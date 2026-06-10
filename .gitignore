@@ -30,3 +30,5 @@ yarn-error.log*
 
 # brainstorm artifacts
 .superpowers/
+
+.vercel
