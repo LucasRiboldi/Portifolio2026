@@ -1,0 +1,1 @@
+export default function GitHubPage() { return <div>GitHub</div>; }
