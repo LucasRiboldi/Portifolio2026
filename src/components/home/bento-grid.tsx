@@ -5,6 +5,7 @@ import { motion } from "motion/react"
 import { Mail, MapPin } from "lucide-react"
 import { GithubIcon, LinkedinIcon } from "@/components/ui/social-icons"
 import { BentoCard } from "./bento-card"
+import { SportsWidget } from "@/components/widgets/sports-widget"
 import { siteConfig } from "@/constants/site"
 import { projects } from "@/data/projects"
 import { tools } from "@/data/tools"
@@ -196,6 +197,14 @@ export function BentoGrid() {
             ))}
           </div>
         </BentoCard>
+      </motion.div>
+
+      {/* Widget de esportes — réplica do widget da nova aba do Firefox */}
+      <motion.div
+        className="col-span-2 flex justify-center"
+        custom={9} initial="hidden" animate="visible" variants={fadeUp}
+      >
+        <SportsWidget />
       </motion.div>
 
     </div>
