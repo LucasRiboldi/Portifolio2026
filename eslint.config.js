@@ -1,3 +1,14 @@
-module.exports = {
-  extends: ['next/core-web-vitals'],
-};
+const { FlatCompat } = require("@eslint/eslintrc");
+
+const compat = new FlatCompat({ baseDirectory: __dirname });
+
+/**
+ * Flat config (ESLint 9). Faz a ponte para o shareable config eslintrc do Next
+ * via FlatCompat, preservando as regras "next/core-web-vitals".
+ */
+module.exports = [
+  ...compat.extends("next/core-web-vitals"),
+  {
+    ignores: [".next/**", "out/**", "build/**", "node_modules/**", "next-env.d.ts"],
+  },
+];

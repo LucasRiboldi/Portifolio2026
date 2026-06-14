@@ -69,11 +69,11 @@ export function ProjectCard({ project, featured }: ProjectCardProps) {
   )
 
   if (project.href) {
+    const isExternal = /^https?:\/\//.test(project.href)
     return (
       <Link
         href={project.href}
-        target="_blank"
-        rel="noopener noreferrer"
+        {...(isExternal ? { target: "_blank", rel: "noopener noreferrer" } : {})}
         className={cn(featured && "md:col-span-2")}
       >
         {card}

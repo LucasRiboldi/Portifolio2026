@@ -54,4 +54,13 @@ export const projects: Project[] = [
     tags: ['Fotografia', 'Lightroom'],
     coverImage: '',
   },
+  {
+    id: '6',
+    title: 'Sports Widget — réplica do Firefox',
+    description: 'Réplica em React do widget de esportes da nova aba do Firefox: abas de resultados/próximos, lista agrupada por grupo, placares e bandeiras. Theme-aware, acessível e reconstruído por engenharia reversa do DOM real.',
+    category: 'code',
+    tags: ['Next.js', 'React', 'TypeScript', 'CSS Modules'],
+    coverImage: '',
+    href: '/sports-widget',
+  },
 ]
