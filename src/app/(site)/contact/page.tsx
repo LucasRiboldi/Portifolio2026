@@ -4,7 +4,8 @@ import { useState } from "react"
 import { useForm } from "react-hook-form"
 import { zodResolver } from "@hookform/resolvers/zod"
 import { z } from "zod"
-import { Container } from "@/components/layout/container"
+import { SvCanvas } from "@/components/spiderverse/sv-canvas"
+import { Onoma } from "@/components/spiderverse/decor"
 import { siteConfig } from "@/constants/site"
 
 const schema = z.object({
@@ -17,7 +18,7 @@ type FormData = z.infer<typeof schema>
 type Status = 'idle' | 'loading' | 'success' | 'error' | 'unavailable'
 
 const inputClasses =
-  "w-full rounded-lg border border-border bg-card px-4 py-2.5 text-sm placeholder:text-muted-foreground focus:border-orange-500/50 focus:outline-none transition-colors"
+  "w-full border-[3px] border-black bg-white px-4 py-2.5 text-sm text-black placeholder:text-black/40 focus:outline-none focus:shadow-[4px_4px_0_0_#ff2d95] transition-shadow"
 
 export default function ContactPage() {
   const [status, setStatus] = useState<Status>('idle')
@@ -47,27 +48,32 @@ export default function ContactPage() {
   }
 
   return (
-    <Container className="max-w-lg py-12">
+    <SvCanvas dimension="punk">
+     <div className="mx-auto max-w-lg">
+      <Onoma color="magenta" className="pointer-events-none absolute right-0 top-0 z-[2] hidden rotate-12 sm:block">
+        WHAM!
+      </Onoma>
       <div className="mb-10">
-        <h1 className="text-3xl font-extrabold">
-          Entrar em <span className="gradient-text">contato</span>
+        <span className="sv-sticker sv-sticker-lime text-sm">Terra-138B · Spider-Punk</span>
+        <h1 className="sv-page-title mt-4 text-white">
+          Entrar em <span className="sv-rainbow">contato</span>
         </h1>
-        <p className="mt-2 text-muted-foreground">
+        <p className="sv-heavy mt-3 text-sm uppercase tracking-wide text-white/80">
           Mande uma mensagem — respondo em até 48h.
         </p>
       </div>
 
       {status === 'success' ? (
-        <div className="rounded-xl border border-green-500/30 bg-green-500/10 p-6 text-center">
-          <p className="font-semibold text-green-400">Mensagem enviada!</p>
-          <p className="mt-1 text-sm text-muted-foreground">Obrigado pelo contato.</p>
+        <div className="sv-panel p-6 text-center">
+          <p className="sv-display text-2xl uppercase">Mensagem enviada!</p>
+          <p className="mt-1 text-sm">Obrigado pelo contato.</p>
         </div>
       ) : status === 'unavailable' ? (
-        <div className="rounded-xl border border-border p-6 text-center">
-          <p className="font-semibold">Serviço de e-mail indisponível</p>
-          <p className="mt-2 text-sm text-muted-foreground">
-            Entre em contato diretamente:{" "}
-            <a href={`mailto:${siteConfig.email}`} className="gradient-text underline">
+        <div className="sv-panel p-6 text-center">
+          <p className="sv-display text-xl uppercase">E-mail indisponível</p>
+          <p className="mt-2 text-sm">
+            Fale direto:{" "}
+            <a href={`mailto:${siteConfig.email}`} className="font-bold underline">
               {siteConfig.email}
             </a>
           </p>
@@ -75,7 +81,7 @@ export default function ContactPage() {
       ) : (
         <form onSubmit={handleSubmit(onSubmit)} className="flex flex-col gap-5">
           <div>
-            <label className="mb-1.5 block text-sm font-medium" htmlFor="name">Nome</label>
+            <label className="sv-heavy mb-1.5 block text-xs uppercase tracking-wide" htmlFor="name">Nome</label>
             <input
               id="name"
               {...register('name')}
@@ -86,7 +92,7 @@ export default function ContactPage() {
           </div>
 
           <div>
-            <label className="mb-1.5 block text-sm font-medium" htmlFor="email">E-mail</label>
+            <label className="sv-heavy mb-1.5 block text-xs uppercase tracking-wide" htmlFor="email">E-mail</label>
             <input
               id="email"
               {...register('email')}
@@ -98,7 +104,7 @@ export default function ContactPage() {
           </div>
 
           <div>
-            <label className="mb-1.5 block text-sm font-medium" htmlFor="message">Mensagem</label>
+            <label className="sv-heavy mb-1.5 block text-xs uppercase tracking-wide" htmlFor="message">Mensagem</label>
             <textarea
               id="message"
               {...register('message')}
@@ -116,13 +122,13 @@ export default function ContactPage() {
           <button
             type="submit"
             disabled={status === 'loading'}
-            className="rounded-lg px-6 py-2.5 text-sm font-semibold text-white transition-opacity disabled:opacity-50"
-            style={{ background: 'linear-gradient(90deg, #f97316, #ec4899)' }}
+            className="sv-display border-[3px] border-black bg-[var(--sv-yellow)] px-6 py-3 text-lg uppercase text-black shadow-[4px_4px_0_0_#000] transition-transform hover:-translate-y-1 hover:rotate-[-1deg] disabled:opacity-50"
           >
-            {status === 'loading' ? 'Enviando…' : 'Enviar mensagem'}
+            {status === 'loading' ? 'Enviando…' : 'Enviar mensagem →'}
           </button>
         </form>
       )}
-    </Container>
+     </div>
+    </SvCanvas>
   )
 }

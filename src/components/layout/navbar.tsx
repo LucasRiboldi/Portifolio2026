@@ -10,6 +10,8 @@ import { MobileMenu } from "./mobile-menu"
 const links = [
   { label: "Portfólio", href: "/portfolio" },
   { label: "Ferramentas", href: "/tools" },
+  { label: "Dimensões", href: "/dimensoes" },
+  { label: "Style Guide", href: "/styleguide" },
   { label: "Sobre", href: "/about" },
   { label: "Contato", href: "/contact" },
 ]
@@ -18,24 +20,24 @@ export function Navbar() {
   const pathname = usePathname()
 
   return (
-    <header className="sticky top-0 z-50 border-b border-border bg-background/80 backdrop-blur-xl">
-      <div className="gradient-accent-bar" />
+    <header className="sticky top-0 z-50 border-b-[3px] border-black bg-[var(--sv-ink)]/90 backdrop-blur-xl">
+      <div style={{ height: 4, background: 'linear-gradient(90deg, var(--sv-yellow), var(--sv-magenta), var(--sv-cyan), var(--sv-lime))' }} />
       <Container>
         <div className="flex h-16 items-center justify-between">
-          <Link href="/" className="flex items-center text-lg font-bold">
-            LR<span className="gradient-text">.</span>
+          <Link href="/" className="sv-display flex items-center text-2xl uppercase text-white">
+            LR<span className="sv-rainbow">.</span>
           </Link>
 
-          <nav className="hidden items-center gap-6 md:flex">
+          <nav className="hidden items-center gap-2 md:flex">
             {links.map(link => (
               <Link
                 key={link.href}
                 href={link.href}
                 className={cn(
-                  "text-sm transition-colors hover:text-foreground",
+                  "sv-heavy rounded-md px-3 py-1 text-xs uppercase tracking-wide transition-all hover:-translate-y-0.5",
                   pathname === link.href
-                    ? "font-medium text-foreground"
-                    : "text-muted-foreground"
+                    ? "border-2 border-black bg-[var(--sv-yellow)] text-black shadow-[3px_3px_0_0_#000]"
+                    : "text-white/70 hover:text-[var(--sv-cyan)]"
                 )}
               >
                 {link.label}

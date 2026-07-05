@@ -1,0 +1,410 @@
+/* ============================================================
+   SPIDER-VERSE LAYER
+   Halftone Ben-Day dots, chromatic aberration, comic panels,
+   glitch, hyper-saturated palette. Disruptive by design.
+   ============================================================ */
+
+:root {
+  /* Hyper-saturated comic palette */
+  --sv-magenta: #ff2d95;
+  --sv-cyan: #00e5ff;
+  --sv-yellow: #ffe600;
+  --sv-orange: #ff5a1f;
+  --sv-violet: #7b2ff7;
+  --sv-lime: #b6ff00;
+  --sv-ink: #0a0612;
+  --sv-ink-2: #140a24;
+  --sv-paper: #fff8e7;
+
+  --sv-halftone: radial-gradient(rgba(255, 45, 149, 0.5) 1.4px, transparent 1.6px);
+  --sv-halftone-cyan: radial-gradient(rgba(0, 229, 255, 0.45) 1.4px, transparent 1.6px);
+}
+
+/* ---- Global comic canvas (variable-driven, per-dimension) ---------- */
+.sv-canvas {
+  /* defaults = MULTIVERSE dimension; each .sv-dim-* overrides these */
+  --c-bg: linear-gradient(160deg, var(--sv-ink), var(--sv-ink-2));
+  --c-glow1: radial-gradient(circle at 15% 10%, rgba(123, 47, 247, 0.35), transparent 45%);
+  --c-glow2: radial-gradient(circle at 85% 20%, rgba(255, 45, 149, 0.3), transparent 40%);
+  --c-glow3: radial-gradient(circle at 50% 100%, rgba(0, 229, 255, 0.25), transparent 55%);
+  --c-ink: var(--sv-paper);
+  --c-dot: rgba(255, 45, 149, 0.5);
+  --c-dot-blend: screen;
+  --c-dot-opacity: 0.35;
+  --c-speedlines: repeating-conic-gradient(from 0deg at 70% 30%, rgba(255,230,0,0.06) 0deg 2deg, transparent 2deg 8deg);
+
+  position: relative;
+  background: var(--c-glow1), var(--c-glow2), var(--c-glow3), var(--c-bg);
+  color: var(--c-ink);
+  overflow: hidden;
+  isolation: isolate;
+}
+
+/* halftone overlay across the whole canvas */
+.sv-canvas::before {
+  content: "";
+  position: absolute;
+  inset: -50px;
+  background-image: radial-gradient(var(--c-dot) 1.4px, transparent 1.6px);
+  background-size: 10px 10px;
+  opacity: var(--c-dot-opacity);
+  mix-blend-mode: var(--c-dot-blend);
+  z-index: 0;
+  pointer-events: none;
+  animation: sv-drift 22s linear infinite;
+}
+
+/* action-comic speed-lines burst */
+.sv-canvas::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+  background: var(--c-speedlines);
+  z-index: 0;
+  pointer-events: none;
+}
+
+@keyframes sv-drift {
+  to { background-position: 200px 120px; }
+}
+
+/* ---- Comic panel --------------------------------------------------- */
+.sv-panel {
+  position: relative;
+  z-index: 1;
+  background: var(--sv-ink-2);
+  border: 3px solid #000;
+  box-shadow:
+    6px 6px 0 0 #000,
+    0 0 0 3px rgba(255, 255, 255, 0.06) inset;
+  border-radius: 6px;
+  transition: transform 0.18s cubic-bezier(.34,1.56,.64,1), box-shadow 0.18s;
+}
+
+.sv-panel:hover {
+  transform: translate(-3px, -3px) rotate(-0.6deg);
+  box-shadow:
+    10px 10px 0 0 var(--sv-magenta),
+    0 0 0 3px rgba(255, 255, 255, 0.12) inset;
+}
+
+.sv-panel-cyan:hover  { box-shadow: 10px 10px 0 0 var(--sv-cyan); }
+.sv-panel-yellow:hover{ box-shadow: 10px 10px 0 0 var(--sv-yellow); }
+.sv-panel-violet:hover{ box-shadow: 10px 10px 0 0 var(--sv-violet); }
+.sv-panel-lime:hover  { box-shadow: 10px 10px 0 0 var(--sv-lime); }
+
+/* tilt variants so nothing lines up "normally" */
+.sv-tilt-1 { transform: rotate(-3deg); }
+.sv-tilt-2 { transform: rotate(3.4deg); }
+.sv-tilt-3 { transform: rotate(-2deg); }
+.sv-tilt-1:hover,
+.sv-tilt-2:hover,
+.sv-tilt-3:hover { transform: translate(-3px, -3px) rotate(0deg); }
+
+/* halftone fill for panels */
+.sv-dots {
+  background-image: var(--sv-halftone);
+  background-size: 8px 8px;
+}
+.sv-dots-cyan {
+  background-image: var(--sv-halftone-cyan);
+  background-size: 8px 8px;
+}
+
+/* ---- Typography ---------------------------------------------------- */
+.sv-display {
+  font-family: var(--font-display), system-ui, sans-serif;
+  letter-spacing: 0.02em;
+  line-height: 0.92;
+}
+.sv-heavy {
+  font-family: var(--font-heavy), system-ui, sans-serif;
+  letter-spacing: -0.02em;
+}
+
+/* chromatic aberration / RGB split title */
+.sv-glitch {
+  position: relative;
+  color: var(--sv-paper);
+  text-shadow:
+    3px 0 var(--sv-magenta),
+   -3px 0 var(--sv-cyan);
+  animation: sv-shake 4.5s steps(2) infinite;
+}
+.sv-glitch::before,
+.sv-glitch::after {
+  content: attr(data-text);
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+}
+.sv-glitch::before {
+  color: var(--sv-cyan);
+  transform: translate(-2px, 1px);
+  mix-blend-mode: screen;
+  clip-path: inset(0 0 55% 0);
+  animation: sv-glitch-x 3.3s steps(3) infinite;
+}
+.sv-glitch::after {
+  color: var(--sv-magenta);
+  transform: translate(2px, -1px);
+  mix-blend-mode: screen;
+  clip-path: inset(50% 0 0 0);
+  animation: sv-glitch-x 2.7s steps(4) infinite reverse;
+}
+
+@keyframes sv-glitch-x {
+  0%, 92%, 100% { transform: translate(0, 0); }
+  93% { transform: translate(-5px, 1px); }
+  96% { transform: translate(4px, -2px); }
+}
+@keyframes sv-shake {
+  0%, 95%, 100% { transform: translate(0, 0); }
+  96% { transform: translate(1px, -1px) skewX(-3deg); }
+  98% { transform: translate(-1px, 1px) skewX(2deg); }
+}
+
+/* rainbow hyper-saturated fill text */
+.sv-rainbow {
+  background: linear-gradient(92deg,
+    var(--sv-yellow), var(--sv-orange), var(--sv-magenta),
+    var(--sv-violet), var(--sv-cyan), var(--sv-lime));
+  background-size: 300% 100%;
+  -webkit-background-clip: text;
+  background-clip: text;
+  -webkit-text-fill-color: transparent;
+  color: transparent;
+  animation: sv-hue 6s linear infinite;
+}
+@keyframes sv-hue {
+  to { background-position: 300% 0; }
+}
+
+/* ---- Stickers / badges -------------------------------------------- */
+.sv-sticker {
+  display: inline-block;
+  font-family: var(--font-display), sans-serif;
+  padding: 0.15em 0.7em;
+  border: 2.5px solid #000;
+  border-radius: 999px;
+  background: var(--sv-yellow);
+  color: #000;
+  box-shadow: 3px 3px 0 0 #000;
+  transform: rotate(-3deg);
+  letter-spacing: 0.04em;
+  white-space: nowrap;
+}
+.sv-sticker-magenta { background: var(--sv-magenta); color: #fff; }
+.sv-sticker-cyan    { background: var(--sv-cyan); color: #000; }
+.sv-sticker-lime    { background: var(--sv-lime); color: #000; }
+.sv-sticker-violet  { background: var(--sv-violet); color: #fff; }
+.sv-sticker-orange  { background: var(--sv-orange); color: #000; }
+
+/* comic burst star (POW! shape) */
+.sv-burst {
+  clip-path: polygon(
+    50% 0%, 61% 20%, 83% 12%, 74% 35%, 98% 40%, 78% 55%,
+    92% 78%, 66% 70%, 62% 96%, 48% 74%, 26% 88%, 30% 62%,
+    4% 58%, 26% 44%, 10% 22%, 36% 28%, 40% 4%
+  );
+}
+
+/* motion / action lines that sweep on hover */
+.sv-action:hover .sv-lines { opacity: 1; }
+.sv-lines {
+  position: absolute;
+  inset: 0;
+  opacity: 0;
+  transition: opacity 0.2s;
+  background: repeating-linear-gradient(
+    115deg,
+    transparent 0 6px,
+    rgba(255, 255, 255, 0.08) 6px 8px
+  );
+  pointer-events: none;
+}
+
+/* scanline / print-registration glitch bar */
+.sv-outline-text {
+  color: transparent;
+  -webkit-text-stroke: 2px var(--sv-cyan);
+  text-stroke: 2px var(--sv-cyan);
+}
+
+/* thick comic underline */
+.sv-underline {
+  position: relative;
+}
+.sv-underline::after {
+  content: "";
+  position: absolute;
+  left: 0; right: 0; bottom: -6px;
+  height: 5px;
+  background: var(--sv-magenta);
+  transform: skewX(-12deg) scaleX(0.9);
+}
+
+/* ---- Speech bubbles ------------------------------------------------ */
+.sv-bubble {
+  position: relative;
+  display: inline-block;
+  background: #fff;
+  color: #000;
+  border: 3px solid #000;
+  border-radius: 18px;
+  padding: 0.5rem 1rem;
+  font-family: var(--font-display), sans-serif;
+  letter-spacing: 0.02em;
+  box-shadow: 4px 4px 0 0 #000;
+}
+.sv-bubble::after {
+  content: "";
+  position: absolute;
+  bottom: -14px;
+  left: 26px;
+  width: 0; height: 0;
+  border: 10px solid transparent;
+  border-top-color: #000;
+}
+.sv-bubble::before {
+  content: "";
+  position: absolute;
+  bottom: -9px;
+  left: 29px;
+  width: 0; height: 0;
+  border: 7px solid transparent;
+  border-top-color: #fff;
+  z-index: 1;
+}
+/* thought / spiky yell variants */
+.sv-bubble-spiky {
+  border-radius: 4px;
+  clip-path: polygon(
+    0% 15%, 8% 0%, 20% 12%, 33% 2%, 46% 12%, 60% 0%, 74% 12%,
+    88% 2%, 100% 15%, 92% 30%, 100% 48%, 90% 62%, 100% 82%,
+    86% 88%, 74% 100%, 60% 88%, 46% 100%, 33% 88%, 20% 100%,
+    8% 86%, 0% 70%, 8% 52%, 0% 34%
+  );
+  box-shadow: none;
+  padding: 1rem 1.4rem;
+}
+.sv-bubble-spiky::before,
+.sv-bubble-spiky::after { display: none; }
+
+/* thought bubble (cloud) */
+.sv-bubble-thought {
+  border-radius: 50% 50% 50% 50% / 60% 60% 40% 40%;
+  box-shadow:
+    4px 4px 0 0 #000,
+    -18px 16px 0 -6px #fff, -18px 16px 0 -3px #000,
+    -30px 26px 0 -10px #fff, -30px 26px 0 -8px #000;
+}
+.sv-bubble-thought::before,
+.sv-bubble-thought::after { display: none; }
+
+/* narration / caption box (yellow rectangle top-left of a panel) */
+.sv-caption {
+  display: inline-block;
+  font-family: var(--font-heavy), sans-serif;
+  text-transform: uppercase;
+  letter-spacing: 0.03em;
+  font-size: 0.7rem;
+  background: var(--sv-yellow);
+  color: #000;
+  border: 2.5px solid #000;
+  padding: 0.35rem 0.6rem;
+  box-shadow: 3px 3px 0 0 #000;
+}
+.sv-caption-cyan { background: var(--sv-cyan); }
+.sv-caption-white { background: #fff; }
+
+/* star burst badge (POW! shape holding text) */
+.sv-badge-burst {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  font-family: var(--font-display), sans-serif;
+  color: #000;
+  text-align: center;
+  padding: 1.4rem;
+  background: var(--sv-yellow);
+  clip-path: polygon(
+    50% 0%, 61% 20%, 83% 12%, 74% 35%, 98% 40%, 78% 55%,
+    92% 78%, 66% 70%, 62% 96%, 48% 74%, 26% 88%, 30% 62%,
+    4% 58%, 26% 44%, 10% 22%, 36% 28%, 40% 4%
+  );
+}
+.sv-badge-burst-magenta { background: var(--sv-magenta); color: #fff; }
+.sv-badge-burst-cyan { background: var(--sv-cyan); }
+
+/* halftone gradient divider bar */
+.sv-divider {
+  height: 12px;
+  background:
+    radial-gradient(circle, currentColor 45%, transparent 46%) 0 0 / 12px 12px,
+    linear-gradient(90deg, transparent, currentColor);
+  -webkit-mask: linear-gradient(90deg, transparent, #000 30%, #000 70%, transparent);
+          mask: linear-gradient(90deg, transparent, #000 30%, #000 70%, transparent);
+  opacity: 0.6;
+}
+
+/* ---- Onomatopoeia (POW! ZAP! BAM!) -------------------------------- */
+.sv-onoma {
+  display: inline-block;
+  font-family: var(--font-display), sans-serif;
+  color: var(--sv-yellow);
+  text-transform: uppercase;
+  line-height: 0.8;
+  -webkit-text-stroke: 3px #000;
+  paint-order: stroke fill;
+  text-shadow: 5px 5px 0 var(--sv-magenta), 8px 8px 0 #000;
+  transform: rotate(-8deg);
+  filter: drop-shadow(0 0 1px #000);
+}
+.sv-onoma-cyan   { color: var(--sv-cyan);   text-shadow: 5px 5px 0 var(--sv-violet), 8px 8px 0 #000; }
+.sv-onoma-magenta{ color: var(--sv-magenta);text-shadow: 5px 5px 0 var(--sv-cyan),  8px 8px 0 #000; }
+.sv-onoma-lime   { color: var(--sv-lime);   text-shadow: 5px 5px 0 var(--sv-orange),8px 8px 0 #000; }
+.sv-onoma-violet { color: var(--sv-violet); text-shadow: 5px 5px 0 var(--sv-yellow), 8px 8px 0 #000; }
+.sv-onoma-orange { color: var(--sv-orange); text-shadow: 5px 5px 0 var(--sv-cyan),  8px 8px 0 #000; }
+
+.sv-onoma-pop { animation: sv-pop 3.5s ease-in-out infinite; }
+@keyframes sv-pop {
+  0%, 88%, 100% { transform: rotate(-8deg) scale(1); }
+  92% { transform: rotate(-6deg) scale(1.12); }
+  95% { transform: rotate(-10deg) scale(0.96); }
+}
+
+/* torn / xerox paper scrap (used heavily in the punk dimension) */
+.sv-scrap {
+  position: relative;
+  background: #f4f1e8;
+  color: #111;
+  padding: 0.6rem 0.9rem;
+  filter: contrast(1.1);
+  box-shadow: 3px 4px 6px rgba(0,0,0,0.4);
+  clip-path: polygon(
+    0% 4%, 12% 0%, 30% 5%, 55% 1%, 78% 6%, 100% 2%,
+    98% 30%, 100% 60%, 97% 92%, 80% 100%, 55% 96%,
+    28% 100%, 8% 95%, 0% 70%, 2% 40%
+  );
+}
+
+/* film-grain overlay for noir */
+.sv-grain::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+  opacity: 0.12;
+  z-index: 2;
+  background-image:
+    repeating-radial-gradient(#000 0 0.4px, transparent 0.4px 1.2px);
+  background-size: 3px 3px;
+  mix-blend-mode: overlay;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .sv-canvas::before,
+  .sv-glitch, .sv-glitch::before, .sv-glitch::after,
+  .sv-rainbow, .sv-onoma-pop { animation: none; }
+}

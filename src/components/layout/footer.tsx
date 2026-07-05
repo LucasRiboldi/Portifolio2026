@@ -5,12 +5,12 @@ import { siteConfig } from "@/constants/site"
 
 export function Footer() {
   return (
-    <footer className="mt-20 border-t border-border">
-      <div className="gradient-accent-bar" />
+    <footer className="border-t-[3px] border-black bg-[var(--sv-ink)]">
+      <div style={{ height: 4, background: 'linear-gradient(90deg, var(--sv-cyan), var(--sv-lime), var(--sv-yellow), var(--sv-magenta))' }} />
       <Container>
         <div className="flex flex-col gap-4 py-8 md:flex-row md:items-center md:justify-between">
-          <p className="text-sm text-muted-foreground">
-            © 2026 {siteConfig.name}
+          <p className="sv-heavy text-xs uppercase tracking-wide text-white/70">
+            © 2026 {siteConfig.name} · Todos os multiversos reservados
           </p>
           <div className="flex gap-4">
             <a

@@ -36,15 +36,11 @@ export function GalleryGrid({ projects }: GalleryGridProps) {
             key={f.value}
             onClick={() => setActiveFilter(f.value)}
             className={cn(
-              "rounded-full border px-4 py-1.5 text-sm transition-colors",
+              "sv-heavy border-[3px] border-current px-4 py-1.5 text-xs uppercase tracking-wide transition-transform hover:-translate-y-0.5",
               activeFilter === f.value
-                ? "border-transparent text-white"
-                : "border-border text-muted-foreground hover:text-foreground"
+                ? "bg-[#4a3312] text-[#f5ecd6] shadow-[3px_3px_0_0_rgba(74,51,18,0.5)]"
+                : "opacity-70 hover:opacity-100"
             )}
-            style={activeFilter === f.value
-              ? { background: 'linear-gradient(90deg, #f97316, #ec4899)' }
-              : undefined
-            }
           >
             {f.label}
           </button>

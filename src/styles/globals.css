@@ -1,4 +1,6 @@
 @import "tw-animate-css";
+@import "./spiderverse.css";
+@import "./spiderverse-dimensions.css";
 
 @tailwind base;
 @tailwind components;

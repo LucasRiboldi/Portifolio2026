@@ -4,29 +4,33 @@ interface BentoCardProps {
   className?: string
   style?: React.CSSProperties
   children: React.ReactNode
-  accent?: 'orange' | 'purple' | 'pink' | 'cyan' | 'green' | 'amber'
+  accent?: 'magenta' | 'cyan' | 'yellow' | 'violet' | 'lime'
+  tilt?: 1 | 2 | 3
 }
 
-const accentStyles: Record<NonNullable<BentoCardProps['accent']>, string> = {
-  orange: 'bg-orange-500/10 border-orange-500/20',
-  purple: 'bg-violet-500/10 border-violet-500/20',
-  pink:   'bg-pink-500/10 border-pink-500/20',
-  cyan:   'bg-cyan-500/10 border-cyan-500/20',
-  green:  'bg-green-500/10 border-green-500/20',
-  amber:  'bg-amber-500/10 border-amber-500/20',
+const accentPanel: Record<NonNullable<BentoCardProps['accent']>, string> = {
+  magenta: '',
+  cyan:   'sv-panel-cyan',
+  yellow: 'sv-panel-yellow',
+  violet: 'sv-panel-violet',
+  lime:   'sv-panel-lime',
 }
 
-export function BentoCard({ className, style, children, accent }: BentoCardProps) {
+const tiltClass = { 1: 'sv-tilt-1', 2: 'sv-tilt-2', 3: 'sv-tilt-3' } as const
+
+export function BentoCard({ className, style, children, accent, tilt }: BentoCardProps) {
   return (
     <div
       className={cn(
-        "rounded-xl border border-border bg-card p-4 transition-all",
-        accent && accentStyles[accent],
+        "sv-panel sv-action p-4",
+        accent && accentPanel[accent],
+        tilt && tiltClass[tilt],
         className
       )}
       style={style}
     >
-      {children}
+      <span className="sv-lines rounded-[6px]" />
+      <div className="relative z-[1] h-full">{children}</div>
     </div>
   )
 }

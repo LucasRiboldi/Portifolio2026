@@ -1,5 +1,6 @@
-import { Container } from "@/components/layout/container"
 import { ToolsGrid } from "@/components/tools/tools-grid"
+import { SvCanvas } from "@/components/spiderverse/sv-canvas"
+import { ComicHeader, Onoma } from "@/components/spiderverse/decor"
 import { tools } from "@/data/tools"
 
 export const metadata = {
@@ -8,16 +9,17 @@ export const metadata = {
 
 export default function ToolsPage() {
   return (
-    <Container className="py-12">
-      <div className="mb-10">
-        <h1 className="text-3xl font-extrabold">
-          Ferramentas <span className="gradient-text">criadas</span>
-        </h1>
-        <p className="mt-2 text-muted-foreground">
-          Web Apps, CLIs, extensões, bots, scripts e plugins que construí.
-        </p>
-      </div>
+    <SvCanvas dimension="neon">
+      <Onoma color="lime" className="pointer-events-none absolute right-2 top-0 z-[2] hidden rotate-6 md:block">
+        ZAP!
+      </Onoma>
+      <ComicHeader
+        kicker="Terra-50101 · Mumbattan"
+        title="Ferramentas"
+        highlight="criadas"
+        subtitle="Web Apps, CLIs, extensões, bots, scripts e plugins que construí."
+      />
       <ToolsGrid tools={tools} />
-    </Container>
+    </SvCanvas>
   )
 }

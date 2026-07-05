@@ -25,15 +25,11 @@ export function ToolsGrid({ tools }: ToolsGridProps) {
         <button
           onClick={() => setActiveFilter('all')}
           className={cn(
-            "rounded-full border px-4 py-1.5 text-sm transition-colors",
+            "sv-heavy border-[3px] border-black px-4 py-1.5 text-xs uppercase tracking-wide transition-transform hover:-translate-y-0.5",
             activeFilter === 'all'
-              ? "border-transparent text-white"
-              : "border-border text-muted-foreground hover:text-foreground"
+              ? "bg-[var(--sv-yellow)] text-black shadow-[3px_3px_0_0_#000]"
+              : "bg-white/10 text-[var(--c-ink)] shadow-[3px_3px_0_0_rgba(0,0,0,0.5)]"
           )}
-          style={activeFilter === 'all'
-            ? { background: 'linear-gradient(90deg, #f97316, #ec4899)' }
-            : undefined
-          }
         >
           Todos
         </button>
@@ -42,15 +38,12 @@ export function ToolsGrid({ tools }: ToolsGridProps) {
             key={type}
             onClick={() => setActiveFilter(type)}
             className={cn(
-              "rounded-full border px-4 py-1.5 text-sm transition-colors",
+              "sv-heavy border-[3px] border-black px-4 py-1.5 text-xs uppercase tracking-wide text-black transition-transform hover:-translate-y-0.5",
               activeFilter === type
-                ? "border-transparent text-white"
-                : "border-border text-muted-foreground hover:text-foreground"
+                ? "shadow-[3px_3px_0_0_#000]"
+                : "bg-white/10 text-[var(--c-ink)] shadow-[3px_3px_0_0_rgba(0,0,0,0.5)]"
             )}
-            style={activeFilter === type
-              ? { background: TOOL_COLORS[type] }
-              : undefined
-            }
+            style={activeFilter === type ? { background: TOOL_COLORS[type] } : undefined}
           >
             {TOOL_LABELS[type]}
           </button>

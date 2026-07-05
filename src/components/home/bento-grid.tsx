@@ -1,20 +1,22 @@
 "use client"
 
 import Link from "next/link"
-import { motion } from "motion/react"
-import { Mail, MapPin } from "lucide-react"
+import { motion, type Variants } from "motion/react"
+import { Mail, MapPin, Zap } from "lucide-react"
 import { GithubIcon, LinkedinIcon } from "@/components/ui/social-icons"
 import { BentoCard } from "./bento-card"
 import { siteConfig } from "@/constants/site"
 import { projects } from "@/data/projects"
 import { tools } from "@/data/tools"
 
-const fadeUp = {
-  hidden: { opacity: 0, y: 16 },
+const pop: Variants = {
+  hidden: { opacity: 0, y: 24, rotate: -4, scale: 0.9 },
   visible: (i: number) => ({
     opacity: 1,
     y: 0,
-    transition: { delay: i * 0.07, duration: 0.4 },
+    rotate: 0,
+    scale: 1,
+    transition: { delay: i * 0.06, type: "spring", stiffness: 260, damping: 18 },
   }),
 }
 
@@ -28,43 +30,47 @@ export function BentoGrid() {
   const featuredProject = projects.find(p => p.featured)
   const recentProjects = projects.slice(0, 3)
   const [firstName, ...rest] = siteConfig.name.split(' ')
+  const lastName = rest.join(' ')
 
   return (
-    <div className="grid grid-cols-2 gap-4 md:grid-cols-4">
+    <div className="grid grid-cols-2 gap-5 md:grid-cols-4 md:gap-6">
 
-      {/* Hero — 2 colunas */}
+      {/* HERO — bloco gigante, 2 colunas */}
       <motion.div
-        className="col-span-2"
-        custom={0} initial="hidden" animate="visible" variants={fadeUp}
+        className="col-span-2 row-span-2"
+        custom={0} initial="hidden" animate="visible" variants={pop}
       >
-        <BentoCard className="relative flex h-full min-h-[180px] flex-col justify-between overflow-hidden">
-          <div className="gradient-accent-bar absolute left-0 right-0 top-0" />
-          <div className="absolute -right-8 -top-8 h-32 w-32 rounded-full bg-gradient-to-br from-orange-500/15 to-violet-500/15" />
+        <BentoCard className="flex h-full min-h-[300px] flex-col justify-between sv-dots" accent="magenta">
           <div>
-            <p className="mb-2 text-xs uppercase tracking-[0.2em] text-muted-foreground">
+            <span className="sv-sticker sv-sticker-cyan text-sm">
               {siteConfig.title}
-            </p>
-            <h1 className="text-3xl font-extrabold leading-tight">
-              {firstName}<br />
-              <span className="gradient-text">{rest.join(' ')}</span>
+            </span>
+            <h1 className="sv-display mt-4 text-6xl uppercase sm:text-7xl">
+              <span
+                className="sv-glitch block"
+                data-text={firstName}
+              >
+                {firstName}
+              </span>
+              <span className="sv-rainbow block">{lastName}</span>
             </h1>
-            <p className="mt-3 max-w-xs text-sm leading-relaxed text-muted-foreground">
+            <p className="sv-heavy mt-4 max-w-sm text-sm uppercase leading-snug tracking-wide text-white/70">
               {siteConfig.description}
             </p>
           </div>
-          <div className="mt-4 flex gap-3">
+
+          <div className="mt-6 flex flex-wrap gap-3">
             <Link
               href="/portfolio"
-              className="rounded-md px-4 py-2 text-xs font-semibold text-white"
-              style={{ background: 'linear-gradient(90deg, #f97316, #ec4899)' }}
+              className="sv-display rounded-md border-[3px] border-black bg-[var(--sv-yellow)] px-5 py-2 text-lg uppercase text-black shadow-[4px_4px_0_0_#000] transition-transform hover:-translate-y-1 hover:rotate-[-2deg]"
             >
-              Ver portfólio
+              Ver portfólio →
             </Link>
             <a
               href={siteConfig.github}
               target="_blank"
               rel="noopener noreferrer"
-              className="rounded-md border border-border px-4 py-2 text-xs font-medium text-muted-foreground transition-colors hover:text-foreground"
+              className="sv-display rounded-md border-[3px] border-black bg-[var(--sv-cyan)] px-5 py-2 text-lg uppercase text-black shadow-[4px_4px_0_0_#000] transition-transform hover:-translate-y-1 hover:rotate-[2deg]"
             >
               GitHub ↗
             </a>
@@ -72,40 +78,65 @@ export function BentoGrid() {
         </BentoCard>
       </motion.div>
 
-      {/* Avatar */}
-      <motion.div custom={1} initial="hidden" animate="visible" variants={fadeUp}>
-        <BentoCard
-          className="flex h-full min-h-[180px] items-center justify-center"
-          style={{ background: 'linear-gradient(135deg, rgba(249,115,22,0.1), rgba(139,92,246,0.1))' }}
-        >
+      {/* AVATAR / spider-emblem */}
+      <motion.div custom={1} initial="hidden" animate="visible" variants={pop}>
+        <BentoCard tilt={2} accent="cyan" className="flex h-full min-h-[140px] items-center justify-center sv-dots-cyan">
           <div className="text-center">
             <div
-              className="mx-auto mb-2 h-16 w-16 rounded-full"
-              style={{ background: 'linear-gradient(135deg, #f97316, #8b5cf6)' }}
-            />
-            <p className="text-xs text-muted-foreground">foto / avatar</p>
+              className="sv-burst mx-auto mb-2 flex h-20 w-20 items-center justify-center"
+              style={{ background: 'linear-gradient(135deg, var(--sv-magenta), var(--sv-violet))' }}
+            >
+              <Zap className="h-8 w-8 text-white" strokeWidth={2.5} />
+            </div>
+            <p className="sv-display text-lg uppercase text-[var(--sv-yellow)]">avatar</p>
           </div>
         </BentoCard>
       </motion.div>
 
-      {/* Localização */}
-      <motion.div custom={2} initial="hidden" animate="visible" variants={fadeUp}>
-        <BentoCard className="flex h-full min-h-[180px] flex-col justify-center">
-          <MapPin className="mb-2 h-5 w-5 text-muted-foreground" />
-          <p className="font-semibold">{siteConfig.location}</p>
-          <p className="mt-1 text-xs text-muted-foreground">Disponível remoto</p>
+      {/* LOCALIZAÇÃO */}
+      <motion.div custom={2} initial="hidden" animate="visible" variants={pop}>
+        <BentoCard tilt={1} accent="lime" className="flex h-full min-h-[140px] flex-col justify-center">
+          <MapPin className="mb-2 h-6 w-6 text-[var(--sv-lime)]" strokeWidth={2.5} />
+          <p className="sv-heavy text-lg uppercase leading-none">{siteConfig.location}</p>
+          <p className="sv-display mt-2 text-base uppercase text-[var(--sv-cyan)]">disponível remoto</p>
         </BentoCard>
       </motion.div>
 
-      {/* Stack */}
-      <motion.div custom={3} initial="hidden" animate="visible" variants={fadeUp}>
+      {/* PROJETOS counter */}
+      <motion.div custom={3} initial="hidden" animate="visible" variants={pop}>
+        <BentoCard tilt={3} accent="yellow" className="flex h-full flex-col items-center justify-center text-center">
+          <span className="sv-display text-6xl text-[var(--sv-yellow)]" style={{ WebkitTextStroke: '2px #000' }}>
+            {projects.length}
+          </span>
+          <span className="sv-heavy mt-1 text-xs uppercase tracking-wider text-white/70">projetos</span>
+        </BentoCard>
+      </motion.div>
+
+      {/* FERRAMENTAS counter */}
+      <motion.div custom={4} initial="hidden" animate="visible" variants={pop}>
+        <BentoCard tilt={1} accent="violet" className="flex h-full flex-col items-center justify-center text-center">
+          <span className="sv-display text-6xl text-[var(--sv-magenta)]" style={{ WebkitTextStroke: '2px #000' }}>
+            {tools.length}
+          </span>
+          <span className="sv-heavy mt-1 text-xs uppercase tracking-wider text-white/70">ferramentas</span>
+        </BentoCard>
+      </motion.div>
+
+      {/* STACK — 2 colunas */}
+      <motion.div
+        className="col-span-2"
+        custom={5} initial="hidden" animate="visible" variants={pop}
+      >
         <BentoCard className="h-full">
-          <p className="mb-3 text-xs uppercase tracking-[0.15em] text-muted-foreground">Stack</p>
+          <p className="sv-display mb-3 text-2xl uppercase text-[var(--sv-cyan)]">{"// stack"}</p>
           <div className="flex flex-wrap gap-2">
-            {['React', 'TypeScript', 'Figma', 'Next.js', 'Node.js', 'Firebase'].map(tech => (
+            {['React', 'TypeScript', 'Figma', 'Next.js', 'Node.js', 'Firebase'].map((tech, i) => (
               <span
                 key={tech}
-                className="rounded-full border border-border px-2 py-0.5 text-xs text-muted-foreground"
+                className={
+                  "sv-sticker text-sm " +
+                  ['', 'sv-sticker-magenta', 'sv-sticker-cyan', 'sv-sticker-lime', '', 'sv-sticker-magenta'][i % 6]
+                }
               >
                 {tech}
               </span>
@@ -114,70 +145,60 @@ export function BentoGrid() {
         </BentoCard>
       </motion.div>
 
-      {/* Projetos counter */}
-      <motion.div custom={4} initial="hidden" animate="visible" variants={fadeUp}>
-        <BentoCard accent="orange" className="flex h-full flex-col items-center justify-center text-center">
-          <span className="text-4xl font-extrabold" style={{ color: '#f97316' }}>
-            {projects.length}
-          </span>
-          <span className="mt-1 text-xs text-muted-foreground">projetos</span>
-        </BentoCard>
-      </motion.div>
-
-      {/* Ferramentas counter */}
-      <motion.div custom={5} initial="hidden" animate="visible" variants={fadeUp}>
-        <BentoCard accent="purple" className="flex h-full flex-col items-center justify-center text-center">
-          <span className="text-4xl font-extrabold" style={{ color: '#8b5cf6' }}>
-            {tools.length}
-          </span>
-          <span className="mt-1 text-xs text-muted-foreground">ferramentas</span>
-        </BentoCard>
-      </motion.div>
-
-      {/* Destaque */}
+      {/* DESTAQUE */}
       {featuredProject && (
-        <motion.div custom={6} initial="hidden" animate="visible" variants={fadeUp}>
-          <BentoCard accent="pink" className="flex h-full flex-col justify-center">
-            <p className="mb-1 text-xs uppercase tracking-[0.15em] text-muted-foreground">Em destaque</p>
-            <p className="text-sm font-bold">{featuredProject.title}</p>
-            <p className="mt-1 text-xs text-muted-foreground">{featuredProject.category}</p>
+        <motion.div
+          className="col-span-2"
+          custom={6} initial="hidden" animate="visible" variants={pop}
+        >
+          <BentoCard accent="magenta" tilt={2} className="flex h-full flex-col justify-center sv-dots">
+            <span className="sv-sticker sv-sticker-lime text-sm">em destaque</span>
+            <p className="sv-display mt-3 text-3xl uppercase leading-none">{featuredProject.title}</p>
+            <p className="sv-heavy mt-1 text-xs uppercase tracking-wider text-white/70">{featuredProject.category}</p>
           </BentoCard>
         </motion.div>
       )}
 
-      {/* Recentes — 2 colunas */}
+      {/* RECENTES — 2 colunas */}
       <motion.div
         className="col-span-2"
-        custom={7} initial="hidden" animate="visible" variants={fadeUp}
+        custom={7} initial="hidden" animate="visible" variants={pop}
       >
         <BentoCard className="h-full">
-          <p className="mb-3 text-xs uppercase tracking-[0.15em] text-muted-foreground">Portfólio recente</p>
-          <div className="grid grid-cols-3 gap-2">
-            {recentProjects.map(p => (
+          <p className="sv-display mb-3 text-2xl uppercase text-[var(--sv-yellow)]">{"// portfólio recente"}</p>
+          <div className="grid grid-cols-3 gap-3">
+            {recentProjects.map((p, i) => (
               <div
                 key={p.id}
                 title={p.title}
-                className="h-16 rounded-lg border border-border"
-                style={{ background: 'linear-gradient(135deg, rgba(249,115,22,0.15), rgba(139,92,246,0.15))' }}
+                className="h-20 border-[3px] border-black shadow-[3px_3px_0_0_#000] sv-dots-cyan"
+                style={{
+                  background: [
+                    'linear-gradient(135deg, var(--sv-magenta), var(--sv-orange))',
+                    'linear-gradient(135deg, var(--sv-cyan), var(--sv-violet))',
+                    'linear-gradient(135deg, var(--sv-lime), var(--sv-yellow))',
+                  ][i % 3],
+                  transform: `rotate(${[-3, 2, -1][i % 3]}deg)`,
+                }}
               />
             ))}
           </div>
           <Link
             href="/portfolio"
-            className="mt-3 inline-block text-xs text-muted-foreground transition-colors hover:text-foreground"
+            className="sv-underline sv-heavy mt-5 inline-block text-xs uppercase tracking-wider text-white transition-colors hover:text-[var(--sv-magenta)]"
           >
             → ver todos os projetos
           </Link>
         </BentoCard>
       </motion.div>
 
-      {/* Links sociais — 2 colunas */}
+      {/* LINKS — 2 colunas */}
       <motion.div
         className="col-span-2"
-        custom={8} initial="hidden" animate="visible" variants={fadeUp}
+        custom={8} initial="hidden" animate="visible" variants={pop}
       >
-        <BentoCard className="h-full">
-          <p className="mb-3 text-xs uppercase tracking-[0.15em] text-muted-foreground">Links</p>
+        <BentoCard accent="cyan" className="h-full">
+          <p className="sv-display mb-3 text-2xl uppercase text-[var(--sv-cyan)]">{"// links"}</p>
           <div className="flex flex-col gap-3">
             {socialLinks.map(({ label, href, icon: Icon }) => (
               <a
@@ -185,13 +206,13 @@ export function BentoGrid() {
                 href={href}
                 target={href.startsWith('http') ? '_blank' : undefined}
                 rel="noopener noreferrer"
-                className="group flex items-center justify-between text-sm text-muted-foreground transition-colors hover:text-foreground"
+                className="sv-heavy group flex items-center justify-between border-b-[3px] border-black/50 pb-2 text-sm uppercase tracking-wide text-white transition-colors hover:text-[var(--sv-yellow)]"
               >
                 <span className="flex items-center gap-2">
-                  <Icon className="h-4 w-4" />
+                  <Icon className="h-5 w-5" />
                   {label}
                 </span>
-                <span className="opacity-0 transition-opacity group-hover:opacity-100">↗</span>
+                <span className="translate-x-0 transition-transform group-hover:translate-x-1">↗</span>
               </a>
             ))}
           </div>

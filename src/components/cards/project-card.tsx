@@ -21,7 +21,7 @@ export function ProjectCard({ project, featured }: ProjectCardProps) {
   const card = (
     <div
       className={cn(
-        "group relative overflow-hidden rounded-xl border border-border bg-card transition-all hover:border-orange-500/30 hover:shadow-lg",
+        "sv-panel group relative overflow-hidden p-0",
         featured && "md:col-span-2"
       )}
     >

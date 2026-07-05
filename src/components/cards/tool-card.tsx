@@ -11,7 +11,7 @@ export function ToolCard({ tool }: ToolCardProps) {
   const color = TOOL_COLORS[tool.type]
 
   return (
-    <div className="group flex flex-col gap-3 rounded-xl border border-border bg-card p-5 transition-all hover:shadow-lg">
+    <div className="sv-panel sv-action group flex flex-col gap-3 p-5"><span className="sv-lines rounded-[6px]" />
       <div className="flex items-start justify-between">
         <div>
           <span className="text-2xl">{tool.emoji}</span>

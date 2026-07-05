@@ -1,0 +1,616 @@
+/* ============================================================
+   SPIDER-VERSE — DIMENSIONS
+   Each dimension is a distinct art language, like the film.
+   A wrapper `.sv-canvas.sv-dim-X` overrides canvas variables and
+   re-skins panels within it. Mix freely — that's the point.
+   ============================================================ */
+
+/* ============================================================
+   1. MUMBATTAN  →  neon fluorescent (Tools)
+   Vibrant Indian-comic neon, glowing edges, saturated dusk.
+   ============================================================ */
+.sv-dim-neon {
+  --c-bg: linear-gradient(160deg, #1a0033, #33004d 60%, #4d0026);
+  --c-glow1: radial-gradient(circle at 20% 15%, rgba(255, 0, 200, 0.4), transparent 40%);
+  --c-glow2: radial-gradient(circle at 80% 30%, rgba(0, 255, 200, 0.35), transparent 40%);
+  --c-glow3: radial-gradient(circle at 50% 95%, rgba(255, 200, 0, 0.3), transparent 55%);
+  --c-dot: rgba(0, 255, 200, 0.5);
+  --c-dot-opacity: 0.4;
+}
+.sv-dim-neon .sv-panel {
+  background: rgba(20, 0, 40, 0.6);
+  border-color: #00ffc8;
+  box-shadow: 0 0 12px rgba(0, 255, 200, 0.5), 0 0 30px rgba(255, 0, 200, 0.25);
+  backdrop-filter: blur(2px);
+}
+.sv-dim-neon .sv-panel:hover {
+  box-shadow: 0 0 20px #ff00c8, 0 0 45px rgba(0, 255, 200, 0.4);
+  transform: translate(-2px, -3px) scale(1.01);
+}
+
+/* ============================================================
+   2. RENAISSANCE (Vulture)  →  parchment sketch (Portfolio)
+   Da Vinci parchment, sepia ink, cross-hatch, torn edges.
+   ============================================================ */
+.sv-dim-renaissance {
+  --c-bg: linear-gradient(160deg, #e8dcc0, #d8c29a);
+  --c-glow1: radial-gradient(circle at 20% 10%, rgba(120, 80, 30, 0.18), transparent 45%);
+  --c-glow2: radial-gradient(circle at 85% 80%, rgba(80, 50, 20, 0.22), transparent 50%);
+  --c-glow3: none;
+  --c-ink: #2a1c0a;
+  --c-dot: rgba(90, 60, 25, 0.35);
+  --c-dot-blend: multiply;
+  --c-dot-opacity: 0.5;
+  --c-speedlines: repeating-linear-gradient(46deg, rgba(90,60,25,0.05) 0 1px, transparent 1px 5px);
+}
+.sv-dim-renaissance .sv-panel {
+  background: rgba(245, 236, 214, 0.75);
+  border-color: #4a3312;
+  box-shadow: 4px 5px 0 0 rgba(74, 51, 18, 0.45);
+  color: #2a1c0a;
+}
+.sv-dim-renaissance .sv-panel:hover { box-shadow: 7px 8px 0 0 rgba(74, 51, 18, 0.6); }
+.sv-dim-renaissance .sv-display { color: #3a260c; }
+
+/* ============================================================
+   3. ART NOUVEAU + GWEN  →  watercolor / ink (About)
+   Cream paper, ink lines, ornamental gold, wet-on-wet blooms.
+   ============================================================ */
+.sv-dim-nouveau {
+  --c-bg: linear-gradient(160deg, #f6efe6, #efe4d6);
+  --c-glow1: radial-gradient(ellipse at 25% 20%, rgba(255, 120, 180, 0.35), transparent 45%);
+  --c-glow2: radial-gradient(ellipse at 80% 60%, rgba(120, 200, 255, 0.35), transparent 45%);
+  --c-glow3: radial-gradient(ellipse at 50% 100%, rgba(180, 140, 255, 0.3), transparent 50%);
+  --c-ink: #23303a;
+  --c-dot: rgba(35, 48, 58, 0.18);
+  --c-dot-blend: multiply;
+  --c-dot-opacity: 0.4;
+  --c-speedlines: none;
+}
+.sv-dim-nouveau .sv-panel {
+  background: rgba(255, 253, 248, 0.7);
+  border-color: #1c2830;
+  border-radius: 4px 22px 4px 22px;
+  box-shadow: 0 6px 22px rgba(120, 90, 60, 0.25), inset 0 0 0 1px rgba(200, 160, 90, 0.4);
+  color: #23303a;
+}
+.sv-dim-nouveau .sv-panel:hover {
+  transform: translateY(-4px) rotate(0deg);
+  box-shadow: 0 12px 30px rgba(120, 90, 60, 0.35), inset 0 0 0 1px rgba(200, 160, 90, 0.7);
+}
+.sv-dim-nouveau .sv-display { color: #1c2830; }
+
+/* soft watercolor bloom blob */
+.sv-watercolor {
+  border-radius: 42% 58% 62% 38% / 45% 40% 60% 55%;
+  filter: blur(1px) saturate(1.3);
+  mix-blend-mode: multiply;
+}
+
+/* ============================================================
+   4. NOIR (Earth-42)  →  black & white (Gallery / Blog)
+   High-contrast grayscale, film grain, hard shadows, 1930s.
+   ============================================================ */
+.sv-dim-noir {
+  --c-bg: linear-gradient(160deg, #0b0b0d, #16161a);
+  --c-glow1: radial-gradient(circle at 30% 0%, rgba(255,255,255,0.10), transparent 40%);
+  --c-glow2: radial-gradient(circle at 90% 100%, rgba(255,255,255,0.05), transparent 45%);
+  --c-glow3: none;
+  --c-ink: #f2f2ef;
+  --c-dot: rgba(255, 255, 255, 0.14);
+  --c-dot-opacity: 0.3;
+  --c-speedlines: repeating-linear-gradient(180deg, rgba(255,255,255,0.03) 0 1px, transparent 1px 3px);
+}
+.sv-dim-noir .sv-panel {
+  background: #101013;
+  border-color: #f2f2ef;
+  box-shadow: 8px 8px 0 0 #000, 0 0 0 1px #000;
+  color: #f2f2ef;
+}
+.sv-dim-noir .sv-panel:hover { box-shadow: 12px 12px 0 0 #fff; }
+.sv-dim-noir .sv-rainbow,
+.sv-dim-noir .sv-glitch {
+  background: none; color: #fff; text-shadow: 4px 4px 0 #000; -webkit-text-fill-color: #fff;
+}
+.sv-dim-noir .sv-glitch::before,
+.sv-dim-noir .sv-glitch::after { color: #888; }
+.sv-dim-noir .sv-sticker { background: #fff; color: #000; }
+
+/* ============================================================
+   5. SPIDER-PUNK (Earth-138B)  →  xerox zine (Contact)
+   Cut-and-paste, ripped paper, misregistered print, tape.
+   ============================================================ */
+.sv-dim-punk {
+  --c-bg: linear-gradient(160deg, #141018, #241019);
+  --c-glow1: radial-gradient(circle at 15% 12%, rgba(255, 60, 90, 0.35), transparent 40%);
+  --c-glow2: radial-gradient(circle at 85% 25%, rgba(0, 220, 160, 0.3), transparent 40%);
+  --c-glow3: radial-gradient(circle at 50% 100%, rgba(255, 210, 0, 0.25), transparent 55%);
+  --c-dot: rgba(255, 255, 255, 0.3);
+  --c-dot-opacity: 0.35;
+  --c-speedlines: repeating-linear-gradient(3deg, rgba(255,255,255,0.04) 0 2px, transparent 2px 9px);
+}
+.sv-dim-punk .sv-panel {
+  background: #f4f1e8;
+  color: #141018;
+  border: 3px solid #000;
+  border-radius: 0;
+  box-shadow: 5px 6px 0 0 rgba(0,0,0,0.7);
+  transform: rotate(-1.2deg);
+  filter: contrast(1.08);
+}
+.sv-dim-punk .sv-panel:nth-child(even) { transform: rotate(1.6deg); }
+.sv-dim-punk .sv-panel:hover { transform: rotate(0deg) translateY(-3px); box-shadow: 8px 9px 0 0 var(--sv-magenta); }
+.sv-dim-punk .sv-display { color: #111; }
+
+/* ============================================================
+   6. NUEVA YORK 2099  →  brutalist futurism (GitHub)
+   Syd-Mead neon grid, holographic cyan, glass, hard geometry.
+   ============================================================ */
+.sv-dim-2099 {
+  --c-bg:
+    linear-gradient(160deg, #04060f, #0a1030),
+    repeating-linear-gradient(90deg, rgba(0,229,255,0.06) 0 1px, transparent 1px 44px),
+    repeating-linear-gradient(0deg, rgba(0,229,255,0.06) 0 1px, transparent 1px 44px);
+  --c-glow1: radial-gradient(circle at 50% -10%, rgba(0, 229, 255, 0.35), transparent 45%);
+  --c-glow2: radial-gradient(circle at 90% 90%, rgba(255, 45, 149, 0.25), transparent 45%);
+  --c-glow3: none;
+  --c-ink: #dff8ff;
+  --c-dot: rgba(0, 229, 255, 0.3);
+  --c-dot-opacity: 0.25;
+  --c-speedlines: none;
+}
+.sv-dim-2099 .sv-panel {
+  background: rgba(6, 14, 34, 0.7);
+  border-color: #00e5ff;
+  border-radius: 0;
+  box-shadow: 0 0 0 1px #00e5ff, 0 0 22px rgba(0, 229, 255, 0.35);
+  backdrop-filter: blur(3px);
+  clip-path: polygon(0 0, 100% 0, 100% 82%, 92% 100%, 0 100%);
+}
+.sv-dim-2099 .sv-panel:hover {
+  box-shadow: 0 0 0 1px #ff2d95, 0 0 30px rgba(0, 229, 255, 0.6);
+  transform: translateY(-3px);
+}
+
+/* ============================================================
+   7. HORROR  →  distressed blood dimension (404 / accents)
+   Grimy red, dripping ink, sickly green, torn contrast.
+   ============================================================ */
+.sv-dim-horror {
+  --c-bg: linear-gradient(160deg, #0a0000, #1a0505 60%, #050a02);
+  --c-glow1: radial-gradient(circle at 30% 10%, rgba(180, 0, 0, 0.4), transparent 45%);
+  --c-glow2: radial-gradient(circle at 80% 70%, rgba(60, 120, 0, 0.25), transparent 50%);
+  --c-glow3: radial-gradient(circle at 50% 100%, rgba(120, 0, 0, 0.35), transparent 55%);
+  --c-ink: #e8d8c8;
+  --c-dot: rgba(150, 0, 0, 0.5);
+  --c-dot-opacity: 0.45;
+  --c-speedlines: repeating-linear-gradient(91deg, rgba(0,0,0,0.2) 0 2px, transparent 2px 6px);
+}
+.sv-dim-horror .sv-panel {
+  background: rgba(20, 4, 4, 0.8);
+  border-color: #8b0000;
+  box-shadow: 4px 6px 0 0 #000, 0 0 22px rgba(139, 0, 0, 0.5);
+  color: #e8d8c8;
+}
+.sv-dim-horror .sv-panel:hover { box-shadow: 6px 10px 0 0 #b60000; }
+.sv-dim-horror .sv-display,
+.sv-dim-horror .sv-glitch { color: #d40000; text-shadow: 2px 0 #3c7800, -2px 0 #000; }
+
+/* ============================================================
+   8. MANGA (Peni Parker)  →  anime screentone
+   Black & white manga, screentone dots, speed lines, blush pink.
+   ============================================================ */
+.sv-dim-manga {
+  --c-bg: linear-gradient(160deg, #fafafa, #eceef2);
+  --c-glow1: radial-gradient(circle at 25% 15%, rgba(255, 120, 170, 0.18), transparent 40%);
+  --c-glow2: radial-gradient(circle at 80% 80%, rgba(120, 160, 255, 0.14), transparent 45%);
+  --c-glow3: none;
+  --c-ink: #14161c;
+  --c-dot: rgba(20, 22, 28, 0.35);
+  --c-dot-blend: multiply;
+  --c-dot-opacity: 0.5;
+  --c-speedlines: repeating-conic-gradient(from 0deg at 80% 20%, rgba(20,22,28,0.05) 0deg 1.5deg, transparent 1.5deg 6deg);
+}
+.sv-dim-manga .sv-panel {
+  background: #fff;
+  border-color: #14161c;
+  box-shadow: 5px 5px 0 0 #14161c;
+  color: #14161c;
+}
+.sv-dim-manga .sv-panel:hover { box-shadow: 8px 8px 0 0 #ff78aa; }
+.sv-dim-manga .sv-display,
+.sv-dim-manga .sv-rainbow { color: #14161c; background: none; -webkit-text-fill-color: #14161c; }
+.sv-dim-manga .sv-sticker { background: #14161c; color: #fff; }
+
+/* ============================================================
+   9. CARTOON (Spider-Ham)  →  Looney Tunes
+   Bright primaries, rubber-hose, bouncy, thick playful outlines.
+   ============================================================ */
+.sv-dim-cartoon {
+  --c-bg: linear-gradient(160deg, #4fc3ff, #7ad0ff 60%, #baf0ff);
+  --c-glow1: radial-gradient(circle at 20% 12%, rgba(255, 235, 60, 0.5), transparent 40%);
+  --c-glow2: radial-gradient(circle at 82% 25%, rgba(255, 120, 120, 0.4), transparent 40%);
+  --c-glow3: radial-gradient(circle at 50% 100%, rgba(120, 255, 160, 0.4), transparent 50%);
+  --c-ink: #1a1030;
+  --c-dot: rgba(255, 255, 255, 0.6);
+  --c-dot-opacity: 0.4;
+  --c-speedlines: none;
+}
+.sv-dim-cartoon .sv-panel {
+  background: #fffdf5;
+  border: 4px solid #1a1030;
+  border-radius: 26px;
+  box-shadow: 6px 6px 0 0 #1a1030;
+  color: #1a1030;
+}
+.sv-dim-cartoon .sv-panel:hover { transform: translateY(-4px) rotate(-1.5deg) scale(1.02); box-shadow: 9px 10px 0 0 #ff5a5a; }
+.sv-dim-cartoon .sv-display { color: #e0004d; }
+
+/* ============================================================
+   10. GRAFFITI (Miles)  →  street art spray
+   Brick + spray paint, drips, stencils, tags, cyan/magenta.
+   ============================================================ */
+.sv-dim-graffiti {
+  --c-bg:
+    linear-gradient(160deg, rgba(10,8,14,0.9), rgba(20,10,24,0.92)),
+    repeating-linear-gradient(0deg, #2a2226 0 26px, #241c20 26px 28px),
+    repeating-linear-gradient(90deg, #2a2226 0 60px, #201a1e 60px 62px);
+  --c-glow1: radial-gradient(circle at 20% 20%, rgba(255, 40, 120, 0.4), transparent 40%);
+  --c-glow2: radial-gradient(circle at 82% 30%, rgba(0, 220, 255, 0.35), transparent 40%);
+  --c-glow3: radial-gradient(circle at 50% 100%, rgba(180, 255, 0, 0.25), transparent 55%);
+  --c-dot: rgba(255, 40, 120, 0.4);
+  --c-dot-opacity: 0.3;
+  --c-speedlines: none;
+}
+.sv-dim-graffiti .sv-panel {
+  background: rgba(16, 12, 20, 0.72);
+  border-color: #ff2878;
+  box-shadow: 4px 5px 0 0 #000, 0 0 18px rgba(255, 40, 120, 0.4);
+  filter: saturate(1.2);
+}
+.sv-dim-graffiti .sv-panel:hover { box-shadow: 7px 8px 0 0 #00dcff, 0 0 26px rgba(0,220,255,0.5); }
+
+/* ============================================================
+   11. PIXEL  →  8-bit retro game
+   Blocky, dithered, CRT green/magenta, hard pixel steps.
+   ============================================================ */
+.sv-dim-pixel {
+  --c-bg: linear-gradient(160deg, #0d0221, #1a0a2e);
+  --c-glow1: radial-gradient(circle at 20% 15%, rgba(0, 255, 128, 0.28), transparent 38%);
+  --c-glow2: radial-gradient(circle at 82% 30%, rgba(255, 0, 128, 0.28), transparent 38%);
+  --c-glow3: none;
+  --c-ink: #b6ffcb;
+  --c-dot: rgba(0, 255, 128, 0.5);
+  --c-dot-blend: screen;
+  --c-dot-opacity: 0.3;
+  --c-speedlines: repeating-linear-gradient(0deg, rgba(0,255,128,0.05) 0 2px, transparent 2px 4px);
+}
+.sv-dim-pixel .sv-panel {
+  background: #160a2a;
+  border: 4px solid #00ff80;
+  border-radius: 0;
+  box-shadow: 0 0 0 4px #0d0221, 6px 6px 0 4px #ff0080;
+  color: #b6ffcb;
+  image-rendering: pixelated;
+}
+.sv-dim-pixel .sv-panel:hover { box-shadow: 0 0 0 4px #0d0221, 9px 9px 0 4px #00ffe0; }
+.sv-dim-pixel .sv-display { color: #ffe600; text-shadow: 3px 3px 0 #ff0080; }
+
+/* ============================================================
+   12. BLUEPRINT (Spider-Byte / The Spot)  →  technical schematic
+   Cyan wireframe on navy, dashed guides, negative-space voids.
+   ============================================================ */
+.sv-dim-blueprint {
+  --c-bg:
+    linear-gradient(160deg, #05203a, #04162a),
+    repeating-linear-gradient(90deg, rgba(120,200,255,0.08) 0 1px, transparent 1px 30px),
+    repeating-linear-gradient(0deg, rgba(120,200,255,0.08) 0 1px, transparent 1px 30px);
+  --c-glow1: radial-gradient(circle at 50% 0%, rgba(120, 200, 255, 0.22), transparent 45%);
+  --c-glow2: none;
+  --c-glow3: none;
+  --c-ink: #cfeaff;
+  --c-dot: rgba(120, 200, 255, 0.3);
+  --c-dot-opacity: 0.2;
+  --c-speedlines: none;
+}
+.sv-dim-blueprint .sv-panel {
+  background: rgba(6, 30, 55, 0.6);
+  border: 2px dashed #7ac8ff;
+  border-radius: 2px;
+  box-shadow: none;
+  color: #cfeaff;
+}
+.sv-dim-blueprint .sv-panel:hover { border-style: solid; box-shadow: 0 0 18px rgba(120,200,255,0.4); }
+.sv-dim-blueprint .sv-display { color: #7ac8ff; text-shadow: none; }
+
+/* ============================================================
+   13. THE SPOT  →  living ink / unfinished sketch
+   Gesso board, blue construction lines, black void holes,
+   scratchboard. "The undoing of comic book language."
+   ============================================================ */
+.sv-dim-spot {
+  --c-bg:
+    linear-gradient(160deg, #f3f1ea, #e9e6dc),
+    repeating-linear-gradient(90deg, rgba(60,120,220,0.10) 0 1px, transparent 1px 48px),
+    repeating-linear-gradient(0deg, rgba(60,120,220,0.10) 0 1px, transparent 1px 48px);
+  --c-glow1: radial-gradient(circle at 22% 18%, rgba(20, 20, 25, 0.5), transparent 12%);
+  --c-glow2: radial-gradient(circle at 78% 62%, rgba(20, 20, 25, 0.45), transparent 10%);
+  --c-glow3: radial-gradient(circle at 60% 88%, rgba(20, 20, 25, 0.4), transparent 8%);
+  --c-ink: #1a1a20;
+  --c-dot: rgba(20, 20, 25, 0.9);
+  --c-dot-blend: normal;
+  --c-dot-opacity: 0.5;
+  --c-speedlines: none;
+}
+.sv-dim-spot .sv-panel {
+  background: rgba(250, 248, 242, 0.85);
+  border: 2px solid #1a1a20;
+  border-radius: 2px;
+  box-shadow: 3px 3px 0 0 rgba(60, 120, 220, 0.4), 0 0 0 1px rgba(60,120,220,0.3) inset;
+  color: #1a1a20;
+}
+.sv-dim-spot .sv-panel:hover { box-shadow: 5px 5px 0 0 #1a1a20; }
+.sv-dim-spot .sv-display { color: #1a1a20; }
+
+/* living ink void hole — a black spot */
+.sv-void {
+  border-radius: 48% 52% 55% 45% / 50% 48% 52% 50%;
+  background: radial-gradient(circle at 40% 35%, #000 60%, #1a1a20 100%);
+  box-shadow: 0 0 0 2px rgba(60,120,220,0.4);
+}
+
+/* ============================================================
+   14. LEGO (Earth-13122)  →  plastic bricks
+   Glossy studs, primary ABS plastic, chunky bevels.
+   ============================================================ */
+.sv-dim-lego {
+  --c-bg: linear-gradient(160deg, #ffd21a, #ffb800 55%, #ff8a00);
+  --c-glow1: radial-gradient(circle at 20% 15%, rgba(220, 0, 40, 0.35), transparent 40%);
+  --c-glow2: radial-gradient(circle at 82% 25%, rgba(0, 120, 255, 0.35), transparent 40%);
+  --c-glow3: radial-gradient(circle at 50% 100%, rgba(0, 180, 90, 0.35), transparent 50%);
+  --c-ink: #201400;
+  --c-dot: rgba(255, 255, 255, 0.55);
+  --c-dot-opacity: 0.35;
+  --c-speedlines: none;
+}
+.sv-dim-lego .sv-panel {
+  background: #d8202f;
+  border: 0;
+  border-radius: 10px;
+  box-shadow:
+    inset 0 4px 0 rgba(255,255,255,0.35),
+    inset 0 -6px 0 rgba(0,0,0,0.28),
+    5px 6px 0 rgba(0,0,0,0.35);
+  color: #fff;
+}
+.sv-dim-lego .sv-panel:hover { transform: translateY(-4px); box-shadow: inset 0 4px 0 rgba(255,255,255,0.4), inset 0 -6px 0 rgba(0,0,0,0.3), 8px 10px 0 rgba(0,0,0,0.35); }
+.sv-dim-lego .sv-display { color: #fff; text-shadow: 2px 2px 0 rgba(0,0,0,0.35); }
+
+/* brick studs strip */
+.sv-studs {
+  height: 14px;
+  background:
+    radial-gradient(circle at 12px 50%, rgba(255,255,255,0.5) 5px, transparent 6px),
+    radial-gradient(circle at 12px 50%, rgba(0,0,0,0.25) 6px, transparent 7px);
+  background-size: 24px 14px;
+  background-repeat: repeat-x;
+}
+
+/* ============================================================
+   15. PROWLER (Earth-42)  →  Aaron / dark Miles
+   Menacing purple + gold, claw slashes, urban shadow.
+   ============================================================ */
+.sv-dim-prowler {
+  --c-bg: linear-gradient(160deg, #0a0410, #17082a 60%, #05010a);
+  --c-glow1: radial-gradient(circle at 20% 10%, rgba(120, 40, 220, 0.4), transparent 42%);
+  --c-glow2: radial-gradient(circle at 85% 80%, rgba(255, 180, 0, 0.2), transparent 45%);
+  --c-glow3: radial-gradient(circle at 50% 50%, rgba(90, 0, 180, 0.25), transparent 55%);
+  --c-ink: #e8dcff;
+  --c-dot: rgba(160, 80, 255, 0.4);
+  --c-dot-opacity: 0.3;
+  --c-speedlines: repeating-linear-gradient(66deg, rgba(255,180,0,0.05) 0 2px, transparent 2px 22px);
+}
+.sv-dim-prowler .sv-panel {
+  background: rgba(12, 6, 22, 0.82);
+  border-color: #a050ff;
+  box-shadow: 4px 5px 0 0 #000, 0 0 20px rgba(120, 40, 220, 0.45);
+  color: #e8dcff;
+}
+.sv-dim-prowler .sv-panel:hover { box-shadow: 7px 8px 0 0 #ffb400, 0 0 26px rgba(160, 80, 255, 0.5); }
+.sv-dim-prowler .sv-display { color: #c79bff; text-shadow: 2px 2px 0 #000; }
+
+/* purple claw-slash */
+.sv-claw {
+  background: linear-gradient(120deg, transparent 40%, #a050ff 41% 43%, transparent 44%, transparent 52%, #ffb400 53% 54%, transparent 55%);
+}
+
+/* ============================================================
+   16. CANON GLITCH  →  anomaly / datamosh
+   Red-cyan VHS tear, the "canon event" distortion.
+   ============================================================ */
+.sv-dim-glitch {
+  --c-bg: linear-gradient(160deg, #06060a, #100812);
+  --c-glow1: radial-gradient(circle at 30% 20%, rgba(255, 0, 60, 0.3), transparent 40%);
+  --c-glow2: radial-gradient(circle at 70% 60%, rgba(0, 220, 255, 0.28), transparent 40%);
+  --c-glow3: none;
+  --c-ink: #eafcff;
+  --c-dot: rgba(255, 0, 80, 0.4);
+  --c-dot-opacity: 0.3;
+  --c-speedlines: repeating-linear-gradient(0deg, rgba(0,220,255,0.05) 0 2px, rgba(255,0,80,0.04) 2px 3px, transparent 3px 7px);
+}
+.sv-dim-glitch .sv-panel {
+  background: rgba(10, 8, 16, 0.8);
+  border-color: #ff0050;
+  box-shadow: -4px 0 0 rgba(0,220,255,0.6), 4px 0 0 rgba(255,0,80,0.6), 5px 6px 0 #000;
+  color: #eafcff;
+  animation: sv-jitter 5s steps(2) infinite;
+}
+@keyframes sv-jitter {
+  0%, 94%, 100% { transform: translate(0,0); }
+  95% { transform: translate(-3px, 1px); }
+  97% { transform: translate(3px, -1px); }
+}
+.sv-dim-glitch .sv-panel:hover { animation: none; box-shadow: -6px 0 0 rgba(0,220,255,0.8), 6px 0 0 rgba(255,0,80,0.8), 8px 9px 0 #000; }
+
+/* ============================================================
+   17. COLLIDER PORTAL  →  kaleidoscope rift
+   Rainbow interdimensional warp, saturated conic tears.
+   ============================================================ */
+.sv-dim-portal {
+  --c-bg:
+    conic-gradient(from 0deg at 50% 45%, #ff2d95, #ff5a1f, #ffe600, #b6ff00, #00e5ff, #7b2ff7, #ff2d95),
+    #05010f;
+  --c-glow1: radial-gradient(circle at 50% 45%, rgba(0,0,0,0.75), transparent 40%);
+  --c-glow2: radial-gradient(circle at 50% 45%, transparent 55%, rgba(0,0,0,0.6) 80%);
+  --c-glow3: none;
+  --c-ink: #ffffff;
+  --c-dot: rgba(255, 255, 255, 0.4);
+  --c-dot-blend: overlay;
+  --c-dot-opacity: 0.25;
+  --c-speedlines: repeating-conic-gradient(from 0deg at 50% 45%, rgba(255,255,255,0.08) 0deg 1deg, transparent 1deg 5deg);
+}
+.sv-dim-portal .sv-canvas::before,
+.sv-dim-portal.sv-canvas::before { animation: sv-spin 30s linear infinite; }
+@keyframes sv-spin { to { transform: rotate(360deg); } }
+.sv-dim-portal .sv-panel {
+  background: rgba(5, 1, 15, 0.72);
+  border-color: #fff;
+  box-shadow: 0 0 0 2px #000, 0 0 26px rgba(255,255,255,0.5);
+  backdrop-filter: blur(4px);
+  color: #fff;
+}
+.sv-dim-portal .sv-panel:hover { box-shadow: 0 0 0 2px #000, 0 0 40px rgba(255,255,255,0.8); }
+
+/* ============================================================
+   18. SPIDER-SOCIETY HQ  →  clean white futurism
+   Bright gallery white, holo-cyan accents, minimal brutalism.
+   ============================================================ */
+.sv-dim-society {
+  --c-bg: linear-gradient(160deg, #fdfdff, #eef3f8);
+  --c-glow1: radial-gradient(circle at 50% 0%, rgba(0, 200, 255, 0.14), transparent 45%);
+  --c-glow2: radial-gradient(circle at 90% 90%, rgba(255, 45, 149, 0.1), transparent 45%);
+  --c-glow3: none;
+  --c-ink: #0a1420;
+  --c-dot: rgba(0, 160, 220, 0.18);
+  --c-dot-blend: multiply;
+  --c-dot-opacity: 0.4;
+  --c-speedlines: none;
+}
+.sv-dim-society .sv-panel {
+  background: rgba(255, 255, 255, 0.9);
+  border: 2px solid #0a1420;
+  border-radius: 0;
+  box-shadow: 6px 6px 0 0 rgba(0, 180, 230, 0.5);
+  color: #0a1420;
+}
+.sv-dim-society .sv-panel:hover { box-shadow: 9px 9px 0 0 #00b4e6; }
+.sv-dim-society .sv-display { color: #0a1420; }
+
+/* ============================================================
+   19. RISOGRAPH  →  2-color misregistered print
+   Grainy fluorescent pink + blue, offset channels, paper.
+   ============================================================ */
+.sv-dim-riso {
+  --c-bg: linear-gradient(160deg, #f7f3e8, #efe9d8);
+  --c-glow1: radial-gradient(circle at 26% 20%, rgba(255, 72, 176, 0.4), transparent 42%);
+  --c-glow2: radial-gradient(circle at 74% 68%, rgba(0, 120, 255, 0.35), transparent 42%);
+  --c-glow3: none;
+  --c-ink: #23203a;
+  --c-dot: rgba(255, 72, 176, 0.5);
+  --c-dot-blend: multiply;
+  --c-dot-opacity: 0.45;
+  --c-speedlines: none;
+}
+.sv-dim-riso .sv-panel {
+  background: #faf6ec;
+  border: 2px solid #ff48b0;
+  border-radius: 2px;
+  box-shadow: 4px 4px 0 0 #0078ff;
+  color: #23203a;
+  filter: contrast(1.05);
+}
+.sv-dim-riso .sv-panel:hover { box-shadow: 6px 6px 0 0 #ff48b0, -2px -2px 0 0 #0078ff; }
+.sv-dim-riso .sv-display { color: #ff48b0; text-shadow: 2px 2px 0 rgba(0,120,255,0.6); }
+
+/* ============================================================
+   MIXING EFFECTS — blend two dimensions together
+   Like the film's split-style shots and portal reveals.
+   ============================================================ */
+
+/* diagonal split panel: two art styles in one card */
+.sv-split { position: relative; overflow: hidden; }
+.sv-split > .sv-split-a,
+.sv-split > .sv-split-b {
+  position: absolute; inset: 0;
+}
+.sv-split > .sv-split-b {
+  clip-path: polygon(100% 0, 100% 100%, 35% 100%);
+}
+.sv-split > .sv-split-content { position: relative; z-index: 2; }
+
+/* jagged rift edge revealing another dimension behind */
+.sv-rift {
+  clip-path: polygon(
+    0 0, 100% 0, 100% 100%, 0 100%,
+    0 60%, 8% 52%, 3% 44%, 10% 36%, 4% 28%, 9% 20%, 0 14%
+  );
+}
+
+/* animated blend: hue + mix pulsing between palettes */
+@keyframes sv-blend {
+  0%   { filter: hue-rotate(0deg) saturate(1.1); }
+  50%  { filter: hue-rotate(180deg) saturate(1.4); }
+  100% { filter: hue-rotate(360deg) saturate(1.1); }
+}
+.sv-blend { animation: sv-blend 8s linear infinite; }
+
+/* double-exposure overlay: superimpose two halftone channels */
+.sv-doubleexpose { position: relative; }
+.sv-doubleexpose::before,
+.sv-doubleexpose::after {
+  content: ""; position: absolute; inset: 0; pointer-events: none;
+  background-image: radial-gradient(currentColor 1.2px, transparent 1.4px);
+  background-size: 7px 7px; mix-blend-mode: screen;
+}
+.sv-doubleexpose::before { color: rgba(255, 45, 149, 0.5); transform: translate(2px, 0); }
+.sv-doubleexpose::after  { color: rgba(0, 229, 255, 0.5); transform: translate(-2px, 0); }
+
+@media (prefers-reduced-motion: reduce) {
+  .sv-blend, .sv-dim-glitch .sv-panel, .sv-dim-portal.sv-canvas::before { animation: none; }
+}
+
+/* ============================================================
+   Cross-style animation: tilt + hue shift BETWEEN dimensions
+   Applied to a wrapper that morphs through the multiverse.
+   ============================================================ */
+@keyframes sv-dimshift {
+  0%   { transform: rotate(-2.5deg) scale(0.985); filter: hue-rotate(0deg) saturate(1); }
+  25%  { transform: rotate(1.5deg)  scale(1.01);  filter: hue-rotate(60deg) saturate(1.3); }
+  50%  { transform: rotate(-1deg)   scale(0.995); filter: hue-rotate(160deg) saturate(1.1); }
+  75%  { transform: rotate(2deg)    scale(1.008); filter: hue-rotate(260deg) saturate(1.3); }
+  100% { transform: rotate(-2.5deg) scale(0.985); filter: hue-rotate(360deg) saturate(1); }
+}
+.sv-shift { animation: sv-dimshift 12s ease-in-out infinite; }
+
+/* glitch-jump used when swapping dimensions on the switcher */
+@keyframes sv-dimjump {
+  0%   { transform: translateX(0) skewX(0); opacity: 1; }
+  15%  { transform: translateX(-8px) skewX(-6deg); opacity: 0.6; }
+  30%  { transform: translateX(6px) skewX(4deg); opacity: 0.85; }
+  100% { transform: translateX(0) skewX(0); opacity: 1; }
+}
+.sv-jump { animation: sv-dimjump 0.5s ease-out; }
+
+@media (prefers-reduced-motion: reduce) {
+  .sv-shift, .sv-jump { animation: none; }
+}
+
+/* ============================================================
+   Shared: comic section header (works in any dimension)
+   ============================================================ */
+.sv-page-title {
+  font-family: var(--font-display), sans-serif;
+  text-transform: uppercase;
+  line-height: 0.9;
+  font-size: clamp(2.5rem, 7vw, 5rem);
+}
