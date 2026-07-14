@@ -35,14 +35,18 @@ Team, Blog Cards, Newsletter, Contact Form — como blocos reutilizáveis em `se
 Login/Auth, busca & filtros, formulários multi-step; templates de Landing, Blog,
 Dashboard, páginas de erro.
 
-## 🔜 Fase 5 — Motion & Refino
+## ✅ Fase 5 — Motion & Refino (entregue)
 
-Biblioteca de motion (pop/tilt, dimension swap, glitch), documentação de uso,
-auditoria de acessibilidade completa e (opcional) Storybook.
+- **Motion**: `src/design-system/motion.ts` (popTilt, popIn, fadeRise, tiltStack,
+  glitchIn, dimSwap) + demo em `/design-system/motion`
+- **Assets**: página `/design-system/assets` (logo, ícones sociais, texturas, gradientes)
+- **Acessibilidade**: matriz de contraste WCAG ao vivo em `/design-system/accessibility`
+  (calculada dos tokens via `src/design-system/contrast.ts`)
+- **Débito técnico**: `npm run tokens:check` valida sincronia tokens.ts ↔ tokens.css (CI-ready)
 
-## Backlog / melhorias técnicas
+## Backlog / melhorias futuras
 
-- Gerar `tokens.css` a partir de `tokens.ts` no build (fim da duplicação manual)
-- Teste de sincronização tokens.css ↔ tokens.ts no CI
+- Gerar `tokens.css` a partir de `tokens.ts` no build (fim total da duplicação manual)
 - Snapshot visual dos componentes (Playwright)
+- Ilustrações e fotografia próprias (hoje `planned`)
 - Storybook como catálogo alternativo (avaliado; hoje o `/design-system` in-app cobre)

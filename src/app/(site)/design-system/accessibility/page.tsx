@@ -1,6 +1,7 @@
 import { ComicHeader } from "@/components/spiderverse/decor"
 import { DsSectionTitle, DsLead, DsCard } from "@/design-system/ds-ui"
 import { A11Y_CRITERIA, INTERACTIVE_STATES } from "@/design-system/registry"
+import { ContrastMatrix } from "@/components/design-system/contrast-matrix"
 
 export default function AccessibilityPage() {
   return (
@@ -21,6 +22,13 @@ export default function AccessibilityPage() {
           </DsCard>
         ))}
       </div>
+
+      <DsSectionTitle id="contrast">Contraste (auditoria ao vivo)</DsSectionTitle>
+      <p className="mb-3 text-xs text-white/50">
+        Razões calculadas dos tokens (WCAG 2.x). O último par mostra deliberadamente uma
+        combinação reprovada — a paleta saturada exige atenção.
+      </p>
+      <ContrastMatrix />
 
       <DsSectionTitle id="states">Estados & leitores de tela</DsSectionTitle>
       <p className="mb-3 text-xs text-white/50">
