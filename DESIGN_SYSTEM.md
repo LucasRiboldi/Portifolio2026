@@ -1,5 +1,10 @@
 # DESIGN_SYSTEM.md
 
+> 📚 **Documentação viva do Design System:** a fundação completa (arquitetura,
+> Design Tokens, convenções, estados, responsividade, acessibilidade e roadmap)
+> está em [`docs/design-system/`](./docs/design-system/README.md) e navegável em
+> `/design-system`. Este arquivo mantém os princípios de alto nível.
+
 # Personal Portal Design System
 
 Versão: 1.0

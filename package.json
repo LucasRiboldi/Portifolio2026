@@ -5,6 +5,7 @@
   "scripts": {
     "setup": "node scripts/setup-structure.mjs",
     "sync:skills": "node scripts/sync-skills.mjs",
+    "tokens:export": "node scripts/export-tokens.mjs",
     "dev": "next dev",
     "build": "next build",
     "start": "next start",

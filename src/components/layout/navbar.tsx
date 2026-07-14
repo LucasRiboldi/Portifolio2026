@@ -13,6 +13,7 @@ const links = [
   { label: "Skills", href: "/skills" },
   { label: "Dimensões", href: "/dimensoes" },
   { label: "Style Guide", href: "/styleguide" },
+  { label: "Design System", href: "/design-system" },
   { label: "Sobre", href: "/about" },
   { label: "Contato", href: "/contact" },
 ]

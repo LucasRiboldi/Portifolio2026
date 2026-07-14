@@ -1,0 +1,342 @@
+/* ============================================================
+   DESIGN TOKENS — Aranhaverso Design System
+   ------------------------------------------------------------
+   Fonte única de verdade em CSS. Espelhada em TypeScript em
+   `src/design-system/tokens.ts` e exportada para Figma/JSON via
+   `scripts/export-tokens.mjs` (npm run tokens:export).
+
+   Camadas (Design Tokens em 3 níveis):
+     1. Primitivos ...... valores crus (--c-primary-500, --space-4)
+     2. Semânticos ...... intenção (--color-primary, --shadow-md)
+     3. Componente ...... aplicados no CSS/Tailwind dos componentes
+
+   Convenção: --<categoria>-<nome>-<escala>
+   Ex.: --c-primary-500, --font-size-lg, --z-modal
+   ============================================================ */
+
+:root {
+  /* ---------------------------------------------------------
+     1. PRIMITIVOS — Cor (escalas 50→950)
+     Paleta hiper-saturada do Aranhaverso.
+     --------------------------------------------------------- */
+
+  /* Primary — Magenta (identidade principal) */
+  --c-primary-50:  #fff0f7;
+  --c-primary-100: #ffd6ea;
+  --c-primary-200: #ffadd4;
+  --c-primary-300: #ff85bf;
+  --c-primary-400: #ff5aa8;
+  --c-primary-500: #ff2d95;
+  --c-primary-600: #e01a7d;
+  --c-primary-700: #b31363;
+  --c-primary-800: #850e49;
+  --c-primary-900: #5c0a33;
+  --c-primary-950: #33061c;
+
+  /* Secondary — Cyan */
+  --c-secondary-50:  #e6feff;
+  --c-secondary-100: #b8fbff;
+  --c-secondary-200: #7df6ff;
+  --c-secondary-300: #3deffb;
+  --c-secondary-400: #00e5ff;
+  --c-secondary-500: #00c4e0;
+  --c-secondary-600: #009cb3;
+  --c-secondary-700: #007587;
+  --c-secondary-800: #004f5c;
+  --c-secondary-900: #002e36;
+  --c-secondary-950: #00171b;
+
+  /* Accent — Violet */
+  --c-accent-50:  #f3ecff;
+  --c-accent-100: #e0ccff;
+  --c-accent-200: #c4a0ff;
+  --c-accent-300: #a570ff;
+  --c-accent-400: #8c47fb;
+  --c-accent-500: #7b2ff7;
+  --c-accent-600: #6417d6;
+  --c-accent-700: #4e11a8;
+  --c-accent-800: #380c78;
+  --c-accent-900: #23074c;
+  --c-accent-950: #130428;
+
+  /* Neutral — Ink → Paper (frio, roxo-tintado) */
+  --c-neutral-0:   #ffffff;
+  --c-neutral-50:  #f7f5fb;
+  --c-neutral-100: #ece8f2;
+  --c-neutral-200: #d6cfe0;
+  --c-neutral-300: #b3a9c4;
+  --c-neutral-400: #8b7fa0;
+  --c-neutral-500: #6a5f7d;
+  --c-neutral-600: #4f4660;
+  --c-neutral-700: #382f47;
+  --c-neutral-800: #241d30;
+  --c-neutral-900: #140a24;
+  --c-neutral-950: #0a0612;
+
+  /* Semantic — Success (lime-green) */
+  --c-success-50:  #edfce8;
+  --c-success-100: #d0f7c4;
+  --c-success-200: #a6ee8f;
+  --c-success-300: #74e057;
+  --c-success-400: #4bc72f;
+  --c-success-500: #2ea818;
+  --c-success-600: #218012;
+  --c-success-700: #19600f;
+  --c-success-800: #12400c;
+  --c-success-900: #0b2606;
+
+  /* Semantic — Warning (yellow) */
+  --c-warning-50:  #fffde6;
+  --c-warning-100: #fff8b3;
+  --c-warning-200: #fff073;
+  --c-warning-300: #ffe600;
+  --c-warning-400: #f5c400;
+  --c-warning-500: #d9a600;
+  --c-warning-600: #a67e00;
+  --c-warning-700: #735700;
+  --c-warning-800: #403000;
+  --c-warning-900: #1f1700;
+
+  /* Semantic — Danger (orange-red) */
+  --c-danger-50:  #fff0eb;
+  --c-danger-100: #ffd6c7;
+  --c-danger-200: #ffb199;
+  --c-danger-300: #ff855a;
+  --c-danger-400: #ff5a1f;
+  --c-danger-500: #e63c00;
+  --c-danger-600: #b32f00;
+  --c-danger-700: #852300;
+  --c-danger-800: #571700;
+  --c-danger-900: #2e0c00;
+
+  /* Semantic — Info (riso-blue) */
+  --c-info-50:  #e6f1ff;
+  --c-info-100: #b8d6ff;
+  --c-info-200: #7db0ff;
+  --c-info-300: #4a90ff;
+  --c-info-400: #1f6fff;
+  --c-info-500: #0078ff;
+  --c-info-600: #0060cc;
+  --c-info-700: #004899;
+  --c-info-800: #003066;
+  --c-info-900: #001833;
+
+  /* --------------------------------------------------------
+     2. SEMÂNTICOS — Cor (aliases + compat. Tailwind existente)
+     Estes nomes são os consumidos por tailwind.config.ts.
+     -------------------------------------------------------- */
+  --primary-500:   var(--c-primary-500);
+  --secondary-500: var(--c-secondary-500);
+  --accent-500:    var(--c-accent-500);
+  --success-500:   var(--c-success-500);
+  --warning-500:   var(--c-warning-500);
+  --danger-500:    var(--c-danger-500);
+  --info-500:      var(--c-info-500);
+
+  --color-primary:   var(--c-primary-500);
+  --color-secondary: var(--c-secondary-500);
+  --color-accent:    var(--c-accent-500);
+
+  /* Superfícies e texto (tema escuro é o padrão do Aranhaverso) */
+  --background:           var(--c-neutral-950);
+  --background-secondary: var(--c-neutral-900);
+  --surface:              var(--c-neutral-800);
+  --surface-hover:        var(--c-neutral-700);
+  --border-color:         rgba(255, 255, 255, 0.10);
+
+  --text-primary:   var(--c-neutral-50);
+  --text-secondary: var(--c-neutral-300);
+  --text-muted:     var(--c-neutral-400);
+  --text-inverse:   var(--c-neutral-950);
+
+  /* ---------------------------------------------------------
+     TIPOGRAFIA
+     next/font define --font-sans / --font-display / --font-heavy
+     no <html>. Aqui só definimos o que falta (mono) e a escala.
+     --------------------------------------------------------- */
+  --font-mono: ui-monospace, "SF Mono", "JetBrains Mono", "Fira Code", monospace;
+
+  --font-size-2xs: 0.625rem;  /* 10 */
+  --font-size-xs:  0.75rem;   /* 12 */
+  --font-size-sm:  0.875rem;  /* 14 */
+  --font-size-md:  1rem;      /* 16 (base) */
+  --font-size-lg:  1.125rem;  /* 18 */
+  --font-size-xl:  1.25rem;   /* 20 */
+  --font-size-2xl: 1.5rem;    /* 24 */
+  --font-size-3xl: 1.875rem;  /* 30 */
+  --font-size-4xl: 2.25rem;   /* 36 */
+  --font-size-5xl: 3rem;      /* 48 */
+  --font-size-6xl: 3.75rem;   /* 60 */
+  --font-size-7xl: 4.5rem;    /* 72 */
+
+  --line-height-none:    1;
+  --line-height-tight:   1.15;
+  --line-height-snug:    1.3;
+  --line-height-normal:  1.5;
+  --line-height-relaxed: 1.7;
+
+  --font-weight-normal:   400;
+  --font-weight-medium:   500;
+  --font-weight-semibold: 600;
+  --font-weight-bold:     700;
+  --font-weight-black:    900;
+
+  --tracking-tighter: -0.03em;
+  --tracking-tight:   -0.01em;
+  --tracking-normal:  0em;
+  --tracking-wide:    0.03em;
+  --tracking-wider:   0.06em;
+  --tracking-widest:  0.12em;
+
+  /* ---------------------------------------------------------
+     ESPAÇAMENTO (base 4px)
+     --------------------------------------------------------- */
+  --space-0:  0;
+  --space-1:  0.25rem;  /* 4  */
+  --space-2:  0.5rem;   /* 8  */
+  --space-3:  0.75rem;  /* 12 */
+  --space-4:  1rem;     /* 16 */
+  --space-5:  1.25rem;  /* 20 */
+  --space-6:  1.5rem;   /* 24 */
+  --space-8:  2rem;     /* 32 */
+  --space-10: 2.5rem;   /* 40 */
+  --space-12: 3rem;     /* 48 */
+  --space-16: 4rem;     /* 64 */
+  --space-20: 5rem;     /* 80 */
+  --space-24: 6rem;     /* 96 */
+  --space-32: 8rem;     /* 128 */
+
+  /* ---------------------------------------------------------
+     BORDER RADIUS
+     --------------------------------------------------------- */
+  --radius-none: 0;
+  --radius-sm:   0.25rem;  /* 4  */
+  --radius-md:   0.5rem;   /* 8  */
+  --radius-lg:   0.75rem;  /* 12 */
+  --radius-xl:   1rem;     /* 16 */
+  --radius-2xl:  1.5rem;   /* 24 */
+  --radius-full: 9999px;
+  --radius:      var(--radius-lg); /* base histórica */
+
+  /* ---------------------------------------------------------
+     BORDAS
+     --------------------------------------------------------- */
+  --border-width-0: 0;
+  --border-width-1: 1px;
+  --border-width-2: 2px;
+  --border-width-3: 3px;   /* traço comic característico */
+  --border-width-4: 4px;
+
+  /* ---------------------------------------------------------
+     SOMBRAS / ELEVATION
+     Suaves (UI) + Comic (offset sólido, identidade Aranhaverso)
+     --------------------------------------------------------- */
+  --shadow-xs:  0 1px 2px rgba(0, 0, 0, 0.30);
+  --shadow-sm:  0 2px 6px rgba(0, 0, 0, 0.35);
+  --shadow-md:  0 6px 16px rgba(0, 0, 0, 0.40);
+  --shadow-lg:  0 12px 32px rgba(0, 0, 0, 0.45);
+  --shadow-xl:  0 24px 56px rgba(0, 0, 0, 0.50);
+  --shadow-primary: 0 8px 24px rgba(255, 45, 149, 0.35);
+  --shadow-focus:   0 0 0 3px rgba(0, 229, 255, 0.55);
+
+  /* Elevation comic (hard shadow) */
+  --elevation-0: none;
+  --elevation-1: 2px 2px 0 0 #000;
+  --elevation-2: 4px 4px 0 0 #000;
+  --elevation-3: 6px 6px 0 0 #000;
+  --elevation-4: 8px 8px 0 0 #000;
+  --elevation-5: 10px 10px 0 0 #000;
+
+  /* ---------------------------------------------------------
+     GRADIENTES
+     --------------------------------------------------------- */
+  --gradient-start: var(--c-warning-300);
+  --gradient-mid:   var(--c-primary-500);
+  --gradient-end:   var(--c-secondary-400);
+  --gradient-accent: linear-gradient(90deg, var(--c-warning-300), var(--c-primary-500), var(--c-secondary-400));
+  --gradient-text:   linear-gradient(90deg, var(--c-primary-500), var(--c-accent-500));
+  --gradient-rainbow: linear-gradient(90deg, var(--c-warning-300), var(--c-primary-500), var(--c-secondary-400), var(--c-success-400));
+
+  /* ---------------------------------------------------------
+     OPACIDADE
+     --------------------------------------------------------- */
+  --opacity-0:   0;
+  --opacity-5:   0.05;
+  --opacity-10:  0.10;
+  --opacity-20:  0.20;
+  --opacity-40:  0.40;
+  --opacity-60:  0.60;
+  --opacity-80:  0.80;
+  --opacity-100: 1;
+
+  /* ---------------------------------------------------------
+     BLUR
+     --------------------------------------------------------- */
+  --blur-sm: 4px;
+  --blur-md: 8px;
+  --blur-lg: 16px;
+  --blur-xl: 24px;
+
+  /* ---------------------------------------------------------
+     Z-INDEX (escala coordenada de camadas)
+     --------------------------------------------------------- */
+  --z-base:     0;
+  --z-docked:   10;
+  --z-dropdown: 1000;
+  --z-sticky:   1100;
+  --z-banner:   1200;
+  --z-overlay:  1300;
+  --z-modal:    1400;
+  --z-popover:  1500;
+  --z-toast:    1600;
+  --z-tooltip:  1700;
+
+  /* ---------------------------------------------------------
+     MOTION — Duração & Easing
+     --------------------------------------------------------- */
+  --duration-instant: 75ms;
+  --duration-fast:    150ms;
+  --duration-normal:  250ms;
+  --duration-slow:    350ms;
+  --duration-slower:  500ms;
+
+  --ease-linear:  linear;
+  --ease-in:      cubic-bezier(0.4, 0, 1, 1);
+  --ease-out:     cubic-bezier(0, 0, 0.2, 1);
+  --ease-in-out:  cubic-bezier(0.4, 0, 0.2, 1);
+  --ease-spring:  cubic-bezier(0.34, 1.56, 0.64, 1); /* pop comic */
+
+  /* ---------------------------------------------------------
+     LAYOUT — Breakpoints & Container
+     (breakpoints são meta-tokens; usados no export/Tailwind)
+     --------------------------------------------------------- */
+  --breakpoint-mobile:       375px;
+  --breakpoint-large-mobile: 425px;
+  --breakpoint-tablet:       768px;
+  --breakpoint-laptop:       1024px;
+  --breakpoint-desktop:      1440px;
+
+  --container-sm:  640px;
+  --container-md:  768px;
+  --container-lg:  1024px;
+  --container-xl:  1200px;
+  --container-2xl: 1200px;
+}
+
+/* ============================================================
+   TEMA CLARO — overrides de superfície/texto
+   O Aranhaverso é dark-first; .light inverte as superfícies.
+   ============================================================ */
+:root.light,
+.light {
+  --background:           var(--c-neutral-50);
+  --background-secondary: var(--c-neutral-100);
+  --surface:              var(--c-neutral-0);
+  --surface-hover:        var(--c-neutral-100);
+  --border-color:         rgba(10, 6, 18, 0.12);
+
+  --text-primary:   var(--c-neutral-900);
+  --text-secondary: var(--c-neutral-700);
+  --text-muted:     var(--c-neutral-500);
+  --text-inverse:   var(--c-neutral-0);
+}
