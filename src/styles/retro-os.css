@@ -1,0 +1,130 @@
+/* ============================================================
+   RETRO-OS — recriações originais de chrome de janela (homenagem).
+   Win95, WinXP (Luna) e macOS. CSS próprio; sem logos/ícones de
+   marca. Glyphs genéricos e traffic-lights (padrão de UI comum).
+   Classes: .os-window.os-95 / .os-xp / .os-mac
+   ============================================================ */
+
+.os-window {
+  --tb-h: 30px;
+  position: relative;
+  overflow: hidden;
+  font-family: ui-sans-serif, system-ui, sans-serif;
+  color: #111;
+}
+.os-window .os-titlebar {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  height: var(--tb-h);
+  padding: 0 6px;
+  user-select: none;
+  font-size: 13px;
+  font-weight: 700;
+}
+.os-window .os-title { flex: 1; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+.os-window .os-btns { display: flex; gap: 3px; }
+.os-window .os-body { padding: 14px; font-size: 13px; line-height: 1.5; }
+
+/* ---------------- Windows 95 ---------------- */
+.os-95 {
+  background: #c0c0c0;
+  border: 2px solid;
+  border-color: #dfdfdf #000 #000 #dfdfdf;
+  box-shadow: inset 1px 1px 0 #fff, inset -1px -1px 0 #808080;
+  color: #000;
+  font-family: "Tahoma", "MS Sans Serif", ui-sans-serif, sans-serif;
+}
+.os-95 .os-titlebar {
+  background: linear-gradient(90deg, #000080, #1084d0);
+  color: #fff;
+  margin: 2px;
+  height: 24px;
+  --tb-h: 24px;
+}
+.os-95 .os-btns button {
+  width: 18px; height: 16px;
+  background: #c0c0c0;
+  border: 1px solid;
+  border-color: #fff #000 #000 #fff;
+  box-shadow: inset 1px 1px 0 #dfdfdf, inset -1px -1px 0 #808080;
+  font-size: 10px; font-weight: 700; line-height: 1; color: #000;
+  display: grid; place-items: center; cursor: pointer;
+}
+.os-95 .os-btns button:active { border-color: #000 #fff #fff #000; box-shadow: inset 1px 1px 0 #808080; }
+.os-95 .os-body { background: #c0c0c0; }
+.os-95 .os-inset {
+  background: #fff; border: 2px solid;
+  border-color: #808080 #fff #fff #808080;
+  box-shadow: inset 1px 1px 0 #000; padding: 8px;
+}
+.os-95 .os-btn {
+  background: #c0c0c0; border: 2px solid;
+  border-color: #fff #000 #000 #fff;
+  box-shadow: inset 1px 1px 0 #dfdfdf, inset -1px -1px 0 #808080;
+  padding: 4px 14px; font-size: 12px; cursor: pointer; color: #000;
+}
+.os-95 .os-btn:active { border-color: #000 #fff #fff #000; }
+
+/* ---------------- Windows XP (Luna) ---------------- */
+.os-xp {
+  background: #ece9d8;
+  border: 1px solid #0831d9;
+  border-radius: 8px 8px 0 0;
+  box-shadow: 0 8px 30px rgba(0, 0, 0, 0.4);
+  font-family: "Tahoma", "Segoe UI", ui-sans-serif, sans-serif;
+  color: #000;
+}
+.os-xp .os-titlebar {
+  height: 30px; --tb-h: 30px;
+  border-radius: 7px 7px 0 0;
+  background: linear-gradient(180deg, #0997ff 0%, #0053ee 8%, #0050ee 40%, #06f 88%, #0141dd 100%);
+  color: #fff; text-shadow: 1px 1px 1px rgba(0, 0, 0, 0.6);
+  padding-left: 10px;
+}
+.os-xp .os-btns button {
+  width: 22px; height: 21px; border-radius: 4px; cursor: pointer;
+  border: 1px solid rgba(255, 255, 255, 0.6);
+  color: #fff; font-size: 11px; font-weight: 700;
+  background: linear-gradient(180deg, #4a9bf5, #0a56d6);
+  display: grid; place-items: center;
+}
+.os-xp .os-btns button.os-close { background: linear-gradient(180deg, #f5866a, #d43c1e); }
+.os-xp .os-body { background: #ece9d8; }
+.os-xp .os-inset { background: #fff; border: 1px solid #7f9db9; padding: 10px; border-radius: 2px; }
+.os-xp .os-btn {
+  background: linear-gradient(180deg, #fdfdfd, #e6e6e6);
+  border: 1px solid #7f9db9; border-radius: 4px; padding: 5px 16px; font-size: 12px; cursor: pointer;
+}
+.os-xp .os-btn:hover { border-color: #f5a623; }
+
+/* ---------------- macOS ---------------- */
+.os-mac {
+  background: #ffffff;
+  border-radius: 12px;
+  box-shadow: 0 20px 60px rgba(0, 0, 0, 0.45), 0 0 0 1px rgba(0, 0, 0, 0.08);
+  font-family: -apple-system, "SF Pro Text", "Segoe UI", ui-sans-serif, sans-serif;
+  color: #1d1d1f;
+}
+.os-mac .os-titlebar {
+  height: 38px; --tb-h: 38px;
+  background: linear-gradient(180deg, #f6f6f6, #e8e8e8);
+  border-bottom: 1px solid #d3d3d3;
+  border-radius: 12px 12px 0 0;
+  font-size: 13px; font-weight: 600; color: #4a4a4a;
+  justify-content: center; position: relative;
+}
+.os-mac .os-title { flex: 0 1 auto; text-align: center; }
+.os-mac .os-lights { position: absolute; left: 12px; display: flex; gap: 8px; }
+.os-mac .os-lights span { width: 12px; height: 12px; border-radius: 50%; display: block; }
+.os-mac .os-lights .l-red { background: #ff5f57; box-shadow: inset 0 0 0 0.5px rgba(0, 0, 0, 0.15); }
+.os-mac .os-lights .l-yellow { background: #febc2e; }
+.os-mac .os-lights .l-green { background: #28c840; }
+.os-mac .os-body { background: #fff; border-radius: 0 0 12px 12px; }
+.os-mac .os-inset { background: #f5f5f7; border: 1px solid #e0e0e2; border-radius: 8px; padding: 12px; }
+.os-mac .os-btn {
+  background: #0071e3; color: #fff; border: none; border-radius: 8px;
+  padding: 7px 16px; font-size: 13px; font-weight: 500; cursor: pointer;
+}
+.os-mac .os-btn:hover { background: #0077ed; }
+.os-mac .os-btn.os-btn-ghost { background: #e8e8ed; color: #1d1d1f; }

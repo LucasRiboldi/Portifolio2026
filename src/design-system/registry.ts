@@ -289,6 +289,7 @@ export const DS_NAV = [
   { href: "/design-system/templates", label: "Templates" },
   { href: "/design-system/motion", label: "Motion" },
   { href: "/design-system/assets", label: "Assets" },
+  { href: "/design-system/os", label: "Retro OS" },
   { href: "/design-system/lab", label: "Lab ⚡" },
   { href: "/design-system/accessibility", label: "Acessibilidade" },
   { href: "/design-system/docs", label: "Documentação" },
