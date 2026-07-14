@@ -334,6 +334,19 @@
   80% { transform: translateX(3px); }
 }
 
+@keyframes sv-toast-in {
+  from { opacity: 0; transform: translateX(24px) rotate(1.5deg); }
+  to { opacity: 1; transform: translateX(0) rotate(0); }
+}
+
+@keyframes sv-indeterminate {
+  0% { transform: translateX(-100%); }
+  100% { transform: translateX(320%); }
+}
+
+@keyframes sv-drawer-r { from { transform: translateX(100%); } to { transform: translateX(0); } }
+@keyframes sv-drawer-l { from { transform: translateX(-100%); } to { transform: translateX(0); } }
+
 @media (prefers-reduced-motion: reduce) {
   .sv-anim-error-shake { animation: none !important; }
 }
