@@ -8,6 +8,7 @@ const links = [
   { label: "Portfólio", href: "/portfolio" },
   { label: "Ferramentas", href: "/tools" },
   { label: "Skills", href: "/skills" },
+  { label: "Blog", href: "/blog" },
   { label: "Dimensões", href: "/dimensoes" },
   { label: "Style Guide", href: "/styleguide" },
   { label: "Design System", href: "/design-system" },

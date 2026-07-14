@@ -1,24 +1,26 @@
 import { SvCanvas } from "@/components/spiderverse/sv-canvas"
 import { ArtOverlay } from "@/components/design-system/art-overlay"
 import { ComicHeader } from "@/components/spiderverse/decor"
+import { BlogCard } from "@/components/cards/blog-card"
+import { posts } from "@/data/posts"
 
 export const metadata = { title: "Blog" }
 
 export default function BlogPage() {
+  const sorted = [...posts].sort((a, b) => +new Date(b.date) - +new Date(a.date))
   return (
     <SvCanvas dimension="noir">
       <ArtOverlay universe="noir" />
       <ComicHeader
         kicker="Edição especial"
         title="Blog"
-        highlight="// em breve"
-        subtitle="Artigos sobre design, código e experimentos — próxima edição a caminho."
+        highlight="noir"
+        subtitle="Artigos sobre design, código e experimentos."
       />
-      <div className="sv-panel sv-tilt-2 max-w-lg p-8">
-        <p className="sv-display text-3xl uppercase text-white">Continua…</p>
-        <p className="mt-3 text-sm opacity-80">
-          Novas histórias em preparação. Volte logo para o próximo número.
-        </p>
+      <div className="grid grid-cols-1 gap-5 md:grid-cols-2 lg:grid-cols-3">
+        {sorted.map((post) => (
+          <BlogCard key={post.slug} post={post} />
+        ))}
       </div>
     </SvCanvas>
   )
