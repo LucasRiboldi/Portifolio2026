@@ -21,6 +21,17 @@ const pop: Variants = {
   }),
 }
 
+// Hero = elemento LCP: pinta imediatamente (sem opacity:0), só transform sutil.
+// Mantém vida sem atrasar o Largest Contentful Paint.
+const heroPop: Variants = {
+  hidden: { y: 12, scale: 0.98 },
+  visible: {
+    y: 0,
+    scale: 1,
+    transition: { type: "spring", stiffness: 260, damping: 20 },
+  },
+}
+
 const socialLinks = [
   { label: 'GitHub', href: siteConfig.github, icon: GithubIcon },
   { label: 'LinkedIn', href: siteConfig.linkedin, icon: LinkedinIcon },
@@ -36,10 +47,10 @@ export function BentoGrid() {
   return (
     <div className="grid grid-cols-2 gap-5 md:grid-cols-4 md:gap-6">
 
-      {/* HERO — bloco gigante, 2 colunas */}
+      {/* HERO — bloco gigante, 2 colunas (elemento LCP: sem fade, só transform) */}
       <motion.div
         className="col-span-2 row-span-2"
-        custom={0} initial="hidden" animate="visible" variants={pop}
+        initial="hidden" animate="visible" variants={heroPop}
       >
         <BentoCard className="flex h-full min-h-[300px] flex-col justify-between sv-dots" accent="magenta">
           <div>
