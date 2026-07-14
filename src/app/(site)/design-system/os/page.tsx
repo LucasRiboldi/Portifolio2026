@@ -1,8 +1,22 @@
 import { ComicHeader } from "@/components/spiderverse/decor"
 import { DsSectionTitle, DsLead } from "@/design-system/ds-ui"
 import { RetroWindow } from "@/components/design-system/retro-window"
+import { TypingTerminal } from "@/components/design-system/typing-terminal"
 
 export const metadata = { title: "Retro OS · Design System" }
+
+const CRT_LINES = [
+  "$ ssh lucas@terra-2026",
+  "conectado. bem-vindo ao multiverso dev.",
+  "$ ls ~/portfolio",
+  "portfolio-2026/  design-system/  tools/  blog/",
+  "$ npm run build",
+  "▲ Next.js 15 — compilando…",
+  "✓ compilado com sucesso · 0 erros",
+  "$ deploy --prod",
+  "◈ deploy pronto: https://portifolio2026-two.vercel.app",
+  "$ _",
+]
 
 export default function OsThemesPage() {
   return (
@@ -10,100 +24,54 @@ export default function OsThemesPage() {
       <ComicHeader kicker="Modo dev · Retro" title="Telas" highlight="retrô" />
       <DsLead>
         Homenagem estética a três eras de interface — recriadas com CSS original
-        (sem logos ou ícones de marca). Combina com o modo dev do portfólio.
+        (sem logos/ícones de marca). No modo dev, um <strong>dock flutuante</strong> aparece
+        no rodapé e a troca de tema faz uma <strong>metamorfose animada</strong>.
       </DsLead>
 
-      {/* ---------- Windows 95 ---------- */}
-      <DsSectionTitle id="win95">Windows 95</DsSectionTitle>
-      <div className="max-w-md">
-        <RetroWindow os="95" title="Sobre.txt — Bloco de Notas">
+      {/* ---------- Área de trabalho arrastável ---------- */}
+      <DsSectionTitle id="desktop">Área de trabalho (arraste as janelas)</DsSectionTitle>
+      <div className="relative h-[560px] overflow-hidden rounded-lg border-[3px] border-black bg-[repeating-linear-gradient(45deg,#0e1113_0_12px,#0c0f11_12px_24px)]">
+        <RetroWindow os="95" title="Sobre.txt — Bloco de Notas" draggable initial={{ x: 20, y: 20 }} className="w-[300px]">
+          <div className="os-inset" style={{ fontFamily: "monospace", fontSize: 13 }}>
+            Lucas Riboldi<br />Product Designer &amp; Developer<br />---------------------<br />Do Figma ao deploy.
+          </div>
+        </RetroWindow>
+
+        <RetroWindow os="xp" title="Meus Projetos" draggable initial={{ x: 220, y: 130 }} className="w-[360px]">
           <div className="os-inset">
-            <p style={{ fontFamily: "monospace", fontSize: 13 }}>
-              Lucas Riboldi<br />
-              Product Designer &amp; Developer<br />
-              --------------------------------<br />
-              Interfaces, ferramentas e experimentos.<br />
-              Do Figma ao deploy.
-            </p>
+            <ul style={{ fontSize: 13, listStyle: "none", margin: 0, padding: 0 }}>
+              <li>📁 portfolio-2026 — Next.js</li>
+              <li>📁 design-system — Tokens</li>
+              <li>📁 sports-widget — React</li>
+              <li>📁 skill-seekers — CLI</li>
+            </ul>
           </div>
-          <div style={{ display: "flex", gap: 8, marginTop: 12, justifyContent: "flex-end" }}>
-            <button className="os-btn">OK</button>
-            <button className="os-btn">Cancelar</button>
+        </RetroWindow>
+
+        <RetroWindow os="mac" title="lucas — zsh" draggable initial={{ x: 120, y: 300 }} className="w-[380px]">
+          <div className="os-inset" style={{ background: "#1e1e1e", color: "#e6e6e6", fontFamily: "monospace", fontSize: 12, borderRadius: 8 }}>
+            <span style={{ color: "#28c840" }}>➜</span> <span style={{ color: "#38bdf8" }}>~/portfolio</span> git status<br />
+            <span style={{ color: "#b7bdc4" }}>nada a commitar, tudo limpo ✓</span>
           </div>
         </RetroWindow>
       </div>
+      <p className="mt-2 text-xs text-white/40">Dica: segure a barra de título e arraste. A janela ativa vem para a frente.</p>
 
-      {/* ---------- Windows XP ---------- */}
-      <DsSectionTitle id="winxp">Windows XP</DsSectionTitle>
-      <div className="max-w-lg">
-        <RetroWindow os="xp" title="Meus Projetos">
-          <div className="os-inset">
-            <table style={{ width: "100%", fontSize: 13, borderCollapse: "collapse" }}>
-              <thead>
-                <tr style={{ textAlign: "left", color: "#333", borderBottom: "1px solid #c9c2a8" }}>
-                  <th style={{ padding: "4px 6px" }}>Nome</th>
-                  <th style={{ padding: "4px 6px" }}>Tipo</th>
-                  <th style={{ padding: "4px 6px" }}>Modificado</th>
-                </tr>
-              </thead>
-              <tbody>
-                {[
-                  ["portfolio-2026", "Next.js", "hoje"],
-                  ["design-system", "Tokens", "hoje"],
-                  ["sports-widget", "React", "ontem"],
-                  ["skill-seekers", "CLI", "jul 2026"],
-                ].map(([n, t, m]) => (
-                  <tr key={n} style={{ borderBottom: "1px solid #eee" }}>
-                    <td style={{ padding: "4px 6px" }}>📁 {n}</td>
-                    <td style={{ padding: "4px 6px" }}>{t}</td>
-                    <td style={{ padding: "4px 6px", color: "#555" }}>{m}</td>
-                  </tr>
-                ))}
-              </tbody>
-            </table>
-          </div>
-          <div style={{ display: "flex", gap: 8, marginTop: 12, justifyContent: "flex-end" }}>
-            <button className="os-btn">Abrir</button>
-            <button className="os-btn">Propriedades</button>
-          </div>
+      {/* ---------- Tela CRT que emite mensagens ---------- */}
+      <DsSectionTitle id="crt">Tela que emite mensagens</DsSectionTitle>
+      <div className="max-w-xl">
+        <RetroWindow os="mac" title="terminal — lucas@terra-2026">
+          <TypingTerminal lines={CRT_LINES} />
         </RetroWindow>
       </div>
 
-      {/* ---------- macOS ---------- */}
-      <DsSectionTitle id="macos">macOS</DsSectionTitle>
-      <div className="max-w-lg">
-        <RetroWindow os="mac" title="lucas — zsh — 80×24">
-          <div
-            className="os-inset"
-            style={{ background: "#1e1e1e", color: "#e6e6e6", fontFamily: "monospace", fontSize: 13, borderRadius: 8 }}
-          >
-            <p style={{ margin: 0 }}>
-              <span style={{ color: "#28c840" }}>lucas@terra-2026</span>
-              <span style={{ color: "#8b9299" }}>:</span>
-              <span style={{ color: "#38bdf8" }}>~/portfolio</span>
-              <span style={{ color: "#8b9299" }}>$</span> npm run build
-            </p>
-            <p style={{ margin: "6px 0 0", color: "#b7bdc4" }}>▲ Next.js 15 — Compiled successfully ✓</p>
-            <p style={{ margin: "2px 0 0", color: "#b7bdc4" }}>◈ 60+ rotas · 0 erros</p>
-            <p style={{ margin: "8px 0 0" }}>
-              <span style={{ color: "#28c840" }}>lucas@terra-2026</span>
-              <span style={{ color: "#8b9299" }}>:</span>
-              <span style={{ color: "#38bdf8" }}>~/portfolio</span>
-              <span style={{ color: "#8b9299" }}>$</span> <span style={{ background: "#e6e6e6", color: "#1e1e1e" }}>&nbsp;</span>
-            </p>
-          </div>
-          <div style={{ display: "flex", gap: 8, marginTop: 12 }}>
-            <button className="os-btn">Deploy</button>
-            <button className="os-btn os-btn-ghost">Cancelar</button>
-          </div>
-        </RetroWindow>
-      </div>
-
-      <p className="mt-8 text-xs text-white/40">
-        Componente reutilizável: <code className="text-[var(--sv-cyan)]">
-          &lt;RetroWindow os=&quot;95|xp|mac&quot; title=&quot;…&quot; /&gt;
-        </code>
-      </p>
+      {/* ---------- Referência ---------- */}
+      <DsSectionTitle id="ref">Componentes</DsSectionTitle>
+      <pre className="overflow-x-auto rounded-md border-2 border-black bg-black/50 p-4 text-xs text-white/80">
+        <code>{`<RetroWindow os="95|xp|mac" title="…" draggable initial={{x,y}} />
+<TypingTerminal lines={["$ npm run build", "✓ ok"]} />
+// dock flutuante e metamorfose ativam no modo dev (botão ❯_ DEV no topo)`}</code>
+      </pre>
     </div>
   )
 }

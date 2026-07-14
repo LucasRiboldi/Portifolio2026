@@ -8,6 +8,7 @@
 @import "./sv-surfaces.css";
 @import "./sober.css";
 @import "./retro-os.css";
+@import "./dev-mode.css";
 
 @tailwind base;
 @tailwind components;
