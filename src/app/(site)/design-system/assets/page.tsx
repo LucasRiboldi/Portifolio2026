@@ -2,6 +2,8 @@ import { ComicHeader } from "@/components/spiderverse/decor"
 import { DsSectionTitle, DsLead } from "@/design-system/ds-ui"
 import { GithubIcon, LinkedinIcon } from "@/components/ui/social-icons"
 import { SV_ICONS } from "@/components/ui/sv-icons"
+import { LogoGrid } from "@/components/design-system/logos"
+import { PUNK_ILLUSTRATIONS } from "@/components/design-system/punk-illustrations"
 
 function Swatch({ label, children }: { label: string; children: React.ReactNode }) {
   return (
@@ -37,6 +39,19 @@ export default function AssetsPage() {
             LR
           </span>
         </Swatch>
+      </div>
+
+      <DsSectionTitle id="logos">Logos — 10 lockups</DsSectionTitle>
+      <LogoGrid />
+
+      <DsSectionTitle id="punk">Ilustrações punk</DsSectionTitle>
+      <div className="grid grid-cols-2 gap-4 sm:grid-cols-4 lg:grid-cols-8">
+        {PUNK_ILLUSTRATIONS.map(({ name, Comp }) => (
+          <div key={name} className="flex flex-col items-center gap-2 rounded-lg border-[3px] border-black bg-[var(--sv-ink-2)] p-3 shadow-[var(--elevation-2)]">
+            <Comp className="h-14 w-14" />
+            <span className="text-center text-[0.55rem] uppercase tracking-wide text-white/45">{name}</span>
+          </div>
+        ))}
       </div>
 
       <DsSectionTitle id="icons">Ícones próprios</DsSectionTitle>

@@ -223,6 +223,14 @@ export const PATTERNS: DsComponent[] = [
   { name: "FAQ", status: "ready", href: "/design-system/patterns/faq" },
   { name: "Navegação principal", status: "ready" },
   { name: "Contato", status: "ready" },
+  { name: "Onboarding / tour", status: "planned" },
+  { name: "Command palette (⌘K)", status: "planned" },
+  { name: "Central de notificações", status: "planned" },
+  { name: "Paywall / upgrade", status: "planned" },
+  { name: "Cookie consent", status: "planned" },
+  { name: "Checkout / carrinho", status: "planned" },
+  { name: "Comentários / thread", status: "planned" },
+  { name: "Filtros avançados (drawer)", status: "planned" },
 ]
 
 export const TEMPLATES: DsComponent[] = [
@@ -232,6 +240,11 @@ export const TEMPLATES: DsComponent[] = [
   { name: "Portfólio / Grid", status: "ready" },
   { name: "Página de erro", status: "ready" },
   { name: "Contato", status: "ready" },
+  { name: "Pricing / planos", status: "planned" },
+  { name: "Perfil / conta", status: "planned" },
+  { name: "Documentação", status: "planned" },
+  { name: "Changelog", status: "planned" },
+  { name: "Coming soon", status: "planned" },
 ]
 
 export const MOTION_PATTERNS = [

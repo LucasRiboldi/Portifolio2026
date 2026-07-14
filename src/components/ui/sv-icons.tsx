@@ -52,6 +52,25 @@ export const SvIconWeb2 = (p: IconProps) => (
   <Base {...p}><path d="M12 2v20M2 12h20M4.5 4.5l15 15M19.5 4.5l-15 15" /></Base>
 )
 
+export const SvIconGuitar = (p: IconProps) => (
+  <Base {...p}><path d="M14 4l3 3-6 6M8 13a3 3 0 1 0 3 3c0-1-1-2-1-3l3-3" /><circle cx="8" cy="16" r="1.2" fill="currentColor" /></Base>
+)
+export const SvIconHeadphone = (p: IconProps) => (
+  <Base {...p}><path d="M4 14v-2a8 8 0 0 1 16 0v2" /><rect x="3" y="14" width="4" height="6" rx="1.5" /><rect x="17" y="14" width="4" height="6" rx="1.5" /></Base>
+)
+export const SvIconMask = (p: IconProps) => (
+  <Base {...p}><ellipse cx="12" cy="12" rx="8" ry="9" /><path d="M8 9l3 2-3 2M16 9l-3 2 3 2" /></Base>
+)
+export const SvIconSkull = (p: IconProps) => (
+  <Base {...p}><path d="M5 11a7 7 0 0 1 14 0c0 3-2 4-2 5v2H7v-2c0-1-2-2-2-5Z" /><circle cx="9" cy="11" r="1.4" fill="currentColor" /><circle cx="15" cy="11" r="1.4" fill="currentColor" /></Base>
+)
+export const SvIconHeart = (p: IconProps) => (
+  <Base {...p}><path d="M12 20S4 14 4 9a4 4 0 0 1 8-1 4 4 0 0 1 8 1c0 5-8 11-8 11Z" /></Base>
+)
+export const SvIconPin = (p: IconProps) => (
+  <Base {...p}><path d="M7 17q-4-2-2-6t7-3l6 1q3 .5 2-2" /><circle cx="7" cy="17" r="1.6" /></Base>
+)
+
 export const SV_ICONS = [
   { name: "Web", Comp: SvIconWeb },
   { name: "Mail", Comp: SvIconMail },
@@ -61,4 +80,10 @@ export const SV_ICONS = [
   { name: "Palette", Comp: SvIconPalette },
   { name: "Bolt", Comp: SvIconBolt },
   { name: "Web2", Comp: SvIconWeb2 },
+  { name: "Guitar", Comp: SvIconGuitar },
+  { name: "Headphone", Comp: SvIconHeadphone },
+  { name: "Mask", Comp: SvIconMask },
+  { name: "Skull", Comp: SvIconSkull },
+  { name: "Heart", Comp: SvIconHeart },
+  { name: "Pin", Comp: SvIconPin },
 ] as const

@@ -1,0 +1,84 @@
+/* ============================================================
+   SV-PUNK — Efeitos inspirados no Spider-Punk / colagem / graffiti.
+   Camada extrema (Lab). Prefixo .fx-*. Todos com reduced-motion.
+   ============================================================ */
+
+/* Letras de resgate (ransom note) — aplicar em cada filho .fx-ransom-piece */
+.fx-ransom { display: inline-flex; flex-wrap: wrap; gap: 2px; }
+.fx-ransom-piece {
+  display: inline-block; padding: 0 6px; border: 2px solid #000;
+  font-family: var(--font-heavy), sans-serif; line-height: 1.1;
+  box-shadow: 2px 2px 0 #000;
+}
+
+/* Spray / splatter (lata de tinta) */
+.fx-spray {
+  background-image:
+    radial-gradient(circle at 20% 30%, currentColor 0 5%, transparent 6%),
+    radial-gradient(circle at 70% 20%, currentColor 0 3%, transparent 4%),
+    radial-gradient(circle at 45% 60%, currentColor 0 6%, transparent 7%),
+    radial-gradient(circle at 80% 70%, currentColor 0 2%, transparent 3%),
+    radial-gradient(circle at 30% 80%, currentColor 0 4%, transparent 5%),
+    radial-gradient(circle at 60% 45%, currentColor 0 2.5%, transparent 3.5%);
+  color: var(--sv-magenta);
+}
+
+/* Colagem de papel rasgado (clip irregular) */
+.fx-collage {
+  clip-path: polygon(2% 6%, 20% 0, 46% 5%, 72% 0, 98% 8%, 96% 44%, 100% 82%, 78% 96%, 50% 92%, 22% 100%, 4% 90%, 0 50%);
+}
+
+/* Contorno de marcador (traço grosso irregular) */
+.fx-marker { -webkit-text-stroke: 3px #000; paint-order: stroke fill; filter: url(#art-rough); }
+
+/* Borda em zigue-zague (fita perfurada) */
+.fx-zigzag {
+  --z: 10px;
+  -webkit-mask:
+    conic-gradient(from -45deg at bottom, #0000, #000 1deg 89deg, #0000 90deg) 50% / var(--z) 100% repeat-x,
+    linear-gradient(#000 0 0) padding-box;
+}
+
+/* Risograph — dupla impressão desalinhada (dois canais) */
+.fx-riso { text-shadow: 2px 0 var(--sv-magenta), -2px 2px var(--sv-cyan); }
+
+/* Screentone gigante (Ben-Day grande) */
+.fx-screentone {
+  background-image: radial-gradient(var(--st-color, rgba(255,45,149,0.6)) 3px, transparent 3.4px);
+  background-size: 16px 16px;
+}
+
+/* Sticker slap (adesivo colado torto) */
+.fx-slap {
+  transform: rotate(-6deg);
+  border: 3px solid #fff; box-shadow: 3px 5px 8px rgba(0,0,0,0.5);
+  filter: drop-shadow(0 0 0 #000);
+}
+
+/* Fita cruzada (X de fita adesiva) */
+.fx-tape-x { position: relative; }
+.fx-tape-x::before, .fx-tape-x::after {
+  content: ""; position: absolute; left: 50%; top: 50%; width: 120%; height: 22px;
+  background: rgba(255,230,0,0.4); border-block: 1px dashed rgba(0,0,0,0.3);
+  pointer-events: none;
+}
+.fx-tape-x::before { transform: translate(-50%,-50%) rotate(24deg); }
+.fx-tape-x::after  { transform: translate(-50%,-50%) rotate(-24deg); }
+
+/* Aberração cromática punk (mais forte, animada) */
+.fx-chroma-punk { animation: fx-chroma-punk 1.6s steps(1) infinite; }
+@keyframes fx-chroma-punk {
+  0%,100% { text-shadow: 3px 0 var(--sv-magenta), -3px 0 var(--sv-cyan), 0 2px var(--sv-yellow); }
+  50%     { text-shadow: -4px 0 var(--sv-magenta), 4px 0 var(--sv-cyan), 0 -2px var(--sv-lime); }
+}
+
+/* Raios elétricos ao fundo (energia punk) */
+.fx-bolts {
+  background:
+    repeating-linear-gradient(72deg, transparent 0 22px, rgba(255,230,0,0.10) 22px 24px),
+    repeating-linear-gradient(-58deg, transparent 0 30px, rgba(0,229,255,0.08) 30px 32px);
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .fx-chroma-punk { animation: none; }
+}

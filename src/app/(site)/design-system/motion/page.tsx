@@ -5,9 +5,16 @@ import { motion } from "motion/react"
 import { RotateCw } from "lucide-react"
 import { ComicHeader } from "@/components/spiderverse/decor"
 import { DsLead } from "@/design-system/ds-ui"
-import { popTilt, popIn, fadeRise, tiltStack, glitchIn, dimSwap, MOTION_PRESETS } from "@/design-system/motion"
+import {
+  popTilt, popIn, fadeRise, tiltStack, glitchIn, dimSwap,
+  slamIn, shake, swing, vibrate, flicker, popBurst, slideRip, spinPop, elastic, drift,
+  MOTION_PRESETS,
+} from "@/design-system/motion"
 
-const VARIANTS = { popTilt, popIn, fadeRise, tiltStack, glitchIn, dimSwap } as const
+const VARIANTS = {
+  popTilt, popIn, fadeRise, tiltStack, glitchIn, dimSwap,
+  slamIn, shake, swing, vibrate, flicker, popBurst, slideRip, spinPop, elastic, drift,
+} as const
 
 export default function MotionPage() {
   const [key, setKey] = useState(0)
