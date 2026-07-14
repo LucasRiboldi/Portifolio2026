@@ -1,0 +1,128 @@
+"use client"
+
+import { useState, useTransition } from "react"
+import { useRouter } from "next/navigation"
+
+import type { FieldConfig } from "@/lib/admin/resources"
+import { saveResource } from "@/app/admin/crud-actions"
+import { MediaPicker } from "@/components/admin/media-picker"
+
+interface ResourceFormProps {
+  slug: string
+  singular: string
+  fields: FieldConfig[]
+  id: string | null
+  initial: Record<string, unknown>
+}
+
+function toInputValue(field: FieldConfig, raw: unknown): string {
+  if (field.type === "tags") return Array.isArray(raw) ? raw.join(", ") : ""
+  if (raw == null) return ""
+  return String(raw)
+}
+
+const inputCls =
+  "w-full rounded-lg border border-white/15 bg-neutral-950 px-3 py-2 text-sm text-white outline-none focus:border-white/40"
+
+export function ResourceForm({ slug, singular, fields, id, initial }: ResourceFormProps) {
+  const router = useRouter()
+  const [pending, start] = useTransition()
+  const [error, setError] = useState<string | null>(null)
+
+  function onSubmit(e: React.FormEvent<HTMLFormElement>) {
+    e.preventDefault()
+    setError(null)
+    const formData = new FormData(e.currentTarget)
+    start(async () => {
+      const res = await saveResource(slug, id, formData)
+      if (res.ok) {
+        router.push(`/admin/${slug}`)
+        router.refresh()
+      } else {
+        setError(res.error)
+      }
+    })
+  }
+
+  return (
+    <form onSubmit={onSubmit} className="max-w-2xl space-y-5">
+      {fields.map((field) => {
+        const value = toInputValue(field, initial[field.name])
+        return (
+          <div key={field.name} className="space-y-1.5">
+            <label htmlFor={field.name} className="block text-sm font-medium text-white/80">
+              {field.label}
+              {field.required && <span className="text-red-400"> *</span>}
+            </label>
+
+            {field.type === "textarea" && (
+              <textarea id={field.name} name={field.name} defaultValue={value} rows={3} className={inputCls} />
+            )}
+
+            {field.type === "markdown" && (
+              <textarea id={field.name} name={field.name} defaultValue={value} rows={12} className={`${inputCls} font-mono`} />
+            )}
+
+            {field.type === "select" && (
+              <select id={field.name} name={field.name} defaultValue={value} className={inputCls}>
+                {field.options?.map((o) => (
+                  <option key={o.value} value={o.value}>
+                    {o.label}
+                  </option>
+                ))}
+              </select>
+            )}
+
+            {field.type === "boolean" && (
+              <label className="flex items-center gap-2 text-sm text-white/70">
+                <input
+                  type="checkbox"
+                  name={field.name}
+                  defaultChecked={initial[field.name] === true}
+                  className="size-4"
+                />
+                {field.label}
+              </label>
+            )}
+
+            {field.type === "media" && (
+              <MediaPicker name={field.name} defaultValue={value} inputClassName={inputCls} />
+            )}
+
+            {(field.type === "text" || field.type === "tags" || field.type === "number") && (
+              <input
+                id={field.name}
+                name={field.name}
+                type={field.type === "number" ? "number" : "text"}
+                defaultValue={value}
+                placeholder={field.placeholder}
+                className={inputCls}
+              />
+            )}
+
+            {field.help && <p className="text-xs text-white/40">{field.help}</p>}
+          </div>
+        )
+      })}
+
+      {error && <p className="rounded-lg border border-red-500/30 bg-red-500/10 p-3 text-sm text-red-300">{error}</p>}
+
+      <div className="flex gap-3">
+        <button
+          type="submit"
+          disabled={pending}
+          className="rounded-lg bg-white px-5 py-2 text-sm font-semibold text-black transition-opacity hover:opacity-90 disabled:opacity-60"
+        >
+          {pending ? "Salvando…" : `Salvar ${singular.toLowerCase()}`}
+        </button>
+        <button
+          type="button"
+          onClick={() => router.push(`/admin/${slug}`)}
+          className="rounded-lg border border-white/15 px-5 py-2 text-sm text-white/70 hover:bg-white/5"
+        >
+          Cancelar
+        </button>
+      </div>
+    </form>
+  )
+}
