@@ -1,9 +1,16 @@
 import { BentoGrid } from "@/components/home/bento-grid"
 import { SvCanvas } from "@/components/spiderverse/sv-canvas"
 import { Onoma } from "@/components/spiderverse/decor"
+import { ArcaneGazette } from "@/components/realms/arcane-gazette"
 
 export default function HomePage() {
   return (
+    <>
+      {/* Realm ARCANE (Game Design) — jornal antigo, só aparece em data-realm="arcane" */}
+      <ArcaneGazette className="realm-only-arcane" />
+
+      {/* Realms Creative + Developer — conteúdo atual, preservado (some no Arcane) */}
+      <div className="realm-hide-arcane">
     <SvCanvas dimension="multiverse" className="art-grain py-10">
       {/* faixa de halftone losango (retícula plural) */}
       <div
@@ -31,5 +38,7 @@ export default function HomePage() {
 
       <BentoGrid />
     </SvCanvas>
+      </div>
+    </>
   )
 }

@@ -1,0 +1,67 @@
+/* ============================================================
+   FONTES TEMÁTICAS — realm ARCANE (The Daily Prophet).
+   Servidas de /public/font/woff2 (convertidas de .ttf/.otf).
+   font-display: swap → não bloqueiam o render; cada face só é
+   baixada quando algum texto realmente a utiliza.
+   Nome da família = nome interno real da fonte.
+   ============================================================ */
+
+/* Wordmark do título (logo Harry Potter / Daily Prophet) */
+@font-face {
+  font-family: "Harry P";
+  src: url("/font/woff2/HARRYP.woff2") format("woff2");
+  font-weight: 400;
+  font-style: normal;
+  font-display: swap;
+}
+
+/* Manchetes decorativas */
+@font-face {
+  font-family: "Headline One";
+  src: url("/font/woff2/HEADOH.woff2") format("woff2");
+  font-display: swap;
+}
+@font-face {
+  font-family: "Headline Two";
+  src: url("/font/woff2/HEADTH.woff2") format("woff2");
+  font-display: swap;
+}
+
+/* Corpo de jornal bruxo */
+@font-face {
+  font-family: "Mugglenews";
+  src: url("/font/woff2/Mugglenews.woff2") format("woff2");
+  font-display: swap;
+}
+
+/* Ornamentais / mágicas */
+@font-face {
+  font-family: "Parseltongue";
+  src: url("/font/woff2/PARSELTO.woff2") format("woff2");
+  font-display: swap;
+}
+@font-face {
+  font-family: "Lumos";
+  src: url("/font/woff2/LUMOS.woff2") format("woff2");
+  font-display: swap;
+}
+@font-face {
+  font-family: "Animales Fantastic";
+  src: url("/font/woff2/AnimalesFantastic.woff2") format("woff2");
+  font-display: swap;
+}
+@font-face {
+  font-family: "Crimes of Grindelwald";
+  src: url("/font/woff2/CrimesofGrindelwald.woff2") format("woff2");
+  font-display: swap;
+}
+@font-face {
+  font-family: "Jenna";
+  src: url("/font/woff2/jenna.woff2") format("woff2");
+  font-display: swap;
+}
+@font-face {
+  font-family: "Purple";
+  src: url("/font/woff2/purple-3.woff2") format("woff2");
+  font-display: swap;
+}

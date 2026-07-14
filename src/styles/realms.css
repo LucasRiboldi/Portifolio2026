@@ -1,0 +1,479 @@
+/* ============================================================
+   THE THREE REALMS — engine de universos.
+   Reaproveita o overlay/keyframes de dev-mode.css e adiciona:
+     • alvos de metamorfose para os 3 realms (creative/developer/arcane)
+     • a identidade visual do realm ARCANE (jornal 1920 / pergaminho)
+   creative  → default (Aranhaverso, styles/spiderverse.css)
+   developer → classe legada .sober (styles/sober.css + dev-mode.css)
+   arcane    → [data-realm="arcane"] (abaixo)
+   ============================================================ */
+
+/* ---------- Metamorfose: painéis por realm ---------- */
+.vibe-morph-overlay.to-creative .vibe-morph-panel {
+  background:
+    radial-gradient(rgba(0, 229, 255, 0.35) 1.4px, transparent 1.6px) 0 0 / 12px 12px,
+    linear-gradient(120deg, #ff2d95, #7b2ff7 45%, #00e5ff);
+}
+.vibe-morph-overlay.to-developer .vibe-morph-panel {
+  background:
+    repeating-linear-gradient(0deg, rgba(0, 0, 0, 0.25) 0 1px, transparent 1px 3px),
+    linear-gradient(160deg, #0a0c0e, #0e1113);
+}
+.vibe-morph-overlay.to-arcane .vibe-morph-panel {
+  background:
+    radial-gradient(rgba(90, 68, 32, 0.18) 1px, transparent 1.4px) 0 0 / 7px 7px,
+    linear-gradient(160deg, #efe6d0, #d8c9a3 60%, #c7b489);
+}
+
+.to-creative .vibe-morph-label {
+  color: #fff;
+  text-shadow: 2px 0 #00e5ff, -2px 0 #ff2d95;
+}
+.to-developer .vibe-morph-label {
+  color: #4ade80;
+  text-shadow: 0 0 12px rgba(74, 222, 128, 0.6);
+}
+.to-arcane .vibe-morph-label {
+  color: #2a2118;
+  font-family: Georgia, "Times New Roman", serif;
+  text-shadow: 1px 1px 0 rgba(0, 0, 0, 0.15);
+}
+
+/* ============================================================
+   CURSOR CONTROLLER — apenas no realm ARCANE (novo/aditivo).
+   Creative e Developer mantêm o cursor nativo, idêntico ao site no ar.
+   Só em ponteiro fino (mouse); toque/caneta mantêm o cursor nativo.
+   ============================================================ */
+@media (hover: hover) and (pointer: fine) {
+  /* Arcane: pena/quill (tinta) */
+  [data-realm="arcane"] {
+    cursor: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='26' height='26' viewBox='0 0 26 26'%3E%3Cpath d='M23 2 C14 5 7 12 4 22 l3 1 C10 14 16 8 24 4 Z' fill='%23241d14'/%3E%3Cpath d='M4 22 l-2 2' stroke='%23241d14' stroke-width='2'/%3E%3C/svg%3E")
+        3 3,
+      crosshair;
+  }
+}
+
+/* ============================================================
+   ARCANE REALM — "Arcane Realm": jornal antigo (Daily Prophet vibe).
+   Pergaminho envelhecido, tinta preta, serifada, molduras.
+   Neutraliza glows/halftones do Aranhaverso (como o .sober faz).
+   ============================================================ */
+[data-realm="arcane"] {
+  --arc-paper: #e9ddc2;
+  --arc-paper-2: #efe6d0;
+  --arc-surface: #f3ecd8;
+  --arc-ink: #241d14;
+  --arc-ink-2: #4a3e2c;
+  --arc-muted: #7a6c52;
+  --arc-border: #3a2f1c;
+  --arc-accent: #7a1f14; /* selo/carimbo vermelho-tinta */
+  --paper-opacity: 0;
+  --grain-opacity: 0;
+
+  --font-serif: Georgia, "Times New Roman", "Iowan Old Style", serif;
+}
+
+[data-realm="arcane"] body {
+  background:
+    /* manchas de envelhecimento */
+    radial-gradient(700px 380px at 12% -6%, rgba(120, 92, 44, 0.14), transparent 70%),
+    radial-gradient(620px 420px at 92% 8%, rgba(90, 68, 32, 0.12), transparent 72%),
+    var(--arc-paper);
+  color: var(--arc-ink);
+}
+
+[data-realm="arcane"] ::selection {
+  background: color-mix(in srgb, var(--arc-accent) 28%, transparent);
+  color: var(--arc-ink);
+}
+
+/* tipografia serifada em toda a hierarquia display/heavy */
+[data-realm="arcane"],
+[data-realm="arcane"] body,
+[data-realm="arcane"] .sv-display,
+[data-realm="arcane"] .sv-heavy,
+[data-realm="arcane"] .sv-page-title,
+[data-realm="arcane"] [class*="font-[family-name:var(--font-display)]"],
+[data-realm="arcane"] [class*="font-[family-name:var(--font-heavy)]"] {
+  font-family: var(--font-serif) !important;
+  letter-spacing: 0.01em;
+}
+
+[data-realm="arcane"] .sv-display,
+[data-realm="arcane"] .sv-page-title {
+  color: var(--arc-ink) !important;
+  text-transform: none;
+  font-weight: 700;
+  -webkit-text-stroke: 0 !important;
+}
+
+/* foco acessível (contraste AA sobre pergaminho) */
+[data-realm="arcane"] :focus-visible {
+  outline: 2px solid var(--arc-accent) !important;
+  outline-offset: 2px !important;
+  box-shadow: none !important;
+}
+
+/* canvas: mata glows / halftone / speedlines do Aranhaverso */
+[data-realm="arcane"] .sv-canvas {
+  background: var(--arc-surface) !important;
+  color: var(--arc-ink) !important;
+  border-color: var(--arc-border) !important;
+  box-shadow: 4px 4px 0 0 rgba(58, 47, 28, 0.7) !important;
+}
+[data-realm="arcane"] .sv-canvas::before,
+[data-realm="arcane"] .sv-canvas::after {
+  content: none !important;
+  display: none !important;
+}
+
+/* painéis / superfícies → recorte de jornal com moldura de tinta */
+[data-realm="arcane"] .sv-panel {
+  background: var(--arc-paper-2) !important;
+  color: var(--arc-ink) !important;
+  border: 1px solid var(--arc-border) !important;
+  box-shadow: none !important;
+}
+
+/* links sublinhados como impressão */
+[data-realm="arcane"] a {
+  color: var(--arc-ink);
+  text-decoration-color: color-mix(in srgb, var(--arc-accent) 60%, transparent);
+}
+
+/* filete ornamental sob títulos de seção */
+[data-realm="arcane"] .sv-page-title::after {
+  content: "";
+  display: block;
+  height: 3px;
+  margin-top: 0.4rem;
+  background:
+    repeating-linear-gradient(90deg, var(--arc-border) 0 14px, transparent 14px 20px);
+  opacity: 0.7;
+}
+
+/* ============================================================
+   CONTENT REGISTRY — troca de conteúdo por realm (SSR-safe, sem flash).
+   O conteúdo padrão fica visível; some no Arcane. O jornal (só-Arcane)
+   fica oculto por padrão e aparece quando data-realm="arcane".
+   O script anti-FOUC pinta data-realm antes do paint → sem layout shift.
+   ============================================================ */
+.realm-only-arcane {
+  display: none;
+}
+[data-realm="arcane"] .realm-only-arcane {
+  display: block;
+}
+[data-realm="arcane"] .realm-hide-arcane {
+  display: none !important;
+}
+
+/* ============================================================
+   ARCANE GAZETTE — a home de Game Design como jornal antigo.
+   ============================================================ */
+.arc-gazette {
+  max-width: 1120px;
+  margin: 0 auto;
+  padding: clamp(1rem, 3vw, 2.5rem) clamp(1rem, 4vw, 2rem) 3rem;
+  color: var(--arc-ink);
+  font-family: var(--font-serif);
+}
+
+/* Masthead */
+.arc-masthead {
+  text-align: center;
+  border-bottom: 3px double var(--arc-border);
+  padding-bottom: 0.75rem;
+}
+.arc-masthead-rule {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 1rem;
+  font-size: 0.72rem;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+  color: var(--arc-muted);
+  border-bottom: 1px solid var(--arc-border);
+  padding-bottom: 0.4rem;
+  margin-bottom: 0.6rem;
+}
+.arc-masthead-rule .arc-cap {
+  text-transform: capitalize;
+}
+.arc-title {
+  /* Wordmark do Daily Prophet (Harry P), com fallback serifado */
+  font-family: "Harry P", var(--font-serif);
+  font-weight: 400;
+  font-size: clamp(3rem, 10vw, 7rem);
+  line-height: 0.95;
+  letter-spacing: 0.01em;
+  margin: 0.2rem 0 0.3rem;
+  color: var(--arc-ink);
+  text-wrap: balance;
+}
+.arc-motto {
+  font-style: italic;
+  font-size: clamp(0.85rem, 2vw, 1rem);
+  color: var(--arc-ink-2);
+}
+
+/* Corpo: matéria de capa + sidebar */
+.arc-body {
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: clamp(1.25rem, 3vw, 2.5rem);
+  padding-top: 1.25rem;
+}
+@media (min-width: 900px) {
+  .arc-body {
+    grid-template-columns: 2.1fr 1fr;
+  }
+  .arc-sidebar {
+    border-left: 1px solid var(--arc-border);
+    padding-left: clamp(1rem, 2vw, 1.75rem);
+  }
+}
+
+.arc-kicker {
+  font-size: 0.72rem;
+  letter-spacing: 0.18em;
+  text-transform: uppercase;
+  color: var(--arc-accent);
+  font-weight: 700;
+  margin-bottom: 0.35rem;
+}
+.arc-headline {
+  font-family: var(--font-serif);
+  font-weight: 700;
+  font-size: clamp(1.8rem, 4.5vw, 3rem);
+  line-height: 1.05;
+  margin-bottom: 0.6rem;
+  text-wrap: balance;
+}
+.arc-standfirst {
+  font-size: clamp(1rem, 2vw, 1.2rem);
+  font-style: italic;
+  color: var(--arc-ink-2);
+  line-height: 1.5;
+  margin-bottom: 0.5rem;
+}
+.arc-byline {
+  font-size: 0.8rem;
+  letter-spacing: 0.04em;
+  text-transform: uppercase;
+  color: var(--arc-muted);
+  border-top: 1px solid var(--arc-border);
+  border-bottom: 1px solid var(--arc-border);
+  padding: 0.35rem 0;
+  margin-bottom: 1rem;
+}
+.arc-cols {
+  columns: 2;
+  column-gap: 1.75rem;
+  column-rule: 1px solid color-mix(in srgb, var(--arc-border) 45%, transparent);
+  font-size: 0.98rem;
+  line-height: 1.62;
+  text-align: justify;
+  hyphens: auto;
+}
+.arc-cols p { margin-bottom: 0.8rem; }
+@media (max-width: 560px) { .arc-cols { columns: 1; } }
+
+.arc-dropcap::first-letter {
+  font-size: 3.4em;
+  line-height: 0.72;
+  float: left;
+  padding: 0.08em 0.12em 0 0;
+  font-weight: 700;
+  color: var(--arc-accent);
+}
+
+/* Sidebar — grimório */
+.arc-sidebar-title {
+  font-size: 1.05rem;
+  font-weight: 700;
+  text-align: center;
+  text-transform: uppercase;
+  letter-spacing: 0.08em;
+  border-top: 3px double var(--arc-border);
+  border-bottom: 1px solid var(--arc-border);
+  padding: 0.4rem 0;
+  margin-bottom: 0.75rem;
+}
+.arc-grimoire > div {
+  padding: 0.5rem 0;
+  border-bottom: 1px dotted color-mix(in srgb, var(--arc-border) 60%, transparent);
+}
+.arc-grimoire dt {
+  font-weight: 700;
+  font-size: 0.95rem;
+}
+.arc-grimoire dd {
+  font-size: 0.85rem;
+  font-style: italic;
+  color: var(--arc-muted);
+}
+
+/* Filete duplo separador */
+.arc-rule-double {
+  height: 0;
+  border-top: 1px solid var(--arc-border);
+  border-bottom: 3px double var(--arc-border);
+  padding-top: 3px;
+  margin: 1.75rem 0;
+}
+
+/* Colunas de serviço */
+.arc-columns {
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: clamp(1.25rem, 3vw, 2rem);
+}
+@media (min-width: 760px) {
+  .arc-columns { grid-template-columns: repeat(3, 1fr); }
+  .arc-column + .arc-column {
+    border-left: 1px solid var(--arc-border);
+    padding-left: clamp(1rem, 2vw, 1.75rem);
+  }
+}
+.arc-col-headline {
+  font-size: 1.25rem;
+  font-weight: 700;
+  line-height: 1.15;
+  margin-bottom: 0.4rem;
+  text-wrap: balance;
+}
+.arc-col-stand {
+  font-style: italic;
+  color: var(--arc-ink-2);
+  margin-bottom: 0.5rem;
+  font-size: 0.95rem;
+}
+.arc-column p {
+  font-size: 0.92rem;
+  line-height: 1.58;
+  text-align: justify;
+}
+
+/* Almanaque — estatísticas */
+.arc-almanac {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: space-around;
+  gap: 1.5rem;
+  text-align: center;
+}
+.arc-stat { display: flex; flex-direction: column; }
+.arc-stat-value {
+  font-size: clamp(2rem, 5vw, 3rem);
+  font-weight: 700;
+  line-height: 1;
+  color: var(--arc-accent);
+}
+.arc-stat-label {
+  font-size: 0.8rem;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  color: var(--arc-muted);
+  margin-top: 0.35rem;
+}
+
+/* ============================================================
+   MAGIC INK — animações de "jornal mágico" (Daily Prophet).
+   Letras quebradas em .arc-ltr (ver InkLetters).
+     • .arc-ink    → masthead: tinta que respira/treme continuamente
+     • .arc-settle → manchete: letras se assentam ao carregar
+   ============================================================ */
+.arc-ink,
+.arc-settle {
+  display: inline;
+}
+.arc-ltr {
+  display: inline-block;
+  white-space: pre;
+  will-change: transform, opacity, filter;
+}
+
+/* masthead: tremor de tinta perpétuo, escalonado e sutil */
+.arc-ink .arc-ltr {
+  animation: arc-ink-tremble 3.6s ease-in-out infinite;
+  animation-delay: calc(var(--i) * -0.19s);
+}
+@keyframes arc-ink-tremble {
+  0%,
+  100% {
+    transform: translateY(0) rotate(0deg);
+    filter: blur(0);
+    opacity: 1;
+  }
+  25% {
+    transform: translateY(-0.9px) rotate(-0.6deg);
+  }
+  50% {
+    transform: translateY(0.6px) rotate(0.5deg);
+    filter: blur(0.25px);
+    opacity: 0.94;
+  }
+  75% {
+    transform: translateY(-0.5px) rotate(0.3deg);
+  }
+}
+
+/* manchete: cada letra emerge da tinta e se assenta (uma vez) */
+.arc-settle .arc-ltr {
+  animation: arc-letter-settle 0.62s cubic-bezier(0.2, 0.9, 0.2, 1) both;
+  animation-delay: calc(var(--i) * 0.035s);
+}
+@keyframes arc-letter-settle {
+  0% {
+    opacity: 0;
+    transform: translateY(0.4em) scale(1.35) rotate(-4deg);
+    filter: blur(3px);
+  }
+  60% {
+    opacity: 1;
+    filter: blur(0);
+  }
+  100% {
+    opacity: 1;
+    transform: translateY(0) scale(1) rotate(0deg);
+    filter: blur(0);
+  }
+}
+
+/* filete de aparição do masthead como "pena escrevendo" */
+[data-realm="arcane"] .arc-masthead {
+  position: relative;
+}
+[data-realm="arcane"] .arc-masthead::after {
+  content: "";
+  position: absolute;
+  left: 0;
+  bottom: 0;
+  height: 3px;
+  width: 100%;
+  background: var(--arc-border);
+  transform-origin: left center;
+  animation: arc-quill-write 1.1s ease-out both;
+}
+@keyframes arc-quill-write {
+  from {
+    transform: scaleX(0);
+  }
+  to {
+    transform: scaleX(1);
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  [data-realm="arcane"] * {
+    animation: none !important;
+  }
+  .arc-settle .arc-ltr,
+  [data-realm="arcane"] .arc-masthead::after {
+    opacity: 1;
+    transform: none;
+    filter: none;
+  }
+}

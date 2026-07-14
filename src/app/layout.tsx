@@ -4,6 +4,7 @@ import type { Metadata } from "next";
 import { Analytics } from "@vercel/analytics/next";
 import { ThemeProvider }
 from "@/components/providers/theme-provider";
+import { UniverseProvider } from "@/components/providers/universe-provider";
 import { Geist, Bangers, Archivo_Black, Nabla, Monoton, Rubik_Glitch, Bungee_Shade } from "next/font/google";
 import { cn } from "@/lib/utils";
 import { siteConfig } from "@/constants/site";
@@ -69,11 +70,11 @@ export default function RootLayout({
         <script
           dangerouslySetInnerHTML={{
             __html:
-              "(function(){try{if(localStorage.getItem('vibe')==='sober')document.documentElement.classList.add('sober')}catch(e){}})()",
+              "(function(){try{var r=localStorage.getItem('realm');if(!r){r=localStorage.getItem('vibe')==='sober'?'developer':'creative';}if(r!=='creative'&&r!=='developer'&&r!=='arcane')r='creative';var d=document.documentElement;d.setAttribute('data-realm',r);if(r==='developer')d.classList.add('sober');}catch(e){}})()",
           }}
         />
         <ThemeProvider>
-          {children}
+          <UniverseProvider>{children}</UniverseProvider>
         </ThemeProvider>
         <Analytics />
       </body>
