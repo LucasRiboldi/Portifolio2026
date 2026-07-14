@@ -1,17 +1,29 @@
-// For more info, see https://github.com/storybookjs/eslint-plugin-storybook#configuration-flat-config-format
+// Flat config (ESLint 9) — ESM.
+import { fileURLToPath } from "node:url";
+import { dirname } from "node:path";
+import { FlatCompat } from "@eslint/eslintrc";
 import storybook from "eslint-plugin-storybook";
 
-const { FlatCompat } = require("@eslint/eslintrc");
-
+const __dirname = dirname(fileURLToPath(import.meta.url));
 const compat = new FlatCompat({ baseDirectory: __dirname });
 
 /**
- * Flat config (ESLint 9). Faz a ponte para o shareable config eslintrc do Next
- * via FlatCompat, preservando as regras "next/core-web-vitals".
+ * Faz a ponte para o shareable config eslintrc do Next via FlatCompat,
+ * preservando "next/core-web-vitals". Inclui as regras do Storybook.
  */
-module.exports = [
+const config = [
   ...compat.extends("next/core-web-vitals"),
+  ...storybook.configs["flat/recommended"],
   {
-    ignores: [".next/**", "out/**", "build/**", "node_modules/**", "next-env.d.ts"],
+    ignores: [
+      ".next/**",
+      "out/**",
+      "build/**",
+      "storybook-static/**",
+      "node_modules/**",
+      "next-env.d.ts",
+    ],
   },
 ];
+
+export default config;

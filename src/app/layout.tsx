@@ -1,9 +1,38 @@
 import "@/styles/globals.css";
 
+import type { Metadata } from "next";
+import { Analytics } from "@vercel/analytics/next";
 import { ThemeProvider }
 from "@/components/providers/theme-provider";
 import { Geist, Bangers, Archivo_Black, Nabla, Monoton, Rubik_Glitch, Bungee_Shade } from "next/font/google";
 import { cn } from "@/lib/utils";
+import { siteConfig } from "@/constants/site";
+
+const SITE_URL = "https://portifolio2026-two.vercel.app";
+
+export const metadata: Metadata = {
+  metadataBase: new URL(SITE_URL),
+  title: {
+    default: `${siteConfig.name} — ${siteConfig.title}`,
+    template: `%s · ${siteConfig.name}`,
+  },
+  description: siteConfig.description,
+  keywords: ["Lucas Riboldi", "Product Designer", "Developer", "Design System", "Portfólio", "Aranhaverso"],
+  authors: [{ name: siteConfig.name, url: siteConfig.github }],
+  openGraph: {
+    type: "website",
+    locale: "pt_BR",
+    url: SITE_URL,
+    siteName: `${siteConfig.name} · Portfólio 2026`,
+    title: `${siteConfig.name} — ${siteConfig.title}`,
+    description: siteConfig.description,
+  },
+  twitter: {
+    card: "summary_large_image",
+    title: `${siteConfig.name} — ${siteConfig.title}`,
+    description: siteConfig.description,
+  },
+};
 
 const geist = Geist({subsets:['latin'],variable:'--font-sans'});
 
@@ -40,6 +69,7 @@ export default function RootLayout({
         <ThemeProvider>
           {children}
         </ThemeProvider>
+        <Analytics />
       </body>
     </html>
   );

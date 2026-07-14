@@ -22,6 +22,7 @@ export function SvAvatar({ name, src, size = 44, color = "magenta" }: { name: st
       style={{ width: size, height: size, background: BG[color], fontSize: size * 0.36 }}
       aria-label={name}
     >
+      {/* eslint-disable-next-line @next/next/no-img-element -- avatar aceita src arbitrário/externo */}
       {src ? <img src={src} alt={name} className="h-full w-full object-cover" /> : initials}
     </span>
   )
