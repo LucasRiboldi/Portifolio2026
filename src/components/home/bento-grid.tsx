@@ -5,6 +5,7 @@ import { motion, type Variants } from "motion/react"
 import { Mail, MapPin, Zap } from "lucide-react"
 import { GithubIcon, LinkedinIcon } from "@/components/ui/social-icons"
 import { BentoCard } from "./bento-card"
+import { ArtArrow } from "@/components/design-system/art-graphics"
 import { siteConfig } from "@/constants/site"
 import { projects } from "@/data/projects"
 import { tools } from "@/data/tools"
@@ -59,7 +60,11 @@ export function BentoGrid() {
             </p>
           </div>
 
-          <div className="mt-6 flex flex-wrap gap-3">
+          <div className="relative mt-6 flex flex-wrap gap-3">
+            <ArtArrow
+              className="pointer-events-none absolute -top-11 left-6 hidden h-10 w-14 -scale-x-100 sm:block"
+              color="var(--sv-cyan)"
+            />
             <Link
               href="/portfolio"
               className="sv-display rounded-md border-[3px] border-black bg-[var(--sv-yellow)] px-5 py-2 text-lg uppercase text-black shadow-[4px_4px_0_0_#000] transition-transform hover:-translate-y-1 hover:rotate-[-2deg]"

@@ -22,7 +22,7 @@ export function BentoCard({ className, style, children, accent, tilt }: BentoCar
   return (
     <div
       className={cn(
-        "sv-panel sv-action p-4",
+        "sv-panel sv-action art-paper p-4",
         accent && accentPanel[accent],
         tilt && tiltClass[tilt],
         className
