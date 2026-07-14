@@ -1,5 +1,6 @@
 import { ToolsGrid } from "@/components/tools/tools-grid"
 import { SvCanvas } from "@/components/spiderverse/sv-canvas"
+import { ArtOverlay } from "@/components/design-system/art-overlay"
 import { ComicHeader, Onoma } from "@/components/spiderverse/decor"
 import { tools } from "@/data/tools"
 
@@ -10,6 +11,7 @@ export const metadata = {
 export default function ToolsPage() {
   return (
     <SvCanvas dimension="neon">
+      <ArtOverlay universe="cyber" />
       <Onoma color="lime" className="pointer-events-none absolute right-2 top-0 z-[2] hidden rotate-6 md:block">
         ZAP!
       </Onoma>

@@ -1,6 +1,7 @@
 import { Mail } from "lucide-react"
 import { GithubIcon, LinkedinIcon } from "@/components/ui/social-icons"
 import { SvCanvas } from "@/components/spiderverse/sv-canvas"
+import { ArtOverlay } from "@/components/design-system/art-overlay"
 import { SpeechBubble } from "@/components/spiderverse/decor"
 import { siteConfig } from "@/constants/site"
 
@@ -23,6 +24,7 @@ export const metadata = {
 export default function AboutPage() {
   return (
     <SvCanvas dimension="nouveau">
+      <ArtOverlay universe="watercolor" />
       <div className="grid grid-cols-1 gap-10 md:grid-cols-3">
 
         {/* Coluna esquerda */}

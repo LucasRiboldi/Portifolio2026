@@ -1,4 +1,5 @@
 import { SvCanvas } from "@/components/spiderverse/sv-canvas"
+import { ArtOverlay } from "@/components/design-system/art-overlay"
 import { ComicHeader } from "@/components/spiderverse/decor"
 
 export const metadata = { title: "Blog" }
@@ -6,6 +7,7 @@ export const metadata = { title: "Blog" }
 export default function BlogPage() {
   return (
     <SvCanvas dimension="noir">
+      <ArtOverlay universe="noir" />
       <ComicHeader
         kicker="Edição especial"
         title="Blog"

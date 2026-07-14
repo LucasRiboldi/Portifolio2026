@@ -1,5 +1,6 @@
 import { GalleryGrid } from "@/components/portfolio/gallery-grid"
 import { SvCanvas } from "@/components/spiderverse/sv-canvas"
+import { ArtOverlay } from "@/components/design-system/art-overlay"
 import { ComicHeader } from "@/components/spiderverse/decor"
 import { projects } from "@/data/projects"
 
@@ -10,6 +11,7 @@ export const metadata = {
 export default function PortfolioPage() {
   return (
     <SvCanvas dimension="renaissance">
+      <ArtOverlay universe="painterly" />
       <ComicHeader
         kicker="Terra-65 · O Abutre"
         title="Portfólio"

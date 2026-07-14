@@ -82,7 +82,7 @@ camada **sutil/produção**; `fx-*` é o **exagero/Lab**.
 ## 5. Rollout (progressivo)
 
 - **Onda 1 — Sistema + fundação** ✅ : `sv-artdirection.css`, filtros SVG globais, tokens; aplicar em `DsCard`, divisores de seção e no hero da home. Documentar.
-- **Onda 2 — Universos por rota**: aplicar `sv-dim-*` + textura de cada seção (portfólio pop-art, sobre aquarela, contato grafite…).
+- **Onda 2 — Universos por rota** ✅ : `ArtOverlay` (presets por universo) sobre a dimensão existente de cada rota — portfólio (renaissance→offset pictórico), sobre (nouveau→aquarela), contato (punk→grafite), blog (noir→filme antigo), skills/tools (neon→cyberpunk). Sem trocar dimensões (identidade preservada); textura via overlay sem tocar no halftone-assinatura do canvas.
 - **Onda 3 — Narrativa & micro-detalhes**: carimbos/fitas/setas com propósito; hover states únicos por componente; onomatopeias contextuais.
 - **Onda 4 — Pós & refino**: RGB offset/bloom/grão discretos por seção; auditoria de contraste e performance; revisão tela a tela.
 

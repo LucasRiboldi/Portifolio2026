@@ -5,6 +5,7 @@ import { useForm } from "react-hook-form"
 import { zodResolver } from "@hookform/resolvers/zod"
 import { z } from "zod"
 import { SvCanvas } from "@/components/spiderverse/sv-canvas"
+import { ArtOverlay } from "@/components/design-system/art-overlay"
 import { Onoma } from "@/components/spiderverse/decor"
 import { siteConfig } from "@/constants/site"
 
@@ -49,6 +50,7 @@ export default function ContactPage() {
 
   return (
     <SvCanvas dimension="punk">
+      <ArtOverlay universe="graffiti" />
      <div className="mx-auto max-w-lg">
       <Onoma color="magenta" className="pointer-events-none absolute right-0 top-0 z-[2] hidden rotate-12 sm:block">
         WHAM!

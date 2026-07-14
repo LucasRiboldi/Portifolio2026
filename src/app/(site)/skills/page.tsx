@@ -1,5 +1,6 @@
 import { SkillsGrid } from "@/components/skills/skills-grid"
 import { SvCanvas } from "@/components/spiderverse/sv-canvas"
+import { ArtOverlay } from "@/components/design-system/art-overlay"
 import { ComicHeader, Onoma } from "@/components/spiderverse/decor"
 
 export const metadata = {
@@ -9,6 +10,7 @@ export const metadata = {
 export default function SkillsPage() {
   return (
     <SvCanvas dimension="neon">
+      <ArtOverlay universe="cyber" />
       <Onoma color="cyan" className="pointer-events-none absolute right-2 top-0 z-[2] hidden -rotate-6 md:block">
         POW!
       </Onoma>
