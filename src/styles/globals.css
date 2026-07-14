@@ -3,6 +3,7 @@
 @import "./spiderverse.css";
 @import "./spiderverse-dimensions.css";
 @import "./sv-effects.css";
+@import "./sv-artdirection.css";
 
 @tailwind base;
 @tailwind components;

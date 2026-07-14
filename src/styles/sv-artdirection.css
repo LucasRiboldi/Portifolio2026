@@ -1,0 +1,150 @@
+/* ============================================================
+   SV-ARTDIRECTION — Camada de arte "de produção" (sutil).
+   Texturas, halftones, contornos, sombras desenhadas, imperfeição
+   controlada e pós-processamento discreto. Prefixo .art-*.
+   (A camada .fx-* do Lab é o exagero; esta é a dose sutil.)
+   Todas leves (CSS/SVG), com prefers-reduced-motion.
+   ============================================================ */
+
+:root {
+  --ht-color: rgba(255, 45, 149, 0.5);
+  --ht-size: 10px;
+  --paper-opacity: 0.05;
+  --grain-opacity: 0.07;
+}
+
+/* ---------------- TEXTURAS ---------------- */
+/* papel: fibra sutil por ruído fractal */
+.art-paper { position: relative; isolation: isolate; }
+.art-paper::before {
+  content: ""; position: absolute; inset: 0; z-index: -1; pointer-events: none;
+  opacity: var(--paper-opacity); mix-blend-mode: overlay;
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='180' height='180'%3E%3Cfilter id='p'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.012 0.4' numOctaves='2'/%3E%3C/filter%3E%3Crect width='180' height='180' filter='url(%23p)'/%3E%3C/svg%3E");
+}
+/* grão de filme */
+.art-grain { position: relative; isolation: isolate; }
+.art-grain::after {
+  content: ""; position: absolute; inset: 0; z-index: 1; pointer-events: none;
+  opacity: var(--grain-opacity); mix-blend-mode: overlay;
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='120' height='120'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='3'/%3E%3C/filter%3E%3Crect width='120' height='120' filter='url(%23n)'/%3E%3C/svg%3E");
+}
+/* respingo de tinta (canto) */
+.art-ink { position: relative; }
+.art-ink::before {
+  content: ""; position: absolute; width: 90px; height: 90px; right: -14px; top: -14px;
+  pointer-events: none; opacity: 0.5;
+  background: radial-gradient(circle at 30% 30%, currentColor 0 8%, transparent 9%) ,
+              radial-gradient(circle at 70% 55%, currentColor 0 4%, transparent 5%),
+              radial-gradient(circle at 45% 75%, currentColor 0 3%, transparent 4%);
+  color: var(--sv-magenta);
+}
+
+/* ---------------- HALFTONES (plural) ---------------- */
+.art-ht-dots { background-image: radial-gradient(var(--ht-color) 1.4px, transparent 1.6px); background-size: var(--ht-size) var(--ht-size); }
+.art-ht-lines { background-image: repeating-linear-gradient(45deg, var(--ht-color) 0 1.4px, transparent 1.4px var(--ht-size)); }
+.art-ht-diamond { background-image: repeating-linear-gradient(45deg, var(--ht-color) 0 1.5px, transparent 1.5px var(--ht-size)), repeating-linear-gradient(-45deg, var(--ht-color) 0 1.5px, transparent 1.5px var(--ht-size)); }
+.art-ht-hex {
+  background-image:
+    radial-gradient(var(--ht-color) 1.3px, transparent 1.5px),
+    radial-gradient(var(--ht-color) 1.3px, transparent 1.5px);
+  background-size: var(--ht-size) calc(var(--ht-size) * 1.73);
+  background-position: 0 0, calc(var(--ht-size) / 2) calc(var(--ht-size) * 0.866);
+}
+/* retícula irregular (dois tamanhos sobrepostos) */
+.art-ht-irregular {
+  background-image:
+    radial-gradient(var(--ht-color) 1.6px, transparent 1.8px),
+    radial-gradient(var(--ht-color) 1px, transparent 1.2px);
+  background-size: 13px 13px, 7px 7px;
+  background-position: 0 0, 4px 5px;
+}
+/* aplicar como overlay de camada */
+.art-ht-overlay { position: relative; isolation: isolate; }
+.art-ht-overlay::before {
+  content: ""; position: absolute; inset: 0; z-index: 0; pointer-events: none;
+  opacity: 0.25; mix-blend-mode: screen;
+  background-image: radial-gradient(var(--ht-color) 1.4px, transparent 1.6px);
+  background-size: var(--ht-size) var(--ht-size);
+}
+
+/* ---------------- CONTORNOS COLORIDOS ---------------- */
+.art-outline-cyan    { border-color: var(--sv-cyan) !important; }
+.art-outline-magenta { border-color: var(--sv-magenta) !important; }
+.art-outline-violet  { border-color: var(--sv-violet) !important; }
+.art-outline-lime    { border-color: var(--sv-lime) !important; }
+.art-outline-red     { border-color: #ff3b3b !important; }
+.art-outline-white   { border-color: #fff !important; }
+/* linha tremida (via filtro SVG) */
+.art-line-rough { filter: url(#art-rough); }
+
+/* ---------------- SOMBRAS DESENHADAS ---------------- */
+/* hachura diagonal deslocada */
+.art-shadow-hatch { position: relative; }
+.art-shadow-hatch::after {
+  content: ""; position: absolute; inset: 0; z-index: -1; transform: translate(7px, 7px);
+  background: repeating-linear-gradient(45deg, #000 0 2px, transparent 2px 5px);
+  border-radius: inherit; pointer-events: none;
+}
+/* cross-hatch */
+.art-shadow-cross { position: relative; }
+.art-shadow-cross::after {
+  content: ""; position: absolute; inset: 0; z-index: -1; transform: translate(7px, 7px);
+  background:
+    repeating-linear-gradient(45deg, #000 0 1.5px, transparent 1.5px 5px),
+    repeating-linear-gradient(-45deg, #000 0 1.5px, transparent 1.5px 5px);
+  border-radius: inherit; pointer-events: none;
+}
+/* pontilhismo */
+.art-shadow-dots { position: relative; }
+.art-shadow-dots::after {
+  content: ""; position: absolute; inset: 0; z-index: -1; transform: translate(7px, 7px);
+  background: radial-gradient(#000 1.2px, transparent 1.4px); background-size: 5px 5px;
+  border-radius: inherit; pointer-events: none;
+}
+
+/* ---------------- MOTION NO ESTÁTICO ---------------- */
+/* linhas cinéticas (velocidade à esquerda) */
+.art-kinetic { position: relative; }
+.art-kinetic::before {
+  content: ""; position: absolute; right: 100%; top: 12%; height: 76%; width: 46px; margin-right: 6px;
+  pointer-events: none; opacity: 0.7;
+  background: repeating-linear-gradient(to right, currentColor 0 3px, transparent 3px 9px);
+  -webkit-mask-image: linear-gradient(to left, #000, transparent);
+          mask-image: linear-gradient(to left, #000, transparent);
+  color: var(--sv-cyan);
+}
+/* ghosting RGB estático em texto */
+.art-ghost { text-shadow: -2px 0 rgba(255,45,149,0.6), 2px 0 rgba(0,229,255,0.6); }
+
+/* ---------------- BORDAS IMPERFEITAS ---------------- */
+.art-deckle { filter: url(#art-rough); }
+.art-torn {
+  -webkit-mask-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='100' height='12'%3E%3Cpath d='M0 12 V4 Q10 0 20 5 T40 5 T60 4 T80 6 T100 4 V12 Z' fill='%23000'/%3E%3C/svg%3E");
+  -webkit-mask-size: 100px 12px; -webkit-mask-repeat: repeat-x; -webkit-mask-position: bottom;
+          mask-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='100' height='12'%3E%3Cpath d='M0 12 V4 Q10 0 20 5 T40 5 T60 4 T80 6 T100 4 V12 Z' fill='%23000'/%3E%3C/svg%3E");
+}
+
+/* ---------------- GRAFISMOS / ADESIVOS ---------------- */
+.art-tape { position: relative; }
+.art-tape::before {
+  content: ""; position: absolute; top: -12px; left: 50%; width: 90px; height: 26px;
+  transform: translateX(-50%) rotate(-4deg); pointer-events: none;
+  background: rgba(255, 230, 0, 0.35); border: 1px dashed rgba(0,0,0,0.25);
+  box-shadow: 0 1px 3px rgba(0,0,0,0.3);
+}
+.art-stamp {
+  display: inline-flex; align-items: center; justify-content: center;
+  border: 3px solid currentColor; border-radius: 6px; padding: 4px 10px;
+  font-family: var(--font-heavy), sans-serif; text-transform: uppercase; letter-spacing: 1px;
+  transform: rotate(-8deg); opacity: 0.85; color: var(--sv-magenta);
+  filter: url(#art-rough);
+}
+
+/* ---------------- PÓS-PROCESSAMENTO (discreto) ---------------- */
+.art-rgb-offset { filter: drop-shadow(1.5px 0 0 rgba(255,45,149,0.5)) drop-shadow(-1.5px 0 0 rgba(0,229,255,0.5)); }
+.art-bloom { filter: drop-shadow(0 0 6px rgba(0,229,255,0.35)); }
+.art-chroma-soft { text-shadow: 0.6px 0 var(--sv-magenta), -0.6px 0 var(--sv-cyan); }
+
+@media (prefers-reduced-motion: reduce) {
+  .art-kinetic::before { display: none; }
+}
