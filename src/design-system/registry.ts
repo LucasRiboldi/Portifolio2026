@@ -69,7 +69,7 @@ export const FOUNDATIONS: DsGroup[] = [
     items: [
       { name: "Brand Guidelines", status: "ready" },
       { name: "Logo & Marca", status: "ready", href: "/design-system/assets" },
-      { name: "Ícones", status: "wip" },
+      { name: "Ícones", status: "ready", href: "/design-system/assets" },
       { name: "Ilustrações", status: "ready", href: "/design-system/lab" },
       { name: "Fotografia", status: "planned" },
       { name: "Texturas", status: "ready", href: "/design-system/assets", examples: ["Halftone", "Ben-Day", "Speedlines"] },

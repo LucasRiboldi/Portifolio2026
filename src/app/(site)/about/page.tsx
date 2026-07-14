@@ -61,9 +61,9 @@ export default function AboutPage() {
 
         {/* Coluna direita */}
         <div className="flex flex-col gap-8 md:col-span-2">
-          <div className="sv-panel">
+          <div className="sv-panel art-paper">
             <h1 className="sv-display mb-4 text-5xl uppercase">
-              Olá, sou o <span className="sv-rainbow">Lucas</span>
+              Olá, sou o <span className="sv-rainbow art-bloom">Lucas</span>
             </h1>
             <div className="flex flex-col gap-4 leading-relaxed opacity-90">
               <p>
@@ -82,20 +82,32 @@ export default function AboutPage() {
             </div>
           </div>
 
-          <div className="sv-panel">
-            <h2 className="sv-display mb-4 text-2xl uppercase">Experiência</h2>
-            <div className="flex flex-col gap-4">
+          <div className="sv-panel art-paper relative overflow-hidden">
+            {/* mancha de aquarela ao fundo */}
+            <div
+              aria-hidden
+              className="pointer-events-none absolute -right-8 -top-8 h-40 w-40 opacity-25"
+              style={{ filter: "url(#art-rough) blur(4px)", background: "radial-gradient(circle at 40% 40%, #ff78b4, transparent 65%)" }}
+            />
+            <h2 className="sv-display mb-5 text-2xl uppercase">Experiência</h2>
+            {/* trilha aquarela */}
+            <div className="relative flex flex-col gap-5 pl-6">
+              <span aria-hidden className="absolute left-[7px] top-2 bottom-2 w-[3px] rounded" style={{ background: "linear-gradient(180deg,#ff78b4,#b48cff,#78c8ff)", filter: "url(#art-rough)" }} />
               {experience.map((item, i) => (
-                <div key={i} className="flex items-start gap-4">
-                  <div
-                    className="mt-1.5 w-1.5 shrink-0 self-stretch"
-                    style={{ background: 'linear-gradient(180deg, #ff78b4, #78c8ff)', minHeight: '40px' }}
+                <div key={i} className="relative">
+                  {/* nó de aquarela com borda molhada */}
+                  <span
+                    aria-hidden
+                    className="absolute -left-[26px] top-1 h-4 w-4 rounded-full border-2 border-black"
+                    style={{
+                      filter: "url(#art-rough)",
+                      background: ["#ff78b4", "#b48cff", "#78c8ff"][i % 3],
+                      boxShadow: "0 0 0 4px rgba(255,255,255,0.35)",
+                    }}
                   />
-                  <div>
-                    <p className="sv-heavy text-xs uppercase tracking-wide opacity-60">{item.year}</p>
-                    <p className="font-medium">{item.role}</p>
-                    <p className="text-xs opacity-70">{item.company}</p>
-                  </div>
+                  <p className="sv-heavy text-xs uppercase tracking-wide opacity-60">{item.year}</p>
+                  <p className="font-medium">{item.role}</p>
+                  <p className="text-xs opacity-70">{item.company}</p>
                 </div>
               ))}
             </div>

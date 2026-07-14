@@ -1,6 +1,7 @@
 import { ComicHeader } from "@/components/spiderverse/decor"
 import { DsSectionTitle, DsLead } from "@/design-system/ds-ui"
 import { GithubIcon, LinkedinIcon } from "@/components/ui/social-icons"
+import { SV_ICONS } from "@/components/ui/sv-icons"
 
 function Swatch({ label, children }: { label: string; children: React.ReactNode }) {
   return (
@@ -36,6 +37,17 @@ export default function AssetsPage() {
             LR
           </span>
         </Swatch>
+      </div>
+
+      <DsSectionTitle id="icons">Ícones próprios</DsSectionTitle>
+      <p className="mb-3 text-xs text-white/50">Set comic autoral (traço 2.5px, currentColor, variante <code className="text-[var(--sv-cyan)]">rough</code>).</p>
+      <div className="flex flex-wrap gap-3">
+        {SV_ICONS.map(({ name, Comp }) => (
+          <div key={name} className="flex flex-col items-center gap-1.5 rounded-md border-[3px] border-black bg-[var(--sv-ink-2)] p-4 shadow-[var(--elevation-1)]">
+            <Comp className="text-2xl text-[var(--sv-cyan)]" />
+            <span className="text-[0.6rem] uppercase tracking-wide text-white/45">{name}</span>
+          </div>
+        ))}
       </div>
 
       <DsSectionTitle id="social">Ícones Sociais</DsSectionTitle>

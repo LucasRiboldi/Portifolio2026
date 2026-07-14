@@ -21,10 +21,20 @@ export function ProjectCard({ project, featured }: ProjectCardProps) {
   const card = (
     <div
       className={cn(
-        "sv-panel group relative overflow-hidden p-0",
+        "sv-panel group art-paper art-hover-ink relative overflow-hidden p-0",
         featured && "md:col-span-2"
       )}
     >
+      {/* carimbo narrativo "CASE" (com propósito: marca de dossiê) */}
+      <span
+        aria-hidden
+        className="art-stamp pointer-events-none absolute right-3 top-3 z-[3] text-[0.6rem] opacity-0 transition-all duration-300 group-hover:opacity-90"
+        style={{ color: featured ? "var(--sv-magenta)" : "var(--sv-cyan)" }}
+      >
+        {featured ? "Case ★" : "Case"}
+      </span>
+      {featured && <span aria-hidden className="art-tape absolute left-1/2 top-0 z-[3]" />}
+
       <div
         className={cn(
           "relative w-full overflow-hidden",

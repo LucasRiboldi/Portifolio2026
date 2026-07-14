@@ -66,7 +66,8 @@ export default function ContactPage() {
       </div>
 
       {status === 'success' ? (
-        <div className="sv-panel p-6 text-center">
+        <div className="sv-panel art-grain relative p-6 text-center">
+          <span aria-hidden className="art-stamp absolute -right-2 -top-3 rotate-6 text-sm" style={{ color: "var(--sv-lime)" }}>Sent!</span>
           <p className="sv-display text-2xl uppercase">Mensagem enviada!</p>
           <p className="mt-1 text-sm">Obrigado pelo contato.</p>
         </div>
@@ -83,7 +84,7 @@ export default function ContactPage() {
       ) : (
         <form onSubmit={handleSubmit(onSubmit)} className="flex flex-col gap-5">
           <div>
-            <label className="sv-heavy mb-1.5 block text-xs uppercase tracking-wide" htmlFor="name">Nome</label>
+            <label className="sv-heavy art-line-rough mb-1.5 block text-xs uppercase tracking-[0.22em] text-[var(--sv-lime)]" htmlFor="name">Nome</label>
             <input
               id="name"
               {...register('name')}
@@ -94,7 +95,7 @@ export default function ContactPage() {
           </div>
 
           <div>
-            <label className="sv-heavy mb-1.5 block text-xs uppercase tracking-wide" htmlFor="email">E-mail</label>
+            <label className="sv-heavy art-line-rough mb-1.5 block text-xs uppercase tracking-[0.22em] text-[var(--sv-lime)]" htmlFor="email">E-mail</label>
             <input
               id="email"
               {...register('email')}
@@ -106,7 +107,7 @@ export default function ContactPage() {
           </div>
 
           <div>
-            <label className="sv-heavy mb-1.5 block text-xs uppercase tracking-wide" htmlFor="message">Mensagem</label>
+            <label className="sv-heavy art-line-rough mb-1.5 block text-xs uppercase tracking-[0.22em] text-[var(--sv-lime)]" htmlFor="message">Mensagem</label>
             <textarea
               id="message"
               {...register('message')}
@@ -124,9 +125,10 @@ export default function ContactPage() {
           <button
             type="submit"
             disabled={status === 'loading'}
-            className="sv-display border-[3px] border-black bg-[var(--sv-yellow)] px-6 py-3 text-lg uppercase text-black shadow-[4px_4px_0_0_#000] transition-transform hover:-translate-y-1 hover:rotate-[-1deg] disabled:opacity-50"
+            className="sv-display art-hover-ink border-[3px] border-black bg-[var(--sv-yellow)] px-6 py-3 text-lg uppercase text-black shadow-[4px_4px_0_0_#000] transition-transform hover:-translate-y-1 hover:rotate-[-1deg] disabled:opacity-50"
+            style={{ color: "var(--sv-lime)" }}
           >
-            {status === 'loading' ? 'Enviando…' : 'Enviar mensagem →'}
+            <span className="text-black">{status === 'loading' ? 'Enviando…' : 'Enviar mensagem →'}</span>
           </button>
         </form>
       )}
