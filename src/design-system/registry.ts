@@ -84,7 +84,7 @@ export const FOUNDATIONS: DsGroup[] = [
     items: [
       { name: "Paleta de Cores", status: "ready" },
       { name: "Tipografia", status: "ready" },
-      { name: "Grid System", status: "wip" },
+      { name: "Grid System", status: "ready", href: "/design-system/grid" },
       { name: "Espaçamento", status: "ready" },
       { name: "Border Radius", status: "ready" },
       { name: "Sombras (Elevation)", status: "ready" },

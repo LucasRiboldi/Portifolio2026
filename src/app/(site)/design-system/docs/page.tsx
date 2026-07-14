@@ -6,6 +6,7 @@ const DOCS = [
   { file: "naming-conventions.md", title: "Convenção de Nomenclatura", desc: "BEM + Tailwind + tokens: como nomear tudo." },
   { file: "component-structure.md", title: "Estrutura de Componentes", desc: "Anatomia, pastas, CVA e API de props." },
   { file: "states-and-variants.md", title: "Estados & Variantes", desc: "Matriz de estados interativos canônicos." },
+  { file: "grid-system.md", title: "Grid System", desc: "12 colunas, gutter, container e baseline 4px." },
   { file: "responsiveness.md", title: "Responsividade", desc: "Breakpoints, grid e regras mobile-first." },
   { file: "accessibility-wcag.md", title: "Acessibilidade (WCAG)", desc: "Checklist AA por componente." },
   { file: "tokens.md", title: "Design Tokens", desc: "Camadas, sincronização e export Figma/JSON." },
