@@ -20,6 +20,8 @@ export interface DsComponent {
   states?: string[]
   examples?: string[]
   status: ItemStatus
+  /** rota da demo "live", quando existe. */
+  href?: string
 }
 
 export interface DsGroup {
@@ -113,6 +115,7 @@ export const COMPONENTS: DsGroup[] = [
         variants: ["Primary", "Secondary", "Ghost", "Outlined", "Link", "FAB", "Icon Button"],
         states: ["Normal", "Hover", "Active", "Disabled", "Loading", "Focus"],
         status: "ready",
+        href: "/design-system/components/buttons",
       },
     ],
   },
