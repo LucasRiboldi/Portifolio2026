@@ -182,7 +182,7 @@ export const COMPONENTS: DsGroup[] = [
       { name: "Hero Section", status: "ready" },
       { name: "CTA Sections", status: "ready", href: "/design-system/sections" },
       { name: "Pricing Cards", status: "ready", href: "/design-system/sections" },
-      { name: "FAQ", status: "wip" },
+      { name: "FAQ", status: "ready", href: "/design-system/patterns/faq" },
       { name: "Testimonials", status: "ready", href: "/design-system/sections" },
       { name: "Timeline", status: "ready", href: "/design-system/sections" },
       { name: "Statistics", status: "ready", href: "/design-system/sections" },
@@ -217,20 +217,20 @@ export const COMPONENTS: DsGroup[] = [
    PATTERNS · TEMPLATES · MOTION
    ============================================================ */
 export const PATTERNS: DsComponent[] = [
-  { name: "Login / Auth", status: "planned" },
+  { name: "Login / Auth", status: "ready", href: "/design-system/patterns/login" },
+  { name: "Busca & filtros", status: "ready", href: "/design-system/patterns/search" },
+  { name: "Formulários multi-step", status: "ready", href: "/design-system/patterns/multi-step" },
+  { name: "FAQ", status: "ready", href: "/design-system/patterns/faq" },
   { name: "Navegação principal", status: "ready" },
-  { name: "FAQ", status: "wip" },
   { name: "Contato", status: "ready" },
-  { name: "Formulários multi-step", status: "planned" },
-  { name: "Busca & filtros", status: "planned" },
 ]
 
 export const TEMPLATES: DsComponent[] = [
+  { name: "Dashboard", status: "ready", href: "/design-system/templates/dashboard" },
+  { name: "Blog / Artigo", status: "ready", href: "/design-system/templates/article" },
   { name: "Landing Page", status: "ready" },
   { name: "Portfólio / Grid", status: "ready" },
-  { name: "Blog / Artigo", status: "wip" },
-  { name: "Dashboard", status: "planned" },
-  { name: "Página de erro", status: "planned" },
+  { name: "Página de erro", status: "ready" },
   { name: "Contato", status: "ready" },
 ]
 

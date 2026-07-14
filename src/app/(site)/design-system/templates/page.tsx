@@ -1,3 +1,5 @@
+import Link from "next/link"
+import { ArrowRight } from "lucide-react"
 import { ComicHeader } from "@/components/spiderverse/decor"
 import { DsSectionTitle, DsLead, StatusPill, DsCard } from "@/design-system/ds-ui"
 import { TEMPLATES, BREAKPOINTS } from "@/design-system/registry"
@@ -17,7 +19,14 @@ export default function TemplatesPage() {
           <DsCard key={t.name}>
             <div className="flex items-center justify-between gap-2">
               <h3 className="sv-heavy text-sm uppercase tracking-wide text-white">{t.name}</h3>
-              <StatusPill status={t.status} />
+              <div className="flex items-center gap-2">
+                {t.href && (
+                  <Link href={t.href} className="inline-flex items-center gap-1 rounded border-2 border-[var(--sv-cyan)] px-1.5 py-0.5 text-[0.65rem] font-bold uppercase tracking-wide text-[var(--sv-cyan)] transition-colors hover:bg-[var(--sv-cyan)] hover:text-black">
+                    Ver <ArrowRight className="size-3" />
+                  </Link>
+                )}
+                <StatusPill status={t.status} />
+              </div>
             </div>
           </DsCard>
         ))}
