@@ -338,6 +338,37 @@
   .sv-anim-error-shake { animation: none !important; }
 }
 
+/* Slider comic (SvSlider) — trilha preenchida + polegar com hard-shadow */
+.sv-slider {
+  background:
+    linear-gradient(var(--sv-magenta), var(--sv-magenta)) no-repeat,
+    rgba(255, 255, 255, 0.15);
+  background-size: var(--pct, 0%) 100%;
+  border: 2px solid #000;
+}
+.sv-slider::-webkit-slider-thumb {
+  -webkit-appearance: none;
+  appearance: none;
+  width: 20px;
+  height: 20px;
+  border-radius: 9999px;
+  background: var(--sv-cyan);
+  border: 3px solid #000;
+  box-shadow: var(--elevation-1);
+  cursor: pointer;
+  transition: transform var(--duration-fast) var(--ease-spring);
+}
+.sv-slider::-webkit-slider-thumb:hover { transform: scale(1.15) translateY(-1px); }
+.sv-slider::-moz-range-thumb {
+  width: 20px;
+  height: 20px;
+  border-radius: 9999px;
+  background: var(--sv-cyan);
+  border: 3px solid #000;
+  cursor: pointer;
+}
+.sv-slider:focus-visible { box-shadow: 0 0 0 3px var(--sv-cyan); }
+
 /* ============================================================
    TEMA CLARO — overrides de superfície/texto
    O Aranhaverso é dark-first; .light inverte as superfícies.
