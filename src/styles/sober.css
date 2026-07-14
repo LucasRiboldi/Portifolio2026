@@ -1,24 +1,35 @@
 /* ============================================================
-   SOBER — "Aranhaverso desligado". Visual terminal/dev calmo.
+   SOBER — "Aranhaverso desligado". UI terminal/dev intencional.
    Ativado pela classe .sober no <html> (VibeToggle).
-   Neutraliza as camadas comic/art/fx e aplica uma linguagem
-   monoespaçada, escura e minimalista. Original — inspirado no
-   gênero terminal/dev, não uma cópia de nenhum projeto.
+   Linguagem original inspirada no gênero terminal/dev.
    ============================================================ */
 
 .sober {
-  --sober-bg: #0b0d0f;
-  --sober-surface: #131619;
-  --sober-border: #242a30;
+  --sober-bg: #0a0c0e;
+  --sober-bg-2: #0e1113;
+  --sober-surface: #14181b;
+  --sober-surface-2: #191e22;
+  --sober-border: #232a30;
+  --sober-border-2: #313a42;
   --sober-text: #e6e8eb;
-  --sober-muted: #8b9299;
-  --sober-accent: #4ade80; /* verde terminal */
+  --sober-text-2: #b7bdc4;
+  --sober-muted: #7d858d;
+  --sober-accent: #4ade80;   /* verde terminal */
+  --sober-accent-2: #38bdf8; /* azul info */
   --paper-opacity: 0;
   --grain-opacity: 0;
 }
 
 /* ---- base ---- */
-.sober body { background: var(--sober-bg); color: var(--sober-text); }
+.sober body {
+  background:
+    radial-gradient(1200px 600px at 50% -10%, #12161a, transparent 70%),
+    var(--sober-bg);
+  color: var(--sober-text);
+}
+.sober ::selection { background: color-mix(in srgb, var(--sober-accent) 35%, transparent); color: #fff; }
+
+/* fonte mono em toda hierarquia display/heavy */
 .sober,
 .sober body,
 .sober .sv-display,
@@ -29,33 +40,44 @@
   font-family: var(--font-mono) !important;
 }
 
+/* foco acessível em acento (mantém visibilidade WCAG) */
+.sober :focus-visible {
+  outline: 2px solid var(--sober-accent) !important;
+  outline-offset: 2px !important;
+  box-shadow: none !important;
+}
+
 /* ---- canvas: mata glows / halftone / speedlines ---- */
 .sober .sv-canvas {
-  background: var(--sober-bg) !important;
+  background: transparent !important;
   color: var(--sober-text) !important;
 }
 .sober .sv-canvas::before,
 .sober .sv-canvas::after { content: none !important; display: none !important; }
 
-/* ---- títulos: mono, sem stroke/uppercase agressivo ---- */
+/* ---- tipografia ---- */
 .sober .sv-display,
 .sober .sv-page-title {
   font-weight: 600 !important;
-  letter-spacing: -0.015em !important;
+  letter-spacing: -0.02em !important;
   text-transform: none !important;
   color: var(--sober-text) !important;
   -webkit-text-stroke: 0 !important;
   text-shadow: none !important;
 }
-.sober .sv-heavy { font-weight: 500 !important; letter-spacing: 0 !important; color: var(--sober-muted) !important; }
-
-/* prefixo de prompt discreto nos títulos de página */
-.sober .sv-page-title::before {
-  content: "❯ ";
-  color: var(--sober-accent);
+.sober .sv-heavy {
+  font-weight: 500 !important;
+  letter-spacing: 0 !important;
+  text-transform: none !important;
+  color: var(--sober-muted) !important;
 }
+.sober .sv-glitch::before,
+.sober .sv-glitch::after { display: none !important; }
 
-/* ---- rainbow / gradientes de texto → acento sólido ---- */
+/* prompt discreto nos títulos de página */
+.sober .sv-page-title::before { content: "❯ "; color: var(--sober-accent); }
+
+/* rainbow / gradiente de texto → acento sólido */
 .sober .sv-rainbow,
 .sober .gradient-text {
   background: none !important;
@@ -64,8 +86,18 @@
   animation: none !important;
 }
 
-/* ---- painéis: flat, borda fina, hover discreto ---- */
-.sober .sv-panel {
+/* texto secundário mais calmo */
+.sober .text-white\/70,
+.sober .text-white\/60,
+.sober .text-white\/80 { color: var(--sober-text-2) !important; }
+.sober .text-white\/40,
+.sober .text-white\/45,
+.sober .text-white\/50,
+.sober .text-muted-foreground { color: var(--sober-muted) !important; }
+
+/* ---- painéis / cards: flat com borda fina ---- */
+.sober .sv-panel,
+.sober [class*="border-[3px]"] {
   background: var(--sober-surface) !important;
   border: 1px solid var(--sober-border) !important;
   border-radius: 10px !important;
@@ -73,38 +105,77 @@
   transform: none !important;
 }
 .sober .sv-panel::before { display: none !important; }
-.sober .sv-panel:hover {
+.sober .sv-panel:hover,
+.sober a:hover .sv-panel,
+.sober .group:hover [class*="border-[3px]"] {
   transform: translateY(-2px) !important;
-  border-color: #333b42 !important;
-  box-shadow: 0 6px 24px rgba(0, 0, 0, 0.45) !important;
+  border-color: var(--sober-border-2) !important;
+  box-shadow: 0 8px 30px rgba(0, 0, 0, 0.5) !important;
 }
 
-/* ---- stickers / badges comic → tag sóbria ---- */
+/* ---- inputs (contato) ---- */
+.sober input,
+.sober textarea,
+.sober select {
+  background: var(--sober-bg-2) !important;
+  border: 1px solid var(--sober-border) !important;
+  border-radius: 8px !important;
+  color: var(--sober-text) !important;
+  box-shadow: none !important;
+  font-family: var(--font-mono) !important;
+}
+.sober input:focus,
+.sober textarea:focus,
+.sober select:focus {
+  border-color: var(--sober-accent) !important;
+  box-shadow: 0 0 0 1px var(--sober-accent) !important;
+  transform: none !important;
+}
+
+/* ---- stickers / badges comic → tag mono ---- */
 .sober .sv-sticker,
 .sober [class*="sv-sticker"] {
-  background: var(--sober-surface) !important;
+  background: var(--sober-surface-2) !important;
   color: var(--sober-accent) !important;
   border: 1px solid var(--sober-border) !important;
   box-shadow: none !important;
   transform: none !important;
   font-family: var(--font-mono) !important;
   text-transform: none !important;
+  border-radius: 6px !important;
 }
 
-/* ---- botões comic coloridos → sóbrios ---- */
+/* tags/badges genéricos com borda colorida → borda sóbria */
+.sober [class*="rounded-full"][style*="border"],
+.sober [class*="rounded"][style*="borderColor"] {
+  border-color: var(--sober-border-2) !important;
+}
+
+/* ---- botões comic coloridos → sóbrios (primário = acento) ---- */
 .sober .bg-\[var\(--sv-yellow\)\],
 .sober .bg-\[var\(--sv-cyan\)\],
 .sober .bg-\[var\(--sv-magenta\)\],
 .sober .bg-\[var\(--sv-lime\)\],
-.sober .bg-\[var\(--sv-violet\)\] {
-  background: var(--sober-surface) !important;
+.sober .bg-\[var\(--sv-violet\)\],
+.sober .bg-\[var\(--sv-orange\)\] {
+  background: transparent !important;
   color: var(--sober-text) !important;
-  border: 1px solid var(--sober-border) !important;
+  border: 1px solid var(--sober-border-2) !important;
   box-shadow: none !important;
+  border-radius: 8px !important;
+  text-transform: none !important;
+  font-weight: 500 !important;
+}
+.sober a[class*="bg-\[var\(--sv-yellow\)\]"],
+.sober button[class*="bg-\[var\(--sv-yellow\)\]"] {
+  border-color: var(--sober-accent) !important;
+  color: var(--sober-accent) !important;
 }
 .sober .bg-\[var\(--sv-yellow\)\]:hover,
 .sober .bg-\[var\(--sv-cyan\)\]:hover,
-.sober .bg-\[var\(--sv-magenta\)\]:hover {
+.sober .bg-\[var\(--sv-magenta\)\]:hover,
+.sober .bg-\[var\(--sv-lime\)\]:hover {
+  background: color-mix(in srgb, var(--sober-accent) 12%, transparent) !important;
   border-color: var(--sober-accent) !important;
   color: var(--sober-accent) !important;
   transform: translateY(-1px) !important;
@@ -121,21 +192,51 @@
 .sober [class^="fx-"],
 .sober [class*=" fx-"],
 .sober [class*="art-ht-"],
+.sober [class*="art-tex-"],
 .sober .art-stamp,
-.sober .art-tape { display: none !important; }
+.sober .art-tape,
+.sober .art-kinetic::before { display: none !important; }
 
-/* desliga animações decorativas e aberrações */
 .sober .art-chroma-soft,
-.sober .art-ghost { text-shadow: none !important; }
-.sober *,
-.sober *::before,
-.sober *::after { animation-play-state: paused !important; }
+.sober .art-ghost,
+.sober .art-bloom { text-shadow: none !important; filter: none !important; }
+.sober .art-underline { background-image: none !important; padding-bottom: 0 !important; }
+.sober .art-hover-jitter:hover,
+.sober .art-hover-ink:hover { transform: translateY(-2px) !important; }
+.sober .art-hover-ink::after { display: none !important; }
 
-/* ---- navbar / superfícies escuras ---- */
-.sober header { background: rgba(11, 13, 15, 0.9) !important; border-bottom-color: var(--sober-border) !important; }
+/* desliga aberrações/keyframes decorativos */
+.sober [class*="animate-["] { animation: none !important; }
 
-/* links de acento */
+/* ---- navbar ---- */
+.sober header {
+  background: color-mix(in srgb, var(--sober-bg) 88%, transparent) !important;
+  border-bottom: 1px solid var(--sober-border) !important;
+}
+/* barra de gradiente do topo → linha discreta de acento */
+.sober header > div[style] {
+  background: linear-gradient(90deg, transparent, var(--sober-accent), transparent) !important;
+  opacity: 0.5 !important;
+  height: 1px !important;
+}
+/* link ativo da nav: chip mono com acento */
+.sober nav a {
+  font-family: var(--font-mono) !important;
+  text-transform: none !important;
+  border-radius: 6px !important;
+}
+.sober nav a[class*="bg-\[var\(--sv-yellow\)\]"] {
+  background: var(--sober-surface-2) !important;
+  color: var(--sober-accent) !important;
+  border: 1px solid var(--sober-border-2) !important;
+  box-shadow: none !important;
+}
+
+/* logo LR. → ponto de acento */
+.sober a[href="/"] .sv-rainbow { color: var(--sober-accent) !important; -webkit-text-fill-color: var(--sober-accent) !important; }
+
+/* links */
 .sober a:hover { color: var(--sober-accent); }
 
-/* barra de gradiente do topo (navbar) → linha discreta */
-.sober header > div[style] { background: var(--sober-border) !important; }
+/* footer */
+.sober footer { border-color: var(--sober-border) !important; }
