@@ -1,0 +1,141 @@
+/* ============================================================
+   SOBER — "Aranhaverso desligado". Visual terminal/dev calmo.
+   Ativado pela classe .sober no <html> (VibeToggle).
+   Neutraliza as camadas comic/art/fx e aplica uma linguagem
+   monoespaçada, escura e minimalista. Original — inspirado no
+   gênero terminal/dev, não uma cópia de nenhum projeto.
+   ============================================================ */
+
+.sober {
+  --sober-bg: #0b0d0f;
+  --sober-surface: #131619;
+  --sober-border: #242a30;
+  --sober-text: #e6e8eb;
+  --sober-muted: #8b9299;
+  --sober-accent: #4ade80; /* verde terminal */
+  --paper-opacity: 0;
+  --grain-opacity: 0;
+}
+
+/* ---- base ---- */
+.sober body { background: var(--sober-bg); color: var(--sober-text); }
+.sober,
+.sober body,
+.sober .sv-display,
+.sober .sv-heavy,
+.sober .sv-page-title,
+.sober [class*="font-[family-name:var(--font-display)]"],
+.sober [class*="font-[family-name:var(--font-heavy)]"] {
+  font-family: var(--font-mono) !important;
+}
+
+/* ---- canvas: mata glows / halftone / speedlines ---- */
+.sober .sv-canvas {
+  background: var(--sober-bg) !important;
+  color: var(--sober-text) !important;
+}
+.sober .sv-canvas::before,
+.sober .sv-canvas::after { content: none !important; display: none !important; }
+
+/* ---- títulos: mono, sem stroke/uppercase agressivo ---- */
+.sober .sv-display,
+.sober .sv-page-title {
+  font-weight: 600 !important;
+  letter-spacing: -0.015em !important;
+  text-transform: none !important;
+  color: var(--sober-text) !important;
+  -webkit-text-stroke: 0 !important;
+  text-shadow: none !important;
+}
+.sober .sv-heavy { font-weight: 500 !important; letter-spacing: 0 !important; color: var(--sober-muted) !important; }
+
+/* prefixo de prompt discreto nos títulos de página */
+.sober .sv-page-title::before {
+  content: "❯ ";
+  color: var(--sober-accent);
+}
+
+/* ---- rainbow / gradientes de texto → acento sólido ---- */
+.sober .sv-rainbow,
+.sober .gradient-text {
+  background: none !important;
+  -webkit-text-fill-color: var(--sober-accent) !important;
+  color: var(--sober-accent) !important;
+  animation: none !important;
+}
+
+/* ---- painéis: flat, borda fina, hover discreto ---- */
+.sober .sv-panel {
+  background: var(--sober-surface) !important;
+  border: 1px solid var(--sober-border) !important;
+  border-radius: 10px !important;
+  box-shadow: none !important;
+  transform: none !important;
+}
+.sober .sv-panel::before { display: none !important; }
+.sober .sv-panel:hover {
+  transform: translateY(-2px) !important;
+  border-color: #333b42 !important;
+  box-shadow: 0 6px 24px rgba(0, 0, 0, 0.45) !important;
+}
+
+/* ---- stickers / badges comic → tag sóbria ---- */
+.sober .sv-sticker,
+.sober [class*="sv-sticker"] {
+  background: var(--sober-surface) !important;
+  color: var(--sober-accent) !important;
+  border: 1px solid var(--sober-border) !important;
+  box-shadow: none !important;
+  transform: none !important;
+  font-family: var(--font-mono) !important;
+  text-transform: none !important;
+}
+
+/* ---- botões comic coloridos → sóbrios ---- */
+.sober .bg-\[var\(--sv-yellow\)\],
+.sober .bg-\[var\(--sv-cyan\)\],
+.sober .bg-\[var\(--sv-magenta\)\],
+.sober .bg-\[var\(--sv-lime\)\],
+.sober .bg-\[var\(--sv-violet\)\] {
+  background: var(--sober-surface) !important;
+  color: var(--sober-text) !important;
+  border: 1px solid var(--sober-border) !important;
+  box-shadow: none !important;
+}
+.sober .bg-\[var\(--sv-yellow\)\]:hover,
+.sober .bg-\[var\(--sv-cyan\)\]:hover,
+.sober .bg-\[var\(--sv-magenta\)\]:hover {
+  border-color: var(--sober-accent) !important;
+  color: var(--sober-accent) !important;
+  transform: translateY(-1px) !important;
+  rotate: none !important;
+}
+
+/* ---- neutraliza overlays de arte, efeitos e onomatopeias ---- */
+.sober .art-grain::after,
+.sober .art-paper::before,
+.sober .sv-lines,
+.sober .sv-dots,
+.sober .sv-onoma,
+.sober [class*="sv-onoma"],
+.sober [class^="fx-"],
+.sober [class*=" fx-"],
+.sober [class*="art-ht-"],
+.sober .art-stamp,
+.sober .art-tape { display: none !important; }
+
+/* desliga animações decorativas e aberrações */
+.sober .art-chroma-soft,
+.sober .art-ghost { text-shadow: none !important; }
+.sober *,
+.sober *::before,
+.sober *::after { animation-play-state: paused !important; }
+
+/* ---- navbar / superfícies escuras ---- */
+.sober header { background: rgba(11, 13, 15, 0.9) !important; border-bottom-color: var(--sober-border) !important; }
+
+/* links de acento */
+.sober a:hover { color: var(--sober-accent); }
+
+/* barra de gradiente do topo (navbar) → linha discreta */
+.sober header > div[style] { background: var(--sober-border) !important; }

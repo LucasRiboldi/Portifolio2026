@@ -5,6 +5,7 @@ import { usePathname } from "next/navigation"
 import { cn } from "@/lib/utils"
 import { Container } from "./container"
 import { ThemeToggle } from "@/components/ui/theme-toggle"
+import { VibeToggle } from "@/components/providers/vibe-toggle"
 import { MobileMenu } from "./mobile-menu"
 
 const links = [
@@ -49,6 +50,7 @@ export function Navbar() {
           </nav>
 
           <div className="flex items-center gap-2">
+            <VibeToggle />
             <ThemeToggle />
             <MobileMenu />
           </div>

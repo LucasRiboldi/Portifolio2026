@@ -66,6 +66,12 @@ export default function RootLayout({
       suppressHydrationWarning className={cn("font-sans", geist.variable, bangers.variable, archivo.variable, nabla.variable, monoton.variable, rubikGlitch.variable, bungeeShade.variable)}
     >
       <body>
+        <script
+          dangerouslySetInnerHTML={{
+            __html:
+              "(function(){try{if(localStorage.getItem('vibe')==='sober')document.documentElement.classList.add('sober')}catch(e){}})()",
+          }}
+        />
         <ThemeProvider>
           {children}
         </ThemeProvider>
