@@ -85,3 +85,42 @@ UniverseProvider            components/providers/universe-provider.tsx
 5. **VibeToggle**: se quiser skin própria do botão, adicione o ramo `realm === "<id>"`.
 
 Nenhuma mudança no engine é necessária — ele é agnóstico à aparência dos realms.
+
+## Admin / CMS (Supabase)
+
+O conteúdo saiu dos arquivos estáticos para o **Supabase** (Postgres + Auth +
+Storage), controlado por um painel `/admin` protegido por **GitHub OAuth**.
+Design completo em [`docs/superpowers/specs/2026-07-14-admin-cms-supabase-design.md`](superpowers/specs/2026-07-14-admin-cms-supabase-design.md);
+setup em [`supabase/README.md`](../supabase/README.md).
+
+### Camadas
+
+```
+site público (Server Components)
+  └─ src/lib/repos/*        leitura cacheada (unstable_cache + tags)
+       ├─ Supabase configurado → lê do Postgres
+       └─ senão               → fallback ao seed estático (src/data/*.ts)
+
+/admin (dinâmico, guard requireAdmin)
+  ├─ src/lib/admin/resources.ts   config declarativa (campos + zod + tag)
+  ├─ /admin/[resource]            CRUD genérico (projects/posts/skills/tools)
+  ├─ /admin/{site,realms,media,messages}   seções bespoke
+  └─ Server Actions → escreve (RLS) → revalidateTag → site atualiza em segundos
+```
+
+### Princípios
+
+1. **Fallback ao seed** — sem `.env`, o site roda com o conteúdo estático e o
+   build permanece verde. O CMS "liga" quando o Supabase é configurado.
+2. **Segurança em profundidade** — `middleware` barra `/admin`, `requireAdmin()`
+   revalida em toda action, e **RLS** (`is_admin()` via allowlist) protege o banco.
+3. **DRY** — os `src/data/*.ts` são a única fonte do seed; o CRUD é dirigido por
+   config, não por página duplicada.
+4. **ISR on-demand** — páginas públicas estáticas + `revalidateTag` ao salvar.
+
+### Realms via banco
+
+`src/lib/repos/realms.ts` expõe `getRealmSettings()` (padrão/ativos/conteúdo do
+Arcane). O admin edita esses valores; o engine (client) continua agnóstico —
+ainda lê `lib/realms.ts` como config de aparência. Ligar o default/enabled do
+banco ao provider é o próximo incremento natural.
