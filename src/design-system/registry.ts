@@ -234,17 +234,17 @@ export const PATTERNS: DsComponent[] = [
 ]
 
 export const TEMPLATES: DsComponent[] = [
+  { name: "Landing Page", status: "ready", href: "/design-system/templates/landing" },
   { name: "Dashboard", status: "ready", href: "/design-system/templates/dashboard" },
   { name: "Blog / Artigo", status: "ready", href: "/design-system/templates/article" },
-  { name: "Landing Page", status: "ready" },
+  { name: "Pricing / planos", status: "ready", href: "/design-system/templates/pricing" },
+  { name: "Perfil / conta", status: "ready", href: "/design-system/templates/profile" },
+  { name: "Documentação", status: "ready", href: "/design-system/templates/docs" },
+  { name: "Changelog", status: "ready", href: "/design-system/templates/changelog" },
+  { name: "Coming soon", status: "ready", href: "/design-system/templates/coming-soon" },
   { name: "Portfólio / Grid", status: "ready" },
   { name: "Página de erro", status: "ready" },
   { name: "Contato", status: "ready" },
-  { name: "Pricing / planos", status: "planned" },
-  { name: "Perfil / conta", status: "planned" },
-  { name: "Documentação", status: "planned" },
-  { name: "Changelog", status: "planned" },
-  { name: "Coming soon", status: "planned" },
 ]
 
 export const MOTION_PATTERNS = [
