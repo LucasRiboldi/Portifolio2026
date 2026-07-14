@@ -6,29 +6,31 @@ import remarkGfm from "remark-gfm"
 import { SvCanvas } from "@/components/spiderverse/sv-canvas"
 import { ArtOverlay } from "@/components/design-system/art-overlay"
 import { SvTag, SvBreadcrumb } from "@/components/ui/sv-data"
-import { posts, getPost } from "@/data/posts"
-import { siteConfig } from "@/constants/site"
+import { getPosts, getPostBySlug } from "@/lib/repos/posts"
+import { getSiteConfig } from "@/lib/repos/site-config"
 
 const ACCENT: Record<string, string> = {
   magenta: "var(--sv-magenta)", cyan: "var(--sv-cyan)", lime: "var(--sv-lime)", violet: "var(--sv-violet)",
 }
 
-export function generateStaticParams() {
+export async function generateStaticParams() {
+  const posts = await getPosts()
   return posts.map((p) => ({ slug: p.slug }))
 }
 
 export async function generateMetadata({ params }: { params: Promise<{ slug: string }> }) {
   const { slug } = await params
-  const post = getPost(slug)
+  const post = await getPostBySlug(slug)
   if (!post) return { title: "Artigo não encontrado" }
   return { title: post.title, description: post.excerpt }
 }
 
 export default async function ArticlePage({ params }: { params: Promise<{ slug: string }> }) {
   const { slug } = await params
-  const post = getPost(slug)
+  const post = await getPostBySlug(slug)
   if (!post) notFound()
 
+  const site = await getSiteConfig()
   const accent = ACCENT[post.accent]
   const date = new Date(post.date).toLocaleDateString("pt-BR", { day: "2-digit", month: "long", year: "numeric" })
 
@@ -54,7 +56,7 @@ export default async function ArticlePage({ params }: { params: Promise<{ slug: 
         <div className="mt-4 flex items-center gap-3 border-y-2 border-white/10 py-3">
           <span className="grid size-10 place-items-center rounded-full border-2 border-black font-[family-name:var(--font-heavy)] text-black" style={{ background: accent }}>LR</span>
           <div className="text-xs">
-            <div className="font-bold text-white">{siteConfig.name}</div>
+            <div className="font-bold text-white">{site.name}</div>
             <div className="text-white/40">{date}</div>
           </div>
         </div>

@@ -2,11 +2,12 @@ import { SvCanvas } from "@/components/spiderverse/sv-canvas"
 import { ArtOverlay } from "@/components/design-system/art-overlay"
 import { ComicHeader } from "@/components/spiderverse/decor"
 import { BlogCard } from "@/components/cards/blog-card"
-import { posts } from "@/data/posts"
+import { getPosts } from "@/lib/repos/posts"
 
 export const metadata = { title: "Blog" }
 
-export default function BlogPage() {
+export default async function BlogPage() {
+  const posts = await getPosts()
   const sorted = [...posts].sort((a, b) => +new Date(b.date) - +new Date(a.date))
   return (
     <SvCanvas dimension="noir">

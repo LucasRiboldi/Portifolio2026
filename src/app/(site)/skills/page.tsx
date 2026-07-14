@@ -1,4 +1,5 @@
 import { SkillsGrid } from "@/components/skills/skills-grid"
+import { getSkills } from "@/lib/repos/skills"
 import { SvCanvas } from "@/components/spiderverse/sv-canvas"
 import { ArtOverlay } from "@/components/design-system/art-overlay"
 import { ComicHeader, Onoma } from "@/components/spiderverse/decor"
@@ -7,7 +8,8 @@ export const metadata = {
   title: "Skills",
 }
 
-export default function SkillsPage() {
+export default async function SkillsPage() {
+  const skills = await getSkills()
   return (
     <SvCanvas dimension="neon">
       <ArtOverlay universe="cyber" />
@@ -20,7 +22,7 @@ export default function SkillsPage() {
         highlight="instaladas"
         subtitle="As skills que uso no meu Claude Code — agrupadas por tema, com o comando de cada uma pronto para copiar."
       />
-      <SkillsGrid />
+      <SkillsGrid skills={skills} />
     </SvCanvas>
   )
 }

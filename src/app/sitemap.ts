@@ -1,9 +1,10 @@
 import type { MetadataRoute } from "next"
-import { posts } from "@/data/posts"
+import { getPosts } from "@/lib/repos/posts"
 
 const SITE_URL = "https://portifolio2026-two.vercel.app"
 
-export default function sitemap(): MetadataRoute.Sitemap {
+export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
+  const posts = await getPosts()
   const routes = [
     "", "/portfolio", "/tools", "/skills", "/blog", "/about", "/contact",
     "/dimensoes", "/styleguide", "/design-system",

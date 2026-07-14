@@ -2,8 +2,11 @@ import { BentoGrid } from "@/components/home/bento-grid"
 import { SvCanvas } from "@/components/spiderverse/sv-canvas"
 import { Onoma } from "@/components/spiderverse/decor"
 import { ArcaneGazette } from "@/components/realms/arcane-gazette"
+import { getProjects } from "@/lib/repos/projects"
+import { getTools } from "@/lib/repos/tools"
 
-export default function HomePage() {
+export default async function HomePage() {
+  const [projects, tools] = await Promise.all([getProjects(), getTools()])
   return (
     <>
       {/* Realm ARCANE (Game Design) — jornal antigo, só aparece em data-realm="arcane" */}
@@ -36,7 +39,7 @@ export default function HomePage() {
         Terra-2026
       </span>
 
-      <BentoGrid />
+      <BentoGrid projects={projects} tools={tools} />
     </SvCanvas>
       </div>
     </>

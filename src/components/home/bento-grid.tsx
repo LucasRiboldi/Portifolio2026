@@ -7,8 +7,8 @@ import { GithubIcon, LinkedinIcon } from "@/components/ui/social-icons"
 import { BentoCard } from "./bento-card"
 import { ArtArrow } from "@/components/design-system/art-graphics"
 import { siteConfig } from "@/constants/site"
-import { projects } from "@/data/projects"
-import { tools } from "@/data/tools"
+import { projects as seedProjects, type Project } from "@/data/projects"
+import { tools as seedTools, type Tool } from "@/data/tools"
 
 const pop: Variants = {
   hidden: { opacity: 0, y: 24, rotate: -4, scale: 0.9 },
@@ -38,7 +38,12 @@ const socialLinks = [
   { label: 'E-mail', href: `mailto:${siteConfig.email}`, icon: Mail },
 ]
 
-export function BentoGrid() {
+interface BentoGridProps {
+  projects?: Project[]
+  tools?: Tool[]
+}
+
+export function BentoGrid({ projects = seedProjects, tools = seedTools }: BentoGridProps) {
   const featuredProject = projects.find(p => p.featured)
   const recentProjects = projects.slice(0, 3)
   const [firstName, ...rest] = siteConfig.name.split(' ')

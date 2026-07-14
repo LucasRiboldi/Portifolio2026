@@ -2,13 +2,14 @@ import { ToolsGrid } from "@/components/tools/tools-grid"
 import { SvCanvas } from "@/components/spiderverse/sv-canvas"
 import { ArtOverlay } from "@/components/design-system/art-overlay"
 import { ComicHeader, Onoma } from "@/components/spiderverse/decor"
-import { tools } from "@/data/tools"
+import { getTools } from "@/lib/repos/tools"
 
 export const metadata = {
   title: "Ferramentas",
 }
 
-export default function ToolsPage() {
+export default async function ToolsPage() {
+  const tools = await getTools()
   return (
     <SvCanvas dimension="neon">
       <ArtOverlay universe="cyber" />

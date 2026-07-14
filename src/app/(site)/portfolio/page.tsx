@@ -2,13 +2,14 @@ import { GalleryGrid } from "@/components/portfolio/gallery-grid"
 import { SvCanvas } from "@/components/spiderverse/sv-canvas"
 import { ArtOverlay } from "@/components/design-system/art-overlay"
 import { ComicHeader } from "@/components/spiderverse/decor"
-import { projects } from "@/data/projects"
+import { getProjects } from "@/lib/repos/projects"
 
 export const metadata = {
   title: "Portfólio",
 }
 
-export default function PortfolioPage() {
+export default async function PortfolioPage() {
+  const projects = await getProjects()
   return (
     <SvCanvas dimension="renaissance">
       <ArtOverlay universe="painterly" />
