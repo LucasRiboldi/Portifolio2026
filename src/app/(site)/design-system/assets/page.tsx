@@ -1,9 +1,15 @@
 import { ComicHeader } from "@/components/spiderverse/decor"
 import { DsSectionTitle, DsLead } from "@/design-system/ds-ui"
-import { GithubIcon, LinkedinIcon } from "@/components/ui/social-icons"
+import { SOCIAL_ICONS } from "@/components/ui/social-icons"
 import { SV_ICONS } from "@/components/ui/sv-icons"
 import { LogoGrid } from "@/components/design-system/logos"
 import { PUNK_ILLUSTRATIONS } from "@/components/design-system/punk-illustrations"
+import { STYLE_ILLUSTRATIONS } from "@/components/design-system/illustrations-styles"
+
+const GRADS = ["bg-grad-sunset", "bg-grad-vapor", "bg-grad-toxic", "bg-grad-galaxy", "bg-grad-inferno"]
+const TEXS = ["art-tex-concrete", "art-tex-crosshatch", "art-tex-dots-grid", "art-tex-scratch", "art-tex-canvas"]
+const COLOR3D = ["fx-3dc-cyan", "fx-3dc-magenta", "fx-3dc-rainbow", "fx-3dc-deep", "fx-3dc-emboss"]
+const GLITCHES = ["fx-gl-slice", "fx-gl-rgb", "fx-gl-jitter", "fx-gl-scan", "fx-gl-blocks"]
 
 function Swatch({ label, children }: { label: string; children: React.ReactNode }) {
   return (
@@ -67,9 +73,19 @@ export default function AssetsPage() {
 
       <DsSectionTitle id="social">Ícones Sociais</DsSectionTitle>
       <div className="flex flex-wrap gap-3">
-        {[GithubIcon, LinkedinIcon].map((Icon, i) => (
-          <div key={i} className="grid size-14 place-items-center rounded-md border-[3px] border-black bg-[var(--sv-ink-2)] text-white shadow-[var(--elevation-1)] transition-transform hover:-translate-y-1 hover:text-[var(--sv-cyan)]">
-            <Icon className="size-6" />
+        {SOCIAL_ICONS.map(({ name, Comp }) => (
+          <div key={name} className="grid size-14 place-items-center rounded-md border-[3px] border-black bg-[var(--sv-ink-2)] text-white shadow-[var(--elevation-1)] transition-transform hover:-translate-y-1 hover:text-[var(--sv-cyan)]" title={name}>
+            <Comp className="size-6" />
+          </div>
+        ))}
+      </div>
+
+      <DsSectionTitle id="style-illos">Ilustrações — outros estilos</DsSectionTitle>
+      <div className="grid grid-cols-2 gap-4 sm:grid-cols-5">
+        {STYLE_ILLUSTRATIONS.map(({ name, Comp }) => (
+          <div key={name} className="flex flex-col items-center gap-2 rounded-lg border-[3px] border-black bg-[var(--sv-ink-2)] p-3 shadow-[var(--elevation-2)]">
+            <Comp className="h-16 w-16" />
+            <span className="text-[0.6rem] uppercase tracking-wide text-white/45">{name}</span>
           </div>
         ))}
       </div>
@@ -88,16 +104,42 @@ export default function AssetsPage() {
       </div>
 
       <DsSectionTitle id="backgrounds">Backgrounds & Gradientes</DsSectionTitle>
-      <div className="grid gap-4 sm:grid-cols-3">
-        <Swatch label="gradient-accent">
-          <div className="h-full w-full" style={{ background: "var(--gradient-accent)" }} />
-        </Swatch>
-        <Swatch label="gradient-rainbow">
-          <div className="h-full w-full" style={{ background: "var(--gradient-rainbow)" }} />
-        </Swatch>
-        <Swatch label="Canvas ink">
-          <div className="h-full w-full" style={{ background: "linear-gradient(160deg, var(--sv-ink), var(--sv-ink-2))" }} />
-        </Swatch>
+      <div className="grid gap-4 sm:grid-cols-3 lg:grid-cols-4">
+        <Swatch label="accent"><div className="h-full w-full" style={{ background: "var(--gradient-accent)" }} /></Swatch>
+        <Swatch label="rainbow"><div className="h-full w-full" style={{ background: "var(--gradient-rainbow)" }} /></Swatch>
+        {GRADS.map((g) => (
+          <Swatch key={g} label={g.replace("bg-grad-", "")}><div className={`${g} h-full w-full`} /></Swatch>
+        ))}
+        <Swatch label="canvas ink"><div className="h-full w-full" style={{ background: "linear-gradient(160deg, var(--sv-ink), var(--sv-ink-2))" }} /></Swatch>
+      </div>
+
+      <DsSectionTitle id="textures2">Texturas de superfície</DsSectionTitle>
+      <div className="grid gap-4 sm:grid-cols-3 lg:grid-cols-5">
+        {TEXS.map((t) => (
+          <Swatch key={t} label={t.replace("art-tex-", "")}>
+            <div className={`${t} relative h-full w-full bg-[var(--sv-ink-2)]`} />
+          </Swatch>
+        ))}
+      </div>
+
+      <DsSectionTitle id="color3d">3D de cor</DsSectionTitle>
+      <div className="grid grid-cols-2 gap-4 sm:grid-cols-5">
+        {COLOR3D.map((c) => (
+          <div key={c} className="flex flex-col items-center gap-2 rounded-lg border-[3px] border-black bg-[var(--sv-ink-2)] p-5">
+            <span className={`${c} font-[family-name:var(--font-display)] text-3xl uppercase`}>AA</span>
+            <code className="font-mono text-[0.6rem] text-[var(--sv-cyan)]">{c}</code>
+          </div>
+        ))}
+      </div>
+
+      <DsSectionTitle id="glitches">Glitches</DsSectionTitle>
+      <div className="grid grid-cols-2 gap-4 sm:grid-cols-5">
+        {GLITCHES.map((g) => (
+          <div key={g} className="flex flex-col items-center gap-2 rounded-lg border-[3px] border-black bg-[var(--sv-ink-2)] p-5">
+            <span className={`${g} font-[family-name:var(--font-display)] text-2xl uppercase text-white`} data-text="GLI">GLI</span>
+            <code className="font-mono text-[0.6rem] text-[var(--sv-cyan)]">{g}</code>
+          </div>
+        ))}
       </div>
     </div>
   )

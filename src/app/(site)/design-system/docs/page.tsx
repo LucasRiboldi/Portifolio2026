@@ -3,6 +3,7 @@ import { DsSectionTitle, DsLead, DsCard } from "@/design-system/ds-ui"
 
 const DOCS = [
   { file: "README.md", title: "Arquitetura & Hierarquia", desc: "Estrutura do Design System e como estender." },
+  { file: "brand.md", title: "Brand Foundation", desc: "Essência, voz, logo, do/don't e universos." },
   { file: "naming-conventions.md", title: "Convenção de Nomenclatura", desc: "BEM + Tailwind + tokens: como nomear tudo." },
   { file: "component-structure.md", title: "Estrutura de Componentes", desc: "Anatomia, pastas, CVA e API de props." },
   { file: "states-and-variants.md", title: "Estados & Variantes", desc: "Matriz de estados interativos canônicos." },

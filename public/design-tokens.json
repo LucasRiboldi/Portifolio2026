@@ -440,6 +440,10 @@
       "$value": "1.5rem",
       "$type": "dimension"
     },
+    "3xl": {
+      "$value": "2rem",
+      "$type": "dimension"
+    },
     "full": {
       "$value": "9999px",
       "$type": "dimension"
@@ -796,6 +800,14 @@
     },
     "spring": {
       "$value": "cubic-bezier(0.34,1.56,0.64,1)",
+      "$type": "cubicBezier"
+    },
+    "bounce": {
+      "$value": "cubic-bezier(0.68,-0.55,0.27,1.55)",
+      "$type": "cubicBezier"
+    },
+    "smooth": {
+      "$value": "cubic-bezier(0.45,0,0.15,1)",
       "$type": "cubicBezier"
     }
   },

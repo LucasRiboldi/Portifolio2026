@@ -47,6 +47,17 @@ export const BREAKPOINTS = [
   { name: "Landscape", min: "— (orientação)" },
 ] as const
 
+/** Novos critérios do WCAG 2.2 (além dos clássicos). */
+export const WCAG_22 = [
+  { sc: "2.4.11", name: "Focus Not Obscured (Mínimo)", note: "O elemento focado não pode ficar totalmente escondido por conteúdo fixo (sticky/overlay)." },
+  { sc: "2.4.13", name: "Focus Appearance", note: "Indicador de foco com área e contraste mínimos — anel espesso e visível." },
+  { sc: "2.5.7", name: "Dragging Movements", note: "Toda ação de arrastar tem alternativa por clique simples (ex.: botões no slider)." },
+  { sc: "2.5.8", name: "Target Size (Mínimo)", note: "Alvos de toque ≥ 24×24px (ou espaçamento equivalente)." },
+  { sc: "3.2.6", name: "Consistent Help", note: "Mecanismos de ajuda (contato, docs) aparecem na mesma ordem em todas as páginas." },
+  { sc: "3.3.7", name: "Redundant Entry", note: "Não pedir a mesma informação duas vezes no mesmo fluxo (auto-preencher/lembrar)." },
+  { sc: "3.3.8", name: "Accessible Authentication", note: "Login sem teste cognitivo — permitir colar senha, gerenciadores, sem puzzles." },
+] as const
+
 /** Critérios de acessibilidade (WCAG 2.2). */
 export const A11Y_CRITERIA = [
   { name: "Contraste", note: "≥ 4.5:1 texto normal · ≥ 3:1 texto grande/ícones (WCAG 1.4.3/1.4.11)" },
@@ -209,6 +220,19 @@ export const COMPONENTS: DsGroup[] = [
       { name: "404", status: "ready", href: "/design-system/components/feedback" },
       { name: "500", status: "ready", href: "/design-system/components/feedback" },
       { name: "Offline", status: "ready", href: "/design-system/components/feedback" },
+    ],
+  },
+  {
+    id: "utils",
+    title: "Utilitários",
+    description: "Peças de apoio que completam a biblioteca.",
+    items: [
+      { name: "Avatar", status: "ready" },
+      { name: "Kbd (tecla)", status: "ready" },
+      { name: "Callout", status: "ready" },
+      { name: "Divider", status: "ready" },
+      { name: "Spinner", status: "ready" },
+      { name: "Skip Link", status: "ready" },
     ],
   },
 ]

@@ -5,6 +5,7 @@
 @import "./sv-effects.css";
 @import "./sv-artdirection.css";
 @import "./sv-punk.css";
+@import "./sv-surfaces.css";
 
 @tailwind base;
 @tailwind components;

@@ -86,7 +86,7 @@ export const spacing = {
 
 export const radius = {
   none: "0", sm: "0.25rem", md: "0.5rem", lg: "0.75rem",
-  xl: "1rem", "2xl": "1.5rem", full: "9999px",
+  xl: "1rem", "2xl": "1.5rem", "3xl": "2rem", full: "9999px",
 } as const
 
 export const borderWidth = {
@@ -138,6 +138,8 @@ export const motion = {
     out: "cubic-bezier(0,0,0.2,1)",
     inOut: "cubic-bezier(0.4,0,0.2,1)",
     spring: "cubic-bezier(0.34,1.56,0.64,1)",
+    bounce: "cubic-bezier(0.68,-0.55,0.27,1.55)",
+    smooth: "cubic-bezier(0.45,0,0.15,1)",
   },
 } as const
 
@@ -153,6 +155,11 @@ export const gradient = {
   accent: "linear-gradient(90deg, #ffe600, #ff2d95, #00e5ff)",
   text: "linear-gradient(90deg, #ff2d95, #7b2ff7)",
   rainbow: "linear-gradient(90deg, #ffe600, #ff2d95, #00e5ff, #4bc72f)",
+  sunset: "linear-gradient(135deg, #ffe600, #ff5a1f 45%, #ff2d95 80%, #7b2ff7)",
+  vapor: "linear-gradient(160deg, #7b2ff7, #ff2d95 40%, #00e5ff)",
+  toxic: "linear-gradient(120deg, #b6ff00, #00e5ff 60%, #7b2ff7)",
+  galaxy: "radial+linear (ink base)",
+  inferno: "conic-gradient(from 210deg, #ff2d95, #ff5a1f, #ffe600, #ff5a1f, #ff2d95)",
 } as const
 
 export const tokens = {

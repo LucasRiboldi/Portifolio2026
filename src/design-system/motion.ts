@@ -77,6 +77,26 @@ export const drift: Variants = {
   hidden: { opacity: 0, y: 14 },
   visible: { opacity: 1, y: [14, -4, 0], transition: { duration: 0.6, ease: "easeOut" } },
 }
+export const rubberBand: Variants = {
+  hidden: { scaleX: 1, scaleY: 1 },
+  visible: { scaleX: [1, 1.25, 0.85, 1.05, 1], scaleY: [1, 0.75, 1.15, 0.95, 1], transition: { duration: 0.7 } },
+}
+export const jello: Variants = {
+  hidden: { opacity: 0 },
+  visible: { opacity: 1, skewX: [0, -12, 10, -6, 4, 0], transition: { duration: 0.7 } },
+}
+export const dropIn: Variants = {
+  hidden: { y: -120, opacity: 0 },
+  visible: { y: [-120, 0, -18, 0], opacity: 1, transition: { duration: 0.7, ease: "easeOut" } },
+}
+export const zoomIn: Variants = {
+  hidden: { scale: 2.2, opacity: 0 },
+  visible: { scale: 1, opacity: 1, transition: { type: "spring", stiffness: 260, damping: 20 } },
+}
+export const rollIn: Variants = {
+  hidden: { x: -80, rotate: -120, opacity: 0 },
+  visible: { x: 0, rotate: 0, opacity: 1, transition: { type: "spring", stiffness: 200, damping: 18 } },
+}
 
 export const MOTION_PRESETS = [
   { name: "popTilt", desc: "Entrada com tilt que assenta (spring)", token: "--ease-spring" },
@@ -95,4 +115,9 @@ export const MOTION_PRESETS = [
   { name: "spinPop", desc: "Gira 180° e cresce", token: "--ease-spring" },
   { name: "elastic", desc: "Elástico (squash & stretch)", token: "--ease-spring" },
   { name: "drift", desc: "Sobe suave com leve overshoot", token: "--ease-out" },
+  { name: "rubberBand", desc: "Estica e volta (rubber band)", token: "--ease-bounce" },
+  { name: "jello", desc: "Gelatina (skew oscilante)", token: "--ease-smooth" },
+  { name: "dropIn", desc: "Cai do topo e quica", token: "--ease-out" },
+  { name: "zoomIn", desc: "Zoom de longe até assentar", token: "--ease-spring" },
+  { name: "rollIn", desc: "Rola da esquerda girando", token: "--ease-spring" },
 ] as const

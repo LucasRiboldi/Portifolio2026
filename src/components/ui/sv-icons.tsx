@@ -70,6 +70,24 @@ export const SvIconHeart = (p: IconProps) => (
 export const SvIconPin = (p: IconProps) => (
   <Base {...p}><path d="M7 17q-4-2-2-6t7-3l6 1q3 .5 2-2" /><circle cx="7" cy="17" r="1.6" /></Base>
 )
+export const SvIconTerminal = (p: IconProps) => (
+  <Base {...p}><rect x="3" y="4" width="18" height="16" rx="2" /><path d="M7 9l3 3-3 3M13 15h4" /></Base>
+)
+export const SvIconLayers = (p: IconProps) => (
+  <Base {...p}><path d="M12 3l9 5-9 5-9-5 9-5Z" /><path d="M3 13l9 5 9-5" /></Base>
+)
+export const SvIconCursor = (p: IconProps) => (
+  <Base {...p}><path d="M5 3l6 16 2.5-6L20 10.5 5 3Z" /></Base>
+)
+export const SvIconSparkle = (p: IconProps) => (
+  <Base {...p}><path d="M12 3l2 6 6 2-6 2-2 6-2-6-6-2 6-2 2-6Z" /></Base>
+)
+export const SvIconBug = (p: IconProps) => (
+  <Base {...p}><rect x="8" y="8" width="8" height="10" rx="4" /><path d="M12 8V5M9 6L7 4M15 6l2-2M8 12H4M16 12h4M8 16l-3 2M16 16l3 2" /></Base>
+)
+export const SvIconCube = (p: IconProps) => (
+  <Base {...p}><path d="M12 3l8 4.5v9L12 21l-8-4.5v-9L12 3Z" /><path d="M12 3v9m0 9v-9m8-4.5L12 12 4 7.5" /></Base>
+)
 
 export const SV_ICONS = [
   { name: "Web", Comp: SvIconWeb },
@@ -86,4 +104,10 @@ export const SV_ICONS = [
   { name: "Skull", Comp: SvIconSkull },
   { name: "Heart", Comp: SvIconHeart },
   { name: "Pin", Comp: SvIconPin },
+  { name: "Terminal", Comp: SvIconTerminal },
+  { name: "Layers", Comp: SvIconLayers },
+  { name: "Cursor", Comp: SvIconCursor },
+  { name: "Sparkle", Comp: SvIconSparkle },
+  { name: "Bug", Comp: SvIconBug },
+  { name: "Cube", Comp: SvIconCube },
 ] as const

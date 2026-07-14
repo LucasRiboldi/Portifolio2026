@@ -440,6 +440,10 @@
       "value": "1.5rem",
       "type": "borderRadius"
     },
+    "3xl": {
+      "value": "2rem",
+      "type": "borderRadius"
+    },
     "full": {
       "value": "9999px",
       "type": "borderRadius"

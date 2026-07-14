@@ -8,12 +8,14 @@ import { DsLead } from "@/design-system/ds-ui"
 import {
   popTilt, popIn, fadeRise, tiltStack, glitchIn, dimSwap,
   slamIn, shake, swing, vibrate, flicker, popBurst, slideRip, spinPop, elastic, drift,
+  rubberBand, jello, dropIn, zoomIn, rollIn,
   MOTION_PRESETS,
 } from "@/design-system/motion"
 
 const VARIANTS = {
   popTilt, popIn, fadeRise, tiltStack, glitchIn, dimSwap,
   slamIn, shake, swing, vibrate, flicker, popBurst, slideRip, spinPop, elastic, drift,
+  rubberBand, jello, dropIn, zoomIn, rollIn,
 } as const
 
 export default function MotionPage() {

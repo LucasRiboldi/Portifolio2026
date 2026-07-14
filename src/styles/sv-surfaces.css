@@ -1,0 +1,71 @@
+/* ============================================================
+   SV-SURFACES — Backgrounds/Gradientes, Texturas, 3D de cor, Glitches.
+   Aditivo. Classes .bg-grad-*, .art-tex-*, .fx-3dc-*, .fx-gl-*.
+   ============================================================ */
+
+/* ---------------- GRADIENTES (5) ---------------- */
+.bg-grad-sunset  { background: linear-gradient(135deg, #ffe600, #ff5a1f 45%, #ff2d95 80%, #7b2ff7); }
+.bg-grad-vapor   { background: linear-gradient(160deg, #7b2ff7, #ff2d95 40%, #00e5ff); }
+.bg-grad-toxic   { background: linear-gradient(120deg, #b6ff00, #00e5ff 60%, #7b2ff7); }
+.bg-grad-galaxy  { background: radial-gradient(circle at 30% 20%, #7b2ff7, transparent 45%), radial-gradient(circle at 80% 70%, #ff2d95, transparent 45%), linear-gradient(160deg, #0a0612, #140a24); }
+.bg-grad-inferno { background: conic-gradient(from 210deg at 50% 60%, #ff2d95, #ff5a1f, #ffe600, #ff5a1f, #ff2d95); }
+
+/* ---------------- TEXTURAS (5) ---------------- */
+.art-tex-concrete { position: relative; isolation: isolate; }
+.art-tex-concrete::before {
+  content: ""; position: absolute; inset: 0; z-index: -1; opacity: 0.09; pointer-events: none; mix-blend-mode: overlay;
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='200' height='200'%3E%3Cfilter id='c'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.04' numOctaves='4'/%3E%3C/filter%3E%3Crect width='200' height='200' filter='url(%23c)'/%3E%3C/svg%3E");
+}
+.art-tex-crosshatch { background-image: repeating-linear-gradient(45deg, rgba(255,255,255,0.06) 0 1px, transparent 1px 6px), repeating-linear-gradient(-45deg, rgba(255,255,255,0.06) 0 1px, transparent 1px 6px); }
+.art-tex-dots-grid { background-image: radial-gradient(rgba(255,255,255,0.12) 1px, transparent 1.4px); background-size: 18px 18px; }
+.art-tex-scratch::after {
+  content: ""; position: absolute; inset: 0; z-index: 1; opacity: 0.12; pointer-events: none;
+  background-image: repeating-linear-gradient(115deg, transparent 0 40px, rgba(255,255,255,0.5) 40px 40.5px, transparent 41px 90px);
+}
+.art-tex-canvas { background-image: repeating-linear-gradient(0deg, rgba(0,0,0,0.05) 0 1px, transparent 1px 3px), repeating-linear-gradient(90deg, rgba(0,0,0,0.05) 0 1px, transparent 1px 3px); }
+
+/* ---------------- 3D DE COR (5) — text-shadow empilhado ---------------- */
+.fx-3dc-cyan    { color: #fff; text-shadow: 1px 1px 0 var(--sv-cyan), 2px 2px 0 var(--sv-cyan), 3px 3px 0 #007587, 4px 4px 6px rgba(0,0,0,.5); }
+.fx-3dc-magenta { color: #fff; text-shadow: 1px 1px 0 var(--sv-magenta), 2px 2px 0 var(--sv-magenta), 3px 3px 0 #85114e, 4px 4px 6px rgba(0,0,0,.5); }
+.fx-3dc-rainbow { color: #fff; text-shadow: 1px 1px 0 var(--sv-yellow), 2px 2px 0 var(--sv-orange), 3px 3px 0 var(--sv-magenta), 4px 4px 0 var(--sv-violet), 5px 5px 0 var(--sv-cyan), 6px 6px 8px rgba(0,0,0,.6); }
+.fx-3dc-deep    { color: var(--sv-yellow); text-shadow: 0 1px 0 #b38f00, 0 2px 0 #8a6d00, 0 3px 0 #5c4900, 0 6px 8px rgba(0,0,0,.6); }
+.fx-3dc-emboss  { color: #140a24; text-shadow: -1px -1px 0 rgba(255,255,255,.35), 1px 1px 0 rgba(0,0,0,.6); }
+
+/* ---------------- GLITCHES (5) ---------------- */
+.fx-gl-slice { position: relative; }
+.fx-gl-slice::before, .fx-gl-slice::after {
+  content: attr(data-text); position: absolute; inset: 0; background: inherit; pointer-events: none;
+}
+.fx-gl-slice::before { color: var(--sv-cyan); clip-path: inset(0 0 60% 0); animation: fx-gl-slice1 2.5s steps(2) infinite; }
+.fx-gl-slice::after  { color: var(--sv-magenta); clip-path: inset(65% 0 0 0); animation: fx-gl-slice2 3s steps(2) infinite; }
+@keyframes fx-gl-slice1 { 0%,88%,100%{transform:translate(0)} 90%{transform:translate(-6px)} 94%{transform:translate(5px)} }
+@keyframes fx-gl-slice2 { 0%,85%,100%{transform:translate(0)} 88%{transform:translate(6px)} 92%{transform:translate(-4px)} }
+
+.fx-gl-rgb { animation: fx-gl-rgb 1.4s steps(1) infinite; }
+@keyframes fx-gl-rgb {
+  0%,100% { text-shadow: 2px 0 red, -2px 0 cyan; }
+  33% { text-shadow: -2px 0 red, 2px 0 lime; }
+  66% { text-shadow: 0 2px blue, 0 -2px magenta; }
+}
+
+.fx-gl-jitter { animation: fx-gl-jitter 0.35s steps(3) infinite; }
+@keyframes fx-gl-jitter { 0%{transform:translate(0)} 25%{transform:translate(1px,-1px)} 50%{transform:translate(-1px,1px)} 75%{transform:translate(1px,1px)} 100%{transform:translate(0)} }
+
+.fx-gl-scan { position: relative; overflow: hidden; }
+.fx-gl-scan::after {
+  content: ""; position: absolute; left: 0; right: 0; height: 30%; top: -30%;
+  background: linear-gradient(rgba(0,229,255,0.18), transparent); pointer-events: none;
+  animation: fx-gl-scan 3s linear infinite;
+}
+@keyframes fx-gl-scan { to { top: 130%; } }
+
+.fx-gl-blocks {
+  background-image: repeating-linear-gradient(0deg, transparent 0 6px, rgba(255,45,149,0.05) 6px 7px);
+  animation: fx-gl-blocks 4s steps(6) infinite;
+}
+@keyframes fx-gl-blocks { 0%,100%{clip-path:inset(0)} 20%{clip-path:inset(10% 0 40% 0)} 40%{clip-path:inset(50% 0 20% 0)} 60%{clip-path:inset(0)} }
+
+@media (prefers-reduced-motion: reduce) {
+  .fx-gl-slice::before, .fx-gl-slice::after, .fx-gl-rgb, .fx-gl-jitter,
+  .fx-gl-scan::after, .fx-gl-blocks { animation: none !important; }
+}
