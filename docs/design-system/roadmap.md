@@ -48,5 +48,15 @@ Dashboard, páginas de erro.
 
 - Gerar `tokens.css` a partir de `tokens.ts` no build (fim total da duplicação manual)
 - Snapshot visual dos componentes (Playwright)
-- Ilustrações e fotografia próprias (hoje `planned`)
-- Storybook como catálogo alternativo (avaliado; hoje o `/design-system` in-app cobre)
+- Fotografia própria (hoje `planned` — requer imagens raster)
+
+## ✅ Storybook (entregue)
+
+Catálogo de componentes com **Storybook 10** (`@storybook/nextjs-vite`).
+
+- Rodar: `npm run storybook` (dev, porta 6006) · `npm run build-storybook` (estático)
+- Config em `.storybook/` — `preview.tsx` carrega `globals.css` + envolve stories no
+  `.sv-canvas` com os filtros de arte; `preview-head.html` traz as fontes Aranhaverso;
+  `main.ts` usa `cssMinify: esbuild` (evita erro do lightningcss no Vite 8)
+- Stories: `SvButton`, `SvInput`, `SvChoice`, `SvFeedback` (`src/components/ui/*.stories.tsx`)
+- Addons: a11y, docs (autodocs), vitest, mcp, chromatic
