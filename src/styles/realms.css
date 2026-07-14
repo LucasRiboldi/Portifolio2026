@@ -466,6 +466,33 @@
   }
 }
 
+/* ============================================================
+   REFINOS DO DAILY PROPHET
+     • letra dourada (o "P" do wordmark, como na referência)
+     • manchetes na fonte de jornal bruxo (Mugglenews)
+   ============================================================ */
+.arc-gold {
+  color: #b8860b;
+  background: linear-gradient(180deg, #e6c14b 0%, #b8860b 55%, #8a5a0a 100%);
+  -webkit-background-clip: text;
+  background-clip: text;
+  -webkit-text-fill-color: transparent;
+  text-shadow: 0 1px 0 rgba(0, 0, 0, 0.12);
+}
+
+/* manchetes / cabeçalhos com a tipografia de jornal bruxo */
+.arc-headline,
+.arc-col-headline,
+.arc-sidebar-title {
+  font-family: "Mugglenews", var(--font-serif);
+  font-weight: 400;
+  letter-spacing: 0.005em;
+}
+.arc-headline {
+  font-size: clamp(2rem, 5vw, 3.4rem);
+  line-height: 1.02;
+}
+
 @media (prefers-reduced-motion: reduce) {
   [data-realm="arcane"] * {
     animation: none !important;

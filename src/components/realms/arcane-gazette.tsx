@@ -11,8 +11,18 @@ import {
  * treme/assenta letra a letra). Espaços viram gaps não-animados.
  * Cada letra recebe --i para escalonar a animação via CSS.
  */
-function InkLetters({ text, className }: { text: string; className: string }) {
+function InkLetters({
+  text,
+  className,
+  gild,
+}: {
+  text: string
+  className: string
+  /** letras a "dourar" (como o P do Daily Prophet), case-insensitive */
+  gild?: string
+}) {
   let idx = 0
+  const gildSet = new Set((gild ?? "").toLowerCase())
   return (
     <span className={className} aria-label={text}>
       {Array.from(text).map((ch, i) =>
@@ -22,7 +32,7 @@ function InkLetters({ text, className }: { text: string; className: string }) {
           <span
             key={i}
             aria-hidden
-            className="arc-ltr"
+            className={gildSet.has(ch.toLowerCase()) ? "arc-ltr arc-gold" : "arc-ltr"}
             style={{ "--i": idx++ } as React.CSSProperties}
           >
             {ch}
@@ -57,7 +67,7 @@ export function ArcaneGazette({ className }: { className?: string }) {
           <span>{gazette.price}</span>
         </div>
         <h1 className="arc-title">
-          <InkLetters text={gazette.masthead} className="arc-ink" />
+          <InkLetters text={gazette.masthead} className="arc-ink" gild="P" />
         </h1>
         <p className="arc-motto">{gazette.motto} — {gazette.place}</p>
       </header>
