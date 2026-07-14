@@ -129,6 +129,7 @@ export const COMPONENTS: DsGroup[] = [
         variants: ["Text", "Email", "Password", "Textarea", "Number", "Date", "Search", "Phone", "CPF", "CEP", "Select", "Autocomplete"],
         states: ["Normal", "Hover", "Focus", "Error", "Disabled", "Readonly", "Success"],
         status: "ready",
+        href: "/design-system/components/inputs",
       },
       { name: "Checkbox", states: [...INTERACTIVE_STATES], status: "wip" },
       { name: "Radio Button", states: [...INTERACTIVE_STATES], status: "wip" },

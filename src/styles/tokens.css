@@ -324,6 +324,21 @@
 }
 
 /* ============================================================
+   KEYFRAMES do Design System (componentes)
+   ============================================================ */
+@keyframes sv-error-shake {
+  0%, 100% { transform: translateX(0); }
+  20% { transform: translateX(-5px); }
+  40% { transform: translateX(5px); }
+  60% { transform: translateX(-3px); }
+  80% { transform: translateX(3px); }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .sv-anim-error-shake { animation: none !important; }
+}
+
+/* ============================================================
    TEMA CLARO — overrides de superfície/texto
    O Aranhaverso é dark-first; .light inverte as superfícies.
    ============================================================ */
