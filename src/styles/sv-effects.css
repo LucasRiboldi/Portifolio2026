@@ -1,0 +1,162 @@
+/* ============================================================
+   SV-EFFECTS — Anomalias do Aranhaverso
+   Efeitos criativos e extrapolados. Classes utilitárias .fx-*
+   Todos respeitam prefers-reduced-motion.
+   ============================================================ */
+
+/* ---- Fontes experimentais (definidas via next/font no layout) ---- */
+.fx-font-nabla   { font-family: var(--font-nabla), fantasy; }
+.fx-font-monoton { font-family: var(--font-monoton), cursive; }
+.fx-font-glitch  { font-family: var(--font-glitch), monospace; }
+.fx-font-shade   { font-family: var(--font-shade), fantasy; }
+
+/* ---- Texto 3D comic empilhado ---- */
+.fx-3d {
+  color: var(--sv-yellow);
+  text-shadow:
+    1px 1px 0 #000, 2px 2px 0 #000, 3px 3px 0 var(--sv-magenta),
+    4px 4px 0 var(--sv-magenta), 5px 5px 0 var(--sv-cyan), 6px 6px 0 var(--sv-cyan),
+    7px 7px 12px rgba(0, 0, 0, 0.6);
+}
+
+/* ---- Aberração cromática pulsante ---- */
+.fx-chroma {
+  position: relative;
+  animation: fx-chroma 2.4s steps(1) infinite;
+}
+@keyframes fx-chroma {
+  0%, 100% { text-shadow: 2px 0 var(--sv-magenta), -2px 0 var(--sv-cyan); }
+  50% { text-shadow: -3px 0 var(--sv-magenta), 3px 0 var(--sv-cyan); }
+}
+
+/* ---- Glitch clássico (dois clones deslocados) ---- */
+.fx-glitch { position: relative; display: inline-block; }
+.fx-glitch::before,
+.fx-glitch::after {
+  content: attr(data-text);
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+}
+.fx-glitch::before {
+  color: var(--sv-cyan);
+  clip-path: inset(0 0 55% 0);
+  animation: fx-glitch-top 2.2s infinite steps(2);
+}
+.fx-glitch::after {
+  color: var(--sv-magenta);
+  clip-path: inset(55% 0 0 0);
+  animation: fx-glitch-bot 2.6s infinite steps(2);
+}
+@keyframes fx-glitch-top {
+  0%, 90%, 100% { transform: translate(0, 0); }
+  92% { transform: translate(-4px, -2px); }
+  96% { transform: translate(4px, 2px); }
+}
+@keyframes fx-glitch-bot {
+  0%, 88%, 100% { transform: translate(0, 0); }
+  90% { transform: translate(4px, 2px); }
+  94% { transform: translate(-4px, -2px); }
+}
+
+/* ---- Holográfico (gradiente iridescente animado) ---- */
+.fx-holo {
+  background: linear-gradient(115deg,
+    #ff2d95, #ffe600, #00e5ff, #b6ff00, #7b2ff7, #ff2d95);
+  background-size: 300% 300%;
+  -webkit-background-clip: text;
+  background-clip: text;
+  color: transparent;
+  animation: fx-holo 6s ease infinite;
+}
+@keyframes fx-holo {
+  0%, 100% { background-position: 0% 50%; }
+  50% { background-position: 100% 50%; }
+}
+
+/* ---- Neon glow (Monoton) ---- */
+.fx-neon {
+  color: var(--sv-cyan);
+  text-shadow:
+    0 0 4px var(--sv-cyan), 0 0 10px var(--sv-cyan),
+    0 0 22px var(--sv-cyan), 0 0 40px rgba(0, 229, 255, 0.6);
+  animation: fx-neon-flicker 3.5s infinite;
+}
+@keyframes fx-neon-flicker {
+  0%, 92%, 100% { opacity: 1; }
+  93% { opacity: 0.4; }
+  95% { opacity: 1; }
+  97% { opacity: 0.6; }
+}
+
+/* ---- Scanlines / VHS ---- */
+.fx-vhs { position: relative; overflow: hidden; }
+.fx-vhs::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+  background: repeating-linear-gradient(
+    0deg, rgba(0, 0, 0, 0.25) 0, rgba(0, 0, 0, 0.25) 1px, transparent 2px, transparent 3px);
+  mix-blend-mode: multiply;
+  animation: fx-scan 8s linear infinite;
+}
+@keyframes fx-scan { to { background-position: 0 100px; } }
+
+/* ---- Portal multiverso (anel girando) ---- */
+.fx-portal {
+  position: relative;
+  border-radius: 9999px;
+  background: conic-gradient(from 0deg,
+    var(--sv-magenta), var(--sv-cyan), var(--sv-yellow),
+    var(--sv-lime), var(--sv-violet), var(--sv-magenta));
+  animation: fx-spin 4s linear infinite;
+  filter: drop-shadow(0 0 20px rgba(255, 45, 149, 0.5));
+}
+.fx-portal::before {
+  content: "";
+  position: absolute;
+  inset: 8px;
+  border-radius: 9999px;
+  background: radial-gradient(circle, var(--sv-ink-2), #000);
+}
+@keyframes fx-spin { to { transform: rotate(360deg); } }
+
+/* ---- Sticker peel (canto dobrado) ---- */
+.fx-sticker {
+  position: relative;
+  border: 3px solid #000;
+  box-shadow: var(--elevation-2);
+}
+.fx-sticker::after {
+  content: "";
+  position: absolute;
+  bottom: 0;
+  right: 0;
+  width: 22px;
+  height: 22px;
+  background: linear-gradient(135deg, transparent 50%, rgba(0, 0, 0, 0.35) 50%);
+  border-bottom-right-radius: 6px;
+}
+
+/* ---- Float suave ---- */
+.fx-float { animation: fx-float 5s ease-in-out infinite; }
+@keyframes fx-float {
+  0%, 100% { transform: translateY(0) rotate(-1deg); }
+  50% { transform: translateY(-10px) rotate(1deg); }
+}
+
+/* ---- Grão de filme ---- */
+.fx-grain::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+  opacity: 0.08;
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='120' height='120'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='3'/%3E%3C/filter%3E%3Crect width='120' height='120' filter='url(%23n)'/%3E%3C/svg%3E");
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .fx-chroma, .fx-glitch::before, .fx-glitch::after, .fx-holo,
+  .fx-neon, .fx-vhs::after, .fx-portal, .fx-float { animation: none !important; }
+}

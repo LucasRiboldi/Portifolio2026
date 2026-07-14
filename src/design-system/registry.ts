@@ -70,7 +70,7 @@ export const FOUNDATIONS: DsGroup[] = [
       { name: "Brand Guidelines", status: "ready" },
       { name: "Logo & Marca", status: "ready", href: "/design-system/assets" },
       { name: "Ícones", status: "wip" },
-      { name: "Ilustrações", status: "planned" },
+      { name: "Ilustrações", status: "ready", href: "/design-system/lab" },
       { name: "Fotografia", status: "planned" },
       { name: "Texturas", status: "ready", href: "/design-system/assets", examples: ["Halftone", "Ben-Day", "Speedlines"] },
       { name: "Backgrounds", status: "ready", href: "/design-system/assets", examples: ["Canvas por dimensão", "Gradientes"] },
@@ -252,6 +252,7 @@ export const DS_NAV = [
   { href: "/design-system/templates", label: "Templates" },
   { href: "/design-system/motion", label: "Motion" },
   { href: "/design-system/assets", label: "Assets" },
+  { href: "/design-system/lab", label: "Lab ⚡" },
   { href: "/design-system/accessibility", label: "Acessibilidade" },
   { href: "/design-system/docs", label: "Documentação" },
 ] as const

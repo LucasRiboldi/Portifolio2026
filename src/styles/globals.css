@@ -2,6 +2,7 @@
 @import "./tokens.css";
 @import "./spiderverse.css";
 @import "./spiderverse-dimensions.css";
+@import "./sv-effects.css";
 
 @tailwind base;
 @tailwind components;
