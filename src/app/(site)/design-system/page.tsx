@@ -2,6 +2,7 @@ import Link from "next/link"
 import { ComicHeader } from "@/components/spiderverse/decor"
 import { DsCard, DsLead } from "@/design-system/ds-ui"
 import { DS_NAV } from "@/design-system/registry"
+import { ArtCircleMark } from "@/components/design-system/art-graphics"
 
 const HIERARCHY = [
   { n: "01", title: "Brand Foundation", desc: "Logo, cores, tipografia e ícones — a identidade Aranhaverso.", href: "/design-system/foundations" },
@@ -46,8 +47,9 @@ export default function DesignSystemHome() {
       </div>
 
       <div className="mt-10 rounded-lg border-[3px] border-black bg-[var(--sv-ink-2)] p-5 shadow-[var(--elevation-2)]">
-        <h3 className="sv-heavy mb-2 text-sm uppercase tracking-wide text-[var(--sv-cyan)]">
+        <h3 className="sv-heavy relative mb-2 inline-block text-sm uppercase tracking-wide text-[var(--sv-cyan)]">
           Fase 1 · Fundação entregue
+          <ArtCircleMark className="pointer-events-none absolute -inset-x-3 -inset-y-2 h-[calc(100%+16px)] w-[calc(100%+24px)]" />
         </h3>
         <p className="text-xs leading-relaxed text-white/70">
           Esta é a fundação navegável do Design System: arquitetura de rotas, camada

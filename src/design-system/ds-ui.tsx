@@ -22,14 +22,15 @@ export function StatusPill({ status }: { status: ItemStatus }) {
 export function DsSectionTitle({ children, id }: { children: React.ReactNode; id?: string }) {
   return (
     <h2 id={id} className="sv-display art-chroma-soft mb-4 mt-10 text-2xl uppercase tracking-wide">
-      <span className="art-ghost opacity-50 text-[var(--sv-cyan)]">{"//"}</span> {children}
+      <span className="art-ghost opacity-50 text-[var(--sv-cyan)]">{"//"}</span>{" "}
+      <span className="art-underline">{children}</span>
     </h2>
   )
 }
 
 export function DsCard({ children, className = "" }: { children: React.ReactNode; className?: string }) {
   return (
-    <div className={`art-paper rounded-lg border-[3px] border-black bg-[var(--sv-ink-2)] p-4 shadow-[var(--elevation-2)] ${className}`}>
+    <div className={`art-paper art-hover-jitter rounded-lg border-[3px] border-black bg-[var(--sv-ink-2)] p-4 shadow-[var(--elevation-2)] ${className}`}>
       {children}
     </div>
   )

@@ -83,8 +83,8 @@ camada **sutil/produção**; `fx-*` é o **exagero/Lab**.
 
 - **Onda 1 — Sistema + fundação** ✅ : `sv-artdirection.css`, filtros SVG globais, tokens; aplicar em `DsCard`, divisores de seção e no hero da home. Documentar.
 - **Onda 2 — Universos por rota** ✅ : `ArtOverlay` (presets por universo) sobre a dimensão existente de cada rota — portfólio (renaissance→offset pictórico), sobre (nouveau→aquarela), contato (punk→grafite), blog (noir→filme antigo), skills/tools (neon→cyberpunk). Sem trocar dimensões (identidade preservada); textura via overlay sem tocar no halftone-assinatura do canvas.
-- **Onda 3 — Narrativa & micro-detalhes**: carimbos/fitas/setas com propósito; hover states únicos por componente; onomatopeias contextuais.
-- **Onda 4 — Pós & refino**: RGB offset/bloom/grão discretos por seção; auditoria de contraste e performance; revisão tela a tela.
+- **Onda 3 — Narrativa & micro-detalhes** ✅ : micro-interações `.art-*` (sublinhado desenhado à mão nos títulos de seção, hover artesanal `art-hover-jitter`/`art-hover-ink`, link ilustrado); grafismos narrativos reutilizáveis (`ArtArrow`, `ArtCircleMark`, `ArtScribble`, `ArtStarMark`) via `#art-rough`, usados **com propósito** (ex.: círculo à mão no marco "Fase 1 entregue").
+- **Onda 4 — Pós & refino** ✅ : bloom discreto no destaque do `ComicHeader` (todas as telas); grão/RGB por universo já vêm do `ArtOverlay`. **Auditoria:** contraste verificado ao vivo (`ContrastMatrix`, WCAG AA) — texto sempre sobre superfícies escuras; **performance** — texturas 100% CSS/SVG data-URI (sem raster), overlays `pointer-events-none`, `prefers-reduced-motion` em toda animação; build sem regressão.
 
 Cada onda: implementar → revisar coerência estética + funcional → documentar aqui.
 

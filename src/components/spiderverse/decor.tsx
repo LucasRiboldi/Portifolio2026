@@ -184,7 +184,7 @@ export function ComicHeader({
       {kicker && <span className="sv-sticker sv-sticker-cyan text-sm">{kicker}</span>}
       <h1 className="sv-page-title mt-4">
         {title}{" "}
-        {highlight && <span className="sv-rainbow">{highlight}</span>}
+        {highlight && <span className="sv-rainbow art-bloom">{highlight}</span>}
       </h1>
       {subtitle && (
         <p className="sv-heavy mt-4 max-w-xl text-sm uppercase tracking-wide opacity-80">
