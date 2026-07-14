@@ -240,3 +240,38 @@
 
 /* footer */
 .sober footer { border-color: var(--sober-border) !important; }
+
+/* ---- resíduos coloridos ---- */
+/* burst/emblema com gradiente inline → superfície neutra */
+.sober .sv-burst,
+.sober [style*="var(--sv-magenta)"][style*="var(--sv-violet)"] {
+  background: var(--sober-surface-2) !important;
+  border: 1px solid var(--sober-border-2) !important;
+  border-radius: 10px !important;
+  clip-path: none !important;
+}
+.sober .sv-burst svg { color: var(--sober-accent) !important; }
+
+/* sublinhados/decorações rosa (sv-underline etc.) */
+.sober .sv-underline,
+.sober .sv-underline::after,
+.sober .sv-divider,
+.sober .gradient-accent-bar,
+.sober .gradient-border {
+  background: none !important;
+  background-image: none !important;
+  border-image: none !important;
+}
+.sober .sv-underline::after { display: none !important; }
+
+/* textos em cores comic → acento sóbrio */
+.sober .text-\[var\(--sv-yellow\)\],
+.sober .text-\[var\(--sv-magenta\)\],
+.sober .text-\[var\(--sv-cyan\)\],
+.sober .text-\[var\(--sv-lime\)\],
+.sober .text-\[var\(--sv-violet\)\],
+.sober .text-\[var\(--sv-orange\)\] { color: var(--sober-accent) !important; }
+
+/* ícones lucide coloridos herdam acento em hover, base calma */
+.sober .hover\:text-\[var\(--sv-magenta\)\]:hover,
+.sober .hover\:text-\[var\(--sv-cyan\)\]:hover { color: var(--sober-accent) !important; }
