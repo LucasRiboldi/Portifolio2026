@@ -155,7 +155,11 @@ export function LearnView({ languages }: { languages: LearnLanguage[] }) {
         ))}
       </div>
 
-      {tab === "roadmap" && (
+      {!hydrated && tab === "roadmap" && (
+        <p className="dv-empty">Carregando trilha…</p>
+      )}
+
+      {hydrated && tab === "roadmap" && (
         <div className="learn-phases">
           {lang.phases.map((phase) => {
             const localDone = phase.topics.filter((_, i) => done[`${phase.id}:${i}`]).length
@@ -232,7 +236,7 @@ export function LearnView({ languages }: { languages: LearnLanguage[] }) {
         </ul>
       )}
 
-      {tab === "roadmap" && lang.routine && (
+      {hydrated && tab === "roadmap" && lang.routine && (
         <div className="learn-routine">
           <p className="dv-section-title">Rotina sugerida</p>
           <div className="dv-grid" style={{ marginTop: "0.75rem" }}>
