@@ -40,18 +40,9 @@
 }
 
 /* ============================================================
-   CURSOR CONTROLLER — apenas no realm ARCANE (novo/aditivo).
-   Creative e Developer mantêm o cursor nativo, idêntico ao site no ar.
-   Só em ponteiro fino (mouse); toque/caneta mantêm o cursor nativo.
+   CURSOR — o realm ARCANE usa o cursor nativo do sistema, como os
+   demais realms. (O cursor custom de pena/quill foi removido a pedido.)
    ============================================================ */
-@media (hover: hover) and (pointer: fine) {
-  /* Arcane: pena/quill (tinta) */
-  [data-realm="arcane"] {
-    cursor: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='26' height='26' viewBox='0 0 26 26'%3E%3Cpath d='M23 2 C14 5 7 12 4 22 l3 1 C10 14 16 8 24 4 Z' fill='%23241d14'/%3E%3Cpath d='M4 22 l-2 2' stroke='%23241d14' stroke-width='2'/%3E%3C/svg%3E")
-        3 3,
-      crosshair;
-  }
-}
 
 /* ============================================================
    ARCANE REALM — "Arcane Realm": jornal antigo (Daily Prophet vibe).

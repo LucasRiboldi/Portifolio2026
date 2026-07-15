@@ -82,6 +82,7 @@ export function LearnView({ languages }: { languages: LearnLanguage[] }) {
           return (
             <button
               key={l.id}
+              type="button"
               className="dv-filter learn-lang"
               data-on={l.id === activeId}
               disabled={soon}
@@ -146,6 +147,7 @@ export function LearnView({ languages }: { languages: LearnLanguage[] }) {
         {TABS.map((t) => (
           <button
             key={t.id}
+            type="button"
             className="dv-tab"
             data-on={tab === t.id}
             onClick={() => setTab(t.id)}
@@ -178,6 +180,7 @@ export function LearnView({ languages }: { languages: LearnLanguage[] }) {
                     return (
                       <li key={key}>
                         <button
+                          type="button"
                           className="learn-item"
                           role="checkbox"
                           aria-checked={checked}
