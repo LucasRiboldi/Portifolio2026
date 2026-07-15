@@ -9,6 +9,8 @@ export interface Project {
   coverImage: string
   href?: string
   featured?: boolean
+  slug?: string
+  readme?: string
 }
 
 export const projects: Project[] = [

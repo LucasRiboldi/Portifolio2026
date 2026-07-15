@@ -1,6 +1,7 @@
 "use client"
 
 import { useMemo, useState } from "react"
+import { highlight } from "sugar-high"
 
 import type { SnippetRow } from "@/lib/repos/dev"
 import { CopyButton } from "./copy-button"
@@ -37,7 +38,7 @@ export function SnippetsView({ snippets }: { snippets: SnippetRow[] }) {
             {s.description && <p>{s.description}</p>}
             {s.code && (
               <pre className="dv-code mt-3">
-                <code>{s.code}</code>
+                <code dangerouslySetInnerHTML={{ __html: highlight(s.code) }} />
               </pre>
             )}
           </article>

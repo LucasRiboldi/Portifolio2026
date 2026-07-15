@@ -7,7 +7,9 @@ import type { ProjectRow } from "@/lib/supabase/types"
 import { projects as seed, type Project } from "@/data/projects"
 import { CACHE_TAGS } from "./tags"
 
-function rowToProject(r: ProjectRow): Project {
+type ProjectRowExt = ProjectRow & { slug?: string | null; readme?: string | null }
+
+function rowToProject(r: ProjectRowExt): Project {
   return {
     id: r.id,
     title: r.title,
@@ -17,6 +19,8 @@ function rowToProject(r: ProjectRow): Project {
     coverImage: r.cover_image ?? "",
     href: r.href ?? undefined,
     featured: r.featured,
+    slug: r.slug ?? undefined,
+    readme: r.readme ?? undefined,
   }
 }
 
@@ -39,3 +43,9 @@ export const getProjects = unstable_cache(
   ["projects"],
   { tags: [CACHE_TAGS.projects] },
 )
+
+/** Um projeto pelo slug (usa a lista cacheada). */
+export async function getProjectBySlug(slug: string): Promise<Project | undefined> {
+  const all = await getProjects()
+  return all.find((p) => p.slug === slug)
+}

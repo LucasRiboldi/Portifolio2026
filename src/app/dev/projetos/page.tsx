@@ -1,3 +1,5 @@
+import Link from "next/link"
+
 import { DevHeader, DevEmpty } from "@/components/dev/dev-header"
 import { getProjects } from "@/lib/repos/projects"
 import { getPageContent } from "@/lib/repos/page-content"
@@ -35,7 +37,13 @@ export default async function DevProjectsPage() {
                 </div>
               )}
               <div className="flex items-center justify-between gap-2">
-                <h3>{p.title}</h3>
+                {p.slug ? (
+                  <Link href={`/dev/projetos/${p.slug}`} className="hover:underline">
+                    <h3>{p.title}</h3>
+                  </Link>
+                ) : (
+                  <h3>{p.title}</h3>
+                )}
                 <span className="dv-tag">{CATEGORY[p.category] ?? p.category}</span>
               </div>
               <p className="flex-1">{p.description}</p>
@@ -47,10 +55,16 @@ export default async function DevProjectsPage() {
                 ))}
               </div>
               <div className="mt-3 flex items-center justify-between">
-                {p.featured ? <span className="dv-status done">★ destaque</span> : <span />}
+                {p.slug ? (
+                  <Link href={`/dev/projetos/${p.slug}`} className="dv-link text-sm">
+                    ver README →
+                  </Link>
+                ) : (
+                  <span />
+                )}
                 {p.href && (
                   <a href={p.href} target="_blank" rel="noreferrer" className="dv-link text-sm">
-                    ❯ abrir repositório
+                    ❯ repo
                   </a>
                 )}
               </div>
