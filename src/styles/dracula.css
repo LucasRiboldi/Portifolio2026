@@ -30,8 +30,86 @@
 .dv-container {
   max-width: 1120px;
   margin: 0 auto;
-  padding: 1.5rem 1.25rem 4rem;
+  padding: 1.5rem 1.25rem 6.5rem; /* espaço pro dock inferior */
 }
+
+/* ─── Topbar (logo + troca de universo) ─── */
+.dv-topbar {
+  position: sticky;
+  top: 0;
+  z-index: 30;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 0.75rem 1.25rem;
+  background: color-mix(in srgb, var(--d-bg-2) 90%, transparent);
+  backdrop-filter: blur(8px);
+  border-bottom: 1px solid var(--d-current);
+}
+.dv-logo {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.5rem;
+  font-weight: 800;
+  letter-spacing: 0.02em;
+}
+.dv-logo .lr {
+  display: grid;
+  place-items: center;
+  width: 30px;
+  height: 30px;
+  border-radius: 8px;
+  background: var(--d-purple);
+  color: var(--d-bg);
+  font-size: 0.85rem;
+}
+.dv-logo .blink {
+  color: var(--d-green);
+  animation: dv-blink 1.1s steps(2) infinite;
+}
+@keyframes dv-blink { 50% { opacity: 0; } }
+
+/* ─── Dock inferior ─── */
+.dv-dock {
+  position: fixed;
+  left: 50%;
+  bottom: 1rem;
+  transform: translateX(-50%);
+  z-index: 40;
+  display: flex;
+  gap: 0.15rem;
+  padding: 0.4rem;
+  border-radius: 16px;
+  background: color-mix(in srgb, var(--d-bg-2) 96%, transparent);
+  border: 1px solid var(--d-current);
+  box-shadow: 0 10px 40px rgba(0, 0, 0, 0.5);
+  backdrop-filter: blur(10px);
+  max-width: calc(100vw - 2rem);
+  overflow-x: auto;
+}
+.dv-dock a {
+  display: grid;
+  place-items: center;
+  gap: 2px;
+  padding: 0.5rem 0.6rem;
+  border-radius: 11px;
+  color: var(--d-comment);
+  font-size: 0.6rem;
+  text-transform: uppercase;
+  letter-spacing: 0.03em;
+  transition: color 0.15s, background 0.15s, transform 0.15s;
+}
+.dv-dock a:hover {
+  color: var(--d-fg);
+  background: var(--d-current);
+  transform: translateY(-3px);
+}
+.dv-dock a[data-active="true"] {
+  color: var(--d-bg);
+  background: var(--d-purple);
+}
+.dv-dock a[data-active="true"] .dock-lbl { color: var(--d-bg); }
+.dv-dock .dock-lbl { white-space: nowrap; }
 
 /* ─── Nav ─── */
 .dv-nav {
@@ -171,6 +249,62 @@
   color: var(--d-fg);
   white-space: pre;
 }
+
+/* ─── Landing (home dev) ─── */
+.dv-hero {
+  border: 1px solid var(--d-current);
+  border-radius: var(--d-radius);
+  background:
+    radial-gradient(120% 140% at 100% 0%, color-mix(in srgb, var(--d-purple) 18%, transparent), transparent 55%),
+    var(--d-bg-2);
+  padding: 1.5rem;
+  margin-top: 1.25rem;
+}
+.dv-hero .term {
+  color: var(--d-comment);
+  font-size: 0.8rem;
+}
+.dv-hero .term .tok-fn { color: var(--d-green); }
+.dv-hero .term .tok-str { color: var(--d-yellow); }
+.dv-hero h1 {
+  font-size: clamp(1.8rem, 4vw, 2.8rem);
+  font-weight: 800;
+  line-height: 1.05;
+  margin-top: 0.5rem;
+}
+.dv-hero h1 .g { color: var(--d-green); }
+.dv-hero h1 .p { color: var(--d-purple); }
+.dv-hero h1 .c { color: var(--d-cyan); }
+.dv-hero p { color: var(--d-fg); opacity: 0.8; margin-top: 0.6rem; max-width: 44rem; }
+
+.dv-stats {
+  display: grid;
+  gap: 0.9rem;
+  grid-template-columns: repeat(2, 1fr);
+  margin-top: 1.25rem;
+}
+@media (min-width: 720px) { .dv-stats { grid-template-columns: repeat(4, 1fr); } }
+.dv-stat {
+  border: 1px solid var(--d-current);
+  border-radius: var(--d-radius);
+  background: var(--d-bg-2);
+  padding: 1rem;
+}
+.dv-stat .n { font-size: 1.9rem; font-weight: 800; line-height: 1; }
+.dv-stat .l { color: var(--d-comment); font-size: 0.78rem; margin-top: 0.35rem; }
+
+.dv-section-title {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  margin: 2rem 0 0.25rem;
+  color: var(--d-orange);
+  font-weight: 700;
+  font-size: 0.95rem;
+}
+.dv-section-title::before { content: "▍"; color: var(--d-purple); }
+
+.dv-chip-row { display: flex; flex-wrap: wrap; gap: 0.4rem; margin-top: 0.75rem; }
 
 /* ─── Vazio ─── */
 .dv-empty {

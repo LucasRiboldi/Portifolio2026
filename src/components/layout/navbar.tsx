@@ -7,9 +7,6 @@ import { Container } from "./container"
 import { ThemeToggle } from "@/components/ui/theme-toggle"
 import { VibeToggle } from "@/components/providers/vibe-toggle"
 import { MobileMenu } from "./mobile-menu"
-import { useUniverse } from "@/components/providers/universe-provider"
-import { DEV_LINKS } from "@/components/dev/dev-nav"
-import { PROPHET_LINKS } from "@/components/prophet/prophet-nav"
 
 const siteLinks = [
   { label: "Portfólio", href: "/portfolio" },
@@ -25,10 +22,7 @@ const siteLinks = [
 
 export function Navbar() {
   const pathname = usePathname()
-  const { realm } = useUniverse()
-  // Cada realm tem seu próprio menu (entrada para o respectivo sub-site).
-  const links =
-    realm === "developer" ? DEV_LINKS : realm === "arcane" ? PROPHET_LINKS : siteLinks
+  const links = siteLinks
 
   return (
     <header className="sticky top-0 z-50 border-b-[3px] border-black bg-[var(--sv-ink)]/90 backdrop-blur-xl">

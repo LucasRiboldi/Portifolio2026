@@ -1,46 +1,55 @@
 "use client"
 
+import { usePathname, useRouter } from "next/navigation"
+
 import { cn } from "@/lib/utils"
-import { REALMS } from "@/lib/realms"
+import { REALMS, type RealmId } from "@/lib/realms"
 import { useUniverse } from "@/components/providers/universe-provider"
 
 /**
- * VibeToggle — o botão "Transform" de THE THREE REALMS.
+ * VibeToggle — o botão de troca de universo de THE THREE REALMS.
  *
- * Cicla creative → developer → arcane → creative disparando a metamorfose
- * cinematográfica. Toda a lógica (estado, morph, persistência) vive no
- * UniverseProvider; aqui é só a UI acessível. Rótulo/skin mudam por realm.
+ * Agora os realms são sub-sites com rota própria (creative "/", developer
+ * "/dev", arcane "/prophet"). O botão deriva o realm atual do pathname e
+ * NAVEGA para o próximo realm habilitado.
  */
+function realmFromPath(pathname: string): RealmId {
+  if (pathname.startsWith("/dev")) return "developer"
+  if (pathname.startsWith("/prophet")) return "arcane"
+  return "creative"
+}
+
 export function VibeToggle({ className }: { className?: string }) {
-  const { realm, morphing, cycle, enabled } = useUniverse()
-  const current = REALMS[realm]
-  // próximo realm HABILITADO (espelha exatamente o que cycle() fará)
+  const pathname = usePathname()
+  const router = useRouter()
+  const { enabled } = useUniverse()
+
+  const realm = realmFromPath(pathname)
   const i = enabled.indexOf(realm)
   const nextId = enabled[(i + 1) % enabled.length] ?? realm
   const next = REALMS[nextId]
-  // botão só faz sentido com 2+ realms ativos
   const canCycle = enabled.length > 1
 
   return (
     <button
-      onClick={cycle}
-      disabled={!!morphing || !canCycle}
-      aria-label={`Transformar universo — próximo: ${next.aria}`}
-      title={`Transform → ${next.label}`}
+      onClick={() => router.push(next.route)}
+      disabled={!canCycle}
+      aria-label={`Trocar de universo — próximo: ${next.aria}`}
+      title={`Universo → ${next.label}`}
       data-realm-btn={realm}
       className={cn(
         "inline-flex items-center gap-1.5 rounded-md border-2 px-2.5 py-1 font-mono text-[0.7rem] uppercase tracking-wide transition-all disabled:opacity-70",
         realm === "developer" &&
-          "border-[#2b3238] bg-[#131619] text-[#4ade80] hover:border-[#4ade80]",
+          "border-[#6272a4] bg-[#282a36] text-[#bd93f9] hover:border-[#bd93f9] hover:text-[#ff79c6]",
         realm === "creative" &&
           "border-black bg-[var(--sv-yellow)] text-black shadow-[2px_2px_0_0_#000] hover:-translate-y-0.5",
         realm === "arcane" &&
           "border-[#3a2f1c] bg-[#efe6d0] text-[#2a2118] shadow-[2px_2px_0_0_#2a2118] hover:-translate-y-0.5",
-        className
+        className,
       )}
     >
-      <span aria-hidden>{current.glyph}</span>
-      {current.label}
+      <span aria-hidden>{next.glyph}</span>
+      {next.label}
     </button>
   )
 }

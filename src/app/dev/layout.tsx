@@ -3,7 +3,8 @@ import "@/styles/dracula.css"
 import type { ReactNode } from "react"
 import { JetBrains_Mono } from "next/font/google"
 
-import { DevNav } from "@/components/dev/dev-nav"
+import { DevTopbar } from "@/components/dev/dev-topbar"
+import { DevRealmDock } from "@/components/dev/dev-realm-dock"
 
 const mono = JetBrains_Mono({ subsets: ["latin"], variable: "--font-mono" })
 
@@ -15,8 +16,9 @@ export const metadata = {
 export default function DevLayout({ children }: { children: ReactNode }) {
   return (
     <div className={`dracula ${mono.variable}`}>
-      <DevNav />
+      <DevTopbar />
       <div className="dv-container">{children}</div>
+      <DevRealmDock />
     </div>
   )
 }

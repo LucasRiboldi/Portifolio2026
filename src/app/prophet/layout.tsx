@@ -5,6 +5,7 @@ import type { ReactNode } from "react"
 import Link from "next/link"
 
 import { ProphetNav } from "@/components/prophet/prophet-nav"
+import { VibeToggle } from "@/components/providers/vibe-toggle"
 import { gazette } from "@/lib/arcane-content"
 
 export const metadata = {
@@ -32,7 +33,10 @@ export default function ProphetLayout({ children }: { children: ReactNode }) {
         <div className="pr-dateline">
           <span>{gazette.edition}</span>
           <span>{today}</span>
-          <span>{gazette.price}</span>
+          <span className="flex items-center gap-3">
+            {gazette.price}
+            <VibeToggle />
+          </span>
         </div>
         <ProphetNav />
         {children}

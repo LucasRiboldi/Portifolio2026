@@ -70,17 +70,13 @@ export default async function RootLayout({
 }) {
   // Config dos realms + do site controladas pelo admin.
   const [settings, site] = await Promise.all([getRealmSettings(), getSiteConfig()]);
-  const enabledJson = JSON.stringify(settings.enabled);
 
-  // Script anti-FOUC: pinta data-realm antes da hidratação, respeitando o
-  // default e os realms habilitados vindos do banco (injetados pelo server).
+  // Script anti-FOUC: pinta data-realm antes da hidratação, derivado da ROTA
+  // (os realms agora são sub-sites próprios: / , /dev , /prophet).
   const antiFouc =
-    "(function(){try{var EN=" + enabledJson + ",DEF='" + settings.defaultRealm + "';" +
-    "var r=localStorage.getItem('realm');" +
-    "if(!r){r=localStorage.getItem('vibe')==='sober'?'developer':DEF;}" +
-    "if(EN.indexOf(r)<0)r=DEF;" +
-    "var d=document.documentElement;d.setAttribute('data-realm',r);" +
-    "if(r==='developer')d.classList.add('sober');}catch(e){}})()";
+    "(function(){try{var p=location.pathname," +
+    "r=p.indexOf('/dev')===0?'developer':p.indexOf('/prophet')===0?'arcane':'creative';" +
+    "document.documentElement.setAttribute('data-realm',r);}catch(e){}})()";
 
   return (
     <html

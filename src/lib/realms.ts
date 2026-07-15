@@ -20,6 +20,8 @@ export interface Realm {
   label: string
   /** glifo/ícone textual do realm */
   glyph: string
+  /** rota (sub-site) do realm — a troca de universo navega para cá */
+  route: string
   /** próximo realm no ciclo do botão Transform */
   next: RealmId
   /** ativa a skin terminal legada (.sober). Só o developer usa. */
@@ -35,6 +37,7 @@ export const REALMS: Record<RealmId, Realm> = {
     id: "creative",
     label: "Creative",
     glyph: "◍",
+    route: "/",
     next: "developer",
     sober: false,
     morphLabel: "◍ recalibrando o multiverso…",
@@ -44,6 +47,7 @@ export const REALMS: Record<RealmId, Realm> = {
     id: "developer",
     label: "Developer",
     glyph: "❯_",
+    route: "/dev",
     next: "arcane",
     sober: true,
     morphLabel: "❯ booting dev environment…",
@@ -53,6 +57,7 @@ export const REALMS: Record<RealmId, Realm> = {
     id: "arcane",
     label: "Daily Prophet",
     glyph: "⚜",
+    route: "/prophet",
     next: "creative",
     sober: false,
     morphLabel: "⚜ selando o pergaminho…",
