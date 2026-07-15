@@ -5,6 +5,7 @@ import type { ReactNode } from "react"
 import Link from "next/link"
 
 import { ProphetNav } from "@/components/prophet/prophet-nav"
+import { SoundToggle } from "@/components/prophet/sound-toggle"
 import { VibeToggle } from "@/components/providers/vibe-toggle"
 import { gazette } from "@/lib/arcane-content"
 
@@ -35,6 +36,7 @@ export default function ProphetLayout({ children }: { children: ReactNode }) {
           <span>{today}</span>
           <span className="flex items-center gap-3">
             {gazette.price}
+            <SoundToggle />
             <VibeToggle />
           </span>
         </div>

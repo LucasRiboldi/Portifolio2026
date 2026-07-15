@@ -2,6 +2,8 @@ import Link from "next/link"
 
 import { leadArticle } from "@/lib/arcane-content"
 import { getTutorials, getMechanics, getPrototypes } from "@/lib/repos/prophet"
+import { InkScramble } from "@/components/prophet/ink-scramble"
+import { LivingPortrait } from "@/components/prophet/living-portrait"
 
 export const metadata = { title: "Primeira Página" }
 
@@ -17,9 +19,12 @@ export default async function ProphetFront() {
       {/* Matéria de capa */}
       <article>
         <p className="pr-kicker">{leadArticle.kicker}</p>
-        <h2 className="pr-headline">{leadArticle.headline}</h2>
+        <h2 className="pr-headline">
+          <InkScramble text={leadArticle.headline} />
+        </h2>
         <p className="pr-stand">{leadArticle.standfirst}</p>
         {leadArticle.byline && <p className="pr-byline">{leadArticle.byline}</p>}
+        <LivingPortrait caption="Coruja-correio sobrevoa o castelo ao anoitecer" />
         <div className="pr-columns">
           {leadArticle.body.map((p, i) => (
             <p key={i} className={i === 0 ? "pr-dropcap" : undefined} style={{ marginBottom: "0.75rem" }}>

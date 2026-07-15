@@ -285,3 +285,189 @@
   padding: 0.1rem 0.5rem 0 0;
   color: var(--p-accent);
 }
+
+/* ============================================================
+   MAGIA — efeitos de "jornal bruxo" (Daily Prophet).
+   CSS puro; animações desligam em prefers-reduced-motion.
+   ============================================================ */
+
+/* (8) Wordmark do título com a fonte-logo do Profeta Diário */
+.pr-masthead h1 {
+  font-family: "Harry P", var(--font-arcane, var(--p-serif));
+  letter-spacing: 0.01em;
+}
+
+/* (6) Brasão de coruja em marca d'água atrás do masthead */
+.pr-masthead {
+  position: relative;
+  isolation: isolate;
+}
+.pr-masthead::before {
+  content: "";
+  position: absolute;
+  inset: -0.5rem 0 0;
+  z-index: -1;
+  background: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'%3E%3Cg fill='%23241d14'%3E%3Cellipse cx='50' cy='56' rx='25' ry='31'/%3E%3Ccircle cx='40' cy='44' r='10' fill='%23fff'/%3E%3Ccircle cx='60' cy='44' r='10' fill='%23fff'/%3E%3Ccircle cx='40' cy='44' r='4'/%3E%3Ccircle cx='60' cy='44' r='4'/%3E%3Cpath d='M50 50 l5 8 h-10 z'/%3E%3Cpath d='M25 30 l11 14 -15 2z'/%3E%3Cpath d='M75 30 l-11 14 15 2z'/%3E%3C/g%3E%3C/svg%3E")
+    center 60% / auto 84% no-repeat;
+  opacity: 0.06;
+  pointer-events: none;
+}
+
+/* (5) Brilho de vela "respirando" sobre o papel (só opacidade — barato) */
+.prophet {
+  position: relative;
+}
+.prophet::before {
+  content: "";
+  position: fixed;
+  inset: 0;
+  z-index: 0;
+  pointer-events: none;
+  background: radial-gradient(58% 42% at 50% 26%, rgba(255, 224, 158, 0.14), transparent 72%);
+  opacity: 0.55;
+  animation: pr-candle 9s ease-in-out infinite;
+}
+.pr-container {
+  position: relative;
+  z-index: 1;
+}
+@keyframes pr-candle {
+  0%, 100% { opacity: 0.45; }
+  50% { opacity: 0.95; }
+}
+
+/* (3) Tinta que sangra e assenta no hover das manchetes/cards */
+.pr-headline,
+.pr-card h3 {
+  transition: text-shadow 0.5s ease, letter-spacing 0.5s ease;
+}
+.pr-headline:hover,
+.pr-card:hover h3 {
+  text-shadow: 0 0 0.4px var(--p-ink), 0 0 6px rgba(35, 32, 26, 0.35);
+  letter-spacing: 0.01em;
+}
+
+/* (2) Moldura art déco + (1) retrato vivo */
+.pr-frame {
+  position: relative;
+  margin: 0 0 1rem;
+  padding: 0.5rem;
+  border: 1px solid var(--p-rule);
+  outline: 3px double var(--p-rule);
+  outline-offset: -6px;
+  background: var(--p-paper-2);
+}
+.pr-frame::before,
+.pr-frame::after {
+  content: "";
+  position: absolute;
+  width: 14px;
+  height: 14px;
+  border: 2px solid var(--p-accent);
+}
+.pr-frame::before {
+  top: 3px;
+  left: 3px;
+  border-right: none;
+  border-bottom: none;
+}
+.pr-frame::after {
+  bottom: 3px;
+  right: 3px;
+  border-left: none;
+  border-top: none;
+}
+.pr-frame figcaption {
+  text-align: center;
+  font-variant: small-caps;
+  letter-spacing: 0.04em;
+  font-size: 0.72rem;
+  color: var(--p-muted);
+  padding-top: 0.35rem;
+}
+.pr-portrait {
+  position: relative;
+  width: 100%;
+  aspect-ratio: 4 / 3;
+  overflow: hidden;
+  background: #d9cdae;
+  filter: grayscale(1) sepia(0.32) contrast(1.05);
+}
+.pr-portrait svg {
+  width: 100%;
+  height: 100%;
+  display: block;
+}
+/* elementos internos "vivos": névoa deriva, faíscas sobem, lua oscila */
+.pr-portrait .pp-fog {
+  transform-origin: center;
+  animation: pp-drift 14s ease-in-out infinite;
+}
+.pr-portrait .pp-spark {
+  animation: pp-rise 5s linear infinite;
+}
+.pr-portrait .pp-spark2 {
+  animation: pp-rise 7s linear infinite;
+  animation-delay: -3s;
+}
+.pr-portrait .pp-moon {
+  transform-origin: center;
+  animation: pp-glow 6s ease-in-out infinite;
+}
+@keyframes pp-drift {
+  0%, 100% { transform: translateX(-4%); }
+  50% { transform: translateX(4%); }
+}
+@keyframes pp-rise {
+  0% { transform: translateY(6px); opacity: 0; }
+  20% { opacity: 0.9; }
+  100% { transform: translateY(-34px); opacity: 0; }
+}
+@keyframes pp-glow {
+  0%, 100% { opacity: 0.75; }
+  50% { opacity: 1; }
+}
+
+/* (7) Botão de som (farfalhar) na dateline */
+.pr-sound {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.25rem;
+  background: transparent;
+  border: 1px solid var(--p-rule);
+  color: var(--p-ink-2);
+  font-variant: small-caps;
+  letter-spacing: 0.04em;
+  font-size: 0.68rem;
+  padding: 0.05rem 0.4rem;
+  cursor: pointer;
+}
+.pr-sound[aria-pressed="true"] {
+  background: var(--p-ink);
+  color: var(--p-paper);
+}
+@media (max-width: 480px) {
+  .pr-sound-lbl { display: none; }
+}
+
+/* (4) Manchete que se reescreve — cursor de tinta piscando */
+.pr-scramble .pr-caret {
+  color: var(--p-accent);
+  animation: pr-blink 0.9s steps(2) infinite;
+}
+@keyframes pr-blink {
+  50% { opacity: 0; }
+}
+
+/* Respeita quem prefere menos movimento */
+@media (prefers-reduced-motion: reduce) {
+  .prophet::before,
+  .pr-portrait .pp-fog,
+  .pr-portrait .pp-spark,
+  .pr-portrait .pp-spark2,
+  .pr-portrait .pp-moon,
+  .pr-scramble .pr-caret {
+    animation: none;
+  }
+  .prophet::before { opacity: 0.6; }
+}
