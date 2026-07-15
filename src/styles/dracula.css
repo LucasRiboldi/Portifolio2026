@@ -490,3 +490,11 @@
   color: var(--d-comment);
   margin-top: 1.5rem;
 }
+
+/* ─── Acessibilidade: respeita prefers-reduced-motion ─── */
+@media (prefers-reduced-motion: reduce) {
+  .dv-caret,
+  [class*="dv-"] {
+    animation: none !important;
+  }
+}
