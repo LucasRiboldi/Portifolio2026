@@ -2,6 +2,7 @@ import { Mail } from "lucide-react"
 import { GithubIcon, LinkedinIcon } from "@/components/ui/social-icons"
 import { Container } from "./container"
 import { getSiteConfig } from "@/lib/repos/site-config"
+import { AdminFooterLink } from "./admin-footer-link"
 
 export async function Footer() {
   const siteConfig = await getSiteConfig()
@@ -12,6 +13,8 @@ export async function Footer() {
         <div className="flex flex-col gap-4 py-8 md:flex-row md:items-center md:justify-between">
           <p className="sv-heavy text-xs uppercase tracking-wide text-white/70">
             © 2026 {siteConfig.name} · Todos os multiversos reservados
+            <span className="mx-2 text-white/20">·</span>
+            <AdminFooterLink />
           </p>
           <div className="flex gap-4">
             <a
