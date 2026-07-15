@@ -1,6 +1,7 @@
 import { DevHeader, DevEmpty } from "@/components/dev/dev-header"
 import { getTools } from "@/lib/repos/tools"
 import { getPageContent } from "@/lib/repos/page-content"
+import { DevToolbox } from "@/components/dev/dev-toolbox"
 
 export const metadata = { title: "Ferramentas" }
 
@@ -10,10 +11,15 @@ export default async function DevToolsPage() {
   return (
     <div>
       <DevHeader fn={c.kicker} title={c.title} accent={c.highlight} subtitle={c.subtitle} />
+
+      {/* Ferramentas internas funcionais (rodam no navegador) */}
+      <DevToolbox />
+
+      <h2 className="dv-section-title">Utilitários publicados</h2>
       {tools.length === 0 ? (
         <DevEmpty>Nenhuma ferramenta ainda — adicione em /admin/tools.</DevEmpty>
       ) : (
-        <div className="dv-grid">
+        <div className="dv-grid" style={{ marginTop: "0.5rem" }}>
           {tools.map((t) => (
             <article key={t.id} className="dv-card">
               <div className="flex items-center gap-2">
