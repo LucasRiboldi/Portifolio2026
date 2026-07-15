@@ -56,7 +56,7 @@ export default function DataDisplayPage() {
       <DsSectionTitle id="accordion">Accordion</DsSectionTitle>
       <SvAccordion
         items={[
-          { id: "1", title: "O que é o Aranhaverso DS?", content: "Um design system comic-first construído sobre tokens." },
+          { id: "1", title: "O que é o Design System?", content: "Um design system comic-first construído sobre tokens." },
           { id: "2", title: "Como uso os tokens?", content: "Via classes Tailwind mapeadas ou CSS vars diretas." },
           { id: "3", title: "É acessível?", content: "Sim — todos os componentes seguem WCAG 2.2 AA." },
         ]}

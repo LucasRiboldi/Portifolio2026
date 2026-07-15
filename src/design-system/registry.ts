@@ -76,7 +76,7 @@ export const FOUNDATIONS: DsGroup[] = [
   {
     id: "brand",
     title: "Brand Foundation",
-    description: "Identidade visual: logo, princípios e voz do Aranhaverso.",
+    description: "Identidade visual: logo, princípios e voz do Design System.",
     items: [
       { name: "Brand Guidelines", status: "ready" },
       { name: "Logo & Marca", status: "ready", href: "/design-system/assets" },
@@ -273,7 +273,7 @@ export const TEMPLATES: DsComponent[] = [
 
 export const MOTION_PATTERNS = [
   { name: "Pop / Tilt", token: "--ease-spring", note: "Entrada de painéis comic" },
-  { name: "Dimension Swap", token: "--duration-slow", note: "Troca de dimensão do Aranhaverso" },
+  { name: "Dimension Swap", token: "--duration-slow", note: "Troca de dimensão do Design System" },
   { name: "Fade & Rise", token: "--ease-out", note: "Reveal de seção on-scroll" },
   { name: "Glitch", token: "--duration-fast", note: "Aberração cromática / hover disruptivo" },
 ] as const

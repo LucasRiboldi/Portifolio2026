@@ -1,7 +1,7 @@
 "use client"
 
 /**
- * SvButton — sistema de botões do Design System (identidade Aranhaverso).
+ * SvButton — sistema de botões do Design System (identidade Design System).
  * ------------------------------------------------------------------------
  * Variantes: primary · secondary · ghost · outline · link · fab · icon
  * Estados:   normal · hover · active · focus · disabled · loading

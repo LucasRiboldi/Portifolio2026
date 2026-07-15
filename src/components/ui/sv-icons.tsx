@@ -1,5 +1,5 @@
 /**
- * SvIcons — conjunto de ícones próprios do Aranhaverso.
+ * SvIcons — conjunto de ícones próprios do Design System.
  * Traço comic (2.5px, cantos redondos), currentColor, opção "rough"
  * (borda tremida via #art-rough). Fecha o item "Ícones" das Foundations.
  */

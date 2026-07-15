@@ -2,7 +2,7 @@ import type { Metadata } from "next"
 import { DsSidebar } from "@/components/design-system/ds-sidebar"
 
 export const metadata: Metadata = {
-  title: "Design System · Aranhaverso",
+  title: "Design System · Design System",
   description:
     "Design System corporativo do portfólio: foundations, design tokens, componentes, patterns, templates, acessibilidade e documentação.",
 }

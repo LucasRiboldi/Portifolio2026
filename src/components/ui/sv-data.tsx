@@ -1,7 +1,7 @@
 "use client"
 
 /**
- * SvData — exibição de dados & navegação (Aranhaverso).
+ * SvData — exibição de dados & navegação (Design System).
  * ------------------------------------------------------------------------
  * SvChip · SvTag · SvPagination · SvBreadcrumb · SvTabs · SvAccordion
  *

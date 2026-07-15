@@ -1,7 +1,7 @@
 "use client"
 
 /**
- * Seções de marketing (Aranhaverso) — Pricing · CTA · Newsletter.
+ * Seções de marketing (Design System) — Pricing · CTA · Newsletter.
  * Data-driven, responsivas, identidade comic.
  */
 

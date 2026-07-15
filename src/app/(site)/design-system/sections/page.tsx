@@ -67,7 +67,7 @@ export default function SectionsPage() {
       <SvLogosGrid title="Confiado por realidades de todo o multiverso" logos={["Oscorp", "Alchemax", "Daily Bugle", "Horizon", "Stark", "Wayne"]} />
 
       <DsSectionTitle id="cta">CTA Section</DsSectionTitle>
-      <SvCTA title="Pronto para saltar?" subtitle="Comece a construir com o Aranhaverso Design System hoje." primary="Começar agora" secondary="Ver docs" />
+      <SvCTA title="Pronto para saltar?" subtitle="Comece a construir com o Design System hoje." primary="Começar agora" secondary="Ver docs" />
 
       <DsSectionTitle id="newsletter">Newsletter</DsSectionTitle>
       <SvNewsletter subtitle="Novidades do multiverso direto no seu e-mail." />

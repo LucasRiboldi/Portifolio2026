@@ -18,10 +18,10 @@ export const posts: Post[] = [
     slug: "design-system-comic-first",
     title: "Design System comic-first: do token ao delírio",
     excerpt:
-      "Como construí o Aranhaverso — um design system que nasce dos tokens e vai até uma ala experimental de anomalias.",
+      "Como construí o Design System — um design system que nasce dos tokens e vai até uma ala experimental de anomalias.",
     date: "2026-07-12",
     readingMinutes: 6,
-    tags: ["Design System", "Tokens", "Aranhaverso"],
+    tags: ["Design System", "Tokens", "Design System"],
     accent: "magenta",
     body: `Um design system nasce dos **tokens**. Antes de qualquer componente, você
 define os valores atômicos — cor, espaço, forma e movimento — em uma fonte única
@@ -45,7 +45,7 @@ variantes e mantenha a lógica de negócio fora da UI.
 
 ## 3. Deixe espaço para o delírio
 
-A regra de ouro do Aranhaverso: cada tela funciona como interface **e** página de
+A regra de ouro do Design System: cada tela funciona como interface **e** página de
 quadrinho **e** pôster ilustrado. A ala Lab existe justamente para romper as
 próprias regras com propósito.`,
   },

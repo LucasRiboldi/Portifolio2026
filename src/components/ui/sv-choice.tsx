@@ -1,7 +1,7 @@
 "use client"
 
 /**
- * SvChoice — controles de seleção do Design System (Aranhaverso).
+ * SvChoice — controles de seleção do Design System (Design System).
  * ------------------------------------------------------------------------
  * SvCheckbox · SvRadio (+SvRadioGroup) · SvSwitch · SvRating · SvSlider
  *

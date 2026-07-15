@@ -1,5 +1,5 @@
 /**
- * Motion do Design System (Aranhaverso) — variantes canônicas.
+ * Motion do Design System (Design System) — variantes canônicas.
  * ------------------------------------------------------------------------
  * Reexporta as variantes-casa do spiderverse e adiciona presets alinhados
  * aos tokens de duração/easing. Use com `motion/react`.

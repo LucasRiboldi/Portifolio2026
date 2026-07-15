@@ -10,7 +10,7 @@ export default function PatternsPage() {
       <ComicHeader kicker="05 · Patterns" title="Padrões de" highlight="interface" />
       <DsLead>
         Combinações de componentes que resolvem fluxos recorrentes — login, navegação,
-        FAQ, contato — e os padrões de Motion Design que dão vida ao Aranhaverso.
+        FAQ, contato — e os padrões de Motion Design que dão vida ao Design System.
       </DsLead>
 
       <DsSectionTitle id="ui-patterns">Fluxos & Combinações</DsSectionTitle>

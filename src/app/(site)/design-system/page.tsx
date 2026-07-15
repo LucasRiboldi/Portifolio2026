@@ -5,7 +5,7 @@ import { DS_NAV } from "@/design-system/registry"
 import { ArtCircleMark } from "@/components/design-system/art-graphics"
 
 const HIERARCHY = [
-  { n: "01", title: "Brand Foundation", desc: "Logo, cores, tipografia e ícones — a identidade Aranhaverso.", href: "/design-system/foundations" },
+  { n: "01", title: "Brand Foundation", desc: "Logo, cores, tipografia e ícones — a identidade Design System.", href: "/design-system/foundations" },
   { n: "02", title: "Design Tokens", desc: "Cores, espaçamentos, sombras, bordas, motion — valores atômicos.", href: "/design-system/tokens" },
   { n: "03", title: "Style Guide", desc: "Regras visuais que traduzem os tokens em identidade.", href: "/design-system/foundations" },
   { n: "04", title: "UI Components", desc: "Botões, forms, cards, overlays, navegação e feedback.", href: "/design-system/components" },
@@ -21,7 +21,7 @@ export default function DesignSystemHome() {
       <ComicHeader
         kicker="Design System corporativo"
         title="Consistência do"
-        highlight="Aranhaverso"
+        highlight="Design System"
       />
       <DsLead>
         Um sistema de design completo — da fundação de marca aos tokens atômicos,

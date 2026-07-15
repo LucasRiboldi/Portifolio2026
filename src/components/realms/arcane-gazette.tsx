@@ -58,7 +58,7 @@ export function ArcaneGazette({ className }: { className?: string }) {
   }).format(new Date())
 
   return (
-    <article className={`arc-gazette ${className ?? ""}`} aria-label="The Arcane Gazette — Game Design">
+    <article className={`arc-gazette ${className ?? ""}`} aria-label="The Daily Prophet — Game Design">
       {/* ---------- Masthead ---------- */}
       <header className="arc-masthead">
         <div className="arc-masthead-rule">

@@ -16,7 +16,7 @@ export default function FaqPatternPage() {
       <div className="mt-6 max-w-2xl">
         <SvAccordion
           items={[
-            { id: "1", title: "O que é o Aranhaverso Design System?", content: "Um design system comic-first construído sobre design tokens, com componentes, patterns e templates prontos." },
+            { id: "1", title: "O que é o Design System?", content: "Um design system comic-first construído sobre design tokens, com componentes, patterns e templates prontos." },
             { id: "2", title: "Posso usar em produção?", content: "Sim. Todos os componentes têm estados, acessibilidade WCAG 2.2 AA e build validado." },
             { id: "3", title: "Como exporto os tokens para o Figma?", content: "Rode npm run tokens:export — gera design-tokens.figma.json (Tokens Studio) e o formato W3C DTCG." },
             { id: "4", title: "Funciona com tema claro?", content: "Sim. É dark-first, com override .light para superfícies e texto." },

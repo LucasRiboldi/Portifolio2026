@@ -71,7 +71,7 @@ export default async function RealmsPage() {
 
         <div className="space-y-1.5">
           <label htmlFor="arcane_content" className="block text-sm font-medium text-[color:var(--mm-text)]">
-            Conteúdo do Arcane (JSON — masthead, artigos, sidebar, almanaque)
+            Conteúdo do Daily Prophet (JSON — masthead, artigos, sidebar, almanaque)
           </label>
           <textarea
             id="arcane_content"

@@ -1,7 +1,7 @@
 "use client"
 
 /**
- * SvOverlay — camadas flutuantes do Design System (Aranhaverso).
+ * SvOverlay — camadas flutuantes do Design System (Design System).
  * ------------------------------------------------------------------------
  * SvModal · SvDrawer · SvTooltip · SvPopover · SvDropdown · SvContextMenu
  *

@@ -3,7 +3,7 @@ import { ILLUSTRATIONS } from "@/components/design-system/illustrations"
 import { PUNK_ILLUSTRATIONS, MohawkSpider, Guitar, BoltCluster } from "@/components/design-system/punk-illustrations"
 import { LOGOS } from "@/components/design-system/logos"
 
-export const metadata = { title: "Lab · Anomalias do Aranhaverso" }
+export const metadata = { title: "Lab · Anomalias do Design System" }
 
 const FONTS = [
   { cls: "fx-font-nabla", name: "Nabla", note: "cromática COLRv1", sample: "MULTI" },

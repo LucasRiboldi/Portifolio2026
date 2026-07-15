@@ -26,7 +26,7 @@ export default function LandingTemplatePage() {
             Construa em <span className="sv-rainbow art-bloom">outra dimensão</span>
           </h2>
           <p className="mt-4 max-w-md text-sm text-white/70">
-            Um layout de landing pronto, montado com componentes e efeitos do Aranhaverso.
+            Um layout de landing pronto, montado com componentes e efeitos do Design System.
           </p>
           <div className="mt-6 flex flex-wrap gap-3">
             <SvButton color="magenta" pop="GO!">Começar grátis</SvButton>
@@ -59,7 +59,7 @@ export default function LandingTemplatePage() {
 
       <div className="mt-10"><SvLogosGrid title="Confiado por realidades do multiverso" logos={["Oscorp", "Alchemax", "Horizon", "Stark", "Wayne", "Bugle"]} /></div>
 
-      <div className="mt-10"><SvCTA title="Pronto para saltar?" subtitle="Comece hoje no Aranhaverso." primary="Começar agora" secondary="Ver docs" /></div>
+      <div className="mt-10"><SvCTA title="Pronto para saltar?" subtitle="Comece hoje no Design System." primary="Começar agora" secondary="Ver docs" /></div>
     </div>
   )
 }

@@ -12,7 +12,7 @@ export function DsSidebar() {
     <aside className="lg:sticky lg:top-24 lg:h-fit lg:w-56 lg:shrink-0">
       <div className="mb-4">
         <p className="sv-display text-xl uppercase leading-none">Design System</p>
-        <p className="text-[0.7rem] uppercase tracking-widest text-white/40">Aranhaverso · v1</p>
+        <p className="text-[0.7rem] uppercase tracking-widest text-white/40">Design System · v1</p>
       </div>
       <nav className="flex gap-2 overflow-x-auto pb-2 lg:flex-col lg:overflow-visible lg:pb-0">
         {DS_NAV.map((item) => {

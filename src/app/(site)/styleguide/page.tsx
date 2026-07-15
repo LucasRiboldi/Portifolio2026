@@ -57,7 +57,7 @@ export default function StyleguidePage() {
         <SvCanvas dimension={dim}>
           {/* Switcher — tilts between styles live */}
           <ComicHeader
-            kicker="Guia de estilo · Aranhaverso"
+            kicker="Guia de estilo · Design System"
             title="Style"
             highlight="Guide"
             subtitle="Todos os componentes e as 20 dimensões. Clique numa dimensão para trocar o multiverso ao vivo."

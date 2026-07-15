@@ -1,7 +1,7 @@
 "use client"
 
 /**
- * SvInput — sistema de campos do Design System (identidade Aranhaverso).
+ * SvInput — sistema de campos do Design System (identidade Design System).
  * ------------------------------------------------------------------------
  * Tipos:   text · email · password · number · date · search · phone · cpf · cep
  * Estados: normal · hover · focus · error · success · disabled · readonly

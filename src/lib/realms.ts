@@ -7,7 +7,7 @@
  * identidade duplica código: cada realm só declara seus assets/config.
  *
  * Mapeamento sobre o projeto atual:
- *   creative  → Aranhaverso (estado padrão de hoje)
+ *   creative  → Design System (estado padrão de hoje)
  *   developer → modo dev/terminal (classe .sober existente)
  *   arcane    → realm novo (jornal 1920 / pergaminho) — styles/realms.css
  */
@@ -38,7 +38,7 @@ export const REALMS: Record<RealmId, Realm> = {
     next: "developer",
     sober: false,
     morphLabel: "◍ recalibrando o multiverso…",
-    aria: "Realm criativo (Aranhaverso)",
+    aria: "Realm criativo (Design System)",
   },
   developer: {
     id: "developer",
@@ -51,12 +51,12 @@ export const REALMS: Record<RealmId, Realm> = {
   },
   arcane: {
     id: "arcane",
-    label: "Arcane",
+    label: "Daily Prophet",
     glyph: "⚜",
     next: "creative",
     sober: false,
     morphLabel: "⚜ selando o pergaminho…",
-    aria: "Realm arcano (jornal antigo)",
+    aria: "Realm Daily Prophet (jornal de game design)",
   },
 }
 

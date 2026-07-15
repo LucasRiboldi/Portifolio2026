@@ -1,7 +1,7 @@
 "use client"
 
 /**
- * Seções de pessoas & processo (Aranhaverso) — Team · Timeline.
+ * Seções de pessoas & processo (Design System) — Team · Timeline.
  */
 
 import * as React from "react"

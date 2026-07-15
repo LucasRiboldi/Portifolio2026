@@ -1,5 +1,5 @@
 /**
- * Ilustrações SVG do Aranhaverso — "alucinações" geométricas e animadas.
+ * Ilustrações SVG do Design System — "alucinações" geométricas e animadas.
  * Puro SVG, sem dependências, theme-aware via CSS vars.
  */
 import * as React from "react"

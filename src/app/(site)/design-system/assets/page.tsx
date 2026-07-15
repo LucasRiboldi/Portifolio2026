@@ -26,7 +26,7 @@ export default function AssetsPage() {
   return (
     <div>
       <ComicHeader kicker="Fase 5 · Assets" title="Biblioteca de" highlight="assets" />
-      <DsLead>Marca, ícones e texturas que compõem a identidade Aranhaverso.</DsLead>
+      <DsLead>Marca, ícones e texturas que compõem a identidade Design System.</DsLead>
 
       <DsSectionTitle id="logo">Logo & Marca</DsSectionTitle>
       <div className="grid gap-4 sm:grid-cols-3">

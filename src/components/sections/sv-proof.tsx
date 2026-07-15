@@ -1,7 +1,7 @@
 "use client"
 
 /**
- * Seções de prova social (Aranhaverso) — Stats · Testimonials · LogosGrid/Partners.
+ * Seções de prova social (Design System) — Stats · Testimonials · LogosGrid/Partners.
  */
 
 import * as React from "react"

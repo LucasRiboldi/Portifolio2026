@@ -1,7 +1,7 @@
 "use client"
 
 /**
- * SvFeedback — comunicação de estado do sistema (Aranhaverso).
+ * SvFeedback — comunicação de estado do sistema (Design System).
  * ------------------------------------------------------------------------
  * SvAlert · SvProgress · SvEmptyState · SvToast + useToast()/SvToaster
  *

@@ -9,7 +9,7 @@ export default function FoundationsPage() {
     <div>
       <ComicHeader kicker="01 + 03 · Brand & Style" title="Fundação de" highlight="marca" />
       <DsLead>
-        Brand Foundation e Style Guide: a identidade visual do Aranhaverso e as regras
+        Brand Foundation e Style Guide: a identidade visual do Design System e as regras
         que traduzem os Design Tokens em linguagem consistente.
       </DsLead>
 

@@ -24,7 +24,7 @@ export async function generateMetadata(): Promise<Metadata> {
       template: `%s · ${site.name}`,
     },
     description: site.description,
-    keywords: ["Lucas Riboldi", "Product Designer", "Developer", "Design System", "Portfólio", "Aranhaverso"],
+    keywords: ["Lucas Riboldi", "Product Designer", "Developer", "Design System", "Portfólio", "Game Design"],
     authors: [{ name: site.name, url: site.github }],
     openGraph: {
       type: "website",
