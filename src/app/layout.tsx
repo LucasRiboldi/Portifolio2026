@@ -1,10 +1,12 @@
 import "@/styles/globals.css";
+import "@/styles/transition.css";
 
 import type { Metadata } from "next";
 import { Analytics } from "@vercel/analytics/next";
 import { ThemeProvider }
 from "@/components/providers/theme-provider";
 import { UniverseProvider } from "@/components/providers/universe-provider";
+import { UniverseTransitionProvider } from "@/components/providers/universe-transition";
 import { Geist, Bangers, Archivo_Black, Nabla, Monoton, Rubik_Glitch, Bungee_Shade } from "next/font/google";
 import { cn } from "@/lib/utils";
 import { getRealmSettings } from "@/lib/repos/realms";
@@ -87,7 +89,9 @@ export default async function RootLayout({
         <script dangerouslySetInnerHTML={{ __html: antiFouc }} />
         <ThemeProvider>
           <SiteConfigProvider value={site}>
-            <UniverseProvider settings={settings}>{children}</UniverseProvider>
+            <UniverseProvider settings={settings}>
+              <UniverseTransitionProvider>{children}</UniverseTransitionProvider>
+            </UniverseProvider>
           </SiteConfigProvider>
         </ThemeProvider>
         <Analytics />

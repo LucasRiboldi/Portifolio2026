@@ -120,7 +120,7 @@ export async function seedDatabase(): Promise<SeedReport> {
         glyph: r.glyph,
         enabled: true,
         is_default: id === DEFAULT_REALM,
-        morph_label: r.morphLabel,
+        morph_label: "",
         aria: r.aria,
         arcane_content:
           id === "arcane"

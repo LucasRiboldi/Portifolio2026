@@ -57,7 +57,7 @@ export default async function RealmsPage() {
                 <label className="mb-1 block text-xs text-[color:var(--mm-text-2)]">Legenda da metamorfose</label>
                 <input
                   name={`morph_${id}`}
-                  defaultValue={row?.morph_label ?? meta.morphLabel}
+                  defaultValue={row?.morph_label ?? ""}
                   className={cls}
                 />
                 <label className="mt-3 flex items-center gap-2 text-sm text-[color:var(--mm-text-2)]">

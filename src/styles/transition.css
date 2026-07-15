@@ -1,0 +1,175 @@
+/**
+ * Universe Transition Engine — a travessia dimensional entre realms.
+ * Fases: a tela rasga → halftone explode → as cores derretem → nova
+ * tipografia → novo grid → novo universo. Cores/tipografia vêm do tema do
+ * realm de destino (CSS vars --ut-*). Puro CSS para performance.
+ */
+
+.ut {
+  position: fixed;
+  inset: 0;
+  z-index: 99999;
+  pointer-events: none;
+  overflow: hidden;
+  opacity: 1;
+  transition: opacity 0.45s ease;
+}
+.ut[data-exit="true"] {
+  opacity: 0;
+}
+
+/* Cover — garante cobertura total durante a navegação */
+.ut-cover {
+  position: absolute;
+  inset: 0;
+  background: var(--ut-bg);
+  opacity: 0;
+  animation: ut-cover 0.34s ease-out forwards;
+}
+@keyframes ut-cover {
+  to {
+    opacity: 1;
+  }
+}
+
+/* Rasgo — dois painéis entram das bordas com uma fenda diagonal no centro */
+.ut-panel {
+  position: absolute;
+  top: -2%;
+  bottom: -2%;
+  width: 54%;
+  background: linear-gradient(180deg, color-mix(in srgb, var(--ut-accent) 30%, var(--ut-bg)), var(--ut-bg));
+}
+.ut-panel.l {
+  left: 0;
+  transform: translateX(-104%);
+  clip-path: polygon(0 0, 100% 0, 88% 100%, 0 100%);
+  animation: ut-tear-l 0.4s cubic-bezier(0.7, 0, 0.25, 1) forwards;
+}
+.ut-panel.r {
+  right: 0;
+  transform: translateX(104%);
+  clip-path: polygon(12% 0, 100% 0, 100% 100%, 0 100%);
+  animation: ut-tear-r 0.4s cubic-bezier(0.7, 0, 0.25, 1) forwards;
+}
+@keyframes ut-tear-l {
+  to {
+    transform: translateX(0);
+  }
+}
+@keyframes ut-tear-r {
+  to {
+    transform: translateX(0);
+  }
+}
+
+/* Halftone explode a partir do centro */
+.ut-halftone {
+  position: absolute;
+  inset: -30%;
+  opacity: 0;
+  background-image: radial-gradient(var(--ut-accent) 28%, transparent 30%);
+  background-size: 16px 16px;
+  mix-blend-mode: screen;
+  animation: ut-ht 0.7s ease-out 0.24s forwards;
+}
+@keyframes ut-ht {
+  0% {
+    opacity: 0;
+    transform: scale(0.25) rotate(0deg);
+  }
+  45% {
+    opacity: 0.95;
+  }
+  100% {
+    opacity: 0;
+    transform: scale(2.6) rotate(10deg);
+  }
+}
+
+/* As cores derretem — cortina que escorre */
+.ut-melt {
+  position: absolute;
+  inset: 0;
+  transform: translateY(-100%);
+  background: linear-gradient(180deg, var(--ut-accent2), var(--ut-accent) 45%, var(--ut-bg));
+  filter: blur(0.4px);
+  animation: ut-melt 0.55s cubic-bezier(0.65, 0, 0.2, 1) 0.46s forwards;
+}
+@keyframes ut-melt {
+  to {
+    transform: translateY(0);
+  }
+}
+
+/* Novo grid formando */
+.ut-grid {
+  position: absolute;
+  inset: 0;
+  opacity: 0;
+  background-image: linear-gradient(var(--ut-line) 1px, transparent 1px),
+    linear-gradient(90deg, var(--ut-line) 1px, transparent 1px);
+  background-size: 44px 44px;
+  animation: ut-grid 0.7s ease 0.66s forwards;
+}
+@keyframes ut-grid {
+  0% {
+    opacity: 0;
+    transform: scale(1.15);
+  }
+  50% {
+    opacity: 0.6;
+  }
+  100% {
+    opacity: 0.15;
+    transform: scale(1);
+  }
+}
+
+/* Nova tipografia — o nome da dimensão de destino */
+.ut-name {
+  position: absolute;
+  inset: 0;
+  display: grid;
+  place-items: center;
+  gap: 0.5rem;
+  color: var(--ut-ink);
+  font-family: var(--ut-font);
+  font-weight: 800;
+  font-size: clamp(2.2rem, 9vw, 6rem);
+  letter-spacing: 0.06em;
+  text-align: center;
+  opacity: 0;
+  animation: ut-name 0.85s cubic-bezier(0.2, 0.7, 0.2, 1) 0.6s forwards;
+}
+.ut-name .glyph {
+  font-size: 0.5em;
+  opacity: 0.7;
+}
+@keyframes ut-name {
+  0% {
+    opacity: 0;
+    letter-spacing: 0.5em;
+    filter: blur(10px);
+    transform: scale(1.15);
+  }
+  45% {
+    opacity: 1;
+    filter: blur(0);
+  }
+  100% {
+    opacity: 0;
+    letter-spacing: 0.1em;
+    transform: scale(1);
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .ut-panel,
+  .ut-halftone,
+  .ut-melt,
+  .ut-grid,
+  .ut-name {
+    animation-duration: 0.01ms !important;
+  }
+}

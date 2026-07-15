@@ -1,10 +1,11 @@
 "use client"
 
-import { usePathname, useRouter } from "next/navigation"
+import { usePathname } from "next/navigation"
 
 import { cn } from "@/lib/utils"
-import { REALMS, type RealmId } from "@/lib/realms"
+import { REALMS, realmFromPath } from "@/lib/realms"
 import { useUniverse } from "@/components/providers/universe-provider"
+import { useUniverseTransition } from "@/components/providers/universe-transition"
 
 /**
  * VibeToggle — o botão de troca de universo de THE THREE REALMS.
@@ -13,16 +14,10 @@ import { useUniverse } from "@/components/providers/universe-provider"
  * "/dev", arcane "/prophet"). O botão deriva o realm atual do pathname e
  * NAVEGA para o próximo realm habilitado.
  */
-function realmFromPath(pathname: string): RealmId {
-  if (pathname.startsWith("/dev")) return "developer"
-  if (pathname.startsWith("/prophet")) return "arcane"
-  return "creative"
-}
-
 export function VibeToggle({ className }: { className?: string }) {
   const pathname = usePathname()
-  const router = useRouter()
   const { enabled } = useUniverse()
+  const { go, transitioning } = useUniverseTransition()
 
   const realm = realmFromPath(pathname)
   const i = enabled.indexOf(realm)
@@ -32,8 +27,8 @@ export function VibeToggle({ className }: { className?: string }) {
 
   return (
     <button
-      onClick={() => router.push(next.route)}
-      disabled={!canCycle}
+      onClick={() => go(nextId)}
+      disabled={!canCycle || transitioning}
       aria-label={`Trocar de universo — próximo: ${next.aria}`}
       title={`Universo → ${next.label}`}
       data-realm-btn={realm}
