@@ -1,5 +1,6 @@
 import { DevHeader, DevEmpty } from "@/components/dev/dev-header"
 import { getLab } from "@/lib/repos/dev"
+import { getPageContent } from "@/lib/repos/page-content"
 
 export const metadata = { title: "Laboratório" }
 
@@ -11,16 +12,11 @@ const STATUS_LABEL: Record<string, string> = {
 }
 
 export default async function LabPage() {
-  const items = await getLab()
+  const [items, c] = await Promise.all([getLab(), getPageContent("dev.laboratorio")])
 
   return (
     <div>
-      <DevHeader
-        fn="lab.run"
-        title="Laboratório"
-        accent="// experimentos"
-        subtitle="Testes de código, componentes, APIs e modelos de IA — protótipos em andamento."
-      />
+      <DevHeader fn={c.kicker} title={c.title} accent={c.highlight} subtitle={c.subtitle} />
       {items.length === 0 ? (
         <DevEmpty>Nenhum experimento ainda — adicione em /admin/lab.</DevEmpty>
       ) : (

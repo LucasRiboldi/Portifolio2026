@@ -1,5 +1,6 @@
 import { ProphetHeader, ProphetEmpty } from "@/components/prophet/prophet-header"
 import { getTutorials } from "@/lib/repos/prophet"
+import { getPageContent } from "@/lib/repos/page-content"
 
 export const metadata = { title: "Oficina do Inventor" }
 
@@ -10,15 +11,11 @@ const DIFF: Record<string, string> = {
 }
 
 export default async function OficinaPage() {
-  const tutorials = await getTutorials()
+  const [tutorials, c] = await Promise.all([getTutorials(), getPageContent("prophet.oficina")])
 
   return (
     <div>
-      <ProphetHeader
-        kicker="Oficina do Inventor"
-        headline="Como se forja um jogo"
-        standfirst="Tutoriais de criação de boardgames, card games e mecânicas — do rascunho ao protótipo na mesa."
-      />
+      <ProphetHeader kicker={c.kicker} headline={c.title} standfirst={c.subtitle} />
       {tutorials.length === 0 ? (
         <ProphetEmpty>Nenhum tutorial publicado ainda.</ProphetEmpty>
       ) : (

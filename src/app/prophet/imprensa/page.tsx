@@ -1,5 +1,6 @@
 import { ProphetHeader, ProphetEmpty } from "@/components/prophet/prophet-header"
 import { getResources } from "@/lib/repos/prophet"
+import { getPageContent } from "@/lib/repos/page-content"
 
 export const metadata = { title: "Imprensa do Inventor" }
 
@@ -12,15 +13,11 @@ const TYPE: Record<string, string> = {
 }
 
 export default async function ImprensaPage() {
-  const resources = await getResources()
+  const [resources, c] = await Promise.all([getResources(), getPageContent("prophet.imprensa")])
 
   return (
     <div>
-      <ProphetHeader
-        kicker="Imprensa do Inventor"
-        headline="Para imprimir e jogar"
-        standfirst="Materiais faça-você-mesmo, print & play, cartas, tabuleiros e recursos para download."
-      />
+      <ProphetHeader kicker={c.kicker} headline={c.title} standfirst={c.subtitle} />
       {resources.length === 0 ? (
         <ProphetEmpty>A prensa ainda não rodou nenhum material.</ProphetEmpty>
       ) : (

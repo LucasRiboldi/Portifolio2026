@@ -1,19 +1,15 @@
 import { DevHeader, DevEmpty } from "@/components/dev/dev-header"
 import { getDevlogs } from "@/lib/repos/dev"
+import { getPageContent } from "@/lib/repos/page-content"
 
 export const metadata = { title: "DevLogs" }
 
 export default async function DevlogsPage() {
-  const logs = await getDevlogs()
+  const [logs, c] = await Promise.all([getDevlogs(), getPageContent("dev.devlogs")])
 
   return (
     <div>
-      <DevHeader
-        fn="git.log"
-        title="DevLogs"
-        accent="// diário técnico"
-        subtitle="Registro cronológico do desenvolvimento, decisões técnicas e problemas resolvidos."
-      />
+      <DevHeader fn={c.kicker} title={c.title} accent={c.highlight} subtitle={c.subtitle} />
       {logs.length === 0 ? (
         <DevEmpty>Nenhum devlog ainda — adicione em /admin/devlogs.</DevEmpty>
       ) : (

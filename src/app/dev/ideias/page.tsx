@@ -1,5 +1,6 @@
 import { DevHeader, DevEmpty } from "@/components/dev/dev-header"
 import { getIdeas } from "@/lib/repos/dev"
+import { getPageContent } from "@/lib/repos/page-content"
 
 export const metadata = { title: "Ideias" }
 
@@ -12,16 +13,11 @@ const STATUS_LABEL: Record<string, string> = {
 }
 
 export default async function IdeasPage() {
-  const ideas = await getIdeas()
+  const [ideas, c] = await Promise.all([getIdeas(), getPageContent("dev.ideias")])
 
   return (
     <div>
-      <DevHeader
-        fn="backlog.next"
-        title="Ideias"
-        accent="// backlog"
-        subtitle="Conceitos, MVPs e experimentos futuros esperando a vez."
-      />
+      <DevHeader fn={c.kicker} title={c.title} accent={c.highlight} subtitle={c.subtitle} />
       {ideas.length === 0 ? (
         <DevEmpty>Nenhuma ideia ainda — adicione em /admin/ideas.</DevEmpty>
       ) : (

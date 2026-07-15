@@ -1,10 +1,11 @@
 import { DevHeader, DevEmpty } from "@/components/dev/dev-header"
 import { getWiki, type WikiRow } from "@/lib/repos/dev"
+import { getPageContent } from "@/lib/repos/page-content"
 
 export const metadata = { title: "Wiki" }
 
 export default async function WikiPage() {
-  const pages = await getWiki()
+  const [pages, c] = await Promise.all([getWiki(), getPageContent("dev.wiki")])
 
   const byCategory = pages.reduce<Record<string, WikiRow[]>>((acc, p) => {
     ;(acc[p.category] ??= []).push(p)
@@ -13,12 +14,7 @@ export default async function WikiPage() {
 
   return (
     <div>
-      <DevHeader
-        fn="wiki.open"
-        title="Wiki"
-        accent="// docs"
-        subtitle="Documentação técnica, anotações, cheatsheets e referências organizadas."
-      />
+      <DevHeader fn={c.kicker} title={c.title} accent={c.highlight} subtitle={c.subtitle} />
       {pages.length === 0 ? (
         <DevEmpty>Nenhuma página ainda — adicione em /admin/wiki.</DevEmpty>
       ) : (

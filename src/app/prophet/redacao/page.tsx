@@ -1,16 +1,17 @@
 import { ProphetHeader } from "@/components/prophet/prophet-header"
 import { getProphetAbout } from "@/lib/repos/prophet"
+import { getPageContent } from "@/lib/repos/page-content"
 
 export const metadata = { title: "A Redação" }
 
 export default async function RedacaoPage() {
-  const about = await getProphetAbout()
+  const [about, c] = await Promise.all([getProphetAbout(), getPageContent("prophet.redacao")])
 
   return (
     <div>
       <ProphetHeader
-        kicker="A Redação"
-        headline="Quem assina esta folha"
+        kicker={c.kicker}
+        headline={c.title}
         standfirst={about.intro}
         byline={`por ${about.author}`}
       />

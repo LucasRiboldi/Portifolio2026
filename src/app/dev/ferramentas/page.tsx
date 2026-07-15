@@ -1,19 +1,15 @@
 import { DevHeader, DevEmpty } from "@/components/dev/dev-header"
 import { getTools } from "@/lib/repos/tools"
+import { getPageContent } from "@/lib/repos/page-content"
 
 export const metadata = { title: "Ferramentas" }
 
 export default async function DevToolsPage() {
-  const tools = await getTools()
+  const [tools, c] = await Promise.all([getTools(), getPageContent("dev.ferramentas")])
 
   return (
     <div>
-      <DevHeader
-        fn="tools.list"
-        title="Ferramentas"
-        accent="// utilitários"
-        subtitle="Pequenos utilitários que construí para o dia a dia."
-      />
+      <DevHeader fn={c.kicker} title={c.title} accent={c.highlight} subtitle={c.subtitle} />
       {tools.length === 0 ? (
         <DevEmpty>Nenhuma ferramenta ainda — adicione em /admin/tools.</DevEmpty>
       ) : (

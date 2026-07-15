@@ -1,19 +1,15 @@
 import { DevHeader, DevEmpty } from "@/components/dev/dev-header"
 import { getProjects } from "@/lib/repos/projects"
+import { getPageContent } from "@/lib/repos/page-content"
 
 export const metadata = { title: "Projetos" }
 
 export default async function DevProjectsPage() {
-  const projects = await getProjects()
+  const [projects, c] = await Promise.all([getProjects(), getPageContent("dev.projetos")])
 
   return (
     <div>
-      <DevHeader
-        fn="projects.map"
-        title="Projetos"
-        accent="// repositórios"
-        subtitle="Cada projeto com stack, status e link direto para o repositório."
-      />
+      <DevHeader fn={c.kicker} title={c.title} accent={c.highlight} subtitle={c.subtitle} />
       {projects.length === 0 ? (
         <DevEmpty>Nenhum projeto ainda — adicione em /admin/projects.</DevEmpty>
       ) : (

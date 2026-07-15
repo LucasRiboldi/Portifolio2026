@@ -1,5 +1,6 @@
 import { ProphetHeader, ProphetEmpty } from "@/components/prophet/prophet-header"
 import { getPrototypes } from "@/lib/repos/prophet"
+import { getPageContent } from "@/lib/repos/page-content"
 
 export const metadata = { title: "Laboratório" }
 
@@ -11,15 +12,11 @@ const STATUS: Record<string, string> = {
 }
 
 export default async function LabPage() {
-  const prototypes = await getPrototypes()
+  const [prototypes, c] = await Promise.all([getPrototypes(), getPageContent("prophet.laboratorio")])
 
   return (
     <div>
-      <ProphetHeader
-        kicker="Laboratório"
-        headline="Na bancada do inventor"
-        standfirst="Protótipos, projetos em andamento, playtests e experimentos de mesa."
-      />
+      <ProphetHeader kicker={c.kicker} headline={c.title} standfirst={c.subtitle} />
       {prototypes.length === 0 ? (
         <ProphetEmpty>Nenhum protótipo na bancada ainda.</ProphetEmpty>
       ) : (

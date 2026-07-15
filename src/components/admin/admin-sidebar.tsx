@@ -23,6 +23,9 @@ import {
   Puzzle,
   Dices,
   Printer,
+  PanelsTopLeft,
+  Terminal as TerminalIcon,
+  ScrollText,
   type LucideIcon,
 } from "lucide-react"
 
@@ -65,6 +68,14 @@ const NAV: { section: string; items: NavItem[] }[] = [
       { href: "/admin/mechanics", label: "Mecânicas", icon: Puzzle },
       { href: "/admin/prototypes", label: "Laboratório", icon: Dices },
       { href: "/admin/resources", label: "Imprensa", icon: Printer },
+    ],
+  },
+  {
+    section: "Páginas (textos)",
+    items: [
+      { href: "/admin/pages/creative", label: "Creative", icon: PanelsTopLeft },
+      { href: "/admin/pages/dev", label: "Dev", icon: TerminalIcon },
+      { href: "/admin/pages/prophet", label: "Daily Prophet", icon: ScrollText },
     ],
   },
   {

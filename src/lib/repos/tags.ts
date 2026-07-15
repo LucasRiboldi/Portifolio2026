@@ -16,6 +16,7 @@ export const CACHE_TAGS = {
   prototypes: "prototypes",
   resources: "resources",
   prophetAbout: "prophet-about",
+  pages: "page-content",
 } as const
 
 export type CacheTag = (typeof CACHE_TAGS)[keyof typeof CACHE_TAGS]
