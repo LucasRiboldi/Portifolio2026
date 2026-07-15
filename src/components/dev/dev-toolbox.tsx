@@ -4,15 +4,45 @@ import { useMemo, useState } from "react"
 
 import { CopyButton } from "./copy-button"
 
-type ToolId = "slug" | "count" | "json" | "base64" | "uuid"
+type ToolId = "slug" | "count" | "json" | "base64" | "cor" | "time" | "uuid" | "lorem"
 
 const TABS: { id: ToolId; label: string }[] = [
   { id: "slug", label: "Slugify" },
   { id: "count", label: "Contador" },
   { id: "json", label: "JSON" },
   { id: "base64", label: "Base64" },
+  { id: "cor", label: "Cor" },
+  { id: "time", label: "Timestamp" },
   { id: "uuid", label: "UUID" },
+  { id: "lorem", label: "Lorem" },
 ]
+
+const LOREM =
+  "Lorem ipsum dolor sit amet consectetur adipiscing elit sed do eiusmod tempor incididunt ut labore et dolore magna aliqua enim ad minim veniam quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat".split(
+    " ",
+  )
+
+function loremParas(n: number) {
+  return Array.from({ length: n }, () => {
+    const len = 30 + Math.floor(Math.random() * 25)
+    const words = Array.from({ length: len }, () => LOREM[Math.floor(Math.random() * LOREM.length)] ?? "lorem")
+    const s = words.join(" ")
+    return s.charAt(0).toUpperCase() + s.slice(1) + "."
+  }).join("\n\n")
+}
+
+function hexToRgb(hex: string): string | null {
+  const m = hex.replace("#", "").match(/^([0-9a-f]{6})$/i)
+  if (!m) return null
+  const n = parseInt(m[1] ?? "0", 16)
+  return `rgb(${(n >> 16) & 255}, ${(n >> 8) & 255}, ${n & 255})`
+}
+function rgbToHex(rgb: string): string | null {
+  const m = rgb.match(/(\d+)\D+(\d+)\D+(\d+)/)
+  if (!m) return null
+  const h = (v: string) => Number(v).toString(16).padStart(2, "0")
+  return `#${h(m[1] ?? "0")}${h(m[2] ?? "0")}${h(m[3] ?? "0")}`
+}
 
 function slugify(s: string) {
   return s
@@ -27,7 +57,8 @@ function slugify(s: string) {
 export function DevToolbox() {
   const [tab, setTab] = useState<ToolId>("slug")
   const [input, setInput] = useState("")
-  const [uuid, setUuid] = useState("")
+  const [gen, setGen] = useState("")
+  const isGenerator = tab === "uuid" || tab === "lorem"
 
   const output = useMemo(() => {
     try {
@@ -37,6 +68,24 @@ export function DevToolbox() {
         return `${input.length} caracteres · ${words} palavras · ${input.split(/\n/).length} linhas`
       }
       if (tab === "json") return input.trim() ? JSON.stringify(JSON.parse(input), null, 2) : ""
+      if (tab === "cor") {
+        if (!input.trim()) return ""
+        return input.includes("#") || /^[0-9a-f]{6}$/i.test(input.trim())
+          ? hexToRgb(input.trim()) ?? "hex inválido (use #rrggbb)"
+          : rgbToHex(input) ?? "rgb inválido (use r,g,b)"
+      }
+      if (tab === "time") {
+        if (!input.trim()) return ""
+        const num = Number(input.trim())
+        if (!Number.isNaN(num)) {
+          const ms = input.trim().length > 10 ? num : num * 1000
+          return new Date(ms).toISOString() + "  ·  " + new Date(ms).toLocaleString("pt-BR")
+        }
+        const d = new Date(input)
+        return Number.isNaN(d.getTime())
+          ? "data inválida"
+          : `unix: ${Math.floor(d.getTime() / 1000)}  ·  ms: ${d.getTime()}`
+      }
       if (tab === "base64") {
         // encode se não parecer base64; senão tenta decodificar
         const looksB64 = /^[A-Za-z0-9+/=\s]+$/.test(input) && input.length % 4 === 0 && input.length > 0
@@ -73,20 +122,20 @@ export function DevToolbox() {
         ))}
       </div>
 
-      {tab === "uuid" ? (
+      {isGenerator ? (
         <div>
           <button
             type="button"
             className="dv-copy"
-            onClick={() => setUuid(crypto.randomUUID())}
+            onClick={() => setGen(tab === "uuid" ? crypto.randomUUID() : loremParas(3))}
             style={{ marginBottom: "0.6rem" }}
           >
-            gerar UUID v4
+            {tab === "uuid" ? "gerar UUID v4" : "gerar 3 parágrafos"}
           </button>
-          {uuid && (
-            <div className="dv-tool-out flex items-center justify-between gap-3">
-              <span>{uuid}</span>
-              <CopyButton text={uuid} />
+          {gen && (
+            <div className="dv-tool-out flex items-start justify-between gap-3">
+              <span style={{ flex: 1 }}>{gen}</span>
+              <CopyButton text={gen} />
             </div>
           )}
         </div>
@@ -102,7 +151,11 @@ export function DevToolbox() {
                   ? '{"a":1,"b":[2,3]}'
                   : tab === "base64"
                     ? "texto ou base64…"
-                    : "cole seu texto…"
+                    : tab === "cor"
+                      ? "#bd93f9  ou  189, 147, 249"
+                      : tab === "time"
+                        ? "1784060000  ou  2026-07-14"
+                        : "cole seu texto…"
             }
             value={input}
             onChange={(e) => setInput(e.target.value)}

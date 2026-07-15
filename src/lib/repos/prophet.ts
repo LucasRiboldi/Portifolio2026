@@ -65,6 +65,13 @@ function reader<T>(table: string, tag: string, order: string, asc: boolean) {
 
 export const getTutorials = reader<TutorialRow>("prophet_tutorials", CACHE_TAGS.tutorials, "sort", true)
 export const getMechanics = reader<MechanicRow>("prophet_mechanics", CACHE_TAGS.mechanics, "sort", true)
+
+export async function getTutorialBySlug(slug: string): Promise<TutorialRow | undefined> {
+  return (await getTutorials()).find((t) => t.slug === slug)
+}
+export async function getMechanicBySlug(slug: string): Promise<MechanicRow | undefined> {
+  return (await getMechanics()).find((m) => m.slug === slug)
+}
 export const getPrototypes = reader<PrototypeRow>("prophet_prototypes", CACHE_TAGS.prototypes, "sort", true)
 export const getResources = reader<ResourceRow>("prophet_resources", CACHE_TAGS.resources, "sort", true)
 

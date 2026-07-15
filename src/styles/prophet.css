@@ -179,6 +179,38 @@
   text-underline-offset: 2px;
 }
 
+/* ─── Controles (filtro / busca) ─── */
+.pr-controls {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.5rem;
+  align-items: center;
+  margin: 1.25rem 0 0.25rem;
+}
+.pr-filter {
+  font-variant: small-caps;
+  letter-spacing: 0.04em;
+  font-size: 0.82rem;
+  padding: 0.15rem 0.65rem;
+  border: 1px solid var(--p-rule);
+  background: transparent;
+  color: var(--p-ink-2);
+  cursor: pointer;
+}
+.pr-filter[data-on="true"] { background: var(--p-ink); color: var(--p-paper); }
+.pr-searchbox {
+  flex: 1;
+  min-width: 180px;
+  border: 1px solid var(--p-rule);
+  background: var(--p-paper-2);
+  padding: 0.4rem 0.7rem;
+  color: var(--p-ink);
+  font-family: var(--p-serif);
+  outline: none;
+}
+.pr-card-link { cursor: pointer; }
+.pr-card-link:hover { outline: 2px solid var(--p-accent); }
+
 .pr-empty {
   border: 1px dashed var(--p-rule);
   padding: 2rem;
@@ -186,6 +218,50 @@
   color: var(--p-muted);
   font-style: italic;
   margin-top: 1.5rem;
+}
+
+/* ─── Artigo (markdown) ─── */
+.pr-article {
+  max-width: 42rem;
+  margin: 1.25rem auto 0;
+  color: var(--p-ink-2);
+  line-height: 1.7;
+}
+.pr-article > p { margin-bottom: 0.9rem; }
+.pr-article h2 {
+  font-family: var(--font-arcane, var(--p-serif));
+  font-weight: 800;
+  font-size: 1.4rem;
+  margin: 1.4rem 0 0.5rem;
+  color: var(--p-ink);
+}
+.pr-article h3 { font-weight: 700; font-size: 1.1rem; margin: 1rem 0 0.35rem; }
+.pr-article ul, .pr-article ol { margin: 0.5rem 0 0.9rem 1.4rem; }
+.pr-article ul { list-style: disc; }
+.pr-article ol { list-style: decimal; }
+.pr-article li { margin-bottom: 0.3rem; }
+.pr-article blockquote {
+  border-left: 3px solid var(--p-accent);
+  padding-left: 1rem;
+  font-style: italic;
+  color: var(--p-muted);
+  margin: 1rem 0;
+}
+.pr-article code {
+  background: var(--p-paper-2);
+  border: 1px solid var(--p-rule);
+  padding: 0.05rem 0.35rem;
+  border-radius: 4px;
+  font-size: 0.85em;
+}
+.pr-article a { color: var(--p-accent); text-decoration: underline; }
+.pr-article > p:first-of-type::first-letter {
+  font-family: var(--font-arcane, var(--p-serif));
+  font-size: 3rem;
+  float: left;
+  line-height: 0.8;
+  padding: 0.1rem 0.5rem 0 0;
+  color: var(--p-accent);
 }
 
 .pr-dropcap::first-letter {
