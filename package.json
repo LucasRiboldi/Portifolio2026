@@ -5,6 +5,7 @@
   "scripts": {
     "setup": "node scripts/setup-structure.mjs",
     "sync:skills": "node scripts/sync-skills.mjs",
+    "sync:vercel-env": "node scripts/sync-vercel-env.mjs",
     "tokens:export": "node scripts/export-tokens.mjs",
     "tokens:check": "node scripts/check-tokens.mjs",
     "dev": "next dev",
