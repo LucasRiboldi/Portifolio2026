@@ -1,0 +1,198 @@
+/**
+ * The Daily Prophet — tema jornal antigo para o realm Arcane (Game Design).
+ * Escopado em `.prophet`. Pergaminho, serifas, filetes e colunas.
+ */
+
+.prophet {
+  --p-paper: #f4ecd8;
+  --p-paper-2: #efe6cf;
+  --p-ink: #23201a;
+  --p-ink-2: #4a4436;
+  --p-muted: #7a715c;
+  --p-rule: #23201a;
+  --p-accent: #7c2d12;
+  --p-gold: #9a7b28;
+
+  --p-serif: Georgia, "Times New Roman", "Iowan Old Style", serif;
+  --font-arcane: "Mugglenews", "Headline One", Georgia, serif;
+
+  background:
+    repeating-linear-gradient(0deg, transparent, transparent 27px, rgba(0, 0, 0, 0.015) 28px),
+    var(--p-paper);
+  color: var(--p-ink);
+  min-height: 100vh;
+  font-family: var(--p-serif);
+}
+
+.pr-container {
+  max-width: 1080px;
+  margin: 0 auto;
+  padding: 1.25rem 1.25rem 4rem;
+}
+
+/* ─── Masthead ─── */
+.pr-masthead {
+  text-align: center;
+  border-bottom: 3px double var(--p-rule);
+  padding-bottom: 0.5rem;
+  margin-bottom: 0.35rem;
+}
+.pr-masthead h1 {
+  font-family: var(--font-arcane, var(--p-serif));
+  font-size: clamp(2.2rem, 6vw, 4rem);
+  font-weight: 900;
+  letter-spacing: 0.02em;
+  line-height: 1;
+}
+.pr-masthead .pr-motto {
+  font-style: italic;
+  color: var(--p-muted);
+  font-size: 0.85rem;
+  margin-top: 0.25rem;
+}
+.pr-dateline {
+  display: flex;
+  justify-content: space-between;
+  flex-wrap: wrap;
+  gap: 0.5rem;
+  font-size: 0.72rem;
+  text-transform: uppercase;
+  letter-spacing: 0.08em;
+  color: var(--p-ink-2);
+  border-bottom: 1px solid var(--p-rule);
+  padding: 0.3rem 0;
+  margin-bottom: 1.25rem;
+}
+
+/* ─── Nav ─── */
+.pr-nav {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  gap: 0.25rem 1.25rem;
+  border-bottom: 3px double var(--p-rule);
+  padding: 0.5rem 0;
+  margin-bottom: 1.5rem;
+}
+.pr-navlink {
+  font-variant: small-caps;
+  letter-spacing: 0.04em;
+  font-size: 0.95rem;
+  color: var(--p-ink-2);
+  padding: 0.1rem 0.2rem;
+  border-bottom: 2px solid transparent;
+}
+.pr-navlink:hover {
+  color: var(--p-accent);
+}
+.pr-navlink[data-active="true"] {
+  color: var(--p-ink);
+  border-bottom-color: var(--p-accent);
+  font-weight: 700;
+}
+
+/* ─── Tipografia editorial ─── */
+.pr-kicker {
+  text-transform: uppercase;
+  letter-spacing: 0.12em;
+  font-size: 0.72rem;
+  color: var(--p-accent);
+  font-weight: 700;
+}
+.pr-headline {
+  font-family: var(--font-arcane, var(--p-serif));
+  font-weight: 800;
+  line-height: 1.05;
+  font-size: clamp(1.6rem, 3.5vw, 2.4rem);
+  margin: 0.15rem 0 0.4rem;
+}
+.pr-stand {
+  font-style: italic;
+  color: var(--p-ink-2);
+  max-width: 44rem;
+}
+.pr-byline {
+  font-size: 0.78rem;
+  text-transform: uppercase;
+  letter-spacing: 0.06em;
+  color: var(--p-muted);
+  margin-top: 0.35rem;
+}
+
+/* ─── Colunas / cards ─── */
+.pr-columns {
+  columns: 2;
+  column-gap: 2rem;
+  margin-top: 1.25rem;
+}
+@media (max-width: 640px) {
+  .pr-columns { columns: 1; }
+}
+.pr-grid {
+  display: grid;
+  gap: 1.25rem;
+  grid-template-columns: repeat(auto-fill, minmax(260px, 1fr));
+  margin-top: 1.5rem;
+}
+.pr-card {
+  border: 1px solid var(--p-rule);
+  background: var(--p-paper-2);
+  padding: 1rem;
+}
+.pr-card h3 {
+  font-family: var(--font-arcane, var(--p-serif));
+  font-weight: 800;
+  font-size: 1.15rem;
+}
+.pr-card p {
+  margin-top: 0.4rem;
+  color: var(--p-ink-2);
+  font-size: 0.92rem;
+}
+.pr-rule {
+  border: none;
+  border-top: 1px solid var(--p-rule);
+  margin: 1.5rem 0;
+}
+
+/* ─── Selos / tags ─── */
+.pr-tag {
+  display: inline-block;
+  font-variant: small-caps;
+  font-size: 0.72rem;
+  letter-spacing: 0.05em;
+  border: 1px solid var(--p-rule);
+  padding: 0.05rem 0.45rem;
+  margin: 0.15rem 0.15rem 0 0;
+  color: var(--p-ink-2);
+}
+.pr-badge {
+  font-variant: small-caps;
+  font-size: 0.72rem;
+  color: var(--p-accent);
+  border: 1px solid var(--p-accent);
+  padding: 0.05rem 0.4rem;
+}
+.pr-link {
+  color: var(--p-accent);
+  text-decoration: underline;
+  text-underline-offset: 2px;
+}
+
+.pr-empty {
+  border: 1px dashed var(--p-rule);
+  padding: 2rem;
+  text-align: center;
+  color: var(--p-muted);
+  font-style: italic;
+  margin-top: 1.5rem;
+}
+
+.pr-dropcap::first-letter {
+  font-family: var(--font-arcane, var(--p-serif));
+  font-size: 3.2rem;
+  float: left;
+  line-height: 0.8;
+  padding: 0.1rem 0.5rem 0 0;
+  color: var(--p-accent);
+}

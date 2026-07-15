@@ -18,6 +18,11 @@ import {
   Code2,
   BookOpen,
   FlaskConical,
+  Newspaper,
+  GraduationCap,
+  Puzzle,
+  Dices,
+  Printer,
   type LucideIcon,
 } from "lucide-react"
 
@@ -50,6 +55,16 @@ const NAV: { section: string; items: NavItem[] }[] = [
       { href: "/admin/snippets", label: "Código", icon: Code2 },
       { href: "/admin/wiki", label: "Wiki", icon: BookOpen },
       { href: "/admin/lab", label: "Laboratório", icon: FlaskConical },
+    ],
+  },
+  {
+    section: "Daily Prophet",
+    items: [
+      { href: "/admin/prophet", label: "A Redação", icon: Newspaper },
+      { href: "/admin/tutorials", label: "Oficina", icon: GraduationCap },
+      { href: "/admin/mechanics", label: "Mecânicas", icon: Puzzle },
+      { href: "/admin/prototypes", label: "Laboratório", icon: Dices },
+      { href: "/admin/resources", label: "Imprensa", icon: Printer },
     ],
   },
   {

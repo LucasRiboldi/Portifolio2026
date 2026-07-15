@@ -413,11 +413,168 @@ export const RESOURCES: Record<string, ResourceConfig> = {
       sort: int,
     }),
   },
+
+  // ─── Realm DAILY PROPHET ──────────────────────────────────────────────
+  tutorials: {
+    slug: "tutorials",
+    label: "Oficina (Tutoriais)",
+    singular: "Tutorial",
+    tag: CACHE_TAGS.tutorials,
+    orderBy: { column: "sort", ascending: true },
+    columns: [
+      { name: "title", label: "Título" },
+      { name: "difficulty", label: "Nível" },
+    ],
+    fields: [
+      { name: "title", label: "Título", type: "text", required: true },
+      { name: "slug", label: "Slug", type: "text", required: true },
+      { name: "summary", label: "Resumo", type: "textarea" },
+      { name: "body", label: "Conteúdo (Markdown)", type: "markdown" },
+      {
+        name: "difficulty",
+        label: "Nível",
+        type: "select",
+        options: [
+          { value: "iniciante", label: "Iniciante" },
+          { value: "intermediario", label: "Intermediário" },
+          { value: "avancado", label: "Avançado" },
+        ],
+      },
+      { name: "tags", label: "Tags", type: "tags" },
+      { name: "published", label: "Publicado", type: "boolean" },
+      { name: "sort", label: "Ordem", type: "number" },
+    ],
+    schema: z.object({
+      title: z.string().min(1, "Título obrigatório"),
+      slug: z.string().min(1).regex(/^[a-z0-9-]+$/, "minúsculas, números e hífens"),
+      summary: z.string().default(""),
+      body: z.string().default(""),
+      difficulty: z.enum(["iniciante", "intermediario", "avancado"]).default("iniciante"),
+      tags: tagList,
+      published: bool,
+      sort: int,
+    }),
+  },
+
+  mechanics: {
+    slug: "mechanics",
+    label: "Caderno (Mecânicas)",
+    singular: "Mecânica",
+    tag: CACHE_TAGS.mechanics,
+    orderBy: { column: "sort", ascending: true },
+    columns: [{ name: "title", label: "Mecânica" }],
+    fields: [
+      { name: "title", label: "Nome", type: "text", required: true },
+      { name: "slug", label: "Slug", type: "text", required: true },
+      { name: "summary", label: "Resumo", type: "textarea" },
+      { name: "body", label: "Explicação (Markdown)", type: "markdown" },
+      { name: "tags", label: "Tags", type: "tags" },
+      { name: "published", label: "Publicado", type: "boolean" },
+      { name: "sort", label: "Ordem", type: "number" },
+    ],
+    schema: z.object({
+      title: z.string().min(1, "Nome obrigatório"),
+      slug: z.string().min(1).regex(/^[a-z0-9-]+$/, "minúsculas, números e hífens"),
+      summary: z.string().default(""),
+      body: z.string().default(""),
+      tags: tagList,
+      published: bool,
+      sort: int,
+    }),
+  },
+
+  prototypes: {
+    slug: "prototypes",
+    label: "Laboratório (Protótipos)",
+    singular: "Protótipo",
+    tag: CACHE_TAGS.prototypes,
+    orderBy: { column: "sort", ascending: true },
+    columns: [
+      { name: "title", label: "Título" },
+      { name: "status", label: "Status" },
+    ],
+    fields: [
+      { name: "title", label: "Título", type: "text", required: true },
+      { name: "description", label: "Descrição", type: "textarea" },
+      {
+        name: "status",
+        label: "Status",
+        type: "select",
+        options: [
+          { value: "conceito", label: "Conceito" },
+          { value: "prototipo", label: "Protótipo" },
+          { value: "playtest", label: "Playtest" },
+          { value: "publicado", label: "Publicado" },
+        ],
+      },
+      { name: "players", label: "Jogadores", type: "text", placeholder: "2–4" },
+      { name: "playtime", label: "Duração", type: "text", placeholder: "45 min" },
+      { name: "tags", label: "Tags", type: "tags" },
+      { name: "published", label: "Publicado", type: "boolean" },
+      { name: "sort", label: "Ordem", type: "number" },
+    ],
+    schema: z.object({
+      title: z.string().min(1, "Título obrigatório"),
+      description: z.string().default(""),
+      status: z.enum(["conceito", "prototipo", "playtest", "publicado"]).default("conceito"),
+      players: z.string().default(""),
+      playtime: z.string().default(""),
+      tags: tagList,
+      published: bool,
+      sort: int,
+    }),
+  },
+
+  resources: {
+    slug: "resources",
+    label: "Imprensa (Recursos)",
+    singular: "Recurso",
+    tag: CACHE_TAGS.resources,
+    orderBy: { column: "sort", ascending: true },
+    columns: [
+      { name: "title", label: "Título" },
+      { name: "type", label: "Tipo" },
+    ],
+    fields: [
+      { name: "title", label: "Título", type: "text", required: true },
+      { name: "description", label: "Descrição", type: "textarea" },
+      {
+        name: "type",
+        label: "Tipo",
+        type: "select",
+        options: [
+          { value: "pnp", label: "Print & Play" },
+          { value: "cartas", label: "Cartas" },
+          { value: "tabuleiro", label: "Tabuleiro" },
+          { value: "regras", label: "Regras" },
+          { value: "outro", label: "Outro" },
+        ],
+      },
+      { name: "file_url", label: "Arquivo (URL)", type: "media" },
+      { name: "published", label: "Publicado", type: "boolean" },
+      { name: "sort", label: "Ordem", type: "number" },
+    ],
+    schema: z.object({
+      title: z.string().min(1, "Título obrigatório"),
+      description: z.string().default(""),
+      type: z.enum(["pnp", "cartas", "tabuleiro", "regras", "outro"]).default("pnp"),
+      file_url: optText,
+      published: bool,
+      sort: int,
+    }),
+  },
 }
 
 /** Recurso destino do "table" no Supabase (nem sempre == slug). */
+const TABLE_MAP: Record<string, string> = {
+  lab: "lab_experiments",
+  tutorials: "prophet_tutorials",
+  mechanics: "prophet_mechanics",
+  prototypes: "prophet_prototypes",
+  resources: "prophet_resources",
+}
 export function resourceTable(slug: string): string {
-  return slug === "lab" ? "lab_experiments" : slug
+  return TABLE_MAP[slug] ?? slug
 }
 
 export function getResource(slug: string): ResourceConfig | null {

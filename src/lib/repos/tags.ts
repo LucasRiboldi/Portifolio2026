@@ -11,6 +11,11 @@ export const CACHE_TAGS = {
   snippets: "snippets",
   wiki: "wiki",
   lab: "lab",
+  tutorials: "tutorials",
+  mechanics: "mechanics",
+  prototypes: "prototypes",
+  resources: "resources",
+  prophetAbout: "prophet-about",
 } as const
 
 export type CacheTag = (typeof CACHE_TAGS)[keyof typeof CACHE_TAGS]
