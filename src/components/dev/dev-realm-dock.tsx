@@ -11,6 +11,7 @@ import {
   Lightbulb,
   Code2,
   BookOpen,
+  GraduationCap,
   type LucideIcon,
 } from "lucide-react"
 
@@ -29,6 +30,7 @@ const ITEMS: DockItem[] = [
   { href: "/dev/devlogs", label: "devlogs", Icon: Terminal },
   { href: "/dev/ideias", label: "ideias", Icon: Lightbulb },
   { href: "/dev/codigo", label: "código", Icon: Code2 },
+  { href: "/dev/learn", label: "learn", Icon: GraduationCap },
   { href: "/dev/wiki", label: "wiki", Icon: BookOpen },
 ]
 

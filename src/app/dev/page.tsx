@@ -116,6 +116,7 @@ export default async function DevHome() {
         {[
           { href: "/dev/ferramentas", t: "Ferramentas", d: `${tools.length} utilitários do dia a dia` },
           { href: "/dev/codigo", t: "Código", d: "Snippets e boilerplates reutilizáveis" },
+          { href: "/dev/learn", t: "Learn", d: "Trilhas para aprender linguagens (C, Java…)" },
           { href: "/dev/wiki", t: "Wiki", d: "Cheatsheets e documentação técnica" },
         ].map((x) => (
           <Link key={x.href} href={x.href} className="dv-card">
