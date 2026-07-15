@@ -8,7 +8,7 @@ export default async function MessagesPage() {
     <div className="space-y-5">
       <header>
         <h1 className="text-2xl font-bold">Mensagens</h1>
-        <p className="text-sm text-white/50">Enviadas pelo formulário de contato.</p>
+        <p className="text-sm text-[color:var(--mm-text-2)]">Enviadas pelo formulário de contato.</p>
       </header>
       <MessageList messages={messages} />
     </div>

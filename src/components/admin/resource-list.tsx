@@ -46,47 +46,41 @@ export function ResourceList({ slug, label, singular, columns, rows }: ResourceL
       <header className="flex items-center justify-between">
         <div>
           <h1 className="text-2xl font-bold">{label}</h1>
-          <p className="text-sm text-white/50">{rows.length} item(s)</p>
+          <p className="text-sm" style={{ color: "var(--mm-text-2)" }}>{rows.length} item(s)</p>
         </div>
-        <Link
-          href={`/admin/${slug}/new`}
-          className="rounded-lg bg-white px-4 py-2 text-sm font-semibold text-black hover:opacity-90"
-        >
+        <Link href={`/admin/${slug}/new`} className="mm-btn mm-btn-primary">
           + Novo
         </Link>
       </header>
 
       {rows.length === 0 ? (
-        <p className="rounded-xl border border-white/10 bg-white/[0.03] p-6 text-sm text-white/50">
+        <p className="mm-card p-6 text-sm" style={{ color: "var(--mm-text-2)" }}>
           Nenhum item ainda. Clique em “+ Novo” para criar.
         </p>
       ) : (
-        <div className="overflow-hidden rounded-xl border border-white/10">
-          <table className="w-full text-sm">
-            <thead className="bg-white/[0.04] text-left text-white/50">
+        <div className="mm-card overflow-hidden">
+          <table className="mm-table">
+            <thead>
               <tr>
                 {columns.map((c) => (
-                  <th key={c.name} className="px-4 py-2 font-medium">
-                    {c.label}
-                  </th>
+                  <th key={c.name}>{c.label}</th>
                 ))}
-                <th className="px-4 py-2" />
+                <th />
               </tr>
             </thead>
             <tbody>
               {rows.map((row) => {
                 const id = String(row.id)
                 return (
-                  <tr key={id} className="border-t border-white/5 hover:bg-white/[0.02]">
+                  <tr key={id}>
                     {columns.map((c) => (
-                      <td key={c.name} className="px-4 py-2.5 text-white/80">
-                        {renderCell(row[c.name])}
-                      </td>
+                      <td key={c.name}>{renderCell(row[c.name])}</td>
                     ))}
-                    <td className="px-4 py-2.5 text-right">
+                    <td className="text-right whitespace-nowrap">
                       <Link
                         href={`/admin/${slug}/${id}`}
-                        className="mr-3 text-white/60 hover:text-white"
+                        className="mr-4 font-medium hover:underline"
+                        style={{ color: "var(--mm-primary)" }}
                       >
                         Editar
                       </Link>
@@ -94,7 +88,8 @@ export function ResourceList({ slug, label, singular, columns, rows }: ResourceL
                         type="button"
                         onClick={() => onDelete(id)}
                         disabled={pending && busyId === id}
-                        className="text-red-400 hover:text-red-300 disabled:opacity-50"
+                        className="font-medium hover:underline disabled:opacity-50"
+                        style={{ color: "var(--mm-error)" }}
                       >
                         Excluir
                       </button>

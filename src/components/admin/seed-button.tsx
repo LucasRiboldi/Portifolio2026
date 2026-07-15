@@ -24,16 +24,11 @@ export function SeedButton() {
 
   return (
     <div className="flex flex-col gap-2">
-      <button
-        type="button"
-        onClick={seed}
-        disabled={pending}
-        className="w-fit rounded-lg bg-emerald-500 px-4 py-2 text-sm font-semibold text-black transition-colors hover:bg-emerald-400 disabled:opacity-60"
-      >
+      <button type="button" onClick={seed} disabled={pending} className="mm-btn mm-btn-primary w-fit">
         {pending ? "Populando…" : "Popular banco com o conteúdo atual"}
       </button>
-      {msg && <p className="text-sm text-emerald-400">{msg}</p>}
-      {err && <p className="text-sm text-red-400">{err}</p>}
+      {msg && <p className="text-sm" style={{ color: "var(--mm-success)" }}>{msg}</p>}
+      {err && <p className="text-sm" style={{ color: "var(--mm-error)" }}>{err}</p>}
     </div>
   )
 }

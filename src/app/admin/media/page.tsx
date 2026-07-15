@@ -5,7 +5,7 @@ export default function MediaPage() {
     <div className="space-y-5">
       <header>
         <h1 className="text-2xl font-bold">Mídia</h1>
-        <p className="text-sm text-white/50">
+        <p className="text-sm text-[color:var(--mm-text-2)]">
           Envie imagens e copie a URL para usar em projetos e capas.
         </p>
       </header>

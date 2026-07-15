@@ -9,7 +9,7 @@ export default async function SitePage() {
     <div className="space-y-6">
       <header>
         <h1 className="text-2xl font-bold">Site & SEO</h1>
-        <p className="text-sm text-white/50">Identidade, contato e metadados.</p>
+        <p className="text-sm text-[color:var(--mm-text-2)]">Identidade, contato e metadados.</p>
       </header>
 
       <AdminForm action={saveSiteConfig} submitLabel="Salvar configuração">

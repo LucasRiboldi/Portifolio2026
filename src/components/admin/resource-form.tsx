@@ -21,8 +21,7 @@ function toInputValue(field: FieldConfig, raw: unknown): string {
   return String(raw)
 }
 
-const inputCls =
-  "w-full rounded-lg border border-white/15 bg-neutral-950 px-3 py-2 text-sm text-white outline-none focus:border-white/40"
+const inputCls = "mm-input"
 
 export function ResourceForm({ slug, singular, fields, id, initial }: ResourceFormProps) {
   const router = useRouter()
@@ -45,14 +44,14 @@ export function ResourceForm({ slug, singular, fields, id, initial }: ResourceFo
   }
 
   return (
-    <form onSubmit={onSubmit} className="max-w-2xl space-y-5">
+    <form onSubmit={onSubmit} className="mm-card max-w-2xl space-y-5 p-6">
       {fields.map((field) => {
         const value = toInputValue(field, initial[field.name])
         return (
           <div key={field.name} className="space-y-1.5">
-            <label htmlFor={field.name} className="block text-sm font-medium text-white/80">
+            <label htmlFor={field.name} className="mm-label">
               {field.label}
-              {field.required && <span className="text-red-400"> *</span>}
+              {field.required && <span style={{ color: "var(--mm-error)" }}> *</span>}
             </label>
 
             {field.type === "textarea" && (
@@ -74,12 +73,12 @@ export function ResourceForm({ slug, singular, fields, id, initial }: ResourceFo
             )}
 
             {field.type === "boolean" && (
-              <label className="flex items-center gap-2 text-sm text-white/70">
+              <label className="flex items-center gap-2 text-sm" style={{ color: "var(--mm-text-2)" }}>
                 <input
                   type="checkbox"
                   name={field.name}
                   defaultChecked={initial[field.name] === true}
-                  className="size-4"
+                  className="size-4 accent-[var(--mm-primary)]"
                 />
                 {field.label}
               </label>
@@ -100,26 +99,22 @@ export function ResourceForm({ slug, singular, fields, id, initial }: ResourceFo
               />
             )}
 
-            {field.help && <p className="text-xs text-white/40">{field.help}</p>}
+            {field.help && <p className="text-xs" style={{ color: "var(--mm-text-2)" }}>{field.help}</p>}
           </div>
         )
       })}
 
-      {error && <p className="rounded-lg border border-red-500/30 bg-red-500/10 p-3 text-sm text-red-300">{error}</p>}
+      {error && (
+        <p className="rounded-lg p-3 text-sm" style={{ background: "var(--mm-light-error)", color: "var(--mm-error)" }}>
+          {error}
+        </p>
+      )}
 
       <div className="flex gap-3">
-        <button
-          type="submit"
-          disabled={pending}
-          className="rounded-lg bg-white px-5 py-2 text-sm font-semibold text-black transition-opacity hover:opacity-90 disabled:opacity-60"
-        >
+        <button type="submit" disabled={pending} className="mm-btn mm-btn-primary">
           {pending ? "Salvando…" : `Salvar ${singular.toLowerCase()}`}
         </button>
-        <button
-          type="button"
-          onClick={() => router.push(`/admin/${slug}`)}
-          className="rounded-lg border border-white/15 px-5 py-2 text-sm text-white/70 hover:bg-white/5"
-        >
+        <button type="button" onClick={() => router.push(`/admin/${slug}`)} className="mm-btn mm-btn-ghost">
           Cancelar
         </button>
       </div>

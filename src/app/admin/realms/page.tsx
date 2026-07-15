@@ -14,8 +14,7 @@ async function loadRealms(): Promise<Record<string, RealmRow>> {
   return map
 }
 
-const cls =
-  "w-full rounded-lg border border-white/15 bg-neutral-950 px-3 py-2 text-sm text-white outline-none focus:border-white/40"
+const cls = "mm-input"
 
 export default async function RealmsPage() {
   const rows = await loadRealms()
@@ -28,7 +27,7 @@ export default async function RealmsPage() {
     <div className="space-y-6">
       <header>
         <h1 className="text-2xl font-bold">Realms</h1>
-        <p className="text-sm text-white/50">
+        <p className="text-sm text-[color:var(--mm-text-2)]">
           Os 3 universos. Controle qual é o padrão, quais estão ativos e os textos
           da metamorfose. (Popule o banco no Dashboard se estiver vazio.)
         </p>
@@ -40,12 +39,12 @@ export default async function RealmsPage() {
             const meta = REALMS[id]
             const row = rows[id]
             return (
-              <div key={id} className="rounded-xl border border-white/10 p-4">
+              <div key={id} className="rounded-xl border border-[color:var(--mm-border)] p-4">
                 <div className="mb-3 flex items-center justify-between">
                   <span className="text-lg font-semibold">
                     {meta.glyph} {meta.label}
                   </span>
-                  <label className="flex items-center gap-2 text-sm text-white/70">
+                  <label className="flex items-center gap-2 text-sm text-[color:var(--mm-text-2)]">
                     <input
                       type="checkbox"
                       name={`enabled_${id}`}
@@ -55,13 +54,13 @@ export default async function RealmsPage() {
                     Ativo
                   </label>
                 </div>
-                <label className="mb-1 block text-xs text-white/50">Legenda da metamorfose</label>
+                <label className="mb-1 block text-xs text-[color:var(--mm-text-2)]">Legenda da metamorfose</label>
                 <input
                   name={`morph_${id}`}
                   defaultValue={row?.morph_label ?? meta.morphLabel}
                   className={cls}
                 />
-                <label className="mt-3 flex items-center gap-2 text-sm text-white/70">
+                <label className="mt-3 flex items-center gap-2 text-sm text-[color:var(--mm-text-2)]">
                   <input type="radio" name="default" value={id} defaultChecked={id === defaultId} />
                   Realm padrão
                 </label>
@@ -71,7 +70,7 @@ export default async function RealmsPage() {
         </fieldset>
 
         <div className="space-y-1.5">
-          <label htmlFor="arcane_content" className="block text-sm font-medium text-white/80">
+          <label htmlFor="arcane_content" className="block text-sm font-medium text-[color:var(--mm-text)]">
             Conteúdo do Arcane (JSON — masthead, artigos, sidebar, almanaque)
           </label>
           <textarea
@@ -82,7 +81,7 @@ export default async function RealmsPage() {
             className={`${cls} font-mono text-xs`}
             placeholder="{ ... } — deixe vazio para manter o atual"
           />
-          <p className="text-xs text-white/40">
+          <p className="text-xs text-[color:var(--mm-text-2)]">
             Edição avançada. JSON inválido é rejeitado ao salvar. Vazio = mantém o atual.
           </p>
         </div>

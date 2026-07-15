@@ -1,0 +1,173 @@
+/**
+ * MaterialM — identidade visual do painel /admin (recriação do template
+ * Material Design "MaterialM", tema BLUE). Escopado em `.mm-root` para não
+ * vazar no site público. Paleta oficial do template.
+ */
+
+.mm-root {
+  --mm-primary: #00a1ff;
+  --mm-primary-hover: #0090e6;
+  --mm-secondary: #8965e5;
+  --mm-info: #46caeb;
+  --mm-success: #00ceb6;
+  --mm-warning: #ffae1f;
+  --mm-error: #ff6692;
+
+  --mm-light-primary: #e5f5ff;
+  --mm-light-secondary: #e7e2f3;
+  --mm-light-success: #d2f9f4;
+  --mm-light-warning: #fff1cc;
+  --mm-light-error: #ffe4ec;
+  --mm-light-info: #e1f5fa;
+
+  --mm-text: #111c2d;
+  --mm-text-2: #7b8893;
+  --mm-muted: #526b7a;
+  --mm-border: #e0e6eb;
+  --mm-bg: #f8fafd;
+  --mm-surface: #ffffff;
+  --mm-hover: #eff4fa;
+
+  --mm-radius: 16px;
+  --mm-shadow: 0 6px 24px rgba(17, 28, 45, 0.06);
+
+  background: var(--mm-bg);
+  color: var(--mm-text);
+  font-family: var(--font-mm), ui-sans-serif, system-ui, sans-serif;
+  -webkit-font-smoothing: antialiased;
+}
+
+/* ─── Superfícies ─── */
+.mm-card {
+  background: var(--mm-surface);
+  border: 1px solid var(--mm-border);
+  border-radius: var(--mm-radius);
+  box-shadow: var(--mm-shadow);
+}
+
+/* ─── Chip de ícone colorido (stat cards / nav) ─── */
+.mm-chip {
+  display: inline-grid;
+  place-items: center;
+  width: 44px;
+  height: 44px;
+  border-radius: 12px;
+}
+
+/* ─── Formulários ─── */
+.mm-label {
+  display: block;
+  font-size: 0.8125rem;
+  font-weight: 600;
+  color: var(--mm-text);
+  margin-bottom: 0.4rem;
+}
+.mm-input,
+.mm-select,
+.mm-textarea {
+  width: 100%;
+  background: var(--mm-surface);
+  border: 1px solid var(--mm-border);
+  border-radius: 10px;
+  padding: 0.6rem 0.8rem;
+  font-size: 0.875rem;
+  color: var(--mm-text);
+  outline: none;
+  transition: border-color 0.15s, box-shadow 0.15s;
+}
+.mm-input::placeholder,
+.mm-textarea::placeholder {
+  color: var(--mm-text-2);
+}
+.mm-input:focus,
+.mm-select:focus,
+.mm-textarea:focus {
+  border-color: var(--mm-primary);
+  box-shadow: 0 0 0 3px rgba(0, 161, 255, 0.15);
+}
+
+/* ─── Botões ─── */
+.mm-btn {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.5rem;
+  border-radius: 10px;
+  padding: 0.55rem 1.1rem;
+  font-size: 0.875rem;
+  font-weight: 600;
+  transition: background 0.15s, opacity 0.15s, box-shadow 0.15s;
+  cursor: pointer;
+}
+.mm-btn:disabled {
+  opacity: 0.6;
+  cursor: default;
+}
+.mm-btn-primary {
+  background: var(--mm-primary);
+  color: #fff;
+  box-shadow: 0 4px 12px rgba(0, 161, 255, 0.3);
+}
+.mm-btn-primary:hover:not(:disabled) {
+  background: var(--mm-primary-hover);
+}
+.mm-btn-ghost {
+  background: transparent;
+  color: var(--mm-text-2);
+  border: 1px solid var(--mm-border);
+}
+.mm-btn-ghost:hover:not(:disabled) {
+  background: var(--mm-hover);
+  color: var(--mm-text);
+}
+.mm-btn-danger {
+  background: var(--mm-light-error);
+  color: var(--mm-error);
+}
+.mm-btn-danger:hover:not(:disabled) {
+  background: var(--mm-error);
+  color: #fff;
+}
+
+/* ─── Badges de status ─── */
+.mm-badge {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.3rem;
+  padding: 0.15rem 0.6rem;
+  border-radius: 999px;
+  font-size: 0.7rem;
+  font-weight: 600;
+}
+.mm-badge-success {
+  background: var(--mm-light-success);
+  color: var(--mm-success);
+}
+.mm-badge-muted {
+  background: var(--mm-hover);
+  color: var(--mm-text-2);
+}
+
+/* ─── Tabela ─── */
+.mm-table {
+  width: 100%;
+  font-size: 0.875rem;
+  border-collapse: collapse;
+}
+.mm-table thead th {
+  text-align: left;
+  padding: 0.75rem 1rem;
+  font-weight: 600;
+  color: var(--mm-text-2);
+  border-bottom: 1px solid var(--mm-border);
+}
+.mm-table tbody td {
+  padding: 0.85rem 1rem;
+  border-bottom: 1px solid var(--mm-border);
+  color: var(--mm-text);
+}
+.mm-table tbody tr:last-child td {
+  border-bottom: none;
+}
+.mm-table tbody tr:hover {
+  background: var(--mm-hover);
+}

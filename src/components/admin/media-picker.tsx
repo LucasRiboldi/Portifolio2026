@@ -55,7 +55,7 @@ export function MediaPicker({ name, defaultValue, inputClassName }: MediaPickerP
             type="button"
             onClick={() => fileRef.current?.click()}
             disabled={uploading}
-            className="shrink-0 rounded-lg border border-white/15 px-3 py-2 text-sm text-white/70 hover:bg-white/5 disabled:opacity-60"
+            className="shrink-0 rounded-lg border border-[color:var(--mm-border)] px-3 py-2 text-sm text-[color:var(--mm-text-2)] hover:bg-[color:var(--mm-hover)] disabled:opacity-60"
           >
             {uploading ? "Enviando…" : "Upload"}
           </button>
@@ -73,9 +73,9 @@ export function MediaPicker({ name, defaultValue, inputClassName }: MediaPickerP
       />
       {url && (
         // eslint-disable-next-line @next/next/no-img-element
-        <img src={url} alt="preview" className="max-h-32 rounded-lg border border-white/10" />
+        <img src={url} alt="preview" className="max-h-32 rounded-lg border border-[color:var(--mm-border)]" />
       )}
-      {error && <p className="text-xs text-red-400">{error}</p>}
+      {error && <p className="text-xs text-[color:var(--mm-error)]">{error}</p>}
     </div>
   )
 }

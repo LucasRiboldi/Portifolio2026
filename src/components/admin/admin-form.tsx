@@ -32,24 +32,21 @@ export function AdminForm({ action, children, submitLabel = "Salvar" }: AdminFor
   }
 
   return (
-    <form onSubmit={onSubmit} className="max-w-2xl space-y-5">
+    <form onSubmit={onSubmit} className="mm-card max-w-2xl space-y-5 p-6">
       {children}
       {state && (
         <p
-          className={`rounded-lg border p-3 text-sm ${
+          className="rounded-lg p-3 text-sm"
+          style={
             state.ok
-              ? "border-emerald-500/30 bg-emerald-500/10 text-emerald-300"
-              : "border-red-500/30 bg-red-500/10 text-red-300"
-          }`}
+              ? { background: "var(--mm-light-success)", color: "var(--mm-success)" }
+              : { background: "var(--mm-light-error)", color: "var(--mm-error)" }
+          }
         >
           {state.msg}
         </p>
       )}
-      <button
-        type="submit"
-        disabled={pending}
-        className="rounded-lg bg-white px-5 py-2 text-sm font-semibold text-black hover:opacity-90 disabled:opacity-60"
-      >
+      <button type="submit" disabled={pending} className="mm-btn mm-btn-primary">
         {pending ? "Salvando…" : submitLabel}
       </button>
     </form>
@@ -70,17 +67,15 @@ export function Field({
   textarea?: boolean
   placeholder?: string
 }) {
-  const cls =
-    "w-full rounded-lg border border-white/15 bg-neutral-950 px-3 py-2 text-sm text-white outline-none focus:border-white/40"
   return (
     <div className="space-y-1.5">
-      <label htmlFor={name} className="block text-sm font-medium text-white/80">
+      <label htmlFor={name} className="mm-label">
         {label}
       </label>
       {textarea ? (
-        <textarea id={name} name={name} defaultValue={defaultValue} rows={3} className={cls} placeholder={placeholder} />
+        <textarea id={name} name={name} defaultValue={defaultValue} rows={3} className="mm-textarea" placeholder={placeholder} />
       ) : (
-        <input id={name} name={name} defaultValue={defaultValue} className={cls} placeholder={placeholder} />
+        <input id={name} name={name} defaultValue={defaultValue} className="mm-input" placeholder={placeholder} />
       )}
     </div>
   )
