@@ -8,6 +8,7 @@ import { UniverseProvider } from "@/components/providers/universe-provider";
 import { Geist, Bangers, Archivo_Black, Nabla, Monoton, Rubik_Glitch, Bungee_Shade } from "next/font/google";
 import { cn } from "@/lib/utils";
 import { siteConfig } from "@/constants/site";
+import { getRealmSettings } from "@/lib/repos/realms";
 
 const SITE_URL = "https://portifolio2026-two.vercel.app";
 
@@ -56,25 +57,34 @@ const rubikGlitch = Rubik_Glitch({ weight: '400', subsets: ['latin'], variable: 
 const bungeeShade = Bungee_Shade({ weight: '400', subsets: ['latin'], variable: '--font-shade' });
 
 
-export default function RootLayout({
+export default async function RootLayout({
   children
 }: {
   children: React.ReactNode;
 }) {
+  // Config dos realms controlada pelo admin (default + habilitados).
+  const settings = await getRealmSettings();
+  const enabledJson = JSON.stringify(settings.enabled);
+
+  // Script anti-FOUC: pinta data-realm antes da hidratação, respeitando o
+  // default e os realms habilitados vindos do banco (injetados pelo server).
+  const antiFouc =
+    "(function(){try{var EN=" + enabledJson + ",DEF='" + settings.defaultRealm + "';" +
+    "var r=localStorage.getItem('realm');" +
+    "if(!r){r=localStorage.getItem('vibe')==='sober'?'developer':DEF;}" +
+    "if(EN.indexOf(r)<0)r=DEF;" +
+    "var d=document.documentElement;d.setAttribute('data-realm',r);" +
+    "if(r==='developer')d.classList.add('sober');}catch(e){}})()";
+
   return (
     <html
       lang="pt-BR"
       suppressHydrationWarning className={cn("font-sans", geist.variable, bangers.variable, archivo.variable, nabla.variable, monoton.variable, rubikGlitch.variable, bungeeShade.variable)}
     >
       <body>
-        <script
-          dangerouslySetInnerHTML={{
-            __html:
-              "(function(){try{var r=localStorage.getItem('realm');if(!r){r=localStorage.getItem('vibe')==='sober'?'developer':'creative';}if(r!=='creative'&&r!=='developer'&&r!=='arcane')r='creative';var d=document.documentElement;d.setAttribute('data-realm',r);if(r==='developer')d.classList.add('sober');}catch(e){}})()",
-          }}
-        />
+        <script dangerouslySetInnerHTML={{ __html: antiFouc }} />
         <ThemeProvider>
-          <UniverseProvider>{children}</UniverseProvider>
+          <UniverseProvider settings={settings}>{children}</UniverseProvider>
         </ThemeProvider>
         <Analytics />
       </body>

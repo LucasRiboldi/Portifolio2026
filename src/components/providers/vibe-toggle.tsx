@@ -12,14 +12,19 @@ import { useUniverse } from "@/components/providers/universe-provider"
  * UniverseProvider; aqui é só a UI acessível. Rótulo/skin mudam por realm.
  */
 export function VibeToggle({ className }: { className?: string }) {
-  const { realm, morphing, cycle } = useUniverse()
+  const { realm, morphing, cycle, enabled } = useUniverse()
   const current = REALMS[realm]
-  const next = REALMS[current.next]
+  // próximo realm HABILITADO (espelha exatamente o que cycle() fará)
+  const i = enabled.indexOf(realm)
+  const nextId = enabled[(i + 1) % enabled.length] ?? realm
+  const next = REALMS[nextId]
+  // botão só faz sentido com 2+ realms ativos
+  const canCycle = enabled.length > 1
 
   return (
     <button
       onClick={cycle}
-      disabled={!!morphing}
+      disabled={!!morphing || !canCycle}
       aria-label={`Transformar universo — próximo: ${next.aria}`}
       title={`Transform → ${next.label}`}
       data-realm-btn={realm}

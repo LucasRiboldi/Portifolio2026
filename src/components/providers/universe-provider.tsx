@@ -31,6 +31,14 @@ interface UniverseContextValue {
   setRealm: (id: RealmId) => void
   /** avança para o próximo realm no ciclo (botão Transform) */
   cycle: () => void
+  /** realms habilitados (controlado pelo admin) */
+  enabled: RealmId[]
+}
+
+/** Configuração vinda do banco (admin). Cai no default do código se ausente. */
+export interface RealmSettings {
+  enabled: RealmId[]
+  defaultRealm: RealmId
 }
 
 const UniverseContext = React.createContext<UniverseContextValue | null>(null)
@@ -44,8 +52,27 @@ function applyRealm(id: RealmId) {
   el.classList.toggle("sober", REALMS[id].sober)
 }
 
-export function UniverseProvider({ children }: { children: React.ReactNode }) {
-  const [realm, setRealmState] = React.useState<RealmId>(DEFAULT_REALM)
+export function UniverseProvider({
+  children,
+  settings,
+}: {
+  children: React.ReactNode
+  settings?: RealmSettings
+}) {
+  // Realms ativos (na ordem canônica do ciclo), com fallback ao código.
+  const enabled = React.useMemo<RealmId[]>(() => {
+    const list = (settings?.enabled ?? REALM_ORDER).filter((id) =>
+      REALM_ORDER.includes(id),
+    )
+    return list.length ? list : [...REALM_ORDER]
+  }, [settings?.enabled])
+
+  const defaultRealm = React.useMemo<RealmId>(() => {
+    const d = settings?.defaultRealm ?? DEFAULT_REALM
+    return enabled.includes(d) ? d : (enabled[0] ?? DEFAULT_REALM)
+  }, [settings?.defaultRealm, enabled])
+
+  const [realm, setRealmState] = React.useState<RealmId>(defaultRealm)
   const [morphing, setMorphing] = React.useState<RealmId | null>(null)
   const timers = React.useRef<number[]>([])
 
@@ -54,7 +81,8 @@ export function UniverseProvider({ children }: { children: React.ReactNode }) {
   // para que cada universo seja compartilhável por URL.
   React.useEffect(() => {
     const fromUrl = new URLSearchParams(window.location.search).get("realm")
-    if (isRealmId(fromUrl)) {
+    // deep-link só vale se o realm estiver habilitado pelo admin
+    if (isRealmId(fromUrl) && enabled.includes(fromUrl)) {
       applyRealm(fromUrl)
       setRealmState(fromUrl)
       try {
@@ -63,14 +91,19 @@ export function UniverseProvider({ children }: { children: React.ReactNode }) {
       } catch {}
     } else {
       const current = document.documentElement.getAttribute("data-realm")
-      setRealmState(isRealmId(current) ? current : DEFAULT_REALM)
+      const resolved =
+        isRealmId(current) && enabled.includes(current) ? current : defaultRealm
+      // corrige o <html> caso o script anti-FOUC tenha pintado um realm desativado
+      if (resolved !== current) applyRealm(resolved)
+      setRealmState(resolved)
     }
     return () => timers.current.forEach((t) => window.clearTimeout(t))
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [])
 
   const setRealm = React.useCallback(
     (next: RealmId) => {
-      if (morphing || next === realm) return
+      if (morphing || next === realm || !enabled.includes(next)) return
       setMorphing(next)
       document.documentElement.classList.add("morphing")
 
@@ -93,16 +126,19 @@ export function UniverseProvider({ children }: { children: React.ReactNode }) {
         }, MORPH_END_MS)
       )
     },
-    [morphing, realm]
+    [morphing, realm, enabled]
   )
 
   const cycle = React.useCallback(() => {
-    setRealm(REALMS[realm].next)
-  }, [realm, setRealm])
+    // próximo realm HABILITADO no ciclo (respeita on/off do admin)
+    const i = enabled.indexOf(realm)
+    const next = enabled[(i + 1) % enabled.length]
+    if (next) setRealm(next)
+  }, [realm, enabled, setRealm])
 
   const value = React.useMemo(
-    () => ({ realm, morphing, setRealm, cycle }),
-    [realm, morphing, setRealm, cycle]
+    () => ({ realm, morphing, setRealm, cycle, enabled }),
+    [realm, morphing, setRealm, cycle, enabled]
   )
 
   return (
