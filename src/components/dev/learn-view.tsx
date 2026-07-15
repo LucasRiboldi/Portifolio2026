@@ -76,7 +76,7 @@ export function LearnView({ languages }: { languages: LearnLanguage[] }) {
   return (
     <div style={{ ["--learn-accent" as string]: lang.accent }}>
       {/* Seletor de linguagem */}
-      <div className="dv-chip-row" role="tablist" aria-label="Escolha a linguagem">
+      <div className="dv-chip-row" role="group" aria-label="Escolha a linguagem">
         {languages.map((l) => {
           const soon = l.status === "coming-soon"
           return (
