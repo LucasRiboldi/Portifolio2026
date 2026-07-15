@@ -6,7 +6,7 @@ import { Mail, MapPin, Zap } from "lucide-react"
 import { GithubIcon, LinkedinIcon } from "@/components/ui/social-icons"
 import { BentoCard } from "./bento-card"
 import { ArtArrow } from "@/components/design-system/art-graphics"
-import { siteConfig } from "@/constants/site"
+import { useSiteConfig } from "@/components/providers/site-config-provider"
 import { projects as seedProjects, type Project } from "@/data/projects"
 import { tools as seedTools, type Tool } from "@/data/tools"
 
@@ -32,18 +32,18 @@ const heroPop: Variants = {
   },
 }
 
-const socialLinks = [
-  { label: 'GitHub', href: siteConfig.github, icon: GithubIcon },
-  { label: 'LinkedIn', href: siteConfig.linkedin, icon: LinkedinIcon },
-  { label: 'E-mail', href: `mailto:${siteConfig.email}`, icon: Mail },
-]
-
 interface BentoGridProps {
   projects?: Project[]
   tools?: Tool[]
 }
 
 export function BentoGrid({ projects = seedProjects, tools = seedTools }: BentoGridProps) {
+  const siteConfig = useSiteConfig()
+  const socialLinks = [
+    { label: 'GitHub', href: siteConfig.github, icon: GithubIcon },
+    { label: 'LinkedIn', href: siteConfig.linkedin, icon: LinkedinIcon },
+    { label: 'E-mail', href: `mailto:${siteConfig.email}`, icon: Mail },
+  ]
   const featuredProject = projects.find(p => p.featured)
   const recentProjects = projects.slice(0, 3)
   const [firstName, ...rest] = siteConfig.name.split(' ')

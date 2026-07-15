@@ -3,7 +3,7 @@ import { ArrowLeft } from "lucide-react"
 import { Container } from "@/components/layout/container"
 import { GithubIcon } from "@/components/ui/social-icons"
 import { SportsWidget } from "@/components/widgets/sports-widget"
-import { siteConfig } from "@/constants/site"
+import { getSiteConfig } from "@/lib/repos/site-config"
 
 export const metadata = {
   title: "Sports Widget — réplica do Firefox",
@@ -51,7 +51,8 @@ const TECH: { label: string; body: string }[] = [
   },
 ]
 
-export default function SportsWidgetPage() {
+export default async function SportsWidgetPage() {
+  const siteConfig = await getSiteConfig()
   return (
     <Container className="py-12">
       <Link

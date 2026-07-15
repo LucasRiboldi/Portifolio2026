@@ -3,7 +3,7 @@ import { GithubIcon, LinkedinIcon } from "@/components/ui/social-icons"
 import { SvCanvas } from "@/components/spiderverse/sv-canvas"
 import { ArtOverlay } from "@/components/design-system/art-overlay"
 import { SpeechBubble } from "@/components/spiderverse/decor"
-import { siteConfig } from "@/constants/site"
+import { getSiteConfig } from "@/lib/repos/site-config"
 
 const experience = [
   { year: '2024–hoje', role: 'Product Designer & Dev', company: 'Freelance' },
@@ -11,17 +11,17 @@ const experience = [
   { year: '2022–2023', role: 'Designer Jr.', company: 'Agência Y' },
 ]
 
-const socialLinks = [
-  { label: 'GitHub', href: siteConfig.github, icon: GithubIcon },
-  { label: 'LinkedIn', href: siteConfig.linkedin, icon: LinkedinIcon },
-  { label: siteConfig.email, href: `mailto:${siteConfig.email}`, icon: Mail },
-]
-
 export const metadata = {
   title: "Sobre",
 }
 
-export default function AboutPage() {
+export default async function AboutPage() {
+  const siteConfig = await getSiteConfig()
+  const socialLinks = [
+    { label: 'GitHub', href: siteConfig.github, icon: GithubIcon },
+    { label: 'LinkedIn', href: siteConfig.linkedin, icon: LinkedinIcon },
+    { label: siteConfig.email, href: `mailto:${siteConfig.email}`, icon: Mail },
+  ]
   return (
     <SvCanvas dimension="nouveau">
       <ArtOverlay universe="watercolor" />

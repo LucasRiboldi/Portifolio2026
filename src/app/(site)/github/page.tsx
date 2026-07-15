@@ -1,7 +1,7 @@
 import { SvCanvas } from "@/components/spiderverse/sv-canvas"
 import { ComicHeader } from "@/components/spiderverse/decor"
 import { GithubIcon } from "@/components/ui/social-icons"
-import { siteConfig } from "@/constants/site"
+import { getSiteConfig } from "@/lib/repos/site-config"
 
 export const metadata = { title: "GitHub" }
 
@@ -12,7 +12,8 @@ const stats = [
   { label: 'Open source', value: '∞' },
 ]
 
-export default function GitHubPage() {
+export default async function GitHubPage() {
+  const siteConfig = await getSiteConfig()
   return (
     <SvCanvas dimension="2099">
       <ComicHeader

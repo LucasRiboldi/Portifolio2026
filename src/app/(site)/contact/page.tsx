@@ -7,7 +7,7 @@ import { z } from "zod"
 import { SvCanvas } from "@/components/spiderverse/sv-canvas"
 import { ArtOverlay } from "@/components/design-system/art-overlay"
 import { Onoma } from "@/components/spiderverse/decor"
-import { siteConfig } from "@/constants/site"
+import { useSiteConfig } from "@/components/providers/site-config-provider"
 
 const schema = z.object({
   name: z.string().min(2, "Nome muito curto"),
@@ -22,6 +22,7 @@ const inputClasses =
   "w-full border-[3px] border-black bg-white px-4 py-2.5 text-sm text-black placeholder:text-black/40 focus:outline-none focus:shadow-[4px_4px_0_0_#ff2d95] transition-shadow"
 
 export default function ContactPage() {
+  const siteConfig = useSiteConfig()
   const [status, setStatus] = useState<Status>('idle')
 
   const { register, handleSubmit, formState: { errors }, reset } = useForm<FormData>({

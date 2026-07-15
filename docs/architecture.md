@@ -121,6 +121,14 @@ site público (Server Components)
 ### Realms via banco
 
 `src/lib/repos/realms.ts` expõe `getRealmSettings()` (padrão/ativos/conteúdo do
-Arcane). O admin edita esses valores; o engine (client) continua agnóstico —
-ainda lê `lib/realms.ts` como config de aparência. Ligar o default/enabled do
-banco ao provider é o próximo incremento natural.
+Arcane). O `RootLayout` (server) injeta esses valores no script anti-FOUC e no
+`UniverseProvider`: o realm padrão e o conjunto de universos habilitados passam a
+ser controlados pelo admin. O engine continua agnóstico à aparência (segue lendo
+`lib/realms.ts` para paletas/labels).
+
+### Site config reflete o admin
+
+`getSiteConfig()` alimenta os metadados (`generateMetadata` — title/OG do banco),
+os Server Components (footer, about, github, sports-widget) e, via
+`SiteConfigProvider`, os Client Components (contato, bento). Uma edição em
+**Site & SEO** propaga por todo o site após `revalidateTag('site-config')`.

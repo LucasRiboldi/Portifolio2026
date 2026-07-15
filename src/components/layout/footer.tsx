@@ -1,9 +1,10 @@
 import { Mail } from "lucide-react"
 import { GithubIcon, LinkedinIcon } from "@/components/ui/social-icons"
 import { Container } from "./container"
-import { siteConfig } from "@/constants/site"
+import { getSiteConfig } from "@/lib/repos/site-config"
 
-export function Footer() {
+export async function Footer() {
+  const siteConfig = await getSiteConfig()
   return (
     <footer className="border-t-[3px] border-black bg-[var(--sv-ink)]">
       <div style={{ height: 4, background: 'linear-gradient(90deg, var(--sv-cyan), var(--sv-lime), var(--sv-yellow), var(--sv-magenta))' }} />
