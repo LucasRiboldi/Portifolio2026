@@ -8,7 +8,7 @@
     "sync:vercel-env": "node scripts/sync-vercel-env.mjs",
     "tokens:export": "node scripts/export-tokens.mjs",
     "tokens:check": "node scripts/check-tokens.mjs",
-    "dev": "next dev",
+    "dev": "next dev -p 3000",
     "build": "next build",
     "start": "next start",
     "lint": "eslint",
