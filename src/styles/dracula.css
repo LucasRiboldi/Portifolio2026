@@ -583,7 +583,11 @@
   border-color: var(--learn-accent);
 }
 .learn-item[data-done="true"] .learn-box::before { content: "✓"; }
-.learn-item[data-done="true"] > span:last-child {
+.learn-item:not(.learn-ex-item)[data-done="true"] > span:last-child {
+  color: var(--d-comment);
+  text-decoration: line-through;
+}
+.learn-ex-item[data-done="true"] .learn-ex-title {
   color: var(--d-comment);
   text-decoration: line-through;
 }
@@ -604,10 +608,175 @@
 
 .learn-routine { margin-top: 2rem; }
 
+/* ─── Gamificação (XP / streak / badges / heatmap) ─── */
+.learn-game {
+  margin-top: 1.25rem;
+  border: 1px solid var(--d-current);
+  border-radius: var(--d-radius);
+  background: var(--d-bg-2);
+  padding: 1rem 1.1rem;
+  display: grid;
+  gap: 1rem;
+}
+@media (min-width: 780px) {
+  .learn-game { grid-template-columns: 1.2fr 1fr; align-items: center; }
+  .learn-heat { grid-column: 1 / -1; }
+}
+.learn-level { font-weight: 800; font-size: 1.05rem; }
+.learn-xpbar {
+  height: 8px;
+  border-radius: 999px;
+  background: var(--d-current);
+  overflow: hidden;
+  margin: 0.45rem 0;
+}
+.learn-xpbar > span { display: block; height: 100%; border-radius: inherit; transition: width 0.35s; }
+.learn-xp-meta {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.9rem;
+  font-size: 0.78rem;
+  color: var(--d-comment);
+}
+.learn-badges { display: flex; flex-wrap: wrap; gap: 0.45rem; }
+.learn-badge {
+  width: 2.1rem;
+  height: 2.1rem;
+  display: grid;
+  place-items: center;
+  border-radius: 8px;
+  border: 1px solid var(--d-current);
+  font-size: 1.1rem;
+  filter: grayscale(1);
+  opacity: 0.4;
+  transition: transform 0.2s;
+}
+.learn-badge[data-earned="true"] {
+  filter: none;
+  opacity: 1;
+  border-color: var(--learn-accent);
+  box-shadow: 0 0 12px -4px var(--learn-accent);
+}
+.learn-badge[data-earned="true"]:hover { transform: translateY(-2px) scale(1.06); }
+
+.learn-heat {
+  display: grid;
+  grid-template-columns: repeat(12, 1fr);
+  grid-auto-flow: column;
+  grid-template-rows: repeat(7, 1fr);
+  gap: 3px;
+}
+.learn-heat-cell {
+  aspect-ratio: 1;
+  border-radius: 2px;
+  background: var(--d-current);
+}
+.learn-heat-cell[data-lvl="1"] { background: color-mix(in srgb, var(--learn-accent) 35%, var(--d-current)); }
+.learn-heat-cell[data-lvl="2"] { background: color-mix(in srgb, var(--learn-accent) 55%, var(--d-current)); }
+.learn-heat-cell[data-lvl="3"] { background: color-mix(in srgb, var(--learn-accent) 78%, var(--d-current)); }
+.learn-heat-cell[data-lvl="4"] { background: var(--learn-accent); }
+
+/* ─── Trilha do conhecimento (fluxograma) ─── */
+.learn-trail {
+  display: flex;
+  align-items: stretch;
+  gap: 0;
+  overflow-x: auto;
+  padding: 1.4rem 0.2rem 0.6rem;
+}
+.learn-trail-step { display: flex; align-items: center; }
+.learn-connector {
+  width: 2.4rem;
+  height: 2px;
+  flex: none;
+  background: var(--d-current);
+  position: relative;
+}
+.learn-connector[data-filled="true"] { background: var(--learn-accent); }
+.learn-connector[data-filled="true"]::after {
+  content: "";
+  position: absolute;
+  top: -2px;
+  left: 0;
+  width: 6px;
+  height: 6px;
+  border-radius: 50%;
+  background: var(--learn-accent);
+  animation: learn-flow 2.4s linear infinite;
+}
+@keyframes learn-flow {
+  from { left: 0; opacity: 0; }
+  15% { opacity: 1; }
+  85% { opacity: 1; }
+  to { left: calc(100% - 6px); opacity: 0; }
+}
+.learn-node {
+  flex: none;
+  width: 8.2rem;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 0.4rem;
+  text-align: center;
+  padding: 0.7rem 0.5rem;
+  border: 1px solid var(--d-current);
+  border-radius: 10px;
+  background: var(--d-bg-2);
+}
+.learn-node-dot {
+  width: 2rem;
+  height: 2rem;
+  display: grid;
+  place-items: center;
+  border-radius: 50%;
+  border: 2px solid var(--d-comment);
+  color: var(--d-comment);
+  font-weight: 800;
+}
+.learn-node-label { font-size: 0.82rem; font-weight: 700; color: var(--d-fg); line-height: 1.15; }
+.learn-node-prog { font-size: 0.7rem; color: var(--d-comment); }
+.learn-node[data-state="done"] { border-color: var(--d-green); }
+.learn-node[data-state="done"] .learn-node-dot {
+  border-color: var(--d-green);
+  background: var(--d-green);
+  color: var(--d-bg);
+}
+.learn-node[data-state="current"] { border-color: var(--learn-accent); }
+.learn-node[data-state="current"] .learn-node-dot {
+  border-color: var(--learn-accent);
+  color: var(--learn-accent);
+  animation: learn-pulse 1.8s ease-in-out infinite;
+}
+@keyframes learn-pulse {
+  0%, 100% { box-shadow: 0 0 0 0 color-mix(in srgb, var(--learn-accent) 55%, transparent); }
+  50% { box-shadow: 0 0 0 7px transparent; }
+}
+
+/* ─── Exercícios ─── */
+.learn-ex-group { margin-top: 0.5rem; }
+.learn-ex-item { align-items: flex-start; }
+.learn-ex-body { display: flex; flex-direction: column; gap: 0.15rem; flex: 1; }
+.learn-ex-title { font-weight: 700; }
+.learn-ex-prompt { font-size: 0.82rem; color: var(--d-comment); }
+.learn-item[data-done="true"] .learn-ex-prompt { text-decoration: none; }
+.learn-ex-diff {
+  flex: none;
+  align-self: center;
+  font-size: 0.66rem;
+  text-transform: uppercase;
+  letter-spacing: 0.03em;
+  padding: 0.08rem 0.45rem;
+  border-radius: 999px;
+}
+.learn-ex-diff[data-diff="básico"] { background: color-mix(in srgb, var(--d-green) 22%, transparent); color: var(--d-green); }
+.learn-ex-diff[data-diff="intermediário"] { background: color-mix(in srgb, var(--d-yellow) 22%, transparent); color: var(--d-yellow); }
+.learn-ex-diff[data-diff="avançado"] { background: color-mix(in srgb, var(--d-red) 22%, transparent); color: var(--d-red); }
+
 /* ─── Acessibilidade: respeita prefers-reduced-motion ─── */
 @media (prefers-reduced-motion: reduce) {
   .dv-caret,
-  [class*="dv-"] {
+  [class*="dv-"],
+  [class*="learn-"] {
     animation: none !important;
   }
 }

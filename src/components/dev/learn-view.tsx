@@ -2,12 +2,25 @@
 
 import { Fragment, useEffect, useMemo, useState } from "react"
 
-import { countTopics, type LearnLanguage } from "@/data/learn"
+import { type LearnLanguage } from "@/data/learn"
+import {
+  badgesFor,
+  computeStats,
+  emptyProgress,
+  heatmap,
+  registerActivity,
+  type Progress,
+} from "@/lib/learn/gamify"
+import { LearnExercises } from "@/components/dev/learn-exercises"
+import { LearnGamification } from "@/components/dev/learn-gamification"
+import { LearnTrail } from "@/components/dev/learn-trail"
 
-type Tab = "roadmap" | "praticas" | "erros" | "recursos"
+type Tab = "trilha" | "roadmap" | "exercicios" | "praticas" | "erros" | "recursos"
 
 const TABS: { id: Tab; label: string }[] = [
+  { id: "trilha", label: "trilha" },
   { id: "roadmap", label: "roadmap" },
+  { id: "exercicios", label: "exercícios" },
   { id: "praticas", label: "boas práticas" },
   { id: "erros", label: "erros comuns" },
   { id: "recursos", label: "recursos" },
@@ -28,11 +41,25 @@ function withCode(text: string) {
 
 const storageKey = (langId: string) => `dev:learn:${langId}`
 
+/** Aceita o formato novo (Progress) ou o legado (só o mapa de tópicos). */
+function parseProgress(raw: string | null): Progress {
+  if (!raw) return emptyProgress()
+  try {
+    const obj = JSON.parse(raw) as unknown
+    if (obj && typeof obj === "object" && "topics" in obj) {
+      return { ...emptyProgress(), ...(obj as Partial<Progress>) }
+    }
+    return { ...emptyProgress(), topics: (obj as Record<string, boolean>) ?? {} }
+  } catch {
+    return emptyProgress()
+  }
+}
+
 export function LearnView({ languages }: { languages: LearnLanguage[] }) {
   const available = languages.filter((l) => l.status === "available")
   const [activeId, setActiveId] = useState(available[0]?.id ?? languages[0]?.id)
-  const [tab, setTab] = useState<Tab>("roadmap")
-  const [done, setDone] = useState<Record<string, boolean>>({})
+  const [tab, setTab] = useState<Tab>("trilha")
+  const [progress, setProgress] = useState<Progress>(emptyProgress)
   const [hydrated, setHydrated] = useState(false)
 
   const lang = useMemo(
@@ -43,12 +70,7 @@ export function LearnView({ languages }: { languages: LearnLanguage[] }) {
   // Carrega o progresso salvo ao trocar de linguagem.
   useEffect(() => {
     if (!lang) return
-    try {
-      const raw = localStorage.getItem(storageKey(lang.id))
-      setDone(raw ? (JSON.parse(raw) as Record<string, boolean>) : {})
-    } catch {
-      setDone({})
-    }
+    setProgress(parseProgress(localStorage.getItem(storageKey(lang.id))))
     setHydrated(true)
   }, [lang])
 
@@ -56,22 +78,40 @@ export function LearnView({ languages }: { languages: LearnLanguage[] }) {
   useEffect(() => {
     if (!hydrated || !lang) return
     try {
-      localStorage.setItem(storageKey(lang.id), JSON.stringify(done))
+      localStorage.setItem(storageKey(lang.id), JSON.stringify(progress))
     } catch {
       /* localStorage indisponível — ignora */
     }
-  }, [done, hydrated, lang])
+  }, [progress, hydrated, lang])
 
   if (!lang) return null
 
-  const total = countTopics(lang)
-  const doneCount = lang.phases.reduce(
-    (n, p) => n + p.topics.filter((_, i) => done[`${p.id}:${i}`]).length,
-    0,
-  )
-  const pct = total ? Math.round((doneCount / total) * 100) : 0
+  const stats = computeStats(lang, progress)
+  const pct = stats.totalTopics ? Math.round((stats.doneTopics / stats.totalTopics) * 100) : 0
+  const badges = badgesFor(stats, progress.streak)
+  const cells = heatmap(progress)
+  const trailPhases = lang.phases.map((ph) => ({
+    id: ph.id,
+    title: ph.title,
+    total: ph.topics.length,
+    done: ph.topics.filter((_, i) => progress.topics[`${ph.id}:${i}`]).length,
+  }))
 
-  const toggle = (key: string) => setDone((d) => ({ ...d, [key]: !d[key] }))
+  const toggleTopic = (key: string) =>
+    setProgress((p) => {
+      const nowDone = !p.topics[key]
+      const base = { ...p, topics: { ...p.topics, [key]: nowDone } }
+      return nowDone ? registerActivity(base) : base
+    })
+
+  const toggleExercise = (id: string) =>
+    setProgress((p) => {
+      const nowDone = !p.exercises[id]
+      const base = { ...p, exercises: { ...p.exercises, [id]: nowDone } }
+      return nowDone ? registerActivity(base) : base
+    })
+
+  const runHref = lang.resources.find((r) => /compilador|online|godbolt|jdoodle|gdb/i.test(r.label))?.href
 
   return (
     <div style={{ ["--learn-accent" as string]: lang.accent }}>
@@ -114,33 +154,40 @@ export function LearnView({ languages }: { languages: LearnLanguage[] }) {
         )}
       </div>
 
-      {/* Progresso */}
+      {/* Progresso (números) */}
       <div className="dv-stats" style={{ marginTop: "1.1rem" }}>
         <div className="dv-stat">
           <div className="n" style={{ color: "var(--learn-accent)" }}>
             {pct}%
           </div>
-          <div className="l">progresso</div>
+          <div className="l">roadmap</div>
         </div>
         <div className="dv-stat">
           <div className="n">
-            {doneCount}
-            <span style={{ color: "var(--d-comment)", fontSize: "1rem" }}>/{total}</span>
+            {stats.doneTopics}
+            <span style={{ color: "var(--d-comment)", fontSize: "1rem" }}>/{stats.totalTopics}</span>
           </div>
-          <div className="l">tópicos dominados</div>
+          <div className="l">tópicos</div>
+        </div>
+        <div className="dv-stat">
+          <div className="n">
+            {stats.doneExercises}
+            <span style={{ color: "var(--d-comment)", fontSize: "1rem" }}>
+              /{stats.totalExercises}
+            </span>
+          </div>
+          <div className="l">exercícios</div>
         </div>
         <div className="dv-stat">
           <div className="n">{lang.phases.length}</div>
           <div className="l">fases</div>
         </div>
-        <div className="dv-stat">
-          <div className="n">{lang.practices.length}</div>
-          <div className="l">boas práticas</div>
-        </div>
       </div>
-      <div className="learn-bar" aria-hidden>
-        <span style={{ width: `${pct}%`, background: "var(--learn-accent)" }} />
-      </div>
+
+      {/* Gamificação (XP, streak, badges, heatmap) */}
+      {hydrated && (
+        <LearnGamification stats={stats} streak={progress.streak} badges={badges} cells={cells} />
+      )}
 
       {/* Abas */}
       <div className="dv-tabs" style={{ marginTop: "1.5rem" }}>
@@ -157,14 +204,16 @@ export function LearnView({ languages }: { languages: LearnLanguage[] }) {
         ))}
       </div>
 
-      {!hydrated && tab === "roadmap" && (
-        <p className="dv-empty">Carregando trilha…</p>
+      {!hydrated && ["trilha", "roadmap", "exercicios"].includes(tab) && (
+        <p className="dv-empty">Carregando…</p>
       )}
+
+      {hydrated && tab === "trilha" && <LearnTrail phases={trailPhases} />}
 
       {hydrated && tab === "roadmap" && (
         <div className="learn-phases">
           {lang.phases.map((phase) => {
-            const localDone = phase.topics.filter((_, i) => done[`${phase.id}:${i}`]).length
+            const localDone = phase.topics.filter((_, i) => progress.topics[`${phase.id}:${i}`]).length
             return (
               <section key={phase.id} className="learn-phase">
                 <header className="learn-phase-head">
@@ -176,7 +225,7 @@ export function LearnView({ languages }: { languages: LearnLanguage[] }) {
                 <ul className="learn-list">
                   {phase.topics.map((topic, i) => {
                     const key = `${phase.id}:${i}`
-                    const checked = !!done[key]
+                    const checked = !!progress.topics[key]
                     return (
                       <li key={key}>
                         <button
@@ -185,7 +234,7 @@ export function LearnView({ languages }: { languages: LearnLanguage[] }) {
                           role="checkbox"
                           aria-checked={checked}
                           data-done={checked}
-                          onClick={() => toggle(key)}
+                          onClick={() => toggleTopic(key)}
                         >
                           <span className="learn-box" aria-hidden />
                           <span>{withCode(topic.label)}</span>
@@ -198,6 +247,15 @@ export function LearnView({ languages }: { languages: LearnLanguage[] }) {
             )
           })}
         </div>
+      )}
+
+      {hydrated && tab === "exercicios" && (
+        <LearnExercises
+          exercises={lang.exercises}
+          done={progress.exercises}
+          onToggle={toggleExercise}
+          runHref={runHref}
+        />
       )}
 
       {tab === "praticas" && (
@@ -237,20 +295,6 @@ export function LearnView({ languages }: { languages: LearnLanguage[] }) {
             </li>
           ))}
         </ul>
-      )}
-
-      {hydrated && tab === "roadmap" && lang.routine && (
-        <div className="learn-routine">
-          <p className="dv-section-title">Rotina sugerida</p>
-          <div className="dv-grid" style={{ marginTop: "0.75rem" }}>
-            {lang.routine.map((r) => (
-              <div key={r.day} className="dv-card">
-                <h3 style={{ color: "var(--learn-accent)" }}>{r.day}</h3>
-                <p>{r.activity}</p>
-              </div>
-            ))}
-          </div>
-        </div>
       )}
     </div>
   )

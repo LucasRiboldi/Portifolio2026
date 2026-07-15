@@ -37,6 +37,27 @@ export interface LearnRoutineRow {
 
 export type LearnStatus = "available" | "coming-soon"
 
+export type Difficulty = "básico" | "intermediário" | "avançado"
+
+export interface LearnExercise {
+  id: string
+  title: string
+  /** Enunciado curto do desafio. */
+  prompt: string
+  difficulty: Difficulty
+  /** id da fase relacionada (opcional). */
+  phase?: string
+}
+
+/** XP concedido ao concluir um tópico do roadmap. */
+export const XP_TOPIC = 10
+/** XP por exercício resolvido, por dificuldade. */
+export const XP_EXERCISE: Record<Difficulty, number> = {
+  "básico": 15,
+  "intermediário": 25,
+  "avançado": 40,
+}
+
 export interface LearnLanguage {
   /** Identificador estável usado em URLs e no localStorage. */
   id: string
@@ -49,6 +70,7 @@ export interface LearnLanguage {
   course?: string
   courseHref?: string
   phases: LearnPhase[]
+  exercises: LearnExercise[]
   practices: string[]
   errors: LearnError[]
   resources: LearnResource[]
@@ -126,6 +148,24 @@ const C_LANG: LearnLanguage = {
         { label: "Cadastro persistido em arquivo" },
       ],
     },
+  ],
+  exercises: [
+    { id: "c-hello", title: "Olá, mundo", prompt: "Imprima `Olá, mundo!` na tela com `printf`.", difficulty: "básico", phase: "fundamentos" },
+    { id: "c-soma", title: "Soma de dois números", prompt: "Leia dois inteiros e mostre a soma.", difficulty: "básico", phase: "fundamentos" },
+    { id: "c-media", title: "Média de 3 notas", prompt: "Leia 3 notas `float` e imprima a média com 2 casas.", difficulty: "básico", phase: "fundamentos" },
+    { id: "c-par", title: "Par ou ímpar", prompt: "Leia um inteiro e diga se é par ou ímpar.", difficulty: "básico", phase: "fluxo" },
+    { id: "c-maior3", title: "Maior de três", prompt: "Leia 3 números e imprima o maior usando `if`.", difficulty: "básico", phase: "fluxo" },
+    { id: "c-tabuada", title: "Tabuada", prompt: "Leia N e imprima a tabuada de N (1 a 10) com `for`.", difficulty: "básico", phase: "fluxo" },
+    { id: "c-fatorial", title: "Fatorial", prompt: "Calcule o fatorial de N com um laço.", difficulty: "intermediário", phase: "fluxo" },
+    { id: "c-primo", title: "Número primo", prompt: "Verifique se um número lido é primo.", difficulty: "intermediário", phase: "estrutura" },
+    { id: "c-vogais", title: "Contar vogais", prompt: "Conte quantas vogais há numa string.", difficulty: "intermediário", phase: "estrutura" },
+    { id: "c-inverter", title: "Inverter vetor", prompt: "Leia 5 inteiros e imprima na ordem inversa.", difficulty: "intermediário", phase: "estrutura" },
+    { id: "c-bubble", title: "Bubble sort", prompt: "Ordene um vetor de inteiros do menor ao maior.", difficulty: "intermediário", phase: "estrutura" },
+    { id: "c-swap", title: "Troca por referência", prompt: "Escreva `void troca(int *a, int *b)` que troca dois valores.", difficulty: "avançado", phase: "ponteiros" },
+    { id: "c-matriz", title: "Matriz dinâmica", prompt: "Aloque uma matriz NxM com `malloc` e libere com `free`.", difficulty: "avançado", phase: "ponteiros" },
+    { id: "c-lista", title: "Lista encadeada", prompt: "Implemente inserção no fim de uma lista simplesmente encadeada.", difficulty: "avançado", phase: "compostos" },
+    { id: "c-arquivo", title: "Cadastro em arquivo", prompt: "Grave e leia registros de um `struct` em arquivo texto.", difficulty: "avançado", phase: "compostos" },
+    { id: "c-hanoi", title: "Torre de Hanói", prompt: "Resolva a Torre de Hanói de forma recursiva.", difficulty: "avançado", phase: "projetos" },
   ],
   practices: [
     "Sempre inicializar variáveis antes de usar",
@@ -235,6 +275,24 @@ const JAVA_LANG: LearnLanguage = {
         { label: "Projeto: CRUD de console + persistência em arquivo" },
       ],
     },
+  ],
+  exercises: [
+    { id: "j-hello", title: "Hello World", prompt: "Imprima `Hello, World!` com `System.out.println`.", difficulty: "básico", phase: "fundamentos" },
+    { id: "j-soma", title: "Soma com Scanner", prompt: "Leia dois inteiros com `Scanner` e mostre a soma.", difficulty: "básico", phase: "fundamentos" },
+    { id: "j-media", title: "Média de notas", prompt: "Leia 3 notas `double` e imprima a média formatada.", difficulty: "básico", phase: "fundamentos" },
+    { id: "j-par", title: "Par ou ímpar", prompt: "Leia um inteiro e diga se é par ou ímpar.", difficulty: "básico", phase: "fluxo" },
+    { id: "j-maior3", title: "Maior de três", prompt: "Leia 3 números e imprima o maior.", difficulty: "básico", phase: "fluxo" },
+    { id: "j-tabuada", title: "Tabuada", prompt: "Imprima a tabuada de N (1 a 10) com `for`.", difficulty: "básico", phase: "fluxo" },
+    { id: "j-fatorial", title: "Fatorial", prompt: "Calcule o fatorial de N com um laço.", difficulty: "intermediário", phase: "metodos" },
+    { id: "j-fib", title: "Fibonacci", prompt: "Imprima os N primeiros termos de Fibonacci.", difficulty: "intermediário", phase: "metodos" },
+    { id: "j-vogais", title: "Contar vogais", prompt: "Conte as vogais de uma `String`.", difficulty: "intermediário", phase: "metodos" },
+    { id: "j-ordenar", title: "Ordenar lista", prompt: "Ordene uma `List<Integer>` com `Collections.sort`.", difficulty: "intermediário", phase: "colecoes" },
+    { id: "j-primo", title: "Número primo", prompt: "Verifique se um número lido é primo.", difficulty: "intermediário", phase: "metodos" },
+    { id: "j-conta", title: "Conta bancária (OOP)", prompt: "Crie a classe `Conta` com saldo, depositar e sacar (encapsulado).", difficulty: "avançado", phase: "oop" },
+    { id: "j-heranca", title: "Herança Animal", prompt: "Crie `Animal` e `Cachorro` sobrescrevendo `emitirSom()`.", difficulty: "avançado", phase: "oop" },
+    { id: "j-interface", title: "Interface e polimorfismo", prompt: "Defina `Forma` com `area()` e implemente em `Circulo` e `Retangulo`.", difficulty: "avançado", phase: "oop" },
+    { id: "j-streams", title: "Streams: filtrar e somar", prompt: "Some os pares de uma lista usando `stream().filter().mapToInt().sum()`.", difficulty: "avançado", phase: "colecoes" },
+    { id: "j-arquivo", title: "Ler/gravar arquivo", prompt: "Grave linhas num arquivo com `Files.write` e leia com `Files.readAllLines`.", difficulty: "avançado", phase: "projetos" },
   ],
   practices: [
     "Seguir convenções: `PascalCase` para classes, `camelCase` para métodos/variáveis",
