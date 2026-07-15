@@ -1,0 +1,183 @@
+/**
+ * Dracula — tema oficial (https://draculatheme.com) para o realm DEV.
+ * Escopado em `.dracula` para não vazar nos outros realms.
+ */
+
+.dracula {
+  --d-bg: #282a36;
+  --d-bg-2: #21222c;
+  --d-current: #44475a;
+  --d-fg: #f8f8f2;
+  --d-comment: #6272a4;
+  --d-cyan: #8be9fd;
+  --d-green: #50fa7b;
+  --d-orange: #ffb86c;
+  --d-pink: #ff79c6;
+  --d-purple: #bd93f9;
+  --d-red: #ff5555;
+  --d-yellow: #f1fa8c;
+
+  --d-radius: 12px;
+  --d-mono: var(--font-mono, ui-monospace, "SF Mono", Menlo, monospace);
+
+  background: var(--d-bg);
+  color: var(--d-fg);
+  min-height: 100vh;
+  font-family: var(--d-mono);
+  -webkit-font-smoothing: antialiased;
+}
+
+.dv-container {
+  max-width: 1120px;
+  margin: 0 auto;
+  padding: 1.5rem 1.25rem 4rem;
+}
+
+/* ─── Nav ─── */
+.dv-nav {
+  position: sticky;
+  top: 0;
+  z-index: 20;
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  flex-wrap: wrap;
+  padding: 0.75rem 1.25rem;
+  background: color-mix(in srgb, var(--d-bg-2) 92%, transparent);
+  backdrop-filter: blur(8px);
+  border-bottom: 1px solid var(--d-current);
+}
+.dv-brand {
+  font-weight: 700;
+  color: var(--d-green);
+  margin-right: 0.75rem;
+}
+.dv-brand .dv-prompt {
+  color: var(--d-pink);
+}
+.dv-navlink {
+  padding: 0.35rem 0.7rem;
+  border-radius: 8px;
+  font-size: 0.85rem;
+  color: var(--d-comment);
+  transition: color 0.15s, background 0.15s;
+}
+.dv-navlink:hover {
+  color: var(--d-fg);
+  background: var(--d-current);
+}
+.dv-navlink[data-active="true"] {
+  color: var(--d-bg);
+  background: var(--d-purple);
+  font-weight: 600;
+}
+
+/* ─── Cabeçalho de página ─── */
+.dv-kicker {
+  color: var(--d-comment);
+  font-size: 0.8rem;
+}
+.dv-kicker .tok-fn {
+  color: var(--d-green);
+}
+.dv-kicker .tok-str {
+  color: var(--d-yellow);
+}
+.dv-title {
+  font-size: 1.9rem;
+  font-weight: 700;
+  color: var(--d-fg);
+  margin-top: 0.25rem;
+}
+.dv-title .accent {
+  color: var(--d-purple);
+}
+.dv-sub {
+  color: var(--d-comment);
+  margin-top: 0.35rem;
+  max-width: 46rem;
+}
+
+/* ─── Cards ─── */
+.dv-grid {
+  display: grid;
+  gap: 1rem;
+  grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+  margin-top: 1.75rem;
+}
+.dv-card {
+  background: var(--d-bg-2);
+  border: 1px solid var(--d-current);
+  border-radius: var(--d-radius);
+  padding: 1.1rem;
+  transition: border-color 0.15s, transform 0.15s;
+}
+.dv-card:hover {
+  border-color: var(--d-purple);
+  transform: translateY(-2px);
+}
+.dv-card h3 {
+  color: var(--d-cyan);
+  font-weight: 600;
+}
+.dv-card p {
+  color: var(--d-fg);
+  opacity: 0.82;
+  font-size: 0.9rem;
+  margin-top: 0.4rem;
+}
+
+/* ─── Chips / tags ─── */
+.dv-tag {
+  display: inline-block;
+  padding: 0.1rem 0.55rem;
+  border-radius: 999px;
+  font-size: 0.72rem;
+  background: var(--d-current);
+  color: var(--d-cyan);
+}
+.dv-status {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.35rem;
+  padding: 0.12rem 0.6rem;
+  border-radius: 999px;
+  font-size: 0.72rem;
+  font-weight: 600;
+}
+.dv-status.idea, .dv-status.wip { background: color-mix(in srgb, var(--d-yellow) 22%, transparent); color: var(--d-yellow); }
+.dv-status.mvp, .dv-status.playtest { background: color-mix(in srgb, var(--d-orange) 22%, transparent); color: var(--d-orange); }
+.dv-status.building { background: color-mix(in srgb, var(--d-cyan) 22%, transparent); color: var(--d-cyan); }
+.dv-status.done, .dv-status.stable { background: color-mix(in srgb, var(--d-green) 22%, transparent); color: var(--d-green); }
+.dv-status.paused, .dv-status.archived { background: var(--d-current); color: var(--d-comment); }
+
+/* ─── Links ─── */
+.dv-link {
+  color: var(--d-pink);
+  text-decoration: none;
+}
+.dv-link:hover {
+  text-decoration: underline;
+}
+
+/* ─── Bloco de código ─── */
+.dv-code {
+  background: var(--d-bg-2);
+  border: 1px solid var(--d-current);
+  border-radius: 10px;
+  padding: 0.9rem 1rem;
+  overflow-x: auto;
+  font-size: 0.82rem;
+  color: var(--d-fg);
+  white-space: pre;
+}
+
+/* ─── Vazio ─── */
+.dv-empty {
+  border: 1px dashed var(--d-current);
+  border-radius: var(--d-radius);
+  padding: 2rem;
+  text-align: center;
+  color: var(--d-comment);
+  margin-top: 1.5rem;
+}

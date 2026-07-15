@@ -7,8 +7,10 @@ import { Container } from "./container"
 import { ThemeToggle } from "@/components/ui/theme-toggle"
 import { VibeToggle } from "@/components/providers/vibe-toggle"
 import { MobileMenu } from "./mobile-menu"
+import { useUniverse } from "@/components/providers/universe-provider"
+import { DEV_LINKS } from "@/components/dev/dev-nav"
 
-const links = [
+const siteLinks = [
   { label: "Portfólio", href: "/portfolio" },
   { label: "Ferramentas", href: "/tools" },
   { label: "Skills", href: "/skills" },
@@ -22,6 +24,9 @@ const links = [
 
 export function Navbar() {
   const pathname = usePathname()
+  const { realm } = useUniverse()
+  // No realm developer, o menu do site vira a entrada para o sub-site /dev.
+  const links = realm === "developer" ? DEV_LINKS : siteLinks
 
   return (
     <header className="sticky top-0 z-50 border-b-[3px] border-black bg-[var(--sv-ink)]/90 backdrop-blur-xl">

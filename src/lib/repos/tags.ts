@@ -6,6 +6,11 @@ export const CACHE_TAGS = {
   tools: "tools",
   site: "site-config",
   realms: "realms",
+  devlogs: "devlogs",
+  ideas: "ideas",
+  snippets: "snippets",
+  wiki: "wiki",
+  lab: "lab",
 } as const
 
 export type CacheTag = (typeof CACHE_TAGS)[keyof typeof CACHE_TAGS]

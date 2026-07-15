@@ -7,7 +7,7 @@
  */
 import { revalidatePath } from "next/cache"
 
-import { getResource } from "@/lib/admin/resources"
+import { getResource, resourceTable } from "@/lib/admin/resources"
 import { adminContext, revalidate, ok, fail, type ActionResult } from "@/lib/admin/action-helpers"
 
 /** Constrói o objeto a validar a partir do FormData, respeitando os campos. */
@@ -39,10 +39,11 @@ export async function saveResource(
 
   const { supabase } = await adminContext()
   const payload = parsed.data as Record<string, unknown>
+  const table = resourceTable(slug)
 
   const query = id
-    ? supabase.from(slug).update(payload).eq("id", id)
-    : supabase.from(slug).insert(payload)
+    ? supabase.from(table).update(payload).eq("id", id)
+    : supabase.from(table).insert(payload)
 
   const { error } = await query
   if (error) return fail(error.message)
@@ -57,7 +58,7 @@ export async function deleteResource(slug: string, id: string): Promise<ActionRe
   if (!res) return fail("Recurso inválido.")
 
   const { supabase } = await adminContext()
-  const { error } = await supabase.from(slug).delete().eq("id", id)
+  const { error } = await supabase.from(resourceTable(slug)).delete().eq("id", id)
   if (error) return fail(error.message)
 
   revalidate(res.tag)

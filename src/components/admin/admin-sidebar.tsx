@@ -13,6 +13,11 @@ import {
   Image as ImageIcon,
   Mail,
   LogOut,
+  Terminal,
+  Lightbulb,
+  Code2,
+  BookOpen,
+  FlaskConical,
   type LucideIcon,
 } from "lucide-react"
 
@@ -35,6 +40,16 @@ const NAV: { section: string; items: NavItem[] }[] = [
       { href: "/admin/posts", label: "Blog", icon: FileText },
       { href: "/admin/skills", label: "Skills", icon: Sparkles },
       { href: "/admin/tools", label: "Ferramentas", icon: Wrench },
+    ],
+  },
+  {
+    section: "Realm Dev",
+    items: [
+      { href: "/admin/devlogs", label: "DevLogs", icon: Terminal },
+      { href: "/admin/ideas", label: "Ideias", icon: Lightbulb },
+      { href: "/admin/snippets", label: "Código", icon: Code2 },
+      { href: "/admin/wiki", label: "Wiki", icon: BookOpen },
+      { href: "/admin/lab", label: "Laboratório", icon: FlaskConical },
     ],
   },
   {
