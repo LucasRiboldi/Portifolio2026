@@ -2,6 +2,7 @@
 
 import { useEffect, useState } from "react"
 import Link from "next/link"
+import { usePathname } from "next/navigation"
 import { Lock } from "lucide-react"
 
 import { createClient } from "@/lib/supabase/client"
@@ -12,9 +13,14 @@ import { isSupabaseConfigured } from "@/lib/supabase/config"
  * Roda 100% no client (checa a sessão via Supabase), preservando o ISR.
  *  - deslogado → /login
  *  - logado    → /admin
+ *
+ * Exceção: no realm Anfitrião a folha é uma página impressa — um botão
+ * flutuante quebraria a ilusão. Lá o acesso vive incorporado ao expediente
+ * do rodapé (ver `PressMark`).
  */
 export function AdminFab() {
   const [authed, setAuthed] = useState<boolean | null>(null)
+  const pathname = usePathname()
 
   useEffect(() => {
     if (!isSupabaseConfigured) {
@@ -30,6 +36,8 @@ export function AdminFab() {
       active = false
     }
   }, [])
+
+  if (pathname.startsWith("/anfitriao")) return null
 
   const href = authed ? "/admin" : "/login"
   const label = authed ? "Painel de administração" : "Área administrativa"

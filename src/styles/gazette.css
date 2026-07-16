@@ -1,0 +1,569 @@
+/**
+ * THE MEEPLE & ANVIL GAZETTE — jornal inglês do fim do séc. XIX.
+ * Escopado em `.gz` (aplicado junto de `.prophet`, que segue servindo as
+ * seções internas). Papel envelhecido, filetes, colunas densas, capitulares.
+ *
+ * Nada aqui usa raio de canto, sombra difusa ou gradiente moderno.
+ */
+
+.gz {
+  --gz-paper: #e8dcbe;
+  --gz-paper-2: #ded0ac;
+  --gz-ink: #1c1710;
+  --gz-ink-2: #43382a;
+  --gz-ink-3: #6b5c45;
+  --gz-rule: #2a2216;
+  --gz-sepia: #7a5c34;
+  --gz-ocre: #8a6a2f;
+  --gz-gold: #9a7b28;
+
+  /* Old style / clarendon / egyptian, com fallbacks de sistema. */
+  --gz-body: "Iowan Old Style", "Palatino Linotype", Palatino, "Book Antiqua",
+    Georgia, "Times New Roman", serif;
+  --gz-head: "Playbill", "Bookman Old Style", "Rockwell", "Clarendon",
+    "Iowan Old Style", Georgia, serif;
+  --gz-wood: "Headline One", "Headline Two", "Bookman Old Style", Rockwell, Georgia, serif;
+  --gz-black: "UnifrakturCook", "Old English Text MT", "Blackletter686 BT", Georgia, serif;
+
+  color: var(--gz-ink);
+  font-family: var(--gz-body);
+  font-size: 15px;
+  line-height: 1.42;
+  background-color: var(--gz-paper);
+  /* Papel: foxing, fibras, desgaste irregular e vinheta discreta. */
+  background-image:
+    radial-gradient(120% 80% at 50% -8%, transparent 55%, rgba(70, 50, 20, 0.16) 100%),
+    radial-gradient(140% 110% at 50% 108%, transparent 52%, rgba(70, 50, 20, 0.18) 100%),
+    radial-gradient(circle at 12% 22%, rgba(130, 95, 40, 0.09), transparent 30%),
+    radial-gradient(circle at 88% 62%, rgba(130, 95, 40, 0.08), transparent 28%),
+    radial-gradient(circle at 32% 78%, rgba(110, 80, 35, 0.07), transparent 22%),
+    radial-gradient(circle at 68% 12%, rgba(110, 80, 35, 0.06), transparent 18%),
+    repeating-linear-gradient(90deg, transparent, transparent 2px, rgba(90, 70, 35, 0.02) 3px),
+    repeating-linear-gradient(0deg, transparent, transparent 3px, rgba(90, 70, 35, 0.015) 4px);
+}
+
+/* Ruído de impressão sobre tudo (não intercepta cliques). */
+.gz::after {
+  content: "";
+  position: fixed;
+  inset: 0;
+  z-index: 60;
+  pointer-events: none;
+  opacity: 0.5;
+  mix-blend-mode: multiply;
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='140' height='140'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.82' numOctaves='3' stitchTiles='stitch'/%3E%3CfeColorMatrix type='saturate' values='0'/%3E%3C/filter%3E%3Crect width='140' height='140' filter='url(%23n)' opacity='0.22'/%3E%3C/svg%3E");
+}
+
+/* Folha: bordas desgastadas e sombra de papel sobre a mesa. */
+.gz .gz-sheet {
+  max-width: 1180px;
+  margin: 0 auto;
+  padding: 1rem 1.15rem 2rem;
+  position: relative;
+  border-left: 1px solid rgba(42, 34, 22, 0.28);
+  border-right: 1px solid rgba(42, 34, 22, 0.28);
+}
+
+/* ─────────── Filetes & ornamentos ─────────── */
+.gz-rule { border: 0; border-top: 1px solid var(--gz-rule); margin: 0.5rem 0; }
+.gz-rule--thick { border-top: 3px solid var(--gz-rule); }
+.gz-rule--double { border: 0; border-top: 3px double var(--gz-rule); margin: 0.6rem 0; }
+.gz-rule--hair { border-top: 1px solid rgba(42, 34, 22, 0.42); }
+
+.gz-orn {
+  text-align: center;
+  color: var(--gz-ink-2);
+  font-size: 0.72rem;
+  letter-spacing: 0.5em;
+  padding: 0.15rem 0;
+  user-select: none;
+}
+
+/* ─────────── Masthead ─────────── */
+.gz-masthead { text-align: center; padding-top: 0.35rem; }
+.gz-masthead-top {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-end;
+  font-size: 0.58rem;
+  text-transform: uppercase;
+  letter-spacing: 0.14em;
+  color: var(--gz-ink-3);
+  padding-bottom: 0.25rem;
+}
+.gz-nameplate { display: block; text-decoration: none; color: inherit; }
+.gz-nameplate h1 {
+  font-family: var(--gz-wood);
+  font-size: clamp(2.4rem, 8.5vw, 6rem);
+  line-height: 0.92;
+  letter-spacing: 0.01em;
+  font-weight: 400;
+  text-transform: uppercase;
+  /* Tinta prensada, com falha de entintagem. */
+  text-shadow: 0 1px 0 rgba(255, 250, 232, 0.28), 0 -1px 0 rgba(0, 0, 0, 0.16);
+}
+.gz-nameplate .gz-amp {
+  font-family: var(--gz-body);
+  font-style: italic;
+  text-transform: none;
+  font-size: 0.72em;
+  padding: 0 0.06em;
+}
+.gz-nameplate-sub {
+  font-family: var(--gz-black);
+  font-size: clamp(1rem, 2.4vw, 1.6rem);
+  letter-spacing: 0.24em;
+  text-transform: uppercase;
+  color: var(--gz-ink-2);
+  margin-top: -0.1rem;
+}
+.gz-motto {
+  font-style: italic;
+  font-size: 0.78rem;
+  color: var(--gz-ink-2);
+  padding: 0.2rem 0;
+}
+.gz-motto small { display: block; font-size: 0.66rem; color: var(--gz-ink-3); font-style: normal; }
+
+.gz-crest { width: 46px; height: 46px; color: var(--gz-ink); flex: none; }
+
+.gz-dateline {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 0.5rem;
+  flex-wrap: wrap;
+  font-size: 0.62rem;
+  text-transform: uppercase;
+  letter-spacing: 0.1em;
+  color: var(--gz-ink-2);
+  padding: 0.28rem 0;
+  border-top: 1px solid var(--gz-rule);
+  border-bottom: 3px double var(--gz-rule);
+}
+
+/* ─────────── Barra de seções (cadernos) ─────────── */
+.gz-sections {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  gap: 0 0.75rem;
+  padding: 0.3rem 0;
+  border-bottom: 1px solid var(--gz-rule);
+  font-size: 0.6rem;
+  text-transform: uppercase;
+  letter-spacing: 0.11em;
+}
+.gz-sections a { color: var(--gz-ink-2); text-decoration: none; white-space: nowrap; }
+.gz-sections a:hover { color: var(--gz-sepia); text-decoration: underline; }
+.gz-sections span { color: var(--gz-ink-3); opacity: 0.55; }
+
+/* ─────────── Barra de serviço ─────────── */
+.gz-service {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  border-bottom: 1px solid var(--gz-rule);
+}
+.gz-service > * { padding: 0.35rem 0.6rem; border-left: 1px solid rgba(42, 34, 22, 0.3); }
+.gz-service > *:first-child { border-left: 0; }
+.gz-svc-title {
+  font-variant: small-caps;
+  font-weight: 700;
+  font-size: 0.68rem;
+  letter-spacing: 0.06em;
+  text-align: center;
+  border-bottom: 1px solid rgba(42, 34, 22, 0.3);
+  margin-bottom: 0.15rem;
+}
+.gz-svc-row {
+  display: flex;
+  justify-content: space-between;
+  gap: 0.5rem;
+  font-size: 0.66rem;
+  color: var(--gz-ink-2);
+  line-height: 1.5;
+}
+.gz-svc-row span:first-child { font-variant: small-caps; color: var(--gz-ink-3); }
+.gz-svc-line { font-size: 0.66rem; color: var(--gz-ink-2); line-height: 1.5; }
+
+/* ─────────── Manchete principal ─────────── */
+.gz-lead { padding-top: 0.5rem; }
+.gz-kicker {
+  font-variant: small-caps;
+  letter-spacing: 0.14em;
+  font-size: 0.64rem;
+  color: var(--gz-sepia);
+  text-align: center;
+  font-weight: 700;
+}
+.gz-bighead {
+  font-family: var(--gz-head);
+  font-size: clamp(2.1rem, 7vw, 4.6rem);
+  line-height: 0.94;
+  text-align: center;
+  text-transform: uppercase;
+  font-weight: 700;
+  letter-spacing: -0.01em;
+  padding: 0.1rem 0;
+  text-shadow: 0 1px 0 rgba(255, 250, 232, 0.22);
+}
+.gz-subhead {
+  font-family: var(--gz-body);
+  font-style: italic;
+  font-size: clamp(0.85rem, 1.6vw, 1.08rem);
+  text-align: center;
+  color: var(--gz-ink-2);
+  max-width: 62ch;
+  margin: 0.2rem auto;
+  line-height: 1.35;
+}
+.gz-byline {
+  text-align: center;
+  font-size: 0.64rem;
+  text-transform: uppercase;
+  letter-spacing: 0.12em;
+  color: var(--gz-ink-3);
+  padding: 0.2rem 0;
+}
+.gz-byline b { color: var(--gz-ink); }
+
+/* Corpo do lead em colunas verdadeiras, com filete entre elas. */
+.gz-lead-body {
+  columns: 2;
+  column-gap: 1.4rem;
+  column-rule: 1px solid rgba(42, 34, 22, 0.32);
+  text-align: justify;
+  hyphens: auto;
+  font-size: 0.82rem;
+  line-height: 1.44;
+  padding-top: 0.35rem;
+}
+.gz-lead-body p { text-indent: 1.1em; margin-bottom: 0.25rem; }
+.gz-lead-body p:first-child { text-indent: 0; }
+
+@media (min-width: 900px) {
+  .gz-lead-body { columns: 3; }
+}
+@media (min-width: 1100px) {
+  .gz-lead-body { columns: 4; }
+}
+
+/* Capitular ornamentada. */
+.gz-cap {
+  float: left;
+  font-family: var(--gz-head);
+  font-size: 3.6em;
+  line-height: 0.76;
+  padding: 0.06em 0.1em 0 0;
+  color: var(--gz-ink);
+  text-shadow: 1px 1px 0 rgba(122, 92, 52, 0.28);
+}
+
+/* Figura impressa: halftone + sépia + alto contraste. */
+.gz-figure { margin: 0 0 0.4rem; break-inside: avoid; }
+.gz-plate {
+  position: relative;
+  border: 1px solid var(--gz-rule);
+  padding: 3px;
+  background: var(--gz-paper-2);
+}
+.gz-plate-inner {
+  position: relative;
+  overflow: hidden;
+  border: 1px solid rgba(42, 34, 22, 0.45);
+  filter: grayscale(1) sepia(0.55) contrast(1.35) brightness(0.96);
+}
+/* Trama de meio-tom por cima da gravura. */
+.gz-plate-inner::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+  mix-blend-mode: multiply;
+  opacity: 0.42;
+  background-image: radial-gradient(circle at center, rgba(28, 23, 16, 0.9) 0.6px, transparent 0.9px);
+  background-size: 3px 3px;
+}
+.gz-figcaption {
+  font-size: 0.62rem;
+  font-style: italic;
+  color: var(--gz-ink-2);
+  padding-top: 0.18rem;
+  border-bottom: 1px solid rgba(42, 34, 22, 0.3);
+  padding-bottom: 0.18rem;
+  line-height: 1.3;
+}
+
+/* Olho / citação destacada. */
+.gz-pull {
+  border-top: 3px double var(--gz-rule);
+  border-bottom: 3px double var(--gz-rule);
+  padding: 0.4rem 0.2rem;
+  margin: 0.4rem 0;
+  text-align: center;
+  font-family: var(--gz-head);
+  font-size: 0.94rem;
+  line-height: 1.24;
+  font-style: italic;
+  break-inside: avoid;
+}
+.gz-pull::before { content: "“"; font-size: 1.5em; line-height: 0; vertical-align: -0.25em; }
+.gz-pull::after { content: "”"; font-size: 1.5em; line-height: 0; vertical-align: -0.4em; }
+
+/* ─────────── Grelha editorial principal ─────────── */
+.gz-grid {
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: 0.9rem;
+  padding-top: 0.5rem;
+}
+@media (min-width: 780px) {
+  .gz-grid { grid-template-columns: 1.55fr 1fr; }
+}
+@media (min-width: 1060px) {
+  .gz-grid { grid-template-columns: 0.72fr 2.1fr 0.82fr; }
+}
+
+.gz-col { min-width: 0; }
+.gz-col--rail { border-left: 1px solid rgba(42, 34, 22, 0.3); padding-left: 0.75rem; }
+@media (max-width: 1059px) {
+  .gz-col--rail { border-left: 0; padding-left: 0; border-top: 3px double var(--gz-rule); padding-top: 0.5rem; }
+}
+
+/* ─────────── Caixas editoriais ─────────── */
+.gz-box {
+  border: 1px solid var(--gz-rule);
+  padding: 0.4rem 0.5rem;
+  margin-bottom: 0.7rem;
+  background: rgba(222, 208, 172, 0.35);
+  break-inside: avoid;
+}
+.gz-box--heavy { border-width: 2px; }
+.gz-box-title {
+  font-family: var(--gz-head);
+  font-variant: small-caps;
+  font-size: 0.78rem;
+  letter-spacing: 0.05em;
+  text-align: center;
+  border-bottom: 1px solid var(--gz-rule);
+  margin-bottom: 0.3rem;
+  padding-bottom: 0.12rem;
+}
+.gz-box p, .gz-box li { font-size: 0.7rem; line-height: 1.4; text-align: justify; hyphens: auto; }
+.gz-box ul { list-style: none; }
+.gz-box li { padding: 0.16rem 0; border-bottom: 1px dotted rgba(42, 34, 22, 0.35); }
+.gz-box li:last-child { border-bottom: 0; }
+.gz-box li::before { content: "❧ "; color: var(--gz-sepia); }
+
+.gz-kv { display: flex; justify-content: space-between; gap: 0.4rem; font-size: 0.7rem; padding: 0.1rem 0; }
+.gz-kv:not(:last-child) { border-bottom: 1px dotted rgba(42, 34, 22, 0.35); }
+.gz-kv b { font-variant: small-caps; }
+
+.gz-term { font-size: 0.7rem; padding: 0.16rem 0; border-bottom: 1px dotted rgba(42, 34, 22, 0.35); }
+.gz-term b { font-variant: small-caps; letter-spacing: 0.02em; }
+.gz-term em { color: var(--gz-ink-3); font-size: 0.66rem; }
+
+/* Editorial (opinião). */
+.gz-editorial { border-top: 3px double var(--gz-rule); padding-top: 0.35rem; margin-bottom: 0.7rem; }
+.gz-editorial h3 {
+  font-family: var(--gz-black);
+  font-size: 0.9rem;
+  text-align: center;
+  letter-spacing: 0.04em;
+}
+.gz-editorial p { font-size: 0.7rem; text-align: justify; hyphens: auto; margin-bottom: 0.25rem; text-indent: 0.9em; }
+.gz-editorial .gz-sign { text-align: right; font-style: italic; font-size: 0.68rem; color: var(--gz-ink-3); }
+
+/* Telegramas / últimas notícias. */
+.gz-briefs li {
+  font-size: 0.66rem;
+  line-height: 1.35;
+  padding: 0.24rem 0;
+  border-bottom: 1px solid rgba(42, 34, 22, 0.25);
+  text-align: justify;
+}
+.gz-briefs li::before { content: none; }
+
+/* Anúncios classificados. */
+.gz-ad {
+  border: 2px solid var(--gz-rule);
+  padding: 0.35rem 0.45rem;
+  margin-bottom: 0.6rem;
+  text-align: center;
+  background: rgba(222, 208, 172, 0.5);
+  break-inside: avoid;
+}
+.gz-ad-head {
+  font-family: var(--gz-wood);
+  font-size: 0.86rem;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+  border-bottom: 1px solid var(--gz-rule);
+  padding-bottom: 0.1rem;
+  margin-bottom: 0.18rem;
+}
+.gz-ad p { font-size: 0.64rem; line-height: 1.34; text-align: justify; hyphens: auto; }
+.gz-ad-sign { font-style: italic; font-size: 0.6rem; color: var(--gz-ink-3); padding-top: 0.15rem; }
+
+/* ─────────── Matérias secundárias ─────────── */
+.gz-reports {
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: 0.9rem;
+  border-top: 3px double var(--gz-rule);
+  padding-top: 0.6rem;
+  margin-top: 0.6rem;
+}
+@media (min-width: 680px) { .gz-reports { grid-template-columns: repeat(2, 1fr); } }
+@media (min-width: 1060px) { .gz-reports { grid-template-columns: repeat(4, 1fr); } }
+
+.gz-report { border-left: 1px solid rgba(42, 34, 22, 0.3); padding-left: 0.7rem; min-width: 0; }
+.gz-report:first-child { border-left: 0; padding-left: 0; }
+@media (max-width: 1059px) { .gz-report:nth-child(odd) { border-left: 0; padding-left: 0; } }
+@media (max-width: 679px) { .gz-report { border-left: 0; padding-left: 0; border-top: 1px solid rgba(42,34,22,.3); padding-top: 0.5rem; } .gz-report:first-child { border-top: 0; } }
+
+.gz-report-kicker {
+  font-variant: small-caps;
+  font-size: 0.6rem;
+  letter-spacing: 0.1em;
+  color: var(--gz-sepia);
+  font-weight: 700;
+  border-bottom: 1px solid rgba(42, 34, 22, 0.35);
+  margin-bottom: 0.2rem;
+}
+.gz-report-head {
+  font-family: var(--gz-head);
+  font-size: 0.98rem;
+  line-height: 1.06;
+  text-transform: uppercase;
+  letter-spacing: -0.005em;
+  margin-bottom: 0.14rem;
+}
+.gz-report-sub {
+  font-style: italic;
+  font-size: 0.66rem;
+  color: var(--gz-ink-2);
+  line-height: 1.28;
+  border-bottom: 1px solid rgba(42, 34, 22, 0.25);
+  padding-bottom: 0.2rem;
+  margin-bottom: 0.24rem;
+}
+.gz-report-body { font-size: 0.7rem; line-height: 1.42; text-align: justify; hyphens: auto; }
+.gz-report-note {
+  font-size: 0.6rem;
+  font-style: italic;
+  color: var(--gz-ink-3);
+  padding-top: 0.2rem;
+}
+.gz-more {
+  display: block;
+  margin-top: 0.3rem;
+  border-top: 1px solid var(--gz-rule);
+  padding-top: 0.2rem;
+  font-variant: small-caps;
+  font-size: 0.68rem;
+  letter-spacing: 0.05em;
+  color: var(--gz-ink);
+  text-decoration: none;
+}
+.gz-more:hover { color: var(--gz-sepia); background: rgba(122, 92, 52, 0.09); }
+.gz-more b { float: right; font-variant: normal; font-size: 0.62rem; color: var(--gz-ink-3); }
+
+/* Gravura do índice (gráfico). */
+.gz-chart { width: 100%; height: auto; border: 1px solid var(--gz-rule); background: rgba(222,208,172,.4); margin-bottom: 0.25rem; }
+.gz-chart line, .gz-chart polyline { stroke: var(--gz-ink); fill: none; stroke-width: 0.8; }
+.gz-chart text { font-family: var(--gz-body); font-size: 4px; fill: var(--gz-ink-2); }
+
+/* ─────────── Índice / sumário ─────────── */
+.gz-index {
+  border-top: 3px double var(--gz-rule);
+  border-bottom: 3px double var(--gz-rule);
+  margin-top: 0.8rem;
+  padding: 0.35rem 0;
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: 0 1.2rem;
+}
+@media (min-width: 640px) { .gz-index { grid-template-columns: repeat(2, 1fr); } }
+@media (min-width: 1060px) { .gz-index { grid-template-columns: repeat(3, 1fr); } }
+.gz-index-item {
+  display: flex;
+  align-items: baseline;
+  gap: 0.4rem;
+  text-decoration: none;
+  color: var(--gz-ink);
+  font-size: 0.72rem;
+  padding: 0.12rem 0;
+}
+.gz-index-item span:first-child { font-variant: small-caps; letter-spacing: 0.03em; white-space: nowrap; }
+/* Pontilhado de sumário, como em índice impresso. */
+.gz-index-dots {
+  flex: 1;
+  border-bottom: 1px dotted rgba(42, 34, 22, 0.5);
+  transform: translateY(-0.2em);
+}
+.gz-index-item b { font-size: 0.68rem; color: var(--gz-ink-2); }
+.gz-index-item:hover { color: var(--gz-sepia); }
+.gz-index-item:hover .gz-index-dots { border-bottom-color: var(--gz-sepia); }
+
+/* ─────────── Expediente / colofão ─────────── */
+.gz-colophon {
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: 0.6rem;
+  padding: 0.6rem 0 0.3rem;
+  font-size: 0.64rem;
+  color: var(--gz-ink-2);
+}
+@media (min-width: 780px) { .gz-colophon { grid-template-columns: 1.1fr 1.4fr 0.8fr; } }
+.gz-colophon .gz-box-title { font-size: 0.7rem; }
+
+/* O verbete "Tipografia & Prelo" é o acesso administrativo — incorporado
+   ao texto, sem qualquer marca de interface. */
+.gz-press {
+  color: inherit;
+  text-decoration: none;
+  cursor: text;
+  border-bottom: 1px dotted transparent;
+  transition: border-color 0.25s, color 0.25s;
+}
+.gz-press:hover { color: var(--gz-sepia); border-bottom-color: rgba(122, 92, 52, 0.55); }
+.gz-press:focus-visible { outline: 1px dotted var(--gz-sepia); outline-offset: 2px; }
+
+.gz-notice { font-style: italic; line-height: 1.4; text-align: justify; }
+
+/* Selo de impressão / carimbo. */
+.gz-stamp {
+  border: 2px solid var(--gz-sepia);
+  color: var(--gz-sepia);
+  padding: 0.2rem 0.35rem;
+  text-align: center;
+  font-variant: small-caps;
+  font-size: 0.58rem;
+  letter-spacing: 0.1em;
+  line-height: 1.2;
+  transform: rotate(-4deg);
+  opacity: 0.72;
+  width: fit-content;
+  margin: 0.3rem auto;
+}
+
+/* Rodapé: numeração de página e marcas de registro. */
+.gz-foot {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 0.5rem;
+  border-top: 1px solid var(--gz-rule);
+  padding-top: 0.3rem;
+  font-size: 0.58rem;
+  text-transform: uppercase;
+  letter-spacing: 0.1em;
+  color: var(--gz-ink-3);
+}
+.gz-folio { font-family: var(--gz-head); font-size: 0.72rem; letter-spacing: 0.04em; }
+
+/* O leitor com movimento reduzido não perde nada: aqui não há animação. */
+@media print {
+  .gz::after { display: none; }
+}
