@@ -4,6 +4,7 @@ import { getProjects } from "@/lib/repos/projects"
 import { getTools } from "@/lib/repos/tools"
 import { getDevlogs, getIdeas, getSnippets, getLab } from "@/lib/repos/dev"
 import { getSiteConfig } from "@/lib/repos/site-config"
+import { GsapDemo } from "@/components/dev/gsap-demo"
 
 export const metadata = { title: "Dev" }
 
@@ -109,6 +110,10 @@ export default async function DevHome() {
           </div>
         </>
       )}
+
+      {/* Demo de motion — GSAP */}
+      <h2 className="dv-section-title">Stack em movimento</h2>
+      <GsapDemo />
 
       {/* Acesso rápido */}
       <h2 className="dv-section-title">Explorar</h2>

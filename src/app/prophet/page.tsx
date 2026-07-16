@@ -4,6 +4,7 @@ import { leadArticle } from "@/lib/arcane-content"
 import { getTutorials, getMechanics, getPrototypes } from "@/lib/repos/prophet"
 import { InkScramble } from "@/components/prophet/ink-scramble"
 import { LivingPortrait } from "@/components/prophet/living-portrait"
+import { LottieOrb } from "@/components/prophet/lottie-orb"
 
 export const metadata = { title: "Primeira Página" }
 
@@ -25,6 +26,7 @@ export default async function ProphetFront() {
         <p className="pr-stand">{leadArticle.standfirst}</p>
         {leadArticle.byline && <p className="pr-byline">{leadArticle.byline}</p>}
         <LivingPortrait caption="Coruja-correio sobrevoa o castelo ao anoitecer" />
+        <LottieOrb />
         <div className="pr-columns">
           {leadArticle.body.map((p, i) => (
             <p key={i} className={i === 0 ? "pr-dropcap" : undefined} style={{ marginBottom: "0.75rem" }}>
