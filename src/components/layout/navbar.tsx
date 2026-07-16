@@ -17,7 +17,7 @@ export function Navbar() {
       <div style={{ height: 4, background: 'linear-gradient(90deg, var(--sv-yellow), var(--sv-magenta), var(--sv-cyan), var(--sv-lime))' }} />
       <Container>
         <div className="flex h-16 items-center justify-between">
-          <Link href="/" className="sv-display flex items-center text-2xl uppercase text-white">
+          <Link href="/criativo" className="sv-display flex items-center text-2xl uppercase text-white">
             LR<span className="sv-rainbow">.</span>
           </Link>
 
