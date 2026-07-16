@@ -41,7 +41,7 @@ export function DevRealmDock() {
       {ITEMS.map(({ href, label, Icon, exact }) => {
         const active = exact ? pathname === href : pathname.startsWith(href)
         return (
-          <Link key={href} href={href} data-active={active} aria-label={label}>
+          <Link key={href} href={href} data-active={active} aria-current={active ? "page" : undefined} aria-label={label}>
             <Icon className="size-[18px]" strokeWidth={2} />
             <span className="dock-lbl">{label}</span>
           </Link>

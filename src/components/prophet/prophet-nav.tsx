@@ -16,12 +16,12 @@ export const PROPHET_LINKS = [
 export function ProphetNav() {
   const pathname = usePathname()
   return (
-    <nav className="pr-nav">
+    <nav className="pr-nav" aria-label="Navegação Daily Prophet">
       {PROPHET_LINKS.map((link) => {
         const active =
           link.href === "/prophet" ? pathname === "/prophet" : pathname.startsWith(link.href)
         return (
-          <Link key={link.href} href={link.href} className="pr-navlink" data-active={active}>
+          <Link key={link.href} href={link.href} className="pr-navlink" data-active={active} aria-current={active ? "page" : undefined}>
             {link.label}
           </Link>
         )

@@ -3,11 +3,12 @@
 import Link from "next/link"
 import { usePathname } from "next/navigation"
 import { Home, FolderGit2, Wrench, User, Newspaper, Mail } from "lucide-react"
+import { isActive } from "@/lib/nav"
 
 /**
- * DevDock — menu flutuante exclusivo do modo dev (estilo dock).
+ * SoberDock — dock flutuante do realm Creative (modo sóbrio/leitura).
  * Renderizado sempre; o CSS (.dev-dock) só o exibe quando .sober está ativo.
- * Itens "elevam" no hover e levam às páginas do portfólio.
+ * Itens "elevam" no hover e levam às páginas do site.
  */
 const ITEMS = [
   { href: "/", label: "início", Icon: Home },
@@ -18,14 +19,14 @@ const ITEMS = [
   { href: "/contact", label: "contato", Icon: Mail },
 ]
 
-export function DevDock() {
+export function SoberDock() {
   const pathname = usePathname()
   return (
-    <nav className="dev-dock" aria-label="Navegação dev">
+    <nav className="dev-dock" aria-label="Navegação rápida">
       {ITEMS.map(({ href, label, Icon }) => {
-        const active = href === "/" ? pathname === "/" : pathname.startsWith(href)
+        const active = isActive(pathname, href)
         return (
-          <Link key={href} href={href} data-active={active} aria-label={label}>
+          <Link key={href} href={href} data-active={active} aria-current={active ? "page" : undefined} aria-label={label}>
             <Icon className="size-5" strokeWidth={2} />
             <span className="dock-label">{label}</span>
           </Link>

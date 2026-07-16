@@ -14,7 +14,7 @@ export function DsSidebar() {
         <p className="sv-display text-xl uppercase leading-none">Design System</p>
         <p className="text-[0.7rem] uppercase tracking-widest text-white/40">Design System · v1</p>
       </div>
-      <nav className="flex gap-2 overflow-x-auto pb-2 lg:flex-col lg:overflow-visible lg:pb-0">
+      <nav className="flex gap-2 overflow-x-auto pb-2 lg:flex-col lg:overflow-visible lg:pb-0" aria-label="Navegação do Design System">
         {DS_NAV.map((item) => {
           const active =
             item.href === "/design-system"
@@ -24,6 +24,7 @@ export function DsSidebar() {
             <Link
               key={item.href}
               href={item.href}
+              aria-current={active ? "page" : undefined}
               className={cn(
                 "sv-heavy shrink-0 rounded-md px-3 py-1.5 text-xs uppercase tracking-wide transition-all",
                 active

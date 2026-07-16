@@ -107,7 +107,7 @@ export function AdminSidebar({ login }: { login: string | null }) {
         <span className="text-lg font-bold">Admin</span>
       </div>
 
-      <nav className="flex-1 space-y-6 overflow-y-auto px-4 py-4">
+      <nav className="flex-1 space-y-6 overflow-y-auto px-4 py-4" aria-label="Navegação do painel admin">
         {NAV.map((group) => (
           <div key={group.section}>
             <p
@@ -126,6 +126,7 @@ export function AdminSidebar({ login }: { login: string | null }) {
                   <Link
                     key={item.href}
                     href={item.href}
+                    aria-current={active ? "page" : undefined}
                     className="flex items-center gap-3 rounded-[10px] px-3 py-2.5 text-sm font-medium transition-colors"
                     style={
                       active
