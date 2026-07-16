@@ -16,9 +16,12 @@ export const metadata = {
 export default function DevLayout({ children }: { children: ReactNode }) {
   return (
     <div className={`dracula ${mono.variable}`}>
-      <DevTopbar />
+      {/* Topbar + dock viajam juntos no topo, grudados ao rolar. */}
+      <div className="dv-head">
+        <DevTopbar />
+        <DevRealmDock />
+      </div>
       <div className="dv-container">{children}</div>
-      <DevRealmDock />
     </div>
   )
 }

@@ -1,0 +1,113 @@
+/**
+ * Logos animados em miniatura para o botão de troca de universo (VibeToggle).
+ * Mesmas características do portal, em escala de botão (18px).
+ * Ver `components/realms/realm-logo-mini.tsx`.
+ */
+
+.rl {
+  width: 18px;
+  height: 18px;
+  flex: none;
+  display: inline-grid;
+  place-items: center;
+  position: relative;
+}
+
+/* ─── CRIATIVO — mundos paralelos + aberração cromática ─── */
+.rl-cri svg {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+}
+.rl-cri svg * {
+  fill: none;
+  stroke-width: 7; /* engorda: o traço de 3 sumiria a 18px */
+  stroke-linecap: round;
+}
+.rl-cri .base * { stroke: currentColor; }
+.rl-cri .r * { stroke: #ff2d95; }
+.rl-cri .c * { stroke: #00e5ff; }
+.rl-cri .r,
+.rl-cri .c { mix-blend-mode: screen; }
+.rl-cri .r { animation: rl-gl 2.4s infinite steps(2); }
+.rl-cri .c { animation: rl-gl 2.4s infinite steps(2) reverse; }
+@keyframes rl-gl {
+  0%, 100% { transform: translate(0, 0); }
+  25% { transform: translate(-1px, 0.5px); }
+  50% { transform: translate(1px, -1px); }
+  75% { transform: translate(-1px, 1px); }
+}
+/* No hover o glitch acelera, como nos painéis do portal. */
+[data-realm-btn]:hover .rl-cri .r,
+[data-realm-btn]:hover .rl-cri .c { animation-duration: 0.5s; }
+
+/* ─── _DEV — terminal ─── */
+.rl-dev {
+  font-family: ui-monospace, monospace;
+  font-size: 13px;
+  font-weight: 700;
+  line-height: 1;
+  display: inline-flex;
+  align-items: center;
+  gap: 1px;
+}
+.rl-dev .p { color: #50fa7b; }
+.rl-dev .cur {
+  width: 5px;
+  height: 11px;
+  background: #50fa7b;
+  animation: rl-blink 1s steps(1) infinite;
+}
+@keyframes rl-blink { 50% { opacity: 0; } }
+
+/* ─── ANFITRIÃO — selo girando + d20 ─── */
+.rl-anf { animation: rl-spin 30s linear infinite; }
+@keyframes rl-spin { to { transform: rotate(360deg); } }
+.rl-anf .ringwrap {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+}
+.rl-anf .ring {
+  fill: none;
+  stroke: currentColor;
+  stroke-width: 5;
+  stroke-linecap: round;
+}
+.rl-anf .draw {
+  stroke-dasharray: 520;
+  stroke-dashoffset: 520;
+  animation: rl-draw 3.4s ease forwards infinite;
+}
+@keyframes rl-draw { to { stroke-dashoffset: 0; } }
+.rl-anf .inner {
+  position: absolute;
+  inset: 0;
+  display: grid;
+  place-items: center;
+  animation: rl-spin 30s linear infinite reverse;
+}
+.rl-anf .inner svg {
+  width: 100%;
+  height: 100%;
+}
+.rl-anf .inner svg * {
+  fill: none;
+  stroke: currentColor;
+  stroke-linecap: round;
+  stroke-linejoin: round;
+}
+.rl-anf .out { stroke-width: 5; }
+.rl-anf .face { stroke-width: 4; }
+
+@media (prefers-reduced-motion: reduce) {
+  .rl-cri .r,
+  .rl-cri .c,
+  .rl-dev .cur,
+  .rl-anf,
+  .rl-anf .inner,
+  .rl-anf .draw { animation: none !important; }
+  .rl-anf .draw { stroke-dashoffset: 0; }
+}

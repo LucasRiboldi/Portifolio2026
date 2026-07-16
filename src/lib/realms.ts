@@ -62,11 +62,11 @@ export const REALMS: Record<RealmId, Realm> = {
   },
   developer: {
     id: "developer",
-    label: "O DESENVOLVEDOR",
+    label: "O _DEV",
     glyph: "❯_",
     route: "/desenvolvedor",
     next: "arcane",
-    aria: "O Desenvolvedor (Dracula)",
+    aria: "O _DEV (Dracula)",
     theme: {
       bg: "#282a36",
       ink: "#50fa7b",

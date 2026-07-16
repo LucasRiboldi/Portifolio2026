@@ -5,7 +5,6 @@ import { usePathname } from "next/navigation"
 import { cn } from "@/lib/utils"
 import { SITE_LINKS, isActive } from "@/lib/nav"
 import { Container } from "./container"
-import { ThemeToggle } from "@/components/ui/theme-toggle"
 import { VibeToggle } from "@/components/providers/vibe-toggle"
 import { MobileMenu } from "./mobile-menu"
 
@@ -44,7 +43,6 @@ export function Navbar() {
 
           <div className="flex items-center gap-2">
             <VibeToggle />
-            <ThemeToggle />
             <MobileMenu />
           </div>
         </div>

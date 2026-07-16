@@ -34,16 +34,20 @@
 }
 
 /* ─── Topbar (logo + troca de universo) ─── */
-.dv-topbar {
+/* Cabeçalho do realm dev: topbar + dock grudados no topo ao rolar. */
+.dv-head {
   position: sticky;
   top: 0;
-  z-index: 30;
+  z-index: 40;
+  background: color-mix(in srgb, var(--d-bg-2) 92%, transparent);
+  backdrop-filter: blur(10px);
+  border-bottom: 1px solid var(--d-current);
+}
+.dv-topbar {
   display: flex;
   align-items: center;
   justify-content: space-between;
   padding: 0.75rem 1.25rem;
-  background: color-mix(in srgb, var(--d-bg-2) 90%, transparent);
-  backdrop-filter: blur(8px);
   border-bottom: 1px solid var(--d-current);
 }
 .dv-logo {
@@ -71,19 +75,15 @@
 
 /* ─── Dock inferior ─── */
 .dv-dock {
-  position: fixed;
-  left: 50%;
-  bottom: 1rem;
-  transform: translateX(-50%);
-  z-index: 40;
   display: flex;
   gap: 0.15rem;
+  width: fit-content;
+  margin: 0.5rem auto;
   padding: 0.4rem;
   border-radius: 16px;
   background: color-mix(in srgb, var(--d-bg-2) 96%, transparent);
   border: 1px solid var(--d-current);
-  box-shadow: 0 10px 40px rgba(0, 0, 0, 0.5);
-  backdrop-filter: blur(10px);
+  box-shadow: 0 6px 24px rgba(0, 0, 0, 0.45);
   max-width: calc(100vw - 2rem);
   overflow-x: auto;
 }

@@ -11,6 +11,7 @@
 @import "./dev-mode.css";
 @import "./fonts-arcane.css";
 @import "./realms.css";
+@import "./realm-logo.css";
 
 @tailwind base;
 @tailwind components;
