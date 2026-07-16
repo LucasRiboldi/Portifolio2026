@@ -2,8 +2,7 @@
 
 import Link from "next/link"
 import { motion, type Variants } from "motion/react"
-import { BookOpen, Mail, MapPin, Zap } from "lucide-react"
-import { GithubIcon, LinkedinIcon } from "@/components/ui/social-icons"
+import { BookOpen, MapPin, Zap } from "lucide-react"
 import { STORYBOOK_URL } from "@/constants/site"
 import { BentoCard } from "./bento-card"
 import { ArtArrow } from "@/components/design-system/art-graphics"
@@ -40,13 +39,7 @@ interface BentoGridProps {
 
 export function BentoGrid({ projects = seedProjects, tools = seedTools }: BentoGridProps) {
   const siteConfig = useSiteConfig()
-  const socialLinks = [
-    { label: 'GitHub', href: siteConfig.github, icon: GithubIcon },
-    { label: 'LinkedIn', href: siteConfig.linkedin, icon: LinkedinIcon },
-    { label: 'E-mail', href: `mailto:${siteConfig.email}`, icon: Mail },
-  ]
   const featuredProject = projects.find(p => p.featured)
-  const recentProjects = projects.slice(0, 3)
   const [firstName, ...rest] = siteConfig.name.split(' ')
   const lastName = rest.join(' ')
 
@@ -144,33 +137,10 @@ export function BentoGrid({ projects = seedProjects, tools = seedTools }: BentoG
         </BentoCard>
       </motion.div>
 
-      {/* STACK — 2 colunas */}
-      <motion.div
-        className="col-span-2"
-        custom={5} initial="hidden" animate="visible" variants={pop}
-      >
-        <BentoCard className="h-full">
-          <p className="sv-display mb-3 text-2xl uppercase text-[var(--sv-cyan)]">{"// stack"}</p>
-          <div className="flex flex-wrap gap-2">
-            {['React', 'TypeScript', 'Figma', 'Next.js', 'Node.js', 'Firebase'].map((tech, i) => (
-              <span
-                key={tech}
-                className={
-                  "sv-sticker text-sm " +
-                  ['', 'sv-sticker-magenta', 'sv-sticker-cyan', 'sv-sticker-lime', '', 'sv-sticker-magenta'][i % 6]
-                }
-              >
-                {tech}
-              </span>
-            ))}
-          </div>
-        </BentoCard>
-      </motion.div>
-
       {/* STORYBOOK — catálogo de componentes (externo) */}
       <motion.div
         className="col-span-2"
-        custom={6} initial="hidden" animate="visible" variants={pop}
+        custom={5} initial="hidden" animate="visible" variants={pop}
       >
         <a
           href={STORYBOOK_URL}
@@ -200,7 +170,7 @@ export function BentoGrid({ projects = seedProjects, tools = seedTools }: BentoG
       {featuredProject && (
         <motion.div
           className="col-span-2"
-          custom={7} initial="hidden" animate="visible" variants={pop}
+          custom={6} initial="hidden" animate="visible" variants={pop}
         >
           <BentoCard accent="magenta" tilt={2} className="flex h-full flex-col justify-center sv-dots">
             <span className="sv-sticker sv-sticker-lime text-sm">em destaque</span>
@@ -230,66 +200,6 @@ export function BentoGrid({ projects = seedProjects, tools = seedTools }: BentoG
           </BentoCard>
         </motion.div>
       )}
-
-      {/* RECENTES — 2 colunas */}
-      <motion.div
-        className="col-span-2"
-        custom={8} initial="hidden" animate="visible" variants={pop}
-      >
-        <BentoCard className="h-full">
-          <p className="sv-display mb-3 text-2xl uppercase text-[var(--sv-yellow)]">{"// portfólio recente"}</p>
-          <div className="grid grid-cols-3 gap-3">
-            {recentProjects.map((p, i) => (
-              <div
-                key={p.id}
-                title={p.title}
-                className="h-20 border-[3px] border-black shadow-[3px_3px_0_0_#000] sv-dots-cyan"
-                style={{
-                  background: [
-                    'linear-gradient(135deg, var(--sv-magenta), var(--sv-orange))',
-                    'linear-gradient(135deg, var(--sv-cyan), var(--sv-violet))',
-                    'linear-gradient(135deg, var(--sv-lime), var(--sv-yellow))',
-                  ][i % 3],
-                  transform: `rotate(${[-3, 2, -1][i % 3]}deg)`,
-                }}
-              />
-            ))}
-          </div>
-          <Link
-            href="/portfolio"
-            className="sv-underline sv-heavy mt-5 inline-block text-xs uppercase tracking-wider text-white transition-colors hover:text-[var(--sv-magenta)]"
-          >
-            → ver todos os projetos
-          </Link>
-        </BentoCard>
-      </motion.div>
-
-      {/* LINKS — 2 colunas */}
-      <motion.div
-        className="col-span-2"
-        custom={9} initial="hidden" animate="visible" variants={pop}
-      >
-        <BentoCard accent="cyan" className="h-full">
-          <p className="sv-display mb-3 text-2xl uppercase text-[var(--sv-cyan)]">{"// links"}</p>
-          <div className="flex flex-col gap-3">
-            {socialLinks.map(({ label, href, icon: Icon }) => (
-              <a
-                key={label}
-                href={href}
-                target={href.startsWith('http') ? '_blank' : undefined}
-                rel="noopener noreferrer"
-                className="sv-heavy group flex items-center justify-between border-b-[3px] border-black/50 pb-2 text-sm uppercase tracking-wide text-white transition-colors hover:text-[var(--sv-yellow)]"
-              >
-                <span className="flex items-center gap-2">
-                  <Icon className="h-5 w-5" />
-                  {label}
-                </span>
-                <span className="translate-x-0 transition-transform group-hover:translate-x-1">↗</span>
-              </a>
-            ))}
-          </div>
-        </BentoCard>
-      </motion.div>
 
     </div>
   )

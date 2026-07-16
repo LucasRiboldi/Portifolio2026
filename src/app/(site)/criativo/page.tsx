@@ -1,8 +1,7 @@
 import { BentoGrid } from "@/components/home/bento-grid"
 import { SvCanvas } from "@/components/spiderverse/sv-canvas"
 import { Onoma } from "@/components/spiderverse/decor"
-import { ArcaneGazette } from "@/components/realms/arcane-gazette"
-import { MotionDemo } from "@/components/home/motion-demo"
+import { ArcaneProphet } from "@/components/realms/arcane-prophet"
 import { getProjects } from "@/lib/repos/projects"
 import { getTools } from "@/lib/repos/tools"
 
@@ -11,7 +10,7 @@ export default async function CriativoHome() {
   return (
     <>
       {/* Realm ARCANE (Game Design) — jornal antigo, só aparece em data-realm="arcane" */}
-      <ArcaneGazette className="realm-only-arcane" />
+      <ArcaneProphet className="realm-only-arcane" />
 
       {/* Realms Creative + Developer — conteúdo atual, preservado (some no Arcane) */}
       <div className="realm-hide-arcane">
@@ -41,10 +40,6 @@ export default async function CriativoHome() {
       </span>
 
       <BentoGrid projects={projects} tools={tools} />
-
-      <div className="relative z-[2] mx-auto mt-8 max-w-3xl px-4">
-        <MotionDemo />
-      </div>
     </SvCanvas>
       </div>
     </>

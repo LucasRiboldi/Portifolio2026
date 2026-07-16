@@ -33,7 +33,7 @@ export function PressMark({ label }: { label: string }) {
   return (
     <Link
       href={authed ? "/admin" : "/login"}
-      className="gz-press"
+      className="dp-press"
       title={authed ? "Painel de administração" : "Área administrativa"}
       aria-label={authed ? "Painel de administração" : "Área administrativa"}
     >

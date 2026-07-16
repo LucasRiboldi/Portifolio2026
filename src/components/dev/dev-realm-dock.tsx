@@ -7,10 +7,7 @@ import {
   FolderGit2,
   FlaskConical,
   Wrench,
-  Terminal,
-  Lightbulb,
   Code2,
-  BookOpen,
   GraduationCap,
   type LucideIcon,
 } from "lucide-react"
@@ -27,11 +24,8 @@ const ITEMS: DockItem[] = [
   { href: "/desenvolvedor/projetos", label: "projetos", Icon: FolderGit2 },
   { href: "/desenvolvedor/laboratorio", label: "lab", Icon: FlaskConical },
   { href: "/desenvolvedor/ferramentas", label: "tools", Icon: Wrench },
-  { href: "/desenvolvedor/devlogs", label: "devlogs", Icon: Terminal },
-  { href: "/desenvolvedor/ideias", label: "ideias", Icon: Lightbulb },
   { href: "/desenvolvedor/codigo", label: "código", Icon: Code2 },
   { href: "/desenvolvedor/learn", label: "learn", Icon: GraduationCap },
-  { href: "/desenvolvedor/wiki", label: "wiki", Icon: BookOpen },
 ]
 
 export function DevRealmDock() {

@@ -2,7 +2,7 @@ import Link from "next/link"
 
 import { getProjects } from "@/lib/repos/projects"
 import { getTools } from "@/lib/repos/tools"
-import { getDevlogs, getIdeas, getSnippets, getLab } from "@/lib/repos/dev"
+import { getSnippets, getLab } from "@/lib/repos/dev"
 import { getSiteConfig } from "@/lib/repos/site-config"
 import { GsapDemo } from "@/components/dev/gsap-demo"
 
@@ -11,24 +11,20 @@ export const metadata = { title: "Dev" }
 const STACK = ["TypeScript", "React", "Next.js", "Node", "Python", "Supabase", "Tailwind", "Postgres"]
 
 export default async function DevHome() {
-  const [projects, tools, devlogs, ideas, snippets, lab, site] = await Promise.all([
+  const [projects, tools, snippets, lab, site] = await Promise.all([
     getProjects(),
     getTools(),
-    getDevlogs(),
-    getIdeas(),
     getSnippets(),
     getLab(),
     getSiteConfig(),
   ])
 
   const featured = projects.find((p) => p.featured) ?? projects[0]
-  const recentLogs = devlogs.slice(0, 3)
 
   const stats = [
     { n: projects.length, l: "projetos", href: "/desenvolvedor/projetos", color: "var(--d-green)" },
     { n: lab.length, l: "experimentos", href: "/desenvolvedor/laboratorio", color: "var(--d-cyan)" },
     { n: snippets.length, l: "snippets", href: "/desenvolvedor/codigo", color: "var(--d-pink)" },
-    { n: ideas.length, l: "ideias", href: "/desenvolvedor/ideias", color: "var(--d-orange)" },
   ]
 
   return (
@@ -91,26 +87,6 @@ export default async function DevHome() {
         </>
       )}
 
-      {/* Últimos devlogs */}
-      {recentLogs.length > 0 && (
-        <>
-          <h2 className="dv-section-title">Últimos devlogs</h2>
-          <div className="dv-grid" style={{ marginTop: "0.5rem" }}>
-            {recentLogs.map((l) => (
-              <Link key={l.id} href="/desenvolvedor/devlogs" className="dv-card">
-                <div className="flex items-baseline justify-between gap-2">
-                  <h3 style={{ fontSize: "1rem" }}>{l.title}</h3>
-                  <time className="text-xs" style={{ color: "var(--d-comment)" }}>
-                    {new Date(l.date).toLocaleDateString("pt-BR")}
-                  </time>
-                </div>
-                <p>{l.summary}</p>
-              </Link>
-            ))}
-          </div>
-        </>
-      )}
-
       {/* Demo de motion — GSAP */}
       <h2 className="dv-section-title">Stack em movimento</h2>
       <GsapDemo />
@@ -122,7 +98,6 @@ export default async function DevHome() {
           { href: "/desenvolvedor/ferramentas", t: "Ferramentas", d: `${tools.length} utilitários do dia a dia` },
           { href: "/desenvolvedor/codigo", t: "Código", d: "Snippets e boilerplates reutilizáveis" },
           { href: "/desenvolvedor/learn", t: "Learn", d: "Trilhas para aprender linguagens (C, Java…)" },
-          { href: "/desenvolvedor/wiki", t: "Wiki", d: "Cheatsheets e documentação técnica" },
         ].map((x) => (
           <Link key={x.href} href={x.href} className="dv-card">
             <h3 style={{ fontSize: "1rem" }}>{x.t} →</h3>

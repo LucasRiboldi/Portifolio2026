@@ -125,7 +125,7 @@ export async function seedDatabase(): Promise<SeedReport> {
         arcane_content:
           id === "arcane"
             ? {
-                gazette: arcane.gazette,
+                prophet: arcane.prophet,
                 leadArticle: arcane.leadArticle,
                 columns: arcane.columns,
                 sidebar: arcane.sidebar,

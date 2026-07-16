@@ -1,11 +1,11 @@
 /**
  * Conteúdo do realm ARCANE — a vertente de Game Design do portfólio,
- * diagramada como um jornal antigo ("The Arcane Gazette").
+ * diagramada como um jornal antigo ("Daily Prophet").
  * Conteúdo próprio (não é re-skin) — cobre design de jogos de tabuleiro,
  * card games, RPG, mecânicas, lore e world building.
  */
 
-export const gazette = {
+export const prophet = {
   masthead: "The Daily Prophet",
   motto: "A folha mais enfeitiçante do mundo dos jogos — encante, conjure, jogue",
   edition: "Vol. MMXXVI — Nº 1",
@@ -13,7 +13,7 @@ export const gazette = {
   place: "Impresso em Terra-2026",
 } as const
 
-export type GazetteArticle = {
+export type ProphetArticle = {
   kicker: string
   headline: string
   standfirst: string
@@ -22,7 +22,7 @@ export type GazetteArticle = {
 }
 
 /** Matéria de capa — o projeto de jogo em destaque. */
-export const leadArticle: GazetteArticle = {
+export const leadArticle: ProphetArticle = {
   kicker: "Edição Especial · Jogos de Tabuleiro",
   headline: "Designer transforma regras em rituais jogáveis",
   standfirst:
@@ -36,7 +36,7 @@ export const leadArticle: GazetteArticle = {
 }
 
 /** Colunas de serviço — o que a oficina oferece, em linguagem de jornal. */
-export const columns: GazetteArticle[] = [
+export const columns: ProphetArticle[] = [
   {
     kicker: "Mecânicas",
     headline: "A arquitetura invisível do divertimento",
@@ -140,32 +140,10 @@ export const frontPage = {
       "Sistemas de recursos e economias de deck se multiplicam a cada ciclo. O estúdio isola a mecânica antes da arte: um bom protótipo é feio de propósito, para que o divertimento não seja acidente da ilustração.",
   },
 
-  /** Matérias inferiores — cada uma é uma seção real (botão incorporado). */
+  /** Matéria inferior — leva ao Laboratório, a única seção que resta. */
   reports: [
     {
       kicker: "Relatório Especial",
-      title: "NEGOCIAÇÕES DE REGRAS FRACASSAM",
-      dropcap: "A",
-      body:
-        "assembleia de designers rompe o acordo sobre a curva de dificuldade; comitê de playtest promete nova rodada de ajustes até a próxima edição.",
-      href: "/anfitriao/oficina",
-      cta: "Matéria completa",
-      page: "pág. 3",
-      chart: false,
-    },
-    {
-      kicker: "",
-      title: "ONDE ARRANJAMOS NOVAS MECÂNICAS?",
-      dropcap: "B",
-      body:
-        "bruxos do balanceamento apontam para o Caderno de Mecânicas — loops, economias e tensão catalogados para quem ficou sem núcleo de jogo.",
-      href: "/anfitriao/mecanicas",
-      cta: "Ler o caderno",
-      page: "págs. 8/9",
-      chart: false,
-    },
-    {
-      kicker: "",
       title: "PREÇOS DAS CARTAS DESABAM",
       dropcap: "O",
       body:
@@ -173,27 +151,12 @@ export const frontPage = {
       href: "/anfitriao/laboratorio",
       cta: "Ver o laboratório",
       page: "págs. 3/4",
-      chart: true,
-    },
-    {
-      kicker: "",
-      title: "PERCALÇOS DE PÓ DE FLU: OS FATOS",
-      dropcap: "A",
-      body:
-        "Imprensa do Inventor reúne notas de produção, print & play e os bastidores das edições — os fatos que você precisa saber.",
-      href: "/anfitriao/imprensa",
-      cta: "Ir à imprensa",
-      page: "págs. 4/5",
       chart: false,
     },
   ],
 
   /** Barra-índice inferior — o menu incorporado como índice de jornal. */
   index: [
-    { label: "editorial", href: "/anfitriao/redacao", page: 2 },
-    { label: "oficina", href: "/anfitriao/oficina", page: 3 },
-    { label: "mecânicas", href: "/anfitriao/mecanicas", page: 8 },
     { label: "laboratório", href: "/anfitriao/laboratorio", page: 4 },
-    { label: "imprensa", href: "/anfitriao/imprensa", page: 5 },
   ],
 } as const

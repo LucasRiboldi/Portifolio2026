@@ -6,11 +6,7 @@ import { usePathname } from "next/navigation"
 /** Menu exclusivo do realm Daily Prophet (jornal). */
 export const PROPHET_LINKS = [
   { label: "Primeira Página", href: "/anfitriao" },
-  { label: "A Redação", href: "/anfitriao/redacao" },
-  { label: "Oficina do Inventor", href: "/anfitriao/oficina" },
-  { label: "Caderno das Mecânicas", href: "/anfitriao/mecanicas" },
   { label: "Laboratório", href: "/anfitriao/laboratorio" },
-  { label: "Imprensa do Inventor", href: "/anfitriao/imprensa" },
 ]
 
 export function ProphetNav() {

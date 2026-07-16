@@ -1,5 +1,5 @@
 import {
-  gazette,
+  prophet,
   leadArticle,
   columns,
   sidebar,
@@ -44,12 +44,12 @@ function InkLetters({
 }
 
 /**
- * ArcaneGazette — a home do realm ARCANE (Game Design) diagramada como
+ * ArcaneProphet — a home do realm ARCANE (Game Design) diagramada como
  * um jornal antigo ("The Daily Prophet"). Renderiza apenas quando
  * data-realm="arcane" (gating por CSS em realms.css, .realm-only-arcane).
  * Server component; as animações mágicas são CSS puro.
  */
-export function ArcaneGazette({ className }: { className?: string }) {
+export function ArcaneProphet({ className }: { className?: string }) {
   const today = new Intl.DateTimeFormat("pt-BR", {
     weekday: "long",
     day: "2-digit",
@@ -58,18 +58,18 @@ export function ArcaneGazette({ className }: { className?: string }) {
   }).format(new Date())
 
   return (
-    <article className={`arc-gazette ${className ?? ""}`} aria-label="The Daily Prophet — Game Design">
+    <article className={`arc-prophet ${className ?? ""}`} aria-label="The Daily Prophet — Game Design">
       {/* ---------- Masthead ---------- */}
       <header className="arc-masthead">
         <div className="arc-masthead-rule">
-          <span>{gazette.edition}</span>
+          <span>{prophet.edition}</span>
           <span className="arc-cap">{today}</span>
-          <span>{gazette.price}</span>
+          <span>{prophet.price}</span>
         </div>
         <h1 className="arc-title">
-          <InkLetters text={gazette.masthead} className="arc-ink" gild="P" />
+          <InkLetters text={prophet.masthead} className="arc-ink" gild="P" />
         </h1>
-        <p className="arc-motto">{gazette.motto} — {gazette.place}</p>
+        <p className="arc-motto">{prophet.motto} — {prophet.place}</p>
       </header>
 
       {/* ---------- Corpo em colunas ---------- */}

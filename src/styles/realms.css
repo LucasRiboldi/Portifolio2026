@@ -160,9 +160,9 @@
 }
 
 /* ============================================================
-   ARCANE GAZETTE — a home de Game Design como jornal antigo.
+   ARCANE DAILY PROPHET — a home de Game Design como jornal antigo.
    ============================================================ */
-.arc-gazette {
+.arc-prophet {
   max-width: 1120px;
   margin: 0 auto;
   padding: clamp(1rem, 3vw, 2.5rem) clamp(1rem, 4vw, 2rem) 3rem;

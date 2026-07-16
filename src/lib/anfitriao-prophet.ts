@@ -1,15 +1,13 @@
 /**
- * THE MEEPLE & ANVIL GAZETTE — conteúdo da primeira página do realm Anfitrião.
+ * DAILY PROPHET — conteúdo da primeira página do realm Anfitrião.
  *
  * Jornal inglês do fim do séc. XIX dedicado à criação de jogos de tabuleiro:
  * game design, mecânicas, prototipagem, impressão 3D, miniaturas, print & play.
- * Cada "matéria" e cada verbete do índice aponta para uma seção real do realm —
- * nada aqui é decorativo-morto.
  */
 
 export const paper = {
-  masthead: "The Meeple & Anvil",
-  mastheadSub: "Gazette",
+  masthead: "Daily Prophet",
+  mastheadSub: "Crônica das artes de mesa",
   motto: "Chronicle of the Tabletop Arts — Mechanisms, Prototypes & Kindred Curiosities",
   mottoPt: "Crônica das artes de mesa — mecânicas, protótipos e curiosidades afins",
   established: "Est. MDCCCLXXIV",
@@ -87,58 +85,20 @@ export const editorial = {
     "Que se ilustre, pois — mas depois. A ordem importa. Quem pinta antes de provar não está desenhando um jogo: está desenhando uma esperança.",
   ],
   sign: "— A Redação",
-  href: "/anfitriao/redacao",
 }
 
-/** Matérias secundárias — cada uma leva a uma seção real. */
+/** Matéria secundária — leva ao Laboratório, a única seção que resta. */
 export const reports = [
-  {
-    kicker: "Relatório Especial",
-    head: "NEGOCIAÇÕES DE REGRAS FRACASSAM",
-    sub: "Comitê de playtest promete nova rodada de ajustes até a próxima edição",
-    dropcap: "A",
-    body: "assembleia de projetistas rompeu o acordo sobre a curva de dificuldade na noite de quarta. O impasse gira em torno do terceiro turno, onde o motor de recursos dispara e a partida, dizem os presentes, decide-se sozinha. A oficina abriu as bancadas para exame público dos gabaritos.",
-    note: "Nota: as atas do playtest seguem disponíveis para consulta.",
-    href: "/anfitriao/oficina",
-    cta: "Matéria completa",
-    page: "pág. 3",
-    chart: false,
-  },
-  {
-    kicker: "Do Caderno Técnico",
-    head: "ONDE ARRANJAMOS NOVAS MECÂNICAS?",
-    sub: "Loops, economias e tensão, catalogados para quem ficou sem núcleo de jogo",
-    dropcap: "O",
-    body: "s estudiosos do balanceamento apontam para o Caderno das Mecânicas, onde se acham descritos, com verbete e exemplo, os motores que movem a mesa: deckbuilding, alocação de trabalhadores, pressão da sorte e assimetria de facções.",
-    note: "Vide também: tabela de raridades, pág. 9.",
-    href: "/anfitriao/mecanicas",
-    cta: "Ler o caderno",
-    page: "págs. 8/9",
-    chart: false,
-  },
   {
     kicker: "Mercado & Materiais",
     head: "PREÇOS DAS CARTAS DESABAM",
     sub: "Índice de raridade despenca após novo playtest; bancadas abertas à visitação",
     dropcap: "O",
     body: "índice de raridade recuou pelo quarto mês seguido, arrastado pela reimpressão dos protótipos e pela queda do filamento. O Laboratório expõe as peças que causaram o tombo e convida o leitor a examiná-las de perto.",
-    note: "Gravura do índice ao lado.",
+    note: "Peças em exposição na bancada.",
     href: "/anfitriao/laboratorio",
     cta: "Ver o laboratório",
     page: "págs. 3/4",
-    chart: true,
-  },
-  {
-    kicker: "Da Prensa",
-    head: "PRINT & PLAY: OS FATOS",
-    sub: "Notas de produção, gabaritos e os bastidores das edições independentes",
-    dropcap: "A",
-    body: "Imprensa do Inventor reúne as notas de produção, os arquivos de recorte, as sangrias e os enganos honestos de quem edita por conta própria. Publicam-se aqui os fatos que o entusiasta precisa conhecer antes de acionar o prelo.",
-    note: "Inclui tabela de gramaturas.",
-    href: "/anfitriao/imprensa",
-    cta: "Ir à imprensa",
-    page: "págs. 4/5",
-    chart: false,
   },
 ]
 
@@ -212,25 +172,12 @@ export const briefs = {
 
 /** Índice / seções — o menu incorporado como sumário de jornal. */
 export const index = [
-  { label: "Editorial & Redação", href: "/anfitriao/redacao", page: "II" },
-  { label: "Oficina do Inventor", href: "/anfitriao/oficina", page: "III" },
   { label: "Laboratório de Protótipos", href: "/anfitriao/laboratorio", page: "IV" },
-  { label: "Imprensa & Print-and-Play", href: "/anfitriao/imprensa", page: "V" },
-  { label: "Caderno das Mecânicas", href: "/anfitriao/mecanicas", page: "VIII" },
 ]
 
 /** Cadernos anunciados na barra de seções (mapeados às rotas reais). */
 export const sections = [
-  { label: "Game Design", href: "/anfitriao/mecanicas" },
-  { label: "Board & Card Games", href: "/anfitriao/mecanicas" },
-  { label: "RPG de Mesa", href: "/anfitriao/mecanicas" },
-  { label: "Prototipagem", href: "/anfitriao/oficina" },
-  { label: "Impressão 3D", href: "/anfitriao/oficina" },
-  { label: "Miniaturas", href: "/anfitriao/oficina" },
-  { label: "Materiais", href: "/anfitriao/imprensa" },
-  { label: "Tutoriais", href: "/anfitriao/imprensa" },
   { label: "Reviews", href: "/anfitriao/laboratorio" },
-  { label: "História dos Jogos", href: "/anfitriao/redacao" },
 ]
 
 /** Expediente do rodapé — abriga o acesso administrativo incorporado. */

@@ -2,7 +2,7 @@
 
 import Link from "next/link"
 import { usePathname } from "next/navigation"
-import { Home, FolderGit2, Wrench, User, Newspaper, Mail } from "lucide-react"
+import { Home, FolderGit2 } from "lucide-react"
 import { isActive } from "@/lib/nav"
 
 /**
@@ -13,10 +13,6 @@ import { isActive } from "@/lib/nav"
 const ITEMS = [
   { href: "/criativo", label: "início", Icon: Home },
   { href: "/portfolio", label: "projetos", Icon: FolderGit2 },
-  { href: "/tools", label: "ferramentas", Icon: Wrench },
-  { href: "/blog", label: "blog", Icon: Newspaper },
-  { href: "/about", label: "sobre", Icon: User },
-  { href: "/contact", label: "contato", Icon: Mail },
 ]
 
 export function SoberDock() {
