@@ -2,8 +2,9 @@
 
 import Link from "next/link"
 import { motion, type Variants } from "motion/react"
-import { Mail, MapPin, Zap } from "lucide-react"
+import { BookOpen, Mail, MapPin, Zap } from "lucide-react"
 import { GithubIcon, LinkedinIcon } from "@/components/ui/social-icons"
+import { STORYBOOK_URL } from "@/constants/site"
 import { BentoCard } from "./bento-card"
 import { ArtArrow } from "@/components/design-system/art-graphics"
 import { useSiteConfig } from "@/components/providers/site-config-provider"
@@ -166,11 +167,40 @@ export function BentoGrid({ projects = seedProjects, tools = seedTools }: BentoG
         </BentoCard>
       </motion.div>
 
+      {/* STORYBOOK — catálogo de componentes (externo) */}
+      <motion.div
+        className="col-span-2"
+        custom={6} initial="hidden" animate="visible" variants={pop}
+      >
+        <a
+          href={STORYBOOK_URL}
+          target="_blank"
+          rel="noopener noreferrer"
+          className="group/sb block h-full"
+        >
+          <BentoCard accent="violet" tilt={1} className="flex h-full flex-col justify-between sv-dots">
+            <div>
+              <p className="sv-display mb-2 text-2xl uppercase text-[var(--sv-violet)]">
+                {"// storybook"}
+              </p>
+              <p className="sv-heavy text-xs uppercase leading-snug tracking-wide text-white/70">
+                O catálogo vivo do Design System — 40+ componentes, cada estado
+                navegável e testável isoladamente.
+              </p>
+            </div>
+            <span className="sv-display mt-4 inline-flex w-fit items-center gap-2 rounded-md border-[3px] border-black bg-[var(--sv-violet)] px-4 py-1.5 text-base uppercase text-white shadow-[4px_4px_0_0_#000] transition-transform group-hover/sb:-translate-y-1 group-hover/sb:rotate-[-2deg]">
+              <BookOpen className="size-4" strokeWidth={2.5} />
+              Abrir Storybook ↗
+            </span>
+          </BentoCard>
+        </a>
+      </motion.div>
+
       {/* DESTAQUE */}
       {featuredProject && (
         <motion.div
           className="col-span-2"
-          custom={6} initial="hidden" animate="visible" variants={pop}
+          custom={7} initial="hidden" animate="visible" variants={pop}
         >
           <BentoCard accent="magenta" tilt={2} className="flex h-full flex-col justify-center sv-dots">
             <span className="sv-sticker sv-sticker-lime text-sm">em destaque</span>
@@ -204,7 +234,7 @@ export function BentoGrid({ projects = seedProjects, tools = seedTools }: BentoG
       {/* RECENTES — 2 colunas */}
       <motion.div
         className="col-span-2"
-        custom={7} initial="hidden" animate="visible" variants={pop}
+        custom={8} initial="hidden" animate="visible" variants={pop}
       >
         <BentoCard className="h-full">
           <p className="sv-display mb-3 text-2xl uppercase text-[var(--sv-yellow)]">{"// portfólio recente"}</p>
@@ -237,7 +267,7 @@ export function BentoGrid({ projects = seedProjects, tools = seedTools }: BentoG
       {/* LINKS — 2 colunas */}
       <motion.div
         className="col-span-2"
-        custom={8} initial="hidden" animate="visible" variants={pop}
+        custom={9} initial="hidden" animate="visible" variants={pop}
       >
         <BentoCard accent="cyan" className="h-full">
           <p className="sv-display mb-3 text-2xl uppercase text-[var(--sv-cyan)]">{"// links"}</p>
