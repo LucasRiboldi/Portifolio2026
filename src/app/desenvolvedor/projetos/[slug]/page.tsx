@@ -58,7 +58,7 @@ export default async function ProjectDetail({ params }: { params: Promise<{ slug
 
       {p.coverImage && (
         // eslint-disable-next-line @next/next/no-img-element
-        <img src={p.coverImage} alt={p.title} className="mt-5 w-full rounded-xl border" style={{ borderColor: "var(--d-current)" }} />
+        <img src={p.coverImage} alt={p.title} className="img-frame img-wide mt-5 rounded-xl border" style={{ borderColor: "var(--d-current)" }} />
       )}
 
       {p.readme ? (

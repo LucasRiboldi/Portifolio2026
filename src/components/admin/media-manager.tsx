@@ -96,7 +96,7 @@ export function MediaManager() {
         {items.map((item) => (
           <div key={item.name} className="space-y-2 rounded-xl border border-[color:var(--mm-border)] p-2">
             {/* eslint-disable-next-line @next/next/no-img-element */}
-            <img src={item.url} alt={item.name} className="aspect-video w-full rounded-lg object-cover" />
+            <img src={item.url} alt={item.name} className="img-frame img-wide rounded-lg" />
             <div className="flex gap-2">
               <button
                 type="button"

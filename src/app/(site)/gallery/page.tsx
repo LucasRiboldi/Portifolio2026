@@ -19,7 +19,7 @@ export default function GalleryPage() {
         {Array.from({ length: 6 }).map((_, i) => (
           <div
             key={i}
-            className={`sv-panel sv-tilt-${(i % 3) + 1} flex aspect-[4/5] items-end p-4`}
+            className={`sv-panel sv-tilt-${(i % 3) + 1} img-portrait flex items-end p-4`}
             style={{ background: `repeating-linear-gradient(${45 + i * 15}deg, #000 0 6px, #1a1a1a 6px 12px)` }}
           >
             <span className="sv-display text-xl uppercase text-white">Quadro {i + 1}</span>

@@ -27,10 +27,10 @@ export default async function DevProjectsPage() {
             <article key={p.id} className="dv-card flex flex-col">
               {p.coverImage ? (
                 // eslint-disable-next-line @next/next/no-img-element
-                <img src={p.coverImage} alt={p.title} className="mb-3 aspect-video w-full rounded-lg object-cover" />
+                <img src={p.coverImage} alt={p.title} className="img-frame img-wide mb-3 rounded-lg" />
               ) : (
                 <div
-                  className="mb-3 grid aspect-video w-full place-items-center rounded-lg font-mono text-xs"
+                  className="img-frame img-wide mb-3 grid place-items-center rounded-lg font-mono text-xs"
                   style={{ background: "var(--d-bg)", color: "var(--d-comment)", border: "1px solid var(--d-current)" }}
                 >
                   {"</>"} {p.title}

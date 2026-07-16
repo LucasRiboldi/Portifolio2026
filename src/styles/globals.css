@@ -12,6 +12,8 @@
 @import "./fonts-arcane.css";
 @import "./realms.css";
 @import "./realm-logo.css";
+@import "./realm-tokens.css";
+@import "./images.css";
 
 @tailwind base;
 @tailwind components;

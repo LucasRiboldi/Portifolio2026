@@ -20,7 +20,7 @@ export const metadata = { title: "Primeira Página" }
 function BenchPlate() {
   return (
     <div className="dp-plate">
-      <div className="dp-placeholder" role="img" aria-label="Campo de imagem" />
+      <div className="img-frame img-wide img-empty" role="img" aria-label="Campo de imagem" />
     </div>
   )
 }

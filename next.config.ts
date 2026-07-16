@@ -1,5 +1,25 @@
 import type { NextConfig } from "next";
 
+const isDev = process.env.NODE_ENV === "development";
+
+/**
+ * `next dev` compila com devtool baseado em eval (HMR + source maps). Sem
+ * 'unsafe-eval' o bundle lança EvalError, a hidratação nunca acontece e a
+ * aplicação fica inerte — HTML renderizado, nada clicável. Só em dev:
+ * produção continua sem eval.
+ *
+ * O va.vercel-scripts.com também é dev-only: em produção a Vercel serve o
+ * script de analytics do próprio domínio (/_vercel/insights), coberto por 'self'.
+ */
+const scriptSrc = [
+  "'self'",
+  "'unsafe-inline'",
+  isDev && "'unsafe-eval'",
+  isDev && "https://va.vercel-scripts.com",
+]
+  .filter(Boolean)
+  .join(" ");
+
 /**
  * Content-Security-Policy — permissiva o suficiente para o Next App Router
  * (scripts/estilos inline de hidratação), Vercel Analytics e Supabase
@@ -11,7 +31,7 @@ import type { NextConfig } from "next";
  */
 const csp = [
   "default-src 'self'",
-  "script-src 'self' 'unsafe-inline'",
+  `script-src ${scriptSrc}`,
   "style-src 'self' 'unsafe-inline'",
   "img-src 'self' data: blob: https:",
   "font-src 'self' data:",

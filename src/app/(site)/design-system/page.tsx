@@ -5,6 +5,7 @@ import { DS_NAV } from "@/design-system/registry"
 import { ArtCircleMark } from "@/components/design-system/art-graphics"
 
 const HIERARCHY = [
+  { n: "00", title: "Design System por Realm", desc: "Cada universo tem a sua identidade: paleta, tipografia, elevação e kit próprios.", href: "/design-system/realms/creative" },
   { n: "01", title: "Brand Foundation", desc: "Logo, cores, tipografia e ícones — a identidade Design System.", href: "/design-system/foundations" },
   { n: "02", title: "Design Tokens", desc: "Cores, espaçamentos, sombras, bordas, motion — valores atômicos.", href: "/design-system/tokens" },
   { n: "03", title: "Style Guide", desc: "Regras visuais que traduzem os tokens em identidade.", href: "/design-system/foundations" },

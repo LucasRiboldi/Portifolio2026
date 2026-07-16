@@ -15,6 +15,7 @@ import {
   SplitPanel,
 } from "@/components/spiderverse/decor"
 import { popTilt, dimSwap } from "@/components/spiderverse/motion"
+import { IMAGE_RATIOS, IMAGE_WIDTHS } from "@/design-system/image"
 
 const palette = [
   ['magenta', '#ff2d95'], ['cyan', '#00e5ff'], ['yellow', '#ffe600'],
@@ -36,6 +37,14 @@ export default function Page() {
     </SvCanvas>
   )
 }`
+
+const imageSnippet = `// com imagem
+<div className="img-frame img-wide">
+  <Image src={cover} alt={title} fill sizes={IMAGE_SIZES.card} />
+</div>
+
+// campo vago (cinza listrado)
+<div className="img-frame img-wide img-empty" />`
 
 function Section({ title, children }: { title: string; children: React.ReactNode }) {
   return (
@@ -229,6 +238,43 @@ export default function StyleguidePage() {
                 </Panel>
               ))}
             </div>
+          </Section>
+
+          {/* Imagens */}
+          <Section title="Imagens">
+            <p className="sv-heavy mb-5 max-w-2xl text-xs uppercase leading-relaxed tracking-wide opacity-70">
+              Três proporções, e só. Toda imagem do projeto usa uma delas — o cinza
+              listrado é o campo vago. Fonte única em{" "}
+              <code className="font-mono lowercase">src/design-system/image.ts</code>.
+            </p>
+
+            <div className="grid grid-cols-1 gap-5 sm:grid-cols-3">
+              {Object.entries(IMAGE_RATIOS).map(([key, r]) => (
+                <Panel key={key} className="p-0">
+                  <div className={`img-frame ${r.className} img-empty`} />
+                  <div className="p-3">
+                    <p className="sv-display text-xl uppercase">
+                      {r.label}{" "}
+                      <span className="text-[var(--sv-cyan)]">{r.ratio}</span>
+                    </p>
+                    <p className="mt-1 text-[11px] leading-snug opacity-70">{r.use}</p>
+                    <p className="sv-heavy mt-2 text-[10px] uppercase tracking-wider opacity-50">
+                      exportar {r.export} · .{r.className}
+                    </p>
+                  </div>
+                </Panel>
+              ))}
+            </div>
+
+            <Panel className="mt-5 p-4">
+              <p className="sv-display text-lg uppercase">Como aplicar</p>
+              <pre className="mt-2 overflow-x-auto text-[11px] leading-relaxed">
+                <code className="font-mono">{imageSnippet}</code>
+              </pre>
+              <p className="sv-heavy mt-3 text-[10px] uppercase tracking-wider opacity-60">
+                Larguras servidas pelo next/image: {IMAGE_WIDTHS.join(" · ")} px
+              </p>
+            </Panel>
           </Section>
 
           {/* Como usar */}

@@ -13,7 +13,7 @@ export default function ArticleTemplatePage() {
       <ComicHeader kicker="06 · Template" title="Página de" highlight="artigo" />
 
       <article className="mx-auto mt-6 max-w-2xl">
-        <SvBreadcrumb items={[{ label: "Blog", href: "/blog" }, { label: "Design System" }]} />
+        <SvBreadcrumb items={[{ label: "Templates", href: "/design-system/templates" }, { label: "Design System" }]} />
 
         <div className="mt-4 flex flex-wrap items-center gap-2">
           <SvTag color="magenta">Design System</SvTag>

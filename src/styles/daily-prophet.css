@@ -284,16 +284,6 @@
   background-image: radial-gradient(circle at center, rgba(28, 23, 16, 0.9) 0.6px, transparent 0.9px);
   background-size: 3px 3px;
 }
-/* Campo de imagem vago — cinza listrado, no lugar da gravura. */
-.dp-placeholder {
-  aspect-ratio: 16 / 10;
-  width: 100%;
-  background-image: repeating-linear-gradient(
-    45deg,
-    #9c9c9c 0 7px,
-    #c4c4c4 7px 14px
-  );
-}
 .dp-figcaption {
   font-size: 0.62rem;
   font-style: italic;

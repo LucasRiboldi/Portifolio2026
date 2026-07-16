@@ -1,0 +1,138 @@
+/* ============================================================
+   TOKENS DE REALM — a camada semântica dos três universos.
+
+   As primitivas continuam onde sempre estiveram, e cada folha as
+   declara na SUA classe de escopo:
+     creative  → --sv-*  em :root        (spiderverse.css)
+     developer → --d-*   em .dracula     (dracula.css)
+     arcane    → --dp-*  em .dp          (daily-prophet.css)
+
+   Aqui elas ganham PAPEL: fundo, tinta, destaque, borda, elevação.
+   Um componente escrito com --r-* funciona nos três realms sem `if`.
+
+   POR QUE O ESCOPO É POR CLASSE, e não por [data-realm]:
+   as primitivas só existem dentro de .dracula / .dp. Mapear --r-* no
+   <html> referenciaria variáveis que não existem ali — o token sairia
+   inválido. Escopando na mesma classe que as declara, funciona tanto na
+   rota real quanto no preview de /design-system/realms/[realm], que
+   aplica essas mesmas classes.
+
+   Contrato (igual nos três):
+     --r-bg / --r-bg-2 / --r-surface   fundos
+     --r-ink / --r-ink-2 / --r-ink-mut tinta
+     --r-accent / -2 / -3              destaques que assinam o realm
+     --r-border / --r-border-w         traço
+     --r-radius-sm / -md / -pill       cantos
+     --r-elev-1 / -2 / -3              elevação
+     --r-font-display / -heavy / -body tipografia
+     --r-ease / --r-dur                movimento
+     --r-tilt                          a inclinação característica
+
+   Espelha src/design-system/realms.ts — mude nos dois.
+   ============================================================ */
+
+/* ---------- CREATIVE (default do site) ---------- */
+:root {
+  --r-bg: var(--sv-ink);
+  --r-bg-2: var(--sv-ink-2);
+  --r-surface: var(--sv-ink-2);
+  --r-ink: var(--sv-paper);
+  --r-ink-2: #ffffff;
+  --r-ink-mut: rgba(255, 255, 255, 0.7);
+
+  --r-accent: var(--sv-magenta);
+  --r-accent-2: var(--sv-cyan);
+  --r-accent-3: var(--sv-yellow);
+
+  /* O traço preto grosso é a assinatura do realm. */
+  --r-border: #000000;
+  --r-border-w: 3px;
+
+  --r-radius-sm: 4px;
+  --r-radius-md: 6px;
+  --r-radius-pill: 999px;
+
+  /* Sombra dura, sem blur: tinta deslocada, não luz. */
+  --r-elev-1: 2px 2px 0 0 #000;
+  --r-elev-2: 4px 4px 0 0 #000;
+  --r-elev-3: 6px 6px 0 0 #000;
+
+  --r-font-display: var(--font-display);
+  --r-font-heavy: var(--font-heavy);
+  --r-font-body: var(--font-sans);
+
+  --r-ease: cubic-bezier(0.34, 1.56, 0.64, 1); /* spring */
+  --r-dur: 180ms;
+  --r-tilt: -2deg;
+}
+
+/* ---------- DEVELOPER (Dracula / terminal) ---------- */
+.dracula {
+  --r-bg: var(--d-bg);
+  --r-bg-2: var(--d-bg-2);
+  --r-surface: var(--d-bg-2);
+  --r-ink: var(--d-fg);
+  --r-ink-2: #ffffff;
+  --r-ink-mut: var(--d-comment);
+
+  --r-accent: var(--d-green);
+  --r-accent-2: var(--d-cyan);
+  --r-accent-3: var(--d-purple);
+
+  /* Traço fino e discreto: a UI recua, o código aparece. */
+  --r-border: var(--d-current);
+  --r-border-w: 1px;
+
+  --r-radius-sm: 6px;
+  --r-radius-md: var(--d-radius);
+  --r-radius-pill: 999px;
+
+  /* Sombra difusa e escura — profundidade de editor, não de papel. */
+  --r-elev-1: 0 1px 2px rgba(0, 0, 0, 0.4);
+  --r-elev-2: 0 4px 12px rgba(0, 0, 0, 0.45);
+  --r-elev-3: 0 12px 32px rgba(0, 0, 0, 0.5);
+
+  --r-font-display: var(--d-mono);
+  --r-font-heavy: var(--d-mono);
+  --r-font-body: var(--d-mono);
+
+  --r-ease: cubic-bezier(0.4, 0, 0.2, 1); /* inOut, sem exagero */
+  --r-dur: 150ms;
+  --r-tilt: 0deg; /* terminal não entorta */
+}
+
+/* ---------- ARCANE (jornal 1920 / pergaminho) ---------- */
+.dp {
+  --r-bg: var(--dp-paper);
+  --r-bg-2: var(--dp-paper-2);
+  --r-surface: var(--dp-paper);
+  --r-ink: var(--dp-ink);
+  --r-ink-2: var(--dp-ink-2);
+  --r-ink-mut: var(--dp-ink-3);
+
+  --r-accent: var(--dp-sepia);
+  --r-accent-2: var(--dp-ocre);
+  --r-accent-3: var(--dp-gold);
+
+  /* Fio de composição tipográfica. */
+  --r-border: var(--dp-rule);
+  --r-border-w: 1px;
+
+  /* Papel não tem canto arredondado. */
+  --r-radius-sm: 0;
+  --r-radius-md: 0;
+  --r-radius-pill: 0;
+
+  /* Sem elevação: é uma folha impressa, tudo no mesmo plano. */
+  --r-elev-1: none;
+  --r-elev-2: none;
+  --r-elev-3: none;
+
+  --r-font-display: var(--dp-wood);
+  --r-font-heavy: var(--dp-head);
+  --r-font-body: var(--dp-body);
+
+  --r-ease: cubic-bezier(0.4, 0, 0.2, 1);
+  --r-dur: 220ms; /* mais lento: papel não salta */
+  --r-tilt: 0deg;
+}

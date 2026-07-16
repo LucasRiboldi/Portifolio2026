@@ -281,6 +281,7 @@ export const MOTION_PATTERNS = [
 /** Navegação lateral do /design-system. */
 export const DS_NAV = [
   { href: "/design-system", label: "Visão Geral" },
+  { href: "/design-system/realms/creative", label: "Realm · Criativo" },
   { href: "/design-system/foundations", label: "Foundations" },
   { href: "/design-system/tokens", label: "Design Tokens" },
   { href: "/design-system/components", label: "Componentes" },

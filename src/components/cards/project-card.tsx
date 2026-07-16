@@ -3,6 +3,7 @@
 import Image from "next/image"
 import Link from "next/link"
 import { cn } from "@/lib/utils"
+import { IMAGE_SIZES } from "@/design-system/image"
 import type { Project } from "@/data/projects"
 
 const CATEGORY_LABELS: Record<Project['category'], string> = {
@@ -36,10 +37,7 @@ export function ProjectCard({ project, featured }: ProjectCardProps) {
       {featured && <span aria-hidden className="art-tape absolute left-1/2 top-0 z-[3]" />}
 
       <div
-        className={cn(
-          "relative w-full overflow-hidden",
-          featured ? "h-64 md:h-80" : "h-48"
-        )}
+        className="img-frame img-wide"
         style={{ background: 'linear-gradient(135deg, rgba(249,115,22,0.12), rgba(139,92,246,0.12))' }}
       >
         {project.coverImage && (
@@ -47,6 +45,7 @@ export function ProjectCard({ project, featured }: ProjectCardProps) {
             src={project.coverImage}
             alt={project.title}
             fill
+            sizes={featured ? IMAGE_SIZES.full : IMAGE_SIZES.card}
             className="object-cover transition-transform duration-500 group-hover:scale-105"
           />
         )}
