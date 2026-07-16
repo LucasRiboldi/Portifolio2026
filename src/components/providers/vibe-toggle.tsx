@@ -10,8 +10,8 @@ import { useUniverseTransition } from "@/components/providers/universe-transitio
 /**
  * VibeToggle — o botão de troca de universo de THE THREE REALMS.
  *
- * Agora os realms são sub-sites com rota própria (creative "/", developer
- * "/dev", arcane "/prophet"). O botão deriva o realm atual do pathname e
+ * Agora os realms são sub-sites com rota própria (creative "/criativo", developer
+ * "/desenvolvedor", arcane "/anfitriao"). O botão deriva o realm atual do pathname e
  * NAVEGA para o próximo realm habilitado.
  */
 export function VibeToggle({ className }: { className?: string }) {

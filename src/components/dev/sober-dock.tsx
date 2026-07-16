@@ -11,7 +11,7 @@ import { isActive } from "@/lib/nav"
  * Itens "elevam" no hover e levam às páginas do site.
  */
 const ITEMS = [
-  { href: "/", label: "início", Icon: Home },
+  { href: "/criativo", label: "início", Icon: Home },
   { href: "/portfolio", label: "projetos", Icon: FolderGit2 },
   { href: "/tools", label: "ferramentas", Icon: Wrench },
   { href: "/blog", label: "blog", Icon: Newspaper },

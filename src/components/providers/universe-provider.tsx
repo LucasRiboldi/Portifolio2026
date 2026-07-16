@@ -8,8 +8,8 @@ import { REALMS, REALM_ORDER, DEFAULT_REALM, type RealmId } from "@/lib/realms"
 /**
  * UniverseProvider — engine de THE THREE REALMS (baseado em ROTA).
  *
- * Cada realm é um sub-site próprio: creative "/", developer "/dev",
- * arcane "/prophet". Trocar de universo = navegar para a rota do realm.
+ * Cada realm é um sub-site próprio: creative "/criativo", developer "/desenvolvedor",
+ * arcane "/anfitriao". Trocar de universo = navegar para a rota do realm.
  * O provider só expõe os realms habilitados (config do admin) e pinta
  * `data-realm` no <html> conforme a rota (para o CSS que ainda depende disso).
  */
@@ -29,8 +29,8 @@ export interface RealmSettings {
 const UniverseContext = React.createContext<UniverseContextValue | null>(null)
 
 function realmFromPath(pathname: string): RealmId {
-  if (pathname.startsWith("/dev")) return "developer"
-  if (pathname.startsWith("/prophet")) return "arcane"
+  if (pathname.startsWith("/desenvolvedor")) return "developer"
+  if (pathname.startsWith("/anfitriao")) return "arcane"
   return "creative"
 }
 

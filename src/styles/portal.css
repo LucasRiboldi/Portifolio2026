@@ -1,0 +1,65 @@
+/* Portal de entrada — layout e logos animados. */
+.portal { position: fixed; inset: 0; background: #08080c; color: #f4f4f6;
+  font-family: var(--font-sans, ui-sans-serif, system-ui, sans-serif); overflow: hidden; }
+.portal::after { content: ""; position: absolute; inset: 0; pointer-events: none; z-index: 5;
+  background: radial-gradient(120% 90% at 50% 45%, transparent 55%, rgba(0,0,0,.7) 100%); }
+.portal-top { position: absolute; top: 0; left: 0; right: 0; z-index: 6; text-align: center; padding: 26px 16px 0; }
+.portal-kick { font-size: 11px; letter-spacing: .42em; text-transform: uppercase; color: rgba(244,244,246,.42); }
+.portal-title { font-weight: 300; font-size: 20px; letter-spacing: .06em; margin-top: 8px; opacity: .85; }
+.portal-title b { font-weight: 600; }
+
+.portal-stage { display: flex; height: 100vh; }
+.portal-panel { position: relative; flex: 1; display: flex; flex-direction: column; align-items: center;
+  justify-content: center; gap: 26px; cursor: pointer; background: transparent; border: 0;
+  border-right: 1px solid rgba(255,255,255,.06); color: inherit;
+  transition: flex .6s cubic-bezier(.7,0,.2,1); }
+.portal-panel:last-child { border-right: 0; }
+.portal-panel::before { content: ""; position: absolute; inset: 0; opacity: 0; transition: opacity .6s ease;
+  background: radial-gradient(90% 70% at 50% 55%, var(--glow) 0%, transparent 70%); }
+.portal-stage:hover .portal-panel { flex: .8; }
+.portal-stage:hover .portal-panel:hover { flex: 1.8; }
+.portal-panel:hover::before, .portal-panel:focus-visible::before { opacity: .22; }
+.portal-panel:focus-visible { outline: 2px solid var(--accent); outline-offset: -8px; }
+
+.portal-logo { width: 130px; height: 130px; display: grid; place-items: center; }
+.portal-name { font-weight: 300; font-size: 26px; letter-spacing: .14em; text-transform: uppercase; }
+.portal-name b { font-weight: 700; }
+.portal-role { font-size: 11px; letter-spacing: .3em; text-transform: uppercase; color: rgba(244,244,246,.42); }
+.portal-enter { margin-top: 6px; font-size: 11px; letter-spacing: .28em; text-transform: uppercase;
+  color: var(--accent); opacity: 0; transform: translateY(6px); transition: .5s ease; }
+.portal-panel:hover .portal-enter, .portal-panel:focus-visible .portal-enter { opacity: 1; transform: none; }
+
+/* CRIATIVO — mundos paralelos + aberração cromática */
+.pl-cri { position: relative; width: 120px; height: 120px; }
+.pl-cri svg { position: absolute; inset: 0; }
+.pl-cri svg * { fill: none; stroke-width: 3; stroke-linecap: round; }
+.pl-cri .base * { stroke: #fff; }
+.pl-cri .r { mix-blend-mode: screen; animation: pl-gl 2.4s infinite steps(2); }
+.pl-cri .c { mix-blend-mode: screen; animation: pl-gl 2.4s infinite steps(2) reverse; }
+.pl-cri .r * { stroke: #ff2d95; } .pl-cri .c * { stroke: #00e5ff; }
+@keyframes pl-gl { 0%,100%{transform:translate(0,0)} 25%{transform:translate(-3px,1px)}
+  50%{transform:translate(2px,-2px)} 75%{transform:translate(-2px,2px)} }
+.portal-panel:hover .pl-cri .r, .portal-panel:hover .pl-cri .c { animation-duration: .5s; }
+
+/* DESENVOLVEDOR — terminal */
+.pl-dev { font-family: ui-monospace, monospace; font-size: 64px; font-weight: 700; color: #f8f8f2; }
+.pl-dev .p { color: #50fa7b; }
+.pl-dev .cur { display: inline-block; width: .55ch; background: #50fa7b; color: #50fa7b; animation: pl-blink 1s steps(1) infinite; }
+@keyframes pl-blink { 50% { opacity: 0; } }
+
+/* ANFITRIÃO — selo + d20 */
+.pl-anf { width: 124px; height: 124px; position: relative; animation: pl-spin 30s linear infinite;
+  filter: drop-shadow(0 0 10px rgba(201,162,74,.4)); }
+@keyframes pl-spin { to { transform: rotate(360deg); } }
+.pl-anf .ring { fill: none; stroke: #e8d9a8; stroke-width: 2; stroke-linecap: round; }
+.pl-anf .draw { stroke-dasharray: 520; stroke-dashoffset: 520; animation: pl-draw 3.4s ease forwards infinite; }
+@keyframes pl-draw { to { stroke-dashoffset: 0; } }
+.pl-anf .inner { position: absolute; inset: 0; display: grid; place-items: center; animation: pl-spin 30s linear infinite reverse; }
+.pl-anf .inner svg * { fill: none; stroke: #e8d9a8; stroke-linecap: round; stroke-linejoin: round; }
+.pl-anf .out { stroke-width: 2.6; } .pl-anf .fac { stroke-width: 1.6; opacity: .85; } .pl-anf .face { stroke-width: 2.2; }
+
+@media (prefers-reduced-motion: reduce) {
+  .pl-cri .r, .pl-cri .c, .pl-dev .cur, .pl-anf, .pl-anf .inner, .pl-anf .draw { animation: none !important; }
+  .pl-anf .draw { stroke-dashoffset: 0; }
+  .portal-panel { transition: none; }
+}

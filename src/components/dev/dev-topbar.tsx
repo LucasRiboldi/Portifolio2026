@@ -6,7 +6,7 @@ import { VibeToggle } from "@/components/providers/vibe-toggle"
 export function DevTopbar() {
   return (
     <header className="dv-topbar">
-      <Link href="/dev" className="dv-logo">
+      <Link href="/desenvolvedor" className="dv-logo">
         <span className="lr">LR</span>
         <span>
           dev<span className="blink">_</span>

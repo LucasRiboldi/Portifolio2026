@@ -30,7 +30,7 @@ export function TutorialsView({ tutorials }: { tutorials: TutorialRow[] }) {
 
       <div className="pr-grid">
         {filtered.map((t) => (
-          <Link key={t.id} href={`/prophet/oficina/${t.slug}`} className="pr-card pr-card-link">
+          <Link key={t.id} href={`/anfitriao/oficina/${t.slug}`} className="pr-card pr-card-link">
             <span className="pr-badge">{DIFF[t.difficulty] ?? t.difficulty}</span>
             <h3 className="mt-2">{t.title}</h3>
             <p>{t.summary}</p>

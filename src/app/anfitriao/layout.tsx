@@ -26,7 +26,7 @@ export default function ProphetLayout({ children }: { children: ReactNode }) {
     <div className="prophet">
       <div className="pr-container">
         <header className="pr-masthead">
-          <Link href="/prophet">
+          <Link href="/anfitriao">
             <h1>{gazette.masthead}</h1>
           </Link>
           <p className="pr-motto">{gazette.motto}</p>

@@ -73,12 +73,15 @@ export default async function RootLayout({
   // Config dos realms + do site controladas pelo admin.
   const [settings, site] = await Promise.all([getRealmSettings(), getSiteConfig()]);
 
-  // Script anti-FOUC: pinta data-realm antes da hidratação, derivado da ROTA
-  // (os realms agora são sub-sites próprios: / , /dev , /prophet).
+  // Script de gate + anti-FOUC (roda antes do paint).
+  // Pinta data-realm pela rota nova (/desenvolvedor, /anfitriao, senão creative)
+  // e, só na porta da frente "/", roteia: sem a chave → /portal; com a chave → /criativo.
   const antiFouc =
     "(function(){try{var p=location.pathname," +
-    "r=p.indexOf('/dev')===0?'developer':p.indexOf('/prophet')===0?'arcane':'creative';" +
-    "document.documentElement.setAttribute('data-realm',r);}catch(e){}})()";
+    "r=p.indexOf('/desenvolvedor')===0?'developer':p.indexOf('/anfitriao')===0?'arcane':'creative';" +
+    "document.documentElement.setAttribute('data-realm',r);" +
+    "if(p==='/'){var e=false;try{e=localStorage.getItem('lr.portal.v1')==='1';}catch(x){}" +
+    "location.replace(e?'/criativo':'/portal');}}catch(e){}})()";
 
   return (
     <html

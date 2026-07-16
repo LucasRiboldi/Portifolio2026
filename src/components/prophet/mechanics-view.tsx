@@ -32,7 +32,7 @@ export function MechanicsView({ mechanics }: { mechanics: MechanicRow[] }) {
       <div className="space-y-5">
         {filtered.map((m) => (
           <article key={m.id}>
-            <Link href={`/prophet/mecanicas/${m.slug}`} className="pr-link">
+            <Link href={`/anfitriao/mecanicas/${m.slug}`} className="pr-link">
               <h3 className="pr-headline" style={{ fontSize: "1.3rem" }}>
                 {m.title}
               </h3>

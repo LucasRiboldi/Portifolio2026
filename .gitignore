@@ -39,3 +39,4 @@ storybook-static
 # scratch/temp scripts (nunca commitar — podem conter segredos)
 _*.mjs
 .env.vercel.tmp
+.playwright-mcp/

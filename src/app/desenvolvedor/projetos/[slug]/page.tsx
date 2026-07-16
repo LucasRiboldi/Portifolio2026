@@ -30,7 +30,7 @@ export default async function ProjectDetail({ params }: { params: Promise<{ slug
 
   return (
     <article className="mx-auto max-w-3xl">
-      <Link href="/dev/projetos" className="dv-link text-sm">
+      <Link href="/desenvolvedor/projetos" className="dv-link text-sm">
         ← projetos
       </Link>
 

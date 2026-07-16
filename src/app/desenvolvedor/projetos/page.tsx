@@ -38,7 +38,7 @@ export default async function DevProjectsPage() {
               )}
               <div className="flex items-center justify-between gap-2">
                 {p.slug ? (
-                  <Link href={`/dev/projetos/${p.slug}`} className="hover:underline">
+                  <Link href={`/desenvolvedor/projetos/${p.slug}`} className="hover:underline">
                     <h3>{p.title}</h3>
                   </Link>
                 ) : (
@@ -56,7 +56,7 @@ export default async function DevProjectsPage() {
               </div>
               <div className="mt-3 flex items-center justify-between">
                 {p.slug ? (
-                  <Link href={`/dev/projetos/${p.slug}`} className="dv-link text-sm">
+                  <Link href={`/desenvolvedor/projetos/${p.slug}`} className="dv-link text-sm">
                     ver README →
                   </Link>
                 ) : (

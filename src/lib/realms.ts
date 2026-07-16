@@ -46,11 +46,11 @@ export interface Realm {
 export const REALMS: Record<RealmId, Realm> = {
   creative: {
     id: "creative",
-    label: "Creative",
+    label: "O CRIATIVO",
     glyph: "◍",
-    route: "/",
+    route: "/criativo",
     next: "developer",
-    aria: "Realm criativo (multiverso comic)",
+    aria: "O Criativo (multiverso comic)",
     theme: {
       bg: "#0b0b12",
       ink: "#fff23a",
@@ -62,11 +62,11 @@ export const REALMS: Record<RealmId, Realm> = {
   },
   developer: {
     id: "developer",
-    label: "Developer",
+    label: "O DESENVOLVEDOR",
     glyph: "❯_",
-    route: "/dev",
+    route: "/desenvolvedor",
     next: "arcane",
-    aria: "Realm de engenharia (Dracula)",
+    aria: "O Desenvolvedor (Dracula)",
     theme: {
       bg: "#282a36",
       ink: "#50fa7b",
@@ -78,11 +78,11 @@ export const REALMS: Record<RealmId, Realm> = {
   },
   arcane: {
     id: "arcane",
-    label: "Daily Prophet",
+    label: "O ANFITRIÃO",
     glyph: "⚜",
-    route: "/prophet",
+    route: "/anfitriao",
     next: "creative",
-    aria: "Realm Daily Prophet (jornal de game design)",
+    aria: "O Anfitrião (Daily Prophet, jornal de game design)",
     theme: {
       bg: "#231f18",
       ink: "#f4ecd8",
@@ -104,7 +104,7 @@ export function isRealmId(v: unknown): v is RealmId {
 
 /** Deriva o realm a partir do pathname (rotas próprias por realm). */
 export function realmFromPath(pathname: string): RealmId {
-  if (pathname.startsWith("/dev")) return "developer"
-  if (pathname.startsWith("/prophet")) return "arcane"
+  if (pathname.startsWith("/desenvolvedor")) return "developer"
+  if (pathname.startsWith("/anfitriao")) return "arcane"
   return "creative"
 }

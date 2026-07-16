@@ -23,15 +23,15 @@ interface DockItem {
 }
 
 const ITEMS: DockItem[] = [
-  { href: "/dev", label: "início", Icon: Home, exact: true },
-  { href: "/dev/projetos", label: "projetos", Icon: FolderGit2 },
-  { href: "/dev/laboratorio", label: "lab", Icon: FlaskConical },
-  { href: "/dev/ferramentas", label: "tools", Icon: Wrench },
-  { href: "/dev/devlogs", label: "devlogs", Icon: Terminal },
-  { href: "/dev/ideias", label: "ideias", Icon: Lightbulb },
-  { href: "/dev/codigo", label: "código", Icon: Code2 },
-  { href: "/dev/learn", label: "learn", Icon: GraduationCap },
-  { href: "/dev/wiki", label: "wiki", Icon: BookOpen },
+  { href: "/desenvolvedor", label: "início", Icon: Home, exact: true },
+  { href: "/desenvolvedor/projetos", label: "projetos", Icon: FolderGit2 },
+  { href: "/desenvolvedor/laboratorio", label: "lab", Icon: FlaskConical },
+  { href: "/desenvolvedor/ferramentas", label: "tools", Icon: Wrench },
+  { href: "/desenvolvedor/devlogs", label: "devlogs", Icon: Terminal },
+  { href: "/desenvolvedor/ideias", label: "ideias", Icon: Lightbulb },
+  { href: "/desenvolvedor/codigo", label: "código", Icon: Code2 },
+  { href: "/desenvolvedor/learn", label: "learn", Icon: GraduationCap },
+  { href: "/desenvolvedor/wiki", label: "wiki", Icon: BookOpen },
 ]
 
 export function DevRealmDock() {

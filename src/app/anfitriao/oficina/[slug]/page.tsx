@@ -28,7 +28,7 @@ export default async function TutorialDetail({ params }: { params: Promise<{ slu
 
   return (
     <article>
-      <Link href="/prophet/oficina" className="pr-link">
+      <Link href="/anfitriao/oficina" className="pr-link">
         ← Oficina do Inventor
       </Link>
       <p className="pr-kicker mt-3">Oficina · {DIFF[t.difficulty] ?? t.difficulty}</p>
