@@ -2,7 +2,7 @@
 
 # 🕸️ LR<span>.</span> — PORTFÓLIO 2026 🕸️
 
-### ⚡ *Um multiverso de estilos. Do átomo ao delírio.* ⚡
+### ⚡ *Uma pessoa, três universos.* ⚡
 
 **Portfólio + Design System comic-first de Lucas Riboldi**
 *Product Designer & Developer — vindo direto da Terra-2026*
@@ -18,6 +18,7 @@
 <br/>
 
 [![Vercel](https://img.shields.io/badge/▲_AO_VIVO-ff2d95?style=for-the-badge&logo=vercel&logoColor=white&labelColor=000000)](https://portifolio2026-two.vercel.app)
+[![Portal](https://img.shields.io/badge/🚪_O_PORTAL-7b2ff7?style=for-the-badge&labelColor=000000)](https://portifolio2026-two.vercel.app/portal)
 [![Design System](https://img.shields.io/badge/🎨_DESIGN_SYSTEM-00e5ff?style=for-the-badge&logoColor=black&labelColor=000000)](https://portifolio2026-two.vercel.app/design-system)
 [![Lab](https://img.shields.io/badge/⚡_LAB_ANOMALIAS-b6ff00?style=for-the-badge&labelColor=000000)](https://portifolio2026-two.vercel.app/design-system/lab)
 [![Storybook](https://img.shields.io/badge/📚_STORYBOOK-ff5a1f?style=for-the-badge&logo=storybook&logoColor=white&labelColor=000000)](https://storybook-static-zeta-steel.vercel.app)
@@ -26,6 +27,7 @@
 [![React](https://img.shields.io/badge/React_19-ff2d95?style=flat-square&logo=react&logoColor=white)](https://react.dev)
 [![TypeScript](https://img.shields.io/badge/TypeScript_5-00e5ff?style=flat-square&logo=typescript&logoColor=black)](https://www.typescriptlang.org)
 [![Tailwind](https://img.shields.io/badge/Tailwind_3-7b2ff7?style=flat-square&logo=tailwindcss&logoColor=white)](https://tailwindcss.com)
+[![Supabase](https://img.shields.io/badge/Supabase-3ecf8e?style=flat-square&logo=supabase&logoColor=white)](https://supabase.com)
 [![Motion](https://img.shields.io/badge/Motion_12-ffe600?style=flat-square&logoColor=black)](https://motion.dev)
 
 </div>
@@ -42,13 +44,28 @@
 
 ## 🎬 O que é isso?
 
-Não é *só* um portfólio. É um **portfólio + Design System corporativo completo**,
-construído com a filosofia do **multiverso de estilos**: pluralidade visual,
-identidade forte, riqueza gráfica e acabamento artesanal — sem perder usabilidade,
-acessibilidade ou performance. 💥
+Não é *só* um portfólio. São **três sites com identidade própria** sob o mesmo teto,
+mais um **Design System corporativo completo** e um **CMS próprio** alimentando tudo.
 
-> Estética **comic-first / Aranhaverso**: halftone, painéis com hard-shadow, neon
-> hiper-saturado, glitch, colagem, spray e imperfeição controlada.
+A ideia central: uma pessoa não cabe num só estilo. Em vez de espremer design, código e
+game design na mesma estética, cada faceta ganhou seu **multiverso** — com tipografia,
+paleta, layout e regras próprias. O visitante escolhe por onde entrar.
+
+## 🚪 Os três multiversos
+
+Tudo começa no [**Portal**](https://portifolio2026-two.vercel.app/portal) — a porta de
+entrada com os três logos animados. A escolha fica salva, e o botão de troca de universo
+acompanha você em qualquer página, vestindo a cara do destino.
+
+| Multiverso | Rota | Estética | O que vive lá |
+|---|---|---|---|
+| 🎨 **O Criativo** | `/criativo` | Comic-first / Aranhaverso — halftone, hard-shadow, neon | Portfólio, design system, blog, skills |
+| 💻 **O _DEV** | `/desenvolvedor` | Terminal Dracula — mono, dock no topo, cursor piscando | Projetos, laboratório, devlogs, ideias, código, wiki, learn |
+| 📰 **O Anfitrião** | `/anfitriao` | *The Meeple & Anvil Gazette* — jornal inglês do séc. XIX | Game design: redação, oficina, mecânicas, protótipos, imprensa |
+
+> 📰 **O Anfitrião** é um jornal de verdade: papel envelhecido, texto justificado em
+> colunas, capitulares, filetes, classificados e gravuras em halftone. Zero cantos
+> arredondados — o objetivo é você esquecer que está num navegador.
 
 ## 🌈 A paleta do multiverso
 
@@ -61,18 +78,23 @@ acessibilidade ou performance. 💥
 | 💜 | Violet | `#7b2ff7` | Acento |
 | 🧡 | Orange | `#ff5a1f` | Danger |
 
-## 🚪 As dimensões (páginas)
+Cada realm tem ainda a sua própria paleta escopada: Dracula no `_DEV`, sépia e papel
+envelhecido no Anfitrião.
 
-| Rota | Terra | Universo |
-|---|---|---|
-| 🏠 **Home** | Multiverso | Bento grid + onomatopeias + halftone |
-| 🖼️ **Portfólio** | Renaissance | Offset pictórico |
-| 👤 **Sobre** | Nouveau | Aquarela |
-| 📬 **Contato** | Spider-Punk | Grafite & spray |
-| 📰 **Blog** | Noir | Filme antigo (markdown) |
-| 🧪 **Skills / Tools** | Neon | Cyberpunk |
-| 🎨 **Design System** | Multiverso | O sistema completo |
-| ⚡ **Lab** | Terra-∞ | Anomalias (fontes cromáticas, glitch, colagem) |
+## 🗺️ Rotas principais
+
+| Rota | O que é |
+|---|---|
+| `/portal` | 🚪 Escolha do multiverso (porta de entrada) |
+| `/criativo` | 🎨 Home do Criativo — bento grid, onomatopeias, halftone |
+| `/desenvolvedor` | 💻 Home do _DEV — terminal Dracula |
+| `/anfitriao` | 📰 Primeira página da gazeta |
+| `/portfolio` · `/blog` · `/skills` · `/tools` | 📇 Conteúdo público |
+| `/about` · `/contact` | 👤 Sobre e contato (envio real via Resend) |
+| `/design-system` | 🎨 O sistema completo (~30 telas) |
+| `/design-system/lab` | ⚡ Anomalias — fontes cromáticas, glitch, colagem |
+| `/dimensoes` · `/styleguide` · `/gallery` | 🎭 Vitrines de direção de arte |
+| `/admin` | 🔐 Painel de administração (protegido) |
 
 ## 🏗️ O Design System — "Aranhaverso"
 
@@ -90,15 +112,35 @@ Construído em **5 fases + Lab**, do token ao delírio:
 > [`/design-system/lab`](https://portifolio2026-two.vercel.app/design-system/lab) ·
 > [Storybook](https://storybook-static-zeta-steel.vercel.app)
 
+## 🔐 O painel (CMS próprio)
+
+O conteúdo do site **vem do Supabase**, editável em `/admin` — sem redeploy para publicar.
+
+- **13 CRUDs** dirigidos por um único catálogo declarativo ([`lib/admin/resources.ts`](src/lib/admin/resources.ts)):
+  colunas, campos, validação Zod e tag de cache numa entrada só. Nova entidade = uma entrada.
+- **Autorização em três camadas** — o middleware barra quem não tem sessão → o layout chama
+  `requireAdmin()` → toda Server Action chama de novo via `adminContext()`. A allowlist é o
+  login do GitHub (`ADMIN_GITHUB_LOGIN`), nunca só "está logado".
+- **Upload de mídia validado no servidor** — formato decidido por *magic bytes* (não pelo
+  `file.type`, que o cliente forja), SVG recusado, teto de 5 MB e nome de destino gerado como
+  UUID. Coberto por testes com payloads hostis.
+- **Cache por tags** — cada edição revalida só o que mudou (`unstable_cache` + `revalidateTag`).
+
+> ⚠️ Os arquivos em `src/data/*` são **seed/fallback**, usados quando o Supabase não está
+> configurado (o caso do dev local). Editá-los **não** publica nada: para levar conteúdo novo
+> ao ar, use o botão **"Publicar conteúdo novo do código"** no `/admin`.
+
 ## 🛠 Stack
 
-`Next.js 15` · `React 19` · `TypeScript 5` · `Tailwind 3` · `Motion 12` ·
-`Radix / Base UI` · `React Hook Form + Zod` · `react-markdown` · `Resend` ·
-`Storybook 10` · `next-themes`
+`Next.js 15` · `React 19` · `TypeScript 5` · `Tailwind 3` · `Motion 12` · `GSAP 3` · `Lottie` ·
+`Supabase` (Postgres + Auth + Storage) · `Radix / Base UI` · `React Hook Form + Zod 4` ·
+`react-markdown` · `Resend` · `Storybook 10` · `Vitest 4`
+
+Hospedado na **Vercel** — deploy automático no push da `main`.
 
 ## 🚀 Rodando localmente
 
-> Pré-requisito: **Node.js 20+** (⚡ com Node 22.6+ os scripts de token rodam sem tsx)
+> Pré-requisito: **Node.js 20+**
 
 ```bash
 git clone https://github.com/LucasRiboldi/Portifolio2026.git
@@ -107,38 +149,75 @@ npm install
 npm run dev            # 🌐 http://localhost:3000
 ```
 
+**Sem `.env` o site roda normalmente** — sem Supabase configurado, ele serve o conteúdo
+estático de `src/data/*`. O `/admin` fica inacessível (não há como autenticar). Para o
+painel e o conteúdo dinâmico, copie `.env.example` para `.env.local` e preencha:
+
+| Variável | Para quê |
+|---|---|
+| `NEXT_PUBLIC_SUPABASE_URL` · `NEXT_PUBLIC_SUPABASE_ANON_KEY` | Leitura pública e sessão |
+| `SUPABASE_SERVICE_ROLE_KEY` | Seed, sync e upload de mídia (**só no servidor**) |
+| `ADMIN_GITHUB_LOGIN` | Allowlist de quem entra no `/admin` |
+| `RESEND_API_KEY` · `CONTACT_TO_EMAIL` | Formulário de contato |
+
+As policies do bucket de mídia estão em [`docs/storage-policies.sql`](docs/storage-policies.sql)
+— rode no SQL Editor do Supabase.
+
 ### 🎮 Scripts
 
 | Comando | O que faz |
 |---|---|
 | `npm run dev` | 🔥 servidor de desenvolvimento |
 | `npm run build` | 📦 build de produção |
+| `npm run test:unit` | 🧪 testes unitários (Vitest) |
 | `npm run storybook` | 📚 catálogo de componentes (porta 6006) |
 | `npm run tokens:export` | 🎨 gera tokens Figma + W3C DTCG |
 | `npm run tokens:check` | ✅ valida sincronia dos tokens |
+| `npm run sync:vercel-env` | 🔑 envia o `.env.local` para a Vercel |
 | `npm run lint` | 🧹 ESLint |
+| `npm run format` | 💅 Prettier |
 
 ## 📁 Estrutura (resumo)
 
 ```
 src/
-├── app/(site)/            # 🚪 rotas públicas + /design-system (14 telas)
+├── app/
+│   ├── (site)/            # 🎨 realm Criativo + rotas públicas + /design-system
+│   ├── desenvolvedor/     # 💻 realm _DEV (Dracula)
+│   ├── anfitriao/         # 📰 realm Anfitrião (a gazeta)
+│   ├── portal/            # 🚪 porta de entrada
+│   └── admin/             # 🔐 painel (CRUDs + Server Actions)
 ├── components/
 │   ├── ui/                # 🧩 componentes (sv-button, sv-input, sv-choice…)
 │   ├── sections/          # 🧱 blocos (pricing, testimonials, timeline…)
 │   ├── design-system/     # 🎨 ilustrações, logos, filtros de arte
-│   └── layout/            # 🧭 navbar, footer, skip-link
-├── design-system/         # ⚛️ tokens.ts, registry.ts, motion.ts
-├── data/                  # 📇 projetos, ferramentas, posts (conteúdo tipado)
-└── styles/                # 🖌️ tokens.css + camadas art/fx/punk/surfaces
-docs/design-system/        # 📖 arquitetura, tokens, a11y, grid, marca, roadmap
+│   ├── realms/            # 🌐 troca de universo + logos animados
+│   ├── portal/ dev/ prophet/ gazette/   # 🎭 componentes por realm
+│   └── admin/             # 🔐 formulários, listas, mídia
+├── lib/
+│   ├── repos/             # 🗄️ leitura do Supabase (cacheada, com fallback)
+│   ├── admin/             # ⚙️ catálogo de recursos, seed, sync, validação
+│   ├── supabase/ auth/    # 🔑 clients e autorização
+│   └── realms.ts          # 🌐 definição dos três universos
+├── design-system/         # ⚛️ tokens.ts, registry.ts, motion.ts, gsap.ts
+├── data/                  # 📇 seed/fallback tipado (projetos, tools, posts…)
+└── styles/                # 🖌️ tokens.css + camadas art/fx/dracula/gazette
+docs/                      # 📖 arquitetura, deploy, design system, policies
+tests/                     # 🧪 testes unitários
 ```
 
 ## ♿ Acessibilidade
 
-**WCAG 2.2 AA** levado a sério: skip link, foco espesso sempre visível,
-navegação por teclado, `prefers-reduced-motion` em toda animação, e uma
-**matriz de contraste ao vivo** calculada dos tokens. 💪
+**WCAG 2.2 AA** levado a sério: skip link, foco espesso sempre visível, navegação por
+teclado, `prefers-reduced-motion` em toda animação (inclusive nos logos animados dos
+realms), e uma **matriz de contraste ao vivo** calculada dos tokens. 💪
+
+## 🔒 Segurança
+
+CSP e headers de hardening (`X-Content-Type-Options`, `Referrer-Policy`,
+`Permissions-Policy`, HSTS) aplicados em todas as rotas. A chave service-role é marcada com
+`server-only` e nunca importada em código de cliente. Escrita no banco sempre atrás de
+`requireAdmin()`.
 
 ## 📫 Contato
 
