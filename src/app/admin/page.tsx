@@ -3,6 +3,7 @@ import { FolderKanban, FileText, Sparkles, Wrench, Mail, ArrowUpRight } from "lu
 
 import { getAdminStats } from "@/lib/admin/stats"
 import { SeedButton } from "@/components/admin/seed-button"
+import { SyncContentButton } from "@/components/admin/sync-content-button"
 
 const CARDS = [
   { key: "projects", label: "Projetos", href: "/admin/projects", icon: FolderKanban, color: "var(--mm-primary)", light: "var(--mm-light-primary)" },
@@ -91,9 +92,12 @@ export default async function AdminDashboard() {
           ) : (
             <>
               <h2 className="font-semibold">Tudo sincronizado</h2>
-              <p className="mt-1 text-sm" style={{ color: "var(--mm-text-2)" }}>
+              <p className="mb-4 mt-1 text-sm" style={{ color: "var(--mm-text-2)" }}>
                 O conteúdo do site é servido do banco. Edições publicam em segundos.
+                Se você acrescentou projetos, ferramentas ou posts no código, publique-os aqui —
+                só o que falta é inserido, nada que você editou no painel é sobrescrito.
               </p>
+              <SyncContentButton />
             </>
           )}
         </div>
