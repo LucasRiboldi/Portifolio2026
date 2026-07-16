@@ -5,7 +5,6 @@ import type { ReactNode } from "react"
 import Link from "next/link"
 
 import { ProphetNav } from "@/components/prophet/prophet-nav"
-import { SoundToggle } from "@/components/prophet/sound-toggle"
 import { VibeToggle } from "@/components/providers/vibe-toggle"
 import { gazette, frontPage } from "@/lib/arcane-content"
 
@@ -43,19 +42,22 @@ export default function ProphetLayout({ children }: { children: ReactNode }) {
     <div className="prophet">
       <div className="pr-container">
         <header className="pr-masthead">
-          <div className="pr-nameplate">
+          <div className="pr-topstrip">
             <div className="pr-crest pr-crest--l" aria-hidden>
               <OwlCrest />
               <span className="pr-crest-words">{frontPage.crestLeft.join(" · ")}</span>
             </div>
-            <Link href="/anfitriao" className="pr-nameplate-mid">
-              <h1>{gazette.masthead}</h1>
-            </Link>
             <div className="pr-crest pr-crest--r" aria-hidden>
               <span className="pr-crest-words">{frontPage.crestRight.join(" · ")}</span>
               <span className="pr-sign">{frontPage.signature}</span>
             </div>
           </div>
+          <Link href="/anfitriao" className="pr-nameplate-mid">
+            <span className="pr-the">The</span>
+            <h1>
+              Daily <span className="pr-goldp">P</span>rophet
+            </h1>
+          </Link>
           <p className="pr-motto">{gazette.motto}</p>
         </header>
         <div className="pr-dateline">
@@ -63,7 +65,6 @@ export default function ProphetLayout({ children }: { children: ReactNode }) {
           <span>{today}</span>
           <span className="flex items-center gap-3">
             {gazette.price}
-            <SoundToggle />
             <VibeToggle />
           </span>
         </div>

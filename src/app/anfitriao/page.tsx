@@ -1,7 +1,6 @@
 import Link from "next/link"
 
 import { frontPage as fp } from "@/lib/arcane-content"
-import { InkScramble } from "@/components/prophet/ink-scramble"
 import { LivingPortrait } from "@/components/prophet/living-portrait"
 
 export const metadata = { title: "Primeira Página" }
@@ -35,7 +34,7 @@ export default function ProphetFront() {
         <div className="pr-info-cell">
           <p className="pr-info-title">{fp.aspects.title}</p>
           {fp.aspects.lines.map((l) => (
-            <p key={l} className="pr-info-row pr-info-row--single">
+            <p key={l} className="pr-info-row--single">
               {l}
             </p>
           ))}
@@ -46,23 +45,13 @@ export default function ProphetFront() {
           <p className="pr-info-row--single">{fp.edition.number}</p>
           <p className="pr-info-row--single">{fp.edition.place}</p>
           <p className="pr-info-row--single">{fp.edition.sign}</p>
-          <span className="pr-price">{fp.edition.price}</span>
         </div>
       </div>
 
       {/* ─── Manchetão / herói ─── */}
       <section className="pr-hero">
-        <span className="pr-side pr-side-l" aria-hidden>
-          {fp.hero.sideLeft}
-        </span>
-        <span className="pr-side pr-side-r" aria-hidden>
-          {fp.hero.sideRight}
-        </span>
-
-        <p className="pr-kicker pr-hero-kicker">{fp.hero.kicker}</p>
-        <h2 className="pr-bighead">
-          <InkScramble text={fp.hero.headline} />
-        </h2>
+        <p className="pr-hero-kicker">{fp.hero.kicker}</p>
+        <h2 className="pr-bighead">{fp.hero.headline}</h2>
 
         <div className="pr-hero-body">
           <p className="pr-hero-col pr-cap-wrap">
@@ -88,23 +77,13 @@ export default function ProphetFront() {
         </div>
       </section>
 
-      <hr className="pr-rule pr-rule-thick" />
+      <hr className="pr-rule-thick" />
 
-      {/* ─── Matérias (seções reais, com botão incorporado) ─── */}
+      {/* ─── Matérias (4 seções reais, simétricas, com botão) ─── */}
       <div className="pr-reports">
-        <article className="pr-report pr-report--lead">
-          <h3 className="pr-report-head">
-            {fp.darkForces.dropTitle} <em>{fp.darkForces.title}</em>
-          </h3>
-          <p className="pr-cap-wrap">
-            <span className="pr-cap">S</span>
-            {fp.darkForces.body}
-          </p>
-        </article>
-
         {fp.reports.map((r) => (
           <article key={r.href} className="pr-report">
-            {r.kicker && <p className="pr-kicker">{r.kicker}</p>}
+            <p className="pr-kicker">{r.kicker || "Nesta edição"}</p>
             <h3 className="pr-report-head">{r.title}</h3>
 
             {r.chart && (

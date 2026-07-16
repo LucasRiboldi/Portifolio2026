@@ -735,3 +735,85 @@
 }
 .pr-index-item:hover { color: var(--p-accent); }
 .pr-index-item:hover b { color: var(--p-accent); }
+
+/* ============================================================
+   REVISÃO — "jornal antigo": sem efeitos nas letras, manchetes
+   em serifa pesada, masthead limpo e grids simétricos.
+   (Bloco no fim do arquivo → sobrescreve as regras acima.)
+   ============================================================ */
+
+/* Masthead: título grande, centrado, SEM efeito de letras */
+.pr-masthead h1 {
+  font-family: "Harry P", var(--font-arcane, var(--p-serif));
+  font-size: clamp(2.6rem, 9vw, 5.5rem);
+  font-weight: 400;
+  letter-spacing: 0.01em;
+  line-height: 1;
+  text-shadow: none;
+}
+.pr-topstrip {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-start;
+  gap: 0.5rem;
+  min-height: 40px;
+}
+.pr-nameplate-mid { display: block; text-align: center; }
+
+/* Remove o "sangramento de tinta" no hover de manchetes/cards */
+.pr-headline:hover,
+.pr-card:hover h3,
+.pr-report-head:hover,
+.pr-bighead:hover {
+  text-shadow: none;
+  letter-spacing: inherit;
+}
+
+/* Fontes das matérias: serifa pesada (jornal antigo), sem decorativa */
+.pr-bighead {
+  font-family: var(--p-serif);
+  font-weight: 900;
+  letter-spacing: -0.01em;
+  text-shadow: none;
+}
+.pr-report-head,
+.pr-headline,
+.pr-info-title,
+.pr-card h3,
+.pr-bounty-txt b,
+.pr-bounty-amt {
+  font-family: var(--p-serif);
+  text-shadow: none;
+}
+.pr-report-head { font-weight: 900; }
+.pr-cap { font-family: var(--p-serif); font-weight: 900; }
+
+/* Barra de infos simétrica */
+.pr-infobar { grid-template-columns: 1.3fr 1fr 1fr 1fr; }
+
+/* Matérias: 4 colunas iguais (simétrico) */
+.pr-reports {
+  grid-template-columns: repeat(4, 1fr);
+  gap: 1.6rem;
+}
+.pr-report { display: flex; flex-direction: column; }
+.pr-report .pr-cap-wrap { flex: 1; }
+.pr-fullreport { align-self: flex-start; }
+@media (max-width: 980px) { .pr-reports { grid-template-columns: 1fr 1fr; } }
+@media (max-width: 560px) { .pr-reports { grid-template-columns: 1fr; } }
+
+/* Índice inferior simétrico */
+.pr-index-item { flex: 1 1 0; }
+
+/* Masthead: "The" pequeno acima + "Daily Prophet" grande com P dourado */
+.pr-the {
+  display: block;
+  font-family: var(--p-serif);
+  font-variant: small-caps;
+  letter-spacing: 0.42em;
+  font-size: clamp(0.7rem, 1.6vw, 1.05rem);
+  color: var(--p-ink-2);
+  margin-bottom: -0.35rem;
+  padding-left: 0.42em;
+}
+.pr-goldp { color: var(--p-gold); }

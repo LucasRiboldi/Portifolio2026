@@ -12,6 +12,7 @@ import { cn } from "@/lib/utils";
 import { getRealmSettings } from "@/lib/repos/realms";
 import { getSiteConfig } from "@/lib/repos/site-config";
 import { SiteConfigProvider } from "@/components/providers/site-config-provider";
+import { AdminFab } from "@/components/layout/admin-fab";
 
 const SITE_URL = "https://portifolio2026-two.vercel.app";
 
@@ -97,6 +98,7 @@ export default async function RootLayout({
             </UniverseProvider>
           </SiteConfigProvider>
         </ThemeProvider>
+        <AdminFab />
         <Analytics />
       </body>
     </html>
