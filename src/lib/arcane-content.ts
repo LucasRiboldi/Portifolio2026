@@ -82,3 +82,118 @@ export const almanac = [
   { value: "3", label: "sistemas autorais" },
   { value: "∞", label: "playtests até acertar" },
 ]
+
+/* ============================================================
+   PRIMEIRA PÁGINA — diagramação fiel ao Daily Prophet.
+   Cada "matéria" aponta para uma seção real do realm.
+   ============================================================ */
+
+export const frontPage = {
+  /** Palavras que ladeiam o brasão (esquerda / direita). */
+  crestLeft: ["encante", "conjure"],
+  crestRight: ["enfeitiçe", "invente", "jogue", "divine"],
+  signature: "L·R",
+
+  /** Barra de informações abaixo do masthead. */
+  bounty: {
+    amount: "100.000",
+    unit: "ÓBOLOS",
+    target: "PELA CABEÇA DO DESEQUILÍBRIO",
+    note: "— veja o balanceamento na Oficina, pág. 3",
+  },
+  weather: {
+    title: "Clima das Mesas",
+    rows: [
+      ["norte", "dados quentes ↑"],
+      ["centro", "blefe encoberto"],
+      ["sul", "sorte variável"],
+    ] as [string, string][],
+  },
+  aspects: {
+    title: "Zodíaco & Aspectos",
+    lines: ["☉ em Estrategista", "☾ em Sortudo", "♄ retrógrado no Tabuleiro"],
+  },
+  edition: {
+    label: "Primeira–Segunda Edição",
+    number: "Nº MMXXVI·01",
+    place: "Terra-2026",
+    sign: "hoje em Escorpião",
+    price: "1 óbolo",
+  },
+
+  /** Herói da capa. */
+  hero: {
+    kicker: "Exclusivo · A mesa em chamas",
+    headline: "O TERROR DO PLAYTEST CONTINUA",
+    standfirst:
+      "Do primeiro rascunho feio ao protótipo que devora a mesa: como mecânicas cruas viram histórias que os jogadores contam de volta.",
+    caption: "Fumaça de dado paira sobre a Cidade dos Jogadores ao anoitecer",
+    sideLeft: "AS FORÇAS DO ACASO CRESCEM EM NÚMERO",
+    sideRight: "O TERROR DO PLAYTEST CONTINUA",
+  },
+
+  /** Coluna "Dark Forces" (continuação, com capitular). */
+  darkForces: {
+    dropTitle: "AS FORÇAS DO ACASO",
+    title: "CRESCEM EM NÚMERO",
+    body:
+      "Sistemas de recursos e economias de deck se multiplicam a cada ciclo. O estúdio isola a mecânica antes da arte: um bom protótipo é feio de propósito, para que o divertimento não seja acidente da ilustração.",
+  },
+
+  /** Matérias inferiores — cada uma é uma seção real (botão incorporado). */
+  reports: [
+    {
+      kicker: "Relatório Especial",
+      title: "NEGOCIAÇÕES DE REGRAS FRACASSAM",
+      dropcap: "A",
+      body:
+        "assembleia de designers rompe o acordo sobre a curva de dificuldade; comitê de playtest promete nova rodada de ajustes até a próxima edição.",
+      href: "/anfitriao/oficina",
+      cta: "Matéria completa",
+      page: "pág. 3",
+      chart: false,
+    },
+    {
+      kicker: "",
+      title: "ONDE ARRANJAMOS NOVAS MECÂNICAS?",
+      dropcap: "B",
+      body:
+        "bruxos do balanceamento apontam para o Caderno de Mecânicas — loops, economias e tensão catalogados para quem ficou sem núcleo de jogo.",
+      href: "/anfitriao/mecanicas",
+      cta: "Ler o caderno",
+      page: "págs. 8/9",
+      chart: false,
+    },
+    {
+      kicker: "",
+      title: "PREÇOS DAS CARTAS DESABAM",
+      dropcap: "O",
+      body:
+        "índice de raridade despenca após novo playtest; o Laboratório abre as bancadas e mostra os protótipos que causaram a queda.",
+      href: "/anfitriao/laboratorio",
+      cta: "Ver o laboratório",
+      page: "págs. 3/4",
+      chart: true,
+    },
+    {
+      kicker: "",
+      title: "PERCALÇOS DE PÓ DE FLU: OS FATOS",
+      dropcap: "A",
+      body:
+        "Imprensa do Inventor reúne notas de produção, print & play e os bastidores das edições — os fatos que você precisa saber.",
+      href: "/anfitriao/imprensa",
+      cta: "Ir à imprensa",
+      page: "págs. 4/5",
+      chart: false,
+    },
+  ],
+
+  /** Barra-índice inferior — o menu incorporado como índice de jornal. */
+  index: [
+    { label: "editorial", href: "/anfitriao/redacao", page: 2 },
+    { label: "oficina", href: "/anfitriao/oficina", page: 3 },
+    { label: "mecânicas", href: "/anfitriao/mecanicas", page: 8 },
+    { label: "laboratório", href: "/anfitriao/laboratorio", page: 4 },
+    { label: "imprensa", href: "/anfitriao/imprensa", page: 5 },
+  ],
+} as const

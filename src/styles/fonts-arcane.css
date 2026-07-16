@@ -6,13 +6,16 @@
    Nome da família = nome interno real da fonte.
    ============================================================ */
 
-/* Wordmark do título (logo Harry Potter / Daily Prophet) */
+/* Wordmark do título (logo Harry Potter / Daily Prophet)
+   unicode-range limita ao ASCII: acentos (ç, ã, í…) caem no fallback serif,
+   já que estas fontes decorativas não têm esses glifos (evita "buracos"). */
 @font-face {
   font-family: "Harry P";
   src: url("/font/woff2/HARRYP.woff2") format("woff2");
   font-weight: 400;
   font-style: normal;
   font-display: swap;
+  unicode-range: U+0020-007E;
 }
 
 /* Manchetes decorativas */
@@ -20,11 +23,13 @@
   font-family: "Headline One";
   src: url("/font/woff2/HEADOH.woff2") format("woff2");
   font-display: swap;
+  unicode-range: U+0020-007E;
 }
 @font-face {
   font-family: "Headline Two";
   src: url("/font/woff2/HEADTH.woff2") format("woff2");
   font-display: swap;
+  unicode-range: U+0020-007E;
 }
 
 /* Corpo de jornal bruxo */
@@ -32,6 +37,7 @@
   font-family: "Mugglenews";
   src: url("/font/woff2/Mugglenews.woff2") format("woff2");
   font-display: swap;
+  unicode-range: U+0020-007E;
 }
 
 /* Ornamentais / mágicas */
