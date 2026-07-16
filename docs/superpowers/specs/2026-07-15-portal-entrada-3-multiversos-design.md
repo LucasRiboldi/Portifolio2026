@@ -8,69 +8,94 @@
 Criar a **porta de entrada** do site: uma tela minimalista e profunda, exibida
 **uma vez por navegador**, onde o visitante escolhe entre os três multiversos
 (personas). Após escolher, é levado ao realm correspondente e navega entre as
-três personas por dentro (mecanismo já existente).
+três personas por dentro (mecanismo já existente). Como parte disso, as rotas de
+cada persona passam a ter **nomes canônicos** (`/criativo`, `/desenvolvedor`,
+`/anfitriao`).
 
-## Convenção de nomes (identificação visível)
+## Convenção de nomes e rotas
 
-| Chave interna (`RealmId`) | Rota | Identificação visível |
-|---|---|---|
-| `creative` | `/` | **O CRIATIVO** |
-| `developer` | `/dev` | **O DESENVOLVEDOR** |
-| `arcane` | `/prophet` | **O ANFITRIÃO** |
+| Chave interna (`RealmId`) | Rota nova | Rota antiga | Identificação visível |
+|---|---|---|---|
+| `creative` | `/criativo` | `/` | **O CRIATIVO** |
+| `developer` | `/desenvolvedor` | `/dev` | **O DESENVOLVEDOR** |
+| `arcane` | `/anfitriao` | `/prophet` | **O ANFITRIÃO** |
 
-Chaves internas e rotas **não mudam** (evita quebrar código e links). Muda só a
-identificação visível: `REALMS.label`, `REALMS.aria`, botão de troca de universo
-e títulos.
+- **Chaves internas (`RealmId`) não mudam** (creative/developer/arcane) — evita
+  refactor de tipos e do engine de realms.
+- **Rotas mudam** (decisão do usuário: substituir de vez).
+- **Subpáginas do CRIATIVO permanecem na raiz** (`/portfolio`, `/tools`,
+  `/blog`, `/about`, `/skills`, `/dimensoes`, `/styleguide`, `/design-system`,
+  `/contact`, `/gallery`, `/github`, `/sports-widget`). Só a **home** do criativo
+  vai para `/criativo`.
 
 ## Escopo
 
-**Inclui:** rota `/portal`, gate por `localStorage`, os 3 logos animados,
-rerotulagem dos realms, reúso da transição existente, a11y/reduced-motion.
+**Inclui:** rota `/portal` (gate), renomeação `/dev`→`/desenvolvedor` e
+`/prophet`→`/anfitriao`, home do criativo em `/criativo`, redirects 301 das
+rotas antigas, `/` como redirecionador, os 3 logos animados, rerotulagem dos
+realms, reúso da transição, a11y/reduced-motion.
 
 **Não inclui:** redesenho da navegação interna entre personas (o
-`UniverseProvider` atual é reaproveitado como está); mudança de rotas/chaves.
+`UniverseProvider` é reaproveitado); mover as subpáginas do criativo para
+`/criativo/*` (ficam na raiz).
 
 ## Decisões de design (travadas)
 
 1. **Persistência:** uma vez por navegador, para sempre (`localStorage`).
-2. **Anfitrião** = realm `arcane` existente (`/prophet`), apenas rerotulado.
-3. **Rota dedicada** `/portal` (não overlay, não substitui `/`).
+2. **Anfitrião** = realm `arcane` existente, rerotulado e movido para `/anfitriao`.
+3. **Rota dedicada** `/portal` para o gate.
 4. **Nav interna:** mantém o `UniverseProvider` atual.
+5. **Renomear rotas de vez**; `/criativo` é a home; subpáginas ficam na raiz.
 
 ## Arquitetura
 
-### Rota e layout
+### Rotas e layouts
 
-- `src/app/portal/layout.tsx` — layout mínimo, **sem** navbar/footer/docks. Fora
-  do grupo `(site)` para não herdar o chrome do CRIATIVO. Tela cheia, fundo
-  `#08080c`.
-- `src/app/portal/page.tsx` — renderiza `<PortalGate />`.
+- **Renomear pastas** no App Router:
+  - `src/app/dev/` → `src/app/desenvolvedor/`
+  - `src/app/prophet/` → `src/app/anfitriao/`
+  - Ajustar `metadata`, layouts e **todos os links internos** dessas árvores.
+- **Home do criativo:** criar `src/app/(site)/criativo/page.tsx` com o conteúdo
+  atual de `(site)/page.tsx` (inclui o `MotionDemo` já adicionado).
+- **`/portal`:** `src/app/portal/layout.tsx` (mínimo, sem chrome) +
+  `src/app/portal/page.tsx` (monta `<PortalGate />`).
+- **`/` (redirecionador):** `src/app/(site)/page.tsx` passa a renderizar uma
+  página mínima cujo **script de gate** decide o destino (ver abaixo). Não faz
+  `redirect()` server-side (senão o script inline não roda).
+
+### Redirects das rotas antigas
+
+- Em `next.config.ts`, `redirects()` com 301 permanente:
+  - `/dev/:path*` → `/desenvolvedor/:path*`
+  - `/prophet/:path*` → `/anfitriao/:path*`
 
 ### Gate "só uma vez" (localStorage)
 
-- Chave: `lr.portal.v1`.
-- **Script inline no `<head>`** de `src/app/layout.tsx` (mesmo padrão do
-  anti-FOUC já presente). Executa antes do primeiro paint:
-  - Se `pathname === "/"` **e** a chave não existe → `location.replace("/portal")`
-    antes de renderizar (sem flash).
-  - **Deep links respeitados:** qualquer outra rota (`/dev`, `/prophet`,
-    subpáginas) **não** é redirecionada, mesmo sem a chave. Só a porta da frente
-    (`/`) faz o gate.
-- Helper `src/lib/portal.ts`: `PORTAL_KEY`, `hasEntered()`, `markEntered()`.
+- Chave: `lr.portal.v1`. Helper `src/lib/portal.ts`: `PORTAL_KEY`,
+  `hasEntered()`, `markEntered()`.
+- **Script inline no `<head>`** de `src/app/layout.tsx` (padrão anti-FOUC).
+  Executa antes do primeiro paint **apenas quando `pathname === "/"`**:
+  - Sem a chave → `location.replace("/portal")`.
+  - Com a chave → `location.replace("/criativo")`.
+- **Deep links respeitados:** `/criativo`, `/desenvolvedor`, `/anfitriao` e as
+  subpáginas nunca passam pelo gate. Só `/` é roteado.
 
 ### Escolha → destino
 
-- Clicar num painel:
+- Clicar num painel do portal:
   1. `markEntered()` grava `lr.portal.v1`.
-  2. Navega para a rota do realm (`/`, `/dev`, `/prophet`).
+  2. Navega para a rota do realm (`/criativo`, `/desenvolvedor`, `/anfitriao`).
 - **Reutiliza `UniverseTransitionProvider`** para a travessia dimensional
-  existente, mantendo coerência com o resto do site. Se a transição não estiver
-  disponível no contexto do `/portal`, faz fallback para navegação direta.
+  existente. Fallback para navegação direta se o contexto não estiver disponível.
 
-### Rerotulagem dos realms
+### Realms e derivação de rota
 
-- `src/lib/realms.ts`: atualizar `label` e `aria` das três entradas para a
-  convenção acima. Nenhuma outra mudança no registro.
+- `src/lib/realms.ts`: atualizar `route` (novas rotas), `label` e `aria`.
+- `realmFromPath()` (em `realms.ts` e no `universe-provider.tsx`):
+  - começa com `/desenvolvedor` → `developer`
+  - começa com `/anfitriao` → `arcane`
+  - senão (`/criativo`, `/`, subpáginas da raiz) → `creative`
+- `REALMS.creative.route` = `/criativo`; `next`/ciclo inalterados.
 
 ## Componentes / arquivos
 
@@ -81,11 +106,25 @@ rerotulagem dos realms, reúso da transição existente, a11y/reduced-motion.
 | `src/components/portal/portal-gate.tsx` | Os 3 painéis (client); hover/teclado; grava chave e navega |
 | `src/components/portal/logos/logo-criativo.tsx` | Mundos paralelos + aberração cromática |
 | `src/components/portal/logos/logo-desenvolvedor.tsx` | Prompt `❯_` com cursor piscando |
-| `src/components/portal/logos/logo-anfitriao.tsx` | Selo dourado que se desenha + d20 clássico (contra-rotação) |
+| `src/components/portal/logos/logo-anfitriao.tsx` | Selo dourado + d20 clássico (contra-rotação) |
 | `src/styles/portal.css` | Estilos e keyframes do portal e logos |
 | `src/lib/portal.ts` | Chave e helpers de persistência |
+| `src/app/(site)/criativo/page.tsx` | Home do CRIATIVO (conteúdo movido de `(site)/page.tsx`) |
+| `src/app/(site)/page.tsx` (edição) | Página `/` mínima (redirecionador do gate) |
+| `src/app/desenvolvedor/**` | Renomeado de `src/app/dev/**` |
+| `src/app/anfitriao/**` | Renomeado de `src/app/prophet/**` |
 | `src/app/layout.tsx` (edição) | Script inline do gate |
-| `src/lib/realms.ts` (edição) | Rerotulagem `label`/`aria` |
+| `src/lib/realms.ts` (edição) | Rotas novas + rerotulagem `label`/`aria` |
+| `src/components/providers/universe-provider.tsx` (edição) | `realmFromPath` novo |
+| `next.config.ts` (edição) | `redirects()` 301 das rotas antigas |
+
+### Links internos a atualizar (categorias)
+
+- `dev-realm-dock.tsx`, `dev-topbar.tsx` → `/desenvolvedor/*`
+- `prophet-nav.tsx` → `/anfitriao/*`
+- Qualquer `Link href="/dev"`/`"/prophet"` no app (busca global).
+- `sober-dock.tsx` aponta para raiz/subpáginas — **inalterado** (não são rotas de persona).
+- `sitemap.xml`, `robots`, metadados que citem as rotas.
 
 ## Conteúdo dos painéis
 
@@ -93,52 +132,48 @@ rerotulagem dos realms, reúso da transição existente, a11y/reduced-motion.
 |---|---|---|---|
 | Criativo | **Criativo** | Design · Arte · Multiverso | Mundos paralelos (3 círculos sobrepostos) sob aberração cromática RGB |
 | Desenvolvedor | **Desenvolvedor** | Aprendizado · Código · Ferramentas | Terminal `❯_` com cursor piscando (verde Dracula) |
-| Anfitrião | **Anfitrião** | Boardgame · Magia · Nostalgia | Selo dourado (stroke que se desenha, giro lento) com d20 clássico interno em contra-rotação |
+| Anfitrião | **Anfitrião** | Boardgame · Magia · Nostalgia | Selo dourado (stroke que se desenha, giro lento) com d20 clássico em contra-rotação |
 
-Topo: kicker "Escolha seu multiverso" + "Uma pessoa, três universos."
-Sem frase de rodapé.
+Topo: kicker "Escolha seu multiverso" + "Uma pessoa, três universos." Sem frase
+de rodapé.
 
 ## Estética
 
 - Fundo `#08080c` com vinheta radial (profundidade).
-- Três painéis lado a lado; no hover, o painel focado expande (`flex 1.8`), os
-  outros recuam (`flex .8`), e a cor-acento da persona "floresce" via gradiente
-  radial (magenta / verde / dourado).
+- Três painéis lado a lado; no hover, o focado expande (`flex 1.8`), os outros
+  recuam (`flex .8`), e a cor-acento "floresce" (magenta / verde / dourado).
 - Tipografia fina, muito espaço negativo; "Entrar →" aparece no hover.
 
 ## Acessibilidade
 
-- Cada painel é elemento interativo focável (`<button>`), com
-  `aria-label` explícito (ex.: "Entrar no multiverso do Criativo").
-- Navegação por teclado (Tab + Enter/Espaço) e foco visível.
-- **`prefers-reduced-motion: reduce`**: congela glitch, giro do selo e cursor —
-  mostra estado estático legível.
-- Contraste do texto sobre `#08080c` validado (AA).
+- Cada painel é `<button>` focável, com `aria-label` explícito.
+- Teclado (Tab + Enter/Espaço) e foco visível.
+- **`prefers-reduced-motion: reduce`**: congela glitch, giro do selo e cursor.
+- Contraste AA sobre `#08080c`.
 
 ## CSP
 
-- Logos são SVG/CSS via **classes** em `portal.css` (evitar `style=` inline
-  crítico). Compatível com o CSP atual (`script-src 'self' 'unsafe-inline'`,
-  `style-src 'self' 'unsafe-inline'`). Nenhuma origem externa nova.
+- Logos em SVG/CSS via **classes** (`portal.css`), sem `style=` inline crítico.
+  Compatível com o CSP atual; nenhuma origem externa nova.
 
 ## Verificação (critérios de aceite)
 
 1. `next build` passa; sem erros de tipo.
-2. **Primeiro acesso:** abrir `/` sem a chave → redireciona a `/portal` (sem
-   flash perceptível).
-3. **Escolha:** clicar num painel grava `lr.portal.v1` e leva ao realm certo.
-4. **Segundo acesso:** abrir `/` com a chave → renderiza o CRIATIVO, sem passar
-   pelo portal.
-5. **Deep link:** abrir `/dev` sem a chave → vai direto ao DESENVOLVEDOR (não é
-   sequestrado).
-6. **Rerotulagem:** os rótulos visíveis exibem O CRIATIVO / O DESENVOLVEDOR /
-   O ANFITRIÃO.
-7. **A11y:** navegável por teclado; com reduced-motion, sem animações.
-8. **CSP:** sem violações no console (Playwright em `/portal`).
+2. **Primeiro acesso:** `/` sem a chave → `/portal` (sem flash).
+3. **Escolha:** clicar grava `lr.portal.v1` e leva ao realm certo (`/criativo`,
+   `/desenvolvedor`, `/anfitriao`).
+4. **Segundo acesso:** `/` com a chave → `/criativo`, sem passar pelo portal.
+5. **Deep link:** `/desenvolvedor` sem a chave → vai direto (não é sequestrado).
+6. **Redirects:** `/dev` → `/desenvolvedor` e `/prophet` → `/anfitriao` (301).
+7. **Rerotulagem:** rótulos exibem O CRIATIVO / O DESENVOLVEDOR / O ANFITRIÃO.
+8. **A11y:** navegável por teclado; com reduced-motion, sem animações.
+9. **CSP:** sem violações no console (Playwright em `/portal` e nas 3 personas).
 
 ## Riscos / notas
 
-- O gate depende de `localStorage` (client-only); por isso o redirect é via
-  script inline no `<head>`, não middleware (middleware não lê `localStorage`).
-- Em navegação SPA interna do Next, o script inline roda só no load inicial —
-  aceitável, pois o gate só importa na entrada "fria" pela porta da frente.
+- O gate depende de `localStorage` (client-only) → redirect via script inline no
+  `<head>`, não middleware.
+- Renomear rotas é a maior fonte de risco: um `Link` esquecido gera 404 (mitigado
+  pelos redirects 301 e por busca global de `href="/dev"`/`"/prophet"`).
+- URLs públicas antigas (`/dev`, `/prophet`) seguem funcionando via 301 — bom
+  para SEO e links já compartilhados.
