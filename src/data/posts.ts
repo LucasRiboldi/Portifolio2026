@@ -15,6 +15,50 @@ export interface Post {
 
 export const posts: Post[] = [
   {
+    slug: "bolao-copa-2026",
+    title: "Fiz um bolão para a Copa de 2026 — e ele já tem 49 pessoas dentro",
+    excerpt:
+      "48 seleções, 3 países e um ranking que muda a cada rodada. Como o Bolão da Copa 2026 funciona, o que ele resolve e por que ele é um PWA em React + Firebase.",
+    date: "2026-07-16",
+    readingMinutes: 4,
+    tags: ["React", "Firebase", "PWA", "Projeto"],
+    accent: "violet",
+    body: `A Copa de 2026 tem **48 seleções** espalhadas por **3 países**. É a maior da
+história — e também a mais difícil de acompanhar numa planilha de grupo de
+WhatsApp. Então eu fiz um bolão de verdade.
+
+👉 **[Entrar no Bolão da Copa 2026](https://bolao2026-a76c7.web.app/)** — de graça,
+leva menos de um minuto.
+
+## O que ele faz
+
+- **Jogos do dia** — abre no confronto da rodada, com navegação por data e link
+  para a transmissão.
+- **Palpite rápido** — você crava o placar antes do apito e pronto.
+- **Ranking ao vivo** — a cada resultado a tabela se reorganiza sozinha. Hoje são
+  **49 participantes** disputando o topo.
+- **Insígnias** — títulos como *Rei do Mata-Mata* para quem acerta onde os outros
+  erram. Ganhar ponto é bom; ganhar apelido é melhor.
+
+## Como foi construído
+
+O app é uma SPA em **React + Vite**, servida pelo **Firebase Hosting**, com
+**Firebase Auth** cuidando do login (Google ou e-mail e senha). É um **PWA**:
+dá para instalar na tela inicial do celular e abrir como um app nativo.
+
+A decisão que mais rendeu foi manter o estado do ranking derivado dos
+resultados, e não guardado à mão. O placar entra uma vez; a pontuação, a
+classificação e as insígnias caem por consequência. Menos escrita, menos chance
+de dois lugares discordarem sobre quem está em primeiro.
+
+## Bora?
+
+O mata-mata é onde o bolão vira outra coisa — todo mundo empata nos grupos e a
+briga real começa depois. Ainda dá tempo de entrar antes disso.
+
+**[bolao2026-a76c7.web.app](https://bolao2026-a76c7.web.app/)** ⚽`,
+  },
+  {
     slug: "design-system-comic-first",
     title: "Design System comic-first: do token ao delírio",
     excerpt:

@@ -174,8 +174,29 @@ export function BentoGrid({ projects = seedProjects, tools = seedTools }: BentoG
         >
           <BentoCard accent="magenta" tilt={2} className="flex h-full flex-col justify-center sv-dots">
             <span className="sv-sticker sv-sticker-lime text-sm">em destaque</span>
-            <p className="sv-display mt-3 text-3xl uppercase leading-none">{featuredProject.title}</p>
-            <p className="sv-heavy mt-1 text-xs uppercase tracking-wider text-white/70">{featuredProject.category}</p>
+            {featuredProject.href ? (
+              <Link
+                href={featuredProject.href}
+                target={featuredProject.href.startsWith("http") ? "_blank" : undefined}
+                rel="noopener noreferrer"
+                className="group/feat"
+              >
+                <p className="sv-display mt-3 text-3xl uppercase leading-none transition-colors group-hover/feat:text-[var(--sv-yellow)]">
+                  {featuredProject.title}{" "}
+                  <span aria-hidden>{featuredProject.href.startsWith("http") ? "↗" : "→"}</span>
+                </p>
+                <p className="sv-heavy mt-1 text-xs uppercase tracking-wider text-white/70">
+                  {featuredProject.category}
+                </p>
+              </Link>
+            ) : (
+              <>
+                <p className="sv-display mt-3 text-3xl uppercase leading-none">{featuredProject.title}</p>
+                <p className="sv-heavy mt-1 text-xs uppercase tracking-wider text-white/70">
+                  {featuredProject.category}
+                </p>
+              </>
+            )}
           </BentoCard>
         </motion.div>
       )}

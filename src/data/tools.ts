@@ -31,6 +31,17 @@ export const TOOL_LABELS: Record<ToolType, string> = {
 
 export const tools: Tool[] = [
   {
+    id: '7',
+    name: 'Bolão da Copa 2026',
+    description:
+      'Bolão de palpites da Copa 2026: palpite nos jogos do dia, ranking ao vivo por pontos e insígnias para quem crava o mata-mata. Login com Google, instalável como PWA.',
+    type: 'webapp',
+    stack: ['React', 'Vite', 'Firebase', 'TypeScript', 'PWA'],
+    emoji: '⚽',
+    demoUrl: 'https://bolao2026-a76c7.web.app/',
+    // githubUrl omitido de propósito: o repositório é privado (daria 404).
+  },
+  {
     id: '1',
     name: 'Paleta.ai',
     description: 'Gerador de paletas de cores com IA. Descreva um mood e receba paletas prontas para Figma.',

@@ -15,6 +15,18 @@ export interface Project {
 
 export const projects: Project[] = [
   {
+    id: '7',
+    title: 'Bolão da Copa 2026',
+    description:
+      'Bolão de palpites da Copa do Mundo FIFA 2026: 48 seleções, jogos do dia, ranking ao vivo por pontos e insígnias para quem acerta o mata-mata. Já roda com 49 participantes.',
+    category: 'code',
+    tags: ['React', 'Vite', 'Firebase', 'TypeScript', 'PWA'],
+    coverImage: '',
+    // O repositório é privado — o card aponta para o app no ar.
+    href: 'https://bolao2026-a76c7.web.app/',
+    featured: true,
+  },
+  {
     id: '1',
     title: 'Paleta.ai',
     description: 'Gerador de paletas de cores com IA. Descreva um mood e receba 5 paletas com HEX e export para Figma.',
@@ -22,7 +34,6 @@ export const projects: Project[] = [
     tags: ['Next.js', 'OpenAI', 'TypeScript'],
     coverImage: '',
     href: 'https://github.com/LucasRiboldi',
-    featured: true,
   },
   {
     id: '2',
