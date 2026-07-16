@@ -19,19 +19,19 @@ export async function getAdminStats(): Promise<AdminStats> {
   }
   const supabase = await createClient()
 
-  const counts: Record<string, number> = {}
-  for (const table of TABLES) {
-    const { count } = await supabase
-      .from(table)
-      .select("*", { count: "exact", head: true })
-    counts[table] = count ?? 0
-  }
+  // Em paralelo: eram 5 idas ao banco em fila, e o dashboard esperava a soma
+  // de todas para pintar.
+  const [tableCounts, { count: unread }] = await Promise.all([
+    Promise.all(
+      TABLES.map(async (table) => {
+        const { count } = await supabase.from(table).select("*", { count: "exact", head: true })
+        return [table, count ?? 0] as const
+      }),
+    ),
+    supabase.from("contact_messages").select("*", { count: "exact", head: true }).eq("read", false),
+  ])
 
-  const { count: unread } = await supabase
-    .from("contact_messages")
-    .select("*", { count: "exact", head: true })
-    .eq("read", false)
-
+  const counts: Record<string, number> = Object.fromEntries(tableCounts)
   const total = Object.values(counts).reduce((a, b) => a + b, 0)
 
   return {
