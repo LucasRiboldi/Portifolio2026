@@ -2,10 +2,9 @@
 
 import { useRef, useState } from "react"
 
-import { createClient } from "@/lib/supabase/client"
 import { isSupabaseConfigured } from "@/lib/supabase/config"
-
-const BUCKET = "public-media"
+import { uploadMedia } from "@/app/admin/media/actions"
+import { ACCEPT_ATTR, ACCEPTED_HINT } from "@/lib/admin/media-accept"
 
 interface MediaPickerProps {
   name: string
@@ -23,16 +22,14 @@ export function MediaPicker({ name, defaultValue, inputClassName }: MediaPickerP
     setUploading(true)
     setError(null)
     try {
-      const supabase = createClient()
-      const ext = file.name.split(".").pop() ?? "bin"
-      const path = `${crypto.randomUUID()}.${ext}`
-      const { error: upErr } = await supabase.storage.from(BUCKET).upload(path, file, {
-        cacheControl: "3600",
-        upsert: false,
-      })
-      if (upErr) throw upErr
-      const { data } = supabase.storage.from(BUCKET).getPublicUrl(path)
-      setUrl(data.publicUrl)
+      const fd = new FormData()
+      fd.set("file", file)
+      const res = await uploadMedia(fd)
+      if (!res.ok) {
+        setError(res.error)
+        return
+      }
+      setUrl(res.data.url)
     } catch (err) {
       setError(err instanceof Error ? err.message : "Falha no upload.")
     } finally {
@@ -64,13 +61,16 @@ export function MediaPicker({ name, defaultValue, inputClassName }: MediaPickerP
       <input
         ref={fileRef}
         type="file"
-        accept="image/*"
+        accept={ACCEPT_ATTR}
         hidden
         onChange={(e) => {
           const file = e.target.files?.[0]
           if (file) upload(file)
         }}
       />
+      {isSupabaseConfigured && (
+        <p className="text-xs text-[color:var(--mm-text-2)]">{ACCEPTED_HINT}</p>
+      )}
       {url && (
         // eslint-disable-next-line @next/next/no-img-element
         <img src={url} alt="preview" className="max-h-32 rounded-lg border border-[color:var(--mm-border)]" />

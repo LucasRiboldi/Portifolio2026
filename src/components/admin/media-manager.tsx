@@ -2,15 +2,9 @@
 
 import { useEffect, useRef, useState, useCallback } from "react"
 
-import { createClient } from "@/lib/supabase/client"
 import { isSupabaseConfigured } from "@/lib/supabase/config"
-
-const BUCKET = "public-media"
-
-interface MediaItem {
-  name: string
-  url: string
-}
+import { listMedia, uploadMedia, deleteMedia, type MediaItem } from "@/app/admin/media/actions"
+import { ACCEPT_ATTR, ACCEPTED_HINT } from "@/lib/admin/media-accept"
 
 export function MediaManager() {
   const [items, setItems] = useState<MediaItem[]>([])
@@ -21,21 +15,12 @@ export function MediaManager() {
 
   const load = useCallback(async () => {
     if (!isSupabaseConfigured) return
-    const supabase = createClient()
-    const { data, error: err } = await supabase.storage
-      .from(BUCKET)
-      .list("", { sortBy: { column: "created_at", order: "desc" }, limit: 100 })
-    if (err) {
-      setError(err.message)
+    const res = await listMedia()
+    if (!res.ok) {
+      setError(res.error)
       return
     }
-    const list = (data ?? [])
-      .filter((f) => f.id)
-      .map((f) => ({
-        name: f.name,
-        url: supabase.storage.from(BUCKET).getPublicUrl(f.name).data.publicUrl,
-      }))
-    setItems(list)
+    setItems(res.data)
   }, [])
 
   useEffect(() => {
@@ -46,11 +31,13 @@ export function MediaManager() {
     setUploading(true)
     setError(null)
     try {
-      const supabase = createClient()
-      const ext = file.name.split(".").pop() ?? "bin"
-      const path = `${crypto.randomUUID()}.${ext}`
-      const { error: upErr } = await supabase.storage.from(BUCKET).upload(path, file)
-      if (upErr) throw upErr
+      const fd = new FormData()
+      fd.set("file", file)
+      const res = await uploadMedia(fd)
+      if (!res.ok) {
+        setError(res.error)
+        return
+      }
       await load()
     } catch (err) {
       setError(err instanceof Error ? err.message : "Falha no upload.")
@@ -61,8 +48,11 @@ export function MediaManager() {
 
   async function remove(name: string) {
     if (!confirm("Excluir este arquivo?")) return
-    const supabase = createClient()
-    await supabase.storage.from(BUCKET).remove([name])
+    const res = await deleteMedia(name)
+    if (!res.ok) {
+      setError(res.error)
+      return
+    }
     await load()
   }
 
@@ -87,10 +77,11 @@ export function MediaManager() {
         >
           {uploading ? "Enviando…" : "Enviar imagem"}
         </button>
+        <p className="mt-1 text-xs text-[color:var(--mm-text-2)]">{ACCEPTED_HINT}</p>
         <input
           ref={fileRef}
           type="file"
-          accept="image/*"
+          accept={ACCEPT_ATTR}
           hidden
           onChange={(e) => {
             const f = e.target.files?.[0]
