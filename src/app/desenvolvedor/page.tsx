@@ -25,10 +25,10 @@ export default async function DevHome() {
   const recentLogs = devlogs.slice(0, 3)
 
   const stats = [
-    { n: projects.length, l: "projetos", href: "/dev/projetos", color: "var(--d-green)" },
-    { n: lab.length, l: "experimentos", href: "/dev/laboratorio", color: "var(--d-cyan)" },
-    { n: snippets.length, l: "snippets", href: "/dev/codigo", color: "var(--d-pink)" },
-    { n: ideas.length, l: "ideias", href: "/dev/ideias", color: "var(--d-orange)" },
+    { n: projects.length, l: "projetos", href: "/desenvolvedor/projetos", color: "var(--d-green)" },
+    { n: lab.length, l: "experimentos", href: "/desenvolvedor/laboratorio", color: "var(--d-cyan)" },
+    { n: snippets.length, l: "snippets", href: "/desenvolvedor/codigo", color: "var(--d-pink)" },
+    { n: ideas.length, l: "ideias", href: "/desenvolvedor/ideias", color: "var(--d-orange)" },
   ]
 
   return (
@@ -97,7 +97,7 @@ export default async function DevHome() {
           <h2 className="dv-section-title">Últimos devlogs</h2>
           <div className="dv-grid" style={{ marginTop: "0.5rem" }}>
             {recentLogs.map((l) => (
-              <Link key={l.id} href="/dev/devlogs" className="dv-card">
+              <Link key={l.id} href="/desenvolvedor/devlogs" className="dv-card">
                 <div className="flex items-baseline justify-between gap-2">
                   <h3 style={{ fontSize: "1rem" }}>{l.title}</h3>
                   <time className="text-xs" style={{ color: "var(--d-comment)" }}>
@@ -119,10 +119,10 @@ export default async function DevHome() {
       <h2 className="dv-section-title">Explorar</h2>
       <div className="dv-grid" style={{ marginTop: "0.5rem" }}>
         {[
-          { href: "/dev/ferramentas", t: "Ferramentas", d: `${tools.length} utilitários do dia a dia` },
-          { href: "/dev/codigo", t: "Código", d: "Snippets e boilerplates reutilizáveis" },
-          { href: "/dev/learn", t: "Learn", d: "Trilhas para aprender linguagens (C, Java…)" },
-          { href: "/dev/wiki", t: "Wiki", d: "Cheatsheets e documentação técnica" },
+          { href: "/desenvolvedor/ferramentas", t: "Ferramentas", d: `${tools.length} utilitários do dia a dia` },
+          { href: "/desenvolvedor/codigo", t: "Código", d: "Snippets e boilerplates reutilizáveis" },
+          { href: "/desenvolvedor/learn", t: "Learn", d: "Trilhas para aprender linguagens (C, Java…)" },
+          { href: "/desenvolvedor/wiki", t: "Wiki", d: "Cheatsheets e documentação técnica" },
         ].map((x) => (
           <Link key={x.href} href={x.href} className="dv-card">
             <h3 style={{ fontSize: "1rem" }}>{x.t} →</h3>

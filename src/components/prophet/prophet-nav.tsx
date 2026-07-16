@@ -5,12 +5,12 @@ import { usePathname } from "next/navigation"
 
 /** Menu exclusivo do realm Daily Prophet (jornal). */
 export const PROPHET_LINKS = [
-  { label: "Primeira Página", href: "/prophet" },
-  { label: "A Redação", href: "/prophet/redacao" },
-  { label: "Oficina do Inventor", href: "/prophet/oficina" },
-  { label: "Caderno das Mecânicas", href: "/prophet/mecanicas" },
-  { label: "Laboratório", href: "/prophet/laboratorio" },
-  { label: "Imprensa do Inventor", href: "/prophet/imprensa" },
+  { label: "Primeira Página", href: "/anfitriao" },
+  { label: "A Redação", href: "/anfitriao/redacao" },
+  { label: "Oficina do Inventor", href: "/anfitriao/oficina" },
+  { label: "Caderno das Mecânicas", href: "/anfitriao/mecanicas" },
+  { label: "Laboratório", href: "/anfitriao/laboratorio" },
+  { label: "Imprensa do Inventor", href: "/anfitriao/imprensa" },
 ]
 
 export function ProphetNav() {
@@ -19,7 +19,7 @@ export function ProphetNav() {
     <nav className="pr-nav" aria-label="Navegação Daily Prophet">
       {PROPHET_LINKS.map((link) => {
         const active =
-          link.href === "/prophet" ? pathname === "/prophet" : pathname.startsWith(link.href)
+          link.href === "/anfitriao" ? pathname === "/anfitriao" : pathname.startsWith(link.href)
         return (
           <Link key={link.href} href={link.href} className="pr-navlink" data-active={active} aria-current={active ? "page" : undefined}>
             {link.label}

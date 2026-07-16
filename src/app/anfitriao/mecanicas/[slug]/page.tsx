@@ -22,7 +22,7 @@ export default async function MechanicDetail({ params }: { params: Promise<{ slu
 
   return (
     <article>
-      <Link href="/prophet/mecanicas" className="pr-link">
+      <Link href="/anfitriao/mecanicas" className="pr-link">
         ← Caderno das Mecânicas
       </Link>
       <p className="pr-kicker mt-3">Caderno das Mecânicas</p>

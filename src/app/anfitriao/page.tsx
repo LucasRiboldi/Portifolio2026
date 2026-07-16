@@ -43,21 +43,21 @@ export default async function ProphetFront() {
         <p className="pr-kicker">Novidades desta edição</p>
         <div className="pr-grid">
           {tutorials.slice(0, 3).map((t) => (
-            <Link key={t.id} href="/prophet/oficina" className="pr-card">
+            <Link key={t.id} href="/anfitriao/oficina" className="pr-card">
               <span className="pr-badge">Oficina</span>
               <h3 className="mt-2">{t.title}</h3>
               <p>{t.summary}</p>
             </Link>
           ))}
           {mechanics.slice(0, 3).map((m) => (
-            <Link key={m.id} href="/prophet/mecanicas" className="pr-card">
+            <Link key={m.id} href="/anfitriao/mecanicas" className="pr-card">
               <span className="pr-badge">Mecânica</span>
               <h3 className="mt-2">{m.title}</h3>
               <p>{m.summary}</p>
             </Link>
           ))}
           {prototypes.slice(0, 2).map((p) => (
-            <Link key={p.id} href="/prophet/laboratorio" className="pr-card">
+            <Link key={p.id} href="/anfitriao/laboratorio" className="pr-card">
               <span className="pr-badge">Laboratório</span>
               <h3 className="mt-2">{p.title}</h3>
               <p>{p.description}</p>
