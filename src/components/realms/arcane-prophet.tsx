@@ -5,6 +5,7 @@ import {
   sidebar,
   almanac,
 } from "@/lib/arcane-content"
+import { DailyProphetSeal } from "./daily-prophet-seal"
 
 /**
  * Quebra um texto em letras animáveis (efeito "jornal mágico": a tinta
@@ -61,6 +62,7 @@ export function ArcaneProphet({ className }: { className?: string }) {
     <article className={`arc-prophet ${className ?? ""}`} aria-label="The Daily Prophet — Game Design">
       {/* ---------- Masthead ---------- */}
       <header className="arc-masthead">
+        <DailyProphetSeal />
         <div className="arc-masthead-rule">
           <span>{prophet.edition}</span>
           <span className="arc-cap">{today}</span>

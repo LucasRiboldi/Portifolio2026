@@ -170,6 +170,16 @@
   font-family: var(--font-serif);
 }
 
+/* Brasão D.P. — acima do masthead */
+.arc-seal {
+  width: 80px;
+  height: 96px;
+  margin: 0 auto 0.5rem;
+  color: var(--arc-accent);
+  opacity: 0.85;
+  filter: drop-shadow(0 2px 4px rgba(0, 0, 0, 0.2));
+}
+
 /* Masthead */
 .arc-masthead {
   text-align: center;
