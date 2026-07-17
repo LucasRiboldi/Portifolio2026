@@ -69,3 +69,214 @@
   .fx-gl-slice::before, .fx-gl-slice::after, .fx-gl-rgb, .fx-gl-jitter,
   .fx-gl-scan::after, .fx-gl-blocks { animation: none !important; }
 }
+
+/* ============================================================
+   TEXTURAS DE IMPRESSÃO (10) — vocabulário de gráfica de HQ.
+   ------------------------------------------------------------
+   Todas puramente CSS e composáveis: aplique junto de qualquer
+   fundo. As que usam ::before pedem um contexto isolado (a
+   própria classe já declara `isolation`).
+
+   Ajuste por variável, sem reescrever a regra:
+     --tex-size     escala da retícula/grão
+     --tex-opacity  intensidade
+     --tex-a/--tex-b  as duas tintas (onde há duas)
+   ============================================================ */
+
+/* 1. BEN-DAY — a retícula grossa do pop-art dos anos 60. Duas tintas
+      em fase trocada; é o avô do halftone fino do art-ht-dots. */
+.art-tex-benday {
+  --tex-size: 10px;
+  --tex-a: rgba(255, 45, 149, 0.55);
+  --tex-b: rgba(0, 229, 255, 0.4);
+  background-image:
+    radial-gradient(var(--tex-a) 26%, transparent 28%),
+    radial-gradient(var(--tex-b) 26%, transparent 28%);
+  background-size: var(--tex-size) var(--tex-size);
+  background-position: 0 0, calc(var(--tex-size) / 2) calc(var(--tex-size) / 2);
+}
+
+/* 2. NEWSPRINT — polpa barata: fibra irregular + amarelado de banca. */
+.art-tex-newsprint {
+  --tex-opacity: 0.5;
+  position: relative;
+  isolation: isolate;
+  background-color: #efe6cf;
+}
+.art-tex-newsprint::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  z-index: -1;
+  pointer-events: none;
+  opacity: var(--tex-opacity);
+  mix-blend-mode: multiply;
+  background-image:
+    url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='180' height='180'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.7' numOctaves='3'/%3E%3C/filter%3E%3Crect width='180' height='180' filter='url(%23n)' opacity='0.5'/%3E%3C/svg%3E"),
+    linear-gradient(180deg, rgba(180, 150, 80, 0.18), rgba(120, 90, 40, 0.28));
+}
+
+/* 3. MISREGISTER — falha de registro: as chapas ciano e magenta saem
+      fora de esquadro e vazam nas bordas. O defeito vira assinatura. */
+.art-tex-misregister {
+  position: relative;
+  isolation: isolate;
+  box-shadow:
+    inset 3px 0 0 rgba(0, 229, 255, 0.5),
+    inset -3px 0 0 rgba(255, 45, 149, 0.5),
+    inset 0 3px 0 rgba(255, 230, 0, 0.35);
+}
+.art-tex-misregister::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  z-index: -1;
+  pointer-events: none;
+  mix-blend-mode: screen;
+  background:
+    linear-gradient(90deg, rgba(0, 229, 255, 0.14), transparent 18%),
+    linear-gradient(270deg, rgba(255, 45, 149, 0.14), transparent 18%);
+}
+
+/* 4. SCREENTONE — a folha adesiva do mangá: retícula que esmaece em
+      rampa, criando sombra sem cinza (P&B puro). */
+/* A rampa é feita com mask — que afeta TODOS os filhos se aplicada no
+   elemento. Por isso a retícula vive num ::before: assim a classe pode ser
+   posta em qualquer caixa com conteúdo, sem apagá-lo. */
+.art-tex-screentone {
+  --tex-size: 5px;
+  --tex-color: rgba(0, 0, 0, 0.55);
+  position: relative;
+  isolation: isolate;
+}
+.art-tex-screentone::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  z-index: -1;
+  pointer-events: none;
+  background-image: radial-gradient(var(--tex-color) 1.1px, transparent 1.3px);
+  background-size: var(--tex-size) var(--tex-size);
+  mask-image: linear-gradient(160deg, #000 10%, rgba(0, 0, 0, 0.35) 55%, transparent 92%);
+  -webkit-mask-image: linear-gradient(160deg, #000 10%, rgba(0, 0, 0, 0.35) 55%, transparent 92%);
+}
+
+/* 5. SPEEDLINES — linhas cinéticas radiais: o quadro inteiro em movimento.
+      Estáticas de propósito; quem anima é quem usa. */
+/* Idem screentone: o vazio central é feito com mask, então a camada vai
+   num ::before para não mascarar o conteúdo da caixa. */
+.art-tex-speedlines {
+  --tex-color: rgba(255, 248, 231, 0.16);
+  position: relative;
+  isolation: isolate;
+}
+.art-tex-speedlines::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  z-index: -1;
+  pointer-events: none;
+  background-image: repeating-conic-gradient(
+    from 0deg at 50% 50%,
+    var(--tex-color) 0deg 0.6deg,
+    transparent 0.6deg 4.5deg
+  );
+  mask-image: radial-gradient(circle at 50% 50%, transparent 28%, #000 70%);
+  -webkit-mask-image: radial-gradient(circle at 50% 50%, transparent 28%, #000 70%);
+}
+
+/* 6. SPATTER — respingo de nanquim sacudido do pincel. Pontos de raios
+      e posições irregulares: o acaso é o efeito. */
+.art-tex-spatter {
+  --tex-color: rgba(10, 6, 18, 0.85);
+  /* Duas camadas em tiles de tamanhos primos entre si (97/61): os respingos
+     nunca repetem em fase, então o acaso não vira xadrez. */
+  background-image:
+    radial-gradient(circle at 12% 22%, var(--tex-color) 2.4px, transparent 2.9px),
+    radial-gradient(circle at 74% 12%, var(--tex-color) 3.6px, transparent 4.1px),
+    radial-gradient(circle at 38% 58%, var(--tex-color) 1.6px, transparent 2.1px),
+    radial-gradient(circle at 88% 66%, var(--tex-color) 4.2px, transparent 4.8px),
+    radial-gradient(circle at 22% 84%, var(--tex-color) 2.6px, transparent 3.1px),
+    radial-gradient(circle at 58% 92%, var(--tex-color) 1.8px, transparent 2.3px),
+    radial-gradient(circle at 92% 38%, var(--tex-color) 2px, transparent 2.5px),
+    radial-gradient(circle at 6% 52%, var(--tex-color) 3px, transparent 3.5px),
+    radial-gradient(circle at 46% 30%, var(--tex-color) 1.2px, transparent 1.6px),
+    radial-gradient(circle at 68% 46%, var(--tex-color) 1.5px, transparent 1.9px);
+  background-size:
+    97px 97px, 97px 97px, 97px 97px, 97px 97px, 97px 97px,
+    61px 61px, 61px 61px, 61px 61px, 61px 61px, 61px 61px;
+}
+
+/* 7. MOIRÉ — duas retículas quase alinhadas brigando entre si. O padrão
+      de interferência que aparece quando a chapa sai torta. */
+.art-tex-moire {
+  --tex-size: 4px;
+  --tex-color: rgba(255, 248, 231, 0.3);
+  /* O batimento exige que as duas retículas discordem em ângulo E em
+     período. Só o ângulo produz uma grade cruzada, não moiré. */
+  background-image:
+    repeating-linear-gradient(0deg, var(--tex-color) 0 1.2px, transparent 1.2px var(--tex-size)),
+    repeating-linear-gradient(
+      3.5deg,
+      var(--tex-color) 0 1.2px,
+      transparent 1.2px calc(var(--tex-size) * 1.14)
+    );
+}
+
+/* 8. RISO — risografia: duas tintas que nunca se misturam, só se
+      sobrepõem, com grão de estêncil por cima. */
+.art-tex-riso {
+  --tex-a: rgba(255, 72, 176, 0.5);
+  --tex-b: rgba(0, 120, 255, 0.45);
+  position: relative;
+  isolation: isolate;
+  background-image:
+    radial-gradient(60% 50% at 28% 32%, var(--tex-a), transparent 70%),
+    radial-gradient(60% 50% at 72% 68%, var(--tex-b), transparent 70%);
+}
+.art-tex-riso::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  z-index: -1;
+  pointer-events: none;
+  opacity: 0.3;
+  mix-blend-mode: multiply;
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='120' height='120'%3E%3Cfilter id='r'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='2'/%3E%3C/filter%3E%3Crect width='120' height='120' filter='url(%23r)'/%3E%3C/svg%3E");
+}
+
+/* 9. FOIL — capa variante metálica: o arco-íris que escorre conforme o
+      ângulo. Aqui em conic, com brilho especular cruzando. */
+.art-tex-foil {
+  background-image:
+    linear-gradient(115deg, transparent 38%, rgba(255, 255, 255, 0.55) 47%, transparent 56%),
+    conic-gradient(
+      from 210deg at 40% 50%,
+      #ff2d95, #ff5a1f, #ffe600, #b6ff00, #00e5ff, #7b2ff7, #ff2d95
+    );
+  background-blend-mode: screen, normal;
+}
+
+/* 10. FOXING — o tempo na página: manchas de umidade e amarelado que
+       aparecem no gibi esquecido na caixa. */
+.art-tex-foxing {
+  --tex-opacity: 0.5;
+  position: relative;
+  isolation: isolate;
+}
+.art-tex-foxing::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  z-index: -1;
+  pointer-events: none;
+  opacity: var(--tex-opacity);
+  mix-blend-mode: multiply;
+  background-image:
+    radial-gradient(circle at 18% 26%, rgba(150, 100, 40, 0.45) 0 6px, transparent 14px),
+    radial-gradient(circle at 82% 18%, rgba(150, 100, 40, 0.35) 0 9px, transparent 20px),
+    radial-gradient(circle at 66% 74%, rgba(130, 85, 30, 0.4) 0 5px, transparent 12px),
+    radial-gradient(circle at 30% 88%, rgba(150, 100, 40, 0.3) 0 8px, transparent 18px),
+    radial-gradient(circle at 92% 52%, rgba(130, 85, 30, 0.3) 0 4px, transparent 10px),
+    linear-gradient(140deg, rgba(190, 160, 90, 0.22), transparent 60%);
+}
