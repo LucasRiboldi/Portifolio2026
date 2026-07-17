@@ -12,6 +12,7 @@ import { cn } from "@/lib/utils";
 import { getRealmSettings } from "@/lib/repos/realms";
 import { getSiteConfig } from "@/lib/repos/site-config";
 import { SiteConfigProvider } from "@/components/providers/site-config-provider";
+import { REALMS } from "@/lib/realms";
 
 const SITE_URL = "https://portifolio2026-two.vercel.app";
 
@@ -74,11 +75,14 @@ export default async function RootLayout({
   const [settings, site] = await Promise.all([getRealmSettings(), getSiteConfig()]);
 
   // Script de gate + anti-FOUC (roda antes do paint).
-  // Pinta data-realm pela rota nova (/desenvolvedor, /anfitriao, senão creative)
-  // e, só na porta da frente "/", roteia: sem a chave → /portal; com a chave → /criativo.
+  // Lê as rotas do registry REALMS, pinta data-realm na <html>, redireciona "/" via gate localStorage.
+  const routeChecks = Object.entries(REALMS)
+    .map(([_, realm]) => `if(p.indexOf('${realm.route}')===0)r='${realm.id}';`)
+    .join("");
+
   const antiFouc =
-    "(function(){try{var p=location.pathname," +
-    "r=p.indexOf('/desenvolvedor')===0?'developer':p.indexOf('/anfitriao')===0?'arcane':'creative';" +
+    "(function(){try{var p=location.pathname,r='creative';" +
+    routeChecks +
     "document.documentElement.setAttribute('data-realm',r);" +
     "if(p==='/'){var e=false;try{e=localStorage.getItem('lr.portal.v1')==='1';}catch(x){}" +
     "location.replace(e?'/criativo':'/portal');}}catch(e){}})()";

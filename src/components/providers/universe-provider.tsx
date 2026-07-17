@@ -3,7 +3,7 @@
 import * as React from "react"
 import { usePathname, useRouter } from "next/navigation"
 
-import { REALMS, REALM_ORDER, DEFAULT_REALM, type RealmId } from "@/lib/realms"
+import { REALMS, REALM_ORDER, DEFAULT_REALM, realmFromPath, type RealmId } from "@/lib/realms"
 
 /**
  * UniverseProvider — engine de THE THREE REALMS (baseado em ROTA).
@@ -27,12 +27,6 @@ export interface RealmSettings {
 }
 
 const UniverseContext = React.createContext<UniverseContextValue | null>(null)
-
-function realmFromPath(pathname: string): RealmId {
-  if (pathname.startsWith("/desenvolvedor")) return "developer"
-  if (pathname.startsWith("/anfitriao")) return "arcane"
-  return "creative"
-}
 
 export function UniverseProvider({
   children,
