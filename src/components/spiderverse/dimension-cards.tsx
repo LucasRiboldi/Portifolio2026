@@ -1,6 +1,6 @@
 import Link from "next/link"
 import { cn } from "@/lib/utils"
-import { DIMENSIONS, dimClass, type Dimension } from "./sv-canvas"
+import { DIMENSIONS, dimClass, type Dimension } from "@/design-system/dimensions"
 
 /**
  * Grade de portais do multiverso.
@@ -23,8 +23,10 @@ interface DimensionCardsProps {
 }
 
 export function DimensionCards({ featuredOnly, className }: DimensionCardsProps) {
+  // flatMap em vez de find()! — sem asserção não-nula: um id inexistente em
+  // FEATURED simplesmente não rende card, em vez de mentir ao type-checker.
   const items = featuredOnly
-    ? FEATURED.map(id => DIMENSIONS.find(d => d.id === id)!).filter(Boolean)
+    ? FEATURED.flatMap(id => DIMENSIONS.filter(d => d.id === id))
     : DIMENSIONS
 
   const cardClass = cn(

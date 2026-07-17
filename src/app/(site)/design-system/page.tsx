@@ -41,10 +41,30 @@ import { LabContent } from "./lab/content"
 import { AccessibilityContent } from "./accessibility/content"
 import { DocsContent } from "./docs/content"
 
-/** Separador entre capítulos — dá respiro num documento desta altura. */
-function Chapter({ n, title, children }: { n: string; title: string; children: React.ReactNode }) {
+/**
+ * Separador entre capítulos — dá respiro num documento desta altura.
+ *
+ * `id` não é menu: é âncora. Num documento de ~46 telas, poder mandar a
+ * alguém /design-system#tokens é o mínimo. O scroll-margin existe para a
+ * navbar fixa não cobrir o título ao saltar.
+ */
+function Chapter({
+  id,
+  n,
+  title,
+  children,
+}: {
+  id: string
+  n: string
+  title: string
+  children: React.ReactNode
+}) {
   return (
-    <section className="mt-16 border-t-[3px] border-black pt-10 first:mt-0 first:border-0 first:pt-0">
+    <section
+      id={id}
+      aria-label={`${n} · ${title}`}
+      className="mt-16 scroll-mt-24 border-t-[3px] border-black pt-10 first:mt-0 first:border-0 first:pt-0"
+    >
       <p className="sv-heavy mb-6 text-[11px] uppercase tracking-[0.2em] text-[var(--sv-magenta)]">
         <span className="sv-display mr-2 text-2xl text-[var(--sv-yellow)]">{n}</span>
         {title}
@@ -70,7 +90,7 @@ export default function DesignSystemHome() {
       </DsLead>
 
       {/* ---------- Os 3 realms ---------- */}
-      <Chapter n="00" title="Design System por realm">
+      <Chapter id="realms" n="00" title="Design System por realm">
         <DsLead>
           Antes do sistema corporativo: cada universo do projeto tem identidade própria — paleta,
           tipografia, motion e kit. Cada guia é uma página autossuficiente, com seletor de versão e
@@ -96,42 +116,42 @@ export default function DesignSystemHome() {
       </Chapter>
 
       {/* ---------- Fundação ---------- */}
-      <Chapter n="01" title="Brand Foundation"><FoundationsContent headingAs="h2" /></Chapter>
-      <Chapter n="02" title="Design Tokens"><TokensContent headingAs="h2" /></Chapter>
-      <Chapter n="03" title="Grid & Responsividade"><GridContent headingAs="h2" /></Chapter>
-      <Chapter n="04" title="Motion"><MotionContent headingAs="h2" /></Chapter>
+      <Chapter id="foundations" n="01" title="Brand Foundation"><FoundationsContent headingAs="h2" /></Chapter>
+      <Chapter id="tokens" n="02" title="Design Tokens"><TokensContent headingAs="h2" /></Chapter>
+      <Chapter id="grid" n="03" title="Grid & Responsividade"><GridContent headingAs="h2" /></Chapter>
+      <Chapter id="motion" n="04" title="Motion"><MotionContent headingAs="h2" /></Chapter>
 
       {/* ---------- Componentes ---------- */}
-      <Chapter n="05" title="Componentes · Botões"><ButtonsContent headingAs="h2" /></Chapter>
-      <Chapter n="06" title="Componentes · Inputs & Forms"><InputsContent headingAs="h2" /></Chapter>
-      <Chapter n="07" title="Componentes · Seleção"><SelectionContent headingAs="h2" /></Chapter>
-      <Chapter n="08" title="Componentes · Data Display"><DataDisplayContent headingAs="h2" /></Chapter>
-      <Chapter n="09" title="Componentes · Overlays"><OverlaysContent headingAs="h2" /></Chapter>
-      <Chapter n="10" title="Componentes · Feedback"><FeedbackContent headingAs="h2" /></Chapter>
+      <Chapter id="botoes" n="05" title="Componentes · Botões"><ButtonsContent headingAs="h2" /></Chapter>
+      <Chapter id="inputs" n="06" title="Componentes · Inputs & Forms"><InputsContent headingAs="h2" /></Chapter>
+      <Chapter id="selecao" n="07" title="Componentes · Seleção"><SelectionContent headingAs="h2" /></Chapter>
+      <Chapter id="data-display" n="08" title="Componentes · Data Display"><DataDisplayContent headingAs="h2" /></Chapter>
+      <Chapter id="overlays" n="09" title="Componentes · Overlays"><OverlaysContent headingAs="h2" /></Chapter>
+      <Chapter id="feedback" n="10" title="Componentes · Feedback"><FeedbackContent headingAs="h2" /></Chapter>
 
       {/* ---------- Seções & patterns ---------- */}
-      <Chapter n="11" title="Seções de página"><SectionsContent headingAs="h2" /></Chapter>
-      <Chapter n="12" title="Pattern · Login / Auth"><LoginPatternContent headingAs="h2" /></Chapter>
-      <Chapter n="13" title="Pattern · Busca & filtros"><SearchPatternContent headingAs="h2" /></Chapter>
-      <Chapter n="14" title="Pattern · Multi-step"><MultiStepPatternContent headingAs="h2" /></Chapter>
-      <Chapter n="15" title="Pattern · FAQ"><FaqPatternContent headingAs="h2" /></Chapter>
+      <Chapter id="secoes" n="11" title="Seções de página"><SectionsContent headingAs="h2" /></Chapter>
+      <Chapter id="pattern-login" n="12" title="Pattern · Login / Auth"><LoginPatternContent headingAs="h2" /></Chapter>
+      <Chapter id="pattern-busca" n="13" title="Pattern · Busca & filtros"><SearchPatternContent headingAs="h2" /></Chapter>
+      <Chapter id="pattern-multi-step" n="14" title="Pattern · Multi-step"><MultiStepPatternContent headingAs="h2" /></Chapter>
+      <Chapter id="pattern-faq" n="15" title="Pattern · FAQ"><FaqPatternContent headingAs="h2" /></Chapter>
 
       {/* ---------- Templates ---------- */}
-      <Chapter n="16" title="Template · Landing"><LandingTemplateContent headingAs="h2" /></Chapter>
-      <Chapter n="17" title="Template · Dashboard"><DashboardTemplateContent headingAs="h2" /></Chapter>
-      <Chapter n="18" title="Template · Artigo"><ArticleTemplateContent headingAs="h2" /></Chapter>
-      <Chapter n="19" title="Template · Pricing"><PricingTemplateContent headingAs="h2" /></Chapter>
-      <Chapter n="20" title="Template · Perfil"><ProfileTemplateContent headingAs="h2" /></Chapter>
-      <Chapter n="21" title="Template · Documentação"><DocsTemplateContent headingAs="h2" /></Chapter>
-      <Chapter n="22" title="Template · Changelog"><ChangelogTemplateContent headingAs="h2" /></Chapter>
-      <Chapter n="23" title="Template · Coming soon"><ComingSoonTemplatePage /></Chapter>
+      <Chapter id="tpl-landing" n="16" title="Template · Landing"><LandingTemplateContent headingAs="h2" /></Chapter>
+      <Chapter id="tpl-dashboard" n="17" title="Template · Dashboard"><DashboardTemplateContent headingAs="h2" /></Chapter>
+      <Chapter id="tpl-artigo" n="18" title="Template · Artigo"><ArticleTemplateContent headingAs="h2" /></Chapter>
+      <Chapter id="tpl-pricing" n="19" title="Template · Pricing"><PricingTemplateContent headingAs="h2" /></Chapter>
+      <Chapter id="tpl-perfil" n="20" title="Template · Perfil"><ProfileTemplateContent headingAs="h2" /></Chapter>
+      <Chapter id="tpl-docs" n="21" title="Template · Documentação"><DocsTemplateContent headingAs="h2" /></Chapter>
+      <Chapter id="tpl-changelog" n="22" title="Template · Changelog"><ChangelogTemplateContent headingAs="h2" /></Chapter>
+      <Chapter id="tpl-coming-soon" n="23" title="Template · Coming soon"><ComingSoonTemplatePage /></Chapter>
 
       {/* ---------- Apoio ---------- */}
-      <Chapter n="24" title="Assets"><AssetsContent headingAs="h2" /></Chapter>
-      <Chapter n="25" title="Retro OS"><OsThemesContent headingAs="h2" /></Chapter>
-      <Chapter n="26" title="Lab"><LabContent headingAs="h2" /></Chapter>
-      <Chapter n="27" title="Acessibilidade"><AccessibilityContent headingAs="h2" /></Chapter>
-      <Chapter n="28" title="Documentação"><DocsContent headingAs="h2" /></Chapter>
+      <Chapter id="assets" n="24" title="Assets"><AssetsContent headingAs="h2" /></Chapter>
+      <Chapter id="retro-os" n="25" title="Retro OS"><OsThemesContent headingAs="h2" /></Chapter>
+      <Chapter id="lab" n="26" title="Lab"><LabContent headingAs="h2" /></Chapter>
+      <Chapter id="acessibilidade" n="27" title="Acessibilidade"><AccessibilityContent headingAs="h2" /></Chapter>
+      <Chapter id="documentacao" n="28" title="Documentação"><DocsContent headingAs="h2" /></Chapter>
 
       <div className="mt-16 rounded-lg border-[3px] border-black bg-[var(--sv-ink-2)] p-5 shadow-[var(--elevation-2)]">
         <h3 className="sv-heavy relative mb-2 inline-block text-sm uppercase tracking-wide text-[var(--sv-cyan)]">

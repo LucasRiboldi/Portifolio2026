@@ -1,4 +1,4 @@
-import { DIMENSIONS, dimClass } from "@/components/spiderverse/sv-canvas"
+import { DIMENSIONS, dimClass } from "@/design-system/dimensions"
 import type { RealmId } from "@/lib/realms"
 
 /**
