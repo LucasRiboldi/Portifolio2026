@@ -11,7 +11,7 @@ import { isSupabaseConfigured } from "@/lib/supabase/config"
  *
  * Não há botão: o nome da tipografia que assina a folha é o próprio link.
  * Só se revela ao passar o cursor (filete pontilhado), preservando a
- * ilusão de página impressa. Mesma lógica do AdminFab global:
+ * ilusão de página impressa. Mesma lógica do AdminFooterLink do site:
  *  - deslogado → /login
  *  - logado    → /admin
  */

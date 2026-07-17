@@ -32,6 +32,15 @@ const heroPop: Variants = {
   },
 }
 
+/**
+ * Cada card do miolo roda numa dimensão diferente do multiverso.
+ *
+ * As classes `sv-dim-*` funcionam por contexto (`.sv-dim-x .sv-panel {…}`),
+ * então basta envolver o card — ele se repinta sozinho. Consequência
+ * importante: o texto NÃO pode ter cor cravada (`text-white/70`), senão
+ * some nas dimensões claras (manga pinta o painel de branco). Use
+ * `opacity-*`, que herda a tinta da dimensão ativa.
+ */
 interface BentoGridProps {
   projects?: Project[]
   tools?: Tool[]
@@ -40,33 +49,30 @@ interface BentoGridProps {
 export function BentoGrid({ projects = seedProjects, tools = seedTools }: BentoGridProps) {
   const siteConfig = useSiteConfig()
   const featuredProject = projects.find(p => p.featured)
-  const [firstName, ...rest] = siteConfig.name.split(' ')
-  const lastName = rest.join(' ')
 
   return (
     <div className="grid grid-cols-2 gap-5 md:grid-cols-4 md:gap-6">
 
-      {/* HERO — bloco gigante, 2 colunas (elemento LCP: sem fade, só transform) */}
+      {/* MATÉRIA DE CAPA — bloco gigante, 2 colunas.
+          A identidade (nome, título, CTAs) vive na ComicCover acima; aqui o
+          destaque é o conteúdo da edição, para não repetir o masthead. */}
       <motion.div
         className="col-span-2 row-span-2"
         initial="hidden" animate="visible" variants={heroPop}
       >
-        <BentoCard className="flex h-full min-h-[300px] flex-col justify-between sv-dots" accent="magenta">
+        <BentoCard
+          className="art-tex-benday flex h-full min-h-[300px] flex-col justify-between"
+          accent="magenta"
+        >
           <div>
-            <span className="sv-sticker sv-sticker-cyan text-sm">
-              {siteConfig.title}
-            </span>
-            <h1 className="sv-display mt-4 text-6xl uppercase sm:text-7xl">
-              <span
-                className="sv-glitch block"
-                data-text={firstName}
-              >
-                {firstName}
+            <span className="sv-sticker sv-sticker-cyan text-sm">matéria de capa</span>
+            <h2 className="sv-display mt-4 text-5xl uppercase leading-none sm:text-6xl">
+              <span className="sv-rainbow block">
+                {featuredProject?.title ?? "Portfólio"}
               </span>
-              <span className="sv-rainbow block">{lastName}</span>
-            </h1>
-            <p className="sv-heavy mt-4 max-w-sm text-sm uppercase leading-snug tracking-wide text-white/70">
-              {siteConfig.description}
+            </h2>
+            <p className="sv-heavy mt-4 max-w-sm text-sm uppercase leading-snug tracking-wide opacity-70">
+              {featuredProject?.description ?? siteConfig.description}
             </p>
           </div>
 
@@ -76,26 +82,24 @@ export function BentoGrid({ projects = seedProjects, tools = seedTools }: BentoG
               color="var(--sv-cyan)"
             />
             <Link
-              href="/portfolio"
+              href={featuredProject?.href ?? "/portfolio"}
               className="sv-display rounded-md border-[3px] border-black bg-[var(--sv-yellow)] px-5 py-2 text-lg uppercase text-black shadow-[4px_4px_0_0_#000] transition-transform hover:-translate-y-1 hover:rotate-[-2deg]"
             >
-              Ver portfólio →
+              Ler matéria →
             </Link>
-            <a
-              href={siteConfig.github}
-              target="_blank"
-              rel="noopener noreferrer"
+            <Link
+              href="/portfolio"
               className="sv-display rounded-md border-[3px] border-black bg-[var(--sv-cyan)] px-5 py-2 text-lg uppercase text-black shadow-[4px_4px_0_0_#000] transition-transform hover:-translate-y-1 hover:rotate-[2deg]"
             >
-              GitHub ↗
-            </a>
+              Todas as edições →
+            </Link>
           </div>
         </BentoCard>
       </motion.div>
 
-      {/* AVATAR / spider-emblem */}
-      <motion.div custom={1} initial="hidden" animate="visible" variants={pop}>
-        <BentoCard tilt={2} accent="cyan" className="flex h-full min-h-[140px] items-center justify-center sv-dots-cyan">
+      {/* AVATAR — Terra-50101 (Mumbattan): neon, glow */}
+      <motion.div className="sv-dim-neon" custom={1} initial="hidden" animate="visible" variants={pop}>
+        <BentoCard tilt={2} accent="cyan" className="art-tex-speedlines flex h-full min-h-[140px] items-center justify-center">
           <div className="text-center">
             <div
               className="sv-burst mx-auto mb-2 flex h-20 w-20 items-center justify-center"
@@ -103,43 +107,45 @@ export function BentoGrid({ projects = seedProjects, tools = seedTools }: BentoG
             >
               <Zap className="h-8 w-8 text-white" strokeWidth={2.5} />
             </div>
-            <p className="sv-display text-lg uppercase text-[var(--sv-yellow)]">avatar</p>
+            <p className="sv-display text-lg uppercase">avatar</p>
+            <p className="sv-heavy text-[9px] uppercase tracking-widest opacity-60">Terra-50101</p>
           </div>
         </BentoCard>
       </motion.div>
 
-      {/* LOCALIZAÇÃO */}
-      <motion.div custom={2} initial="hidden" animate="visible" variants={pop}>
-        <BentoCard tilt={1} accent="lime" className="flex h-full min-h-[140px] flex-col justify-center">
-          <MapPin className="mb-2 h-6 w-6 text-[var(--sv-lime)]" strokeWidth={2.5} />
+      {/* LOCALIZAÇÃO — Terra-42 (Noir): P&B, sem cor cravada */}
+      <motion.div className="sv-dim-noir" custom={2} initial="hidden" animate="visible" variants={pop}>
+        <BentoCard tilt={1} className="art-tex-moire flex h-full min-h-[140px] flex-col justify-center">
+          <MapPin className="mb-2 h-6 w-6" strokeWidth={2.5} />
           <p className="sv-heavy text-lg uppercase leading-none">{siteConfig.location}</p>
-          <p className="sv-display mt-2 text-base uppercase text-[var(--sv-cyan)]">disponível remoto</p>
+          <p className="sv-display mt-2 text-base uppercase opacity-80">disponível remoto</p>
+          <p className="sv-heavy mt-1 text-[9px] uppercase tracking-widest opacity-50">Terra-42</p>
         </BentoCard>
       </motion.div>
 
-      {/* PROJETOS counter */}
-      <motion.div custom={3} initial="hidden" animate="visible" variants={pop}>
-        <BentoCard tilt={3} accent="yellow" className="flex h-full flex-col items-center justify-center text-center">
-          <span className="sv-display text-6xl text-[var(--sv-yellow)]" style={{ WebkitTextStroke: '2px #000' }}>
+      {/* PROJETOS — Terra-14512 (Manga): screentone, painel branco */}
+      <motion.div className="sv-dim-manga" custom={3} initial="hidden" animate="visible" variants={pop}>
+        <BentoCard tilt={3} className="art-tex-screentone flex h-full flex-col items-center justify-center text-center">
+          <span className="sv-display text-6xl" style={{ WebkitTextStroke: '2px #000' }}>
             {projects.length}
           </span>
-          <span className="sv-heavy mt-1 text-xs uppercase tracking-wider text-white/70">projetos</span>
+          <span className="sv-heavy mt-1 text-xs uppercase tracking-wider opacity-70">projetos</span>
         </BentoCard>
       </motion.div>
 
-      {/* FERRAMENTAS counter */}
-      <motion.div custom={4} initial="hidden" animate="visible" variants={pop}>
-        <BentoCard tilt={1} accent="violet" className="flex h-full flex-col items-center justify-center text-center">
-          <span className="sv-display text-6xl text-[var(--sv-magenta)]" style={{ WebkitTextStroke: '2px #000' }}>
+      {/* FERRAMENTAS — Terra-1610 (Graffiti): spray, tijolo */}
+      <motion.div className="sv-dim-graffiti" custom={4} initial="hidden" animate="visible" variants={pop}>
+        <BentoCard tilt={1} className="art-tex-spatter flex h-full flex-col items-center justify-center text-center">
+          <span className="sv-display text-6xl" style={{ WebkitTextStroke: '2px #000' }}>
             {tools.length}
           </span>
-          <span className="sv-heavy mt-1 text-xs uppercase tracking-wider text-white/70">ferramentas</span>
+          <span className="sv-heavy mt-1 text-xs uppercase tracking-wider opacity-70">ferramentas</span>
         </BentoCard>
       </motion.div>
 
-      {/* STORYBOOK — catálogo de componentes (externo) */}
+      {/* STORYBOOK — Terra-928 (2099): brutalismo, grid holográfico */}
       <motion.div
-        className="col-span-2"
+        className="sv-dim-2099 col-span-2"
         custom={5} initial="hidden" animate="visible" variants={pop}
       >
         <a
@@ -148,12 +154,12 @@ export function BentoGrid({ projects = seedProjects, tools = seedTools }: BentoG
           rel="noopener noreferrer"
           className="group/sb block h-full"
         >
-          <BentoCard accent="violet" tilt={1} className="flex h-full flex-col justify-between sv-dots">
+          <BentoCard tilt={1} className="art-tex-misregister flex h-full flex-col justify-between">
             <div>
-              <p className="sv-display mb-2 text-2xl uppercase text-[var(--sv-violet)]">
+              <p className="sv-display mb-2 text-2xl uppercase">
                 {"// storybook"}
               </p>
-              <p className="sv-heavy text-xs uppercase leading-snug tracking-wide text-white/70">
+              <p className="sv-heavy text-xs uppercase leading-snug tracking-wide opacity-70">
                 O catálogo vivo do Design System — 40+ componentes, cada estado
                 navegável e testável isoladamente.
               </p>
@@ -165,41 +171,6 @@ export function BentoGrid({ projects = seedProjects, tools = seedTools }: BentoG
           </BentoCard>
         </a>
       </motion.div>
-
-      {/* DESTAQUE */}
-      {featuredProject && (
-        <motion.div
-          className="col-span-2"
-          custom={6} initial="hidden" animate="visible" variants={pop}
-        >
-          <BentoCard accent="magenta" tilt={2} className="flex h-full flex-col justify-center sv-dots">
-            <span className="sv-sticker sv-sticker-lime text-sm">em destaque</span>
-            {featuredProject.href ? (
-              <Link
-                href={featuredProject.href}
-                target={featuredProject.href.startsWith("http") ? "_blank" : undefined}
-                rel="noopener noreferrer"
-                className="group/feat"
-              >
-                <p className="sv-display mt-3 text-3xl uppercase leading-none transition-colors group-hover/feat:text-[var(--sv-yellow)]">
-                  {featuredProject.title}{" "}
-                  <span aria-hidden>{featuredProject.href.startsWith("http") ? "↗" : "→"}</span>
-                </p>
-                <p className="sv-heavy mt-1 text-xs uppercase tracking-wider text-white/70">
-                  {featuredProject.category}
-                </p>
-              </Link>
-            ) : (
-              <>
-                <p className="sv-display mt-3 text-3xl uppercase leading-none">{featuredProject.title}</p>
-                <p className="sv-heavy mt-1 text-xs uppercase tracking-wider text-white/70">
-                  {featuredProject.category}
-                </p>
-              </>
-            )}
-          </BentoCard>
-        </motion.div>
-      )}
 
     </div>
   )

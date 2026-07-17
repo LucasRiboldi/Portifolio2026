@@ -22,7 +22,8 @@ export type Dimension =
   | 'society'
   | 'riso'
 
-const dimClass: Record<Dimension, string> = {
+/** Classe de arte por dimensão — fonte única (SvCanvas, cards e styleguide). */
+export const dimClass: Record<Dimension, string> = {
   multiverse: '',
   neon: 'sv-dim-neon',
   renaissance: 'sv-dim-renaissance',
