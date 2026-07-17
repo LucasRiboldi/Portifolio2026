@@ -7,10 +7,14 @@ export interface NavLink {
   href: string
 }
 
+/**
+ * "Style Guide" saiu do menu: virou conteúdo do Design System, um por perfil
+ * (/design-system → escolhe o perfil). Dois itens apontando para dentro do
+ * mesmo lugar só dividiam a atenção.
+ */
 export const SITE_LINKS: NavLink[] = [
   { label: "Portfólio", href: "/portfolio" },
   { label: "Dimensões", href: "/dimensoes" },
-  { label: "Style Guide", href: "/design-system/realms/creative" },
   { label: "Design System", href: "/design-system" },
 ]
 

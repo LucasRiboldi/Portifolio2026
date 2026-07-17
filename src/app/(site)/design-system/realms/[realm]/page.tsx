@@ -7,6 +7,7 @@ import { isRealmId, REALMS } from "@/lib/realms"
 import { RealmKitPreview } from "./kit-preview"
 import { RealmMotionLab } from "@/components/design-system/realm-motion-lab"
 import { RealmVariantSwitcher } from "@/components/design-system/realm-variant-switcher"
+import { CreativeChapters } from "@/components/design-system/creative-chapters"
 
 export function generateStaticParams() {
   return REALM_DESIGN_IDS.map((realm) => ({ realm }))
@@ -261,6 +262,14 @@ export default async function RealmDesignPage({ params }: { params: Promise<{ re
           </code>
         ))}
       </div>
+
+      {/* ---------- Guia completo (só o Criativo) ----------
+          Os 29 capítulos — foundations, tokens, componentes, patterns,
+          templates, assets, lab, a11y — são todos desenhados na linguagem
+          comic. Eles pertencem a este realm, não a uma raiz neutra. Dev e
+          Anfitrião terão os seus quando existirem; enfileirar capítulos
+          comic sob um jornal de 1920 seria só barulho. */}
+      {d.id === "creative" && <CreativeChapters />}
     </div>
   )
 }
