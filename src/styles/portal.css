@@ -45,16 +45,19 @@
 .pl-dev { font-family: ui-monospace, monospace; font-size: 64px; font-weight: 700; color: #f8f8f2; }
 .pl-dev .p { color: #50fa7b; }
 .pl-dev .cur { display: inline-block; width: .55ch; background: #50fa7b; color: #50fa7b; animation: pl-blink 1s steps(1) infinite; }
+.portal-panel:hover .pl-dev .cur { animation-duration: .4s; }
 @keyframes pl-blink { 50% { opacity: 0; } }
 
 /* ANFITRIÃO — selo + d20 */
 .pl-anf { width: 124px; height: 124px; position: relative; animation: pl-spin 30s linear infinite;
-  filter: drop-shadow(0 0 10px rgba(201,162,74,.4)); }
+  filter: drop-shadow(0 0 10px rgba(201,162,74,.4)); transition: filter .3s ease; }
+.portal-panel:hover .pl-anf { animation-duration: 8s; filter: drop-shadow(0 0 18px rgba(201,162,74,.7)); }
 @keyframes pl-spin { to { transform: rotate(360deg); } }
 .pl-anf .ring { fill: none; stroke: #e8d9a8; stroke-width: 2; stroke-linecap: round; }
 .pl-anf .draw { stroke-dasharray: 520; stroke-dashoffset: 520; animation: pl-draw 3.4s ease forwards infinite; }
 @keyframes pl-draw { to { stroke-dashoffset: 0; } }
 .pl-anf .inner { position: absolute; inset: 0; display: grid; place-items: center; animation: pl-spin 30s linear infinite reverse; }
+.portal-panel:hover .pl-anf .inner { animation-duration: 8s; }
 .pl-anf .inner svg * { fill: none; stroke: #e8d9a8; stroke-linecap: round; stroke-linejoin: round; }
 .pl-anf .out { stroke-width: 2.6; } .pl-anf .fac { stroke-width: 1.6; opacity: .85; } .pl-anf .face { stroke-width: 2.2; }
 
