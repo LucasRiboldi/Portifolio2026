@@ -62,7 +62,7 @@ export function SectionsContent({ headingAs = "h1" }: { headingAs?: "h1" | "h2" 
         ]}
       />
 
-      <DsSectionTitle id="logos">Logos Grid / Partners</DsSectionTitle>
+      <DsSectionTitle id="sections-logos">Logos Grid / Partners</DsSectionTitle>
       <SvLogosGrid title="Confiado por realidades de todo o multiverso" logos={["Oscorp", "Alchemax", "Daily Bugle", "Horizon", "Stark", "Wayne"]} />
 
       <DsSectionTitle id="cta">CTA Section</DsSectionTitle>

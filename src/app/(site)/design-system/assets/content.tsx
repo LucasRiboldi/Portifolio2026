@@ -28,7 +28,7 @@ export function AssetsContent({ headingAs = "h1" }: { headingAs?: "h1" | "h2" })
       <ComicHeader as={headingAs} kicker="Fase 5 · Assets" title="Biblioteca de" highlight="assets" />
       <DsLead>Marca, ícones e texturas que compõem a identidade Design System.</DsLead>
 
-      <DsSectionTitle id="logo">Logo & Marca</DsSectionTitle>
+      <DsSectionTitle id="assets-logo">Logo & Marca</DsSectionTitle>
       <div className="grid gap-4 sm:grid-cols-3">
         <Swatch label="Logo · dark">
           <span className="font-[family-name:var(--font-display)] text-4xl uppercase text-white">
@@ -47,7 +47,7 @@ export function AssetsContent({ headingAs = "h1" }: { headingAs?: "h1" | "h2" })
         </Swatch>
       </div>
 
-      <DsSectionTitle id="logos">Logos — 10 lockups</DsSectionTitle>
+      <DsSectionTitle id="assets-logos">Logos — 10 lockups</DsSectionTitle>
       <LogoGrid />
 
       <DsSectionTitle id="punk">Ilustrações punk</DsSectionTitle>

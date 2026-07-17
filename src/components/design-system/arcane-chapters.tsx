@@ -176,7 +176,7 @@ export function ArcaneChapters() {
 
       {/* ---------- 02 ---------- */}
       <Chapter
-        id="colunas"
+        id="grid"
         n="02"
         title="A grade de colunas"
         lead={
@@ -448,7 +448,7 @@ export function ArcaneChapters() {
 
       {/* ---------- 10 ---------- */}
       <Chapter
-        id="tintas"
+        id="accessibility"
         n="10"
         title="As tintas sobre o papel"
         lead={

@@ -47,7 +47,7 @@ export function AccessibilityContent({ headingAs = "h1" }: { headingAs?: "h1" | 
       </p>
       <ContrastMatrix />
 
-      <DsSectionTitle id="states">Estados & leitores de tela</DsSectionTitle>
+      <DsSectionTitle id="a11y-states">Estados & leitores de tela</DsSectionTitle>
       <p className="mb-3 text-xs text-white/50">
         Cada estado interativo precisa de um equivalente perceptível e anunciável:
       </p>

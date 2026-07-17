@@ -15,7 +15,9 @@ export function FoundationsContent({ headingAs = "h1" }: { headingAs?: "h1" | "h
 
       {FOUNDATIONS.map((group) => (
         <section key={group.id}>
-          <DsSectionTitle id={group.id}>{group.title}</DsSectionTitle>
+          {/* prefixo `fnd-`: os ids do registry (brand, style…) colidiam com as
+              âncoras da arquitetura quando esta página vira capítulo do guia. */}
+          <DsSectionTitle id={`fnd-${group.id}`}>{group.title}</DsSectionTitle>
           <p className="mb-4 text-xs text-white/50">{group.description}</p>
           <div className="grid gap-3 sm:grid-cols-2">
             {group.items.map((item) => (

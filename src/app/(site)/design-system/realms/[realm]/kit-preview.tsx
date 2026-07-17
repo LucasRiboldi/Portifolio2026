@@ -222,7 +222,9 @@ function ArcaneKit() {
       <Block title="Cabeçalho">
         <div className="dp-masthead" style={{ paddingTop: 0 }}>
           <div className="dp-nameplate">
-            <h1 style={{ fontSize: "2.5rem" }}>Daily Prophet</h1>
+            {/* h3, não h1: isto é amostra dentro do guia, que já tem o seu h1.
+                O CSS aceita h1/h2/h3 justamente para o nível ser do contexto. */}
+            <h3 style={{ fontSize: "2.5rem" }}>Daily Prophet</h3>
             <p className="dp-nameplate-sub">Crônica das artes de mesa</p>
           </div>
           <hr className="dp-rule--hair" />

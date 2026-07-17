@@ -61,7 +61,7 @@ export function SelectionContent({ headingAs = "h1" }: { headingAs?: "h1" | "h2"
         </Demo>
       </div>
 
-      <DsSectionTitle id="code">Como usar</DsSectionTitle>
+      <DsSectionTitle id="selection-code">Como usar</DsSectionTitle>
       <pre className="overflow-x-auto rounded-md border-2 border-black bg-black/50 p-4 text-xs leading-relaxed text-white/80">
         <code>{`import { SvCheckbox, SvSwitch, SvRating } from "@/components/ui/sv-choice"
 

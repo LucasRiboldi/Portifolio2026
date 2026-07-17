@@ -116,7 +116,7 @@ export function LabContent({ headingAs: Title = "h1" }: { headingAs?: "h1" | "h2
       </div>
 
       {/* LOGOS */}
-      <DsSectionTitle id="logos">Logos anômalos</DsSectionTitle>
+      <DsSectionTitle id="lab-logos">Logos anômalos</DsSectionTitle>
       <div className="grid grid-cols-2 gap-3 sm:grid-cols-3 lg:grid-cols-5">
         {LOGOS.map((l) => (
           <div key={l.name} className="grid h-20 place-items-center rounded-md border-[3px] border-black bg-[var(--sv-ink-2)]">{l.node}</div>

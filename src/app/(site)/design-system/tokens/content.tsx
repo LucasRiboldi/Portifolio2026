@@ -46,12 +46,12 @@ export function TokensContent({ headingAs = "h1" }: { headingAs?: "h1" | "h2" })
         <code>public/design-tokens.json</code> (W3C DTCG) e <code>design-tokens.figma.json</code>.
       </DsLead>
 
-      <DsSectionTitle id="colors">Colors</DsSectionTitle>
+      <DsSectionTitle id="tokens-colors">Colors</DsSectionTitle>
       {Object.entries(tokens.color).map(([name, scale]) => (
         <ColorScale key={name} name={name} scale={scale as Record<string, string>} />
       ))}
 
-      <DsSectionTitle id="typography">Typography</DsSectionTitle>
+      <DsSectionTitle id="tokens-typography">Typography</DsSectionTitle>
       <div className="grid gap-4 sm:grid-cols-2">
         <TokenTable rows={Object.entries(tokens.typography.size).map(([k, v]) => [`size.${k}`, v])} />
         <TokenTable rows={Object.entries(tokens.typography.weight).map(([k, v]) => [`weight.${k}`, v])} />
@@ -87,7 +87,7 @@ export function TokensContent({ headingAs = "h1" }: { headingAs?: "h1" | "h2" })
         ))}
       </div>
 
-      <DsSectionTitle id="motion">Motion</DsSectionTitle>
+      <DsSectionTitle id="tokens-motion">Motion</DsSectionTitle>
       <div className="grid gap-4 sm:grid-cols-2">
         <TokenTable rows={Object.entries(tokens.motion.duration).map(([k, v]) => [`duration.${k}`, v])} />
         <TokenTable rows={Object.entries(tokens.motion.ease).map(([k, v]) => [`ease.${k}`, v])} />

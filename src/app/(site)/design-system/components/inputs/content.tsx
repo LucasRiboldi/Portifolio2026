@@ -98,7 +98,7 @@ export function InputsContent({ headingAs = "h1" }: { headingAs?: "h1" | "h2" })
       </div>
 
       {/* ---- Matriz de estados ---- */}
-      <DsSectionTitle id="states">Estados</DsSectionTitle>
+      <DsSectionTitle id="input-states">Estados</DsSectionTitle>
       <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
         <SvInput label="Normal" placeholder="Normal" />
         <SvInput label="Focus (Tab)" placeholder="Foque aqui" />
@@ -109,7 +109,7 @@ export function InputsContent({ headingAs = "h1" }: { headingAs?: "h1" | "h2" })
       </div>
 
       {/* ---- Snippet ---- */}
-      <DsSectionTitle id="code">Como usar</DsSectionTitle>
+      <DsSectionTitle id="input-code">Como usar</DsSectionTitle>
       <pre className="overflow-x-auto rounded-md border-2 border-black bg-black/50 p-4 text-xs leading-relaxed text-white/80">
         <code>{`import { SvInput } from "@/components/ui/sv-input"
 

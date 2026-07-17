@@ -10,6 +10,9 @@ import { RealmVariantSwitcher } from "@/components/design-system/realm-variant-s
 import { CreativeChapters } from "@/components/design-system/creative-chapters"
 import { DevChapters } from "@/components/design-system/dev-chapters"
 import { ArcaneChapters } from "@/components/design-system/arcane-chapters"
+import { DsRealmNav } from "@/components/design-system/ds-realm-nav"
+import { DsIntroduction } from "@/components/design-system/ds-introduction"
+import { DsTokenTables, DsColors } from "@/components/design-system/ds-token-tables"
 
 export function generateStaticParams() {
   return REALM_DESIGN_IDS.map((realm) => ({ realm }))
@@ -101,7 +104,11 @@ export default async function RealmDesignPage({ params }: { params: Promise<{ re
   const nav = REALMS[realm]
 
   return (
-    <div>
+    <div className="lg:flex lg:gap-10">
+      {/* Índice do documento — sumário, não menu de rotas. */}
+      <DsRealmNav realm={d.id} />
+
+      <div className="min-w-0 flex-1">
       <ComicHeader
         kicker={`Design System · Realm ${nav.glyph}`}
         title={d.label.replace(/^O /, "")}
@@ -117,28 +124,23 @@ export default async function RealmDesignPage({ params }: { params: Promise<{ re
         <code className="text-[var(--sv-cyan)]">{nav.route}</code>.
       </DsLead>
 
-      {/* ---------- Style guide em prosa ---------- */}
-      <DsSectionTitle id="principios">Princípios</DsSectionTitle>
-      <ol className="space-y-2">
-        {d.principles.map((p, i) => (
-          <li key={p} className="flex gap-3">
-            <span className="sv-display shrink-0 text-2xl leading-none text-[var(--sv-yellow)]">
-              {String(i + 1).padStart(2, "0")}
-            </span>
-            <p className="pt-1 text-sm leading-snug text-white/75">{p}</p>
-          </li>
-        ))}
-      </ol>
+      {/* ---------- 01 · Introduction ----------
+          Absorveu os "Princípios" que antes flutuavam soltos: princípio sem
+          objetivo e sem como-usar é frase de efeito. */}
+      <DsIntroduction d={d} />
 
-      {/* ---------- Cor ---------- */}
-      <DsSectionTitle id="cor">Sistema de cor</DsSectionTitle>
-      <p className="sv-heavy mb-3 text-[11px] uppercase tracking-wide text-white/50">Acentos</p>
-      <SwatchGrid items={d.palette} />
-      <p className="sv-heavy mb-3 mt-6 text-[11px] uppercase tracking-wide text-white/50">Superfícies</p>
-      <SwatchGrid items={d.surfaces} />
+      {/* ---------- 03 · Design Tokens · 05 · Colors ----------
+          O SwatchGrid antigo saiu: mostrava só nome e hex. As tabelas novas
+          derivam RGB, HSL e contraste do mesmo hex, por função testada. */}
+      <div className="mt-16">
+        <DsTokenTables d={d} />
+      </div>
+      <DsColors d={d} />
 
       {/* ---------- Tokens de realm ---------- */}
-      <DsSectionTitle id="tokens">Tokens de realm</DsSectionTitle>
+      {/* id distinto de `tokens` (o capítulo 03): dois elementos com o mesmo
+          id são HTML inválido e a âncora salta para o primeiro. */}
+      <DsSectionTitle id="tokens-realm">Tokens de realm</DsSectionTitle>
       <DsLead>
         Acima estão as primitivas deste realm. Aqui está a camada semântica:{" "}
         <code className="text-[var(--sv-cyan)]">--r-*</code> tem o mesmo nome nos três universos e
@@ -151,7 +153,7 @@ export default async function RealmDesignPage({ params }: { params: Promise<{ re
       </div>
 
       {/* ---------- Tipografia ---------- */}
-      <DsSectionTitle id="tipografia">Tipografia</DsSectionTitle>
+      <DsSectionTitle id="typography">Typography</DsSectionTitle>
       <div className="space-y-3">
         {d.typography.map((t) => (
           <DsCard key={t.role}>
@@ -187,7 +189,9 @@ export default async function RealmDesignPage({ params }: { params: Promise<{ re
       <DsSectionTitle id="raio">Raio</DsSectionTitle>
       <SpecTable rows={d.radius} />
 
-      <DsSectionTitle id="grelha">Grelha</DsSectionTitle>
+      {/* id distinto de `grid` (o capítulo 06): a grelha do realm são as specs;
+          o capítulo é o sistema de grid completo. */}
+      <DsSectionTitle id="grid-realm">Grelha do realm</DsSectionTitle>
       <SpecTable rows={d.grid} />
 
       <DsSectionTitle id="motion">Motion</DsSectionTitle>
@@ -247,7 +251,7 @@ export default async function RealmDesignPage({ params }: { params: Promise<{ re
       </div>
 
       {/* ---------- Logo ---------- */}
-      <DsSectionTitle id="logo">Logo</DsSectionTitle>
+      <DsSectionTitle id="brand">Brand</DsSectionTitle>
       <DsCard>
         <p className="text-sm leading-snug text-white/70">{d.logo}</p>
       </DsCard>
@@ -274,6 +278,7 @@ export default async function RealmDesignPage({ params }: { params: Promise<{ re
       {d.id === "creative" && <CreativeChapters />}
       {d.id === "developer" && <DevChapters />}
       {d.id === "arcane" && <ArcaneChapters />}
+      </div>
     </div>
   )
 }

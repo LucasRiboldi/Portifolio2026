@@ -107,7 +107,7 @@ export function ButtonsContent({ headingAs = "h1" }: { headingAs?: "h1" | "h2" }
       </div>
 
       {/* ------- MATRIZ DE ESTADOS ------- */}
-      <DsSectionTitle id="states">Estados</DsSectionTitle>
+      <DsSectionTitle id="btn-states">Estados</DsSectionTitle>
       <div className="grid gap-3 sm:grid-cols-3 lg:grid-cols-6">
         <StateCell label="Normal"><SvButton size="sm" color="magenta">Normal</SvButton></StateCell>
         <StateCell label="Hover" hint="passe o mouse"><SvButton size="sm" color="cyan">Hover</SvButton></StateCell>
@@ -128,7 +128,7 @@ export function ButtonsContent({ headingAs = "h1" }: { headingAs?: "h1" | "h2" }
       </div>
 
       {/* ------- SNIPPET ------- */}
-      <DsSectionTitle id="code">Como usar</DsSectionTitle>
+      <DsSectionTitle id="btn-code">Como usar</DsSectionTitle>
       <pre className="overflow-x-auto rounded-md border-2 border-black bg-black/50 p-4 text-xs leading-relaxed text-white/80">
         <code>{`import { SvButton } from "@/components/ui/sv-button"
 

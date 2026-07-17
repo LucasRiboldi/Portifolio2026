@@ -234,7 +234,7 @@ export function DevChapters() {
 
       {/* ---------- 05 ---------- */}
       <Chapter
-        id="cartoes"
+        id="components"
         n="05"
         title="Cartões, tags e números"
         lead="O card do _Dev não salta nem inclina: a borda acende e pronto. Nada aqui distrai de ler."
@@ -337,7 +337,7 @@ export function DevChapters() {
 
       {/* ---------- 09 ---------- */}
       <Chapter
-        id="contraste"
+        id="accessibility"
         n="09"
         title="Contraste da paleta"
         lead={

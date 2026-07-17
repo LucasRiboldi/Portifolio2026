@@ -92,7 +92,10 @@
   padding-bottom: 0.25rem;
 }
 .dp-nameplate { display: block; text-decoration: none; color: inherit; }
-.dp-nameplate h1 {
+/* :is(h1,h2,h3) em vez de h1: na folha real o nameplate É o título da página,
+   mas no kit do Design System ele é uma amostra dentro de um documento que já
+   tem h1. Prender o estilo à tag obrigava a duplicar o h1 para ficar bonito. */
+.dp-nameplate :is(h1, h2, h3) {
   font-family: var(--dp-wood);
   font-size: clamp(2.4rem, 8.5vw, 6rem);
   line-height: 0.92;
