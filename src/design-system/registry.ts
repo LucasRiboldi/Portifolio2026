@@ -278,16 +278,21 @@ export const MOTION_PATTERNS = [
   { name: "Glitch", token: "--duration-fast", note: "Aberração cromática / hover disruptivo" },
 ] as const
 
-/** Navegação lateral do /design-system. */
-export const DS_NAV = [
-  { href: "/design-system", label: "Visão Geral" },
+/**
+ * Índice das rotas do Design System.
+ *
+ * Já não alimenta menu nenhum: o /design-system virou documento único e a
+ * sidebar saiu. Fica como mapa das rotas que ainda existem para linkar
+ * direto — cada uma serve o mesmo `content.tsx` que o documento compõe.
+ */
+export const DS_ROUTES = [
+  { href: "/design-system", label: "Documento completo" },
   { href: "/design-system/realms/creative", label: "Realm · Criativo" },
+  { href: "/design-system/realms/developer", label: "Realm · _Dev" },
+  { href: "/design-system/realms/arcane", label: "Realm · Anfitrião" },
   { href: "/design-system/foundations", label: "Foundations" },
   { href: "/design-system/tokens", label: "Design Tokens" },
-  { href: "/design-system/components", label: "Componentes" },
   { href: "/design-system/sections", label: "Seções" },
-  { href: "/design-system/patterns", label: "Patterns" },
-  { href: "/design-system/templates", label: "Templates" },
   { href: "/design-system/motion", label: "Motion" },
   { href: "/design-system/assets", label: "Assets" },
   { href: "/design-system/os", label: "Retro OS" },

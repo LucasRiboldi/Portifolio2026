@@ -3,7 +3,7 @@
  * ------------------------------------------------------------
  * Três proporções, e só. Toda imagem do projeto usa uma delas.
  * As classes CSS vivem em `src/styles/images.css` (.img-frame + .img-*),
- * a documentação viva em /styleguide.
+ * a documentação viva em /design-system/realms/creative.
  *
  * Regra: ao mudar uma proporção aqui, mude também em images.css.
  */

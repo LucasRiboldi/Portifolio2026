@@ -5,6 +5,8 @@ import { DsSectionTitle, DsLead, DsCard } from "@/design-system/ds-ui"
 import { REALM_DESIGN, REALM_DESIGN_IDS, type Spec, type Swatch } from "@/design-system/realms"
 import { isRealmId, REALMS } from "@/lib/realms"
 import { RealmKitPreview } from "./kit-preview"
+import { RealmMotionLab } from "@/components/design-system/realm-motion-lab"
+import { RealmVariantSwitcher } from "@/components/design-system/realm-variant-switcher"
 
 export function generateStaticParams() {
   return REALM_DESIGN_IDS.map((realm) => ({ realm }))
@@ -186,11 +188,27 @@ export default async function RealmDesignPage({ params }: { params: Promise<{ re
       <SpecTable rows={d.grid} />
 
       <DsSectionTitle id="motion">Motion</DsSectionTitle>
-      <SpecTable rows={d.motion} />
+      <DsLead>
+        Cada gesto abaixo toca de verdade, com as mesmas curvas do realm. Documentar movimento em
+        texto é o jeito mais fácil de a documentação mentir — o easing muda no código e a tabela
+        continua igual. Registro em{" "}
+        <code className="text-[var(--sv-cyan)]">src/design-system/realm-motion.ts</code>.
+      </DsLead>
+      <div className="mt-4">
+        <RealmMotionLab realm={d.id} />
+      </div>
 
-      {/* ---------- Kit vivo ---------- */}
+      {/* ---------- Kit vivo, por versão ---------- */}
       <DsSectionTitle id="kit">UI Kit</DsSectionTitle>
-      <RealmKitPreview realm={d.id} scope={d.scope} />
+      <DsLead>
+        Os componentes reais, não capturas — se um quebrar, quebra aqui também, que é o ponto.
+        Troque a versão para reimprimir o kit inteiro noutra chapa.
+      </DsLead>
+      <div className="mt-4">
+        <RealmVariantSwitcher realm={d.id}>
+          <RealmKitPreview realm={d.id} scope={d.scope} />
+        </RealmVariantSwitcher>
+      </div>
 
       <DsSectionTitle id="catalogo">Catálogo</DsSectionTitle>
       <div className="space-y-5">

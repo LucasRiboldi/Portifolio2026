@@ -168,24 +168,32 @@ export function ComicButton({
 }
 
 /* --- Comic page header (dimension-aware) ------------------------------ */
+/**
+ * `as` existe porque estas páginas têm duas vidas: sozinhas na própria rota
+ * (onde o título é o h1 legítimo) e como capítulo do documento único do
+ * Design System (onde 29 h1 na mesma página destroem a hierarquia para quem
+ * navega por leitor de tela). O padrão continua h1 — só o documento rebaixa.
+ */
 export function ComicHeader({
   kicker,
   title,
   highlight,
   subtitle,
+  as: Tag = "h1",
 }: {
   kicker?: string
   title: string
   highlight?: string
   subtitle?: string
+  as?: "h1" | "h2"
 }) {
   return (
     <header className="mb-10">
       {kicker && <span className="sv-sticker sv-sticker-cyan text-sm">{kicker}</span>}
-      <h1 className="sv-page-title mt-4">
+      <Tag className="sv-page-title mt-4">
         {title}{" "}
         {highlight && <span className="sv-rainbow art-bloom">{highlight}</span>}
-      </h1>
+      </Tag>
       {subtitle && (
         <p className="sv-heavy mt-4 max-w-xl text-sm uppercase tracking-wide opacity-80">
           {subtitle}

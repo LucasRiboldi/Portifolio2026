@@ -1,5 +1,4 @@
 import type { Metadata } from "next"
-import { DsSidebar } from "@/components/design-system/ds-sidebar"
 
 export const metadata: Metadata = {
   title: "Design System · Design System",
@@ -7,12 +6,16 @@ export const metadata: Metadata = {
     "Design System corporativo do portfólio: foundations, design tokens, componentes, patterns, templates, acessibilidade e documentação.",
 }
 
+/**
+ * Sem sidebar: o Design System é um documento único e corrido, lido de cima a
+ * baixo, e não uma árvore para navegar. As rotas por seção continuam existindo
+ * para linkar direto — elas é que são a fonte que a página única compõe.
+ */
 export default function DesignSystemLayout({ children }: { children: React.ReactNode }) {
   return (
     <div className="sv-canvas min-h-screen">
-      <div className="mx-auto flex max-w-[1200px] flex-col gap-8 px-4 py-10 lg:flex-row lg:gap-10">
-        <DsSidebar />
-        <main className="min-w-0 flex-1 pb-24">{children}</main>
+      <div className="mx-auto max-w-[1200px] px-4 py-10">
+        <main className="min-w-0 pb-24">{children}</main>
       </div>
     </div>
   )

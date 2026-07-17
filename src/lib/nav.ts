@@ -10,7 +10,7 @@ export interface NavLink {
 export const SITE_LINKS: NavLink[] = [
   { label: "Portfólio", href: "/portfolio" },
   { label: "Dimensões", href: "/dimensoes" },
-  { label: "Style Guide", href: "/styleguide" },
+  { label: "Style Guide", href: "/design-system/realms/creative" },
   { label: "Design System", href: "/design-system" },
 ]
 
