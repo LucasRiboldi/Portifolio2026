@@ -9,6 +9,7 @@ import { RealmMotionLab } from "@/components/design-system/realm-motion-lab"
 import { RealmVariantSwitcher } from "@/components/design-system/realm-variant-switcher"
 import { CreativeChapters } from "@/components/design-system/creative-chapters"
 import { DevChapters } from "@/components/design-system/dev-chapters"
+import { ArcaneChapters } from "@/components/design-system/arcane-chapters"
 
 export function generateStaticParams() {
   return REALM_DESIGN_IDS.map((realm) => ({ realm }))
@@ -272,6 +273,7 @@ export default async function RealmDesignPage({ params }: { params: Promise<{ re
           sintaxe" no Criativo. */}
       {d.id === "creative" && <CreativeChapters />}
       {d.id === "developer" && <DevChapters />}
+      {d.id === "arcane" && <ArcaneChapters />}
     </div>
   )
 }
