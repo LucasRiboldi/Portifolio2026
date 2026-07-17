@@ -21,6 +21,17 @@ export function DsRealmNav({ realm }: { realm: RealmId }) {
   const secoes = sectionsFor(realm)
   const [ativa, setAtiva] = useState<string | null>(null)
 
+  // O _Dev tem chrome próprio (Dracula): o índice acompanha, com roxo/ciano no
+  // lugar do ciano-comic, para a página inteira falar a mesma língua.
+  const dev = realm === "developer"
+  const activeCls = dev
+    ? "bg-[var(--d-purple)]/20 text-[var(--d-purple)]"
+    : "bg-[var(--sv-cyan)]/15 text-[var(--sv-cyan)]"
+  const idleCls = dev
+    ? "text-[var(--d-comment)] hover:bg-[var(--d-current)]/40 hover:text-[var(--d-fg)]"
+    : "text-white/60 hover:bg-white/5 hover:text-white"
+  const wipCls = dev ? "text-[var(--d-orange)]/80" : "text-[var(--sv-yellow)]/70"
+
   useEffect(() => {
     const alvos = secoes
       .filter(s => s.disponivel)
@@ -80,15 +91,13 @@ export function DsRealmNav({ realm }: { realm: RealmId }) {
                 title={s.desc}
                 className={cn(
                   "flex items-baseline gap-2 rounded px-2 py-1 text-[11px] transition-colors",
-                  on
-                    ? "bg-[var(--sv-cyan)]/15 text-[var(--sv-cyan)]"
-                    : "text-white/60 hover:bg-white/5 hover:text-white"
+                  on ? activeCls : idleCls
                 )}
               >
                 <span className="font-mono text-[9px] opacity-60">{s.n}</span>
                 <span className="flex-1 truncate">{s.label}</span>
                 {s.status === "wip" && (
-                  <span className="text-[8px] uppercase tracking-wide text-[var(--sv-yellow)]/70">
+                  <span className={cn("text-[8px] uppercase tracking-wide", wipCls)}>
                     obra
                   </span>
                 )}

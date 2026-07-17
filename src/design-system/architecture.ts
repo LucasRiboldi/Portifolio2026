@@ -49,7 +49,7 @@ export const DS_ARCHITECTURE: DsSection[] = [
     label: "Foundations",
     desc: "As decisões visuais de base: cor, tipo, espaço, forma, elevação.",
     status: "ready",
-    em: ["creative"],
+    em: ["creative", "developer"],
   },
   {
     id: "tokens",
@@ -81,15 +81,15 @@ export const DS_ARCHITECTURE: DsSection[] = [
     label: "Grid",
     desc: "Container, colunas, margens, medianiz e breakpoints.",
     status: "ready",
-    em: ["creative", "arcane"],
+    em: ["creative", "arcane", "developer"],
   },
   {
     id: "iconography",
     n: "07",
     label: "Iconography",
     desc: "Grade, tamanhos, peso e área segura dos ícones.",
-    status: "planned",
-    em: [],
+    status: "wip",
+    em: ["developer", "creative"],
   },
   {
     id: "motion",
@@ -113,7 +113,7 @@ export const DS_ARCHITECTURE: DsSection[] = [
     label: "Patterns",
     desc: "Composições resolvidas: login, busca, multi-step, FAQ.",
     status: "wip",
-    em: ["creative"],
+    em: ["creative", "developer"],
   },
   {
     id: "templates",
@@ -121,7 +121,7 @@ export const DS_ARCHITECTURE: DsSection[] = [
     label: "Templates",
     desc: "Páginas inteiras montadas com o kit.",
     status: "ready",
-    em: ["creative"],
+    em: ["creative", "developer"],
   },
   {
     id: "accessibility",
@@ -136,8 +136,8 @@ export const DS_ARCHITECTURE: DsSection[] = [
     n: "13",
     label: "Content Design",
     desc: "Microcopy: botões, erros, vazios e voz de cada realm.",
-    status: "planned",
-    em: [],
+    status: "wip",
+    em: ["developer", "creative"],
   },
   {
     id: "brand",
@@ -153,15 +153,50 @@ export const DS_ARCHITECTURE: DsSection[] = [
     label: "Resources",
     desc: "Downloads: SVG, JSON de tokens, config do Tailwind, Storybook.",
     status: "wip",
-    em: ["creative"],
+    em: ["creative", "developer"],
   },
   {
     id: "changelog",
     n: "16",
     label: "Changelog",
     desc: "Histórico de versões: o que mudou, quando e por quê.",
-    status: "planned",
-    em: [],
+    status: "wip",
+    em: ["developer", "creative"],
+  },
+  // ---- Extras: capítulos que existem no corpo mas ficavam fora do índice.
+  // Creative e developer têm os dois um capítulo com o mesmo id — listá-los
+  // aqui equaliza os dois sumários.
+  {
+    id: "secoes",
+    n: "17",
+    label: "Seções de página",
+    desc: "Os blocos que montam uma página: hero, faixa de métricas, CTA.",
+    status: "ready",
+    em: ["creative", "developer"],
+  },
+  {
+    id: "retro-os",
+    n: "18",
+    label: "Retro OS · Temas",
+    desc: "Variações de tema — o SO retrô do Criativo, os temas de terminal do _Dev.",
+    status: "ready",
+    em: ["creative", "developer"],
+  },
+  {
+    id: "lab",
+    n: "19",
+    label: "Lab",
+    desc: "Experimentos: ferramentas internas antes de virarem componente.",
+    status: "wip",
+    em: ["creative", "developer"],
+  },
+  {
+    id: "documentacao",
+    n: "20",
+    label: "Documentação",
+    desc: "Ponteiros para o código e os docs reais, não prosa duplicada.",
+    status: "wip",
+    em: ["creative", "developer"],
   },
 ]
 

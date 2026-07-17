@@ -2,17 +2,18 @@ import { notFound } from "next/navigation"
 
 import { ComicHeader } from "@/components/spiderverse/decor"
 import { DsSectionTitle, DsLead, DsCard } from "@/design-system/ds-ui"
-import { REALM_DESIGN, REALM_DESIGN_IDS, type Spec, type Swatch } from "@/design-system/realms"
+import { REALM_DESIGN, REALM_DESIGN_IDS, type Swatch } from "@/design-system/realms"
 import { isRealmId, REALMS } from "@/lib/realms"
 import { RealmKitPreview } from "./kit-preview"
 import { RealmMotionLab } from "@/components/design-system/realm-motion-lab"
 import { RealmVariantSwitcher } from "@/components/design-system/realm-variant-switcher"
 import { CreativeChapters } from "@/components/design-system/creative-chapters"
-import { DevChapters } from "@/components/design-system/dev-chapters"
 import { ArcaneChapters } from "@/components/design-system/arcane-chapters"
 import { DsRealmNav } from "@/components/design-system/ds-realm-nav"
 import { DsIntroduction } from "@/components/design-system/ds-introduction"
 import { DsTokenTables, DsColors } from "@/components/design-system/ds-token-tables"
+import { SpecTable, RealmTokenGrid } from "@/components/design-system/realm-specs"
+import { DeveloperGuide } from "@/components/design-system/developer-guide"
 
 export function generateStaticParams() {
   return REALM_DESIGN_IDS.map((realm) => ({ realm }))
@@ -42,58 +43,6 @@ function SwatchGrid({ items }: { items: Swatch[] }) {
   )
 }
 
-/** O contrato --r-*: mesmo nome nos três realms, valor resolvido por escopo. */
-const REALM_TOKENS = [
-  { token: "--r-bg", role: "Fundo da página" },
-  { token: "--r-bg-2", role: "Fundo de painel" },
-  { token: "--r-ink", role: "Tinta" },
-  { token: "--r-ink-mut", role: "Tinta secundária" },
-  { token: "--r-accent", role: "Ação primária" },
-  { token: "--r-accent-2", role: "Ação secundária" },
-  { token: "--r-accent-3", role: "Chamada" },
-  { token: "--r-border", role: "Traço" },
-]
-
-/**
- * As amostras vivem DENTRO do `scope`, então cada var resolve no valor real
- * daquele realm — não há hex copiado aqui. Se realm-tokens.css mudar, muda aqui.
- */
-function RealmTokenGrid({ scope }: { scope: string }) {
-  return (
-    <div className={scope}>
-      <div className="grid grid-cols-2 gap-3 sm:grid-cols-4">
-        {REALM_TOKENS.map((t) => (
-          <div key={t.token} className="overflow-hidden rounded-md border-2 border-black">
-            <div className="h-12 w-full" style={{ background: `var(${t.token})` }} />
-            <div className="bg-[var(--sv-ink-2)] p-2">
-              <p className="font-mono text-[10px] text-[var(--sv-cyan)]">{t.token}</p>
-              <p className="mt-0.5 text-[10px] leading-snug text-white/60">{t.role}</p>
-            </div>
-          </div>
-        ))}
-      </div>
-    </div>
-  )
-}
-
-function SpecTable({ rows }: { rows: Spec[] }) {
-  return (
-    <div className="overflow-x-auto rounded-md border-2 border-black">
-      <table className="w-full text-left text-xs">
-        <tbody>
-          {rows.map((r) => (
-            <tr key={r.name} className="border-b border-white/10 last:border-0">
-              <td className="whitespace-nowrap px-3 py-2 font-mono text-[var(--sv-cyan)]">{r.name}</td>
-              <td className="whitespace-nowrap px-3 py-2 font-mono text-white/70">{r.value}</td>
-              <td className="px-3 py-2 text-white/60">{r.use}</td>
-            </tr>
-          ))}
-        </tbody>
-      </table>
-    </div>
-  )
-}
-
 export default async function RealmDesignPage({ params }: { params: Promise<{ realm: string }> }) {
   const { realm } = await params
   if (!isRealmId(realm)) notFound()
@@ -104,11 +53,29 @@ export default async function RealmDesignPage({ params }: { params: Promise<{ re
   const nav = REALMS[realm]
 
   return (
-    <div className="lg:flex lg:gap-10">
+    <div
+      className={`lg:flex lg:gap-10 ${
+        d.id === "developer" ? "dracula rounded-xl px-4 py-6 sm:px-6" : ""
+      }`}
+    >
       {/* Índice do documento — sumário, não menu de rotas. */}
       <DsRealmNav realm={d.id} />
 
       <div className="min-w-0 flex-1">
+      {/* O _Dev tem chrome próprio (Dracula, header de terminal) — sem ComicHeader
+          nem sv-canvas: a página inteira é o realm. Os outros realms usam o
+          scaffold comic. O kit vai por prop porque o preview vive na pasta da rota. */}
+      {d.id === "developer" ? (
+        <DeveloperGuide
+          d={d}
+          kit={
+            <RealmVariantSwitcher realm={d.id}>
+              <RealmKitPreview realm={d.id} scope={d.scope} />
+            </RealmVariantSwitcher>
+          }
+        />
+      ) : (
+        <>
       <ComicHeader
         kicker={`Design System · Realm ${nav.glyph}`}
         title={d.label.replace(/^O /, "")}
@@ -276,8 +243,9 @@ export default async function RealmDesignPage({ params }: { params: Promise<{ re
           Por isso não há "template de pricing" no _Dev nem "realce de
           sintaxe" no Criativo. */}
       {d.id === "creative" && <CreativeChapters />}
-      {d.id === "developer" && <DevChapters />}
       {d.id === "arcane" && <ArcaneChapters />}
+        </>
+      )}
       </div>
     </div>
   )

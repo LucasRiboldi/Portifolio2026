@@ -11,16 +11,25 @@
    `.dracula`. Se uma delas quebrar, quebra aqui — que é o ponto.
    ------------------------------------------------------------------ */
 
-/** Superfície do realm: o CSS do _Dev é escopado, sem isto sai com a cara errada. */
-function Surface({ children, className = "" }: { children: React.ReactNode; className?: string }) {
+/**
+ * Superfície do realm — um painel Dracula.
+ *
+ * Não leva mais a classe `dracula` (que reescrevia vars + bg + min-height:100vh
+ * a cada painel): o guia inteiro já vive dentro de um único escopo `.dracula`,
+ * então aqui basta referenciar as vars. Borda 1px --d-current, sem tinta preta
+ * de comic — a separação do _Dev é a borda, não a sombra.
+ */
+export function Surface({ children, className = "" }: { children: React.ReactNode; className?: string }) {
   return (
-    <div className={`dracula overflow-hidden rounded-md border-2 border-black bg-[var(--d-bg)] p-4 ${className}`}>
+    <div
+      className={`overflow-hidden rounded-[10px] border border-[var(--d-current)] bg-[var(--d-bg-2)] p-4 ${className}`}
+    >
       {children}
     </div>
   )
 }
 
-function Chapter({
+export function Chapter({
   id,
   n,
   title,
@@ -37,13 +46,16 @@ function Chapter({
     <section
       id={id}
       aria-label={`${n} · ${title}`}
-      className="mt-16 scroll-mt-24 border-t-[3px] border-black pt-10"
+      className="mt-14 scroll-mt-24 border-t border-[var(--d-current)] pt-9"
     >
-      <p className="sv-heavy mb-3 text-[11px] uppercase tracking-[0.2em] text-[var(--sv-magenta)]">
-        <span className="sv-display mr-2 text-2xl text-[var(--sv-yellow)]">{n}</span>
+      <p className="mb-3 flex items-baseline gap-2 font-mono text-sm font-bold text-[var(--d-orange)]">
+        <span className="text-[var(--d-purple)]">▍</span>
+        <span className="text-[var(--d-comment)]">{n}</span>
         {title}
       </p>
-      {lead && <p className="mb-5 max-w-3xl text-sm leading-relaxed text-white/70">{lead}</p>}
+      {lead && (
+        <p className="mb-5 max-w-3xl text-sm leading-relaxed text-[var(--d-comment)]">{lead}</p>
+      )}
       {children}
     </section>
   )
@@ -233,8 +245,10 @@ export function DevChapters() {
       </Chapter>
 
       {/* ---------- 05 ---------- */}
+      {/* id="cartoes" (não "components"): o grupo Components é o cluster de 6
+          galerias em dev-library.tsx; este é um capítulo nativo do _Dev. */}
       <Chapter
-        id="components"
+        id="cartoes"
         n="05"
         title="Cartões, tags e números"
         lead="O card do _Dev não salta nem inclina: a borda acende e pronto. Nada aqui distrai de ler."
@@ -334,11 +348,20 @@ export function DevChapters() {
           </div>
         </Surface>
       </Chapter>
+    </>
+  )
+}
 
-      {/* ---------- 09 ---------- */}
+/**
+ * 12 · Accessibility — separado de DevChapters para o corpo do _Dev poder
+ * posicioná-lo na ordem do índice (entre Templates e Content Design), em vez
+ * de ficar preso no fim do cluster de componentes.
+ */
+export function DevAccessibility() {
+  return (
       <Chapter
         id="accessibility"
-        n="09"
+        n="12"
         title="Contraste da paleta"
         lead={
           <>
@@ -385,6 +408,5 @@ export function DevChapters() {
           </div>
         </Surface>
       </Chapter>
-    </>
   )
 }
