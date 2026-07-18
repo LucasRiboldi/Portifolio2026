@@ -1,7 +1,7 @@
 "use client"
 
 import Link from "next/link"
-import { useRef } from "react"
+import { useRef, useState } from "react"
 import {
   motion,
   useMotionValue,
@@ -12,6 +12,36 @@ import {
 import { STORYBOOK_URL } from "@/constants/site"
 import { CenaSalto } from "@/components/design-system/creative-assets"
 import { Onoma } from "@/components/spiderverse/decor"
+import { DIMENSIONS, type Dimension } from "@/design-system/dimensions"
+
+/**
+ * Capa variante: a mesma arte reimpressa na paleta de cada dimensão.
+ * As classes sv-dim-* definem --c-* (atmosfera do canvas), não as cores do
+ * SVG — então a "reimpressão" é uma receita de filtro por dimensão, como uma
+ * variant cover que trocou as chapas de tinta na gráfica.
+ */
+const VARIANT_FX: Record<Dimension, string> = {
+  multiverse: "none",
+  neon: "saturate(1.8) hue-rotate(-20deg) brightness(1.1)",
+  renaissance: "sepia(0.9) contrast(0.9) brightness(1.05)",
+  nouveau: "saturate(0.8) hue-rotate(160deg) brightness(1.15)",
+  noir: "grayscale(1) contrast(1.5)",
+  punk: "contrast(1.6) saturate(1.4) hue-rotate(90deg)",
+  "2099": "hue-rotate(200deg) saturate(1.5) contrast(1.2)",
+  horror: "hue-rotate(-60deg) saturate(2) contrast(1.3) brightness(0.85)",
+  manga: "grayscale(1) contrast(1.2) brightness(1.1)",
+  cartoon: "saturate(2) brightness(1.15)",
+  graffiti: "saturate(1.6) contrast(1.25) hue-rotate(45deg)",
+  pixel: "saturate(1.3) contrast(1.4)",
+  blueprint: "hue-rotate(180deg) saturate(0.6) brightness(1.2) contrast(1.1)",
+  spot: "invert(1) grayscale(0.2)",
+  lego: "saturate(1.8) contrast(1.3) brightness(1.1)",
+  prowler: "hue-rotate(260deg) saturate(1.4) brightness(0.9)",
+  glitch: "hue-rotate(-15deg) saturate(1.7) contrast(1.35)",
+  portal: "hue-rotate(120deg) saturate(1.8)",
+  society: "grayscale(0.6) brightness(1.3) contrast(1.05)",
+  riso: "saturate(1.2) contrast(1.5) hue-rotate(-100deg)",
+}
 import { useSiteConfig } from "@/components/providers/site-config-provider"
 import { projects as seedProjects, type Project } from "@/data/projects"
 import { tools as seedTools, type Tool } from "@/data/tools"
@@ -52,6 +82,10 @@ export function ComicCover({
   const siteConfig = useSiteConfig()
   const reduceMotion = useReducedMotion()
   const ref = useRef<HTMLDivElement>(null)
+
+  // Capa variante ativa — o carimbo cicla as 20 dimensões.
+  const [variant, setVariant] = useState(0)
+  const dim = DIMENSIONS[variant % DIMENSIONS.length] ?? DIMENSIONS[0]!
 
   const [firstName, ...rest] = siteConfig.name.split(" ")
   const lastName = rest.join(" ")
@@ -187,7 +221,9 @@ export function ComicCover({
             do design system (15.1 · Assets em pares — tipo "cena"). */}
         <div className="relative z-[3] mt-6 sm:mt-10">
           <div className="relative overflow-hidden border-[3px] border-black shadow-[6px_6px_0_0_#000]">
-            <CenaSalto className="block w-full" />
+            <div style={{ filter: VARIANT_FX[dim.id], transition: "filter 0.4s ease" }}>
+              <CenaSalto className="block w-full" />
+            </div>
             {/* retícula por cima da arte, como impressão de banca */}
             <span aria-hidden className="sv-dots pointer-events-none absolute inset-0 opacity-20" />
           </div>
@@ -197,10 +233,15 @@ export function ComicCover({
           >
             KRAK!
           </Onoma>
-          {/* carimbo de capa variante — uma por dimensão do multiverso */}
-          <span className="cc-tag cc-tag-pop sv-display absolute -bottom-3 left-3 rotate-[-2deg] text-[10px] uppercase sm:text-xs">
-            Capa variante · 1 de 20
-          </span>
+          {/* carimbo de capa variante — clique reimprime a arte na próxima dimensão */}
+          <button
+            type="button"
+            onClick={() => setVariant((v) => (v + 1) % DIMENSIONS.length)}
+            className="cc-tag cc-tag-pop sv-display absolute -bottom-3 left-3 rotate-[-2deg] cursor-pointer text-[10px] uppercase transition-transform hover:-translate-y-0.5 sm:text-xs"
+            aria-label={`Capa variante ${variant + 1} de ${DIMENSIONS.length}: ${dim.label}. Clique para ver a próxima.`}
+          >
+            Capa variante · {variant + 1} de {DIMENSIONS.length} · {dim.label}
+          </button>
         </div>
 
         {/* ---------- CHAMADAS DE CAPA ---------- */}
