@@ -286,7 +286,8 @@ export function DevSections() {
       <Surface>
         <div className="dv-hero !mt-0">
           <p className="term font-mono"><span className="tok-fn">build</span>(<span className="tok-str">&quot;portfolio&quot;</span>)</p>
-          <h1 className="font-mono"><span className="g">deploy</span> <span className="c">rápido</span>.</h1>
+          {/* p.dv-hero-title, não h1: isto é demo dentro do guia, que já tem seu h1 */}
+          <p className="dv-hero-title font-mono"><span className="g">deploy</span> <span className="c">rápido</span>.</p>
           <p className="font-mono">Do commit ao ar em 21.9s.</p>
         </div>
         <div className="dv-stats">

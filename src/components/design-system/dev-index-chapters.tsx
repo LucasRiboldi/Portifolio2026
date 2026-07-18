@@ -12,8 +12,15 @@
    e classes reais de dracula.css, dentro do escopo `.dracula`.
 
    Os `id` batem 1:1 com architecture.ts (foundations, grid, iconography,
-   patterns, templates, content-design, resources, changelog) para a
-   âncora do índice cair no lugar certo.
+   content-design, resources, changelog) para a âncora do índice cair no
+   lugar certo — são renderizados direto, sem wrapper.
+
+   `patterns` e `templates` são exceção: em developer-guide.tsx eles vivem
+   dentro de um <Group id="patterns"|"templates"> junto com as galerias
+   dedicadas (DevPatternLogin, DevTplLanding…), porque a seção reúne mais
+   de uma fonte. Por isso os Chapter abaixo levam id PRÓPRIO
+   (patterns-cmdk, templates-routes) — repetir o id da seção aqui duplicava
+   a âncora (dois elementos com o mesmo id é HTML inválido).
    ------------------------------------------------------------------ */
 
 import { Chapter, Surface } from "./dev-chapters"
@@ -226,7 +233,7 @@ export const DEV_INDEX: Record<string, React.ReactNode> = {
   ),
   patterns: (
       <Chapter
-        id="patterns"
+        id="patterns-cmdk"
         n="10"
         title="Patterns"
         lead={
@@ -271,7 +278,7 @@ export const DEV_INDEX: Record<string, React.ReactNode> = {
   ),
   templates: (
       <Chapter
-        id="templates"
+        id="templates-routes"
         n="11"
         title="Templates"
         lead={

@@ -27,7 +27,8 @@ export function DevTplLanding() {
         <Frame label="landing.tsx · /desenvolvedor">
           <div className="dv-hero !mt-0 !p-3">
             <p className="term font-mono text-[10px]"><span className="tok-fn">ship</span>()</p>
-            <h1 className="font-mono !text-lg"><span className="g">código</span> <span className="p">que roda</span>.</h1>
+            {/* p.dv-hero-title, não h1: miniatura de template dentro do guia */}
+            <p className="dv-hero-title font-mono !text-lg"><span className="g">código</span> <span className="p">que roda</span>.</p>
           </div>
           <div className="mt-2 grid grid-cols-3 gap-2">
             {["12", "7", "31"].map((n) => (
