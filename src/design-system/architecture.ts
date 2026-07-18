@@ -308,6 +308,7 @@ export const DS_ARCHITECTURE: DsSection[] = [
     desc: "Variações de tema — o SO retrô do Criativo, os temas de terminal do _Dev.",
     status: "ready",
     em: ["creative", "developer", "arcane"],
+    subs: [{ id: "janelas", n: "18.1", label: "A janela — três eras", em: ["developer"] }],
   },
   {
     id: "lab",

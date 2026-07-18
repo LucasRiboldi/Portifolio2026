@@ -48,7 +48,8 @@ import {
   DevTplChangelog,
   DevTplComingSoon,
 } from "./dev-templates"
-import { DevThemes, DevLab, DevDocs } from "./dev-extras"
+import { DevLab, DevDocs } from "./dev-extras"
+import { DevOsThemes } from "./dev-os"
 
 /**
  * O guia de "O _Dev" — inteiro em Dracula.
@@ -232,7 +233,7 @@ export function DeveloperGuide({ d, kit }: { d: RealmDesign; kit: React.ReactNod
           junto de Components, carregando n="11" (o número de Templates) — saiu
           do lugar e do número. */}
       <DevSections />
-      <DevThemes />
+      <DevOsThemes />
       <DevLab />
       <DevDocs />
     </div>

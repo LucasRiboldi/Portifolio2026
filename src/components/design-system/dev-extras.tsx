@@ -5,38 +5,9 @@
    ------------------------------------------------------------------ */
 import { Chapter, Surface } from "./dev-chapters"
 
-/** 25 · Temas de terminal — o equivalente dev do "Retro OS" do Criativo. */
-export function DevThemes() {
-  const themes = [
-    { name: "Dracula", on: true, cols: ["#282a36", "#bd93f9", "#50fa7b", "#ff79c6", "#8be9fd"] },
-    { name: "Nord", on: false, cols: ["#2e3440", "#88c0d0", "#a3be8c", "#b48ead", "#81a1c1"] },
-    { name: "Gruvbox", on: false, cols: ["#282828", "#d3869b", "#b8bb26", "#fe8019", "#83a598"] },
-  ]
-  return (
-    <Chapter
-      id="retro-os"
-      n="18"
-      title="Temas de terminal"
-      lead="O _Dev não tem 'Retro OS' — tem temas de editor. Dracula é o canônico do realm; os outros existem para mostrar que a estrutura é a mesma, só as cores trocam."
-    >
-      <div className="grid gap-3 sm:grid-cols-3">
-        {themes.map((t) => (
-          <Surface key={t.name} className={t.on ? "ring-1 ring-[var(--d-purple)]" : ""}>
-            <div className="flex items-center justify-between">
-              <p className="font-mono text-xs text-[var(--d-fg)]">{t.name}</p>
-              {t.on && <span className="font-mono text-[9px] text-[var(--d-green)]">● ativo</span>}
-            </div>
-            <div className="mt-2 flex gap-1">
-              {t.cols.map((c) => (
-                <span key={c} className="h-6 flex-1 rounded" style={{ background: c }} />
-              ))}
-            </div>
-          </Surface>
-        ))}
-      </div>
-    </Chapter>
-  )
-}
+/* `DevThemes` mudou-se para `dev-os.tsx` e virou `DevOsThemes`: a seção 18
+   deixou de listar amostras de cor e passou a renderizar o mesmo código em
+   cada tema, mais as três eras de janela de sistema transpostas do Criativo. */
 
 /** 26 · Lab — experimentos. Uma ferramenta viva (toolbox estático). */
 export function DevLab() {
