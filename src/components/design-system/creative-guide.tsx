@@ -31,6 +31,7 @@ import { CreativeComic } from "./creative-comic"
 import { CreativeCover } from "./creative-cover"
 import { CreativeExtras } from "./creative-extras"
 import { CreativeShowcase, CreativeLandings } from "./creative-landings"
+import { CreativeAssetsChapter } from "./creative-assets-chapter"
 
 /**
  * O guia de "O Criativo" — o scaffold comic, agora com corpo próprio.
@@ -235,6 +236,7 @@ export function CreativeGuide({
 
       {/* 15 · Resources — e as folhas de estilo deste realm. */}
       <CreativeResources />
+      <CreativeAssetsChapter />
       <DsSectionTitle id="css">Folhas deste realm</DsSectionTitle>
       <div className="flex flex-wrap gap-2">
         {d.css.map((f) => (

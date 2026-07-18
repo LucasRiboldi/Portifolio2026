@@ -279,6 +279,7 @@ export const DS_ARCHITECTURE: DsSection[] = [
     desc: "Downloads: SVG, JSON de tokens, config do Tailwind, Storybook.",
     status: "wip",
     em: ["creative", "developer", "arcane"],
+    subs: [{ id: "assets-pares", n: "15.1", label: "Assets em pares", em: ["creative"] }],
   },
   {
     id: "changelog",
