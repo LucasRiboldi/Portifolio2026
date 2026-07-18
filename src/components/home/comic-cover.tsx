@@ -28,9 +28,25 @@ const COVER_LINES = [
 interface ComicCoverProps {
   projects?: Project[]
   tools?: Tool[]
+  /**
+   * Nível do nameplate. Na home a capa É o título da página, então `h1` é o
+   * padrão correto. Dentro do Design System ela vira amostra num documento que
+   * já tem o seu h1, e dois h1 quebram a árvore de cabeçalhos de quem usa
+   * leitor de tela — ali entra `h2`.
+   *
+   * Mesma armadilha já corrigida duas vezes neste projeto (`.dv-hero` no _Dev,
+   * `.dp-nameplate` no Anfitrião): componente reutilizável não deve prender o
+   * nível de cabeçalho. Aqui o CSS não seleciona por tag, então bastou tornar
+   * a tag configurável.
+   */
+  headingAs?: "h1" | "h2" | "h3"
 }
 
-export function ComicCover({ projects = seedProjects, tools = seedTools }: ComicCoverProps) {
+export function ComicCover({
+  projects = seedProjects,
+  tools = seedTools,
+  headingAs: Heading = "h1",
+}: ComicCoverProps) {
   const siteConfig = useSiteConfig()
   const reduceMotion = useReducedMotion()
   const ref = useRef<HTMLDivElement>(null)
@@ -111,7 +127,7 @@ export function ComicCover({ projects = seedProjects, tools = seedTools }: Comic
 
         {/* ---------- MASTHEAD ---------- */}
         <header className="relative z-[4] pt-2 sm:pl-40">
-          <h1 className="cc-masthead sv-display text-[clamp(2.6rem,11vw,6.5rem)]">
+          <Heading className="cc-masthead sv-display text-[clamp(2.6rem,11vw,6.5rem)]">
             <span className="relative block">
               <span aria-hidden className="cc-masthead-ghost">{firstName}</span>
               <span aria-hidden className="cc-masthead-ghost cc-masthead-ghost-2">{firstName}</span>
@@ -128,7 +144,7 @@ export function ComicCover({ projects = seedProjects, tools = seedTools }: Comic
                 </span>
               </span>
             )}
-          </h1>
+          </Heading>
 
           <p className="sv-heavy mt-3 text-xs uppercase italic tracking-wide text-[var(--sv-paper)]/85 sm:text-base">
             {siteConfig.title}
