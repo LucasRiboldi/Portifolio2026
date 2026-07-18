@@ -9,6 +9,7 @@
 import "@/styles/dracula.css"
 import "@/styles/prophet.css"
 import "@/styles/daily-prophet.css"
+import "@/styles/daily-prophet-ui.css"
 
 import * as React from "react"
 
@@ -283,6 +284,136 @@ function ArcaneKit() {
             <b>IV</b>
           </span>
         </nav>
+      </Block>
+
+      {/* A camada de interface. Este kit mostrava só peças editoriais — o
+          realm não tinha botão, campo nem tabela, então não havia o que
+          mostrar. Com `daily-prophet-ui.css` passa a haver, e o kit equipara
+          finalmente os blocos que o Criativo e o _Dev sempre tiveram. */}
+      <Block title="Botões — variantes e tamanhos">
+        <div className="flex flex-wrap items-center gap-3">
+          <button type="button" className="dp-btn dp-btn--primary">Publicar</button>
+          <button type="button" className="dp-btn">Guardar prova</button>
+          <button type="button" className="dp-btn dp-btn--ghost">Ver arquivo</button>
+          <button type="button" className="dp-btn dp-btn--danger">Recolher</button>
+          <button type="button" className="dp-btn" disabled>Na prensa…</button>
+        </div>
+        <hr className="dp-rule dp-rule--hair" />
+        <div className="flex flex-wrap items-center gap-3">
+          <button type="button" className="dp-btn dp-btn--sm">pequeno</button>
+          <button type="button" className="dp-btn">médio</button>
+          <button type="button" className="dp-btn dp-btn--lg">grande</button>
+          <button type="button" className="dp-btn dp-btn--double">fio duplo</button>
+        </div>
+      </Block>
+
+      <Block title="Campos & escolha">
+        <div className="grid gap-4 sm:grid-cols-2">
+          <div>
+            <div className="dp-field">
+              <label className="dp-label" data-required="true" htmlFor="kit-nome">Nome</label>
+              <input id="kit-nome" className="dp-input" placeholder="como deve sair impresso" />
+            </div>
+            <div className="dp-field">
+              <label className="dp-label" htmlFor="kit-obs">Observações</label>
+              <textarea id="kit-obs" rows={2} className="dp-input dp-input--boxed" />
+              <p className="dp-help">A caixa é a exceção — texto longo pede área.</p>
+            </div>
+            <div className="dp-field">
+              <label className="dp-label" htmlFor="kit-err">Tiragem</label>
+              <input id="kit-err" className="dp-input" aria-invalid="true" defaultValue="0" />
+              <p className="dp-error">Mínimo de quinhentos exemplares.</p>
+            </div>
+          </div>
+          <div>
+            <label className="dp-choice">
+              <input type="checkbox" className="dp-check" defaultChecked />
+              <span>Edição da manhã</span>
+            </label>
+            <label className="dp-choice">
+              <input type="checkbox" className="dp-check" />
+              <span>Classificados</span>
+            </label>
+            <hr className="dp-rule dp-rule--hair" />
+            <label className="dp-choice">
+              <input type="radio" name="kit-entrega" className="dp-check dp-check--radio" defaultChecked />
+              <span>Ao domicílio</span>
+            </label>
+            <label className="dp-choice">
+              <input type="radio" name="kit-entrega" className="dp-check dp-check--radio" />
+              <span>Levantar na oficina</span>
+            </label>
+            <div className="dp-tabs" role="tablist" aria-label="Cadernos" style={{ marginTop: "0.9rem" }}>
+              {["Manchete", "Oficina", "Anúncios"].map((c, i) => (
+                <button
+                  key={c}
+                  type="button"
+                  role="tab"
+                  className="dp-tab"
+                  aria-selected={i === 0}
+                  tabIndex={i === 0 ? 0 : -1}
+                >
+                  {c}
+                </button>
+              ))}
+            </div>
+          </div>
+        </div>
+      </Block>
+
+      <Block title="Selos, carimbo e assinatura">
+        <div className="flex flex-wrap items-center justify-around gap-4">
+          <div className="dp-seal">Prelo &amp; Vinco<br />MCMVIII</div>
+          <div className="dp-seal dp-seal--ink" style={{ width: "4rem", height: "4rem" }}>Aprovado</div>
+          <div className="dp-seal dp-seal--void" style={{ width: "4rem", height: "4rem" }}>Sem efeito</div>
+          <div className="dp-postmark">Expedido<b>18 · VII · 26</b>Terra-2026</div>
+          <div className="dp-signature" style={{ maxWidth: "12rem" }}>
+            <p className="dp-autograph">L. Riboldi</p>
+            <div className="dp-signature-line">
+              <p className="dp-signature-name">Lucas F. Riboldi</p>
+              <p className="dp-signature-role">Compositor-chefe</p>
+            </div>
+          </div>
+        </div>
+      </Block>
+
+      <Block title="Tabela, etiquetas e marcadores">
+        <div className="grid gap-4 sm:grid-cols-[1.3fr_1fr]">
+          <table className="dp-table">
+            <caption>Tiragem por caderno</caption>
+            <thead>
+              <tr><th>Caderno</th><th className="num">Páginas</th><th className="num">Exemplares</th></tr>
+            </thead>
+            <tbody>
+              <tr><td>Manchete</td><td className="num">4</td><td className="num">31.000</td></tr>
+              <tr><td>Mecânicas</td><td className="num">6</td><td className="num">28.400</td></tr>
+              <tr><td>Classificados</td><td className="num">2</td><td className="num">31.000</td></tr>
+            </tbody>
+          </table>
+          <div>
+            <div className="flex flex-wrap gap-2">
+              <span className="dp-tag">rascunho</span>
+              <span className="dp-tag">em prova</span>
+              <span className="dp-tag dp-tag--ink">no prelo</span>
+            </div>
+            <ul className="dp-list dp-list--fleuron" style={{ marginTop: "0.7rem" }}>
+              <li>Composição</li>
+              <li>Impressão</li>
+              <li>Expedição</li>
+            </ul>
+          </div>
+        </div>
+      </Block>
+
+      <Block title="Letras desenhadas">
+        <p style={{ fontSize: "0.85rem", lineHeight: 1.5 }}>
+          <span className="dp-initial">O</span>
+          compositor abre a matéria com a inicial em caixa e fecha os números em{" "}
+          <span className="dp-oldstyle">1908</span> com algarismo antigo, que desce abaixo da linha
+          e convive com o texto sem gritar. Em <span className="dp-sc">versalete verdadeiro</span> o
+          nome da casa, e as frações saem em <span className="dp-frac">1/2</span> e{" "}
+          <span className="dp-frac">3/4</span>.
+        </p>
       </Block>
     </>
   )

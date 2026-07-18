@@ -183,7 +183,12 @@ export const DS_ARCHITECTURE: DsSection[] = [
       { id: "servico", n: "09.6", label: "Barra de serviço", em: ["arcane"] },
       { id: "grafico", n: "09.7", label: "Gravura de dados", em: ["arcane"] },
       { id: "marcas", n: "09.8", label: "Carimbo, verbete e pé", em: ["arcane"] },
-      { id: "kit", n: "09.9", label: "UI Kit", em: ["arcane"] },
+      { id: "botoes", n: "09.9", label: "Botões", em: ["arcane"] },
+      { id: "formulario", n: "09.10", label: "O formulário impresso", em: ["arcane"] },
+      { id: "selos", n: "09.11", label: "Selos, carimbos e assinaturas", em: ["arcane"] },
+      { id: "letras", n: "09.12", label: "Letras e marcadores", em: ["arcane"] },
+      { id: "prensa", n: "09.13", label: "O movimento da prensa", em: ["arcane"] },
+      { id: "kit", n: "09.14", label: "UI Kit", em: ["arcane"] },
     ],
   },
   {

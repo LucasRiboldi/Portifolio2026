@@ -22,6 +22,13 @@ import {
   ArcaneCabecalho,
 } from "./arcane-components"
 import {
+  ArcaneBotoes,
+  ArcaneFormulario,
+  ArcaneSelos,
+  ArcaneLetras,
+  ArcanePrensa,
+} from "./arcane-ui"
+import {
   ArcaneMasthead,
   ArcaneIntro,
   ArcaneTokens,
@@ -116,9 +123,14 @@ export function ArcaneGuide({ d, kit }: { d: RealmDesign; kit: React.ReactNode }
       <ArcaneServico />
       <ArcaneGrafico />
       <ArcaneMarcas />
+      <ArcaneBotoes />
+      <ArcaneFormulario />
+      <ArcaneSelos />
+      <ArcaneLetras />
+      <ArcanePrensa />
       <SubChapter
         id="kit"
-        n="09.9"
+        n="09.14"
         title="Oficina · UI Kit"
         lead="Os componentes reais da folha, não capturas — troque a versão para reimprimir a mesma matéria noutra tiragem."
       >

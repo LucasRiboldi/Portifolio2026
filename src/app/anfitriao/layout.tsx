@@ -1,6 +1,7 @@
 import "@/styles/fonts-arcane.css"
 import "@/styles/prophet.css"
 import "@/styles/daily-prophet.css"
+import "@/styles/daily-prophet-ui.css"
 
 import type { ReactNode } from "react"
 import Link from "next/link"

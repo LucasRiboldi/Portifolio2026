@@ -356,7 +356,7 @@ const arcane: RealmDesign = {
   label: "O Anfitrião",
   tagline: "Daily Prophet — jornal antigo: pergaminho, tinta e composição em colunas.",
   scope: "prophet dp",
-  css: ["prophet.css", "daily-prophet.css", "fonts-arcane.css"],
+  css: ["prophet.css", "daily-prophet.css", "daily-prophet-ui.css", "fonts-arcane.css"],
   principles: [
     "É papel, não tela. Tudo que existe aqui existiria numa folha impressa em 1920.",
     "A composição manda: colunas, fios e capitulares. O texto justificado é a estrutura, não enfeite.",
