@@ -49,7 +49,7 @@ export const DS_ARCHITECTURE: DsSection[] = [
     label: "Foundations",
     desc: "As decisões visuais de base: cor, tipo, espaço, forma, elevação.",
     status: "ready",
-    em: ["creative", "developer"],
+    em: ["creative", "developer", "arcane"],
   },
   {
     id: "tokens",
@@ -89,7 +89,7 @@ export const DS_ARCHITECTURE: DsSection[] = [
     label: "Iconography",
     desc: "Grade, tamanhos, peso e área segura dos ícones.",
     status: "wip",
-    em: ["developer", "creative"],
+    em: ["developer", "creative", "arcane"],
   },
   {
     id: "motion",
@@ -105,7 +105,7 @@ export const DS_ARCHITECTURE: DsSection[] = [
     label: "Components",
     desc: "A biblioteca: variantes, estados, anatomia, código e acessibilidade.",
     status: "wip",
-    em: ["creative", "developer"],
+    em: ["creative", "developer", "arcane"],
   },
   {
     id: "patterns",
@@ -113,7 +113,7 @@ export const DS_ARCHITECTURE: DsSection[] = [
     label: "Patterns",
     desc: "Composições resolvidas: login, busca, multi-step, FAQ.",
     status: "wip",
-    em: ["creative", "developer"],
+    em: ["creative", "developer", "arcane"],
   },
   {
     id: "templates",
@@ -121,7 +121,7 @@ export const DS_ARCHITECTURE: DsSection[] = [
     label: "Templates",
     desc: "Páginas inteiras montadas com o kit.",
     status: "ready",
-    em: ["creative", "developer"],
+    em: ["creative", "developer", "arcane"],
   },
   {
     id: "accessibility",
@@ -137,7 +137,7 @@ export const DS_ARCHITECTURE: DsSection[] = [
     label: "Content Design",
     desc: "Microcopy: botões, erros, vazios e voz de cada realm.",
     status: "wip",
-    em: ["developer", "creative"],
+    em: ["developer", "creative", "arcane"],
   },
   {
     id: "brand",
@@ -153,7 +153,7 @@ export const DS_ARCHITECTURE: DsSection[] = [
     label: "Resources",
     desc: "Downloads: SVG, JSON de tokens, config do Tailwind, Storybook.",
     status: "wip",
-    em: ["creative", "developer"],
+    em: ["creative", "developer", "arcane"],
   },
   {
     id: "changelog",
@@ -161,7 +161,7 @@ export const DS_ARCHITECTURE: DsSection[] = [
     label: "Changelog",
     desc: "Histórico de versões: o que mudou, quando e por quê.",
     status: "wip",
-    em: ["developer", "creative"],
+    em: ["developer", "creative", "arcane"],
   },
   // ---- Extras: capítulos que existem no corpo mas ficavam fora do índice.
   // Creative e developer têm os dois um capítulo com o mesmo id — listá-los

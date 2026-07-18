@@ -8,6 +8,16 @@ import {
   ArcaneMotion,
   ArcaneBrand,
 } from "./arcane-foundations"
+import {
+  ArcaneFoundations,
+  ArcaneIconography,
+  ArcaneComponents,
+  ArcanePatterns,
+  ArcaneTemplates,
+  ArcaneContentDesign,
+  ArcaneResources,
+  ArcaneChangelog,
+} from "./arcane-index-chapters"
 
 /**
  * O guia de "O Anfitrião" — inteiro numa folha de jornal.
@@ -27,7 +37,10 @@ export function ArcaneGuide({ d, kit }: { d: RealmDesign; kit: React.ReactNode }
   return (
     <div className="dp min-w-0 rounded-sm p-5 sm:p-8" style={{ color: "var(--dp-ink)" }}>
       <ArcaneMasthead d={d} />
+
+      {/* Fundações da folha: editorial, oficina de composição, tintas, superfícies. */}
       <ArcaneIntro d={d} />
+      <ArcaneFoundations />
       <ArcaneTokens d={d} />
       <ArcaneColors d={d} />
 
@@ -36,8 +49,16 @@ export function ArcaneGuide({ d, kit }: { d: RealmDesign; kit: React.ReactNode }
           silêncio. Cada capítulo é uma matéria da folha. */}
       <ArcaneChapters />
 
+      {/* Sistemas da folha, na ordem do índice. */}
+      <ArcaneIconography />
       <ArcaneMotion d={d} />
+      <ArcaneComponents />
+      <ArcanePatterns />
+      <ArcaneTemplates />
+      <ArcaneContentDesign />
       <ArcaneBrand d={d} />
+      <ArcaneResources d={d} />
+      <ArcaneChangelog />
 
       {/* Kit vivo, por versão (estados da folha). */}
       <Chapter
