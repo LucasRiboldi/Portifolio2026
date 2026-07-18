@@ -1,0 +1,379 @@
+/* ============================================================
+   SV-EXTRAS — a camada extrapolada do Criativo.
+   ============================================================
+   Extensão de `sv-effects.css` (anomalias), `sv-punk.css` (colagem) e
+   `sv-surfaces.css` (texturas e gradientes). Vive em arquivo próprio porque
+   os três já estavam no limite de leitura e porque isto é acréscimo
+   deliberado, não correção — dá para remover o arquivo inteiro e o sistema
+   continua de pé.
+
+   Regras que valem para tudo aqui:
+   - Nada de imagem: toda superfície é CSS, para não custar rede.
+   - Toda animação desliga em prefers-reduced-motion, e o conteúdo
+     permanece legível sem ela.
+   - Prefixo por família: fx- efeito, art-tex- textura, bg- fundo.
+   ============================================================ */
+
+/* ═══════════════ LETRAS DE RESGATE — o recorte de revista ═══════════════ */
+/**
+ * `.fx-ransom` já existia em sv-punk.css, mas cru: borda preta e sombra, com
+ * todas as letras iguais. Uma nota de resgate real é feita de pedaços de
+ * revistas DIFERENTES — papéis, cores e ângulos que não combinam, e é o
+ * desencontro que faz a leitura funcionar.
+ *
+ * As variantes abaixo dão o papel de cada recorte. A rotação alternada sai
+ * de :nth-child, então nenhuma letra precisa de classe própria: escreva a
+ * palavra e ela já sai torta do jeito certo.
+ */
+.fx-ransom-piece {
+  position: relative;
+  transform: rotate(var(--rn-rot, 0deg));
+}
+/* Ângulos primos entre si — nunca repetem em fase numa palavra curta. */
+.fx-ransom .fx-ransom-piece:nth-child(3n + 1) { --rn-rot: -4deg; }
+.fx-ransom .fx-ransom-piece:nth-child(3n + 2) { --rn-rot: 3deg; }
+.fx-ransom .fx-ransom-piece:nth-child(5n + 3) { --rn-rot: -7deg; }
+.fx-ransom .fx-ransom-piece:nth-child(7n + 5) { --rn-rot: 6deg; }
+
+/* Papel de miolo: creme, com fibra. */
+.fx-ransom-piece--paper {
+  background-color: #efe6cf;
+  background-image: repeating-linear-gradient(0deg, rgba(0, 0, 0, 0.045) 0 1px, transparent 1px 3px);
+  color: #14100a;
+}
+/* Papel-jornal: mais cinza, com retícula visível. */
+.fx-ransom-piece--news {
+  background-color: #d8d2c4;
+  background-image: radial-gradient(rgba(0, 0, 0, 0.22) 0.8px, transparent 1px);
+  background-size: 3px 3px;
+  color: #14100a;
+}
+/* Página de revista: cor chapada e saturada, papel couché. */
+.fx-ransom-piece--glossy {
+  background-image: linear-gradient(150deg, var(--sv-yellow), var(--sv-orange));
+  color: #000;
+}
+.fx-ransom-piece--pop { background-image: linear-gradient(150deg, var(--sv-magenta), var(--sv-violet)); color: #fff; }
+.fx-ransom-piece--cold { background-image: linear-gradient(150deg, var(--sv-cyan), var(--sv-lime)); color: #000; }
+/* Kraft: papel pardo de embrulho. */
+.fx-ransom-piece--kraft {
+  background-color: #b08d57;
+  background-image: repeating-linear-gradient(45deg, rgba(0, 0, 0, 0.05) 0 2px, transparent 2px 5px);
+  color: #1b1206;
+}
+/* Negativo: recorte de foto, tinta invertida. */
+.fx-ransom-piece--negative { background: #0d0d0d; color: #f2f2f2; border-color: #f2f2f2; }
+/* Fita: o pedaço colado por cima, translúcido. */
+.fx-ransom-piece--taped::after {
+  content: "";
+  position: absolute;
+  inset-inline: -6px;
+  top: -5px;
+  height: 11px;
+  background: rgba(255, 230, 0, 0.42);
+  border-block: 1px dashed rgba(0, 0, 0, 0.28);
+  pointer-events: none;
+}
+/* Borda irregular de tesoura, para o recorte não parecer guilhotinado. */
+.fx-ransom-piece--cut {
+  clip-path: polygon(0 8%, 12% 0, 34% 6%, 58% 0, 82% 7%, 100% 2%, 97% 46%, 100% 92%, 74% 100%, 46% 94%, 20% 100%, 3% 91%);
+  padding-inline: 10px;
+}
+
+/* ═══════════════ ANOMALIAS — segunda leva ═══════════════ */
+
+/* Rasgo: a página partida ao meio, com as bordas desencontradas. */
+.fx-tear { position: relative; isolation: isolate; }
+.fx-tear::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+  background: linear-gradient(92deg, transparent 48%, rgba(0, 0, 0, 0.75) 49% 51%, transparent 52%);
+  mix-blend-mode: multiply;
+}
+
+/* Chuvisco de TV sem sinal. */
+.fx-static { position: relative; isolation: isolate; }
+.fx-static::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+  opacity: 0.16;
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='100' height='100'%3E%3Cfilter id='s'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='1.1' numOctaves='2'/%3E%3C/filter%3E%3Crect width='100' height='100' filter='url(%23s)'/%3E%3C/svg%3E");
+  animation: fx-static 0.4s steps(3) infinite;
+}
+@keyframes fx-static {
+  0% { transform: translate(0, 0); }
+  33% { transform: translate(-2%, 1%); }
+  66% { transform: translate(1%, -2%); }
+  100% { transform: translate(0, 0); }
+}
+
+/* Eco de movimento: o corpo que deixou rastro ao atravessar o portal. */
+.fx-echo { position: relative; }
+.fx-echo::before,
+.fx-echo::after {
+  content: attr(data-text);
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+  opacity: 0.4;
+}
+.fx-echo::before { color: var(--sv-magenta); transform: translate(-7px, 3px); }
+.fx-echo::after { color: var(--sv-cyan); transform: translate(7px, -3px); opacity: 0.28; }
+
+/* Fotocópia degradada: contraste estourado e sujeira de vidro. */
+.fx-xerox {
+  filter: grayscale(1) contrast(2.2) brightness(1.12);
+  background-image: repeating-linear-gradient(97deg, transparent 0 60px, rgba(0, 0, 0, 0.06) 60px 61px);
+}
+
+/* Queimado: a borda que o fogo comeu. */
+.fx-burn {
+  box-shadow: inset 0 0 22px rgba(120, 40, 0, 0.55), inset 0 0 6px rgba(0, 0, 0, 0.7);
+}
+
+/* Dither 1-bit: a imagem reduzida a duas cores por trama ordenada. */
+.fx-dither {
+  background-image:
+    repeating-conic-gradient(#000 0% 25%, transparent 0% 50%);
+  background-size: 4px 4px;
+  mix-blend-mode: multiply;
+  opacity: 0.5;
+}
+
+/* Salto de sincronismo: a faixa que escorrega e volta. */
+.fx-scanjump { position: relative; overflow: hidden; }
+.fx-scanjump::after {
+  content: "";
+  position: absolute;
+  inset-inline: 0;
+  height: 14%;
+  pointer-events: none;
+  background: rgba(255, 255, 255, 0.14);
+  animation: fx-scanjump 3.2s steps(1) infinite;
+}
+@keyframes fx-scanjump {
+  0%, 78% { top: -20%; }
+  80% { top: 30%; }
+  84% { top: 62%; }
+  88%, 100% { top: -20%; }
+}
+
+/* ═══════════════ EFEITOS DE TEXTO — segunda leva ═══════════════ */
+
+/* Relevo seco: a letra prensada no papel, sem tinta. */
+.fx-emboss {
+  color: transparent;
+  text-shadow: 1px 1px 0 rgba(255, 255, 255, 0.35), -1px -1px 0 rgba(0, 0, 0, 0.55);
+}
+
+/* Contorno duplo: a letra vazada com duas bordas concêntricas. */
+.fx-outline-double {
+  color: transparent;
+  -webkit-text-stroke: 2px #000;
+  paint-order: stroke fill;
+  text-shadow: 0 0 0 #000, 4px 4px 0 var(--sv-yellow), 4px 4px 0 #000;
+}
+
+/* Sombra longa e chapada, de cartaz. */
+.fx-shadow-long {
+  text-shadow:
+    1px 1px 0 #000, 2px 2px 0 #000, 3px 3px 0 #000, 4px 4px 0 #000,
+    5px 5px 0 #000, 6px 6px 0 #000, 7px 7px 0 #000, 8px 8px 0 #000;
+}
+
+/* Empilhado: a mesma palavra três vezes, deslocada como carimbo repetido. */
+.fx-stack { position: relative; }
+.fx-stack::before,
+.fx-stack::after {
+  content: attr(data-text);
+  position: absolute;
+  inset: 0;
+  z-index: -1;
+  pointer-events: none;
+}
+.fx-stack::before { color: var(--sv-violet); transform: translate(6px, 6px); }
+.fx-stack::after { color: var(--sv-cyan); transform: translate(12px, 12px); }
+
+/* Recortado: o texto que deixa ver o fundo através dele. */
+.fx-cut {
+  background: linear-gradient(120deg, var(--sv-magenta), var(--sv-cyan), var(--sv-yellow));
+  -webkit-background-clip: text;
+  background-clip: text;
+  color: transparent;
+  -webkit-text-stroke: 1.5px #000;
+  paint-order: stroke fill;
+}
+
+/* Ondulado: a linha de base que não é reta. */
+.fx-warp span,
+.fx-warp .ch { display: inline-block; }
+.fx-warp .ch:nth-child(2n) { transform: translateY(-0.09em) rotate(2deg); }
+.fx-warp .ch:nth-child(3n) { transform: translateY(0.11em) rotate(-3deg); }
+.fx-warp .ch:nth-child(5n) { transform: translateY(-0.05em) rotate(4deg); }
+
+/* ═══════════════ TEXTURAS — segunda leva ═══════════════ */
+
+/* Linho: a trama de tecido da capa dura. */
+.art-tex-linen {
+  background-image:
+    repeating-linear-gradient(0deg, rgba(0, 0, 0, 0.07) 0 1px, transparent 1px 4px),
+    repeating-linear-gradient(90deg, rgba(0, 0, 0, 0.07) 0 1px, transparent 1px 4px);
+}
+
+/* Papelão ondulado: a onda do miolo da caixa. */
+.art-tex-corrugated {
+  background-image: repeating-linear-gradient(
+    90deg,
+    rgba(0, 0, 0, 0.16) 0 2px,
+    transparent 2px 5px,
+    rgba(255, 255, 255, 0.07) 5px 7px,
+    transparent 7px 10px
+  );
+}
+
+/* Fita adesiva: a faixa translúcida com brilho. */
+.art-tex-tape {
+  background-image: linear-gradient(
+    100deg,
+    rgba(255, 230, 0, 0.32) 0%,
+    rgba(255, 255, 255, 0.5) 22%,
+    rgba(255, 230, 0, 0.32) 44%,
+    rgba(255, 230, 0, 0.22) 100%
+  );
+  border-block: 1px dashed rgba(0, 0, 0, 0.26);
+}
+
+/* Perfuração: a picotada da folha de bloco. */
+.art-tex-perforation {
+  background-image: radial-gradient(circle, transparent 0 2.2px, currentColor 2.4px 3px, transparent 3.2px);
+  background-size: 12px 12px;
+  background-position: 0 0;
+  opacity: 0.5;
+}
+
+/* Malha milimetrada: a folha técnica. */
+.art-tex-grid-fine {
+  background-image:
+    repeating-linear-gradient(0deg, rgba(0, 229, 255, 0.16) 0 1px, transparent 1px 10px),
+    repeating-linear-gradient(90deg, rgba(0, 229, 255, 0.16) 0 1px, transparent 1px 10px),
+    repeating-linear-gradient(0deg, rgba(0, 229, 255, 0.3) 0 1px, transparent 1px 50px),
+    repeating-linear-gradient(90deg, rgba(0, 229, 255, 0.3) 0 1px, transparent 1px 50px);
+}
+
+/* Pontilhismo: a gravura feita só de pontos irregulares. */
+.art-tex-stipple {
+  background-image:
+    radial-gradient(circle at 13% 27%, currentColor 0.7px, transparent 1px),
+    radial-gradient(circle at 61% 8%, currentColor 0.5px, transparent 0.9px),
+    radial-gradient(circle at 39% 71%, currentColor 0.8px, transparent 1.2px),
+    radial-gradient(circle at 84% 52%, currentColor 0.6px, transparent 1px);
+  /* Tiles primos entre si: o acaso não vira xadrez. */
+  background-size: 37px 37px, 23px 23px, 41px 41px, 29px 29px;
+  opacity: 0.35;
+}
+
+/* Xilogravura: o sulco da goiva na madeira. */
+.art-tex-woodcut {
+  background-image: repeating-linear-gradient(
+    88deg,
+    rgba(0, 0, 0, 0.3) 0 1.5px,
+    transparent 1.5px 3px,
+    rgba(0, 0, 0, 0.16) 3px 4px,
+    transparent 4px 8px
+  );
+}
+
+/* ═══════════════ FUNDOS E GRADIENTES ═══════════════ */
+
+/* -- gradientes de superfície -- */
+.bg-grad-aurora { background: linear-gradient(160deg, #061428, #0b3b4a 35%, #12603f 70%, #0a1a2e); }
+.bg-grad-ember { background: linear-gradient(180deg, #1a0505, #5a1208 45%, #b83a12 78%, #ffb703); }
+.bg-grad-ultraviolet { background: linear-gradient(140deg, #12002e, #3d0a6b 40%, #7b2ff7 75%, #ff2d95); }
+.bg-grad-newsprint { background: linear-gradient(170deg, #efe6cf, #d8d2c4 60%, #c4bda9); }
+.bg-grad-oil { background: conic-gradient(from 140deg at 40% 40%, #7b2ff7, #00e5ff, #b6ff00, #ffe600, #ff2d95, #7b2ff7); }
+.bg-grad-dusk { background: linear-gradient(200deg, #2b1055, #7597de 55%, #ffb26b); }
+.bg-grad-mono { background: linear-gradient(160deg, #0b0b0b, #2c2c2c 50%, #0b0b0b); }
+
+/* -- fundos padronados -- */
+.bg-rays {
+  background-image: repeating-conic-gradient(
+    from 0deg at 50% 50%,
+    rgba(255, 255, 255, 0.055) 0deg 6deg,
+    transparent 6deg 12deg
+  );
+}
+.bg-checker {
+  background-image:
+    repeating-conic-gradient(rgba(0, 0, 0, 0.22) 0% 25%, transparent 0% 50%);
+  background-size: 22px 22px;
+}
+.bg-stripes-diag {
+  background-image: repeating-linear-gradient(
+    45deg,
+    rgba(255, 255, 255, 0.06) 0 12px,
+    transparent 12px 24px
+  );
+}
+.bg-dots-fade {
+  background-image: radial-gradient(rgba(255, 255, 255, 0.22) 1.2px, transparent 1.5px);
+  background-size: 16px 16px;
+  -webkit-mask-image: linear-gradient(180deg, #000, transparent);
+  mask-image: linear-gradient(180deg, #000, transparent);
+}
+.bg-grid-fade {
+  background-image:
+    repeating-linear-gradient(0deg, rgba(255, 255, 255, 0.09) 0 1px, transparent 1px 28px),
+    repeating-linear-gradient(90deg, rgba(255, 255, 255, 0.09) 0 1px, transparent 1px 28px);
+  -webkit-mask-image: radial-gradient(circle at 50% 40%, #000, transparent 72%);
+  mask-image: radial-gradient(circle at 50% 40%, #000, transparent 72%);
+}
+.bg-halftone-fade {
+  background-image: radial-gradient(var(--sv-magenta) 2px, transparent 2.4px);
+  background-size: 10px 10px;
+  -webkit-mask-image: linear-gradient(120deg, #000, transparent 75%);
+  mask-image: linear-gradient(120deg, #000, transparent 75%);
+  opacity: 0.5;
+}
+
+/* ═══════════════ PORTAIS ═══════════════ */
+/**
+ * `.fx-portal` de sv-effects.css é o anel cônico girando. Estes são as
+ * outras formas que uma fenda assume no filme — e existem como componentes
+ * porque um portal é o elemento mais repetido da linguagem do Aranhaverso.
+ */
+
+/* Fenda vertical: o corte fino que abre entre dimensões. */
+.fx-portal-slit {
+  background: linear-gradient(90deg, transparent, var(--sv-cyan) 44%, #fff 50%, var(--sv-magenta) 56%, transparent);
+  filter: drop-shadow(0 0 14px rgba(0, 229, 255, 0.65));
+  clip-path: polygon(46% 0, 54% 6%, 58% 34%, 52% 62%, 56% 100%, 44% 96%, 42% 60%, 48% 30%);
+}
+
+/* Hexágono da Spider-Society. */
+.fx-portal-hex {
+  background: conic-gradient(from 30deg, var(--sv-cyan), #fff, var(--sv-cyan), #7cf9ff, var(--sv-cyan));
+  clip-path: polygon(25% 5%, 75% 5%, 100% 50%, 75% 95%, 25% 95%, 0 50%);
+  filter: drop-shadow(0 0 16px rgba(0, 229, 255, 0.5));
+}
+
+/* Estilhaço: o portal que quebrou como vidro. */
+.fx-portal-shatter {
+  background: conic-gradient(from 0deg, var(--sv-violet), var(--sv-magenta), var(--sv-cyan), var(--sv-violet));
+  clip-path: polygon(50% 0, 62% 22%, 88% 14%, 74% 40%, 100% 52%, 72% 62%, 84% 90%, 56% 74%, 46% 100%, 36% 72%, 10% 84%, 24% 58%, 0 46%, 28% 38%, 14% 12%, 40% 20%);
+  filter: drop-shadow(0 0 18px rgba(123, 47, 247, 0.55));
+}
+
+/* ═══════════════ MOVIMENTO REDUZIDO ═══════════════ */
+@media (prefers-reduced-motion: reduce) {
+  .fx-static::after,
+  .fx-scanjump::after {
+    animation: none;
+  }
+  /* O chuvisco parado ainda comunica "sem sinal"; a faixa de sincronismo
+     some de vez, porque parada ela viraria uma barra sem sentido. */
+  .fx-scanjump::after { display: none; }
+}

@@ -6,6 +6,9 @@
 @import "./sv-artdirection.css";
 @import "./sv-punk.css";
 @import "./sv-surfaces.css";
+/* Depois das três folhas que estende — as variantes de .fx-ransom-piece
+   dependem da base declarada em sv-punk.css. */
+@import "./sv-extras.css";
 @import "./sober.css";
 @import "./retro-os.css";
 @import "./dev-mode.css";

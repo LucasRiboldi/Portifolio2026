@@ -181,6 +181,8 @@ export const DS_ARCHITECTURE: DsSection[] = [
       { id: "vocabulario", n: "09.10", label: "O vocabulário do gibi", em: ["creative"] },
       { id: "capa", n: "09.11", label: "A capa de revista", em: ["creative"] },
       { id: "interacao", n: "09.12", label: "Interação e Retro OS", em: ["creative"] },
+      { id: "colagem", n: "09.13", label: "Colagem e letras de resgate", em: ["creative"] },
+      { id: "extrapolado", n: "09.14", label: "A camada extrapolada", em: ["creative"] },
       { id: "figura", n: "09.1", label: "A gravura e a legenda", em: ["arcane"] },
       { id: "caixas", n: "09.2", label: "Caixas, olho e breves", em: ["arcane"] },
       { id: "classificados", n: "09.3", label: "Classificados", em: ["arcane"] },
