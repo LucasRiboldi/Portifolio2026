@@ -9,55 +9,10 @@
 import { Chapter, SubChapter, Surface } from "./dev-chapters"
 
 /** Botão Dracula — variantes por papel de cor, não por enfeite. */
-function Btn({
-  children,
-  tone = "primary",
-}: {
-  children: React.ReactNode
-  tone?: "primary" | "secondary" | "ghost" | "danger"
-}) {
-  const base =
-    "inline-flex items-center gap-1.5 rounded-lg px-3 py-1.5 font-mono text-xs transition-colors"
-  const tones: Record<string, string> = {
-    primary: "bg-[var(--d-purple)] text-[var(--d-bg)] hover:brightness-110",
-    secondary:
-      "border border-[var(--d-current)] text-[var(--d-fg)] hover:border-[var(--d-comment)]",
-    ghost: "text-[var(--d-pink)] hover:underline",
-    danger: "border border-[var(--d-red)] text-[var(--d-red)] hover:bg-[var(--d-red)]/10",
-  }
-  return <button type="button" className={`${base} ${tones[tone]}`}>{children}</button>
-}
-
-/** 05 · Botões */
-export function DevButtons() {
-  return (
-    <SubChapter
-      id="botoes"
-      n="09.1"
-      title="Componentes · Botões"
-      lead="Quatro papéis, quatro tintas: roxo é a ação primária, borda é a de apoio, rosa é o link, vermelho é destrutivo. A cor diz o que o botão faz."
-    >
-      <Surface>
-        <div className="flex flex-wrap items-center gap-2">
-          <Btn tone="primary">➜ deploy</Btn>
-          <Btn tone="secondary">git diff</Btn>
-          <Btn tone="ghost">ver docs</Btn>
-          <Btn tone="danger">rm -rf</Btn>
-          <button
-            type="button"
-            disabled
-            className="inline-flex cursor-not-allowed items-center gap-1.5 rounded-lg border border-[var(--d-current)] px-3 py-1.5 font-mono text-xs text-[var(--d-comment)] opacity-60"
-          >
-            building…
-          </button>
-        </div>
-        <p className="mt-3 font-mono text-[10px] text-[var(--d-comment)]">
-          .btn primary · secondary · ghost · danger · [disabled]
-        </p>
-      </Surface>
-    </SubChapter>
-  )
-}
+/* Btn e DevButtons mudaram-se para `dev-buttons.tsx`: o capítulo virou o
+   gabarito completo de um componente (papel, anatomia, estados, tamanhos,
+   glifo, quando não usar, acessibilidade e código) e não cabia mais numa
+   galeria ao lado das outras cinco. */
 
 /** 06 · Inputs & Forms */
 export function DevInputs() {

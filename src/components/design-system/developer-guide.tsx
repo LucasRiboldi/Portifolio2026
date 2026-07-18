@@ -22,7 +22,6 @@ import {
   DevShapeSpecs,
 } from "./dev-foundations"
 import {
-  DevButtons,
   DevInputs,
   DevSelection,
   DevDataDisplay,
@@ -30,6 +29,8 @@ import {
   DevFeedback,
   DevSections,
 } from "./dev-library"
+import { DevButtons } from "./dev-buttons"
+import { DevIconography, DevMotionInventory } from "./dev-icons-motion"
 import {
   DevPatternLogin,
   DevPatternSearch,
@@ -124,8 +125,9 @@ export function DeveloperGuide({ d, kit }: { d: RealmDesign; kit: React.ReactNod
 
       {/* 06 · Grid · 07 · Iconography · 08 · Motion */}
       {DEV_INDEX.grid}
-      {DEV_INDEX.iconography}
+      <DevIconography />
       <DevMotion d={d} />
+      <DevMotionInventory />
 
       {/* 09 · Components — as 6 galerias equiparam os 6 grupos do Criativo, e
           os capítulos nativos do _Dev (terminal, diff, estados, cartões,

@@ -143,6 +143,7 @@ export const DS_ARCHITECTURE: DsSection[] = [
     subs: [
       { id: "silencio", n: "08.1", label: "O silêncio", em: ["arcane"] },
       { id: "motion-ds", n: "08.1", label: "Motion (catálogo)", em: ["creative"] },
+      { id: "motion-inventario", n: "08.2", label: "Inventário do movimento", em: ["developer"] },
     ],
   },
   {

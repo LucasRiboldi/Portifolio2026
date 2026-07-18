@@ -52,17 +52,6 @@ const BREAKPOINTS = [
  * No _Dev o ícone é glifo de terminal, não pictograma desenhado: o mesmo
  * caractere que aparece no build. Peso e grade vêm da fonte mono.
  */
-const GLYPHS = [
-  { g: "➜", nome: "prompt", papel: "início de comando", cor: "var(--d-green)" },
-  { g: "✓", nome: "ok", papel: "sucesso / exit 0", cor: "var(--d-green)" },
-  { g: "✗", nome: "fail", papel: "erro / exit ≠ 0", cor: "var(--d-red)" },
-  { g: "▍", nome: "caret", papel: "cursor, marcador de seção", cor: "var(--d-purple)" },
-  { g: "●", nome: "dot", papel: "nó de timeline / status", cor: "var(--d-cyan)" },
-  { g: "▲", nome: "build", papel: "ferramenta / framework", cor: "var(--d-fg)" },
-  { g: "±", nome: "diff", papel: "adição e remoção", cor: "var(--d-orange)" },
-  { g: "//", nome: "comment", papel: "ruído, nota de fundo", cor: "var(--d-comment)" },
-]
-
 /* ---------------- 13 · content design ---------------- */
 
 const VOZ = [
@@ -194,43 +183,8 @@ export const DEV_INDEX: Record<string, React.ReactNode> = {
       </Chapter>
 
   ),
-  iconography: (
-      <Chapter
-        id="iconography"
-        n="07"
-        title="Iconography"
-        lead={
-          <>
-            O ícone do _Dev é <strong>glifo de terminal</strong>, não pictograma desenhado: o mesmo
-            caractere que sai no build. Peso e grade vêm da fonte mono — nada de biblioteca de SVG
-            para dizer o que <code className="text-[var(--sv-cyan)]">✓</code> já diz.
-          </>
-        }
-      >
-        <Surface>
-          <div className="grid gap-2 sm:grid-cols-2">
-            {GLYPHS.map((it) => (
-              <div
-                key={it.nome}
-                className="flex items-center gap-3 rounded border border-[var(--d-current)] bg-[var(--d-bg-2)] px-3 py-2"
-              >
-                <span
-                  className="grid size-8 shrink-0 place-items-center rounded font-mono text-lg"
-                  style={{ color: it.cor, background: "var(--d-bg)" }}
-                >
-                  {it.g}
-                </span>
-                <span className="min-w-0 flex-1">
-                  <span className="block font-mono text-[11px] text-[var(--d-fg)]">{it.nome}</span>
-                  <span className="block text-[10px] text-[var(--d-comment)]">{it.papel}</span>
-                </span>
-              </div>
-            ))}
-          </div>
-        </Surface>
-      </Chapter>
-
-  ),
+  /* `iconography` mudou-se para dev-icons-motion.tsx — o capítulo ganhou
+     grade, alinhamento óptico e regras de acessibilidade. */
   patterns: (
       <SubChapter
         id="patterns-cmdk"
