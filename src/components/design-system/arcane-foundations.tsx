@@ -271,6 +271,79 @@ export function ArcaneBrand({ d }: { d: RealmDesign }) {
           {d.logo}
         </p>
       </Folha>
+
+      {/* Área de proteção & redução */}
+      <div className="mt-4 grid gap-3 sm:grid-cols-2">
+        <Folha>
+          <p className="mb-2 text-[11px] uppercase tracking-wide" style={{ color: "var(--dp-sepia)" }}>
+            Área de proteção
+          </p>
+          <div
+            className="relative border border-dashed p-6 text-center"
+            style={{ borderColor: "var(--dp-ink-3)", background: "var(--dp-paper)" }}
+          >
+            <span
+              className="text-2xl uppercase leading-none"
+              style={{ fontFamily: "var(--dp-wood)", color: "var(--dp-ink)" }}
+            >
+              O Anfitrião
+            </span>
+            <span
+              className="absolute left-1 top-1 text-[9px]"
+              style={{ color: "var(--dp-ink-3)" }}
+            >
+              ↕ 1 linha
+            </span>
+          </div>
+          <p className="mt-1.5 text-[11px] leading-snug" style={{ color: "var(--dp-ink-3)" }}>
+            Uma linha de corpo em volta, de todos os lados. Nada de fio, texto ou anúncio invade
+            essa margem — é o branco que faz o nameplate ser nameplate.
+          </p>
+        </Folha>
+
+        <Folha>
+          <p className="mb-2 text-[11px] uppercase tracking-wide" style={{ color: "var(--dp-sepia)" }}>
+            Reduções
+          </p>
+          <div className="space-y-2" style={{ fontFamily: "var(--dp-wood)", color: "var(--dp-ink)" }}>
+            <p className="text-3xl uppercase leading-none">O Anfitrião</p>
+            <p className="text-xl uppercase leading-none">O Anfitrião</p>
+            <p className="text-sm uppercase leading-none">O Anfitrião</p>
+          </div>
+          <p className="mt-2 text-[11px] leading-snug" style={{ color: "var(--dp-ink-3)" }}>
+            Abaixo de 14px o tipo de madeira fecha os contraforma e vira borrão de tinta. Nesse
+            tamanho, usa-se a slab (<code className="font-mono">--dp-head</code>) no lugar.
+          </p>
+        </Folha>
+      </div>
+
+      {/* Usos incorretos */}
+      <Folha className="mt-3">
+        <p className="mb-2 text-[11px] uppercase tracking-wide" style={{ color: "#8a3020" }}>
+          Usos incorretos
+        </p>
+        <div className="grid gap-3 sm:grid-cols-4">
+          {[
+            { amostra: <span className="inline-block scale-x-150 text-lg uppercase" style={{ fontFamily: "var(--dp-wood)" }}>Anfitrião</span>, o: "Não distorcer — o tipo foi talhado nessa proporção" },
+            { amostra: <span className="text-lg uppercase" style={{ fontFamily: "var(--dp-wood)", color: "#8a3020" }}>Anfitrião</span>, o: "Não colorir — a folha imprime em tinta, não em cor" },
+            { amostra: <span className="inline-block rotate-[-8deg] text-lg uppercase" style={{ fontFamily: "var(--dp-wood)" }}>Anfitrião</span>, o: "Não inclinar — a chapa é reta na prensa" },
+            { amostra: <span className="text-lg uppercase" style={{ fontFamily: "var(--dp-body)" }}>Anfitrião</span>, o: "Não trocar a face — nameplate é tipo de madeira" },
+          ].map((u, i) => (
+            <div key={i} className="border-t border-[var(--dp-rule)]/30 pt-2 sm:border-0 sm:pt-0">
+              <div
+                className="mb-1 grid h-12 place-items-center overflow-hidden border border-[var(--dp-rule)]/40"
+                style={{ background: "var(--dp-paper)", color: "var(--dp-ink)" }}
+              >
+                {u.amostra}
+              </div>
+              <p className="flex gap-1.5 text-[10px] leading-snug" style={{ color: "var(--dp-ink-3)" }}>
+                <span style={{ color: "#8a3020" }}>✕</span>
+                {u.o}
+              </p>
+            </div>
+          ))}
+        </div>
+      </Folha>
     </Chapter>
   )
 }

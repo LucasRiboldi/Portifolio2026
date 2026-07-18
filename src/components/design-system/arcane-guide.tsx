@@ -18,6 +18,12 @@ import {
   ArcaneResources,
   ArcaneChangelog,
 } from "./arcane-index-chapters"
+import {
+  ArcaneSecoes,
+  ArcaneTiragens,
+  ArcaneLab,
+  ArcaneDocumentacao,
+} from "./arcane-extras"
 
 /**
  * O guia de "O Anfitrião" — inteiro numa folha de jornal.
@@ -59,6 +65,13 @@ export function ArcaneGuide({ d, kit }: { d: RealmDesign; kit: React.ReactNode }
       <ArcaneBrand d={d} />
       <ArcaneResources d={d} />
       <ArcaneChangelog />
+
+      {/* 17–20 · os "extras" do índice, com o equivalente real na oficina:
+          blocos de página, tiragens, bancada de provas e o manual da casa. */}
+      <ArcaneSecoes />
+      <ArcaneTiragens />
+      <ArcaneLab />
+      <ArcaneDocumentacao d={d} />
 
       {/* Kit vivo, por versão (estados da folha). */}
       <Chapter

@@ -141,6 +141,58 @@ export function ArcaneIconography() {
           ))}
         </div>
       </Folha>
+
+      {/* Escala — a diferença que separa ornamento de ícone */}
+      <div className="mt-4 grid gap-3 sm:grid-cols-2">
+        <Folha>
+          <p className="mb-2 text-[11px] uppercase tracking-wide" style={{ color: "var(--dp-sepia)" }}>
+            São tipo, não desenho
+          </p>
+          <div className="flex items-end gap-4" style={{ color: "var(--dp-ink)" }}>
+            <span className="text-sm leading-none">❦</span>
+            <span className="text-xl leading-none">❦</span>
+            <span className="text-3xl leading-none">❦</span>
+            <span className="text-5xl leading-none">❦</span>
+          </div>
+          <Nota>
+            Por serem caracteres, obedecem a <code className="font-mono">font-size</code> e{" "}
+            <code className="font-mono">color</code> — não têm fill, stroke nem viewBox. Herdam a
+            tinta do texto ao redor, como qualquer letra.
+          </Nota>
+        </Folha>
+
+        <Folha>
+          <p className="mb-2 text-[11px] uppercase tracking-wide" style={{ color: "var(--dp-sepia)" }}>
+            Em contexto — o fecho de matéria
+          </p>
+          <p className="text-xs leading-snug" style={{ color: "var(--dp-ink-2)" }}>
+            …e a rotativa parou às três da manhã, quando o último caderno desceu para a expedição.
+            O silêncio na oficina durou o tempo de um cigarro.
+          </p>
+          <p className="mt-2 text-center text-lg" style={{ color: "var(--dp-ink-3)" }}>
+            ❦
+          </p>
+          <Nota>O fleurão fecha a matéria — poupa o leitor de procurar se o texto continua.</Nota>
+        </Folha>
+      </div>
+
+      <Folha className="mt-3">
+        <p className="mb-2 text-[11px] uppercase tracking-wide" style={{ color: "#8a3020" }}>
+          Quando não usar
+        </p>
+        <div className="grid gap-2 sm:grid-cols-3">
+          {[
+            ["✕ Como botão", "Ornamento não é alvo de clique. Um link se anuncia com palavra e filete."],
+            ["✕ Em fila decorativa", "Três fleurões seguidos viram enfeite. Um ornamento tem função ou não entra."],
+            ["✕ Colorido", "Sépia e ouro pontuam; o resto é tinta. Ornamento em cor vira logotipo."],
+          ].map(([t, o]) => (
+            <div key={t}>
+              <p className="text-xs" style={{ color: "var(--dp-ink)" }}>{t}</p>
+              <Nota>{o}</Nota>
+            </div>
+          ))}
+        </div>
+      </Folha>
     </Chapter>
   )
 }
@@ -228,16 +280,87 @@ export function ArcanePatterns() {
       </Folha>
 
       <p className="mb-2 mt-5 text-[11px] uppercase tracking-wide" style={{ color: "var(--dp-sepia)" }}>
-        Padrão · a errata
+        Padrão · a continuação
       </p>
-      <Folha className="!border-2 !border-[var(--dp-rule)]">
-        <p className="text-[11px] uppercase tracking-[0.15em]" style={{ color: "var(--dp-ink-3)" }}>Errata</p>
-        <p className="mt-1 text-sm" style={{ color: "var(--dp-ink)" }}>
-          Na edição anterior, onde se lia <em>“o componente flutua”</em>, leia-se{" "}
-          <em>“o componente é cercado por fio”</em>. Papel não tem elevação. A redação lamenta o
-          engano.
-        </p>
+      <Folha>
+        <div className="grid gap-4 sm:grid-cols-2">
+          <div>
+            <p className="text-xs leading-snug" style={{ color: "var(--dp-ink-2)" }}>
+              …o Ministério não quis comentar até o fecho desta edição, mas fontes da própria
+              repartição confirmam que a portaria já circula assinada desde
+            </p>
+            <p className="mt-1 text-right text-[11px] italic" style={{ color: "var(--dp-sepia)" }}>
+              Continua na pág. 4 ▸
+            </p>
+          </div>
+          <div className="border-t border-[var(--dp-rule)]/40 pt-3 sm:border-l sm:border-t-0 sm:pl-4 sm:pt-0">
+            <p className="text-[11px] italic" style={{ color: "var(--dp-sepia)" }}>
+              ◂ Continuação da pág. 1
+            </p>
+            <p className="mt-1 text-xs leading-snug" style={{ color: "var(--dp-ink-2)" }}>
+              a semana passada. A reportagem apurou ainda que dois cadernos foram recolhidos antes
+              da distribuição.
+            </p>
+          </div>
+        </div>
+        <Nota>
+          O papel tem tamanho fixo: quando a matéria não cabe, ela salta — nunca encolhe a fonte. O
+          salto precisa de destino (pág. 4) e de origem (pág. 1), senão o leitor se perde.
+        </Nota>
       </Folha>
+
+      <p className="mb-2 mt-5 text-[11px] uppercase tracking-wide" style={{ color: "var(--dp-sepia)" }}>
+        Padrão · a coluna de classificados
+      </p>
+      <Folha>
+        <div className="grid gap-x-5 gap-y-3 sm:grid-cols-3">
+          {[
+            { t: "Vende-se", c: "Vassoura Nimbus, pouco uso, cabo de freixo. Tratar na oficina.", a: "— Q. Quidditch" },
+            { t: "Procura-se", c: "Compositor com prática em tipo de madeira. Paga-se bem.", a: "— Esta folha" },
+            { t: "Achados", c: "Coruja cinzenta entregue sem bilhete. Reclamar no expediente.", a: "— Redação" },
+          ].map((ad) => (
+            <div key={ad.t} className="border-t border-[var(--dp-rule)]/40 pt-2 first:border-0 sm:border-0">
+              <p className="text-xs uppercase tracking-wide" style={{ fontFamily: "var(--dp-head)", color: "var(--dp-ink)" }}>
+                {ad.t}
+              </p>
+              <p className="mt-1 text-[11px] leading-snug" style={{ color: "var(--dp-ink-2)" }}>{ad.c}</p>
+              <p className="mt-1 text-[10px] italic" style={{ color: "var(--dp-ink-3)" }}>{ad.a}</p>
+            </div>
+          ))}
+        </div>
+        <Nota>Colunas estreitas, título em versalete, assinatura ao pé. Quem paga, assina.</Nota>
+      </Folha>
+
+      <div className="mt-5 grid gap-3 sm:grid-cols-2">
+        <div>
+          <p className="mb-2 text-[11px] uppercase tracking-wide" style={{ color: "var(--dp-sepia)" }}>
+            Padrão · a errata
+          </p>
+          <Folha className="!border-2 !border-[var(--dp-rule)] h-full">
+            <p className="text-[11px] uppercase tracking-[0.15em]" style={{ color: "var(--dp-ink-3)" }}>Errata</p>
+            <p className="mt-1 text-sm" style={{ color: "var(--dp-ink)" }}>
+              Na edição anterior, onde se lia <em>“o componente flutua”</em>, leia-se{" "}
+              <em>“o componente é cercado por fio”</em>. Papel não tem elevação. A redação lamenta o
+              engano.
+            </p>
+          </Folha>
+        </div>
+        <div>
+          <p className="mb-2 text-[11px] uppercase tracking-wide" style={{ color: "var(--dp-sepia)" }}>
+            Padrão · a nota de falecimento
+          </p>
+          <Folha className="h-full text-center">
+            <p className="text-lg" style={{ color: "var(--dp-ink-3)" }}>✝</p>
+            <div className="mx-auto my-1 max-w-[10rem] dp-rule dp-rule--double" />
+            <p className="text-sm" style={{ fontFamily: "var(--dp-head)", color: "var(--dp-ink)" }}>
+              A rotativa nº 2
+            </p>
+            <p className="mt-1 text-[11px] leading-snug" style={{ color: "var(--dp-ink-2)" }}>
+              1908 — 2026. Serviu a esta casa por cento e dezoito anos. O expediente agradece.
+            </p>
+          </Folha>
+        </div>
+      </div>
     </Chapter>
   )
 }
@@ -306,6 +429,38 @@ const REDACAO = [
     sim: "Aguardando composição…",
     nao: "Ilustração de caixa vazia",
   },
+  {
+    regra: "Números por extenso até dez",
+    sim: "três cadernos · 12 páginas",
+    nao: "3 cadernos · doze páginas",
+  },
+  {
+    regra: "O erro se assume, não se disfarça",
+    sim: "A redação lamenta o engano",
+    nao: "Ops! Algo deu errado :(",
+  },
+  {
+    regra: "A legenda diz o que a foto não diz",
+    sim: "A rotativa, horas antes do fecho",
+    nao: "Foto de uma máquina",
+  },
+  {
+    regra: "Sem exclamação — a folha não grita",
+    sim: "Ministério confirma a portaria",
+    nao: "Ministério confirma a portaria!",
+  },
+]
+
+/** O vocabulário da casa: um nome por peça, para não divergirem. */
+const VOCABULARIO = [
+  ["Chapéu", "A linha curta ACIMA da manchete, que classifica"],
+  ["Manchete", "O título grande da matéria principal"],
+  ["Linha fina", "A frase ABAIXO da manchete, que qualifica"],
+  ["Olho", "A citação destacada no meio do texto"],
+  ["Capitular", "A letra grande que abre o parágrafo"],
+  ["Fólio", "O número da página, no pé"],
+  ["Expediente", "Quem imprime, onde, em que edição"],
+  ["Trilho", "A coluna estreita lateral"],
 ]
 
 export function ArcaneContentDesign() {
@@ -332,6 +487,32 @@ export function ArcaneContentDesign() {
           </Folha>
         ))}
       </div>
+
+      {/* O vocabulário — um nome por peça */}
+      <p className="mb-2 mt-5 text-[11px] uppercase tracking-wide" style={{ color: "var(--dp-sepia)" }}>
+        O vocabulário da casa
+      </p>
+      <Folha>
+        <p className="mb-3 text-xs leading-snug" style={{ color: "var(--dp-ink-2)" }}>
+          Metade das discussões de design é gente chamando a mesma peça por nomes diferentes. Aqui
+          cada uma tem um nome só — e é o nome de oficina, não o de software.
+        </p>
+        <dl className="grid gap-x-6 gap-y-2 sm:grid-cols-2">
+          {VOCABULARIO.map(([termo, def]) => (
+            <div key={termo} className="flex gap-3 border-b border-[var(--dp-rule)]/25 pb-1.5">
+              <dt
+                className="w-20 shrink-0 text-xs"
+                style={{ fontFamily: "var(--dp-head)", color: "var(--dp-ink)" }}
+              >
+                {termo}
+              </dt>
+              <dd className="text-[11px] leading-snug" style={{ color: "var(--dp-ink-2)" }}>
+                {def}
+              </dd>
+            </div>
+          ))}
+        </dl>
+      </Folha>
     </Chapter>
   )
 }
@@ -378,9 +559,36 @@ export function ArcaneResources({ d }: { d: RealmDesign }) {
           <p className="mt-3 text-[11px] uppercase tracking-wide" style={{ color: "var(--dp-sepia)" }}>
             A caixa de ornamentos
           </p>
-          <p className="mt-1 text-2xl leading-none" style={{ color: "var(--dp-ink)" }}>
-            ❦ ❧ ☞ ¶ § † ‡ ※ ⁂ ✝
+          <p className="mt-1 select-all text-2xl leading-relaxed" style={{ color: "var(--dp-ink)" }}>
+            ❦ ❧ ☞ ¶ § † ‡ ※ ⁂ ☙ ✝ ℔
           </p>
+          <Nota>Selecione e copie — são caracteres, não arquivos.</Nota>
+        </Folha>
+
+        <Folha className="sm:col-span-2">
+          <p className="mb-2 text-[11px] uppercase tracking-wide" style={{ color: "var(--dp-sepia)" }}>
+            As medidas da oficina — o resumo que se leva para a bancada
+          </p>
+          <div className="overflow-x-auto">
+            <table className="w-full text-left text-xs" style={{ color: "var(--dp-ink-2)" }}>
+              <tbody>
+                {[
+                  ["Medida da coluna", "~28–36ch", "O que torna a old style legível"],
+                  ["Raio", "0", "Guilhotina não faz canto redondo"],
+                  ["Elevação", "nenhuma", "Separação é fio e moldura, nunca sombra"],
+                  ["Corpo", "15px / 1.42", "Base da folha, em .dp"],
+                  ["Colunas do corpo", "2 → 4", "Conforme a largura, via .dp-lead-body"],
+                  ["Tinta segura", "--dp-ink · --dp-ink-2", "AA nas duas folhas"],
+                ].map(([k, v, o]) => (
+                  <tr key={k} className="border-t border-[var(--dp-rule)]/30 first:border-0">
+                    <td className="whitespace-nowrap py-1.5 pr-4" style={{ color: "var(--dp-ink)" }}>{k}</td>
+                    <td className="whitespace-nowrap py-1.5 pr-4 font-mono text-[11px]" style={{ color: "var(--dp-sepia)" }}>{v}</td>
+                    <td className="py-1.5" style={{ color: "var(--dp-ink-3)" }}>{o}</td>
+                  </tr>
+                ))}
+              </tbody>
+            </table>
+          </div>
         </Folha>
       </div>
     </Chapter>
@@ -389,10 +597,36 @@ export function ArcaneResources({ d }: { d: RealmDesign }) {
 
 /* ══════════════ 16 · CHANGELOG ══════════════ */
 const EDICOES = [
-  { data: "18 jul 2026", ed: "Nº 4", o: "A folha inteira — o Anfitrião ganha chrome de jornal, do masthead ao expediente" },
-  { data: "17 jul 2026", ed: "Nº 3", o: "Três perfis, três sistemas — o Design System separa-se por realm" },
-  { data: "17 jul 2026", ed: "Nº 2", o: "Tintas medidas — tabelas de token com contraste WCAG sobre as duas folhas" },
-  { data: "15 jul 2026", ed: "Nº 1", o: "Primeira tiragem — o portal dos três multiversos" },
+  {
+    data: "18 jul 2026",
+    ed: "Nº 5",
+    tipo: "Edição",
+    o: "O índice completo — ornamentos, caixa de tipos, cadernos, manual da redação e a hemeroteca",
+  },
+  {
+    data: "18 jul 2026",
+    ed: "Nº 4",
+    tipo: "Edição extra",
+    o: "A folha inteira — o Anfitrião ganha chrome de jornal, do masthead ao expediente",
+  },
+  {
+    data: "17 jul 2026",
+    ed: "Nº 3",
+    tipo: "Edição extra",
+    o: "Três perfis, três sistemas — o Design System separa-se por realm",
+  },
+  {
+    data: "17 jul 2026",
+    ed: "Nº 2",
+    tipo: "Edição",
+    o: "Tintas medidas — tabelas de token com contraste WCAG sobre as duas folhas",
+  },
+  {
+    data: "15 jul 2026",
+    ed: "Nº 1",
+    tipo: "Primeira tiragem",
+    o: "O portal dos três multiversos",
+  },
 ]
 
 export function ArcaneChangelog() {
@@ -406,20 +640,60 @@ export function ArcaneChangelog() {
       <Folha>
         <div className="space-y-2.5">
           {EDICOES.map((e) => (
-            <div key={e.ed} className="flex items-baseline gap-3 border-b border-[var(--dp-rule)]/30 pb-2 last:border-0">
-              <span className="w-16 shrink-0 text-[11px]" style={{ color: "var(--dp-sepia)", fontFamily: "var(--dp-head)" }}>
-                {e.ed}
-              </span>
-              <span className="min-w-0 flex-1 text-xs leading-snug" style={{ color: "var(--dp-ink-2)" }}>
-                {e.o}
-              </span>
-              <span className="shrink-0 text-[10px] uppercase tracking-wide" style={{ color: "var(--dp-ink-3)" }}>
-                {e.data}
-              </span>
+            <div key={e.ed} className="border-b border-[var(--dp-rule)]/30 pb-2 last:border-0">
+              <div className="flex items-baseline gap-3">
+                <span className="w-14 shrink-0 text-[11px]" style={{ color: "var(--dp-sepia)", fontFamily: "var(--dp-head)" }}>
+                  {e.ed}
+                </span>
+                <span className="min-w-0 flex-1 text-xs leading-snug" style={{ color: "var(--dp-ink-2)" }}>
+                  {e.o}
+                </span>
+                <span className="shrink-0 text-[10px] uppercase tracking-wide" style={{ color: "var(--dp-ink-3)" }}>
+                  {e.data}
+                </span>
+              </div>
+              <p className="ml-[4.25rem] text-[10px] uppercase tracking-[0.15em]" style={{ color: "var(--dp-ink-3)" }}>
+                {e.tipo}
+              </p>
             </div>
           ))}
         </div>
       </Folha>
+
+      {/* Semântica de versão, em linguagem de jornal */}
+      <p className="mb-2 mt-5 text-[11px] uppercase tracking-wide" style={{ color: "var(--dp-sepia)" }}>
+        Como se numera uma edição
+      </p>
+      <div className="grid gap-3 sm:grid-cols-3">
+        {[
+          {
+            t: "Edição extra",
+            v: "major",
+            o: "Refunde a chapa: remove token, renomeia classe, muda a diagramação. Quem compunha do jeito antigo precisa recompor.",
+          },
+          {
+            t: "Edição",
+            v: "minor",
+            o: "Acrescenta caderno, peça ou ornamento. Nada do que já existia deixa de servir.",
+          },
+          {
+            t: "Errata",
+            v: "patch",
+            o: "Corrige valor, contraste ou texto. A matéria é a mesma; o engano é que sai.",
+          },
+        ].map((v) => (
+          <Folha key={v.t}>
+            <div className="flex items-baseline justify-between gap-2">
+              <span className="text-base" style={{ fontFamily: "var(--dp-head)", color: "var(--dp-ink)" }}>
+                {v.t}
+              </span>
+              <code className="font-mono text-[10px]" style={{ color: "var(--dp-sepia)" }}>{v.v}</code>
+            </div>
+            <div className="my-1.5 dp-rule dp-rule--hair" />
+            <p className="text-[11px] leading-snug" style={{ color: "var(--dp-ink-2)" }}>{v.o}</p>
+          </Folha>
+        ))}
+      </div>
     </Chapter>
   )
 }

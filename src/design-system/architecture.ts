@@ -172,7 +172,7 @@ export const DS_ARCHITECTURE: DsSection[] = [
     label: "Seções de página",
     desc: "Os blocos que montam uma página: hero, faixa de métricas, CTA.",
     status: "ready",
-    em: ["creative", "developer"],
+    em: ["creative", "developer", "arcane"],
   },
   {
     id: "retro-os",
@@ -180,7 +180,7 @@ export const DS_ARCHITECTURE: DsSection[] = [
     label: "Retro OS · Temas",
     desc: "Variações de tema — o SO retrô do Criativo, os temas de terminal do _Dev.",
     status: "ready",
-    em: ["creative", "developer"],
+    em: ["creative", "developer", "arcane"],
   },
   {
     id: "lab",
@@ -188,7 +188,7 @@ export const DS_ARCHITECTURE: DsSection[] = [
     label: "Lab",
     desc: "Experimentos: ferramentas internas antes de virarem componente.",
     status: "wip",
-    em: ["creative", "developer"],
+    em: ["creative", "developer", "arcane"],
   },
   {
     id: "documentacao",
@@ -196,7 +196,7 @@ export const DS_ARCHITECTURE: DsSection[] = [
     label: "Documentação",
     desc: "Ponteiros para o código e os docs reais, não prosa duplicada.",
     status: "wip",
-    em: ["creative", "developer"],
+    em: ["creative", "developer", "arcane"],
   },
 ]
 
