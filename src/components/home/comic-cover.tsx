@@ -10,6 +10,8 @@ import {
   useReducedMotion,
 } from "motion/react"
 import { STORYBOOK_URL } from "@/constants/site"
+import { CenaSalto } from "@/components/design-system/creative-assets"
+import { Onoma } from "@/components/spiderverse/decor"
 import { useSiteConfig } from "@/components/providers/site-config-provider"
 import { projects as seedProjects, type Project } from "@/data/projects"
 import { tools as seedTools, type Tool } from "@/data/tools"
@@ -86,10 +88,13 @@ export function ComicCover({
       <span aria-hidden className="cc-speed" />
       <span aria-hidden className="cc-aura" />
 
-      {/* ---------- BANDA SUPERIOR ---------- */}
-      <div className="cc-band px-4 py-2 text-right">
+      {/* ---------- TRADE DRESS (banda superior) ---------- */}
+      <div className="cc-band flex items-center justify-between gap-2 px-4 py-2">
         <span className="sv-display text-xs uppercase tracking-[0.12em] sm:text-sm">
-          Novos experimentos toda semana
+          <span className="text-[var(--sv-yellow)]">LR</span> Comics
+        </span>
+        <span className="sv-heavy text-[10px] uppercase tracking-wide text-white/75 sm:text-xs">
+          Nº 1 · 2026 · <span className="text-[var(--sv-lime)]">R$ 7,90</span> · novos experimentos toda semana
         </span>
       </div>
 
@@ -123,6 +128,15 @@ export function ComicCover({
               {projects.length} projetos · {tools.length} ferramentas
             </p>
           </div>
+
+          {/* selo de aprovação — o Comics Code deste multiverso */}
+          <span
+            aria-hidden
+            className="art-stamp mt-2 hidden text-[9px] sm:inline-flex"
+            style={{ color: "var(--sv-cyan)" }}
+          >
+            100% Criativo
+          </span>
         </div>
 
         {/* ---------- MASTHEAD ---------- */}
@@ -168,13 +182,37 @@ export function ComicCover({
           </span>
         </a>
 
+        {/* ---------- ARTE DE CAPA ----------
+            Toda capa de comics é arte primeiro: a cena vem do próprio acervo
+            do design system (15.1 · Assets em pares — tipo "cena"). */}
+        <div className="relative z-[3] mt-6 sm:mt-10">
+          <div className="relative overflow-hidden border-[3px] border-black shadow-[6px_6px_0_0_#000]">
+            <CenaSalto className="block w-full" />
+            {/* retícula por cima da arte, como impressão de banca */}
+            <span aria-hidden className="sv-dots pointer-events-none absolute inset-0 opacity-20" />
+          </div>
+          <Onoma
+            color="lime"
+            className="pointer-events-none absolute -right-2 -top-6 z-[5] -rotate-6 text-3xl sm:text-5xl"
+          >
+            KRAK!
+          </Onoma>
+          {/* carimbo de capa variante — uma por dimensão do multiverso */}
+          <span className="cc-tag cc-tag-pop sv-display absolute -bottom-3 left-3 rotate-[-2deg] text-[10px] uppercase sm:text-xs">
+            Capa variante · 1 de 20
+          </span>
+        </div>
+
         {/* ---------- CHAMADAS DE CAPA ---------- */}
-        <div className="relative z-[4] mt-8 flex items-end justify-between gap-4 sm:mt-16">
+        <div className="relative z-[4] mt-8 flex items-end justify-between gap-4 sm:mt-10">
           <ul className="max-w-[62%] space-y-4 sm:space-y-5">
-            {COVER_LINES.map(line => (
+            {COVER_LINES.map((line, i) => (
               <li key={line.href}>
                 <Link href={line.href} className="group/line block">
-                  <p className="cc-line-title sv-display text-lg uppercase leading-none transition-colors group-hover/line:text-[var(--sv-yellow)] sm:text-2xl">
+                  <p
+                    className="cc-line-title sv-display text-lg uppercase leading-none transition-colors group-hover/line:text-[var(--sv-yellow)] sm:text-2xl"
+                    style={{ color: ["var(--sv-orange)", "var(--sv-cyan)", "var(--sv-lime)"][i] }}
+                  >
                     {line.title}{" "}
                     <span aria-hidden className="inline-block transition-transform group-hover/line:translate-x-1">
                       →
