@@ -178,6 +178,7 @@ export const DS_ARCHITECTURE: DsSection[] = [
       { id: "dimensoes", n: "09.7", label: "As dimensões", em: ["creative"] },
       { id: "superficies", n: "09.8", label: "Superfícies e texturas", em: ["creative"] },
       { id: "anomalias", n: "09.9", label: "Anomalias", em: ["creative"] },
+      { id: "vocabulario", n: "09.10", label: "O vocabulário do gibi", em: ["creative"] },
       { id: "figura", n: "09.1", label: "A gravura e a legenda", em: ["arcane"] },
       { id: "caixas", n: "09.2", label: "Caixas, olho e breves", em: ["arcane"] },
       { id: "classificados", n: "09.3", label: "Classificados", em: ["arcane"] },

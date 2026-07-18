@@ -27,6 +27,7 @@ import {
 } from "./creative-chapters"
 import { CreativeDimensions } from "./creative-dimensions"
 import { CreativeSurfaces } from "./creative-surfaces"
+import { CreativeComic } from "./creative-comic"
 
 /**
  * O guia de "O Criativo" — o scaffold comic, agora com corpo próprio.
@@ -209,6 +210,7 @@ export function CreativeGuide({
       {/* 09.7 · as dimensões — o sistema de temas do realm */}
       <CreativeDimensions />
       <CreativeSurfaces />
+      <CreativeComic />
 
       {/* 10–11 · Patterns e Templates */}
       <CreativePatterns />
