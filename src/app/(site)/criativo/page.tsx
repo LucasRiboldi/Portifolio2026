@@ -28,8 +28,8 @@ function SectionHeading({
   return (
     <header className="mb-6 sm:mb-8">
       <span className="sv-caption inline-block text-xs sm:text-sm">{kicker}</span>
-      <h2 id={id} className="sv-display mt-3 text-3xl uppercase leading-none sm:text-5xl">
-        {title} {highlight && <span className="sv-rainbow">{highlight}</span>}
+      <h2 id={id} className="sv-display fx-shadow-long mt-3 text-3xl uppercase leading-none sm:text-5xl">
+        {title} {highlight && <span className="sv-rainbow sv-underline">{highlight}</span>}
       </h2>
       {subtitle && (
         <p className="sv-heavy mt-3 max-w-2xl text-xs uppercase leading-snug tracking-wide text-white/70 sm:text-sm">
@@ -69,7 +69,7 @@ export default async function CriativoHome() {
           {/* carimbo narrativo (com propósito: assina a "edição") */}
           <span
             aria-hidden
-            className="art-stamp pointer-events-none absolute right-6 top-24 z-[2] hidden text-xs xl:inline-flex"
+            className="art-stamp sv-tilt-2 pointer-events-none absolute right-6 top-24 z-[2] hidden text-xs xl:inline-flex"
             style={{ color: "var(--sv-lime)" }}
           >
             Terra-2026
@@ -93,13 +93,19 @@ export default async function CriativoHome() {
           {/* ---------- 3. CHAMADA DO MULTIVERSO ----------
               Sem grade de dimensões aqui: os próprios cards do miolo já são
               as dimensões. Esta faixa só aponta para o índice completo. */}
-          <section className="relative mt-16 sm:mt-24" aria-labelledby="sec-multiverso">
+          <section className="art-tape relative mt-16 sm:mt-24" aria-labelledby="sec-multiverso">
             <Onoma
               color="cyan"
               className="pointer-events-none absolute -top-8 right-0 z-[2] hidden -rotate-6 lg:block"
             >
               BAM!
             </Onoma>
+
+            {/* portal giratório — o convite visual para atravessar as dimensões */}
+            <span
+              aria-hidden
+              className="fx-portal pointer-events-none absolute -top-10 right-10 z-[2] hidden size-20 xl:block"
+            />
 
             <div className="art-tex-foil relative overflow-hidden rounded-lg border-[3px] border-black p-6 shadow-[6px_6px_0_0_#000] sm:p-10">
               {/* a retícula por cima do foil segura o texto legível */}

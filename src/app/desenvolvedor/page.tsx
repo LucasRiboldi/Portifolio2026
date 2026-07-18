@@ -2,7 +2,7 @@ import Link from "next/link"
 
 import { getProjects } from "@/lib/repos/projects"
 import { getTools } from "@/lib/repos/tools"
-import { getSnippets, getLab } from "@/lib/repos/dev"
+import { getSnippets, getLab, getDevlogs } from "@/lib/repos/dev"
 import { getSiteConfig } from "@/lib/repos/site-config"
 import { GsapDemo } from "@/components/dev/gsap-demo"
 
@@ -11,12 +11,13 @@ export const metadata = { title: "Dev" }
 const STACK = ["TypeScript", "React", "Next.js", "Node", "Python", "Supabase", "Tailwind", "Postgres"]
 
 export default async function DevHome() {
-  const [projects, tools, snippets, lab, site] = await Promise.all([
+  const [projects, tools, snippets, lab, site, devlogs] = await Promise.all([
     getProjects(),
     getTools(),
     getSnippets(),
     getLab(),
     getSiteConfig(),
+    getDevlogs(),
   ])
 
   const featured = projects.find((p) => p.featured) ?? projects[0]
@@ -34,6 +35,7 @@ export default async function DevHome() {
         <p className="term">
           <span className="tok-fn">const</span> dev = <span className="tok-str">{"{"}</span> nome:{" "}
           <span className="tok-str">&quot;{site.name}&quot;</span> {"}"}
+          <span className="dv-caret">▌</span>
         </p>
         <h1>
           Construo <span className="g">produtos</span>, <span className="p">ferramentas</span> e{" "}
@@ -84,6 +86,22 @@ export default async function DevHome() {
               </a>
             )}
           </article>
+        </>
+      )}
+
+      {/* Devlog — últimas entradas na linha do tempo */}
+      {devlogs.length > 0 && (
+        <>
+          <h2 className="dv-section-title">Devlog</h2>
+          <div className="dv-timeline">
+            {devlogs.slice(0, 3).map((d) => (
+              <article key={d.id} className="dv-tl-item">
+                <div className="dv-tl-date">{d.date}</div>
+                <h3>{d.title}</h3>
+                <p className="dv-prose">{d.summary}</p>
+              </article>
+            ))}
+          </div>
         </>
       )}
 
