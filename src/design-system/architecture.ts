@@ -175,6 +175,7 @@ export const DS_ARCHITECTURE: DsSection[] = [
       { id: "data-display", n: "09.4", label: "Data Display", em: ["creative"] },
       { id: "overlays", n: "09.5", label: "Overlays", em: ["creative"] },
       { id: "feedback", n: "09.6", label: "Feedback", em: ["creative"] },
+      { id: "dimensoes", n: "09.7", label: "As dimensões", em: ["creative"] },
       { id: "figura", n: "09.1", label: "A gravura e a legenda", em: ["arcane"] },
       { id: "caixas", n: "09.2", label: "Caixas, olho e breves", em: ["arcane"] },
       { id: "classificados", n: "09.3", label: "Classificados", em: ["arcane"] },
