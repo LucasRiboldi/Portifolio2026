@@ -196,3 +196,92 @@ export const colophon = {
     "Toda a matéria desta folha é composta e revista nesta casa. Reprodução permitida mediante citação da fonte.",
   registry: "Nº MMXXVI·01 — Terra-2026",
 }
+
+/* ------------------------------------------------------------------
+   Conteúdo acrescentado ao aplicar o próprio Design System à folha.
+   ------------------------------------------------------------------
+   A auditoria mostrou que esta página usava 51% do sistema que o guia
+   documenta — faltava justamente a camada de interface (botões, campos,
+   selos, tabela, assinatura) escrita depois.
+
+   O critério para trazer cada peça não foi cobrir o catálogo: foi ser
+   editorialmente legítimo numa primeira página de 1920. Cupom de assinatura,
+   quadro de cotações e gravura de tiragem existiam de verdade; abas de
+   caderno e botão destrutivo, não.
+   ------------------------------------------------------------------ */
+
+/** O cupom de assinatura — a folha impressa pedia para recortar e enviar. */
+export const coupon = {
+  title: "Cupom de Assinatura",
+  standfirst:
+    "Preencha, recorte pela linha pontilhada e entregue no balcão da oficina — ou remeta pelo correio.",
+  fields: {
+    name: { label: "Nome de quem assina", placeholder: "como deve sair no rótulo" },
+    place: { label: "Praça e rua", placeholder: "onde a folha há de chegar" },
+    note: { label: "Recado ao expedidor", help: "Opcional. Duas linhas bastam." },
+  },
+  cadence: {
+    legend: "Periodicidade",
+    options: [
+      { id: "manha", label: "Edição da manhã", default: true },
+      { id: "semanal", label: "Apanhado de sábado" },
+    ],
+  },
+  extras: {
+    legend: "Cadernos avulsos",
+    options: [
+      { id: "classificados", label: "Classificados", default: true },
+      { id: "oficina", label: "Caderno da oficina" },
+    ],
+  },
+  submit: "Assinar esta folha",
+  reset: "Limpar",
+  fineprint: "A assinatura corre por doze edições. Cancela-se por carta, sem multa.",
+}
+
+/**
+ * Quadro de playtests — a tabela da primeira página.
+ *
+ * A primeira versão era um quadro de cotações e foi descartada por dois
+ * motivos, ambos reais: DUPLICAVA as "Cotações da Oficina" que já estão na
+ * barra de serviço no alto, e as suas quatro colunas transbordavam 38px da
+ * coluna estreita (250 numa caixa de 220). Três colunas curtas cabem, e o
+ * assunto — o que foi à mesa e como saiu — é o desta folha.
+ */
+export const playtests = {
+  caption: "Bancada da quinzena — sessões e veredito",
+  head: ["Protótipo", "Jog.", "Nota"],
+  rows: [
+    { item: "Feira de Ossos", players: "2–4", score: "8" },
+    { item: "Rota do Sal", players: "3–5", score: "6" },
+    { item: "Casa Torta", players: "2", score: "9" },
+    { item: "Pilha de Cartas", players: "1–4", score: "5" },
+  ],
+}
+
+/** Tiragem por ano — a gravura de dados, em traço de nanquim. */
+export const circulation = {
+  caption: "Tiragem desta casa, 1908–1926. Fonte: livro de expedição.",
+  aria:
+    "Tiragem por ano: 1908, doze mil; 1912, dezoito mil; 1918, quinze mil; 1922, vinte e seis mil; 1926, trinta e um mil.",
+  points: "22,52 60,38 98,45 136,22 174,12",
+  years: [
+    ["22", "1908"],
+    ["60", "1912"],
+    ["98", "1918"],
+    ["136", "1922"],
+    ["174", "1926"],
+  ] as [string, string][],
+  top: "31m",
+  bottom: "10m",
+}
+
+/** A rubrica do editor, ao pé do editorial. */
+/** O número da edição, isolado — o carimbo precisa dele sem a praça junto. */
+export const registryNumber = "Nº MMXXVI·01"
+
+export const signature = {
+  autograph: "L. Riboldi",
+  name: "Lucas Floriano Riboldi",
+  role: "Editor-chefe e compositor desta casa",
+}
