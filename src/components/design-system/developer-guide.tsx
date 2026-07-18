@@ -31,6 +31,7 @@ import {
 } from "./dev-library"
 import { DevButtons } from "./dev-buttons"
 import { DevIconography, DevMotionInventory } from "./dev-icons-motion"
+import { DevNavegacao, DevBlocoCodigo, DevPrimitivas } from "./dev-chrome"
 import {
   DevPatternLogin,
   DevPatternSearch,
@@ -137,7 +138,7 @@ export function DeveloperGuide({ d, kit }: { d: RealmDesign; kit: React.ReactNod
         id="components"
         n="09"
         title="Components"
-        lead="A biblioteca do realm, em doze matérias: seis galerias que equiparam os grupos do Criativo e cinco peças que só existem aqui — terminal, diff, estados de projeto, cartões e vazio. Fecha com o kit vivo, que é este mesmo catálogo rodando."
+        lead="A biblioteca do realm, em quinze matérias: seis galerias que equiparam os grupos do Criativo, cinco peças que só existem aqui (terminal, diff, estados de projeto, cartões, vazio) e o chrome que toda página usa — navegação, bloco de código e as primitivas de composição. Fecha com o kit vivo, que é este mesmo catálogo rodando."
       >
         <DevButtons />
         <DevInputs />
@@ -150,9 +151,12 @@ export function DeveloperGuide({ d, kit }: { d: RealmDesign; kit: React.ReactNod
         <DevEstadosProjeto />
         <DevCartoes />
         <DevVazio />
+        <DevNavegacao />
+        <DevBlocoCodigo />
+        <DevPrimitivas />
         <SubChapter
           id="kit"
-          n="09.12"
+          n="09.15"
           title="UI Kit"
           lead="Os componentes reais, não capturas — troque a versão para reimprimir o kit inteiro."
         >
