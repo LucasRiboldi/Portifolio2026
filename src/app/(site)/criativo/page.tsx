@@ -51,13 +51,6 @@ export default async function CriativoHome() {
       {/* Realms Creative + Developer (some no Arcane) */}
       <div className="realm-hide-arcane">
         <SvCanvas dimension="multiverse" className="art-grain py-8 sm:py-10">
-          {/* faixa de halftone losango (retícula plural) */}
-          <div
-            aria-hidden
-            className="art-ht-diamond pointer-events-none absolute inset-x-0 top-0 z-[1] h-24 opacity-30 [mask-image:linear-gradient(to_bottom,#000,transparent)]"
-            style={{ "--ht-color": "rgba(0,229,255,0.5)", "--ht-size": "9px" } as React.CSSProperties}
-          />
-
           {/* onomatopeia da capa (só onde há espaço lateral livre) */}
           <Onoma
             color="magenta"

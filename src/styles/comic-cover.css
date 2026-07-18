@@ -21,7 +21,10 @@
   position: relative;
   isolation: isolate;
   border: var(--cc-edge) solid #000;
-  background: var(--cc-ink);
+  /* Fundo mais claro e divertido que a tinta quase preta original: azul-violeta
+     médio com um sopro de magenta. O papel (--sv-paper) segue AA sobre o ponto
+     mais claro (#6a2fd6 → 6.7:1). */
+  background: linear-gradient(165deg, #35127a, #4a1a9c 45%, #6a2fd6 85%, #8f2fb8);
   box-shadow: 10px 10px 0 0 #000;
   overflow: hidden;
   /* profundidade 3D: filhos com translateZ ganham perspectiva real */
