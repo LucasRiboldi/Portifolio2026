@@ -377,3 +377,156 @@
      some de vez, porque parada ela viraria uma barra sem sentido. */
   .fx-scanjump::after { display: none; }
 }
+
+/* ═══════════════ COMPONENTES EXTRAPOLADOS ═══════════════ */
+/**
+ * Peças de vitrine: caras de renderizar, difíceis de justificar numa tela de
+ * produto e exatamente o que um portfólio existe para mostrar. Todas são
+ * objetos FÍSICOS citados — carta holográfica, tela de tubo, fita cassete,
+ * letreiro de neon, polaroide, folha de adesivos.
+ *
+ * A regra que as mantém honestas: cada uma é um objeto real com regras
+ * ópticas próprias, não um efeito genérico. O holograma vira com o ângulo, o
+ * tubo curva nos cantos, a polaroide tem a margem de baixo maior.
+ */
+
+/* -- Carta holográfica: o brilho que corre com o ângulo -- */
+.fx-holo-card {
+  position: relative;
+  isolation: isolate;
+  border: 3px solid #000;
+  border-radius: 12px;
+  overflow: hidden;
+  background: linear-gradient(150deg, #1a0033, #33004d 55%, #0a0612);
+}
+.fx-holo-card::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+  background: linear-gradient(
+    115deg,
+    transparent 20%,
+    rgba(255, 45, 149, 0.45) 35%,
+    rgba(0, 229, 255, 0.45) 45%,
+    rgba(182, 255, 0, 0.4) 55%,
+    transparent 72%
+  );
+  background-size: 250% 250%;
+  mix-blend-mode: color-dodge;
+  transition: background-position 0.35s ease;
+  background-position: 0% 50%;
+}
+.fx-holo-card:hover::before { background-position: 100% 50%; }
+/* A retícula que revela o holograma — sem ela o brilho parece só gradiente. */
+.fx-holo-card::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+  opacity: 0.22;
+  background-image: repeating-linear-gradient(102deg, transparent 0 3px, rgba(255, 255, 255, 0.5) 3px 4px);
+}
+
+/* -- Tela de tubo: a curvatura e o brilho de fósforo -- */
+.fx-crt-screen {
+  position: relative;
+  isolation: isolate;
+  border-radius: 22px / 16px;
+  border: 10px solid #2a2a2e;
+  box-shadow: inset 0 0 40px rgba(0, 0, 0, 0.85), 0 0 0 3px #000, 0 12px 30px rgba(0, 0, 0, 0.5);
+  background: #0b120b;
+  overflow: hidden;
+}
+.fx-crt-screen::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+  background: repeating-linear-gradient(0deg, rgba(0, 0, 0, 0.32) 0 1px, transparent 1px 3px);
+}
+/* A vinheta do canto: o tubo escurece onde a curvatura afasta o feixe. */
+.fx-crt-screen::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+  background: radial-gradient(ellipse at center, transparent 55%, rgba(0, 0, 0, 0.55) 100%);
+}
+
+/* -- Fita cassete: a etiqueta escrita à mão -- */
+.fx-cassette {
+  position: relative;
+  border: 3px solid #000;
+  border-radius: 4px;
+  background: linear-gradient(180deg, #e9e4d6 0 62%, #c9c2ae 62% 100%);
+  color: #14100a;
+  padding: 10px 12px 26px;
+  box-shadow: 3px 3px 0 #000;
+}
+/* As duas janelas do carretel. */
+.fx-cassette::before,
+.fx-cassette::after {
+  content: "";
+  position: absolute;
+  bottom: 6px;
+  width: 15px;
+  height: 15px;
+  border: 2px solid #000;
+  border-radius: 50%;
+  background: #6b6455;
+}
+.fx-cassette::before { left: 26%; }
+.fx-cassette::after { right: 26%; }
+
+/* -- Letreiro de neon: o tubo aceso com moldura -- */
+.fx-neon-sign {
+  position: relative;
+  display: inline-block;
+  padding: 0.6em 1.1em;
+  border: 3px solid currentColor;
+  border-radius: 10px;
+  color: var(--sv-cyan);
+  box-shadow: 0 0 8px currentColor, inset 0 0 8px currentColor, 0 0 26px rgba(0, 229, 255, 0.35);
+  text-shadow: 0 0 6px currentColor, 0 0 18px currentColor;
+}
+.fx-neon-sign--magenta { color: var(--sv-magenta); box-shadow: 0 0 8px currentColor, inset 0 0 8px currentColor, 0 0 26px rgba(255, 45, 149, 0.35); }
+.fx-neon-sign--lime { color: var(--sv-lime); box-shadow: 0 0 8px currentColor, inset 0 0 8px currentColor, 0 0 26px rgba(182, 255, 0, 0.3); }
+
+/* -- Polaroide: a margem de baixo maior, sempre -- */
+.fx-polaroid {
+  display: inline-block;
+  padding: 12px 12px 42px;
+  background: #f4f1e8;
+  border: 1px solid rgba(0, 0, 0, 0.18);
+  box-shadow: 0 8px 18px rgba(0, 0, 0, 0.45);
+  transform: rotate(-2.2deg);
+}
+.fx-polaroid > :first-child { display: block; filter: saturate(0.85) contrast(1.06); }
+.fx-polaroid figcaption {
+  padding-top: 10px;
+  font-family: var(--font-heavy), sans-serif;
+  font-size: 0.72rem;
+  color: #3a3428;
+  text-align: center;
+  transform: rotate(-0.8deg);
+}
+
+/* -- Folha de adesivos: o corte tracejado -- */
+.fx-sticker-sheet {
+  position: relative;
+  padding: 14px;
+  background: #efe6cf;
+  background-image: radial-gradient(rgba(0, 0, 0, 0.07) 1px, transparent 1.4px);
+  background-size: 8px 8px;
+  border: 2px dashed rgba(0, 0, 0, 0.4);
+  border-radius: 6px;
+}
+.fx-sticker-sheet > * {
+  border: 2px dashed rgba(0, 0, 0, 0.45);
+  border-radius: 8px;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .fx-holo-card::before { transition: none; }
+}

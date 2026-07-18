@@ -183,6 +183,7 @@ export const DS_ARCHITECTURE: DsSection[] = [
       { id: "interacao", n: "09.12", label: "Interação e Retro OS", em: ["creative"] },
       { id: "colagem", n: "09.13", label: "Colagem e letras de resgate", em: ["creative"] },
       { id: "extrapolado", n: "09.14", label: "A camada extrapolada", em: ["creative"] },
+      { id: "vitrine", n: "09.15", label: "Peças de vitrine", em: ["creative"] },
       { id: "figura", n: "09.1", label: "A gravura e a legenda", em: ["arcane"] },
       { id: "caixas", n: "09.2", label: "Caixas, olho e breves", em: ["arcane"] },
       { id: "classificados", n: "09.3", label: "Classificados", em: ["arcane"] },
@@ -244,6 +245,7 @@ export const DS_ARCHITECTURE: DsSection[] = [
       { id: "tpl-docs", n: "11.6", label: "Documentação", em: ["creative"] },
       { id: "tpl-changelog", n: "11.7", label: "Changelog", em: ["creative"] },
       { id: "tpl-coming-soon", n: "11.8", label: "Coming soon", em: ["creative"] },
+      { id: "arquetipos", n: "11.9", label: "Arquétipos de landing", em: ["creative"] },
     ],
   },
   {
