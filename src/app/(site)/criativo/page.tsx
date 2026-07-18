@@ -117,7 +117,7 @@ export default async function CriativoHome() {
               <div className="relative z-[1] max-w-2xl">
                 <span className="sv-caption inline-block text-xs sm:text-sm">O multiverso</span>
                 <h2 id="sec-multiverso" className="sv-display mt-3 text-3xl uppercase leading-none text-black sm:text-5xl">
-                  Cada card acima é uma dimensão
+                  Cada requadro acima é uma dimensão
                 </h2>
                 <p className="sv-heavy mt-3 text-xs uppercase leading-snug tracking-wide text-black/80 sm:text-sm">
                   Mumbattan, Noir, Mangá, Graffiti, 2099 — e outras 15 esperando.
