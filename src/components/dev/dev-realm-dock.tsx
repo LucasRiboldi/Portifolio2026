@@ -9,6 +9,7 @@ import {
   Wrench,
   Code2,
   GraduationCap,
+  Orbit,
   type LucideIcon,
 } from "lucide-react"
 
@@ -26,6 +27,7 @@ const ITEMS: DockItem[] = [
   { href: "/desenvolvedor/ferramentas", label: "tools", Icon: Wrench },
   { href: "/desenvolvedor/codigo", label: "código", Icon: Code2 },
   { href: "/desenvolvedor/learn", label: "learn", Icon: GraduationCap },
+  { href: "/portal", label: "portal", Icon: Orbit },
 ]
 
 export function DevRealmDock() {

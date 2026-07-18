@@ -178,6 +178,7 @@ export const index = [
 /** Cadernos anunciados na barra de seções (mapeados às rotas reais). */
 export const sections = [
   { label: "Reviews", href: "/anfitriao/laboratorio" },
+  { label: "Outras Edições", href: "/portal" },
 ]
 
 /** Expediente do rodapé — abriga o acesso administrativo incorporado. */
