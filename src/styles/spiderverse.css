@@ -22,15 +22,18 @@
 
 /* ---- Global comic canvas (variable-driven, per-dimension) ---------- */
 .sv-canvas {
-  /* defaults = MULTIVERSE dimension; each .sv-dim-* overrides these */
-  --c-bg: linear-gradient(160deg, var(--sv-ink), var(--sv-ink-2));
-  --c-glow1: radial-gradient(circle at 15% 10%, rgba(123, 47, 247, 0.35), transparent 45%);
-  --c-glow2: radial-gradient(circle at 85% 20%, rgba(255, 45, 149, 0.3), transparent 40%);
-  --c-glow3: radial-gradient(circle at 50% 100%, rgba(0, 229, 255, 0.25), transparent 55%);
+  /* defaults = MULTIVERSE dimension; each .sv-dim-* overrides these.
+     Violetas médios em vez de tinta quase preta: a página respira e as cores
+     neon aparecem, mas o papel (--sv-paper) segue AA sobre o ponto mais claro
+     do gradiente (#7b2ff7 → 5.6:1). */
+  --c-bg: linear-gradient(160deg, #3b1670, #5a2a9d 55%, #7b2ff7);
+  --c-glow1: radial-gradient(circle at 15% 10%, rgba(255, 45, 149, 0.42), transparent 45%);
+  --c-glow2: radial-gradient(circle at 85% 20%, rgba(0, 229, 255, 0.36), transparent 40%);
+  --c-glow3: radial-gradient(circle at 50% 100%, rgba(255, 230, 0, 0.26), transparent 55%);
   --c-ink: var(--sv-paper);
-  --c-dot: rgba(255, 45, 149, 0.5);
+  --c-dot: rgba(255, 230, 0, 0.5);
   --c-dot-blend: screen;
-  --c-dot-opacity: 0.35;
+  --c-dot-opacity: 0.3;
   --c-speedlines: repeating-conic-gradient(from 0deg at 70% 30%, rgba(255,230,0,0.06) 0deg 2deg, transparent 2deg 8deg);
 
   position: relative;
