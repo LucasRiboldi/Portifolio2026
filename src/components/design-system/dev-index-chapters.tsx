@@ -23,7 +23,7 @@
    a âncora (dois elementos com o mesmo id é HTML inválido).
    ------------------------------------------------------------------ */
 
-import { Chapter, Surface } from "./dev-chapters"
+import { Chapter, SubChapter, Surface } from "./dev-chapters"
 
 /* ---------------- 02 · foundations ---------------- */
 
@@ -232,9 +232,9 @@ export const DEV_INDEX: Record<string, React.ReactNode> = {
 
   ),
   patterns: (
-      <Chapter
+      <SubChapter
         id="patterns-cmdk"
-        n="10"
+        n="10.5"
         title="Patterns"
         lead={
           <>
@@ -273,13 +273,13 @@ export const DEV_INDEX: Record<string, React.ReactNode> = {
             </ul>
           </div>
         </Surface>
-      </Chapter>
+      </SubChapter>
 
   ),
   templates: (
-      <Chapter
+      <SubChapter
         id="templates-routes"
-        n="11"
+        n="11.9"
         title="Templates"
         lead={
           <>
@@ -308,7 +308,7 @@ export const DEV_INDEX: Record<string, React.ReactNode> = {
             ))}
           </div>
         </Surface>
-      </Chapter>
+      </SubChapter>
 
   ),
   "content-design": (

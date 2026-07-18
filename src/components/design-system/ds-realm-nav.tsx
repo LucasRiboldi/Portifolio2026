@@ -44,9 +44,13 @@ export function DsRealmNav({ realm }: { realm: RealmId }) {
       : "text-[var(--sv-yellow)]/70"
 
   useEffect(() => {
+    // Sub-seções entram na observação junto das mães: elas são âncoras reais
+    // no documento, e sem observá-las o realce congela na mãe enquanto o
+    // leitor já desceu três matérias.
     const alvos = secoes
       .filter(s => s.disponivel)
-      .map(s => document.getElementById(s.id))
+      .flatMap(s => [s.id, ...s.subs.map(sub => sub.id)])
+      .map(id => document.getElementById(id))
       .filter((e): e is HTMLElement => Boolean(e))
 
     if (!alvos.length) return
@@ -113,6 +117,31 @@ export function DsRealmNav({ realm }: { realm: RealmId }) {
                   </span>
                 )}
               </a>
+
+              {/* As matérias do caderno. Recuadas e um ponto menores: o índice
+                  de jornal também distingue caderno de matéria por recuo. */}
+              {s.subs.length > 0 && (
+                <ol className="ml-3 border-l border-current/15 pl-1">
+                  {s.subs.map(sub => {
+                    const subOn = ativa === sub.id
+                    return (
+                      <li key={sub.id}>
+                        <a
+                          href={`#${sub.id}`}
+                          aria-current={subOn ? "location" : undefined}
+                          className={cn(
+                            "flex items-baseline gap-2 rounded px-2 py-0.5 text-[10px] transition-colors",
+                            subOn ? activeCls : idleCls
+                          )}
+                        >
+                          <span className="font-mono text-[8px] opacity-50">{sub.n}</span>
+                          <span className="flex-1 truncate">{sub.label}</span>
+                        </a>
+                      </li>
+                    )
+                  })}
+                </ol>
+              )}
             </li>
           )
         })}

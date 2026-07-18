@@ -15,7 +15,7 @@ export function DevThemes() {
   return (
     <Chapter
       id="retro-os"
-      n="25"
+      n="18"
       title="Temas de terminal"
       lead="O _Dev não tem 'Retro OS' — tem temas de editor. Dracula é o canônico do realm; os outros existem para mostrar que a estrutura é a mesma, só as cores trocam."
     >
@@ -43,7 +43,7 @@ export function DevLab() {
   return (
     <Chapter
       id="lab"
-      n="26"
+      n="19"
       title="Lab"
       lead="Onde o realm testa ideias antes de virarem componente: uma ferramentinha interna, entrada e saída, sem sair da página."
     >
@@ -71,7 +71,7 @@ export function DevDocs() {
   return (
     <Chapter
       id="documentacao"
-      n="28"
+      n="20"
       title="Documentação"
       lead="A doc do _Dev aponta para o código, não o reescreve: cada linha é um arquivo que existe. Prosa duplicada envelhece calada."
     >

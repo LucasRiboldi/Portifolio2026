@@ -3,9 +3,16 @@ import type { RealmId } from "@/lib/realms"
 /**
  * A arquitetura de referência do Design System — fonte única.
  *
- * As 16 seções seguem a espinha dorsal que Material, Carbon, Polaris e Ant
- * Design convergiram: do porquê (Introduction) ao histórico (Changelog),
- * passando por fundações, tokens, componentes, patterns e templates.
+ * As 16 seções canônicas seguem a espinha dorsal que Material, Carbon, Polaris
+ * e Ant Design convergiram: do porquê (Introduction) ao histórico (Changelog),
+ * passando por fundações, tokens, componentes, patterns e templates. As quatro
+ * finais (17–20) são extras deste projeto, não da convenção.
+ *
+ * A numeração aqui é a ÚNICA fonte: um capítulo no corpo de um realm não
+ * inventa o próprio número. Se ele aprofunda uma seção, entra como `subs` da
+ * mãe e herda o prefixo (04 → 04.1). Foi assim que se corrigiu o Anfitrião,
+ * que rodava uma segunda sequência 01–11 em paralelo e colidia com esta em
+ * nove pontos.
  *
  * Uma decisão importante: este índice é o MESMO nos três realms, mas cada um
  * o preenche na sua língua. O esqueleto é compartilhado; a carne, não. É o
@@ -21,6 +28,29 @@ import type { RealmId } from "@/lib/realms"
 
 export type SectionStatus = "ready" | "wip" | "planned"
 
+/**
+ * Uma matéria dentro de um caderno.
+ *
+ * Existe porque um realm pode aprofundar uma seção canônica em capítulos
+ * próprios — o Anfitrião abre Typography em "manchete" e "capitular", o
+ * Criativo abre Components em seis galerias. Antes esses capítulos viviam no
+ * corpo com uma numeração paralela inventada, colidindo com a canônica e
+ * ficando de fora do índice. Agora pendem da seção-mãe: `04.1` diz de onde
+ * vem, e a sidebar consegue mostrá-los.
+ *
+ * `em` é por sub-seção, não herdado: o Anfitrião abre Motion em "o silêncio",
+ * o _Dev não abre.
+ */
+export interface DsSubSection {
+  /** Âncora no documento. */
+  id: string
+  /** Derivada da mãe: "04.1", "04.2". */
+  n: string
+  label: string
+  /** Realms onde esta matéria existe. */
+  em: RealmId[]
+}
+
 export interface DsSection {
   /** Âncora no documento do realm. */
   id: string
@@ -32,6 +62,8 @@ export interface DsSection {
   status: SectionStatus
   /** Realms onde a seção já tem conteúdo. Vazio = nenhum ainda. */
   em: RealmId[]
+  /** Capítulos que um realm pendura sob esta seção. */
+  subs?: DsSubSection[]
 }
 
 export const DS_ARCHITECTURE: DsSection[] = [
@@ -50,6 +82,7 @@ export const DS_ARCHITECTURE: DsSection[] = [
     desc: "As decisões visuais de base: cor, tipo, espaço, forma, elevação.",
     status: "ready",
     em: ["creative", "developer", "arcane"],
+    subs: [{ id: "filetes", n: "02.1", label: "Filetes", em: ["arcane"] }],
   },
   {
     id: "tokens",
@@ -58,6 +91,10 @@ export const DS_ARCHITECTURE: DsSection[] = [
     desc: "Os valores atômicos em tabela: HEX, RGB, HSL, CSS var e Tailwind.",
     status: "ready",
     em: ["creative", "developer", "arcane"],
+    subs: [
+      { id: "elevacao", n: "03.1", label: "Elevação & Raio", em: ["developer"] },
+      { id: "tokens-catalogo", n: "03.1", label: "Catálogo completo", em: ["creative"] },
+    ],
   },
   {
     id: "typography",
@@ -66,6 +103,10 @@ export const DS_ARCHITECTURE: DsSection[] = [
     desc: "A escala completa — família, peso, corpo, entrelinha e tracking.",
     status: "ready",
     em: ["creative", "developer", "arcane"],
+    subs: [
+      { id: "manchete", n: "04.1", label: "Hierarquia da manchete", em: ["arcane"] },
+      { id: "capitular", n: "04.2", label: "Capitular", em: ["arcane"] },
+    ],
   },
   {
     id: "colors",
@@ -74,6 +115,7 @@ export const DS_ARCHITECTURE: DsSection[] = [
     desc: "Paletas, superfícies, estados e contraste medido sobre o fundo real.",
     status: "ready",
     em: ["creative", "developer", "arcane"],
+    subs: [{ id: "sintaxe", n: "05.1", label: "A paleta é um tema de sintaxe", em: ["developer"] }],
   },
   {
     id: "grid",
@@ -98,6 +140,10 @@ export const DS_ARCHITECTURE: DsSection[] = [
     desc: "Duração, curva e gesto — cada entrada toca com as curvas do realm.",
     status: "ready",
     em: ["creative", "developer", "arcane"],
+    subs: [
+      { id: "silencio", n: "08.1", label: "O silêncio", em: ["arcane"] },
+      { id: "motion-ds", n: "08.1", label: "Motion (catálogo)", em: ["creative"] },
+    ],
   },
   {
     id: "components",
@@ -106,6 +152,35 @@ export const DS_ARCHITECTURE: DsSection[] = [
     desc: "A biblioteca: variantes, estados, anatomia, código e acessibilidade.",
     status: "wip",
     em: ["creative", "developer", "arcane"],
+    subs: [
+      { id: "botoes", n: "09.1", label: "Botões", em: ["developer"] },
+      { id: "inputs", n: "09.2", label: "Inputs & Forms", em: ["developer"] },
+      { id: "selecao", n: "09.3", label: "Seleção", em: ["developer"] },
+      { id: "data-display", n: "09.4", label: "Data Display", em: ["developer"] },
+      { id: "overlays", n: "09.5", label: "Overlays", em: ["developer"] },
+      { id: "feedback", n: "09.6", label: "Feedback", em: ["developer"] },
+      { id: "terminal", n: "09.7", label: "Terminal", em: ["developer"] },
+      { id: "codigo", n: "09.8", label: "Código & diff", em: ["developer"] },
+      { id: "estados-projeto", n: "09.9", label: "Estados de projeto", em: ["developer"] },
+      { id: "cartoes", n: "09.10", label: "Cartões, tags e números", em: ["developer"] },
+      { id: "vazio", n: "09.11", label: "Vazio", em: ["developer"] },
+      { id: "kit", n: "09.12", label: "UI Kit", em: ["developer"] },
+      { id: "botoes", n: "09.1", label: "Botões", em: ["creative"] },
+      { id: "inputs", n: "09.2", label: "Inputs & Forms", em: ["creative"] },
+      { id: "selecao", n: "09.3", label: "Seleção", em: ["creative"] },
+      { id: "data-display", n: "09.4", label: "Data Display", em: ["creative"] },
+      { id: "overlays", n: "09.5", label: "Overlays", em: ["creative"] },
+      { id: "feedback", n: "09.6", label: "Feedback", em: ["creative"] },
+      { id: "figura", n: "09.1", label: "A gravura e a legenda", em: ["arcane"] },
+      { id: "caixas", n: "09.2", label: "Caixas, olho e breves", em: ["arcane"] },
+      { id: "classificados", n: "09.3", label: "Classificados", em: ["arcane"] },
+      { id: "reportagens", n: "09.4", label: "Grade de reportagens", em: ["arcane"] },
+      { id: "editorial", n: "09.5", label: "O editorial", em: ["arcane"] },
+      { id: "servico", n: "09.6", label: "Barra de serviço", em: ["arcane"] },
+      { id: "grafico", n: "09.7", label: "Gravura de dados", em: ["arcane"] },
+      { id: "marcas", n: "09.8", label: "Carimbo, verbete e pé", em: ["arcane"] },
+      { id: "kit", n: "09.9", label: "UI Kit", em: ["arcane"] },
+    ],
   },
   {
     id: "patterns",
@@ -114,6 +189,18 @@ export const DS_ARCHITECTURE: DsSection[] = [
     desc: "Composições resolvidas: login, busca, multi-step, FAQ.",
     status: "wip",
     em: ["creative", "developer", "arcane"],
+    subs: [
+      { id: "pattern-login", n: "10.1", label: "Login / Auth", em: ["developer"] },
+      { id: "pattern-busca", n: "10.2", label: "Busca & filtros", em: ["developer"] },
+      { id: "pattern-multi-step", n: "10.3", label: "Multi-step", em: ["developer"] },
+      { id: "pattern-faq", n: "10.4", label: "FAQ", em: ["developer"] },
+      { id: "patterns-cmdk", n: "10.5", label: "Command palette", em: ["developer"] },
+      { id: "devlog", n: "10.6", label: "Devlog", em: ["developer"] },
+      { id: "pattern-login", n: "10.1", label: "Login / Auth", em: ["creative"] },
+      { id: "pattern-busca", n: "10.2", label: "Busca & filtros", em: ["creative"] },
+      { id: "pattern-multi-step", n: "10.3", label: "Multi-step", em: ["creative"] },
+      { id: "pattern-faq", n: "10.4", label: "FAQ", em: ["creative"] },
+    ],
   },
   {
     id: "templates",
@@ -122,6 +209,25 @@ export const DS_ARCHITECTURE: DsSection[] = [
     desc: "Páginas inteiras montadas com o kit.",
     status: "ready",
     em: ["creative", "developer", "arcane"],
+    subs: [
+      { id: "tpl-landing", n: "11.1", label: "Landing", em: ["developer"] },
+      { id: "tpl-dashboard", n: "11.2", label: "Dashboard", em: ["developer"] },
+      { id: "tpl-artigo", n: "11.3", label: "Artigo", em: ["developer"] },
+      { id: "tpl-pricing", n: "11.4", label: "Pricing", em: ["developer"] },
+      { id: "tpl-perfil", n: "11.5", label: "Perfil", em: ["developer"] },
+      { id: "tpl-docs", n: "11.6", label: "Documentação", em: ["developer"] },
+      { id: "tpl-changelog", n: "11.7", label: "Changelog", em: ["developer"] },
+      { id: "tpl-coming-soon", n: "11.8", label: "Coming soon", em: ["developer"] },
+      { id: "templates-routes", n: "11.9", label: "Lista de rotas", em: ["developer"] },
+      { id: "tpl-landing", n: "11.1", label: "Landing", em: ["creative"] },
+      { id: "tpl-dashboard", n: "11.2", label: "Dashboard", em: ["creative"] },
+      { id: "tpl-artigo", n: "11.3", label: "Artigo", em: ["creative"] },
+      { id: "tpl-pricing", n: "11.4", label: "Pricing", em: ["creative"] },
+      { id: "tpl-perfil", n: "11.5", label: "Perfil", em: ["creative"] },
+      { id: "tpl-docs", n: "11.6", label: "Documentação", em: ["creative"] },
+      { id: "tpl-changelog", n: "11.7", label: "Changelog", em: ["creative"] },
+      { id: "tpl-coming-soon", n: "11.8", label: "Coming soon", em: ["creative"] },
+    ],
   },
   {
     id: "accessibility",
@@ -173,6 +279,10 @@ export const DS_ARCHITECTURE: DsSection[] = [
     desc: "Os blocos que montam uma página: hero, faixa de métricas, CTA.",
     status: "ready",
     em: ["creative", "developer", "arcane"],
+    subs: [
+      { id: "cabecalho", n: "17.1", label: "O cabeçalho e o nameplate", em: ["arcane"] },
+      { id: "expediente", n: "17.2", label: "Expediente, fólio e índice", em: ["arcane"] },
+    ],
   },
   {
     id: "retro-os",
@@ -206,10 +316,21 @@ export const STATUS_LABEL: Record<SectionStatus, string> = {
   planned: "planejado",
 }
 
-/** O índice como o realm o vê: o que já tem conteúdo lá. */
+/**
+ * O índice como o realm o vê: o que já tem conteúdo lá.
+ *
+ * As sub-seções são filtradas pelo mesmo critério das mães — um realm que não
+ * abre a seção em matérias recebe `subs: []` e a sidebar não desenha nível
+ * nenhum. Uma sub de seção indisponível nunca aparece, mesmo que declare `em`:
+ * matéria não se lê sem o caderno.
+ */
 export function sectionsFor(realm: RealmId) {
-  return DS_ARCHITECTURE.map(s => ({
-    ...s,
-    disponivel: s.em.includes(realm),
-  }))
+  return DS_ARCHITECTURE.map(s => {
+    const disponivel = s.em.includes(realm)
+    return {
+      ...s,
+      disponivel,
+      subs: disponivel ? (s.subs ?? []).filter(sub => sub.em.includes(realm)) : [],
+    }
+  })
 }

@@ -10,16 +10,7 @@
    compasso. Se uma classe .dp-* quebrar, quebra aqui.
    ------------------------------------------------------------------ */
 import type { RealmDesign } from "@/design-system/realms"
-import { Chapter, Folha } from "./arcane-chapters"
-
-/** Rótulo de caixa no tom da folha — o "quando usar" de cada peça. */
-function Nota({ children }: { children: React.ReactNode }) {
-  return (
-    <p className="mt-1 text-[11px] leading-snug" style={{ color: "var(--dp-ink-3)" }}>
-      {children}
-    </p>
-  )
-}
+import { Chapter, Folha, Nota } from "./arcane-chapters"
 
 /* ══════════════ 02 · FOUNDATIONS ══════════════ */
 export function ArcaneFoundations() {
@@ -64,29 +55,10 @@ export function ArcaneFoundations() {
           </table>
         </Folha>
 
-        <Folha>
-          <p className="mb-3 text-[11px] uppercase tracking-wide" style={{ color: "var(--dp-sepia)" }}>
-            Os fios — toda a hierarquia de separação
-          </p>
-          <div className="space-y-3">
-            <div>
-              <div className="dp-rule dp-rule--hair" />
-              <Nota>.dp-rule--hair · separa itens dentro de um bloco</Nota>
-            </div>
-            <div>
-              <div className="dp-rule" />
-              <Nota>.dp-rule · separa matérias</Nota>
-            </div>
-            <div>
-              <div className="dp-rule dp-rule--double" />
-              <Nota>.dp-rule--double · fecha o masthead e as seções</Nota>
-            </div>
-            <div>
-              <div className="dp-rule dp-rule--thick" />
-              <Nota>.dp-rule--thick · abre cada caderno</Nota>
-            </div>
-          </div>
-        </Folha>
+        {/* A hierarquia de filetes NÃO se documenta aqui: ela é a matéria 02.1,
+            logo abaixo. Este bloco existia duplicado — as mesmas quatro
+            espessuras, com as mesmas legendas, em dois lugares da folha. Uma
+            errata futura corrigiria um e esqueceria o outro. */}
 
         <Folha className="flex flex-col justify-center">
           <p className="mb-1 text-[11px] uppercase tracking-wide" style={{ color: "var(--dp-sepia)" }}>
@@ -497,21 +469,17 @@ export function ArcaneContentDesign() {
           Metade das discussões de design é gente chamando a mesma peça por nomes diferentes. Aqui
           cada uma tem um nome só — e é o nome de oficina, não o de software.
         </p>
-        <dl className="grid gap-x-6 gap-y-2 sm:grid-cols-2">
+        {/* `.dp-term` é a peça de glossário da folha (versalete no termo, tinta
+            fraca na definição, pontilhado entre entradas). Aqui havia um <dl>
+            refeito à mão com estilo inline que imitava — mal — o que a classe
+            já fazia: o guia do sistema contornando o próprio sistema. */}
+        <div className="grid gap-x-6 sm:grid-cols-2">
           {VOCABULARIO.map(([termo, def]) => (
-            <div key={termo} className="flex gap-3 border-b border-[var(--dp-rule)]/25 pb-1.5">
-              <dt
-                className="w-20 shrink-0 text-xs"
-                style={{ fontFamily: "var(--dp-head)", color: "var(--dp-ink)" }}
-              >
-                {termo}
-              </dt>
-              <dd className="text-[11px] leading-snug" style={{ color: "var(--dp-ink-2)" }}>
-                {def}
-              </dd>
-            </div>
+            <p key={termo} className="dp-term">
+              <b>{termo}</b> — <em>{def}</em>
+            </p>
           ))}
-        </dl>
+        </div>
       </Folha>
     </Chapter>
   )

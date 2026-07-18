@@ -76,71 +76,208 @@ function Chapter({
 }
 
 /**
- * Âncora de grupo — o alvo que o índice das 16 seções promete.
+ * Cabeçalho de um caderno que só tem matérias — o alvo que o índice promete.
  *
  * Os capítulos nasceram como páginas soltas e por isso têm ids próprios
  * (`botoes`, `tpl-landing`). A arquitetura fala em `components`, `templates`.
  * Este wrapper dá o id da seção ao grupo inteiro, sem renomear os capítulos —
  * os dois níveis coexistem: o índice leva ao grupo, o link direto ao capítulo.
+ *
+ * Era um `<section>` mudo. Enquanto os capítulos tinham numeração plana
+ * própria (06, 07, 08…) ninguém sentia falta; ao virarem 09.1, 09.2, 09.3 o
+ * buraco ficou visível — a sidebar apontava "09 Components" para um ponto sem
+ * título nenhum. Agora imprime o próprio cabeçalho.
  */
-function Group({ id, children }: { id: string; children: React.ReactNode }) {
+function Group({
+  id,
+  n,
+  title,
+  lead,
+  children,
+}: {
+  id: string
+  n: string
+  title: string
+  lead?: React.ReactNode
+  children: React.ReactNode
+}) {
   return (
-    <section id={id} className="scroll-mt-24">
+    <section
+      id={id}
+      aria-label={`${n} · ${title}`}
+      className="mt-16 scroll-mt-24 border-t-[3px] border-black pt-10"
+    >
+      <p className="sv-heavy mb-3 text-[11px] uppercase tracking-[0.2em] text-[var(--sv-magenta)]">
+        <span className="sv-display mr-2 text-2xl text-[var(--sv-yellow)]">{n}</span>
+        {title}
+      </p>
+      {lead && <p className="mb-6 max-w-3xl text-sm leading-relaxed text-white/60">{lead}</p>}
       {children}
     </section>
   )
 }
 
-/** Os capítulos que formam o guia completo do Criativo. */
-export function CreativeChapters() {
+/**
+ * Uma matéria dentro do caderno — o segundo nível do índice.
+ *
+ * Mesma peça que o `SubChapter` do _Dev e do Anfitrião, na língua do Criativo:
+ * o caderno abre com filete preto de 3px, a matéria com um de 2px em ciano, e
+ * o número vem de `architecture.ts` com o prefixo da mãe.
+ */
+function SubChapter({
+  id,
+  n,
+  title,
+  children,
+}: {
+  id: string
+  n: string
+  title: string
+  children: React.ReactNode
+}) {
   return (
-    <>
-      <Chapter id="foundations" n="01" title="Brand Foundation"><FoundationsContent headingAs="h2" /></Chapter>
-      <Chapter id="tokens-catalogo" n="02" title="Design Tokens · catálogo completo"><TokensContent headingAs="h2" /></Chapter>
-      <Chapter id="grid" n="03" title="Grid & Responsividade"><GridContent headingAs="h2" /></Chapter>
-      {/* Iconografia mora com as fundações — logo após a grelha, como no índice. */}
-      <Chapter id="iconography" n="04" title="Iconography"><CreativeIconography /></Chapter>
-      <Chapter id="motion-ds" n="05" title="Motion (catálogo)"><MotionContent headingAs="h2" /></Chapter>
+    <section
+      id={id}
+      aria-label={`${n} · ${title}`}
+      className="mt-10 scroll-mt-24 border-l-[3px] border-[var(--sv-cyan)]/40 pl-4"
+    >
+      <p className="sv-heavy mb-5 text-[10px] uppercase tracking-[0.2em] text-[var(--sv-cyan)]">
+        <span className="sv-display mr-2 text-lg text-[var(--sv-yellow)]">{n}</span>
+        {title}
+      </p>
+      {children}
+    </section>
+  )
+}
 
-      <Group id="components">
-        <Chapter id="botoes" n="06" title="Componentes · Botões"><ButtonsContent headingAs="h2" /></Chapter>
-        <Chapter id="inputs" n="07" title="Componentes · Inputs & Forms"><InputsContent headingAs="h2" /></Chapter>
-        <Chapter id="selecao" n="08" title="Componentes · Seleção"><SelectionContent headingAs="h2" /></Chapter>
-        <Chapter id="data-display" n="09" title="Componentes · Data Display"><DataDisplayContent headingAs="h2" /></Chapter>
-        <Chapter id="overlays" n="10" title="Componentes · Overlays"><OverlaysContent headingAs="h2" /></Chapter>
-        <Chapter id="feedback" n="11" title="Componentes · Feedback"><FeedbackContent headingAs="h2" /></Chapter>
+/* ------------------------------------------------------------------
+   OS CAPÍTULOS, UM A UM. A ordem quem monta é `creative-guide.tsx`.
+   ------------------------------------------------------------------
+   Este arquivo rodava 01–31, uma sequência inventada sem NENHUMA relação
+   com architecture.ts: "Brand Foundation" era 01 (canônico 02),
+   Accessibility era 28 (canônico 12), Resources 25 (15), Retro OS 26 (18).
+   Praticamente todo número divergia do que a sidebar mostrava ao lado do
+   mesmo link.
+
+   Os capítulos que aprofundam uma seção viram matérias e herdam o prefixo
+   da mãe (09 → 09.1). Quem somar um capítulo aqui declara antes em
+   architecture.ts — não escolhe o próprio número.
+   ------------------------------------------------------------------ */
+
+export function CreativeFoundations() {
+  return <Chapter id="foundations" n="02" title="Brand Foundation"><FoundationsContent headingAs="h2" /></Chapter>
+}
+
+export function CreativeTokensCatalogo() {
+  return <SubChapter id="tokens-catalogo" n="03.1" title="Design Tokens · catálogo completo"><TokensContent headingAs="h2" /></SubChapter>
+}
+
+export function CreativeGrid() {
+  return <Chapter id="grid" n="06" title="Grid & Responsividade"><GridContent headingAs="h2" /></Chapter>
+}
+
+/** Iconografia mora com as fundações — logo após a grelha, como no índice. */
+export function CreativeIconographyChapter() {
+  return <Chapter id="iconography" n="07" title="Iconography"><CreativeIconography /></Chapter>
+}
+
+export function CreativeMotionCatalogo() {
+  return <SubChapter id="motion-ds" n="08.1" title="Motion (catálogo)"><MotionContent headingAs="h2" /></SubChapter>
+}
+
+export function CreativeComponents() {
+  return (
+      <Group
+        id="components"
+        n="09"
+        title="Components"
+        lead="A biblioteca do Criativo em seis galerias, cada uma compondo a página que já serve a rota — fonte única, sem segunda cópia para divergir em silêncio."
+      >
+        <SubChapter id="botoes" n="09.1" title="Componentes · Botões"><ButtonsContent headingAs="h2" /></SubChapter>
+        <SubChapter id="inputs" n="09.2" title="Componentes · Inputs & Forms"><InputsContent headingAs="h2" /></SubChapter>
+        <SubChapter id="selecao" n="09.3" title="Componentes · Seleção"><SelectionContent headingAs="h2" /></SubChapter>
+        <SubChapter id="data-display" n="09.4" title="Componentes · Data Display"><DataDisplayContent headingAs="h2" /></SubChapter>
+        <SubChapter id="overlays" n="09.5" title="Componentes · Overlays"><OverlaysContent headingAs="h2" /></SubChapter>
+        <SubChapter id="feedback" n="09.6" title="Componentes · Feedback"><FeedbackContent headingAs="h2" /></SubChapter>
       </Group>
+  )
+}
 
-      <Chapter id="secoes" n="12" title="Seções de página"><SectionsContent headingAs="h2" /></Chapter>
-
-      <Group id="patterns">
-        <Chapter id="pattern-login" n="13" title="Pattern · Login / Auth"><LoginPatternContent headingAs="h2" /></Chapter>
-        <Chapter id="pattern-busca" n="14" title="Pattern · Busca & filtros"><SearchPatternContent headingAs="h2" /></Chapter>
-        <Chapter id="pattern-multi-step" n="15" title="Pattern · Multi-step"><MultiStepPatternContent headingAs="h2" /></Chapter>
-        <Chapter id="pattern-faq" n="16" title="Pattern · FAQ"><FaqPatternContent headingAs="h2" /></Chapter>
+export function CreativePatterns() {
+  return (
+      <Group
+        id="patterns"
+        n="10"
+        title="Patterns"
+        lead="Composições que já vêm resolvidas: autenticação, busca, formulário em etapas e FAQ. Não são telas — são arranjos que se repetem."
+      >
+        <SubChapter id="pattern-login" n="10.1" title="Pattern · Login / Auth"><LoginPatternContent headingAs="h2" /></SubChapter>
+        <SubChapter id="pattern-busca" n="10.2" title="Pattern · Busca & filtros"><SearchPatternContent headingAs="h2" /></SubChapter>
+        <SubChapter id="pattern-multi-step" n="10.3" title="Pattern · Multi-step"><MultiStepPatternContent headingAs="h2" /></SubChapter>
+        <SubChapter id="pattern-faq" n="10.4" title="Pattern · FAQ"><FaqPatternContent headingAs="h2" /></SubChapter>
       </Group>
+  )
+}
 
-      <Group id="templates">
-        <Chapter id="tpl-landing" n="17" title="Template · Landing"><LandingTemplateContent headingAs="h2" /></Chapter>
-        <Chapter id="tpl-dashboard" n="18" title="Template · Dashboard"><DashboardTemplateContent headingAs="h2" /></Chapter>
-        <Chapter id="tpl-artigo" n="19" title="Template · Artigo"><ArticleTemplateContent headingAs="h2" /></Chapter>
-        <Chapter id="tpl-pricing" n="20" title="Template · Pricing"><PricingTemplateContent headingAs="h2" /></Chapter>
-        <Chapter id="tpl-perfil" n="21" title="Template · Perfil"><ProfileTemplateContent headingAs="h2" /></Chapter>
-        <Chapter id="tpl-docs" n="22" title="Template · Documentação"><DocsTemplateContent headingAs="h2" /></Chapter>
-        <Chapter id="tpl-changelog" n="23" title="Template · Changelog"><ChangelogTemplateContent headingAs="h2" /></Chapter>
-        <Chapter id="tpl-coming-soon" n="24" title="Template · Coming soon"><ComingSoonTemplatePage /></Chapter>
+export function CreativeTemplates() {
+  return (
+      <Group
+        id="templates"
+        n="11"
+        title="Templates"
+        lead="Páginas inteiras montadas com o kit — as oito que o portfólio realmente usa. Template aqui não é maquete: é a página que existe."
+      >
+        <SubChapter id="tpl-landing" n="11.1" title="Template · Landing"><LandingTemplateContent headingAs="h2" /></SubChapter>
+        <SubChapter id="tpl-dashboard" n="11.2" title="Template · Dashboard"><DashboardTemplateContent headingAs="h2" /></SubChapter>
+        <SubChapter id="tpl-artigo" n="11.3" title="Template · Artigo"><ArticleTemplateContent headingAs="h2" /></SubChapter>
+        <SubChapter id="tpl-pricing" n="11.4" title="Template · Pricing"><PricingTemplateContent headingAs="h2" /></SubChapter>
+        <SubChapter id="tpl-perfil" n="11.5" title="Template · Perfil"><ProfileTemplateContent headingAs="h2" /></SubChapter>
+        <SubChapter id="tpl-docs" n="11.6" title="Template · Documentação"><DocsTemplateContent headingAs="h2" /></SubChapter>
+        <SubChapter id="tpl-changelog" n="11.7" title="Template · Changelog"><ChangelogTemplateContent headingAs="h2" /></SubChapter>
+        <SubChapter id="tpl-coming-soon" n="11.8" title="Template · Coming soon"><ComingSoonTemplatePage /></SubChapter>
       </Group>
+  )
+}
 
-      <Chapter id="resources" n="25" title="Assets & Resources"><AssetsContent headingAs="h2" /></Chapter>
-      <Chapter id="retro-os" n="26" title="Retro OS"><OsThemesContent headingAs="h2" /></Chapter>
-      <Chapter id="lab" n="27" title="Lab"><LabContent headingAs="h2" /></Chapter>
-      <Chapter id="accessibility" n="28" title="Accessibility"><AccessibilityContent headingAs="h2" /></Chapter>
-      {/* Voz e microcopy fecham com a acessibilidade; a documentação encerra o corpo. */}
-      <Chapter id="content-design" n="29" title="Content Design"><CreativeContentDesign /></Chapter>
-      <Chapter id="documentacao" n="30" title="Documentação"><DocsContent headingAs="h2" /></Chapter>
-      {/* O histórico fecha o guia — a última edição da coleção. */}
-      <Chapter id="changelog" n="31" title="Changelog"><CreativeChangelog /></Chapter>
+export function CreativeAccessibility() {
+  return <Chapter id="accessibility" n="12" title="Accessibility"><AccessibilityContent headingAs="h2" /></Chapter>
+}
 
+/** Voz e microcopy fecham com a acessibilidade. */
+export function CreativeContentDesignChapter() {
+  return <Chapter id="content-design" n="13" title="Content Design"><CreativeContentDesign /></Chapter>
+}
+
+export function CreativeResources() {
+  return <Chapter id="resources" n="15" title="Assets & Resources"><AssetsContent headingAs="h2" /></Chapter>
+}
+
+/** O histórico fecha os 16 canônicos — a última edição da coleção. */
+export function CreativeChangelogChapter() {
+  return <Chapter id="changelog" n="16" title="Changelog"><CreativeChangelog /></Chapter>
+}
+
+/* ---- 17–20 · os extras do índice ---- */
+
+export function CreativeSecoes() {
+  return <Chapter id="secoes" n="17" title="Seções de página"><SectionsContent headingAs="h2" /></Chapter>
+}
+
+export function CreativeRetroOs() {
+  return <Chapter id="retro-os" n="18" title="Retro OS"><OsThemesContent headingAs="h2" /></Chapter>
+}
+
+export function CreativeLab() {
+  return <Chapter id="lab" n="19" title="Lab"><LabContent headingAs="h2" /></Chapter>
+}
+
+export function CreativeDocumentacao() {
+  return <Chapter id="documentacao" n="20" title="Documentação"><DocsContent headingAs="h2" /></Chapter>
+}
+
+/** O fecho do guia — o cartão que explica que cada capítulo também é rota. */
+export function CreativeFim() {
+  return (
       <div className="mt-16 rounded-lg border-[3px] border-black bg-[var(--sv-ink-2)] p-5 shadow-[var(--elevation-2)]">
         <h3 className="sv-heavy relative mb-2 inline-block text-sm uppercase tracking-wide text-[var(--sv-cyan)]">
           Fim do guia
@@ -153,7 +290,6 @@ export function CreativeChapters() {
           para linkar direto. Aqui elas são compostas, não copiadas: a fonte é a mesma.
         </p>
       </div>
-    </>
   )
 }
 

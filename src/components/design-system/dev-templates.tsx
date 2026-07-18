@@ -4,7 +4,7 @@
    Pricing, Perfil, Docs, Changelog, Coming soon). Mockups compactos,
    todos com as classes reais do realm.
    ------------------------------------------------------------------ */
-import { Chapter, Surface } from "./dev-chapters"
+import { SubChapter, Surface } from "./dev-chapters"
 
 function Frame({ label, children }: { label: string; children: React.ReactNode }) {
   return (
@@ -22,7 +22,7 @@ const bar = (w: string, c = "var(--d-current)") => (
 /** 16 · Landing */
 export function DevTplLanding() {
   return (
-    <Chapter id="tpl-landing" n="16" title="Template · Landing" lead="A home do dev: hero com prompt, contadores e grade de projetos.">
+    <SubChapter id="tpl-landing" n="11.1" title="Template · Landing" lead="A home do dev: hero com prompt, contadores e grade de projetos.">
       <Surface>
         <Frame label="landing.tsx · /desenvolvedor">
           <div className="dv-hero !mt-0 !p-3">
@@ -37,14 +37,14 @@ export function DevTplLanding() {
           </div>
         </Frame>
       </Surface>
-    </Chapter>
+    </SubChapter>
   )
 }
 
 /** 17 · Dashboard */
 export function DevTplDashboard() {
   return (
-    <Chapter id="tpl-dashboard" n="17" title="Template · Dashboard" lead="Painel de controle: sidebar de rotas, faixa de métricas, tabela de builds.">
+    <SubChapter id="tpl-dashboard" n="11.2" title="Template · Dashboard" lead="Painel de controle: sidebar de rotas, faixa de métricas, tabela de builds.">
       <Surface>
         <Frame label="dashboard.tsx">
           <div className="flex gap-2">
@@ -60,14 +60,14 @@ export function DevTplDashboard() {
           </div>
         </Frame>
       </Surface>
-    </Chapter>
+    </SubChapter>
   )
 }
 
 /** 18 · Artigo */
 export function DevTplArticle() {
   return (
-    <Chapter id="tpl-artigo" n="18" title="Template · Artigo" lead="O devlog longo: título, metadados e corpo com blocos de código (.dv-prose).">
+    <SubChapter id="tpl-artigo" n="11.3" title="Template · Artigo" lead="O devlog longo: título, metadados e corpo com blocos de código (.dv-prose).">
       <Surface>
         <Frame label="article.tsx · /devlog/[slug]">
           <p className="font-mono text-sm text-[var(--d-cyan)]">Como separei o DS em 3 realms</p>
@@ -76,7 +76,7 @@ export function DevTplArticle() {
           <pre className="mt-2 rounded border border-[var(--d-current)] bg-[var(--d-bg-2)] p-2 font-mono text-[10px] text-[var(--d-green)]">const realms = 3</pre>
         </Frame>
       </Surface>
-    </Chapter>
+    </SubChapter>
   )
 }
 
@@ -88,7 +88,7 @@ export function DevTplPricing() {
     ["team", "$40", "var(--d-cyan)"],
   ] as const
   return (
-    <Chapter id="tpl-pricing" n="19" title="Template · Pricing" lead="Planos como tiers de conta: três colunas, o do meio destacado pela borda acesa.">
+    <SubChapter id="tpl-pricing" n="11.4" title="Template · Pricing" lead="Planos como tiers de conta: três colunas, o do meio destacado pela borda acesa.">
       <Surface>
         <div className="grid grid-cols-3 gap-2">
           {plans.map(([name, price, c], i) => (
@@ -100,14 +100,14 @@ export function DevTplPricing() {
           ))}
         </div>
       </Surface>
-    </Chapter>
+    </SubChapter>
   )
 }
 
 /** 20 · Perfil */
 export function DevTplProfile() {
   return (
-    <Chapter id="tpl-perfil" n="20" title="Template · Perfil" lead="A página do dev: avatar mono, bio, stack em tags e heatmap de contribuição.">
+    <SubChapter id="tpl-perfil" n="11.5" title="Template · Perfil" lead="A página do dev: avatar mono, bio, stack em tags e heatmap de contribuição.">
       <Surface>
         <Frame label="profile.tsx">
           <div className="flex items-center gap-3">
@@ -125,14 +125,14 @@ export function DevTplProfile() {
           </div>
         </Frame>
       </Surface>
-    </Chapter>
+    </SubChapter>
   )
 }
 
 /** 21 · Documentação */
 export function DevTplDocs() {
   return (
-    <Chapter id="tpl-docs" n="21" title="Template · Documentação" lead="Docs técnica: índice à esquerda, conteúdo com code fences, âncoras por seção.">
+    <SubChapter id="tpl-docs" n="11.6" title="Template · Documentação" lead="Docs técnica: índice à esquerda, conteúdo com code fences, âncoras por seção.">
       <Surface>
         <Frame label="docs.tsx">
           <div className="flex gap-3">
@@ -148,14 +148,14 @@ export function DevTplDocs() {
           </div>
         </Frame>
       </Surface>
-    </Chapter>
+    </SubChapter>
   )
 }
 
 /** 22 · Changelog */
 export function DevTplChangelog() {
   return (
-    <Chapter id="tpl-changelog" n="22" title="Template · Changelog" lead="Histórico versionado: um git log com semver, tag e tipo de commit.">
+    <SubChapter id="tpl-changelog" n="11.7" title="Template · Changelog" lead="Histórico versionado: um git log com semver, tag e tipo de commit.">
       <Surface>
         <div className="font-mono text-[11px] leading-relaxed">
           {[["v0.4.0", "feat", "índice do _Dev completo", "var(--d-green)"], ["v0.3.0", "feat", "portal dos 3 multiversos", "var(--d-green)"], ["v0.2.1", "refactor", "rotas centralizadas", "var(--d-purple)"]].map(([tag, tipo, msg, c]) => (
@@ -167,14 +167,14 @@ export function DevTplChangelog() {
           ))}
         </div>
       </Surface>
-    </Chapter>
+    </SubChapter>
   )
 }
 
 /** 23 · Coming soon */
 export function DevTplComingSoon() {
   return (
-    <Chapter id="tpl-coming-soon" n="23" title="Template · Coming soon" lead="A página de espera do dev: um build em andamento, não um contador com flores.">
+    <SubChapter id="tpl-coming-soon" n="11.8" title="Template · Coming soon" lead="A página de espera do dev: um build em andamento, não um contador com flores.">
       <Surface>
         <div className="dv-empty !mt-0">
           <p className="font-mono text-xs text-[var(--d-comment)]">{"// "}deploy agendado</p>
@@ -184,6 +184,6 @@ export function DevTplComingSoon() {
           <div className="learn-bar mx-auto mt-3 max-w-[200px]"><span style={{ width: "45%", background: "var(--d-purple)" }} /></div>
         </div>
       </Surface>
-    </Chapter>
+    </SubChapter>
   )
 }

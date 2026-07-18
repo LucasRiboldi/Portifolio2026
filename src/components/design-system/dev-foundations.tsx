@@ -5,7 +5,7 @@
    borda 1px, sem tinta preta nem halftone.
    ------------------------------------------------------------------ */
 import type { RealmDesign, Spec, Swatch } from "@/design-system/realms"
-import { Chapter, Surface } from "./dev-chapters"
+import { Chapter, SubChapter, Surface } from "./dev-chapters"
 
 /** Tabela de specs no tom do _Dev: chave = valor // uso. */
 function DevSpecTable({ rows }: { rows: Spec[] }) {
@@ -212,14 +212,14 @@ export function DevMotion({ d }: { d: RealmDesign }) {
 export function DevShapeSpecs({ d }: { d: RealmDesign }) {
   return (
     <>
-      <Chapter
+      <SubChapter
         id="elevacao"
-        n="03b"
+        n="03.1"
         title="Elevação & Raio"
         lead="Profundidade sutil: o card não tem sombra, só borda. Sombra fica para o que flutua — dock e overlays."
       >
         <DevSpecTable rows={[...d.elevation, ...d.radius]} />
-      </Chapter>
+      </SubChapter>
     </>
   )
 }

@@ -61,6 +61,50 @@ export function Chapter({
   )
 }
 
+/**
+ * Um capítulo pendurado noutro — o segundo nível do índice.
+ *
+ * O número vem de `architecture.ts` com o prefixo da mãe (09 → 09.7); este
+ * arquivo não inventa mais numeração própria. Antes ele rodava uma sequência
+ * 01–08 em paralelo à canônica, colidindo com as galerias de dev-library
+ * (dois "05", dois "06", dois "07", dois "08").
+ *
+ * A marca visual é `└─`, a notação de árvore do próprio terminal: no _Dev a
+ * hierarquia se desenha como `tree` desenha, assim como no Anfitrião ela se
+ * desenha com filete. Cada realm indica profundidade na própria língua.
+ */
+export function SubChapter({
+  id,
+  n,
+  title,
+  lead,
+  children,
+}: {
+  id: string
+  n: string
+  title: string
+  lead?: React.ReactNode
+  children: React.ReactNode
+}) {
+  return (
+    <section
+      id={id}
+      aria-label={`${n} · ${title}`}
+      className="mt-8 scroll-mt-24 border-l-2 border-[var(--d-current)] pl-4"
+    >
+      <p className="mb-2 flex items-baseline gap-2 font-mono text-xs font-bold text-[var(--d-cyan)]">
+        <span className="text-[var(--d-comment)]">└─</span>
+        <span className="text-[var(--d-comment)]">{n}</span>
+        {title}
+      </p>
+      {lead && (
+        <p className="mb-4 max-w-3xl text-[13px] leading-relaxed text-[var(--d-comment)]">{lead}</p>
+      )}
+      {children}
+    </section>
+  )
+}
+
 /* ---------------- 01 · sintaxe ---------------- */
 
 /**
@@ -98,13 +142,12 @@ const CONTRASTE = [
 
 const STATUS = ["idea", "mvp", "building", "done", "paused"] as const
 
-export function DevChapters() {
+/** 05.1 · A cor como gramática — matéria de Colors. */
+export function DevSintaxe() {
   return (
-    <>
-      {/* ---------- 01 ---------- */}
-      <Chapter
+      <SubChapter
         id="sintaxe"
-        n="01"
+        n="05.1"
         title="A paleta é um tema de sintaxe"
         lead={
           <>
@@ -136,12 +179,16 @@ export function DevChapters() {
             ))}
           </div>
         </Surface>
-      </Chapter>
+      </SubChapter>
+  )
+}
 
-      {/* ---------- 02 ---------- */}
-      <Chapter
+/** 09.7 · Terminal — matéria de Components. */
+export function DevTerminal() {
+  return (
+      <SubChapter
         id="terminal"
-        n="02"
+        n="09.7"
         title="Terminal"
         lead="O prompt é a assinatura do realm. Caret piscando em passos (nunca fade — cursor não desvanece), saída monoespaçada e exit code visível: 0 é verde, qualquer outra coisa é vermelha."
       >
@@ -174,12 +221,16 @@ export function DevChapters() {
             <p className="font-mono text-xs text-[var(--d-red)]">✗ 2 testes falharam</p>
           </Surface>
         </div>
-      </Chapter>
+      </SubChapter>
+  )
+}
 
-      {/* ---------- 03 ---------- */}
-      <Chapter
+/** 09.8 · Código & diff — matéria de Components. */
+export function DevCodigo() {
+  return (
+      <SubChapter
         id="codigo"
-        n="03"
+        n="09.8"
         title="Código & diff"
         lead="O bloco de código é conteúdo de primeira classe neste universo, não um adorno. O diff usa verde e vermelho da própria paleta — as mesmas tintas de sucesso e erro, porque adicionar e remover são exatamente isso."
       >
@@ -221,12 +272,16 @@ export function DevChapters() {
             </pre>
           </Surface>
         </div>
-      </Chapter>
+      </SubChapter>
+  )
+}
 
-      {/* ---------- 04 ---------- */}
-      <Chapter
+/** 09.9 · Estados de projeto — matéria de Components. */
+export function DevEstadosProjeto() {
+  return (
+      <SubChapter
         id="estados-projeto"
-        n="04"
+        n="09.9"
         title="Estados de projeto"
         lead="Um portfólio de dev mente quando mostra tudo como pronto. Os cinco estados existem para dizer a verdade sobre cada projeto — e cada um tem tinta própria, herdada do papel que a cor já cumpre na sintaxe."
       >
@@ -242,14 +297,19 @@ export function DevChapters() {
             .dv-status.idea · .mvp · .building · .done · .paused
           </p>
         </Surface>
-      </Chapter>
+      </SubChapter>
+  )
+}
 
-      {/* ---------- 05 ---------- */}
-      {/* id="cartoes" (não "components"): o grupo Components é o cluster de 6
-          galerias em dev-library.tsx; este é um capítulo nativo do _Dev. */}
-      <Chapter
+/* id="cartoes" (não "components"): o grupo Components é o cluster de 6
+   galerias em dev-library.tsx; este é um capítulo nativo do _Dev, e agora
+   entra formalmente como matéria 09.10 daquele grupo. */
+/** 09.10 · Cartões, tags e números — matéria de Components. */
+export function DevCartoes() {
+  return (
+      <SubChapter
         id="cartoes"
-        n="05"
+        n="09.10"
         title="Cartões, tags e números"
         lead="O card do _Dev não salta nem inclina: a borda acende e pronto. Nada aqui distrai de ler."
       >
@@ -278,12 +338,16 @@ export function DevChapters() {
             </div>
           </div>
         </Surface>
-      </Chapter>
+      </SubChapter>
+  )
+}
 
-      {/* ---------- 06 ---------- */}
-      <Chapter
+/** 10.6 · Devlog — matéria de Patterns: a timeline é um git log que virou UI. */
+export function DevDevlog() {
+  return (
+      <SubChapter
         id="devlog"
-        n="06"
+        n="10.6"
         title="Devlog"
         lead="A linha do tempo é o formato nativo de quem versiona: data à esquerda, o que mudou à direita. É um git log que virou UI."
       >
@@ -301,38 +365,25 @@ export function DevChapters() {
             ))}
           </div>
         </Surface>
-      </Chapter>
+      </SubChapter>
+  )
+}
 
-      {/* ---------- 07 ---------- */}
-      <Chapter
-        id="busca"
-        n="07"
-        title="Busca & filtros"
-        lead="Filtro é estado, não enfeite: data-on='true' liga, e a cor confirma. Sem drawer, sem modal — o dev quer ver e alternar no mesmo lugar."
-      >
-        <Surface>
-          <input className="dv-search w-full font-mono text-xs" placeholder="filtrar projetos…" readOnly />
-          <div className="dv-controls mt-3 flex flex-wrap gap-2">
-            <button type="button" className="dv-filter font-mono text-[10px]" data-on="true">
-              todos
-            </button>
-            <button type="button" className="dv-filter font-mono text-[10px]">
-              web
-            </button>
-            <button type="button" className="dv-filter font-mono text-[10px]">
-              cli
-            </button>
-            <button type="button" className="dv-filter font-mono text-[10px]">
-              lab
-            </button>
-          </div>
-        </Surface>
-      </Chapter>
+/* O capítulo id="busca" vivia aqui e foi REMOVIDO: era duplicata de
+   `pattern-busca` (dev-patterns.tsx) — mesmo .dv-search, mesmos quatro
+   filtros todos/web/cli/lab, e a mesma frase "sem drawer, sem modal" no
+   lead. Nasceu do commit de paridade com o Criativo, que criou o pattern
+   sem notar que o capítulo nativo já existia. Ficou o pattern, que é
+   superset (mostra também a contagem .dv-count). Ao reconciliar a
+   numeração os dois passariam a aparecer lado a lado em 10.x, e a
+   duplicação ficaria escancarada. */
 
-      {/* ---------- 08 ---------- */}
-      <Chapter
+/** 09.11 · Vazio — matéria de Components. */
+export function DevVazio() {
+  return (
+      <SubChapter
         id="vazio"
-        n="08"
+        n="09.11"
         title="Vazio"
         lead="Sem onomatopeia, sem ilustração: uma linha de comentário explicando o que fazer. O vazio do _Dev fala como o código fala."
       >
@@ -347,15 +398,15 @@ export function DevChapters() {
             </p>
           </div>
         </Surface>
-      </Chapter>
-    </>
+      </SubChapter>
   )
 }
 
 /**
- * 12 · Accessibility — separado de DevChapters para o corpo do _Dev poder
- * posicioná-lo na ordem do índice (entre Templates e Content Design), em vez
- * de ficar preso no fim do cluster de componentes.
+ * 12 · Accessibility — capítulo de topo. Exportado à parte para o corpo do
+ * _Dev poder posicioná-lo na ordem do índice (entre Templates e Content
+ * Design) em vez de ficar preso no fim do cluster de componentes. Hoje todos
+ * os capítulos deste arquivo são exportados assim; este foi só o primeiro.
  */
 export function DevAccessibility() {
   return (

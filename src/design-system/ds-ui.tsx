@@ -19,10 +19,40 @@ export function StatusPill({ status }: { status: ItemStatus }) {
   )
 }
 
-export function DsSectionTitle({ children, id }: { children: React.ReactNode; id?: string }) {
+/**
+ * Título de seção do scaffold comic.
+ *
+ * `n` é opcional de propósito: uma seção canônica do índice imprime o número
+ * (04 Typography), e uma seção específica do realm que não consta de
+ * `architecture.ts` (tokens de realm, raio, catálogo) não imprime nada. Sem
+ * isso o Criativo mostrava "Typography" no corpo enquanto a sidebar dizia
+ * "04 Typography" ao lado do mesmo link — o número existia só na margem.
+ *
+ * O `aria-label` só é montado quando há número, para o título continuar a ser
+ * anunciado pelo próprio texto nos demais casos.
+ */
+export function DsSectionTitle({
+  children,
+  id,
+  n,
+}: {
+  children: React.ReactNode
+  id?: string
+  n?: string
+}) {
   return (
-    <h2 id={id} className="sv-display art-chroma-soft mb-4 mt-10 text-2xl uppercase tracking-wide">
-      <span className="art-ghost opacity-50 text-[var(--sv-cyan)]">{"//"}</span>{" "}
+    <h2
+      id={id}
+      aria-label={n ? `${n} · ${typeof children === "string" ? children : id}` : undefined}
+      className="sv-display art-chroma-soft mb-4 mt-10 text-2xl uppercase tracking-wide"
+    >
+      {n ? (
+        <span className="mr-2 text-[var(--sv-yellow)]">{n}</span>
+      ) : (
+        <>
+          <span className="art-ghost opacity-50 text-[var(--sv-cyan)]">{"//"}</span>{" "}
+        </>
+      )}
       <span className="art-underline">{children}</span>
     </h2>
   )

@@ -138,20 +138,19 @@ export function ArcaneIntro({ d }: { d: RealmDesign }) {
           >
             Expediente
           </p>
-          <dl className="space-y-1.5 text-xs" style={{ color: "var(--dp-ink-2)" }}>
-            <div className="flex justify-between gap-2 border-b border-[var(--dp-rule)]/30 pb-1">
-              <dt style={{ color: "var(--dp-ink-3)" }}>Composição</dt>
-              <dd>Iowan · Playbill</dd>
-            </div>
-            <div className="flex justify-between gap-2 border-b border-[var(--dp-rule)]/30 pb-1">
-              <dt style={{ color: "var(--dp-ink-3)" }}>Folhas</dt>
-              <dd className="text-right">{d.css.join(" · ")}</dd>
-            </div>
-            <div className="flex justify-between gap-2">
-              <dt style={{ color: "var(--dp-ink-3)" }}>Rota</dt>
-              <dd>/anfitriao</dd>
-            </div>
-          </dl>
+          {/* `.dp-kv` já é exatamente isto: rótulo e valor nas pontas, com
+              pontilhado a separar. Estava refeito à mão com flex + border. */}
+          <div>
+            <p className="dp-kv">
+              <b>Composição</b> <span>Iowan · Playbill</span>
+            </p>
+            <p className="dp-kv">
+              <b>Folhas</b> <span className="text-right">{d.css.join(" · ")}</span>
+            </p>
+            <p className="dp-kv">
+              <b>Rota</b> <span>/anfitriao</span>
+            </p>
+          </div>
         </Folha>
       </div>
     </section>

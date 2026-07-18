@@ -6,7 +6,7 @@
    Tudo estático e escopado no `.dracula` do guia: são amostras reais das
    classes de dracula.css, não capturas.
    ------------------------------------------------------------------ */
-import { Chapter, Surface } from "./dev-chapters"
+import { Chapter, SubChapter, Surface } from "./dev-chapters"
 
 /** Botão Dracula — variantes por papel de cor, não por enfeite. */
 function Btn({
@@ -31,9 +31,9 @@ function Btn({
 /** 05 · Botões */
 export function DevButtons() {
   return (
-    <Chapter
+    <SubChapter
       id="botoes"
-      n="05"
+      n="09.1"
       title="Componentes · Botões"
       lead="Quatro papéis, quatro tintas: roxo é a ação primária, borda é a de apoio, rosa é o link, vermelho é destrutivo. A cor diz o que o botão faz."
     >
@@ -55,16 +55,16 @@ export function DevButtons() {
           .btn primary · secondary · ghost · danger · [disabled]
         </p>
       </Surface>
-    </Chapter>
+    </SubChapter>
   )
 }
 
 /** 06 · Inputs & Forms */
 export function DevInputs() {
   return (
-    <Chapter
+    <SubChapter
       id="inputs"
-      n="06"
+      n="09.2"
       title="Componentes · Inputs & Forms"
       lead="Campo é terminal: fundo recuado, borda que acende no foco (--d-purple/--d-cyan), texto mono. Rótulo em comentário, ajuda em cinza."
     >
@@ -89,16 +89,16 @@ export function DevInputs() {
         </div>
         <p className="mt-3 font-mono text-[10px] text-[var(--d-comment)]">.dv-search · .dv-tool-field</p>
       </Surface>
-    </Chapter>
+    </SubChapter>
   )
 }
 
 /** 07 · Seleção */
 export function DevSelection() {
   return (
-    <Chapter
+    <SubChapter
       id="selecao"
-      n="07"
+      n="09.3"
       title="Componentes · Seleção"
       lead="Filtro é estado, não enfeite: data-on liga, e a cor confirma. Abas com borda e raio 9px, checkbox que vira ✓ preenchido."
     >
@@ -133,16 +133,16 @@ export function DevSelection() {
         </div>
         <p className="mt-3 font-mono text-[10px] text-[var(--d-comment)]">.dv-tab · .dv-filter · checkbox</p>
       </Surface>
-    </Chapter>
+    </SubChapter>
   )
 }
 
 /** 08 · Data Display */
 export function DevDataDisplay() {
   return (
-    <Chapter
+    <SubChapter
       id="data-display"
-      n="08"
+      n="09.4"
       title="Componentes · Data Display"
       lead="Como o _Dev mostra dado: card sem sombra, contadores ligados a rotas, tags de stack, tabela mono e linha do tempo. Nada salta — lê-se."
     >
@@ -191,16 +191,16 @@ export function DevDataDisplay() {
           </tbody>
         </table>
       </Surface>
-    </Chapter>
+    </SubChapter>
   )
 }
 
 /** 09 · Overlays */
 export function DevOverlays() {
   return (
-    <Chapter
+    <SubChapter
       id="overlays"
-      n="09"
+      n="09.5"
       title="Componentes · Overlays"
       lead="O que flutua — e só aqui a sombra aparece (dock/overlay). Modal centrado, tooltip mono, dropdown que é uma lista de comandos."
     >
@@ -233,16 +233,16 @@ export function DevOverlays() {
           </span>
         </Surface>
       </div>
-    </Chapter>
+    </SubChapter>
   )
 }
 
 /** 10 · Feedback */
 export function DevFeedback() {
   return (
-    <Chapter
+    <SubChapter
       id="feedback"
-      n="10"
+      n="09.6"
       title="Componentes · Feedback"
       lead="O feedback do _Dev fala como o processo: exit code, barra de progresso, estado (idea→done) e o vazio como linha de comentário."
     >
@@ -270,7 +270,7 @@ export function DevFeedback() {
           </p>
         </div>
       </Surface>
-    </Chapter>
+    </SubChapter>
   )
 }
 
@@ -279,7 +279,7 @@ export function DevSections() {
   return (
     <Chapter
       id="secoes"
-      n="11"
+      n="17"
       title="Seções de página"
       lead="Os blocos que montam uma página do _Dev: hero com prompt, faixa de contadores e um CTA que é um comando."
     >

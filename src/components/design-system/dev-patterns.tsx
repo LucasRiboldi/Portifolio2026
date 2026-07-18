@@ -3,14 +3,14 @@
    pattern do Criativo (Login, Busca, Multi-step, FAQ). Onde o Criativo
    abre um formulário, aqui é um fluxo de terminal / pipeline.
    ------------------------------------------------------------------ */
-import { Chapter, Surface } from "./dev-chapters"
+import { SubChapter, Surface } from "./dev-chapters"
 
 /** 12 · Login / Auth — autenticação como sessão de terminal. */
 export function DevPatternLogin() {
   return (
-    <Chapter
+    <SubChapter
       id="pattern-login"
-      n="12"
+      n="10.1"
       title="Pattern · Login / Auth"
       lead="Autenticar é abrir uma sessão. Sem card centrado com sombra: um prompt pede o token, o segredo é mascarado, e o exit 0 confirma."
     >
@@ -34,16 +34,16 @@ export function DevPatternLogin() {
       <p className="mt-2 font-mono text-[10px] text-[var(--d-comment)]">
         {"// erro → exit 1: 'token inválido', foco volta ao campo"}
       </p>
-    </Chapter>
+    </SubChapter>
   )
 }
 
 /** 13 · Busca & filtros — ver e alternar no mesmo lugar. */
 export function DevPatternSearch() {
   return (
-    <Chapter
+    <SubChapter
       id="pattern-busca"
-      n="13"
+      n="10.2"
       title="Pattern · Busca & filtros"
       lead="Sem drawer, sem modal: campo, filtros ligados por data-on e a contagem do resultado. O dev quer ver e alternar sem sair da página."
     >
@@ -57,7 +57,7 @@ export function DevPatternSearch() {
           <span className="dv-count ml-auto">7 de 7</span>
         </div>
       </Surface>
-    </Chapter>
+    </SubChapter>
   )
 }
 
@@ -75,9 +75,9 @@ export function DevPatternMultiStep() {
     idle: "var(--d-comment)",
   }
   return (
-    <Chapter
+    <SubChapter
       id="pattern-multi-step"
-      n="14"
+      n="10.3"
       title="Pattern · Multi-step"
       lead="A jornada em etapas é um pipeline: cada passo tem um estado (done/running/idle), a barra mostra onde se está, e não se pula etapa quebrada."
     >
@@ -101,7 +101,7 @@ export function DevPatternMultiStep() {
         <div className="learn-bar mt-4"><span style={{ width: "62%", background: "var(--d-cyan)" }} /></div>
         <p className="mt-2 font-mono text-[10px] text-[var(--d-comment)]">{"// "}passo 3 de 4 — test em execução</p>
       </Surface>
-    </Chapter>
+    </SubChapter>
   )
 }
 
@@ -113,9 +113,9 @@ export function DevPatternFaq() {
     ["as amostras são reais?", "sim: usam as classes de dracula.css. se uma quebra, quebra aqui."],
   ]
   return (
-    <Chapter
+    <SubChapter
       id="pattern-faq"
-      n="15"
+      n="10.4"
       title="Pattern · FAQ"
       lead="Pergunta é uma linha de comentário; a resposta abre abaixo. Sem ícone de acordeão desenhado — o [+]/[−] basta."
     >
@@ -132,6 +132,6 @@ export function DevPatternFaq() {
           ))}
         </div>
       </Surface>
-    </Chapter>
+    </SubChapter>
   )
 }

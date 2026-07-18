@@ -1,6 +1,18 @@
 import type { RealmDesign } from "@/design-system/realms"
 import { DEV_INDEX } from "./dev-index-chapters"
-import { DevChapters, DevAccessibility, Chapter, Surface } from "./dev-chapters"
+import {
+  DevSintaxe,
+  DevTerminal,
+  DevCodigo,
+  DevEstadosProjeto,
+  DevCartoes,
+  DevDevlog,
+  DevVazio,
+  DevAccessibility,
+  Chapter,
+  SubChapter,
+  Surface,
+} from "./dev-chapters"
 import {
   DevIntro,
   DevTokens,
@@ -49,10 +61,44 @@ import { DevThemes, DevLab, DevDocs } from "./dev-extras"
  * O UI Kit chega por `kit` porque o preview vive na pasta da rota.
  */
 
-/** Âncora de grupo — o alvo que o índice de 16 seções promete (components…). */
-function Group({ id, children }: { id: string; children: React.ReactNode }) {
+/**
+ * Cabeçalho de um caderno que só tem matérias — o alvo que o índice promete
+ * para Components, Patterns e Templates.
+ *
+ * Era um `<section>` mudo: dava âncora ao id mas não desenhava nada. Enquanto
+ * as galerias tinham numeração plana própria (05, 06, 07…) isso passava
+ * despercebido; ao virarem 09.1, 09.2, 09.3 o buraco ficou visível — o leitor
+ * via a matéria sem nunca ver o caderno, e a sidebar apontava "09 Components"
+ * para um ponto sem título. Agora ele imprime o próprio cabeçalho, no mesmo
+ * compasso de Chapter.
+ */
+function Group({
+  id,
+  n,
+  title,
+  lead,
+  children,
+}: {
+  id: string
+  n: string
+  title: string
+  lead?: React.ReactNode
+  children: React.ReactNode
+}) {
   return (
-    <section id={id} className="scroll-mt-24">
+    <section
+      id={id}
+      aria-label={`${n} · ${title}`}
+      className="mt-14 scroll-mt-24 border-t border-[var(--d-current)] pt-9"
+    >
+      <p className="mb-3 flex items-baseline gap-2 font-mono text-sm font-bold text-[var(--d-orange)]">
+        <span className="text-[var(--d-purple)]">▍</span>
+        <span className="text-[var(--d-comment)]">{n}</span>
+        {title}
+      </p>
+      {lead && (
+        <p className="mb-5 max-w-3xl text-sm leading-relaxed text-[var(--d-comment)]">{lead}</p>
+      )}
       {children}
     </section>
   )
@@ -73,49 +119,68 @@ export function DeveloperGuide({ d, kit }: { d: RealmDesign; kit: React.ReactNod
       <DevTypography d={d} />
       <DevColors d={d} />
 
+      {/* 05.1 · a sintaxe é matéria de Colors: aqui a cor classifica, não decora */}
+      <DevSintaxe />
+
       {/* 06 · Grid · 07 · Iconography · 08 · Motion */}
       {DEV_INDEX.grid}
       {DEV_INDEX.iconography}
       <DevMotion d={d} />
 
-      {/* 09 · Components — as 6 galerias equiparam os 6 grupos do Criativo */}
-      <Group id="components">
+      {/* 09 · Components — as 6 galerias equiparam os 6 grupos do Criativo, e
+          os capítulos nativos do _Dev (terminal, diff, estados, cartões,
+          vazio) entram como matérias do mesmo caderno em vez de flutuarem
+          numa sequência 01–08 própria. O kit fecha o grupo. */}
+      <Group
+        id="components"
+        n="09"
+        title="Components"
+        lead="A biblioteca do realm, em doze matérias: seis galerias que equiparam os grupos do Criativo e cinco peças que só existem aqui — terminal, diff, estados de projeto, cartões e vazio. Fecha com o kit vivo, que é este mesmo catálogo rodando."
+      >
         <DevButtons />
         <DevInputs />
         <DevSelection />
         <DevDataDisplay />
         <DevOverlays />
         <DevFeedback />
+        <DevTerminal />
+        <DevCodigo />
+        <DevEstadosProjeto />
+        <DevCartoes />
+        <DevVazio />
+        <SubChapter
+          id="kit"
+          n="09.12"
+          title="UI Kit"
+          lead="Os componentes reais, não capturas — troque a versão para reimprimir o kit inteiro."
+        >
+          <div className="mt-1">{kit}</div>
+        </SubChapter>
       </Group>
 
-      {/* 11 · Seções de página */}
-      <DevSections />
-
-      {/* Vocabulário nativo do _Dev — o que o Criativo não tem: sintaxe, terminal,
-          diff, estados, cartões, devlog, busca, vazio. */}
-      <DevChapters />
-
-      {/* UI Kit vivo, por versão */}
-      <Chapter
-        id="kit"
-        n="09b"
-        title="UI Kit"
-        lead="Os componentes reais, não capturas — troque a versão para reimprimir o kit inteiro."
+      {/* 10 · Patterns — 4 fluxos equiparando os 4 do Criativo (+ command
+          palette + o devlog, que é o pattern de timeline nativo do realm) */}
+      <Group
+        id="patterns"
+        n="10"
+        title="Patterns"
+        lead="Composições que já vêm resolvidas: autenticação, busca, formulário em etapas e FAQ — mais duas nativas do realm, a paleta de comandos e o devlog. Não são telas, são arranjos que se repetem."
       >
-        <div className="mt-1">{kit}</div>
-      </Chapter>
-
-      {/* 10 · Patterns — 4 fluxos equiparando os 4 do Criativo (+ command palette) */}
-      <Group id="patterns">
         <DevPatternLogin />
         <DevPatternSearch />
         <DevPatternMultiStep />
         <DevPatternFaq />
         {DEV_INDEX.patterns}
+        <DevDevlog />
       </Group>
 
       {/* 11 · Templates — 8 páginas equiparando os 8 do Criativo (+ lista de rotas) */}
-      <Group id="templates">
+      <Group
+        id="templates"
+        n="11"
+        title="Templates"
+        lead="Páginas inteiras montadas com o kit, das oito que o portfólio realmente usa até a lista de rotas que as serve. Template aqui não é maquete: é a página que existe."
+      >
         <DevTplLanding />
         <DevTplDashboard />
         <DevTplArticle />
@@ -157,7 +222,10 @@ export function DeveloperGuide({ d, kit }: { d: RealmDesign; kit: React.ReactNod
       {/* 16 · Changelog */}
       {DEV_INDEX.changelog}
 
-      {/* 18-20 · Extras que agora entram no índice (secoes/11 está com components) */}
+      {/* 17–20 · os extras do índice. `secoes` estava renderizado lá em cima,
+          junto de Components, carregando n="11" (o número de Templates) — saiu
+          do lugar e do número. */}
+      <DevSections />
       <DevThemes />
       <DevLab />
       <DevDocs />

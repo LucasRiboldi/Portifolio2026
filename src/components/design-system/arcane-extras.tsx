@@ -15,15 +15,7 @@
    ------------------------------------------------------------------ */
 import type { RealmDesign } from "@/design-system/realms"
 import { REALM_VARIANTS } from "@/design-system/realm-variants"
-import { Chapter, Folha } from "./arcane-chapters"
-
-function Nota({ children }: { children: React.ReactNode }) {
-  return (
-    <p className="mt-1 text-[11px] leading-snug" style={{ color: "var(--dp-ink-3)" }}>
-      {children}
-    </p>
-  )
-}
+import { Chapter, Folha, Nota } from "./arcane-chapters"
 
 /* ══════════════ 17 · SEÇÕES DE PÁGINA ══════════════ */
 const BLOCOS = [
