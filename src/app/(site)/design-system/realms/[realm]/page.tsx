@@ -55,7 +55,9 @@ export default async function RealmDesignPage({ params }: { params: Promise<{ re
   return (
     <div
       className={`lg:flex lg:gap-10 ${
-        d.id === "developer" ? "dracula rounded-xl px-4 py-6 sm:px-6" : ""
+        // .dracula resolve as vars --d-*; bg-transparent deixa o ds-canvas--dev
+        // (fixo, atrás) aparecer em vez de a classe pintar uma caixa sólida.
+        d.id === "developer" ? "dracula bg-transparent" : ""
       }`}
     >
       {/* Índice do documento — sumário, não menu de rotas. */}

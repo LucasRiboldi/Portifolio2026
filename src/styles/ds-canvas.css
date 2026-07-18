@@ -1,0 +1,137 @@
+/**
+ * DS-CANVAS — o fundo animado, full-bleed, de cada realm no Design System.
+ * ------------------------------------------------------------------
+ * O layout do /design-system impunha o canvas comic (sv-canvas) a TODOS os
+ * realms — então o guia do _Dev (Dracula) e o do Anfitrião (folha) tinham
+ * um fundo roxo com halftone se mexendo por baixo, brigando com o tema.
+ *
+ * Aqui cada realm ganha o seu: uma camada `position: fixed` atrás de tudo
+ * (z-index negativo), opaca, com um efeito que combina com a linguagem do
+ * universo. Trocada pela rota em `DsCanvasAuto` (ds-canvas.tsx).
+ *
+ * Opaca de propósito: cobre o fundo do <body> (que pode ser claro fora do
+ * dark mode) sem depender dele.
+ */
+
+.ds-canvas {
+  position: fixed;
+  inset: 0;
+  z-index: -10;
+  pointer-events: none;
+  overflow: hidden;
+  isolation: isolate;
+}
+
+/* ================= COMIC (Criativo + seleção + sub-rotas) =================
+   Réplica do sv-canvas: ink profundo, três glows neon, halftone à deriva e
+   um leque de speedlines. É o default de tudo que não é dev/arcane. */
+.ds-canvas--comic {
+  background:
+    radial-gradient(circle at 15% 10%, rgba(123, 47, 247, 0.35), transparent 45%),
+    radial-gradient(circle at 85% 20%, rgba(255, 45, 149, 0.30), transparent 40%),
+    radial-gradient(circle at 50% 100%, rgba(0, 229, 255, 0.25), transparent 55%),
+    linear-gradient(160deg, var(--sv-ink, #0a0612), var(--sv-ink-2, #140a24));
+}
+.ds-canvas--comic::before {
+  content: "";
+  position: absolute;
+  inset: -50px;
+  background-image: radial-gradient(rgba(255, 45, 149, 0.5) 1.4px, transparent 1.6px);
+  background-size: 10px 10px;
+  opacity: 0.35;
+  mix-blend-mode: screen;
+  animation: ds-drift 22s linear infinite;
+}
+.ds-canvas--comic::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+  background: repeating-conic-gradient(
+    from 0deg at 70% 30%,
+    rgba(255, 230, 0, 0.06) 0deg 2deg,
+    transparent 2deg 8deg
+  );
+}
+
+/* ================= DEV (Dracula / terminal) =================
+   Base #282a36, glows verde e roxo do tema, e o movimento é de tubo: uma
+   grade de scanlines rolando devagar, como monitor de fósforo. */
+.ds-canvas--dev {
+  background:
+    radial-gradient(circle at 12% 8%, rgba(80, 250, 123, 0.10), transparent 42%),
+    radial-gradient(circle at 88% 88%, rgba(189, 147, 249, 0.14), transparent 46%),
+    radial-gradient(circle at 50% 50%, rgba(139, 233, 253, 0.05), transparent 60%),
+    linear-gradient(165deg, #282a36, #21222c 70%, #1a1b23);
+}
+/* scanlines finas rolando — o "flicker" do CRT, bem contido */
+.ds-canvas--dev::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  background-image: repeating-linear-gradient(
+    0deg,
+    rgba(80, 250, 123, 0.035) 0px,
+    rgba(80, 250, 123, 0.035) 1px,
+    transparent 1px,
+    transparent 4px
+  );
+  animation: ds-scan 8s linear infinite;
+}
+/* colunas de "código" à deriva — grade monoespaçada tênue */
+.ds-canvas--dev::after {
+  content: "";
+  position: absolute;
+  inset: -50px;
+  background-image:
+    repeating-linear-gradient(90deg, rgba(98, 114, 164, 0.05) 0 1px, transparent 1px 28px);
+  animation: ds-drift-y 30s linear infinite;
+}
+
+/* ================= ARCANE (folha / pressroom) =================
+   Não é papel claro (o conteúdo é escuro): é a redação à noite — tinta
+   marrom profunda, luz de lampião sépia, e uma retícula de newsprint
+   derivando devagar, porque papel não corre. */
+.ds-canvas--arcane {
+  background:
+    radial-gradient(circle at 20% 12%, rgba(122, 92, 52, 0.20), transparent 50%),
+    radial-gradient(circle at 82% 90%, rgba(154, 123, 40, 0.14), transparent 46%),
+    linear-gradient(170deg, #1c1710, #14100a 65%, #0e0b06);
+}
+/* newsprint: pontos sépia à deriva, lentos */
+.ds-canvas--arcane::before {
+  content: "";
+  position: absolute;
+  inset: -50px;
+  background-image: radial-gradient(rgba(154, 123, 40, 0.4) 1.2px, transparent 1.5px);
+  background-size: 9px 9px;
+  opacity: 0.3;
+  mix-blend-mode: screen;
+  animation: ds-drift 40s linear infinite;
+}
+/* filetes de coluna, o esqueleto da diagramação */
+.ds-canvas--arcane::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+  background-image:
+    repeating-linear-gradient(90deg, rgba(42, 34, 22, 0.5) 0 1px, transparent 1px 220px);
+  opacity: 0.5;
+}
+
+/* ================= keyframes ================= */
+@keyframes ds-drift {
+  to { background-position: 200px 120px; }
+}
+@keyframes ds-drift-y {
+  to { background-position: 0 260px; }
+}
+@keyframes ds-scan {
+  to { background-position: 0 32px; }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .ds-canvas::before,
+  .ds-canvas::after {
+    animation: none !important;
+  }
+}

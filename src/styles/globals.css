@@ -15,6 +15,7 @@
 @import "./realm-tokens.css";
 @import "./images.css";
 @import "./comic-cover.css";
+@import "./ds-canvas.css";
 
 @tailwind base;
 @tailwind components;

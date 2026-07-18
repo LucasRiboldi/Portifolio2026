@@ -1,4 +1,5 @@
 import type { Metadata } from "next"
+import { DsCanvasAuto } from "@/components/design-system/ds-canvas"
 
 export const metadata: Metadata = {
   title: "Design System · Design System",
@@ -7,13 +8,17 @@ export const metadata: Metadata = {
 }
 
 /**
- * Sem sidebar: o Design System é um documento único e corrido, lido de cima a
- * baixo, e não uma árvore para navegar. As rotas por seção continuam existindo
- * para linkar direto — elas é que são a fonte que a página única compõe.
+ * O fundo não é mais fixo no comic: `DsCanvasAuto` escolhe o canvas pelo realm
+ * da rota (comic / dev / arcane), full-bleed atrás do conteúdo. Antes o
+ * `sv-canvas` aqui impunha o multiverso comic ao guia Dracula e ao da folha.
+ *
+ * Sem sidebar de árvore: o Design System é um documento corrido; o índice de
+ * cada realm é o sumário daquele documento.
  */
 export default function DesignSystemLayout({ children }: { children: React.ReactNode }) {
   return (
-    <div className="sv-canvas min-h-screen">
+    <div className="relative min-h-screen">
+      <DsCanvasAuto />
       <div className="mx-auto max-w-[1200px] px-4 py-10">
         <main className="min-w-0 pb-24">{children}</main>
       </div>
