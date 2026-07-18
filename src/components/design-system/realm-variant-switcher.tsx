@@ -27,10 +27,22 @@ export function RealmVariantSwitcher({
   // Realm sem variantes declaradas: mostra o kit no estado padrão, sem seletor.
   if (!active) return <>{children}</>
 
+  // O Anfitrião vive numa folha clara: os controles brancos-sobre-escuro do
+  // comic sumiriam. Aqui eles viram tinta sobre papel — sem sombra de comic.
+  const arc = realm === "arcane"
+  const labelCls = arc ? "text-[var(--dp-ink-3)]" : "text-white/50"
+  const descCls = arc ? "text-[var(--dp-ink-2)]" : "text-white/55"
+  const onCls = arc
+    ? "border-[var(--dp-rule)] bg-[var(--dp-ink)] text-[var(--dp-paper)]"
+    : "border-black bg-[var(--sv-yellow)] text-black shadow-[3px_3px_0_0_#000]"
+  const offCls = arc
+    ? "border-[var(--dp-rule)] bg-[var(--dp-paper)] text-[var(--dp-ink-2)] hover:bg-[var(--dp-paper-2)]"
+    : "border-black bg-white/10 text-white/70 shadow-[2px_2px_0_0_rgba(0,0,0,0.4)]"
+
   return (
     <div>
       <div className="mb-4 flex flex-wrap items-center gap-2">
-        <span className="sv-heavy mr-1 text-[11px] uppercase tracking-wide text-white/50">
+        <span className={cn("mr-1 text-[11px] uppercase tracking-wide", arc ? "" : "sv-heavy", labelCls)}>
           {VARIANT_LABEL[realm]}:
         </span>
         {variants.map(v => {
@@ -43,10 +55,9 @@ export function RealmVariantSwitcher({
               aria-pressed={on}
               title={v.desc}
               className={cn(
-                "sv-heavy border-2 border-black px-2.5 py-1 text-[10px] uppercase tracking-wide transition-transform hover:-translate-y-0.5",
-                on
-                  ? "bg-[var(--sv-yellow)] text-black shadow-[3px_3px_0_0_#000]"
-                  : "bg-white/10 text-white/70 shadow-[2px_2px_0_0_rgba(0,0,0,0.4)]"
+                "border-2 px-2.5 py-1 text-[10px] uppercase tracking-wide transition-transform hover:-translate-y-0.5",
+                arc ? "" : "sv-heavy",
+                on ? onCls : offCls
               )}
             >
               {v.label}
@@ -55,7 +66,7 @@ export function RealmVariantSwitcher({
         })}
       </div>
 
-      <p className="mb-4 text-xs leading-snug text-white/55">{active.desc}</p>
+      <p className={cn("mb-4 text-xs leading-snug", descCls)}>{active.desc}</p>
 
       {/* a classe da variante entra por fora do kit inteiro */}
       <div className={active.className}>{children}</div>

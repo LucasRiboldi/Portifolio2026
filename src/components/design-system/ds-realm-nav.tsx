@@ -21,16 +21,27 @@ export function DsRealmNav({ realm }: { realm: RealmId }) {
   const secoes = sectionsFor(realm)
   const [ativa, setAtiva] = useState<string | null>(null)
 
-  // O _Dev tem chrome próprio (Dracula): o índice acompanha, com roxo/ciano no
-  // lugar do ciano-comic, para a página inteira falar a mesma língua.
+  // Cada realm com chrome próprio tinge o índice na sua língua, para a página
+  // inteira falar de um jeito só: o _Dev em roxo/ciano Dracula, o Anfitrião em
+  // sépia/ouro sobre a mesa escura da redação. O índice fica na margem (fundo
+  // escuro), então usa os tons claros da paleta, não a tinta sobre papel.
   const dev = realm === "developer"
+  const arc = realm === "arcane"
   const activeCls = dev
     ? "bg-[var(--d-purple)]/20 text-[var(--d-purple)]"
-    : "bg-[var(--sv-cyan)]/15 text-[var(--sv-cyan)]"
+    : arc
+      ? "bg-[#9a7b28]/25 text-[#e8dcbe]"
+      : "bg-[var(--sv-cyan)]/15 text-[var(--sv-cyan)]"
   const idleCls = dev
     ? "text-[var(--d-comment)] hover:bg-[var(--d-current)]/40 hover:text-[var(--d-fg)]"
-    : "text-white/60 hover:bg-white/5 hover:text-white"
-  const wipCls = dev ? "text-[var(--d-orange)]/80" : "text-[var(--sv-yellow)]/70"
+    : arc
+      ? "text-[#c9b892]/70 hover:bg-[#9a7b28]/15 hover:text-[#e8dcbe]"
+      : "text-white/60 hover:bg-white/5 hover:text-white"
+  const wipCls = dev
+    ? "text-[var(--d-orange)]/80"
+    : arc
+      ? "text-[#c8a24a]/80"
+      : "text-[var(--sv-yellow)]/70"
 
   useEffect(() => {
     const alvos = secoes

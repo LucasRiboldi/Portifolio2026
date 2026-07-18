@@ -8,12 +8,12 @@ import { RealmKitPreview } from "./kit-preview"
 import { RealmMotionLab } from "@/components/design-system/realm-motion-lab"
 import { RealmVariantSwitcher } from "@/components/design-system/realm-variant-switcher"
 import { CreativeChapters } from "@/components/design-system/creative-chapters"
-import { ArcaneChapters } from "@/components/design-system/arcane-chapters"
 import { DsRealmNav } from "@/components/design-system/ds-realm-nav"
 import { DsIntroduction } from "@/components/design-system/ds-introduction"
 import { DsTokenTables, DsColors } from "@/components/design-system/ds-token-tables"
 import { SpecTable, RealmTokenGrid } from "@/components/design-system/realm-specs"
 import { DeveloperGuide } from "@/components/design-system/developer-guide"
+import { ArcaneGuide } from "@/components/design-system/arcane-guide"
 
 export function generateStaticParams() {
   return REALM_DESIGN_IDS.map((realm) => ({ realm }))
@@ -64,11 +64,21 @@ export default async function RealmDesignPage({ params }: { params: Promise<{ re
       <DsRealmNav realm={d.id} />
 
       <div className="min-w-0 flex-1">
-      {/* O _Dev tem chrome próprio (Dracula, header de terminal) — sem ComicHeader
-          nem sv-canvas: a página inteira é o realm. Os outros realms usam o
-          scaffold comic. O kit vai por prop porque o preview vive na pasta da rota. */}
+      {/* _Dev e Anfitrião têm chrome próprio — terminal Dracula e folha de
+          jornal — sem ComicHeader nem sv-canvas: a página inteira é o realm. Só
+          o Criativo usa o scaffold comic. O kit vai por prop porque o preview
+          vive na pasta da rota. */}
       {d.id === "developer" ? (
         <DeveloperGuide
+          d={d}
+          kit={
+            <RealmVariantSwitcher realm={d.id}>
+              <RealmKitPreview realm={d.id} scope={d.scope} />
+            </RealmVariantSwitcher>
+          }
+        />
+      ) : d.id === "arcane" ? (
+        <ArcaneGuide
           d={d}
           kit={
             <RealmVariantSwitcher realm={d.id}>
@@ -238,14 +248,9 @@ export default async function RealmDesignPage({ params }: { params: Promise<{ re
         ))}
       </div>
 
-      {/* ---------- Guia completo, na língua de cada realm ----------
-          Cada realm tem o corpo que o seu universo comporta, não uma lista
-          comum repintada: o Criativo é uma revista (capa, painel, template
-          de página); o _Dev é um editor (sintaxe, prompt, diff, devlog).
-          Por isso não há "template de pricing" no _Dev nem "realce de
-          sintaxe" no Criativo. */}
-      {d.id === "creative" && <CreativeChapters />}
-      {d.id === "arcane" && <ArcaneChapters />}
+      {/* Só o Criativo chega aqui (o _Dev e o Anfitrião têm guia próprio acima).
+          O corpo comic — capa, painel, templates de página. */}
+      <CreativeChapters />
         </>
       )}
       </div>

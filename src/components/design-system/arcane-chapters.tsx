@@ -14,19 +14,29 @@
    `.dp`. Se uma delas quebrar, quebra aqui.
    ------------------------------------------------------------------ */
 
-/** Superfície do realm: o CSS do Anfitrião é escopado em `.dp`. */
-function Folha({ children, className = "" }: { children: React.ReactNode; className?: string }) {
+/**
+ * Uma caixa dentro da folha — o "boxed item" do jornal: anúncio, quadro,
+ * exemplo cercado por fio. Fundo `--dp-paper-2` (o tom de recuo) para se
+ * destacar da folha sem virar outra cor. Exportada: as seções de fundação
+ * (arcane-foundations) usam a mesma caixa.
+ */
+export function Folha({ children, className = "" }: { children: React.ReactNode; className?: string }) {
   return (
     <div
-      className={`dp overflow-hidden rounded-sm border-2 border-black p-5 ${className}`}
-      style={{ background: "var(--dp-paper)", color: "var(--dp-ink)" }}
+      className={`overflow-hidden border border-[var(--dp-rule)] p-5 ${className}`}
+      style={{ background: "var(--dp-paper-2)", color: "var(--dp-ink)" }}
     >
       {children}
     </div>
   )
 }
 
-function Chapter({
+/**
+ * Cabeçalho de seção no ritmo do jornal: fio grosso, o número como fólio e o
+ * título em slab (`--dp-head`). Nada de magenta nem branco — a folha inteira é
+ * tinta sobre papel. Exportada para arcane-foundations usar o mesmo compasso.
+ */
+export function Chapter({
   id,
   n,
   title,
@@ -40,16 +50,25 @@ function Chapter({
   children: React.ReactNode
 }) {
   return (
-    <section
-      id={id}
-      aria-label={`${n} · ${title}`}
-      className="mt-16 scroll-mt-24 border-t-[3px] border-black pt-10"
-    >
-      <p className="sv-heavy mb-3 text-[11px] uppercase tracking-[0.2em] text-[var(--sv-magenta)]">
-        <span className="sv-display mr-2 text-2xl text-[var(--sv-yellow)]">{n}</span>
+    <section id={id} aria-label={`${n} · ${title}`} className="mt-14 scroll-mt-24">
+      <div className="dp-rule dp-rule--thick" />
+      <p
+        className="mb-3 mt-2 flex items-baseline gap-3 text-2xl uppercase leading-none"
+        style={{ fontFamily: "var(--dp-head)", color: "var(--dp-ink)" }}
+      >
+        <span className="text-base" style={{ color: "var(--dp-sepia)" }}>
+          №&nbsp;{n}
+        </span>
         {title}
       </p>
-      {lead && <p className="mb-5 max-w-3xl text-sm leading-relaxed text-white/70">{lead}</p>}
+      {lead && (
+        <p
+          className="mb-5 max-w-3xl text-sm leading-relaxed"
+          style={{ color: "var(--dp-ink-2)", fontFamily: "var(--dp-body)" }}
+        >
+          {lead}
+        </p>
+      )}
       {children}
     </section>
   )
@@ -131,7 +150,7 @@ export function ArcaneChapters() {
     <>
       {/* ---------- 01 ---------- */}
       <Chapter
-        id="vozes"
+        id="typography"
         n="01"
         title="As quatro vozes"
         lead={
@@ -182,15 +201,15 @@ export function ArcaneChapters() {
         lead={
           <>
             Duas coisas diferentes, e confundi-las quebra a página. A{" "}
-            <strong>grade</strong> (<code className="text-[var(--sv-cyan)]">.dp-grid</code>) divide a
+            <strong>grade</strong> (<code className="text-[var(--dp-sepia)]">.dp-grid</code>) divide a
             folha em matéria e trilho. O <strong>corpo</strong> (
-            <code className="text-[var(--sv-cyan)]">.dp-lead-body</code>) é ele próprio multi-coluna
+            <code className="text-[var(--dp-sepia)]">.dp-lead-body</code>) é ele próprio multi-coluna
             — de 2 a 4 colunas conforme a largura. Aninhar um dentro do outro produz colunas de uma
             palavra: o corpo já é o motor de colunas, precisa da medida cheia.
           </>
         }
       >
-        <p className="mb-2 font-mono text-[10px] text-white/40">
+        <p className="mb-2 font-mono text-[10px] text-[var(--dp-ink-3)]">
           .dp-lead-body — o corpo em medida cheia, fluindo em colunas reais
         </p>
         <Folha>
@@ -206,7 +225,7 @@ export function ArcaneChapters() {
           </p>
         </Folha>
 
-        <p className="mb-2 mt-5 font-mono text-[10px] text-white/40">
+        <p className="mb-2 mt-5 font-mono text-[10px] text-[var(--dp-ink-3)]">
           .dp-grid · .dp-col--rail — a grade da página: matéria e trilho
         </p>
         <Folha>
@@ -264,7 +283,7 @@ export function ArcaneChapters() {
             A letra que desce três linhas existe desde o manuscrito iluminado: marca onde o texto
             começa de verdade. Uma por matéria — duas e o olho não sabe mais onde entrar. Ela vive
             no início de <em>uma</em> coluna:{" "}
-            <code className="text-[var(--sv-cyan)]">.dp-cap</code> usa float, e dentro de um bloco
+            <code className="text-[var(--dp-sepia)]">.dp-cap</code> usa float, e dentro de um bloco
             multi-coluna o float ancora na coluna errada, separando a capitular da própria palavra.
             Por isso a demo abaixo é de coluna única — que é onde ela pertence.
           </>
@@ -406,7 +425,7 @@ export function ArcaneChapters() {
             </div>
           </Folha>
         </div>
-        <p className="mt-3 font-mono text-[10px] text-white/35">
+        <p className="mt-3 font-mono text-[10px] text-[var(--dp-ink-3)]">
           .dp-ad · .dp-ad-head · .dp-ad-sign · .dp-notice
         </p>
       </Chapter>
@@ -454,11 +473,11 @@ export function ArcaneChapters() {
         lead={
           <>
             Medido pela fórmula do WCAG 2 sobre os <strong>dois</strong> papéis, e é aí que está a
-            armadilha: a folha tem duas superfícies. <code className="text-[var(--sv-cyan)]">--dp-ink-3</code>{" "}
-            e <code className="text-[var(--sv-cyan)]">--dp-sepia</code> passam no papel claro e{" "}
+            armadilha: a folha tem duas superfícies. <code className="text-[var(--dp-sepia)]">--dp-ink-3</code>{" "}
+            e <code className="text-[var(--dp-sepia)]">--dp-sepia</code> passam no papel claro e{" "}
             <strong>caem no escuro</strong> — escolher a tinta sem saber sobre qual papel vai
             imprimir é como aprovar contraste no Figma e reprovar no site. Já o{" "}
-            <code className="text-[var(--sv-cyan)]">--dp-gold</code> reprova nos dois (2.94:1): é
+            <code className="text-[var(--dp-sepia)]">--dp-gold</code> reprova nos dois (2.94:1): é
             ornamento, nunca texto.
           </>
         }
