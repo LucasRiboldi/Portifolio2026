@@ -1,6 +1,6 @@
 "use client"
 
-import { useRef } from "react"
+import { useEffect, useRef, useState } from "react"
 import { useReducedMotion } from "motion/react"
 
 /**
@@ -65,8 +65,8 @@ export interface TcgCardDef {
 const adjust = (v: number, fMin: number, fMax: number, tMin: number, tMax: number) =>
   tMin + ((tMax - tMin) * (v - fMin)) / (fMax - fMin)
 
-interface Vec { x: number; y: number; o: number }
-const REST: Vec = { x: 50, y: 50, o: 0 }
+interface Vec { x: number; y: number; o: number; tx: number; ty: number; s: number }
+const REST: Vec = { x: 50, y: 50, o: 0, tx: 0, ty: 0, s: 1 }
 
 export function HoloTcgCard({ def }: { def: TcgCardDef }) {
   const cardRef = useRef<HTMLDivElement>(null)
@@ -74,16 +74,19 @@ export function HoloTcgCard({ def }: { def: TcgCardDef }) {
   const cur = useRef<Vec>({ ...REST })
   const target = useRef<Vec>({ ...REST })
   const ease = useRef(0.35)
+  const popEase = useRef(0.12)
   const raf = useRef<number | null>(null)
+  const [active, setActive] = useState(false)
 
   function tick() {
     const el = cardRef.current
     if (!el) { raf.current = null; return }
     const c = cur.current
     const t = target.current
-    const k = ease.current
     let done = true
-    for (const key of ["x", "y", "o"] as const) {
+    for (const key of ["x", "y", "o", "tx", "ty", "s"] as const) {
+      // ponteiro segue o ease da interação; pop (translate/scale) tem o seu
+      const k = key === "tx" || key === "ty" || key === "s" ? popEase.current : ease.current
       c[key] += (t[key] - c[key]) * k
       if (Math.abs(t[key] - c[key]) > 0.01) done = false
       else c[key] = t[key]
@@ -100,6 +103,9 @@ export function HoloTcgCard({ def }: { def: TcgCardDef }) {
     el.style.setProperty("--rotate-y", `${((c.y - 50) / 3.5).toFixed(2)}deg`)
     el.style.setProperty("--background-x", `${adjust(c.x, 0, 100, 37, 63).toFixed(2)}%`)
     el.style.setProperty("--background-y", `${adjust(c.y, 0, 100, 33, 67).toFixed(2)}%`)
+    el.style.setProperty("--translate-x", `${c.tx.toFixed(1)}px`)
+    el.style.setProperty("--translate-y", `${c.ty.toFixed(1)}px`)
+    el.style.setProperty("--card-scale", c.s.toFixed(3))
     raf.current = done ? null : requestAnimationFrame(tick)
   }
 
@@ -109,6 +115,7 @@ export function HoloTcgCard({ def }: { def: TcgCardDef }) {
     if (reduceMotion) return
     const r = e.currentTarget.getBoundingClientRect()
     target.current = {
+      ...target.current,
       x: Math.min(100, Math.max(0, ((e.clientX - r.left) / r.width) * 100)),
       y: Math.min(100, Math.max(0, ((e.clientY - r.top) / r.height) * 100)),
       o: 1,
@@ -118,16 +125,73 @@ export function HoloTcgCard({ def }: { def: TcgCardDef }) {
   }
 
   function leave() {
-    target.current = { ...REST }
+    target.current = { ...target.current, x: 50, y: 50, o: 0 }
     ease.current = 0.06
     schedule()
   }
+
+  /** Popover do original: centraliza no viewport e amplia até caber (máx 1.75×). */
+  function setCenterAndScale() {
+    const el = cardRef.current
+    if (!el) return
+    const rect = el.getBoundingClientRect()
+    const c = cur.current
+    // desconta o translate já aplicado para achar a posição de repouso
+    const baseX = rect.x - c.tx
+    const baseY = rect.y - c.ty
+    const baseW = rect.width / c.s
+    const baseH = rect.height / c.s
+    const view = document.documentElement
+    target.current.tx = Math.round(view.clientWidth / 2 - baseX - baseW / 2)
+    target.current.ty = Math.round(view.clientHeight / 2 - baseY - baseH / 2)
+    target.current.s = Math.min(
+      (window.innerWidth / baseW) * 0.9,
+      (window.innerHeight / baseH) * 0.9,
+      1.75
+    )
+    schedule()
+  }
+
+  function deactivate() {
+    setActive(false)
+    target.current = { ...target.current, tx: 0, ty: 0, s: 1 }
+    popEase.current = 0.08
+    schedule()
+  }
+
+  function toggle() {
+    if (active) { deactivate(); return }
+    setActive(true)
+    popEase.current = 0.12
+    setCenterAndScale()
+  }
+
+  // com a carta ampliada: Esc fecha, clique fora fecha, scroll/resize recentram
+  useEffect(() => {
+    if (!active) return
+    const onKey = (e: KeyboardEvent) => { if (e.key === "Escape") deactivate() }
+    const onDown = (e: PointerEvent) => {
+      if (!cardRef.current?.contains(e.target as Node)) deactivate()
+    }
+    const onShift = () => setCenterAndScale()
+    window.addEventListener("keydown", onKey)
+    window.addEventListener("pointerdown", onDown)
+    window.addEventListener("scroll", onShift, { passive: true })
+    window.addEventListener("resize", onShift)
+    return () => {
+      window.removeEventListener("keydown", onKey)
+      window.removeEventListener("pointerdown", onDown)
+      window.removeEventListener("scroll", onShift)
+      window.removeEventListener("resize", onShift)
+    }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [active])
 
   return (
     <figure className="m-0">
       <div
         ref={cardRef}
-        className="card interactive"
+        className={`card interactive ${active ? "active interacting" : ""}`}
         data-rarity={def.rarity}
         data-supertype={def.supertype ?? "pokémon"}
         data-subtypes={def.subtypes ?? "basic"}
@@ -158,6 +222,8 @@ export function HoloTcgCard({ def }: { def: TcgCardDef }) {
             className="card__rotator"
             onPointerMove={move}
             onPointerLeave={leave}
+            onClick={toggle}
+            aria-expanded={active}
             aria-label={`Carta ${def.name} no estilo ${def.label}`}
           >
             {/* alt="" — a face é decorativa; o botão já carrega o rótulo */}
