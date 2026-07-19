@@ -131,3 +131,19 @@
     background-position: 50% 50%;
   }
 }
+
+/* ---------------------------------------------------------------------------
+   Popover das cartas TCG (.card do sistema poke-holo vendorizado):
+   a carta ampliada precisa ficar À FRENTE DE TUDO — inclusive da navbar
+   (header sticky z-50) e dos stacking contexts dos wrappers (o SvCanvas
+   envolve o conteúdo num div `relative z-[1]`, que prende qualquer z-index
+   interno). Enquanto houver uma carta ativa, :has() eleva a cadeia inteira
+   de ancestrais; ao fechar, tudo volta ao empilhamento normal. */
+.card.active {
+  position: relative;
+  z-index: 300;
+}
+:is(figure, div, section, main, article):has(.card.active) {
+  position: relative;
+  z-index: 120;
+}
