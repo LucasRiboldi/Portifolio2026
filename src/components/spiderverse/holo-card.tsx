@@ -1,42 +1,107 @@
 "use client"
 
-import { useRef } from "react"
+import { useEffect, useRef } from "react"
 import { useReducedMotion } from "motion/react"
 import { CenaSalto } from "@/components/design-system/creative-assets"
 
+/** Remap linear (o `adjust` do pokemon-cards-css). */
+function adjust(v: number, fromMin: number, fromMax: number, toMin: number, toMax: number) {
+  return toMin + ((toMax - toMin) * (v - fromMin)) / (fromMax - fromMin)
+}
+
+interface HoloState {
+  rx: number
+  ry: number
+  mx: number
+  my: number
+  o: number
+}
+
+const REST: HoloState = { rx: 0, ry: 0, mx: 50, my: 50, o: 0 }
+
 /**
- * Carta colecionável holográfica — o efeito do poke-holo (tilt 3D + foil
- * arco-íris + glare especular seguindo o cursor), reconstruído sobre o
- * design system do realm: a arte é a CenaSalto do acervo (15.1) e as cores
- * do foil são as quatro tintas neon do multiverso.
+ * Carta colecionável holográfica — técnica do simeydotme/pokemon-cards-css
+ * (ver memória pokemon-cards-css-holo-technique), reconstruída sobre o DS:
+ * arte CenaSalto (15.1) e sunpillars HSL do original.
  *
- * O componente só escreve variáveis CSS (--rx/--ry/--mx/--my/--o); o desenho
- * das camadas vive em holo-card.css. `prefers-reduced-motion` congela tudo.
+ * Como no original, o JS só escreve variáveis; a diferença é que lá os
+ * valores passam por springs do Svelte — aqui um suavizador exponencial em
+ * rAF faz o mesmo papel: perseguição rápida na interação (0.35) e
+ * assentamento lento no leave (0.06), que é o que dá o "peso" da carta.
  */
 export function HoloCard({ className = "" }: { className?: string }) {
   const ref = useRef<HTMLDivElement>(null)
   const reduceMotion = useReducedMotion()
+
+  const cur = useRef<HoloState>({ ...REST })
+  const target = useRef<HoloState>({ ...REST })
+  const ease = useRef(0.35)
+  const raf = useRef<number | null>(null)
+
+  useEffect(() => {
+    return () => {
+      if (raf.current !== null) cancelAnimationFrame(raf.current)
+    }
+  }, [])
+
+  function tick() {
+    const el = ref.current
+    if (!el) {
+      raf.current = null
+      return
+    }
+    const c = cur.current
+    const t = target.current
+    const k = ease.current
+    let done = true
+    for (const key of ["rx", "ry", "mx", "my", "o"] as const) {
+      c[key] += (t[key] - c[key]) * k
+      if (Math.abs(t[key] - c[key]) > 0.01) done = false
+      else c[key] = t[key]
+    }
+
+    // distância do ponteiro ao centro, 0..1 — modula a intensidade
+    const pfc = Math.min(1, Math.hypot(c.mx - 50, c.my - 50) / 50)
+
+    el.style.setProperty("--rx", `${c.ry.toFixed(2)}deg`)
+    el.style.setProperty("--ry", `${c.rx.toFixed(2)}deg`)
+    el.style.setProperty("--mx", `${c.mx.toFixed(2)}%`)
+    el.style.setProperty("--my", `${c.my.toFixed(2)}%`)
+    // remap 37–63 do original: o foil anda menos que o ponteiro
+    el.style.setProperty("--bx", `${adjust(c.mx, 0, 100, 37, 63).toFixed(2)}%`)
+    el.style.setProperty("--by", `${adjust(c.my, 0, 100, 33, 67).toFixed(2)}%`)
+    el.style.setProperty("--o", c.o.toFixed(3))
+    el.style.setProperty("--pfc", pfc.toFixed(3))
+
+    raf.current = done ? null : requestAnimationFrame(tick)
+  }
+
+  function schedule() {
+    if (raf.current === null) raf.current = requestAnimationFrame(tick)
+  }
 
   function move(e: React.PointerEvent<HTMLDivElement>) {
     if (reduceMotion) return
     const el = ref.current
     if (!el) return
     const r = el.getBoundingClientRect()
-    const px = (e.clientX - r.left) / r.width // 0..1
-    const py = (e.clientY - r.top) / r.height
-    el.style.setProperty("--rx", `${(0.5 - py) * 24}deg`)
-    el.style.setProperty("--ry", `${(px - 0.5) * 24}deg`)
-    el.style.setProperty("--mx", `${px * 100}%`)
-    el.style.setProperty("--my", `${py * 100}%`)
-    el.style.setProperty("--o", "1")
+    const px = Math.min(1, Math.max(0, (e.clientX - r.left) / r.width))
+    const py = Math.min(1, Math.max(0, (e.clientY - r.top) / r.height))
+    target.current = {
+      rx: (px - 0.5) * 24,
+      ry: (0.5 - py) * 24,
+      mx: px * 100,
+      my: py * 100,
+      o: 1,
+    }
+    ease.current = 0.35
+    schedule()
   }
 
   function leave() {
-    const el = ref.current
-    if (!el) return
-    el.style.setProperty("--rx", "0deg")
-    el.style.setProperty("--ry", "0deg")
-    el.style.setProperty("--o", "0")
+    target.current = { ...REST }
+    ease.current = 0.06
+    schedule()
   }
 
   return (

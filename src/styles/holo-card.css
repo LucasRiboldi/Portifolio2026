@@ -1,12 +1,18 @@
 /* ==========================================================================
-   Holo Card — carta colecionável holográfica (efeito poke-holo)
+   Holo Card — carta colecionável holográfica
    --------------------------------------------------------------------------
-   Três camadas, como no TCG real:
-     1. a carta (frente com a arte)
-     2. .holo-card__shine — foil arco-íris em color-dodge, deslocado pelo cursor
-     3. .holo-card__glare — reflexo especular no ponto exato do ponteiro
-   O JS (holo-card.tsx) só escreve variáveis: --rx/--ry (tilt), --mx/--my
-   (posição do ponteiro em %), --o (intensidade). Todo o desenho vive aqui.
+   Técnica estudada do simeydotme/pokemon-cards-css (ver memória
+   pokemon-cards-css-holo-technique):
+     · shine = repeating-linear-gradient de 6 "sunpillars" HSL + scanlines,
+       combinadas por background-blend-mode e queimadas em color-dodge;
+       o ::before repete o gradiente com as cores rotacionadas e correndo
+       na direção oposta — a interferência entre as camadas é a profundidade
+     · o foil corre CONTRA o ponteiro com ganho: (50% - --bx) * 2.6 + 50%
+     · glare = radial-gradient no ponto do ponteiro, em overlay
+     · intensidade modulada por --pfc (distância do ponteiro ao centro)
+   O JS (holo-card.tsx) só escreve variáveis via um spring; o desenho é CSS.
+   Sem a máscara por área do TCG real, o foil de carta inteira fica tímido
+   de propósito — acima de ~0.5 ele engole o texto.
    ========================================================================== */
 
 .holo-card {
@@ -15,15 +21,21 @@
   border-radius: 4.55% / 3.5%;
   transform: perspective(900px) rotateX(var(--rx, 0deg)) rotateY(var(--ry, 0deg));
   transform-style: preserve-3d;
-  transition: transform 0.25s ease;
   will-change: transform;
   box-shadow:
     0 0 3px -1px rgba(255, 255, 255, 0.6),
     0 22px 34px -18px rgba(0, 0, 0, 0.65);
+  transition: box-shadow 0.4s ease;
 }
 
-.holo-card:hover {
-  transition: transform 0.08s ease;
+/* Glow de carta ativa, como o box-shadow por "tipo" do original. */
+.holo-card:hover,
+.holo-card:focus-visible {
+  box-shadow:
+    0 0 3px -1px #fff,
+    0 0 12px 2px rgba(255, 45, 149, 0.55),
+    0 0 40px -18px var(--sv-cyan),
+    0 22px 34px -18px rgba(0, 0, 0, 0.65);
 }
 
 .holo-card__front {
@@ -37,34 +49,61 @@
   flex-direction: column;
 }
 
-/* Foil: faixa diagonal de arco-íris que corre contra o tilt. */
+/* ---- Shine: sunpillars + scanlines, duas camadas defasadas -------------- */
 .holo-card__shine {
   position: absolute;
   inset: 0;
   z-index: 3;
   pointer-events: none;
   border-radius: inherit;
+  overflow: hidden;
   mix-blend-mode: color-dodge;
-  /* Sem a máscara por área do TCG real, o foil de carta inteira precisa ser
-     bem mais tímido — acima de ~0.4 ele engole o texto da carta. */
-  opacity: calc(var(--o, 0) * 0.35);
+  opacity: calc(var(--o, 0) * (0.2 + 0.3 * var(--pfc, 0)));
   background-image:
     repeating-linear-gradient(
-      115deg,
-      transparent 0%,
-      var(--sv-cyan) 4%,
-      var(--sv-magenta) 8%,
-      var(--sv-yellow) 12%,
-      var(--sv-lime) 16%,
-      transparent 20%
-    );
-  background-size: 220% 220%;
-  background-position: calc(var(--mx, 50%) * 1.4 - 20%) calc(var(--my, 50%) * 1.4 - 20%);
-  filter: brightness(0.7) contrast(1.5) saturate(1.2);
+      110deg,
+      hsl(2, 100%, 73%) 0%,
+      hsl(53, 100%, 69%) 5%,
+      hsl(93, 100%, 69%) 10%,
+      hsl(176, 100%, 76%) 15%,
+      hsl(228, 100%, 74%) 20%,
+      hsl(283, 100%, 73%) 25%,
+      hsl(2, 100%, 73%) 30%
+    ),
+    repeating-linear-gradient(90deg, #666 0 1px, #000 1px 3.5px);
+  background-size: 400% 400%, cover;
+  background-position:
+    calc(((50% - var(--bx, 50%)) * 2.6) + 50%) calc(((50% - var(--by, 50%)) * 3.5) + 50%),
+    center center;
+  background-blend-mode: overlay;
+  filter: brightness(0.8) contrast(2.1) saturate(0.85);
   transition: opacity 0.3s ease;
 }
 
-/* Glare: o brilho especular no ponto do ponteiro. */
+/* Segunda camada: sunpillars rotacionadas correndo na direção oposta. */
+.holo-card__shine::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  border-radius: inherit;
+  background-image: repeating-linear-gradient(
+    110deg,
+    hsl(228, 100%, 74%) 0%,
+    hsl(283, 100%, 73%) 5%,
+    hsl(2, 100%, 73%) 10%,
+    hsl(53, 100%, 69%) 15%,
+    hsl(93, 100%, 69%) 20%,
+    hsl(176, 100%, 76%) 25%,
+    hsl(228, 100%, 74%) 30%
+  );
+  background-size: 400% 400%;
+  background-position:
+    calc(((50% - var(--bx, 50%)) * -1.8) + 50%) calc(((50% - var(--by, 50%)) * -2.4) + 50%);
+  mix-blend-mode: overlay;
+  opacity: 0.55;
+}
+
+/* ---- Glare: reflexo especular no ponto do ponteiro ---------------------- */
 .holo-card__glare {
   position: absolute;
   inset: 0;
@@ -72,11 +111,11 @@
   pointer-events: none;
   border-radius: inherit;
   mix-blend-mode: overlay;
-  opacity: calc(var(--o, 0) * 0.65);
+  opacity: calc(var(--o, 0) * (0.35 + 0.35 * var(--pfc, 0)));
   background: radial-gradient(
     farthest-corner circle at var(--mx, 50%) var(--my, 50%),
-    rgba(255, 255, 255, 0.75) 8%,
-    rgba(255, 255, 255, 0.28) 26%,
+    rgba(255, 255, 255, 0.75) 10%,
+    rgba(255, 255, 255, 0.28) 24%,
     rgba(0, 0, 0, 0.5) 90%
   );
   transition: opacity 0.3s ease;
@@ -85,11 +124,10 @@
 @media (prefers-reduced-motion: reduce) {
   .holo-card {
     transform: none !important;
-    transition: none;
   }
   .holo-card__shine,
   .holo-card__glare {
-    opacity: 0.25;
+    opacity: 0.22;
     background-position: 50% 50%;
   }
 }
