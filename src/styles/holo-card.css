@@ -1,0 +1,95 @@
+/* ==========================================================================
+   Holo Card — carta colecionável holográfica (efeito poke-holo)
+   --------------------------------------------------------------------------
+   Três camadas, como no TCG real:
+     1. a carta (frente com a arte)
+     2. .holo-card__shine — foil arco-íris em color-dodge, deslocado pelo cursor
+     3. .holo-card__glare — reflexo especular no ponto exato do ponteiro
+   O JS (holo-card.tsx) só escreve variáveis: --rx/--ry (tilt), --mx/--my
+   (posição do ponteiro em %), --o (intensidade). Todo o desenho vive aqui.
+   ========================================================================== */
+
+.holo-card {
+  position: relative;
+  aspect-ratio: 660 / 921;
+  border-radius: 4.55% / 3.5%;
+  transform: perspective(900px) rotateX(var(--rx, 0deg)) rotateY(var(--ry, 0deg));
+  transform-style: preserve-3d;
+  transition: transform 0.25s ease;
+  will-change: transform;
+  box-shadow:
+    0 0 3px -1px rgba(255, 255, 255, 0.6),
+    0 22px 34px -18px rgba(0, 0, 0, 0.65);
+}
+
+.holo-card:hover {
+  transition: transform 0.08s ease;
+}
+
+.holo-card__front {
+  position: absolute;
+  inset: 0;
+  overflow: hidden;
+  border-radius: inherit;
+  border: 3px solid #000;
+  background: linear-gradient(165deg, #35127a, #4a1a9c 45%, #6a2fd6 85%, #8f2fb8);
+  display: flex;
+  flex-direction: column;
+}
+
+/* Foil: faixa diagonal de arco-íris que corre contra o tilt. */
+.holo-card__shine {
+  position: absolute;
+  inset: 0;
+  z-index: 3;
+  pointer-events: none;
+  border-radius: inherit;
+  mix-blend-mode: color-dodge;
+  /* Sem a máscara por área do TCG real, o foil de carta inteira precisa ser
+     bem mais tímido — acima de ~0.4 ele engole o texto da carta. */
+  opacity: calc(var(--o, 0) * 0.35);
+  background-image:
+    repeating-linear-gradient(
+      115deg,
+      transparent 0%,
+      var(--sv-cyan) 4%,
+      var(--sv-magenta) 8%,
+      var(--sv-yellow) 12%,
+      var(--sv-lime) 16%,
+      transparent 20%
+    );
+  background-size: 220% 220%;
+  background-position: calc(var(--mx, 50%) * 1.4 - 20%) calc(var(--my, 50%) * 1.4 - 20%);
+  filter: brightness(0.7) contrast(1.5) saturate(1.2);
+  transition: opacity 0.3s ease;
+}
+
+/* Glare: o brilho especular no ponto do ponteiro. */
+.holo-card__glare {
+  position: absolute;
+  inset: 0;
+  z-index: 4;
+  pointer-events: none;
+  border-radius: inherit;
+  mix-blend-mode: overlay;
+  opacity: calc(var(--o, 0) * 0.65);
+  background: radial-gradient(
+    farthest-corner circle at var(--mx, 50%) var(--my, 50%),
+    rgba(255, 255, 255, 0.75) 8%,
+    rgba(255, 255, 255, 0.28) 26%,
+    rgba(0, 0, 0, 0.5) 90%
+  );
+  transition: opacity 0.3s ease;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .holo-card {
+    transform: none !important;
+    transition: none;
+  }
+  .holo-card__shine,
+  .holo-card__glare {
+    opacity: 0.25;
+    background-position: 50% 50%;
+  }
+}

@@ -4,6 +4,7 @@ import { ComicCover } from "@/components/home/comic-cover"
 import { SvCanvas } from "@/components/spiderverse/sv-canvas"
 import { Onoma } from "@/components/spiderverse/decor"
 import { ArcaneProphet } from "@/components/realms/arcane-prophet"
+import { HoloCard } from "@/components/spiderverse/holo-card"
 import { getProjects } from "@/lib/repos/projects"
 import { getTools } from "@/lib/repos/tools"
 
@@ -83,7 +84,21 @@ export default async function CriativoHome() {
             <BentoGrid projects={projects} tools={tools} />
           </section>
 
-          {/* ---------- 3. CHAMADA DO MULTIVERSO ----------
+          {/* ---------- 3. CARTA COLECIONÁVEL ---------- */}
+          <section className="mt-16 sm:mt-24" aria-labelledby="sec-carta">
+            <SectionHeading
+              id="sec-carta"
+              kicker="Item raro"
+              title="Carta"
+              highlight="holográfica"
+              subtitle="Mova o mouse sobre a carta — foil, brilho e tilt reagem ao ponteiro, como uma carta rara de verdade."
+            />
+            <div className="mx-auto w-[min(320px,85vw)]">
+              <HoloCard />
+            </div>
+          </section>
+
+          {/* ---------- 4. CHAMADA DO MULTIVERSO ----------
               Sem grade de dimensões aqui: os próprios cards do miolo já são
               as dimensões. Esta faixa só aponta para o índice completo. */}
           <section className="art-tape relative mt-16 sm:mt-24" aria-labelledby="sec-multiverso">
