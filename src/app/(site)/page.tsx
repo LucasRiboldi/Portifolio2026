@@ -1,5 +1,5 @@
-// A rota "/" é a porta da frente: o script de gate no <head> (src/app/layout.tsx)
-// já redireciona antes do paint (primeiro acesso → /portal; com a chave → /criativo).
+// A rota "/" é a porta da frente: o script no <head> (src/app/layout.tsx)
+// redireciona antes do paint — sempre para /portal, a tela de escolha de perfil.
 // Este componente é só o fallback para navegadores sem JS.
 export default function FrontDoor() {
   return (

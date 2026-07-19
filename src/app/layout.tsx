@@ -75,7 +75,7 @@ export default async function RootLayout({
   const [settings, site] = await Promise.all([getRealmSettings(), getSiteConfig()]);
 
   // Script de gate + anti-FOUC (roda antes do paint).
-  // Lê as rotas do registry REALMS, pinta data-realm na <html>, redireciona "/" via gate localStorage.
+  // Lê as rotas do registry REALMS, pinta data-realm na <html>, redireciona "/" para o portal.
   const routeChecks = Object.entries(REALMS)
     .map(([_, realm]) => `if(p.indexOf('${realm.route}')===0)r='${realm.id}';`)
     .join("");
@@ -84,8 +84,7 @@ export default async function RootLayout({
     "(function(){try{var p=location.pathname,r='creative';" +
     routeChecks +
     "document.documentElement.setAttribute('data-realm',r);" +
-    "if(p==='/'){var e=false;try{e=localStorage.getItem('lr.portal.v1')==='1';}catch(x){}" +
-    "location.replace(e?'/criativo':'/portal');}}catch(e){}})()";
+    "if(p==='/'){location.replace('/portal');}}catch(e){}})()";
 
   return (
     <html
