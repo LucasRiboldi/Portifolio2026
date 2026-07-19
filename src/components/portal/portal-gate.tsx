@@ -23,25 +23,21 @@ export function PortalGate() {
     router.push(route)
   }
 
+  // Só os logos: cada painel é o logo do perfil, e o logo é o botão.
+  // O nome sobrevive para leitores de tela (aria-label) e como tooltip.
   return (
     <div className="portal">
-      <div className="portal-top">
-        <div className="portal-kick">Escolha seu multiverso</div>
-        <p className="portal-title">Uma pessoa, <b>três</b> universos.</p>
-      </div>
       <div className="portal-stage">
-        {PANELS.map(({ id, name, role, route, glow, accent, Logo }) => (
+        {PANELS.map(({ id, name, route, glow, accent, Logo }) => (
           <button
             key={id}
             className="portal-panel"
             style={{ ["--glow" as string]: glow, ["--accent" as string]: accent }}
             onClick={() => enter(route)}
             aria-label={`Entrar no multiverso ${name}`}
+            title={name}
           >
             <span className="portal-logo"><Logo /></span>
-            <span className="portal-name"><b>{name}</b></span>
-            <span className="portal-role">{role}</span>
-            <span className="portal-enter">Entrar →</span>
           </button>
         ))}
       </div>
