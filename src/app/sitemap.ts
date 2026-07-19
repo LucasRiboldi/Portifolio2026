@@ -6,7 +6,7 @@ export default function sitemap(): MetadataRoute.Sitemap {
   return [
     // /styleguide fora de propósito: virou redirect para o guia do Criativo.
     // Sitemap não deve anunciar rota que só redireciona.
-    "", "/portfolio", "/dimensoes", "/design-system",
+    "", "/portfolio", "/cards", "/dimensoes", "/design-system",
     "/design-system/realms/creative",
     "/design-system/realms/developer",
     "/design-system/realms/arcane",

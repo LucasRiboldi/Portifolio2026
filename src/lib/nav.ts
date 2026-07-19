@@ -14,6 +14,7 @@ export interface NavLink {
  */
 export const SITE_LINKS: NavLink[] = [
   { label: "Portfólio", href: "/portfolio" },
+  { label: "Cards", href: "/cards" },
   { label: "Dimensões", href: "/dimensoes" },
   { label: "Design System", href: "/design-system" },
 ]
