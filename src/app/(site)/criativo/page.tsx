@@ -5,6 +5,7 @@ import { SvCanvas } from "@/components/spiderverse/sv-canvas"
 import { Onoma } from "@/components/spiderverse/decor"
 import { ArcaneProphet } from "@/components/realms/arcane-prophet"
 import { HoloCard } from "@/components/spiderverse/holo-card"
+import { PokeHoloGallery } from "@/components/spiderverse/poke-holo-gallery"
 import { getProjects } from "@/lib/repos/projects"
 import { getTools } from "@/lib/repos/tools"
 
@@ -96,6 +97,18 @@ export default async function CriativoHome() {
             <div className="mx-auto w-[min(320px,85vw)]">
               <HoloCard />
             </div>
+          </section>
+
+          {/* ---------- 3b. A COLEÇÃO ---------- */}
+          <section className="mt-16 sm:mt-24" aria-labelledby="sec-colecao">
+            <SectionHeading
+              id="sec-colecao"
+              kicker="Booster aberto"
+              title="A coleção"
+              highlight="completa"
+              subtitle="Uma carta LR em cada raridade do TCG — holo, cosmos, rainbow, secreta, shiny e mais. Passe o mouse em cada uma."
+            />
+            <PokeHoloGallery />
           </section>
 
           {/* ---------- 4. CHAMADA DO MULTIVERSO ----------
