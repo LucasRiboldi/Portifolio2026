@@ -40,3 +40,7 @@ storybook-static
 _*.mjs
 .env.vercel.tmp
 .playwright-mcp/
+
+# originais pesados do deck ThunderCats — só as webs otimizadas (/web) entram no git
+/public/cards-thundercats/*
+!/public/cards-thundercats/web/

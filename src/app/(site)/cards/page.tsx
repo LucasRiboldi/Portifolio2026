@@ -2,6 +2,7 @@ import { SvCanvas } from "@/components/spiderverse/sv-canvas"
 import { ComicHeader, Onoma } from "@/components/spiderverse/decor"
 import { HoloCard } from "@/components/spiderverse/holo-card"
 import { PokeHoloGallery } from "@/components/spiderverse/poke-holo-gallery"
+import { ThundercatsGallery } from "@/components/spiderverse/thundercats-gallery"
 
 export const metadata = { title: "Cards" }
 
@@ -42,6 +43,18 @@ export default function CardsPage() {
           subtitle="Cartas reais do TCG, uma em cada raridade — holo, cosmos, amazing, full art, VMAX, secreta. Passe o mouse em cada uma."
         />
         <PokeHoloGallery />
+      </section>
+
+      {/* ---------- 3. DECK THUNDERCATS ---------- */}
+      <section className="mt-16 sm:mt-24" aria-label="Deck ThunderCats">
+        <ComicHeader
+          as="h2"
+          kicker="Thunder, thunder…"
+          title="Deck"
+          highlight="ThunderCats"
+          subtitle="O deck de Commander com proxies temáticos de ThunderCats — cada carta com um efeito holográfico do sistema."
+        />
+        <ThundercatsGallery />
       </section>
     </SvCanvas>
   )
