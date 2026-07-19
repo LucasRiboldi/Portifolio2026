@@ -5,14 +5,14 @@ import { useReducedMotion } from "motion/react"
 
 /**
  * Galeria de raridades — o CSS REAL do simeydotme/pokemon-cards-css
- * (vendorizado em /public/poke-holo) aplicado a uma carta LR por estilo.
+ * (vendorizado em /public/poke-holo) aplicado às cartas hi-res baixadas
+ * na mesma pasta, cada uma com o foil oficial correspondente (webp).
  *
  * A estrutura DOM é a do original (.card > __translater > __rotator >
- * __front img + __shine + __glare): o base.css estiliza `.card__rotator *`
- * com display:grid/grid-area:1/1, então a face PRECISA ser uma imagem única
- * (lr-front.svg) — conteúdo HTML rico quebraria. O JS escreve as mesmas
- * variáveis do original; os foils por carta do TCG (CDN) são substituídos
- * pelas texturas locais genéricas via --foil inline.
+ * __front img + __shine + __glare). O JS escreve as mesmas variáveis do
+ * original; onde a carta tem foil próprio (V, full art, VMAX, secreta,
+ * trainer gallery) ele entra via --foil inline — nas demais raridades o
+ * CSS usa os fallbacks (glitter, grain, cosmos, illusion) de /img.
  */
 
 const CSS_FILES = [
@@ -27,48 +27,65 @@ const CSS_FILES = [
   "cards/v-regular.css",
   "cards/v-full-art.css",
   "cards/v-max.css",
-  "cards/v-star.css",
-  "cards/rainbow-holo.css",
-  "cards/rainbow-alt.css",
   "cards/secret-rare.css",
-  "cards/shiny-rare.css",
-  "cards/shiny-v.css",
-  "cards/shiny-vmax.css",
   "cards/trainer-gallery-holo.css",
+  "cards/trainer-gallery-v-max.css",
 ]
 
-interface StyleDef {
+interface CardDef {
+  img: string
+  name: string
   rarity: string
   label: string
   desc: string
+  foil?: string
   supertype?: string
+  subtypes?: string
   trainerGallery?: boolean
   vars?: Record<string, string>
 }
 
-const FOIL = "url(/poke-holo/img/illusion.png)"
-
-const STYLES: StyleDef[] = [
-  { rarity: "common", label: "Comum", desc: "Sem foil — a linha de base" },
-  { rarity: "rare holo", label: "Holo clássica", desc: "Barras verticais + arco-íris" },
-  { rarity: "rare holo cosmos", label: "Cosmos", desc: "Galáxia em três camadas",
+/** Ordem de booster: das comuns às secretas. */
+const CARDS: CardDef[] = [
+  { img: "33_hires.png", name: "Squirtle", rarity: "common",
+    label: "Comum", desc: "Sem foil — a linha de base" },
+  { img: "116_hires.png", name: "Morpeko", rarity: "common",
+    label: "Incomum", desc: "Arte texturizada, ainda sem foil" },
+  { img: "49_hires.png", name: "Pikachu", rarity: "reverse holo",
+    label: "Reverse holo", desc: "Foil no fundo, arte fosca" },
+  { img: "29_hires.png", name: "Zapdos", rarity: "rare holo",
+    label: "Holo clássica", desc: "Barras verticais + arco-íris" },
+  { img: "SWSH012_hires.png", name: "Morpeko", rarity: "rare holo cosmos",
+    label: "Cosmos", desc: "Galáxia em três camadas",
     vars: { "--cosmosbg": "286px 232px" } },
-  { rarity: "reverse holo", label: "Reverse holo", desc: "Foil no fundo, arte fosca" },
-  { rarity: "amazing rare", label: "Amazing rare", desc: "Explosão além da moldura" },
-  { rarity: "radiant rare", label: "Radiant", desc: "Cross-hatch metálico" },
-  { rarity: "rare holo v", label: "V", desc: "Faixas geométricas diagonais" },
-  { rarity: "rare ultra", label: "Full art V", desc: "Textura gravada + brilho",
-    supertype: "pokémon" },
-  { rarity: "rare holo vmax", label: "VMAX", desc: "Foil amplo de fundo" },
-  { rarity: "rare holo vstar", label: "VSTAR", desc: "Branco perolado" },
-  { rarity: "rare rainbow", label: "Rainbow", desc: "Pastel iridescente + glitter" },
-  { rarity: "rare rainbow alt", label: "Rainbow alt", desc: "Iridescência densa" },
-  { rarity: "rare secret", label: "Secreta dourada", desc: "Ouro gravado" },
-  { rarity: "rare shiny", label: "Shiny", desc: "Cintilância prateada" },
-  { rarity: "rare shiny v", label: "Shiny V", desc: "Prata + faixas V" },
-  { rarity: "rare shiny vmax", label: "Shiny VMAX", desc: "Prata em tela cheia" },
-  { rarity: "trainer gallery rare holo", label: "Trainer gallery", desc: "Aquarela holográfica",
-    trainerGallery: true },
+  { img: "21_hires.png", name: "Kyogre", rarity: "amazing rare",
+    label: "Amazing rare", desc: "Explosão além da moldura" },
+  { img: "82_hires.png", name: "Zacian", rarity: "amazing rare",
+    label: "Amazing rare", desc: "Foil que vaza da arte" },
+  { img: "59_hires.png", name: "Radiant Alakazam", rarity: "radiant rare",
+    label: "Radiant", desc: "Cross-hatch metálico" },
+  { img: "138_hires.png", name: "Lugia V", rarity: "rare holo v",
+    label: "V", desc: "Faixas geométricas diagonais",
+    foil: "138_foil_holo_sunpillar_2x.webp" },
+  { img: "250_hires.png", name: "Mew V", rarity: "rare ultra",
+    label: "Full art V", desc: "Textura gravada + brilho",
+    foil: "250_foil_etched_sunpillar_2x.webp" },
+  { img: "SWSH181_hires.png", name: "Vaporeon V", rarity: "rare ultra",
+    label: "Alt art V", desc: "Gravação sunpillar na ilustração",
+    foil: "181_foil_etched_sunpillar_2x.webp" },
+  { img: "271_hires.png", name: "Gengar VMAX", rarity: "rare holo vmax",
+    label: "VMAX alt", desc: "Gravação secreta em tela cheia", subtypes: "vmax",
+    foil: "271_foil_etched_swsecret_2x.webp" },
+  { img: "160_hires.png", name: "Pikachu", rarity: "rare secret",
+    label: "Secreta", desc: "Foil gravado além do set",
+    foil: "160_foil_etched_swsecret_2x.webp" },
+  { img: "TG05_hires.png", name: "Pikachu & Akari", rarity: "trainer gallery rare holo",
+    label: "Trainer gallery", desc: "Aquarela holográfica", trainerGallery: true,
+    foil: "tg05_foil_holo_rainbow_2x.webp" },
+  { img: "TG17_hires.png", name: "Pikachu VMAX", rarity: "rare holo vmax",
+    label: "TG VMAX", desc: "Gravação sunpillar em tela cheia",
+    subtypes: "vmax", trainerGallery: true,
+    foil: "tg17_foil_etched_sunpillar_2x.webp" },
 ]
 
 const adjust = (v: number, fMin: number, fMax: number, tMin: number, tMax: number) =>
@@ -77,7 +94,7 @@ const adjust = (v: number, fMin: number, fMax: number, tMin: number, tMax: numbe
 interface Vec { x: number; y: number; o: number }
 const REST: Vec = { x: 50, y: 50, o: 0 }
 
-function GalleryCard({ def }: { def: StyleDef }) {
+function GalleryCard({ def }: { def: CardDef }) {
   const cardRef = useRef<HTMLDivElement>(null)
   const reduceMotion = useReducedMotion()
   const cur = useRef<Vec>({ ...REST })
@@ -139,7 +156,7 @@ function GalleryCard({ def }: { def: StyleDef }) {
         className="card interactive"
         data-rarity={def.rarity}
         data-supertype={def.supertype ?? "pokémon"}
-        data-subtypes="basic"
+        data-subtypes={def.subtypes ?? "basic"}
         data-trainer-gallery={def.trainerGallery ? "true" : undefined}
         style={{
           "--card-scale": "1",
@@ -155,7 +172,9 @@ function GalleryCard({ def }: { def: StyleDef }) {
           "--pointer-from-center": "0",
           "--pointer-from-top": "0.5",
           "--pointer-from-left": "0.5",
-          "--foil": FOIL,
+          // foil oficial da carta quando existe; sem ele, valem os
+          // fallbacks de cada raridade no CSS vendorizado
+          ...(def.foil ? { "--foil": `url(/poke-holo/${def.foil})` } : {}),
           ...def.vars,
         } as React.CSSProperties}
       >
@@ -165,12 +184,12 @@ function GalleryCard({ def }: { def: StyleDef }) {
             className="card__rotator"
             onPointerMove={move}
             onPointerLeave={leave}
-            aria-label={`Carta LR no estilo ${def.label}`}
+            aria-label={`Carta ${def.name} no estilo ${def.label}`}
           >
             {/* alt="" — a face é decorativa; o botão já carrega o rótulo */}
             <img className="card__back" src="/poke-holo/lr-back.svg" alt="" loading="lazy" width={660} height={921} />
             <div className="card__front">
-              <img src="/poke-holo/lr-front.svg" alt="" loading="lazy" width={660} height={921} />
+              <img src={`/poke-holo/${def.img}`} alt="" loading="lazy" width={734} height={1024} />
               <div className="card__shine" />
               <div className="card__glare" />
             </div>
@@ -179,7 +198,9 @@ function GalleryCard({ def }: { def: StyleDef }) {
       </div>
       <figcaption className="mt-3 text-center">
         <span className="sv-display block text-sm uppercase text-white">{def.label}</span>
-        <span className="sv-heavy text-[10px] uppercase tracking-wide text-white/55">{def.desc}</span>
+        <span className="sv-heavy text-[10px] uppercase tracking-wide text-white/55">
+          {def.name} · {def.desc}
+        </span>
       </figcaption>
     </figure>
   )
@@ -193,8 +214,8 @@ export function PokeHoloGallery() {
         <link key={f} rel="stylesheet" href={`/poke-holo/css/${f}`} precedence={`poke-${f}`} />
       ))}
       <div className="grid gap-x-6 gap-y-10 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4">
-        {STYLES.map((s) => (
-          <GalleryCard key={s.rarity} def={s} />
+        {CARDS.map((c) => (
+          <GalleryCard key={c.img} def={c} />
         ))}
       </div>
     </>

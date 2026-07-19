@@ -39,7 +39,7 @@ export default function CardsPage() {
           kicker="Booster aberto"
           title="A coleção"
           highlight="completa"
-          subtitle="Uma carta LR em cada raridade do TCG — holo, cosmos, rainbow, secreta, shiny e mais. Passe o mouse em cada uma."
+          subtitle="Cartas reais do TCG, uma em cada raridade — holo, cosmos, amazing, full art, VMAX, secreta. Passe o mouse em cada uma."
         />
         <PokeHoloGallery />
       </section>
