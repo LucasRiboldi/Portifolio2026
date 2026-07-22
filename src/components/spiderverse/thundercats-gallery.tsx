@@ -1,6 +1,7 @@
 "use client"
 
 import { HoloTcgCard, HoloTcgStylesheets, type TcgCardDef } from "./holo-tcg-card"
+import { PokeHand } from "./poke-hand"
 
 /**
  * Galeria ThunderCats — o deck de Commander com proxies temáticos
@@ -91,11 +92,13 @@ export function ThundercatsGallery() {
   return (
     <>
       <HoloTcgStylesheets />
-      <div className="grid gap-x-6 gap-y-10 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4">
+      {/* no celular vira leque rolável: 45 cartas em coluna dariam uma
+          página sem fim */}
+      <PokeHand className="grid gap-x-6 gap-y-10 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4">
         {CARDS.map((c, i) => (
           <HoloTcgCard key={`${c.img}-${i}`} def={c} />
         ))}
-      </div>
+      </PokeHand>
     </>
   )
 }

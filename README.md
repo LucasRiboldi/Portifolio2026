@@ -19,6 +19,7 @@
 
 [![Vercel](https://img.shields.io/badge/▲_AO_VIVO-ff2d95?style=for-the-badge&logo=vercel&logoColor=white&labelColor=000000)](https://portifolio2026-two.vercel.app)
 [![Portal](https://img.shields.io/badge/🚪_O_PORTAL-7b2ff7?style=for-the-badge&labelColor=000000)](https://portifolio2026-two.vercel.app/portal)
+[![Cards](https://img.shields.io/badge/🃏_CARDS_HOLO-ffe600?style=for-the-badge&logoColor=black&labelColor=000000)](https://portifolio2026-two.vercel.app/cards)
 [![Design System](https://img.shields.io/badge/🎨_DESIGN_SYSTEM-00e5ff?style=for-the-badge&logoColor=black&labelColor=000000)](https://portifolio2026-two.vercel.app/design-system)
 [![Lab](https://img.shields.io/badge/⚡_LAB_ANOMALIAS-b6ff00?style=for-the-badge&labelColor=000000)](https://portifolio2026-two.vercel.app/design-system/lab)
 [![Storybook](https://img.shields.io/badge/📚_STORYBOOK-ff5a1f?style=for-the-badge&logo=storybook&logoColor=white&labelColor=000000)](https://storybook-static-zeta-steel.vercel.app)
@@ -59,9 +60,9 @@ acompanha você em qualquer página, vestindo a cara do destino.
 
 | Multiverso | Rota | Estética | O que vive lá |
 |---|---|---|---|
-| 🎨 **O Criativo** | `/criativo` | Comic-first / Aranhaverso — halftone, hard-shadow, neon | Portfólio, design system, blog, skills |
-| 💻 **O _DEV** | `/desenvolvedor` | Terminal Dracula — mono, dock no topo, cursor piscando | Projetos, laboratório, devlogs, ideias, código, wiki, learn |
-| 📰 **O Anfitrião** | `/anfitriao` | *The Meeple & Anvil Gazette* — jornal inglês do séc. XIX | Game design: redação, oficina, mecânicas, protótipos, imprensa |
+| 🎨 **O Criativo** | `/criativo` | Comic-first / Aranhaverso — halftone, hard-shadow, neon | Portfólio, cards colecionáveis, design system, vitrines de arte |
+| 💻 **O _DEV** | `/desenvolvedor` | Terminal Dracula — mono, dock no topo, cursor piscando | Projetos, código, ferramentas, laboratório, learn |
+| 📰 **O Anfitrião** | `/anfitriao` | *The Meeple & Anvil Gazette* — jornal inglês do séc. XIX | Game design: primeira página e laboratório |
 
 > 📰 **O Anfitrião** é um jornal de verdade: papel envelhecido, texto justificado em
 > colunas, capitulares, filetes, classificados e gravuras em halftone. Zero cantos
@@ -89,11 +90,15 @@ envelhecido no Anfitrião.
 | `/criativo` | 🎨 Home do Criativo — bento grid, onomatopeias, halftone |
 | `/desenvolvedor` | 💻 Home do _DEV — terminal Dracula |
 | `/anfitriao` | 📰 Primeira página da gazeta |
-| `/portfolio` · `/blog` · `/skills` · `/tools` | 📇 Conteúdo público |
-| `/about` · `/contact` | 👤 Sobre e contato (envio real via Resend) |
+| `/portfolio` | 📇 Projetos publicados |
+| `/cards` | 🃏 Cartas colecionáveis — foil holográfico e Stacked 3D |
+| `/desenvolvedor/{projetos,codigo,ferramentas,laboratorio,learn}` | 💻 Conteúdo do _DEV |
+| `/anfitriao/laboratorio` | 🔬 A oficina da gazeta |
 | `/design-system` | 🎨 O sistema completo (~30 telas) |
 | `/design-system/lab` | ⚡ Anomalias — fontes cromáticas, glitch, colagem |
+| `/design-system/os` | 🖥️ Retro OS — janelas, barra de tarefas, ícones |
 | `/dimensoes` · `/styleguide` · `/gallery` | 🎭 Vitrines de direção de arte |
+| `/github` · `/sports-widget` | 🕹️ Experimentos avulsos (Terra-2099, réplica do Firefox) |
 | `/admin` | 🔐 Painel de administração (protegido) |
 
 ## 🏗️ O Design System — "Aranhaverso"
@@ -111,6 +116,35 @@ Construído em **5 fases + Lab**, do token ao delírio:
 > 🎟️ **Explore:** [`/design-system`](https://portifolio2026-two.vercel.app/design-system) ·
 > [`/design-system/lab`](https://portifolio2026-two.vercel.app/design-system/lab) ·
 > [Storybook](https://storybook-static-zeta-steel.vercel.app)
+
+## 🃏 As cartas — `/cards`
+
+Uma página inteira dedicada a **carta colecionável de verdade**: o foil reage ao ponteiro,
+a luz corre contra o movimento e o brilho especular segue o cursor. Cinco galerias:
+
+| Galeria | O que é |
+|---|---|
+| **Carta holográfica** | A carta LR autoral — foil de *sunpillars* HSL reconstruído sobre o Design System |
+| **A coleção completa** | Cartas hi-res reais do TCG, uma por raridade — holo, cosmos, amazing, full art, VMAX, secreta |
+| **Deck ThunderCats** | O deck de Commander com proxies temáticos, cada carta com um efeito do sistema |
+| **Stacked 3D** | Cartas e moedas montadas em planos separados, com parallax de profundidade |
+| **Stacked 3D holográfico** | Os dois sistemas juntos: foil correndo na face + camadas descolando em 3D |
+
+**Como funciona.** O foil vem da técnica do
+[`simeydotme/pokemon-cards-css`](https://github.com/simeydotme/pokemon-cards-css) — gradientes
+repetidos queimados em `color-dodge`, duas camadas defasadas cuja interferência é a
+profundidade. O empilhamento vem de [`hover-tilt`](https://hover-tilt.simey.me/bespoke/stacked-3d/):
+`preserve-3d` no contêiner e cada camada num `translateZ` proporcional — a *diferença de fator*
+entre elas é o que produz o parallax.
+
+Mesclar os dois exigiu resolver três colisões: o `--translate-z: 150px` que o sistema de foil
+aplica na carta (jogaria a face à frente das camadas), a rotação duplicada entre os dois motores,
+e o fato de que **`mix-blend-mode` achata o `preserve-3d` do ancestral direto** — por isso a face
+inteira mora numa única camada, com o shine e o glare como netos.
+
+Em todas as galerias o **JS só escreve variáveis CSS**, num suavizador exponencial em `rAF`
+(perseguição rápida na interação, assentamento lento na saída — é o que dá o "peso" da carta).
+O desenho é inteiramente CSS, e `prefers-reduced-motion` desliga o tilt.
 
 ## 🔐 O painel (CMS próprio)
 
@@ -134,7 +168,7 @@ O conteúdo do site **vem do Supabase**, editável em `/admin` — sem redeploy 
 
 `Next.js 15` · `React 19` · `TypeScript 5` · `Tailwind 3` · `Motion 12` · `GSAP 3` · `Lottie` ·
 `Supabase` (Postgres + Auth + Storage) · `Radix / Base UI` · `React Hook Form + Zod 4` ·
-`react-markdown` · `Resend` · `Storybook 10` · `Vitest 4`
+`react-markdown` · `Storybook 10` · `Vitest 4`
 
 Hospedado na **Vercel** — deploy automático no push da `main`.
 
@@ -158,7 +192,6 @@ painel e o conteúdo dinâmico, copie `.env.example` para `.env.local` e preench
 | `NEXT_PUBLIC_SUPABASE_URL` · `NEXT_PUBLIC_SUPABASE_ANON_KEY` | Leitura pública e sessão |
 | `SUPABASE_SERVICE_ROLE_KEY` | Seed, sync e upload de mídia (**só no servidor**) |
 | `ADMIN_GITHUB_LOGIN` | Allowlist de quem entra no `/admin` |
-| `RESEND_API_KEY` · `CONTACT_TO_EMAIL` | Formulário de contato |
 
 As policies do bucket de mídia estão em [`docs/storage-policies.sql`](docs/storage-policies.sql)
 — rode no SQL Editor do Supabase.
@@ -167,6 +200,7 @@ As policies do bucket de mídia estão em [`docs/storage-policies.sql`](docs/sto
 
 | Comando | O que faz |
 |---|---|
+| `npm run setup` | 🏗️ cria a estrutura de pastas do projeto |
 | `npm run dev` | 🔥 servidor de desenvolvimento |
 | `npm run build` | 📦 build de produção |
 | `npm run test:unit` | 🧪 testes unitários (Vitest) |
@@ -192,6 +226,7 @@ src/
 │   ├── sections/          # 🧱 blocos (pricing, testimonials, timeline…)
 │   ├── design-system/     # 🎨 ilustrações, logos, filtros de arte
 │   ├── realms/            # 🌐 troca de universo + logos animados
+│   ├── spiderverse/       # 🃏 cartas holo, galerias TCG, stacked 3D, canvas
 │   ├── portal/ dev/ prophet/ gazette/   # 🎭 componentes por realm
 │   └── admin/             # 🔐 formulários, listas, mídia
 ├── lib/
@@ -201,7 +236,8 @@ src/
 │   └── realms.ts          # 🌐 definição dos três universos
 ├── design-system/         # ⚛️ tokens.ts, registry.ts, motion.ts, gsap.ts
 ├── data/                  # 📇 seed/fallback tipado (projetos, tools, posts…)
-└── styles/                # 🖌️ tokens.css + camadas art/fx/dracula/gazette
+└── styles/                # 🖌️ tokens.css + camadas art/fx/dracula/gazette/holo
+public/poke-holo/          # 🃏 CSS e foils do sistema de cartas (vendorizado)
 docs/                      # 📖 arquitetura, deploy, design system, policies
 tests/                     # 🧪 testes unitários
 ```

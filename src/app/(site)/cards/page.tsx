@@ -7,9 +7,10 @@ export const metadata = { title: "Cards" }
 /**
  * Coleção de cards.
  *
- * As três galerias viraram abas (`CardsSections`) e entram por carregamento
- * adiado: juntas somam ~30 imagens hi-res mais as folhas do motor de foil, e
- * carregá-las de uma vez fazia o visitante pagar por três seções para ver uma.
+ * As oito seções (galerias, stacked 3D, tutorial, catálogo e booster completo)
+ * viraram abas em `CardsSections`, com carregamento adiado. Empilhadas, somam
+ * mais de 80 cartas hi-res, o motor de foil e o tutorial inteiro — o visitante
+ * pagava por tudo isso para ver uma seção.
  */
 export default function CardsPage() {
   return (

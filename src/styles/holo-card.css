@@ -133,6 +133,36 @@
 }
 
 /* ---------------------------------------------------------------------------
+   Correção do sistema vendorizado: --clip-trainer-invert
+   ---------------------------------------------------------------------------
+   reverse-holo.css:126 faz `clip-path: var(--clip-trainer-invert)` para as
+   cartas de Treinador, mas essa variável NÃO É DEFINIDA em lugar nenhum do
+   projeto (as outras cinco do grupo são, em cards.css). Variável inexistente
+   torna a declaração inválida, e o recorte do glare vira `none` — o brilho
+   escapa da janela de arte nas cartas de Treinador reverse holo.
+
+   Aqui ela é construída com o mesmo desenho de --clip-invert, trocando os
+   números da janela pelos de --clip-trainer, que é inset(14.5% 8.5% 48.2%
+   8.5%) — ou seja, janela de 8,5% a 91,5% na horizontal e de 14,5% a 51,8%
+   na vertical. O polígono contorna a carta inteira e volta por uma fresta na
+   borda esquerda para recortar a janela por dentro, exatamente como o
+   original faz para o Pokémon básico. */
+.card {
+  --clip-trainer-invert: polygon(
+    0% 0%,
+    100% 0%,
+    100% 100%,
+    0% 100%,
+    0 51.8%,
+    91.5% 51.8%,
+    91.5% 14.5%,
+    8.5% 14.5%,
+    8.5% 51.8%,
+    0 54%
+  );
+}
+
+/* ---------------------------------------------------------------------------
    Popover das cartas TCG (.card do sistema poke-holo vendorizado):
    a carta ampliada precisa ficar À FRENTE DE TUDO — inclusive da navbar
    (header sticky z-50) e dos stacking contexts dos wrappers (o SvCanvas
