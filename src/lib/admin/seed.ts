@@ -11,6 +11,15 @@ import { posts } from "@/data/posts"
 import { skills } from "@/data/skills"
 import { tools } from "@/data/tools"
 import { siteConfig } from "@/constants/site"
+import {
+  artworks,
+  comics,
+  movies,
+  notes,
+  strips,
+  tracks,
+  videos,
+} from "@/data/criativo-zones"
 import { REALMS, REALM_ORDER, DEFAULT_REALM } from "@/lib/realms"
 import * as arcane from "@/lib/arcane-content"
 
@@ -136,6 +145,29 @@ export async function seedDatabase(): Promise<SeedReport> {
       }
     }),
   )
+
+  // ─── Zonas da landing /criativo ──────────────────────────────────────
+  // Os seeds já têm a forma da tabela (só `id` é descartado, porque o banco
+  // gera o seu), então uma passagem genérica dá conta das sete.
+  // `{ id: string }` e não `Record<string, unknown>`: as interfaces dos seeds
+  // não têm index signature, e só o `id` é lido aqui (para ser descartado).
+  const zones: [string, { id: string }[]][] = [
+    ["artworks", artworks],
+    ["comics", comics],
+    ["movies", movies],
+    ["tracks", tracks],
+    ["videos", videos],
+    ["notes", notes],
+    ["strips", strips],
+  ]
+
+  for (const [table, rows] of zones) {
+    report[table] = await seedIfEmpty(
+      supabase,
+      table,
+      rows.map(({ id: _id, ...rest }, i) => ({ ...rest, published: true, sort: i })),
+    )
+  }
 
   return report
 }

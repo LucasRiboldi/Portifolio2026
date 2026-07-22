@@ -1,4 +1,4 @@
-import { Navbar } from "@/components/layout/navbar"
+import { ComicNav } from "@/components/layout/comic-nav"
 import { Footer } from "@/components/layout/footer"
 import { ArtFilters } from "@/components/design-system/art-filters"
 import { SkipLink } from "@/components/layout/skip-link"
@@ -9,8 +9,12 @@ export default function SiteLayout({ children }: { children: React.ReactNode }) 
     <>
       <SkipLink />
       <ArtFilters />
-      <Navbar />
-      <main id="main">{children}</main>
+      <ComicNav />
+      {/* O header passou a ser fixo (o overlay do menu precisa de sair de trás
+          dele): o padding devolve ao conteúdo o espaço que a barra ocupava. */}
+      <main id="main" className="pt-16">
+        {children}
+      </main>
       <Footer />
       <SoberDock />
     </>

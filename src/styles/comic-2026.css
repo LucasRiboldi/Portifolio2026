@@ -1,0 +1,607 @@
+/* ============================================================================
+   COMIC 2026 — camada visual da landing /criativo
+   ---------------------------------------------------------------------------
+   Namespace `k-`, isolado de propósito: os tokens `--sv-*` e as classes `.sv-*`
+   continuam servindo o resto do site sem alteração.
+
+   A direção de arte é revista em quadrinhos: papel colorido, tinta grossa,
+   retícula visível e cor saturada em toda parte. Cada zona da página é uma
+   DIMENSÃO com paleta própria — a mesma ideia das 20 dimensões de
+   `spiderverse-dimensions.css`, aqui aplicada ao fluxo vertical da landing.
+   ============================================================================ */
+
+:root {
+  /* --- paleta base (tinta de quadrinho) --------------------------------- */
+  --k-ink: #12100e;          /* tinta — o preto do traço, nunca #000 puro */
+  --k-paper: #fff6e0;        /* papel jornal claro */
+  --k-white: #ffffff;
+
+  --k-yellow: #ffd200;
+  --k-orange: #ff6b1f;
+  --k-red: #ff2f4e;
+  --k-magenta: #ff2d95;
+  --k-violet: #8b3dff;
+  --k-blue: #1b6cff;
+  --k-cyan: #00d4ff;
+  --k-lime: #9dff2f;
+  --k-green: #00c96b;
+  --k-pink: #ff8fd0;
+
+  /* --- ritmo -------------------------------------------------------------- */
+  --k-radius: 6px;
+  --k-ink-w: 3px;
+  --k-ease: cubic-bezier(0.16, 1, 0.3, 1);
+  --k-bounce: cubic-bezier(0.34, 1.56, 0.64, 1);
+
+  /* --- variáveis de zona (a dimensão vigente) ---------------------------- */
+  /* Sobrescritas por `.k-zone--*`. O default é o multiverso. */
+  --k-zone-bg: linear-gradient(160deg, #ffd200, #ff6b1f 55%, #ff2d95);
+  --k-zone-ink: var(--k-ink);
+  --k-zone-a: var(--k-magenta);
+  --k-zone-b: var(--k-cyan);
+  --k-zone-c: var(--k-yellow);
+  --k-zone-dot: rgba(18, 16, 14, 0.28);
+  --k-zone-card: #fffdf5;
+}
+
+/* ---------------------------------------------------------------------------
+   TIPOGRAFIA
+   Anton na manchete, Bebas nos números e legendas, Oswald nos subtítulos e na
+   navegação, Inter no corpo. Bangers ficou fora: puxava demais para o infantil
+   sem trazer o peso de capa que o Anton dá.
+   --------------------------------------------------------------------------- */
+
+.k-title {
+  font-family: var(--font-anton), Impact, sans-serif;
+  font-weight: 400;
+  text-transform: uppercase;
+  line-height: 0.86;
+  letter-spacing: -0.015em;
+}
+
+.k-kicker {
+  font-family: var(--font-bebas), Impact, sans-serif;
+  text-transform: uppercase;
+  letter-spacing: 0.22em;
+  line-height: 1;
+}
+
+.k-sub {
+  font-family: var(--font-oswald), sans-serif;
+  text-transform: uppercase;
+  letter-spacing: 0.06em;
+  font-weight: 500;
+}
+
+.k-body {
+  font-family: var(--font-inter), system-ui, sans-serif;
+  letter-spacing: -0.005em;
+}
+
+.k-num {
+  font-family: var(--font-bebas), Impact, sans-serif;
+  font-variant-numeric: tabular-nums;
+  line-height: 0.9;
+}
+
+/* --- LETRAGEM DE HQ -------------------------------------------------------- */
+
+/* Manchete com contorno grosso de tinta e sombra dura — o "peso de capa".
+   `paint-order` põe o traço atrás do preenchimento, senão o contorno come as
+   hastes finas da letra. */
+.k-letter {
+  color: var(--k-white);
+  -webkit-text-stroke: 3px var(--k-ink);
+  paint-order: stroke fill;
+  text-shadow:
+    5px 5px 0 var(--k-ink),
+    9px 9px 0 var(--k-zone-a);
+}
+
+/* Preenchimento em arco-íris (a manchete do multiverso). */
+.k-letter-rainbow {
+  background: linear-gradient(
+    92deg,
+    var(--k-yellow), var(--k-orange), var(--k-red),
+    var(--k-magenta), var(--k-violet), var(--k-cyan), var(--k-lime)
+  );
+  background-size: 300% 100%;
+  -webkit-background-clip: text;
+  background-clip: text;
+  -webkit-text-fill-color: transparent;
+  -webkit-text-stroke: 3px var(--k-ink);
+  paint-order: stroke fill;
+  animation: k-rainbow-pan 9s linear infinite;
+  filter: drop-shadow(5px 5px 0 var(--k-ink));
+}
+
+@keyframes k-rainbow-pan {
+  to { background-position: 300% 0; }
+}
+
+/* Palavra em destaque: bloco de cor com rotação, tipo carimbo. */
+.k-shout {
+  display: inline-block;
+  padding: 0 0.18em;
+  background: var(--k-zone-a);
+  color: var(--k-white);
+  -webkit-text-stroke: 2px var(--k-ink);
+  paint-order: stroke fill;
+  border: var(--k-ink-w) solid var(--k-ink);
+  box-shadow: 5px 5px 0 var(--k-ink);
+  transform: rotate(-2deg);
+}
+
+/* Texto vazado — números-fantasma das seções. */
+.k-outline {
+  color: transparent;
+  -webkit-text-stroke: 2px var(--k-zone-ink);
+  opacity: 0.25;
+}
+
+/* ---------------------------------------------------------------------------
+   GLITCH
+   Datamosh vermelho-ciano: duas cópias do texto deslocadas, recortadas em
+   faixas por `clip-path` e sacudidas em tempos diferentes. O conteúdo vem de
+   `data-text` para o leitor de ecrã ler o título uma vez só.
+   --------------------------------------------------------------------------- */
+
+.k-glitch {
+  position: relative;
+  display: inline-block;
+  color: var(--k-white);
+  -webkit-text-stroke: 3px var(--k-ink);
+  paint-order: stroke fill;
+  text-shadow: 5px 5px 0 var(--k-ink);
+}
+
+.k-glitch::before,
+.k-glitch::after {
+  content: attr(data-text);
+  position: absolute;
+  inset: 0;
+  -webkit-text-stroke: 0;
+  text-shadow: none;
+  pointer-events: none;
+}
+
+.k-glitch::before {
+  color: var(--k-cyan);
+  transform: translate(-0.055em, 0.02em);
+  mix-blend-mode: screen;
+  animation: k-glitch-a 3.2s steps(1) infinite;
+}
+
+.k-glitch::after {
+  color: var(--k-red);
+  transform: translate(0.055em, -0.02em);
+  mix-blend-mode: screen;
+  animation: k-glitch-b 2.7s steps(1) infinite;
+}
+
+/* Faixas recortadas em posições diferentes a cada passo — o "erro de registro
+   de impressão". Os passos ficam quase todos em `inset(50% 0 50% 0)` (nada
+   visível) para o efeito ser um susto ocasional, não um tremor constante. */
+@keyframes k-glitch-a {
+  0%, 62%, 100% { clip-path: inset(50% 0 50% 0); }
+  64% { clip-path: inset(12% 0 74% 0); }
+  67% { clip-path: inset(58% 0 24% 0); }
+  70% { clip-path: inset(31% 0 52% 0); }
+  73% { clip-path: inset(78% 0 8% 0); }
+  76% { clip-path: inset(50% 0 50% 0); }
+}
+
+@keyframes k-glitch-b {
+  0%, 40%, 100% { clip-path: inset(50% 0 50% 0); }
+  42% { clip-path: inset(66% 0 18% 0); }
+  45% { clip-path: inset(22% 0 62% 0); }
+  48% { clip-path: inset(84% 0 4% 0); }
+  51% { clip-path: inset(50% 0 50% 0); }
+}
+
+/* Variante contínua para hover de item de menu. */
+.k-glitch--hover::before,
+.k-glitch--hover::after { animation-play-state: paused; }
+.k-glitch--hover:hover::before,
+.k-glitch--hover:hover::after { animation-play-state: running; }
+
+/* ---------------------------------------------------------------------------
+   ZONAS — cada uma é uma dimensão do multiverso pessoal
+   --------------------------------------------------------------------------- */
+
+.k-zone {
+  position: relative;
+  isolation: isolate;
+  background: var(--k-zone-bg);
+  color: var(--k-zone-ink);
+}
+
+/* Retícula benday por cima do fundo da zona. */
+.k-zone::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  z-index: 0;
+  pointer-events: none;
+  background-image: radial-gradient(var(--k-zone-dot) 1.5px, transparent 1.7px);
+  background-size: 9px 9px;
+  opacity: 0.55;
+}
+
+.k-zone > * { position: relative; z-index: 1; }
+
+/* MULTIVERSO — capa: arco-íris quente */
+.k-zone--multiverso {
+  --k-zone-bg: radial-gradient(circle at 18% 12%, #ffe66b, transparent 45%),
+               radial-gradient(circle at 82% 22%, #6be3ff, transparent 42%),
+               radial-gradient(circle at 50% 100%, #ff8fd0, transparent 55%),
+               linear-gradient(160deg, #ffd200, #ff6b1f 52%, #ff2d95);
+  --k-zone-a: var(--k-violet);
+  --k-zone-b: var(--k-cyan);
+  --k-zone-c: var(--k-yellow);
+}
+
+/* ATELIÊ — graffiti: tijolo, spray, lima sobre roxo */
+.k-zone--atelie {
+  /* O roxo pára em #7a1bc4 e não no #b026ff que a paleta graffiti pedia: sobre
+     o lilás claro o texto de corpo caía para ~3.9:1, abaixo de AA. */
+  --k-zone-bg: radial-gradient(circle at 80% 10%, rgba(157, 255, 47, 0.5), transparent 45%),
+               linear-gradient(155deg, #2b0a4d, #571496 60%, #7a1bc4);
+  --k-zone-ink: var(--k-paper);
+  --k-zone-a: var(--k-lime);
+  --k-zone-b: var(--k-magenta);
+  --k-zone-c: var(--k-cyan);
+  --k-zone-dot: rgba(157, 255, 47, 0.35);
+  --k-zone-card: #1d0736;
+}
+
+/* OFICINA — blueprint 2099: grade técnica, ciano sobre azul */
+.k-zone--oficina {
+  --k-zone-bg: linear-gradient(160deg, #04203f, #0a3a6b 55%, #0d5ea8);
+  --k-zone-ink: #dff4ff;
+  --k-zone-a: var(--k-cyan);
+  --k-zone-b: var(--k-lime);
+  --k-zone-c: var(--k-yellow);
+  --k-zone-dot: rgba(0, 212, 255, 0.32);
+  --k-zone-card: #062a52;
+}
+
+/* BANCA — quadrinho clássico de banca: amarelo, vermelho, papel */
+.k-zone--banca {
+  --k-zone-bg: radial-gradient(circle at 15% 15%, #fff3b0, transparent 50%),
+               linear-gradient(160deg, #ffd200, #ffa71f 60%, #ff5a3c);
+  --k-zone-a: var(--k-red);
+  --k-zone-b: var(--k-blue);
+  --k-zone-c: var(--k-white);
+  --k-zone-dot: rgba(18, 16, 14, 0.22);
+}
+
+/* CINE — sala escura: laranja contra ciano, luz de projetor */
+.k-zone--cine {
+  --k-zone-bg: radial-gradient(ellipse at 50% -10%, rgba(255, 107, 31, 0.55), transparent 55%),
+               linear-gradient(170deg, #12043a, #2a0f5e 55%, #4a1178);
+  --k-zone-ink: var(--k-paper);
+  --k-zone-a: var(--k-orange);
+  --k-zone-b: var(--k-cyan);
+  --k-zone-c: var(--k-pink);
+  --k-zone-dot: rgba(255, 143, 208, 0.3);
+  --k-zone-card: #1b0847;
+}
+
+/* RÁDIO — psicodélico 1969: tudo gira, tudo satura */
+.k-zone--radio {
+  /* A conic passa por violeta escuro, onde a tinta cairia para ~3:1. A lavagem
+     clara por cima segura a leitura no miolo e deixa o giro de cor nas bordas,
+     que é onde ele conta. */
+  --k-zone-bg:
+    radial-gradient(ellipse at 50% 42%, rgba(255, 255, 255, 0.88), rgba(255, 255, 255, 0.55) 45%, rgba(255, 255, 255, 0.1) 72%),
+    conic-gradient(
+      from 0deg at 50% 45%,
+      #ff2d95, #ff6b1f, #ffd200, #9dff2f, #00d4ff, #8b3dff, #ff2d95
+    );
+  --k-zone-ink: var(--k-ink);
+  --k-zone-a: var(--k-violet);
+  --k-zone-b: var(--k-lime);
+  --k-zone-c: var(--k-yellow);
+  --k-zone-dot: rgba(255, 255, 255, 0.4);
+  --k-zone-card: #fffdf5;
+}
+
+/* VIDEOTECA — VHS: verde fósforo sobre preto de tubo */
+.k-zone--videoteca {
+  --k-zone-bg: linear-gradient(165deg, #05130d, #0b2e1c 55%, #103f26);
+  --k-zone-ink: #d9ffe9;
+  --k-zone-a: var(--k-lime);
+  --k-zone-b: var(--k-magenta);
+  --k-zone-c: var(--k-cyan);
+  --k-zone-dot: rgba(157, 255, 47, 0.28);
+  --k-zone-card: #08210f;
+}
+
+/* MURAL — cortiça e post-it */
+.k-zone--mural {
+  --k-zone-bg: radial-gradient(circle at 70% 20%, #ffe9b8, transparent 50%),
+               linear-gradient(160deg, #f3c98b, #d99a52 60%, #b9712f);
+  --k-zone-a: var(--k-red);
+  --k-zone-b: var(--k-blue);
+  --k-zone-c: var(--k-green);
+  --k-zone-dot: rgba(90, 55, 20, 0.28);
+}
+
+/* TIRINHAS — cartoon: primárias chapadas sobre céu */
+.k-zone--tirinhas {
+  --k-zone-bg: linear-gradient(170deg, #7fd8ff, #b6ecff 55%, #ffe9a8);
+  --k-zone-a: var(--k-red);
+  --k-zone-b: var(--k-blue);
+  --k-zone-c: var(--k-yellow);
+  --k-zone-dot: rgba(18, 16, 14, 0.18);
+}
+
+/* ---------------------------------------------------------------------------
+   REQUADROS
+   --------------------------------------------------------------------------- */
+
+/* Painel base: papel da zona, tinta grossa, sombra dura deslocada. */
+.k-panel {
+  position: relative;
+  isolation: isolate;
+  background: var(--k-zone-card);
+  border: var(--k-ink-w) solid var(--k-ink);
+  border-radius: var(--k-radius);
+  box-shadow: 7px 7px 0 0 var(--k-ink);
+  transition:
+    transform 0.32s var(--k-ease),
+    box-shadow 0.32s var(--k-ease);
+}
+
+.k-panel--lit:hover,
+.k-panel--lit:focus-within {
+  transform: translate(-3px, -4px);
+  box-shadow:
+    10px 11px 0 0 var(--k-ink),
+    0 0 0 3px var(--k-accent, var(--k-zone-a)) inset;
+}
+
+/* Papel translúcido — usado onde o fundo da zona precisa vazar. */
+.k-panel--glass {
+  background: color-mix(in srgb, var(--k-zone-card) 78%, transparent);
+  backdrop-filter: blur(7px) saturate(1.3);
+}
+
+/* Recorte diagonal — o requadro "explodido" das páginas de ação. */
+.k-cut-tr { clip-path: polygon(0 0, 100% 0, 100% calc(100% - 30px), calc(100% - 30px) 100%, 0 100%); }
+.k-cut-bl { clip-path: polygon(30px 0, 100% 0, 100% 100%, 0 100%, 0 30px); }
+
+/* Inclinação de diagramação — quebra o alinhamento de grade. */
+.k-tilt-l { transform: rotate(-1.4deg); }
+.k-tilt-r { transform: rotate(1.4deg); }
+
+/* ---------------------------------------------------------------------------
+   TEXTURAS E EFEITOS DE FUNDO
+   --------------------------------------------------------------------------- */
+
+.k-halftone {
+  --k-dot: rgba(18, 16, 14, 0.22);
+  --k-dot-step: 7px;
+  background-image: radial-gradient(var(--k-dot) 1.4px, transparent 1.6px);
+  background-size: var(--k-dot-step) var(--k-dot-step);
+}
+
+/* Grão de impressão — quebra o banding dos gradientes. */
+.k-grain::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+  opacity: 0.07;
+  mix-blend-mode: multiply;
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='140' height='140'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.85' numOctaves='3'/%3E%3C/filter%3E%3Crect width='140' height='140' filter='url(%23n)'/%3E%3C/svg%3E");
+}
+
+/* Leque de linhas de velocidade a partir de um foco. */
+.k-speedlines {
+  --k-speed-color: rgba(18, 16, 14, 0.14);
+  background: repeating-conic-gradient(
+    from 0deg at var(--k-speed-x, 50%) var(--k-speed-y, 50%),
+    var(--k-speed-color) 0deg 0.8deg,
+    transparent 0.8deg 5deg
+  );
+  mask-image: radial-gradient(ellipse at var(--k-speed-x, 50%) var(--k-speed-y, 50%), transparent 20%, #000 62%);
+}
+
+/* Explosão em estrela — o requadro de impacto. */
+.k-burst {
+  background: var(--k-zone-c);
+  border: var(--k-ink-w) solid var(--k-ink);
+  clip-path: polygon(
+    50% 0%, 60% 18%, 79% 9%, 76% 30%, 97% 30%, 82% 45%, 100% 57%,
+    79% 62%, 88% 82%, 67% 76%, 63% 97%, 50% 80%, 37% 97%, 33% 76%,
+    12% 82%, 21% 62%, 0% 57%, 18% 45%, 3% 30%, 24% 30%, 21% 9%, 40% 18%
+  );
+}
+
+/* Linhas de impacto radiais que pulsam ao redor de um ponto. */
+.k-pulse-ring {
+  border: var(--k-ink-w) solid var(--k-ink);
+  border-radius: 50%;
+  animation: k-pulse 2.4s var(--k-ease) infinite;
+}
+
+@keyframes k-pulse {
+  0% { transform: scale(0.7); opacity: 0.9; }
+  100% { transform: scale(1.6); opacity: 0; }
+}
+
+/* Faixa de scanline para a videoteca. */
+.k-scanlines {
+  background: repeating-linear-gradient(
+    to bottom,
+    rgba(0, 0, 0, 0.25) 0px 1px,
+    transparent 1px 3px
+  );
+}
+
+/* Ondas psicodélicas — a zona da rádio. */
+.k-swirl {
+  background: conic-gradient(
+    from 0deg at 50% 50%,
+    var(--k-magenta), var(--k-orange), var(--k-yellow),
+    var(--k-lime), var(--k-cyan), var(--k-violet), var(--k-magenta)
+  );
+  animation: k-spin 18s linear infinite;
+}
+
+@keyframes k-spin {
+  to { transform: rotate(360deg); }
+}
+
+/* Texto que ondula — letreiro psicodélico. */
+.k-wobble {
+  animation: k-wobble 3.4s ease-in-out infinite;
+}
+
+@keyframes k-wobble {
+  0%, 100% { transform: rotate(-2deg) skewX(-3deg); }
+  50% { transform: rotate(2deg) skewX(3deg); }
+}
+
+/* ---------------------------------------------------------------------------
+   DETALHES DE HQ
+   --------------------------------------------------------------------------- */
+
+/* Selo de legenda (caption box) — a plaquinha do canto do quadro. */
+.k-caption {
+  display: inline-block;
+  padding: 0.35rem 0.8rem;
+  background: var(--k-zone-c);
+  color: var(--k-ink);
+  border: var(--k-ink-w) solid var(--k-ink);
+  font-family: var(--font-bebas), Impact, sans-serif;
+  text-transform: uppercase;
+  letter-spacing: 0.18em;
+  box-shadow: 4px 4px 0 0 var(--k-ink);
+  transform: rotate(-1.5deg);
+}
+
+/* Balão de fala com rabicho. */
+.k-bubble {
+  position: relative;
+  background: var(--k-white);
+  color: var(--k-ink);
+  border: var(--k-ink-w) solid var(--k-ink);
+  border-radius: 18px;
+  padding: 0.85rem 1.1rem;
+  box-shadow: 5px 5px 0 0 var(--k-ink);
+}
+
+.k-bubble::after {
+  content: "";
+  position: absolute;
+  bottom: -17px;
+  left: 28px;
+  width: 0;
+  height: 0;
+  border: 9px solid transparent;
+  border-top-color: var(--k-ink);
+}
+
+/* Balão de pensamento — borda ondulada, sem rabicho reto. */
+.k-bubble--thought {
+  border-radius: 42% 58% 46% 54% / 54% 44% 56% 46%;
+}
+
+.k-bubble--thought::after {
+  border: none;
+  bottom: -14px;
+  left: 34px;
+  width: 12px;
+  height: 12px;
+  background: var(--k-white);
+  border: var(--k-ink-w) solid var(--k-ink);
+  border-radius: 50%;
+}
+
+/* Onomatopeia solta — o POW! do canto do quadro. */
+.k-onoma {
+  font-family: var(--font-anton), Impact, sans-serif;
+  text-transform: uppercase;
+  color: var(--k-zone-c);
+  -webkit-text-stroke: 3px var(--k-ink);
+  paint-order: stroke fill;
+  text-shadow: 4px 4px 0 var(--k-ink);
+  transform: rotate(-8deg);
+}
+
+/* Botão: bloco de tinta com sombra dura que "afunda" ao clicar. */
+.k-btn {
+  position: relative;
+  display: inline-flex;
+  align-items: center;
+  gap: 0.6rem;
+  border: var(--k-ink-w) solid var(--k-ink);
+  border-radius: var(--k-radius);
+  transition:
+    transform 0.24s var(--k-bounce),
+    box-shadow 0.24s var(--k-bounce);
+}
+
+.k-btn--primary {
+  background: var(--k-zone-c);
+  color: var(--k-ink);
+  box-shadow: 5px 5px 0 0 var(--k-ink);
+}
+
+.k-btn--ghost {
+  background: var(--k-white);
+  color: var(--k-ink);
+  box-shadow: 5px 5px 0 0 var(--k-ink);
+}
+
+.k-btn:hover,
+.k-btn:focus-visible {
+  transform: translate(-2px, -3px) rotate(-1deg);
+  box-shadow: 8px 9px 0 0 var(--k-ink);
+}
+
+.k-btn:active {
+  transform: translate(4px, 4px);
+  box-shadow: 1px 1px 0 0 var(--k-ink);
+}
+
+/* Separador de tinta entre zonas — borda rasgada de papel. */
+.k-ink-divider {
+  height: 18px;
+  background: var(--k-ink);
+  clip-path: polygon(
+    0 0, 4% 55%, 9% 10%, 15% 70%, 22% 20%, 29% 65%, 36% 15%, 44% 72%,
+    52% 18%, 60% 68%, 68% 12%, 76% 66%, 84% 22%, 92% 70%, 100% 25%,
+    100% 100%, 0 100%
+  );
+}
+
+/* Estrelinhas de avaliação. */
+.k-stars { letter-spacing: 0.1em; color: var(--k-ink); }
+
+/* ---------------------------------------------------------------------------
+   ACESSIBILIDADE
+   Nada aqui é essencial para entender a página: com movimento reduzido, tudo
+   vira estado final estático.
+   --------------------------------------------------------------------------- */
+@media (prefers-reduced-motion: reduce) {
+  .k-letter-rainbow,
+  .k-glitch::before,
+  .k-glitch::after,
+  .k-swirl,
+  .k-wobble,
+  .k-pulse-ring {
+    animation: none !important;
+  }
+
+  .k-glitch::before,
+  .k-glitch::after { opacity: 0; }
+
+  .k-btn,
+  .k-panel {
+    transition: none !important;
+  }
+}

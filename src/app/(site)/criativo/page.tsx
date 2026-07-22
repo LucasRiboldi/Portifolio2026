@@ -1,131 +1,83 @@
-import Link from "next/link"
-import { BentoGrid } from "@/components/home/bento-grid"
-import { ComicCover } from "@/components/home/comic-cover"
-import { SvCanvas } from "@/components/spiderverse/sv-canvas"
-import { Onoma } from "@/components/spiderverse/decor"
 import { ArcaneProphet } from "@/components/realms/arcane-prophet"
+import { Hero } from "@/components/criativo/hero"
+import { ZoneAtelie } from "@/components/criativo/zone-atelie"
+import { ZoneOficina } from "@/components/criativo/zone-oficina"
+import { ZoneBanca } from "@/components/criativo/zone-banca"
+import { ZoneCine } from "@/components/criativo/zone-cine"
+import { ZoneRadio } from "@/components/criativo/zone-radio"
+import { ZoneVideoteca } from "@/components/criativo/zone-videoteca"
+import { ZoneMural } from "@/components/criativo/zone-mural"
+import { ZoneTirinhas } from "@/components/criativo/zone-tirinhas"
+import { Outro } from "@/components/criativo/outro"
 import { getProjects } from "@/lib/repos/projects"
-import { getTools } from "@/lib/repos/tools"
+import {
+  getArtworks,
+  getComics,
+  getMovies,
+  getNotes,
+  getStrips,
+  getTracks,
+  getVideos,
+} from "@/lib/repos/criativo"
 
-/**
- * Cabeçalho de seção — dá o mesmo ritmo a todos os blocos da landing.
- * O kicker é o selo de legenda de HQ; o título é sempre h2 (o h1 é o
- * masthead da capa).
- */
-function SectionHeading({
-  id,
-  kicker,
-  title,
-  highlight,
-  subtitle,
-}: {
-  id: string
-  kicker: string
-  title: string
-  highlight?: string
-  subtitle?: string
-}) {
-  return (
-    <header className="mb-6 sm:mb-8">
-      <span className="sv-caption inline-block text-xs sm:text-sm">{kicker}</span>
-      <h2 id={id} className="sv-display fx-shadow-long mt-3 text-3xl uppercase leading-none sm:text-5xl">
-        {title} {highlight && <span className="sv-rainbow sv-underline">{highlight}</span>}
-      </h2>
-      {subtitle && (
-        <p className="sv-heavy mt-3 max-w-2xl text-xs uppercase leading-snug tracking-wide text-white/70 sm:text-sm">
-          {subtitle}
-        </p>
-      )}
-    </header>
-  )
+export const metadata = {
+  title: "O Multiverso",
+  description:
+    "O repositório de ideias do Lucas Riboldi: artes, sites, componentes, quadrinhos, filmes, música e experimentos. Nada à venda — só registro.",
 }
 
+/**
+ * Landing do realm Creative — "Edição #2026".
+ *
+ * Página pessoal, não de venda: cada zona é uma dimensão visual com paleta
+ * própria (ateliê, oficina, banca, cine, rádio, videoteca, mural, tirinhas).
+ *
+ * Server Component: as sete leituras partem em paralelo num único `Promise.all`
+ * — encadeá-las somaria as latências e a página tem oito zonas para encher.
+ * Só o hero (parallax), o player de áudio e os painéis com tilt são clientes.
+ */
 export default async function CriativoHome() {
-  const [projects, tools] = await Promise.all([getProjects(), getTools()])
+  const [projects, artworks, comics, movies, tracks, videos, notes, strips] = await Promise.all([
+    getProjects(),
+    getArtworks(),
+    getComics(),
+    getMovies(),
+    getTracks(),
+    getVideos(),
+    getNotes(),
+    getStrips(),
+  ])
 
   return (
     <>
-      {/* Realm ARCANE (Game Design) — jornal antigo, só aparece em data-realm="arcane" */}
+      {/*
+        As animações de entrada são renderizadas no servidor já em `opacity: 0`
+        e só acendem quando o IntersectionObserver dispara. Sem JavaScript esse
+        disparo nunca acontece e a página ficaria em branco a partir da capa —
+        o `noscript` devolve tudo ao estado final.
+      */}
+      <noscript>
+        <style>{`[style*="opacity:0"]{opacity:1!important;transform:none!important}`}</style>
+      </noscript>
+
+      {/* Realm ARCANE (Game Design) — jornal antigo, só em data-realm="arcane" */}
       <ArcaneProphet className="realm-only-arcane" />
 
-      {/* Realms Creative + Developer (some no Arcane) */}
-      <div className="realm-hide-arcane">
-        <SvCanvas dimension="multiverse" className="art-grain py-8 sm:py-10">
-          {/* onomatopeia da capa (só onde há espaço lateral livre) */}
-          <Onoma
-            color="magenta"
-            className="pointer-events-none absolute -top-2 right-4 z-[2] hidden rotate-12 xl:block"
-          >
-            THWIP!
-          </Onoma>
-
-          {/* carimbo narrativo (com propósito: assina a "edição") */}
-          <span
-            aria-hidden
-            className="art-stamp sv-tilt-2 pointer-events-none absolute right-6 top-24 z-[2] hidden text-xs xl:inline-flex"
-            style={{ color: "var(--sv-lime)" }}
-          >
-            Terra-2026
-          </span>
-
-          {/* ---------- 1. CAPA (hero) ---------- */}
-          <ComicCover projects={projects} tools={tools} />
-
-          {/* ---------- 2. NESTA EDIÇÃO ---------- */}
-          <section className="mt-16 sm:mt-24" aria-labelledby="sec-edicao">
-            <SectionHeading
-              id="sec-edicao"
-              kicker="Nesta edição…"
-              title="O miolo da"
-              highlight="revista"
-              subtitle="Cada bloco foi impresso numa dimensão diferente do multiverso — mangá, noir, neon, graffiti, 2099."
-            />
-            <BentoGrid projects={projects} tools={tools} />
-          </section>
-
-          {/* ---------- 3. CHAMADA DO MULTIVERSO ----------
-              Sem grade de dimensões aqui: os próprios cards do miolo já são
-              as dimensões. Esta faixa só aponta para o índice completo. */}
-          <section className="art-tape relative mt-16 sm:mt-24" aria-labelledby="sec-multiverso">
-            <Onoma
-              color="cyan"
-              className="pointer-events-none absolute -top-8 right-0 z-[2] hidden -rotate-6 lg:block"
-            >
-              BAM!
-            </Onoma>
-
-            {/* portal giratório — o convite visual para atravessar as dimensões */}
-            <span
-              aria-hidden
-              className="fx-portal pointer-events-none absolute -top-10 right-10 z-[2] hidden size-20 xl:block"
-            />
-
-            <div className="art-tex-foil relative overflow-hidden rounded-lg border-[3px] border-black p-6 shadow-[6px_6px_0_0_#000] sm:p-10">
-              {/* a retícula por cima do foil segura o texto legível */}
-              <span
-                aria-hidden
-                className="art-tex-benday absolute inset-0 opacity-40"
-                style={{ "--tex-a": "rgba(10,6,18,0.5)", "--tex-b": "rgba(10,6,18,0.3)" } as React.CSSProperties}
-              />
-              <div className="relative z-[1] max-w-2xl">
-                <span className="sv-caption inline-block text-xs sm:text-sm">O multiverso</span>
-                <h2 id="sec-multiverso" className="sv-display mt-3 text-3xl uppercase leading-none text-black sm:text-5xl">
-                  Cada requadro acima é uma dimensão
-                </h2>
-                <p className="sv-heavy mt-3 text-xs uppercase leading-snug tracking-wide text-black/80 sm:text-sm">
-                  Mumbattan, Noir, Mangá, Graffiti, 2099 — e outras 15 esperando.
-                  Cada portal é um estilo de desenho vivo.
-                </p>
-                <Link
-                  href="/dimensoes"
-                  className="sv-display mt-6 inline-block border-[3px] border-black bg-[var(--sv-ink)] px-6 py-3 text-base uppercase text-[var(--sv-paper)] shadow-[4px_4px_0_0_#000] transition-transform hover:-translate-y-1 hover:rotate-[-1deg] sm:text-lg"
-                >
-                  → Atravessar as 20 dimensões
-                </Link>
-              </div>
-            </div>
-          </section>
-        </SvCanvas>
+      {/* Realms Creative + Developer (somem no Arcane).
+          `overflow-x-clip` (e não `hidden`) porque os blocos entram deslizando
+          da lateral: sem o clipe, o estado inicial da animação cria uma barra
+          de scroll horizontal — e `hidden` quebraria o `position: sticky`. */}
+      <div className="realm-hide-arcane k-body overflow-x-clip">
+        <Hero />
+        <ZoneAtelie artworks={artworks} />
+        <ZoneOficina projects={projects} />
+        <ZoneBanca comics={comics} />
+        <ZoneCine movies={movies} />
+        <ZoneRadio tracks={tracks} />
+        <ZoneVideoteca videos={videos} />
+        <ZoneMural notes={notes} />
+        <ZoneTirinhas strips={strips} />
+        <Outro />
       </div>
     </>
   )

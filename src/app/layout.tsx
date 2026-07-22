@@ -7,7 +7,19 @@ import { ThemeProvider }
 from "@/components/providers/theme-provider";
 import { UniverseProvider } from "@/components/providers/universe-provider";
 import { UniverseTransitionProvider } from "@/components/providers/universe-transition";
-import { Geist, Bangers, Archivo_Black, Nabla, Monoton, Rubik_Glitch, Bungee_Shade } from "next/font/google";
+import {
+  Geist,
+  Bangers,
+  Archivo_Black,
+  Nabla,
+  Monoton,
+  Rubik_Glitch,
+  Bungee_Shade,
+  Anton,
+  Bebas_Neue,
+  Oswald,
+  Inter,
+} from "next/font/google";
 import { cn } from "@/lib/utils";
 import { getRealmSettings } from "@/lib/repos/realms";
 import { getSiteConfig } from "@/lib/repos/site-config";
@@ -65,6 +77,12 @@ const monoton = Monoton({ weight: '400', subsets: ['latin'], variable: '--font-m
 const rubikGlitch = Rubik_Glitch({ weight: '400', subsets: ['latin'], variable: '--font-glitch' });
 const bungeeShade = Bungee_Shade({ weight: '400', subsets: ['latin'], variable: '--font-shade' });
 
+// Tipografia da landing Comic 2026 (/criativo): manchete, kicker, subtítulo e corpo.
+const anton = Anton({ weight: '400', subsets: ['latin'], display: 'swap', variable: '--font-anton' });
+const bebas = Bebas_Neue({ weight: '400', subsets: ['latin'], display: 'swap', variable: '--font-bebas' });
+const oswald = Oswald({ subsets: ['latin'], display: 'swap', variable: '--font-oswald' });
+const inter = Inter({ subsets: ['latin'], display: 'swap', variable: '--font-inter' });
+
 
 export default async function RootLayout({
   children
@@ -89,7 +107,7 @@ export default async function RootLayout({
   return (
     <html
       lang="pt-BR"
-      suppressHydrationWarning className={cn("font-sans", geist.variable, bangers.variable, archivo.variable, nabla.variable, monoton.variable, rubikGlitch.variable, bungeeShade.variable)}
+      suppressHydrationWarning className={cn("font-sans", geist.variable, bangers.variable, archivo.variable, nabla.variable, monoton.variable, rubikGlitch.variable, bungeeShade.variable, anton.variable, bebas.variable, oswald.variable, inter.variable)}
     >
       <body>
         <script dangerouslySetInnerHTML={{ __html: antiFouc }} />

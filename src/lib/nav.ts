@@ -1,10 +1,13 @@
 /**
  * Navegação do site global (realm Creative) — fonte única de verdade.
- * Consumido por Navbar (desktop) e MobileMenu, para não divergirem.
+ * Consumido pelo ComicNav (header + overlay em tela cheia), para o menu de
+ * desktop e o de mobile não divergirem.
  */
 export interface NavLink {
   label: string
   href: string
+  /** Linha de apoio mostrada no overlay do menu (o menu em tela cheia). */
+  description?: string
 }
 
 /**
@@ -13,10 +16,10 @@ export interface NavLink {
  * mesmo lugar só dividiam a atenção.
  */
 export const SITE_LINKS: NavLink[] = [
-  { label: "Portfólio", href: "/portfolio" },
-  { label: "Cards", href: "/cards" },
-  { label: "Dimensões", href: "/dimensoes" },
-  { label: "Design System", href: "/design-system" },
+  { label: "Portfólio", href: "/portfolio", description: "Casos completos, do problema ao que foi para o ar" },
+  { label: "Cards", href: "/cards", description: "Galeria holográfica — os efeitos de foil em CSS puro" },
+  { label: "Dimensões", href: "/dimensoes", description: "20 universos visuais trocáveis em tempo real" },
+  { label: "Design System", href: "/design-system", description: "Tokens, componentes e a documentação viva" },
 ]
 
 /** Regra de "ativo" partilhada por todos os menus: exata na home, prefixo no resto. */

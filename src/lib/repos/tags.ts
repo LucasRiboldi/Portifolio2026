@@ -17,6 +17,14 @@ export const CACHE_TAGS = {
   resources: "resources",
   prophetAbout: "prophet-about",
   pages: "page-content",
+  // Zonas da landing /criativo
+  artworks: "artworks",
+  comics: "comics",
+  movies: "movies",
+  tracks: "tracks",
+  videos: "videos",
+  notes: "notes",
+  strips: "strips",
 } as const
 
 export type CacheTag = (typeof CACHE_TAGS)[keyof typeof CACHE_TAGS]

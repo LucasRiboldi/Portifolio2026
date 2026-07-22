@@ -186,7 +186,12 @@ const config: Config = {
         sans: ["var(--font-sans)"],
         display: ["var(--font-display)"],
         heavy: ["var(--font-heavy)"],
-        mono: ["var(--font-mono)"]
+        mono: ["var(--font-mono)"],
+        // Landing Comic 2026 (/criativo)
+        anton: ["var(--font-anton)", "Impact", "sans-serif"],
+        bebas: ["var(--font-bebas)", "Impact", "sans-serif"],
+        oswald: ["var(--font-oswald)", "sans-serif"],
+        inter: ["var(--font-inter)", "system-ui", "sans-serif"]
       },
 
       maxWidth: {

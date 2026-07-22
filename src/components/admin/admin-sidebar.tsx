@@ -26,6 +26,13 @@ import {
   PanelsTopLeft,
   Terminal as TerminalIcon,
   ScrollText,
+  Palette,
+  BookMarked,
+  Clapperboard,
+  Music,
+  Video,
+  StickyNote,
+  Laugh,
   type LucideIcon,
 } from "lucide-react"
 
@@ -58,6 +65,18 @@ const NAV: { section: string; items: NavItem[] }[] = [
       { href: "/admin/snippets", label: "Código", icon: Code2 },
       { href: "/admin/wiki", label: "Wiki", icon: BookOpen },
       { href: "/admin/lab", label: "Laboratório", icon: FlaskConical },
+    ],
+  },
+  {
+    section: "Multiverso Criativo",
+    items: [
+      { href: "/admin/artworks", label: "Ateliê", icon: Palette },
+      { href: "/admin/comics", label: "Banca", icon: BookMarked },
+      { href: "/admin/movies", label: "Cine", icon: Clapperboard },
+      { href: "/admin/tracks", label: "Rádio", icon: Music },
+      { href: "/admin/videos", label: "Videoteca", icon: Video },
+      { href: "/admin/notes", label: "Mural", icon: StickyNote },
+      { href: "/admin/strips", label: "Tirinhas", icon: Laugh },
     ],
   },
   {

@@ -580,20 +580,34 @@ bottom-left
 
 ---
 
-# Navbar
+# Navbar (ComicNav)
 
 Arquivo:
 
 ```text
-components/layout/navbar.tsx
+components/layout/comic-nav.tsx
 ```
+
+Substituiu `navbar.tsx` + `mobile-menu.tsx` (removidos). Numa página que aposta
+tudo na manchete, uma fileira de links no topo compete com ela por atenção: a
+navegação saiu do caminho e passou a ser um overlay em tela cheia.
 
 Elementos:
 
-* Logo
-* Navegação
-* Theme Toggle
-* Mobile Menu
+* Header fixo mínimo — logo + Theme Toggle + botão Menu
+* Overlay `role="dialog" aria-modal="true"` com os destinos em tipografia grande
+* Mesma navegação em desktop e mobile (um só componente, sem divergência)
+
+Requisitos de acessibilidade cobertos:
+
+* Trava o scroll do `body` enquanto aberto
+* Fecha no `Esc`
+* Focus trap com `Tab` / `Shift+Tab`
+* Devolve o foco ao botão que o abriu
+* `aria-expanded` no gatilho e `aria-current="page"` no item ativo
+
+Fonte dos links: `lib/nav.ts` (`SITE_LINKS`), incluindo a `description` que
+aparece sob cada item no overlay.
 
 ---
 
@@ -796,6 +810,207 @@ Accessibility 100
 Best Practices 100
 SEO 100
 ```
+
+---
+
+# Camada Comic 2026 — o multiverso pessoal (/criativo)
+
+Arquivo de estilo:
+
+```text
+src/styles/comic-2026.css   → importado por globals.css
+```
+
+Namespace próprio (`--k-*` / `.k-*`), isolado de propósito: os tokens `--sv-*` e
+as classes `.sv-*` continuam servindo o resto do site sem alteração.
+
+A direção de arte é **revista em quadrinhos colorida e alegre**: papel saturado,
+tinta grossa, retícula visível, sombra dura e letragem de capa. Nada de fundo
+preto — a página é colorida do topo ao rodapé.
+
+## Conceito de ZONA
+
+Cada seção da landing é uma **dimensão** com paleta própria — a mesma ideia das
+20 dimensões de `spiderverse-dimensions.css`, aqui aplicada ao fluxo vertical.
+A zona expõe cinco variáveis que todos os componentes internos consomem:
+
+```css
+--k-zone-bg     /* fundo da dimensão (gradiente) */
+--k-zone-ink    /* cor do texto — clara ou escura conforme o fundo */
+--k-zone-a      /* acento primário */
+--k-zone-b      /* acento secundário */
+--k-zone-c      /* acento de destaque (botão, caption, onomatopeia) */
+--k-zone-card   /* papel dos requadros */
+--k-zone-dot    /* cor da retícula benday */
+```
+
+| Classe | Dimensão | Assinatura | Paleta |
+|---|---|---|---|
+| `k-zone--multiverso` | Capa e contracapa | Terra-LR | Arco-íris quente (amarelo → laranja → magenta) |
+| `k-zone--atelie` | Artes e imagens | Terra-1610 · Spray | Roxo graffiti + lima |
+| `k-zone--oficina` | Sites e componentes | Terra-BYTE · Blueprint | Azul técnico + ciano |
+| `k-zone--banca` | Quadrinhos lendo | Terra-616 · Banca | Amarelo/laranja de banca + vermelho |
+| `k-zone--cine` | Filmes | Terra-42 · Projeção | Roxo escuro + laranja de projetor |
+| `k-zone--radio` | Música | Terra-1969 · Onda | Cônico psicodélico de 7 cores |
+| `k-zone--videoteca` | Vídeo | Terra-VHS · Fita | Verde fósforo sobre tubo |
+| `k-zone--mural` | Recados | Terra-CORTIÇA · Papel | Cortiça + post-it |
+| `k-zone--tirinhas` | Piadas | Terra-8311 · Piada | Céu cartoon + primárias |
+
+**Regra de contraste:** ao criar uma zona nova, o `--k-zone-ink` tem que bater
+AA (4.5:1) contra **todos** os pontos do gradiente, não só contra o do meio.
+Duas zonas já foram ajustadas por isso — o roxo do ateliê parou em `#7a1bc4`, e
+a cônica da rádio ganhou uma lavagem clara no miolo porque o setor violeta
+derrubava a tinta para ~3:1.
+
+## Paleta base
+
+| Token | Valor | Uso |
+|---|---|---|
+| `--k-ink` | `#12100e` | Traço e texto escuro (nunca `#000` puro) |
+| `--k-paper` | `#fff6e0` | Papel jornal / texto claro |
+| `--k-yellow` | `#ffd200` | Destaque, CTA |
+| `--k-orange` | `#ff6b1f` | Cine, energia |
+| `--k-red` | `#ff2f4e` | Vermelho HQ |
+| `--k-magenta` | `#ff2d95` | Acento quente |
+| `--k-violet` | `#8b3dff` | Neon roxo |
+| `--k-blue` | `#1b6cff` | Azul elétrico |
+| `--k-cyan` | `#00d4ff` | Técnico, foco |
+| `--k-lime` | `#9dff2f` | Spray, VHS |
+| `--k-green` / `--k-pink` | `#00c96b` / `#ff8fd0` | Apoio |
+| `--k-ease` / `--k-bounce` | curvas | Movimento (uma para tudo) |
+
+## Tipografia
+
+| Classe | Fonte | Papel |
+|---|---|---|
+| `.k-title` | Anton | Manchetes — capas de HQ |
+| `.k-kicker` | Bebas Neue | Kickers e etiquetas |
+| `.k-num` | Bebas Neue | Números, contadores, índices |
+| `.k-sub` | Oswald | Subtítulos, navegação, botões |
+| `.k-body` | Inter | Corpo de texto |
+
+**Letragem** (modificadores de `.k-title`):
+
+| Classe | Efeito |
+|---|---|
+| `.k-letter` | Contorno de tinta + dupla sombra dura na cor da zona |
+| `.k-letter-rainbow` | Preenchimento arco-íris animado com contorno |
+| `.k-glitch` | Datamosh vermelho-ciano em faixas (ver abaixo) |
+| `.k-shout` | Palavra em bloco de cor girado, tipo carimbo |
+| `.k-outline` | Texto vazado — números-fantasma das zonas |
+| `.k-onoma` | Onomatopeia (POW!, ZAP!) com contorno e rotação |
+
+### Glitch
+
+Duas cópias do texto em `::before`/`::after`, recortadas por `clip-path` em
+faixas que trocam a cada passo, em ciclos de duração diferente. O conteúdo vem
+de `data-text` — daí o componente aceitar `string` e não `ReactNode`.
+
+Os passos ficam quase todos em `inset(50% 0 50% 0)` (nada visível) de propósito:
+o efeito tem que ser um susto ocasional, não um tremor constante que impeça a
+leitura. As cópias são pseudo-elementos, logo o título é anunciado uma vez só
+pelo leitor de tela.
+
+Usar em **uma ou duas manchetes por página**, nunca em todas.
+
+## Primitivos
+
+| Classe | Efeito |
+|---|---|
+| `.k-panel` | Requadro: papel da zona, tinta grossa, sombra dura deslocada |
+| `.k-panel--lit` | Levanta e acende no hover/focus |
+| `.k-panel--glass` | Papel translúcido (`color-mix` + blur) |
+| `.k-cut-tr` / `.k-cut-bl` | Recorte diagonal do requadro |
+| `.k-tilt-l` / `.k-tilt-r` | Inclinação de diagramação |
+| `.k-halftone` | Retícula benday (`--k-dot`, `--k-dot-step`) |
+| `.k-grain` | Grão de impressão |
+| `.k-speedlines` | Linhas de velocidade a partir de um foco |
+| `.k-burst` | Explosão em estrela (22 pontas em `clip-path`) |
+| `.k-pulse-ring` | Anéis de impacto pulsando |
+| `.k-scanlines` | Linhas de tubo (videoteca) |
+| `.k-swirl` | Cônico girando (rádio) |
+| `.k-wobble` | Texto ondulando |
+| `.k-caption` | Selo de legenda girado |
+| `.k-bubble` / `.k-bubble--thought` | Balão de fala / de pensamento |
+| `.k-btn` + `--primary` / `--ghost` | Botão que afunda ao clicar |
+| `.k-ink-divider` | Separador de tinta entre zonas |
+| `.k-stars` | Nota em estrelas |
+
+## Componentes React
+
+```text
+components/comic/              primitivos (Atomic: átomos e moléculas)
+  atoms.tsx                      Halftone, SpeedLines, Burst, Onoma,
+                                 PulseRings, InkDivider, Caption, Bubble,
+                                 Stars, ComicButton, ACCENT_VAR
+  glitch-title.tsx               GlitchTitle (glitch | rainbow | letter)
+  zone.tsx                       Zone — wrapper de dimensão + cabeçalho
+  comic-panel.tsx                Requadro com tilt 3D
+  media-frame.tsx                Imagem com fallback desenhado
+  counter.tsx                    Contador (IntersectionObserver + rAF)
+  reveal.tsx                     Reveal, RevealItem, RevealGroup
+  motion.ts                      EASE, STAGGER, REVEAL, PANEL_IN, slideIn
+
+components/criativo/           organismos (uma zona = um componente)
+  hero.tsx  outro.tsx
+  zone-atelie.tsx  zone-oficina.tsx  zone-banca.tsx  zone-cine.tsx
+  zone-radio.tsx   zone-videoteca.tsx zone-mural.tsx zone-tirinhas.tsx
+  audio-visualizer.tsx           player local + Web Audio API
+
+constants/criativo-landing.ts  copy editorial e metadados das zonas
+data/criativo-zones.ts         seeds das tabelas (fallback de leitura)
+lib/repos/criativo.ts          leitores cacheados por tag
+```
+
+### Zone
+
+Wrapper que carrega a paleta, o cabeçalho (kicker + assinatura Terra-XXX +
+manchete + número vazado) e o separador de tinta que fecha o bloco. Centralizar
+isto é o que garante que uma zona nova herde o ritmo inteiro em vez de cada
+seção reinventar o seu.
+
+```tsx
+<Zone {...ZONES.atelie}>{/* conteúdo */}</Zone>
+```
+
+### MediaFrame
+
+Muito conteúdo entra sem capa. Em vez de retângulo cinzento, o fallback vira
+requadro de HQ: inicial gigante sobre retícula, na paleta da zona. O buraco
+deixa de parecer defeito e passa a parecer diagramação.
+
+### AudioVisualizer
+
+Player local (`<audio>`, sem embed de terceiros) com barras reagindo ao som via
+Web Audio API. O `AudioContext` só é criado no primeiro play — a política de
+autoplay dos navegadores exige gesto do utilizador, e criar antes deixa um
+contexto suspenso que nunca produz dados. Sem áudio cadastrado, entra em modo
+demo (barras por seno) para a zona não ficar com espaço morto.
+
+## Conteúdo (Supabase)
+
+Sete tabelas novas em `supabase/migrations/0006_criativo_zones.sql`:
+`artworks`, `comics`, `movies`, `tracks`, `videos`, `notes`, `strips`.
+
+Todas seguem o contrato das anteriores: `published` + `sort`, RLS com leitura
+pública do publicado e escrita só para admin. `notes` é **somente leitura
+pública** — sem formulário de visitante não há superfície de spam nem fila de
+moderação.
+
+O CRUD sai de graça: cada uma é uma entrada em `lib/admin/resources.ts`, que
+dirige lista, formulário, validação zod e tag de cache. O seed de
+`data/criativo-zones.ts` popula as tabelas pelo botão do dashboard.
+
+## Movimento
+
+Uma única curva (`--k-ease`) atravessa CSS e JS. Variar a curva por componente é
+o que faz uma página parecer montada por pessoas diferentes.
+
+Toda animação de entrada roda **uma vez** (`viewport.once`) e respeita
+`prefers-reduced-motion`: com a preferência ligada, os componentes renderizam
+direto no estado final e glitch, arco-íris, giro e ondulação param. Não basta
+encurtar a duração — quem liga a preferência costuma fazê-lo por enjoo de
+movimento, e um fade rápido ainda é movimento.
 
 ---
 

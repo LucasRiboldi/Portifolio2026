@@ -18,6 +18,11 @@ No **SQL Editor** do Supabase, execute na ordem:
 
 1. `supabase/migrations/0001_schema.sql` — tabelas, RLS, `is_admin()`, allowlist.
 2. `supabase/migrations/0002_storage.sql` — bucket de mídia + políticas.
+3. `supabase/migrations/0003_dev_realm.sql` — conteúdo do realm Developer.
+4. `supabase/migrations/0004_prophet_realm.sql` — conteúdo do realm Arcane.
+5. `supabase/migrations/0005_page_content.sql` — textos das páginas.
+6. `supabase/migrations/0006_criativo_zones.sql` — zonas da landing `/criativo`
+   (ateliê, banca, cine, rádio, videoteca, mural, tirinhas).
 
 Depois, registre seu login do GitHub na allowlist:
 
