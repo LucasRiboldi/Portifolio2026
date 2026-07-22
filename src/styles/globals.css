@@ -10,6 +10,7 @@
    dependem da base declarada em sv-punk.css. */
 @import "./sv-extras.css";
 @import "./holo-card.css";
+@import "./stacked-3d.css";
 @import "./sober.css";
 @import "./retro-os.css";
 @import "./dev-mode.css";
