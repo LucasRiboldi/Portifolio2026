@@ -1,6 +1,7 @@
 "use client"
 
 import { useEffect, useRef, useState } from "react"
+import Image from "next/image"
 import { useReducedMotion } from "motion/react"
 
 /**
@@ -226,10 +227,34 @@ export function HoloTcgCard({ def }: { def: TcgCardDef }) {
             aria-expanded={active}
             aria-label={`Carta ${def.name} no estilo ${def.label}`}
           >
-            {/* alt="" — a face é decorativa; o botão já carrega o rótulo */}
+            {/* alt="" — a face é decorativa; o botão já carrega o rótulo.
+                O verso continua em <img>: é um SVG, que o otimizador do Next
+                não processa (e nem precisa). */}
+            {/* eslint-disable-next-line @next/next/no-img-element */}
             <img className="card__back" src="/poke-holo/lr-back.svg" alt="" loading="lazy" width={660} height={921} />
             <div className="card__front">
-              <img src={def.img} alt="" loading="lazy" width={734} height={1024} />
+              {/*
+                A face passa por `next/image`: as origens são AVIF de 734px e
+                daqui saem os recortes por breakpoint — sem isto, um telemóvel
+                baixava o arquivo inteiro para mostrar a carta a 200px.
+                `sizes` mira o maior tamanho de exibição: a carta amplia até
+                1,75× no popover (≈560px CSS), e pedir 480 faz o navegador
+                escolher o recorte maior em telas 2×, nítido no zoom.
+
+                `quality={60}` e não o default 75: a origem já foi codificada em
+                AVIF q52, e reencodar acima disso só gasta bytes tentando
+                preservar artefacto de compressão. Medido no recorte de 640px —
+                q75 dava 90 KB, q60 dá 43 KB, sem diferença visível.
+              */}
+              <Image
+                src={def.img}
+                alt=""
+                width={734}
+                height={1024}
+                sizes="(max-width: 640px) 60vw, 480px"
+                quality={60}
+                loading="lazy"
+              />
               <div className="card__shine" />
               <div className="card__glare" />
             </div>

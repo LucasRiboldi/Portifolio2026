@@ -82,7 +82,7 @@ const DECK: { slug: string; name: string; fx: FxKey }[] = [
 ]
 
 const CARDS: TcgCardDef[] = DECK.map(({ slug, name, fx }) => ({
-  img: `/cards-thundercats/web/${slug}.webp`,
+  img: `/cards-thundercats/web/${slug}.avif`,
   name,
   ...FX[fx],
 }))

@@ -643,6 +643,49 @@ Reaproveitar este padrão em qualquer página que empilhe seções pesadas.
 
 ---
 
+# Imagens das cartas
+
+Script:
+
+```text
+scripts/optimize-cards.mjs
+```
+
+As faces vinham como PNG de scan — a maior tinha 1,7 MB, servida tal e qual num
+card de ~320px. PNG é o pior formato possível para fotografia. O script
+reencoda em AVIF (q52) com teto de 1024px de largura:
+
+```bash
+node scripts/optimize-cards.mjs                    # simula
+node scripts/optimize-cards.mjs --write            # grava os .avif
+node scripts/optimize-cards.mjs --write --replace  # grava e apaga a origem
+```
+
+`--replace` é um passo separado de propósito: apagar o original é
+irreversível, e quem roda deve poder conferir antes.
+
+Resultado: **`public/` de 19,20 MB para 7,16 MB** (60 imagens, −12,0 MB).
+
+## Regras para cartas novas
+
+* Colocar o arquivo em `public/poke-holo/` ou `public/cards-thundercats/web/`
+  e rodar o script — não commitar PNG de carta.
+* A face é servida por `next/image` com `sizes` e `quality={60}`.
+* **Não subir a `quality` para o default 75.** A origem já é AVIF q52;
+  reencodar acima disso gasta bytes tentando preservar artefacto de
+  compressão. Medido no recorte de 640px: q75 = 90 KB, q60 = 43 KB, sem
+  diferença visível.
+* `next.config.ts` declara `formats: ["image/avif", "image/webp"]` — sem isso o
+  otimizador reencodava para WebP, **maior** que o AVIF que entrou.
+* O verso da carta continua em `<img>` cru: é SVG, que o otimizador não
+  processa nem precisa.
+
+O que ficou de fora e ainda pesa: os foils (`*_foil_*.webp`, ~0,77 MB) são
+consumidos por `url()` em CSS, fora do alcance do `next/image`; e `public/font`
+(0,72 MB) merece auditoria de `.otf` sobrando ao lado do `.woff2`.
+
+---
+
 # Sidebar
 
 Arquivo:

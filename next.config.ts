@@ -66,6 +66,11 @@ const nextConfig: NextConfig = {
   },
 
   images: {
+    // AVIF primeiro, WebP como rede de segurança. O default do Next é só
+    // WebP; as cartas já são AVIF na origem, e sem isto o otimizador as
+    // reencodava para WebP — maior que o arquivo que entrou.
+    formats: ["image/avif", "image/webp"],
+
     remotePatterns: [
       {
         protocol: "https",
