@@ -199,7 +199,7 @@ export function DevTerminal() {
               <span className="text-[var(--d-cyan)]">~/portfolio</span>{" "}
               <span className="text-[var(--d-fg)]">npm run build</span>
             </p>
-            <p className="text-[var(--d-comment)]">▲ Next.js 15.5.19</p>
+            <p className="text-[var(--d-comment)]">Next.js 15.5.19</p>
             <p className="text-[var(--d-fg)]">
               <span className="text-[var(--d-green)]">✓</span> Compiled successfully in 21.9s
             </p>

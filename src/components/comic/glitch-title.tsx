@@ -1,12 +1,13 @@
 import { cn } from "@/lib/utils"
 
-type Treatment = "glitch" | "rainbow" | "letter"
+export type Treatment = "glitch" | "rainbow" | "letter" | "3d" | "3d-deep"
 
 interface GlitchTitleProps {
   children: string
   /**
    * `glitch` = datamosh vermelho-ciano; `rainbow` = preenchimento arco-íris
-   * animado; `letter` = letragem sólida com contorno e sombra dura.
+   * animado; `letter` = letragem sólida com contorno e sombra dura;
+   * `3d` / `3d-deep` = extrusão por camadas, na cor de acento da zona.
    */
   treatment?: Treatment
   as?: "h1" | "h2" | "h3" | "span"
@@ -40,6 +41,8 @@ export function GlitchTitle({
         treatment === "glitch" && "k-glitch",
         treatment === "rainbow" && "k-letter-rainbow",
         treatment === "letter" && "k-letter",
+        treatment === "3d" && "k-3d",
+        treatment === "3d-deep" && "k-3d k-3d--deep",
         className,
       )}
       data-text={treatment === "glitch" ? children : undefined}

@@ -10,9 +10,9 @@ export default function SiteLayout({ children }: { children: React.ReactNode }) 
       <SkipLink />
       <ArtFilters />
       <ComicNav />
-      {/* O header passou a ser fixo (o overlay do menu precisa de sair de trás
-          dele): o padding devolve ao conteúdo o espaço que a barra ocupava. */}
-      <main id="main" className="pt-16">
+      {/* O header é fixo: o padding devolve ao conteúdo o espaço que a barra
+          ocupa. O token vem de comic-2026.css, para os dois nunca divergirem. */}
+      <main id="main" style={{ paddingTop: "var(--k-header-h)" }}>
         {children}
       </main>
       <Footer />

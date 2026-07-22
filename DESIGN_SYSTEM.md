@@ -588,26 +588,58 @@ Arquivo:
 components/layout/comic-nav.tsx
 ```
 
-Substituiu `navbar.tsx` + `mobile-menu.tsx` (removidos). Numa página que aposta
-tudo na manchete, uma fileira de links no topo compete com ela por atenção: a
-navegação saiu do caminho e passou a ser um overlay em tela cheia.
+Substituiu `navbar.tsx` + `mobile-menu.tsx` (removidos). Barra **inline**, com
+os destinos sempre à vista — o overlay em tela cheia que existia antes foi
+descartado: abrir uma tela só para escolher para onde ir esconde o destino
+atrás de um clique extra e tira o visitante da página.
 
 Elementos:
 
-* Header fixo mínimo — logo + Theme Toggle + botão Menu
-* Overlay `role="dialog" aria-modal="true"` com os destinos em tipografia grande
-* Mesma navegação em desktop e mobile (um só componente, sem divergência)
+* Fio de cor do multiverso no topo (4px)
+* Logo + barra segmentada + Theme Toggle
+* **Desktop:** pílula que desliza entre os itens com `layoutId` — um só
+  elemento animado, em vez de quatro fundos acendendo e apagando
+* **Mobile:** painel que desce logo abaixo da barra, sem cobrir a página
 
-Requisitos de acessibilidade cobertos:
+Altura total (67px = fio 4 + barra 60 + borda 3) vive no token
+`--k-header-h`, consumido também pelo `padding-top` do `<main>` e pela altura
+mínima do hero. Se a barra mudar de altura, os três acompanham.
 
-* Trava o scroll do `body` enquanto aberto
-* Fecha no `Esc`
-* Focus trap com `Tab` / `Shift+Tab`
-* Devolve o foco ao botão que o abriu
-* `aria-expanded` no gatilho e `aria-current="page"` no item ativo
+Acessibilidade:
 
-Fonte dos links: `lib/nav.ts` (`SITE_LINKS`), incluindo a `description` que
-aparece sob cada item no overlay.
+* `aria-expanded` + `aria-controls` no gatilho mobile
+* `aria-current="page"` no item ativo
+* `Esc` fecha o painel mobile
+* Sem trava de scroll nem focus trap — **o painel não é modal**; a página
+  atrás continua visível e utilizável, que é o objetivo do formato
+
+Fonte dos links: `lib/nav.ts` (`SITE_LINKS`), incluindo a `description` — que
+vira `title` no desktop e linha de apoio no painel mobile.
+
+---
+
+# Abas de seção (CardsSections)
+
+Arquivo:
+
+```text
+components/cards/cards-sections.tsx
+```
+
+Padrão de abas com carregamento adiado, usado em `/cards`. As três galerias
+somam ~30 imagens hi-res mais as folhas do motor de foil; carregadas de uma
+vez, o visitante pagava por três seções para ver uma.
+
+* Cada galeria entra por `next/dynamic` com `ssr: false` — o efeito holográfico
+  depende do ponteiro e não produz nada de útil no HTML do servidor
+* Só a aba ativa é montada: trocar de aba desmonta a anterior e libera as
+  imagens dela
+* `role="tablist"` / `tab` / `tabpanel`, setas navegam, Home/End vão às pontas,
+  e só a aba ativa fica no fluxo de tabulação
+* Placeholder com altura próxima da galeria real, para o conteúdo abaixo não
+  saltar quando ela entra
+
+Reaproveitar este padrão em qualquer página que empilhe seções pesadas.
 
 ---
 
@@ -893,6 +925,9 @@ derrubava a tinta para ~3:1.
 
 | Classe | Efeito |
 |---|---|
+| `.k-3d` | **Letras 3D** — extrusão por camadas na cor de acento da zona |
+| `.k-3d--deep` | Extrusão longa, para manchetes de capa |
+| `.k-3d--up` | Extrusão invertida (para cima e à esquerda) |
 | `.k-letter` | Contorno de tinta + dupla sombra dura na cor da zona |
 | `.k-letter-rainbow` | Preenchimento arco-íris animado com contorno |
 | `.k-glitch` | Datamosh vermelho-ciano em faixas (ver abaixo) |
@@ -911,7 +946,38 @@ o efeito tem que ser um susto ocasional, não um tremor constante que impeça a
 leitura. As cópias são pseudo-elementos, logo o título é anunciado uma vez só
 pelo leitor de tela.
 
-Usar em **uma ou duas manchetes por página**, nunca em todas.
+Usar em **uma ou duas manchetes por página**, nunca em todas. Hoje: capa,
+oficina, videoteca e contracapa. O resto usa `3d`, que é o padrão da `Zone`.
+
+### Letras 3D
+
+Extrusão por 9 a 14 camadas de `text-shadow`, cada uma 1px na diagonal, com a
+última fechando a peça em `--k-ink`. A lateral usa `--k-3d-side`, que por
+omissão é o acento da zona — a mesma manchete muda de cor conforme a dimensão
+onde está.
+
+É `text-shadow` e não `transform: translateZ` de propósito: o transform criaria
+contexto 3D e arrastaria junto os pseudo-elementos do glitch, quebrando o
+alinhamento das faixas quando os dois tratamentos aparecem perto.
+
+### Anomalia Terra-138 · Punk
+
+```text
+components/comic/punk-name.tsx  →  <PunkName>Lucas Riboldi</PunkName>
+```
+
+A assinatura do autor na capa. Cada letra é um recorte de revista com fundo,
+rotação e `clip-path` irregular próprios — bilhete de resgate, não tipografia.
+Três posições fixas recebem `k-punk-glitch`, o salto da anomalia (passos
+discretos, não interpolação: é erro de registro, não movimento).
+
+A paleta de recortes e as posições com glitch são **fixas por índice**, nunca
+sorteadas: `Math.random()` no render daria markup diferente no servidor e no
+cliente e a hidratação reclamaria.
+
+Acessibilidade: as letras são `aria-hidden` dentro de um contêiner com
+`aria-label`. Sem isso o leitor de tela soletraria "L… U… C… A… S" — que é o
+efeito visual desejado e exatamente o que não se quer no áudio.
 
 ## Primitivos
 
@@ -943,7 +1009,8 @@ components/comic/              primitivos (Atomic: átomos e moléculas)
   atoms.tsx                      Halftone, SpeedLines, Burst, Onoma,
                                  PulseRings, InkDivider, Caption, Bubble,
                                  Stars, ComicButton, ACCENT_VAR
-  glitch-title.tsx               GlitchTitle (glitch | rainbow | letter)
+  glitch-title.tsx               GlitchTitle (glitch | rainbow | letter | 3d)
+  punk-name.tsx                  PunkName — anomalia Terra-138 (recortes)
   zone.tsx                       Zone — wrapper de dimensão + cabeçalho
   comic-panel.tsx                Requadro com tilt 3D
   media-frame.tsx                Imagem com fallback desenhado
@@ -952,7 +1019,7 @@ components/comic/              primitivos (Atomic: átomos e moléculas)
   motion.ts                      EASE, STAGGER, REVEAL, PANEL_IN, slideIn
 
 components/criativo/           organismos (uma zona = um componente)
-  hero.tsx  outro.tsx
+  hero.tsx  kit-strip.tsx  outro.tsx
   zone-atelie.tsx  zone-oficina.tsx  zone-banca.tsx  zone-cine.tsx
   zone-radio.tsx   zone-videoteca.tsx zone-mural.tsx zone-tirinhas.tsx
   music-player.tsx               playlist + controles + Web Audio API

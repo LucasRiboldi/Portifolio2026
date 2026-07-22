@@ -10,7 +10,7 @@ const CRT_LINES = [
   "$ ls ~/portfolio",
   "portfolio-2026/  design-system/  tools/  blog/",
   "$ npm run build",
-  "▲ Next.js 15 — compilando…",
+  "Next.js 15 — compilando…",
   "✓ compilado com sucesso · 0 erros",
   "$ deploy --prod",
   "◈ deploy pronto: https://portifolio2026-two.vercel.app",

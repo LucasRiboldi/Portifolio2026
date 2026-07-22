@@ -27,6 +27,11 @@
   --k-green: #00c96b;
   --k-pink: #ff8fd0;
 
+  /* Altura total do header fixo: fio de cor (4) + barra (60) + borda (3).
+     O `main` consome o mesmo token — se a barra mudar de altura, os dois
+     acompanham, e o conteúdo não fica meio escondido atrás dela. */
+  --k-header-h: 67px;
+
   /* --- ritmo -------------------------------------------------------------- */
   --k-radius: 6px;
   --k-ink-w: 3px;
@@ -132,6 +137,52 @@
   transform: rotate(-2deg);
 }
 
+/* --- LETRAS 3D -------------------------------------------------------------
+   Extrusão por camadas de `text-shadow`: cada passo desloca 1px na diagonal, e
+   a última camada fecha a peça com a cor da tinta. É a técnica de letreiro de
+   capa — mais barata que `transform: translateZ` e, ao contrário dele, não
+   cria contexto 3D que arrastaria os pseudo-elementos do glitch junto.
+   --------------------------------------------------------------------------- */
+
+.k-3d {
+  --k-3d-face: var(--k-white);
+  --k-3d-side: var(--k-zone-a);
+  color: var(--k-3d-face);
+  -webkit-text-stroke: 2px var(--k-ink);
+  paint-order: stroke fill;
+  text-shadow:
+    1px 1px 0 var(--k-3d-side),
+    2px 2px 0 var(--k-3d-side),
+    3px 3px 0 var(--k-3d-side),
+    4px 4px 0 var(--k-3d-side),
+    5px 5px 0 var(--k-3d-side),
+    6px 6px 0 var(--k-3d-side),
+    7px 7px 0 var(--k-3d-side),
+    8px 8px 0 var(--k-3d-side),
+    9px 9px 0 var(--k-ink),
+    12px 12px 0 rgba(18, 16, 14, 0.28);
+}
+
+/* Extrusão longa, para as manchetes de capa. */
+.k-3d--deep {
+  text-shadow:
+    1px 1px 0 var(--k-3d-side), 2px 2px 0 var(--k-3d-side), 3px 3px 0 var(--k-3d-side),
+    4px 4px 0 var(--k-3d-side), 5px 5px 0 var(--k-3d-side), 6px 6px 0 var(--k-3d-side),
+    7px 7px 0 var(--k-3d-side), 8px 8px 0 var(--k-3d-side), 9px 9px 0 var(--k-3d-side),
+    10px 10px 0 var(--k-3d-side), 11px 11px 0 var(--k-3d-side), 12px 12px 0 var(--k-3d-side),
+    13px 13px 0 var(--k-3d-side), 14px 14px 0 var(--k-3d-side),
+    15px 15px 0 var(--k-ink),
+    20px 20px 0 rgba(18, 16, 14, 0.25);
+}
+
+/* Extrusão para cima e para a esquerda — inverte a luz da cena. */
+.k-3d--up {
+  text-shadow:
+    -1px -1px 0 var(--k-3d-side), -2px -2px 0 var(--k-3d-side), -3px -3px 0 var(--k-3d-side),
+    -4px -4px 0 var(--k-3d-side), -5px -5px 0 var(--k-3d-side), -6px -6px 0 var(--k-3d-side),
+    -7px -7px 0 var(--k-ink);
+}
+
 /* Texto vazado — números-fantasma das seções. */
 .k-outline {
   color: transparent;
@@ -204,6 +255,65 @@
 .k-glitch--hover::after { animation-play-state: paused; }
 .k-glitch--hover:hover::before,
 .k-glitch--hover:hover::after { animation-play-state: running; }
+
+/* ---------------------------------------------------------------------------
+   ANOMALIA TERRA-138 · PUNK
+   A dimensão do Spider-Punk: zine xerocado, papel rasgado, letra de recorte de
+   revista. Aqui serve à assinatura do autor na capa — o nome não é tipografado,
+   é montado letra a letra, como bilhete de resgate.
+   --------------------------------------------------------------------------- */
+
+.k-punk {
+  display: inline-flex;
+  flex-wrap: wrap;
+  align-items: baseline;
+  gap: 0.06em;
+  /* Contraste alto e leve dessaturação: é a cara de fotocópia de fotocópia. */
+  filter: contrast(1.12) saturate(0.94);
+}
+
+/* Cada letra é um recorte com fundo próprio, girado. */
+.k-punk-letter {
+  display: inline-block;
+  padding: 0.02em 0.12em;
+  background: var(--k-punk-bg, var(--k-paper));
+  color: var(--k-punk-fg, var(--k-ink));
+  border: 2px solid var(--k-ink);
+  box-shadow: 3px 3px 0 rgba(18, 16, 14, 0.85);
+  transform: rotate(var(--k-punk-rot, 0deg));
+  /* Recorte irregular no topo e na base — a tesoura sem régua. */
+  clip-path: polygon(0 6%, 12% 0, 46% 5%, 78% 0, 100% 7%, 96% 94%, 62% 100%, 28% 95%, 3% 100%);
+}
+
+.k-punk-space {
+  display: inline-block;
+  width: 0.28em;
+}
+
+/* Instabilidade da anomalia: a letra salta de posição por um quadro e volta.
+   Passos discretos (`steps(1)`) e não interpolação — a anomalia é um erro de
+   registro, não um movimento suave. */
+.k-punk-glitch {
+  animation: k-punk-jitter 5.5s steps(1) infinite;
+}
+
+@keyframes k-punk-jitter {
+  0%, 88%, 100% { transform: rotate(var(--k-punk-rot, 0deg)) translate(0, 0); }
+  89% { transform: rotate(var(--k-punk-rot, 0deg)) translate(-3px, 2px) skewX(-8deg); }
+  91% { transform: rotate(var(--k-punk-rot, 0deg)) translate(4px, -2px) skewX(6deg); }
+  93% { transform: rotate(var(--k-punk-rot, 0deg)) translate(-2px, -1px); }
+}
+
+/* Faixa de fita adesiva por cima do nome. */
+.k-tape {
+  background: repeating-linear-gradient(
+    45deg,
+    rgba(255, 255, 255, 0.5) 0 6px,
+    rgba(255, 255, 255, 0.35) 6px 12px
+  );
+  border-inline: 1px dashed rgba(18, 16, 14, 0.35);
+  box-shadow: 0 1px 4px rgba(18, 16, 14, 0.3);
+}
 
 /* ---------------------------------------------------------------------------
    ZONAS — cada uma é uma dimensão do multiverso pessoal
@@ -591,6 +701,7 @@
   .k-letter-rainbow,
   .k-glitch::before,
   .k-glitch::after,
+  .k-punk-glitch,
   .k-swirl,
   .k-wobble,
   .k-pulse-ring {

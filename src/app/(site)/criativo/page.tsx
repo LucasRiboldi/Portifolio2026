@@ -1,5 +1,6 @@
 import { ArcaneProphet } from "@/components/realms/arcane-prophet"
 import { Hero } from "@/components/criativo/hero"
+import { KitStrip } from "@/components/criativo/kit-strip"
 import { ZoneAtelie } from "@/components/criativo/zone-atelie"
 import { ZoneOficina } from "@/components/criativo/zone-oficina"
 import { ZoneBanca } from "@/components/criativo/zone-banca"
@@ -79,6 +80,7 @@ export default async function CriativoHome() {
           de scroll horizontal — e `hidden` quebraria o `position: sticky`. */}
       <div className="realm-hide-arcane k-body overflow-x-clip">
         <Hero />
+        <KitStrip />
         <ZoneAtelie artworks={artworks} />
         <ZoneOficina projects={projects} />
         <ZoneBanca comics={comics} />

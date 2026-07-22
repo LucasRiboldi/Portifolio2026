@@ -12,6 +12,7 @@ import {
   SpeedLines,
 } from "@/components/comic/atoms"
 import { GlitchTitle } from "@/components/comic/glitch-title"
+import { PunkName } from "@/components/comic/punk-name"
 import { Counter } from "@/components/comic/counter"
 import { EASE } from "@/components/comic/motion"
 import { FUN_STATS, HERO } from "@/constants/criativo-landing"
@@ -38,7 +39,7 @@ export function Hero() {
     <section
       ref={ref}
       aria-labelledby="hero-title"
-      className="k-zone k-zone--multiverso k-grain relative isolate flex min-h-[calc(100vh-4rem)] items-center overflow-hidden px-4 pb-28 pt-12 sm:px-6 lg:px-8"
+      className="k-zone k-zone--multiverso k-grain relative isolate flex min-h-[calc(100vh-var(--k-header-h))] items-center overflow-hidden px-4 pb-28 pt-12 sm:px-6 lg:px-8"
     >
       {/* --- camadas de fundo ------------------------------------------- */}
       <motion.div aria-hidden className="absolute inset-0 z-0" style={layer(yBack)}>
@@ -66,11 +67,22 @@ export function Hero() {
               <Caption>{HERO.kicker}</Caption>
             </motion.div>
 
-            <h1 id="hero-title" className="mt-7 text-[clamp(2.8rem,9.5vw,7.5rem)]">
+            {/* --- assinatura do autor (anomalia Terra-138) -------------- */}
+            <motion.div
+              className="mt-6 flex flex-wrap items-center gap-x-4 gap-y-2"
+              initial={reduced ? false : { opacity: 0, y: 14 }}
+              animate={{ opacity: 1, y: 0 }}
+              transition={{ duration: 0.65, ease: EASE, delay: 0.06 }}
+            >
+              <PunkName className="text-[clamp(1.4rem,3.6vw,2.4rem)]">{HERO.author}</PunkName>
+              <span className="k-kicker text-[9px] text-[var(--k-ink)]/60">{HERO.authorTag}</span>
+            </motion.div>
+
+            <h1 id="hero-title" className="mt-5 text-[clamp(2.8rem,9.5vw,7.5rem)]">
               {[HERO.titleTop, HERO.titleMid].map((line, i) => (
                 <motion.span
                   key={line}
-                  className="k-title k-letter block"
+                  className="k-title k-3d k-3d--deep block"
                   initial={reduced ? false : { opacity: 0, y: 46, rotate: -2 }}
                   animate={{ opacity: 1, y: 0, rotate: 0 }}
                   transition={{ duration: 0.8, ease: EASE, delay: 0.1 + i * 0.09 }}

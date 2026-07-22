@@ -25,7 +25,7 @@ export function Outro() {
         <Caption>{OUTRO.kicker}</Caption>
 
         <h2 id="outro-title" className="mt-7 text-[clamp(2.4rem,7vw,5.5rem)]">
-          <span className="k-title k-letter block">{OUTRO.title}</span>
+          <span className="k-title k-3d k-3d--deep block">{OUTRO.title}</span>
           <GlitchTitle as="span" treatment="glitch" className="mt-2 block text-[0.55em]">
             {OUTRO.glitch}
           </GlitchTitle>

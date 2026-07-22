@@ -1,4 +1,5 @@
 import type { Accent } from "@/components/comic/atoms"
+import type { Treatment } from "@/components/comic/glitch-title"
 import type { ZoneId } from "@/components/comic/zone"
 
 /**
@@ -15,6 +16,9 @@ import type { ZoneId } from "@/components/comic/zone"
 
 export const HERO = {
   kicker: "Edição #2026 · Terra-LR",
+  /** Assinatura do autor na capa, na anomalia Terra-138 · Punk. */
+  author: "Lucas Riboldi",
+  authorTag: "Terra-138 · Punk · ANOMALIAS",
   /** Manchete em três tempos: as duas primeiras em letragem, a terceira glitch. */
   titleTop: "Um grande",
   titleMid: "repositório",
@@ -36,7 +40,8 @@ export interface ZoneMeta {
   kicker: string
   title: string
   subtitle: string
-  treatment?: "glitch" | "rainbow" | "letter"
+  /** Sem valor, a `Zone` aplica letras 3D — o tratamento padrão da página. */
+  treatment?: Treatment
 }
 
 export const ZONES: Record<Exclude<ZoneId, "multiverso">, ZoneMeta> = {
@@ -59,6 +64,7 @@ export const ZONES: Record<Exclude<ZoneId, "multiverso">, ZoneMeta> = {
     title: "Sites & componentes",
     subtitle:
       "O que eu construo em código: interfaces, componentes, experimentos de CSS e coisas que só existem para responder a pergunta “será que dá?”.",
+    treatment: "glitch",
   },
   banca: {
     id: "banca",

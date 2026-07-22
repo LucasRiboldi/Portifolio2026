@@ -1,6 +1,6 @@
 import { cn } from "@/lib/utils"
 import { Caption, InkDivider } from "./atoms"
-import { GlitchTitle } from "./glitch-title"
+import { GlitchTitle, type Treatment } from "./glitch-title"
 import { Reveal } from "./reveal"
 
 /** As dimensões da landing. Cada uma tem paleta própria em `comic-2026.css`. */
@@ -25,7 +25,7 @@ interface ZoneProps {
   title: string
   subtitle?: string
   /** Tratamento da manchete; o glitch é para uma ou duas zonas, não todas. */
-  treatment?: "glitch" | "rainbow" | "letter"
+  treatment?: Treatment
   index: string
   children: React.ReactNode
   className?: string
@@ -46,7 +46,7 @@ export function Zone({
   kicker,
   title,
   subtitle,
-  treatment = "letter",
+  treatment = "3d",
   index,
   children,
   className,
