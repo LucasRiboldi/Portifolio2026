@@ -140,6 +140,13 @@ function Stacked3dHoloCard({ def }: { def: HoloStackDef }) {
               <div className="card__rotator">
                 {/* alt="" — a face é decorativa; o contêiner já tem o rótulo */}
                 <div className="card__front">
+                  {/*
+                    <img> cru de propósito: a técnica holo depende da estrutura
+                    exata .card__front > img + .card__shine + .card__glare. O
+                    next/image envolve num <span> e quebra os irmãos/os seletores
+                    do efeito. Mantido nativo.
+                  */}
+                  {/* eslint-disable-next-line @next/next/no-img-element */}
                   <img src={def.img} alt="" loading="lazy" width={734} height={1024} />
                   <div className="card__shine" />
                   <div className="card__glare" />

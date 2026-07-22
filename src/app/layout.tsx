@@ -41,6 +41,15 @@ export async function generateMetadata(): Promise<Metadata> {
     description: site.description,
     keywords: ["Lucas Riboldi", "Product Designer", "Developer", "Design System", "Portfólio", "Game Design"],
     authors: [{ name: site.name, url: site.github }],
+    manifest: "/favicon/site.webmanifest",
+    icons: {
+      icon: [
+        { url: "/favicon/favicon.ico", sizes: "any" },
+        { url: "/favicon/favicon-16x16.png", type: "image/png", sizes: "16x16" },
+        { url: "/favicon/favicon-32x32.png", type: "image/png", sizes: "32x32" },
+      ],
+      apple: [{ url: "/favicon/apple-touch-icon.png", sizes: "180x180" }],
+    },
     openGraph: {
       type: "website",
       locale: "pt_BR",

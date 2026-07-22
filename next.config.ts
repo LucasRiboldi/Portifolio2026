@@ -55,6 +55,11 @@ const securityHeaders = [
 const nextConfig: NextConfig = {
   reactStrictMode: true,
 
+  // Fixa a raiz do workspace neste projeto. Sem isto o Next detecta o
+  // package-lock.json órfão em C:\Users\lucas e infere a raiz errada,
+  // emitindo o warning de "multiple lockfiles" a cada boot.
+  outputFileTracingRoot: import.meta.dirname,
+
   experimental: {
     serverActions: {
       // O upload de mídia passa por Server Action e o teto do arquivo é 5 MB
