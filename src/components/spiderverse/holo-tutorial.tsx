@@ -1,8 +1,9 @@
 "use client"
 
-import { useState, type ReactNode } from "react"
+import { useState } from "react"
 import { TutorialCard, TutorialStack, useTutorialPointer } from "./holo-tutorial-demo"
-import { Code } from "./holo-tutorial-code"
+import { Code, Nota, Step } from "./holo-tutorial-ui"
+import { HoloTutorialAdvanced } from "./holo-tutorial-advanced"
 
 /**
  * Tutorial "como se faz um holo" — a seção didática de /cards.
@@ -15,32 +16,6 @@ import { Code } from "./holo-tutorial-code"
  *   · simeydotme/pokemon-cards-css → public/pokemon-cards-main/src/style.scss
  *   · simeydotme/hover-tilt        → public/hover-tilt-main/packages/hover-tilt
  */
-
-function Step({
-  n,
-  title,
-  children,
-  demo,
-}: {
-  n: number
-  title: string
-  children: ReactNode
-  demo?: ReactNode
-}) {
-  return (
-    <section className="border-t-2 border-white/12 pt-8" aria-label={`Passo ${n}: ${title}`}>
-      <div className="grid gap-8 lg:grid-cols-[1fr_minmax(200px,260px)] lg:items-start">
-        <div className="min-w-0">
-          <h3 className="sv-display mb-3 text-xl uppercase text-white">
-            <span className="text-[var(--sv-magenta)]">{String(n).padStart(2, "0")}.</span> {title}
-          </h3>
-          <div className="space-y-4 text-sm leading-relaxed text-white/75">{children}</div>
-        </div>
-        {demo ? <div className="lg:sticky lg:top-24">{demo}</div> : null}
-      </div>
-    </section>
-  )
-}
 
 /** Demo com leitura ao vivo das variáveis — o "console" do passo 1. */
 function PointerReadout() {
@@ -214,12 +189,12 @@ ry: (px - 0.5) * 22   // ponteiro em X  → rotateY`}
   opacity: var(--o);
 }`}
         />
-        <p className="rounded border-l-4 border-[var(--sv-yellow)] bg-white/5 py-2 pl-3 text-[13px]">
-          <b className="text-white">Detalhe do original:</b> antes de virar{" "}
-          <code>--bx</code>, o valor passa por um remapeamento de{" "}
-          <code>0–100%</code> para <code>37–63%</code>. O foil anda menos que o ponteiro na
-          origem, para depois ser multiplicado — sem isso o gradiente sai da carta nos cantos.
-        </p>
+        <Nota cor="yellow">
+          <b className="text-white">Detalhe do original:</b> antes de virar <code>--bx</code>, o
+          valor passa por um remapeamento de <code>0–100%</code> para <code>37–63%</code>. O foil
+          anda menos que o ponteiro na origem, para depois ser multiplicado — sem isso o gradiente
+          sai da carta nos cantos.
+        </Nota>
       </Step>
 
       <Step n={4} title="O reflexo especular" demo={<GlareDemo />}>
@@ -285,11 +260,11 @@ ease = 0.35   // no move:  gruda no ponteiro
 // no leave:
 ease = 0.06   // assenta devagar — o "peso"`}
         />
-        <p className="rounded border-l-4 border-[var(--sv-cyan)] bg-white/5 py-2 pl-3 text-[13px]">
+        <Nota cor="cyan">
           <b className="text-white">Pare o loop.</b> Quando todos os valores chegam ao alvo, não
           agende o próximo quadro. Um <code>rAF</code> eterno por carta custa bateria à toa — e
           numa galeria são dezenas deles.
-        </p>
+        </Nota>
       </Step>
 
       <Step n={6} title="Empilhar em 3D: profundidade por fator" demo={<StackDemo />}>
@@ -323,15 +298,15 @@ ease = 0.06   // assenta devagar — o "peso"`}
   transform: translateZ(calc(var(--o) * 40px * var(--z)));
 }`}
         />
-        <p className="rounded border-l-4 border-[var(--sv-magenta)] bg-white/5 py-2 pl-3 text-[13px]">
-          <b className="text-white">A armadilha que custa horas:</b>{" "}
-          <code>mix-blend-mode</code> em um filho <b className="text-white">achata o{" "}
-          <code>preserve-3d</code> do pai direto</b> — e o foil dos passos 3 e 4 é feito de blend
-          modes. Ao juntar os dois sistemas, a carta inteira (com shine e glare dentro) tem que
-          morar em <b className="text-white">uma única</b> camada, para que os blends fiquem como
-          netos do contêiner 3D, e não como filhos. O mesmo vale para{" "}
-          <code>will-change: opacity</code> e para <code>container-type</code>.
-        </p>
+        <Nota cor="magenta">
+          <b className="text-white">A armadilha que custa horas:</b> <code>mix-blend-mode</code> em
+          um filho <b className="text-white">achata o <code>preserve-3d</code> do pai direto</b> —
+          e o foil dos passos 3 e 4 é feito de blend modes. Ao juntar os dois sistemas, a carta
+          inteira (com shine e glare dentro) tem que morar em{" "}
+          <b className="text-white">uma única</b> camada, para que os blends fiquem como netos do
+          contêiner 3D, e não como filhos. O mesmo vale para <code>will-change: opacity</code> e
+          para <code>container-type</code>.
+        </Nota>
       </Step>
 
       <Step n={7} title="O que separa a demo do código de produção">
@@ -369,6 +344,23 @@ ease = 0.06   // assenta devagar — o "peso"`}
 }`}
         />
       </Step>
+
+      {/* Passos 8-11: a anatomia do sistema real, lida do CSS vendorizado */}
+      <div className="border-t-4 border-[var(--sv-magenta)] pt-8">
+        <p className="sv-heavy text-[10px] uppercase tracking-widest text-[var(--sv-magenta)]">
+          Parte 2 — a anatomia do sistema real
+        </p>
+        <p className="mt-2 max-w-2xl text-sm leading-relaxed text-white/70">
+          Os passos acima constroem um holo do zero. Os quatro a seguir abrem o CSS do{" "}
+          <code>pokemon-cards-css</code> vendorizado em{" "}
+          <code className="text-[var(--sv-cyan)]">/public/poke-holo/css</code> e explicam como ele
+          faz as cartas de verdade — as três camadas do shine, as imagens de foil e máscara que
+          vêm da carta física, os recortes por formato de moldura, e a diferença entre os dois
+          tipos de blend.
+        </p>
+      </div>
+
+      <HoloTutorialAdvanced />
 
       <section className="border-t-2 border-white/12 pt-8">
         <h3 className="sv-display mb-3 text-xl uppercase text-white">Créditos e fontes</h3>

@@ -36,10 +36,12 @@
 }
 
 .tut-card__art::after {
-  /* uma "janela de arte", como a moldura de uma carta de verdade */
+  /* A "janela de arte". Os números NÃO são arbitrários: são os mesmos do
+     --clip de cards.css (a janela de uma carta Básica), para que o Passo 10
+     possa aplicar o clip-path real e ele encaixar exatamente aqui. */
   content: "";
   position: absolute;
-  inset: 12% 8% 34% 8%;
+  inset: 9.85% 8% 52.85% 8%;
   border: 2px solid rgba(0, 0, 0, 0.55);
   border-radius: 4px;
   background:
@@ -104,6 +106,29 @@
 .tut-card--raw .tut-card__glare {
   mix-blend-mode: normal;
   opacity: 1;
+}
+
+/* ---- Passo 10: o clip-path da janela de arte ----------------------------
+   Os mesmos números do --clip do sistema real (cards.css): um inset que
+   deixa o foil só dentro da janela de ilustração de uma carta Básica. */
+.tut-card--clip .tut-card__shine {
+  clip-path: inset(9.85% 8% 52.85% 8%);
+}
+
+/* ---- Passo 9: a máscara -------------------------------------------------
+   No sistema real a máscara é uma imagem da carta (--mask); aqui é um
+   gradiente, porque o mecanismo a ensinar é o mesmo: o canal alfa da
+   máscara decide onde a camada aparece. Opaco mostra, transparente corta.
+   A "janela de arte" é recortada para imitar a área foilada de uma holo. */
+.tut-card--masked .tut-card__shine {
+  -webkit-mask-image: linear-gradient(#000 0 0), linear-gradient(#000 0 0);
+  mask-image: linear-gradient(#000 0 0), linear-gradient(#000 0 0);
+  -webkit-mask-size: 84% 22%, 84% 26%;
+  mask-size: 84% 22%, 84% 26%;
+  -webkit-mask-position: 50% 12%, 50% 74%;
+  mask-position: 50% 12%, 50% 74%;
+  -webkit-mask-repeat: no-repeat;
+  mask-repeat: no-repeat;
 }
 
 /* ---- Passo 6: as camadas do stacked 3D ---------------------------------- */

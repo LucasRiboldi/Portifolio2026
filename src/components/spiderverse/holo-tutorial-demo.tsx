@@ -117,9 +117,22 @@ type Handlers = {
 
 export const TutorialCard = forwardRef<
   HTMLDivElement,
-  { handlers: Handlers; tilt?: boolean; shine?: boolean; glare?: boolean; raw?: boolean }
->(function TutorialCard({ handlers, tilt, shine, glare, raw }, ref) {
-  const classes = ["tut-card", tilt && "tut-card--tilt", raw && "tut-card--raw"]
+  {
+    handlers: Handlers
+    tilt?: boolean
+    shine?: boolean
+    glare?: boolean
+    raw?: boolean
+    /** recorta o foil na janela de arte, como o --clip do Passo 10 */
+    clip?: boolean
+  }
+>(function TutorialCard({ handlers, tilt, shine, glare, raw, clip }, ref) {
+  const classes = [
+    "tut-card",
+    tilt && "tut-card--tilt",
+    raw && "tut-card--raw",
+    clip && "tut-card--clip",
+  ]
     .filter(Boolean)
     .join(" ")
 
@@ -143,6 +156,38 @@ export const TutorialCard = forwardRef<
     </div>
   )
 })
+
+/**
+ * Demo de `mask-image` (Passo 9).
+ *
+ * A máscara real de uma carta é um PNG/WebP gerado a partir da impressão —
+ * não temos esses arquivos no repositório, então aqui a máscara é um
+ * gradiente CSS. O MECANISMO é idêntico ao do sistema real (branco/opaco
+ * mostra, transparente esconde); o que muda é a origem da imagem. Está
+ * dito com todas as letras no texto do passo, para ninguém achar que é a
+ * máscara oficial da carta.
+ */
+export const TutorialMask = forwardRef<HTMLDivElement, { handlers: Handlers; masked: boolean }>(
+  function TutorialMask({ handlers, masked }, ref) {
+    return (
+      <div
+        ref={ref}
+        {...handlers}
+        role="img"
+        aria-label={
+          masked
+            ? "Carta com o foil restrito pela máscara"
+            : "Carta com o foil cobrindo tudo, sem máscara"
+        }
+        className={`tut-card tut-card--tilt ${masked ? "tut-card--masked" : ""}`}
+      >
+        <span aria-hidden className="tut-card__art" />
+        <span aria-hidden className="tut-card__shine" />
+        <span aria-hidden className="tut-card__glare" />
+      </div>
+    )
+  }
+)
 
 export const TutorialStack = forwardRef<HTMLDivElement, { handlers: Handlers }>(
   function TutorialStack({ handlers }, ref) {

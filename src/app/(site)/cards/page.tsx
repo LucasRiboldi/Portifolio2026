@@ -6,6 +6,7 @@ import { ThundercatsGallery } from "@/components/spiderverse/thundercats-gallery
 import { Stacked3dGallery } from "@/components/spiderverse/stacked-3d-gallery"
 import { Stacked3dHoloGallery } from "@/components/spiderverse/stacked-3d-holo"
 import { HoloTutorial } from "@/components/spiderverse/holo-tutorial"
+import { HoloRarityCatalog } from "@/components/spiderverse/holo-rarity-catalog"
 
 export const metadata = { title: "Cards" }
 
@@ -94,6 +95,18 @@ export default function CardsPage() {
           subtitle="O tutorial completo em português: da posição do ponteiro até o foil metálico e as camadas em 3D. Cada trecho de código é o mesmo que roda na demo ao lado — passe o mouse nelas."
         />
         <HoloTutorial />
+      </section>
+
+      {/* ---------- 7. CATÁLOGO DE RARIDADES ---------- */}
+      <section className="mt-16 sm:mt-24" aria-label="Catálogo de raridades">
+        <ComicHeader
+          as="h2"
+          kicker="Uma a uma"
+          title="Catálogo de"
+          highlight="raridades"
+          subtitle="Cada efeito do sistema com a explicação de como ele é feito e o arquivo CSS onde a regra mora — as descrições saíram do código, não da documentação."
+        />
+        <HoloRarityCatalog />
       </section>
     </SvCanvas>
   )

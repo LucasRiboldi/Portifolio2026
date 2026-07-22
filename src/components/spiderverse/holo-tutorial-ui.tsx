@@ -1,3 +1,56 @@
+import type { ReactNode } from "react"
+
+/**
+ * Primitivas de apresentação do tutorial holo: o passo numerado e o bloco
+ * de código. Ficam separadas porque três arquivos as consomem — os passos
+ * básicos, os avançados e o catálogo de raridades.
+ */
+
+/** Um passo numerado, com a demo opcional grudada à direita. */
+export function Step({
+  n,
+  title,
+  children,
+  demo,
+}: {
+  n: number
+  title: string
+  children: ReactNode
+  demo?: ReactNode
+}) {
+  return (
+    <section className="border-t-2 border-white/12 pt-8" aria-label={`Passo ${n}: ${title}`}>
+      <div className="grid gap-8 lg:grid-cols-[1fr_minmax(200px,260px)] lg:items-start">
+        <div className="min-w-0">
+          <h3 className="sv-display mb-3 text-xl uppercase text-white">
+            <span className="text-[var(--sv-magenta)]">{String(n).padStart(2, "0")}.</span> {title}
+          </h3>
+          <div className="space-y-4 text-sm leading-relaxed text-white/75">{children}</div>
+        </div>
+        {demo ? <div className="lg:sticky lg:top-24">{demo}</div> : null}
+      </div>
+    </section>
+  )
+}
+
+/** Caixa de destaque — a "nota de rodapé" dos passos. */
+export function Nota({
+  cor = "yellow",
+  children,
+}: {
+  cor?: "yellow" | "cyan" | "magenta"
+  children: ReactNode
+}) {
+  const borda = {
+    yellow: "border-[var(--sv-yellow)]",
+    cyan: "border-[var(--sv-cyan)]",
+    magenta: "border-[var(--sv-magenta)]",
+  }[cor]
+  return (
+    <p className={`rounded border-l-4 ${borda} bg-white/5 py-2 pl-3 text-[13px]`}>{children}</p>
+  )
+}
+
 /**
  * Bloco de código do tutorial — sem dependência de highlighter.
  *
