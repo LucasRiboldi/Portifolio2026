@@ -7,6 +7,7 @@ import { Stacked3dGallery } from "@/components/spiderverse/stacked-3d-gallery"
 import { Stacked3dHoloGallery } from "@/components/spiderverse/stacked-3d-holo"
 import { HoloTutorial } from "@/components/spiderverse/holo-tutorial"
 import { HoloRarityCatalog } from "@/components/spiderverse/holo-rarity-catalog"
+import { HoloBoosterGallery } from "@/components/spiderverse/holo-booster-gallery"
 
 export const metadata = { title: "Cards" }
 
@@ -107,6 +108,18 @@ export default function CardsPage() {
           subtitle="Cada efeito do sistema com a explicação de como ele é feito e o arquivo CSS onde a regra mora — as descrições saíram do código, não da documentação."
         />
         <HoloRarityCatalog />
+      </section>
+
+      {/* ---------- 8. BOOSTER COMPLETO ---------- */}
+      <section className="mt-16 sm:mt-24" aria-label="Booster completo">
+        <ComicHeader
+          as="h2"
+          kicker="O acervo inteiro"
+          title="Booster"
+          highlight="completo"
+          subtitle="As 51 cartas restantes do acervo, agrupadas por família de raridade. Cada uma foi identificada abrindo a imagem — o número do arquivo não diz se a 51 é uma VMAX comum ou uma do Shiny Vault."
+        />
+        <HoloBoosterGallery />
       </section>
     </SvCanvas>
   )
