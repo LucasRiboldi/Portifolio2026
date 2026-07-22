@@ -1,33 +1,25 @@
 import type { RealmDesign } from "@/design-system/realms"
 import {
-  ArcaneTypography,
-  ArcaneManchete,
-  ArcaneCapitular,
   ArcaneGrid,
   ArcaneFiletes,
   ArcaneCaixas,
   ArcaneClassificados,
   ArcaneExpediente,
-  ArcaneAccessibility,
   ArcaneSilencio,
   SubChapter,
 } from "./arcane-chapters"
+import { ArcaneTypography, ArcaneManchete, ArcaneCapitular } from "./arcane-typography"
+import { ArcaneAccessibility } from "./arcane-accessibility"
 import {
   ArcaneGravura,
   ArcaneReportagens,
   ArcaneEditorial,
   ArcaneServico,
   ArcaneGrafico,
-  ArcaneMarcas,
-  ArcaneCabecalho,
 } from "./arcane-components"
-import {
-  ArcaneBotoes,
-  ArcaneFormulario,
-  ArcaneSelos,
-  ArcaneLetras,
-  ArcanePrensa,
-} from "./arcane-ui"
+import { ArcaneMarcas, ArcaneCabecalho } from "./arcane-marcas"
+import { ArcaneBotoes, ArcaneFormulario, ArcaneSelos } from "./arcane-ui"
+import { ArcaneLetras, ArcanePrensa } from "./arcane-ui-letras"
 import {
   ArcaneMasthead,
   ArcaneIntro,
@@ -42,10 +34,12 @@ import {
   ArcaneComponents,
   ArcanePatterns,
   ArcaneTemplates,
+} from "./arcane-index-chapters"
+import {
   ArcaneContentDesign,
   ArcaneResources,
   ArcaneChangelog,
-} from "./arcane-index-chapters"
+} from "./arcane-index-content"
 import {
   ArcaneSecoes,
   ArcaneTiragens,
