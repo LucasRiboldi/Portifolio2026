@@ -155,7 +155,51 @@ export function HoloTutorialAdvanced() {
         </Nota>
       </Step>
 
-      <Step n={10} title="clip-path: a janela holo muda de lugar por estágio" demo={<ClipDemo />}>
+      <Step n={10} title="A nomenclatura dos arquivos de foil">
+        <p>
+          O sistema não guarda um mapa de carta para foil: ele{" "}
+          <b className="text-white">deriva o nome do arquivo</b>. Vale a pena entender o padrão,
+          porque é ele que permite acrescentar cartas sem editar tabela nenhuma.
+        </p>
+        <Code
+          lang="ts"
+          highlight={[4, 7, 10]}
+          code={`carta:  {ID}_hires.png
+foil:   {id}_foil_{tipo}_{variante}_2x.webp
+
+// 1. numérico → minúsculo, com zeros à esquerda até 3 dígitos
+     49_hires.png  →  049_foil_holo_reverse_2x.webp
+
+// 2. prefixo TG/SV → mantido, em minúsculo
+     TG17_hires.png →  tg17_foil_etched_sunpillar_2x.webp
+
+// 3. prefixo SWSH → o prefixo CAI, sobra o número
+     SWSH181_hires.png → 181_foil_etched_sunpillar_2x.webp`}
+        />
+        <p>
+          <code className="text-[var(--sv-cyan)]">tipo</code> é o acabamento da impressão:{" "}
+          <code>etched</code> (gravado, com relevo) ou <code>holo</code> (liso). E{" "}
+          <code className="text-[var(--sv-cyan)]">variante</code> diz{" "}
+          <b className="text-white">a que raridade aquele foil pertence</b> —{" "}
+          <code>sunpillar</code>, <code>swsecret</code>, <code>reverse</code>,{" "}
+          <code>rainbow</code>.
+        </p>
+        <p>
+          Essa última parte é a que evita um bug silencioso: não basta casar o número. O arquivo{" "}
+          <code>116_foil_holo_reverse_2x.webp</code> existe, mas se a carta 116 estiver sendo
+          exibida como comum, aplicá-lo põe um foil de reverse holo numa carta que não deveria
+          brilhar. Por isso a derivação aqui só devolve o caminho quando a variante corresponde à
+          raridade pedida.
+        </p>
+        <Nota cor="yellow">
+          <b className="text-white">O mesmo nome serve a dois arquivos diferentes.</b> No CDN do
+          projeto original, <code>160_foil_etched_swsecret_2x.webp</code> existe tanto em{" "}
+          <code>/foils/</code> quanto em <code>/masks/</code> — mesmo nome, imagens distintas: uma
+          é a textura, a outra é o recorte. O caminho é que diz qual é qual.
+        </Nota>
+      </Step>
+
+      <Step n={11} title="clip-path: a janela holo muda de lugar por estágio" demo={<ClipDemo />}>
         <p>
           Numa holo clássica o brilho não cobre a carta toda: ele vive{" "}
           <b className="text-white">dentro da janela de arte</b>. E a janela não fica no mesmo
@@ -209,7 +253,7 @@ export function HoloTutorialAdvanced() {
         </Nota>
       </Step>
 
-      <Step n={11} title="Os dois blends fazem coisas diferentes">
+      <Step n={12} title="Os dois blends fazem coisas diferentes">
         <p>
           Esta distinção confunde quase todo mundo, e sem ela o CSS das raridades fica
           ilegível. São dois <i>blends</i> com escopos completamente diferentes.

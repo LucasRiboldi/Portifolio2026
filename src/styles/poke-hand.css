@@ -1,0 +1,75 @@
+/* ==========================================================================
+   Mão de cartas — layout responsivo das galerias
+   --------------------------------------------------------------------------
+   Em telas estreitas a grade vira um leque sobreposto, como cartas seguradas
+   na mão (o comportamento do poke-holo.simey.me). Acima do breakpoint a
+   classe não faz nada e a grade original volta a valer.
+
+   O JS entrega dois números por carta: --i (índice) e --meio (o índice
+   central). Todo o resto é CSS. A rotação e a subida saem da distância ao
+   centro, que é o que dá o arco do leque.
+   ========================================================================== */
+
+@media (max-width: 767px) {
+  .poke-hand {
+    display: flex !important;
+    justify-content: safe center;
+    align-items: flex-end;
+    /* o leque estoura a largura quando há muitas cartas: rola na horizontal */
+    overflow-x: auto;
+    overflow-y: hidden;
+    /* A folga lateral não é estética: `rotate()` NÃO entra no scrollWidth,
+       então a carta das pontas fica ~50px além da área rolável e vira
+       inalcançável. O padding lateral empurra o conteúdo para dentro e
+       devolve essa saliência ao alcance do dedo. */
+    padding: 3.5rem 4rem 2.5rem;
+    margin-inline: -1rem;
+    scroll-padding-inline: 4rem;
+    -webkit-overflow-scrolling: touch;
+  }
+
+  .poke-hand > * {
+    flex: 0 0 auto;
+    width: min(52vw, 210px);
+    /* a sobreposição: cada carta entra por baixo da anterior */
+    margin-inline-start: calc(-1 * var(--sobrepor, 26%));
+    transform-origin: bottom center;
+    /* --desloc já vem normalizado em [-1, 1]: estes dois números são a
+       abertura MÁXIMA do leque, valham 2 cartas ou 20 */
+    transform: rotate(calc(var(--desloc, 0) * 15deg))
+      translateY(calc(var(--dist, 0) * 22px));
+    /* as da direita por cima, como numa mão real segurada pela esquerda */
+    z-index: calc(10 + var(--i, 0));
+    transition: transform 0.25s ease, z-index 0s;
+  }
+
+  .poke-hand > *:first-child {
+    margin-inline-start: 0;
+  }
+
+  /* A carta tocada sai do leque e vem para a frente de todas. */
+  .poke-hand > *:hover,
+  .poke-hand > *:focus-within {
+    transform: rotate(0deg) translateY(-18px) scale(1.04);
+    z-index: 90;
+  }
+
+  /* A legenda de cada carta atrapalha no leque: some, porque a carta
+     ampliada (o popover ao clicar) já mostra o nome e a raridade. */
+  .poke-hand figcaption {
+    display: none;
+  }
+}
+
+/* Fora do leque não há transform herdado que atrapalhe o tilt das cartas. */
+@media (min-width: 768px) {
+  .poke-hand > * {
+    transform: none;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .poke-hand > * {
+    transition: none;
+  }
+}

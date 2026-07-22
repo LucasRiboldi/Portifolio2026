@@ -2,6 +2,7 @@
 
 import { useEffect, useRef, useState } from "react"
 import { useReducedMotion } from "motion/react"
+import { foilDaCarta } from "./poke-foil"
 
 /**
  * Motor compartilhado das cartas holográficas — o CSS REAL do
@@ -69,6 +70,11 @@ interface Vec { x: number; y: number; o: number; tx: number; ty: number; s: numb
 const REST: Vec = { x: 50, y: 50, o: 0, tx: 0, ty: 0, s: 1 }
 
 export function HoloTcgCard({ def }: { def: TcgCardDef }) {
+  // Sem foil declarado, tenta derivar do nome do arquivo da carta (ver
+  // poke-foil.ts). Só aplica se a variante do foil bater com a raridade —
+  // casar apenas o número colocaria foil de reverse holo em carta comum.
+  const foil = def.foil ?? foilDaCarta(def.img, def.rarity)
+
   const cardRef = useRef<HTMLDivElement>(null)
   const reduceMotion = useReducedMotion()
   const cur = useRef<Vec>({ ...REST })
@@ -210,9 +216,9 @@ export function HoloTcgCard({ def }: { def: TcgCardDef }) {
           "--pointer-from-center": "0",
           "--pointer-from-top": "0.5",
           "--pointer-from-left": "0.5",
-          // foil próprio da carta quando existe; sem ele, valem os
-          // fallbacks de cada raridade no CSS vendorizado
-          ...(def.foil ? { "--foil": `url(${def.foil})` } : {}),
+          // foil próprio da carta quando existe (declarado ou derivado);
+          // sem ele, valem os fallbacks de cada raridade no CSS vendorizado
+          ...(foil ? { "--foil": `url(${foil})` } : {}),
           ...def.vars,
         } as React.CSSProperties}
       >

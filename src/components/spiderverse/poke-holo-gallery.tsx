@@ -1,6 +1,7 @@
 "use client"
 
 import { HoloTcgCard, HoloTcgStylesheets, type TcgCardDef } from "./holo-tcg-card"
+import { PokeHand } from "./poke-hand"
 
 /**
  * Galeria de raridades — as cartas hi-res de /public/poke-holo, cada uma
@@ -57,11 +58,12 @@ export function PokeHoloGallery() {
   return (
     <>
       <HoloTcgStylesheets />
-      <div className="grid gap-x-6 gap-y-10 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4">
+      {/* no desktop, grade; no celular, o leque de poke-hand.css */}
+      <PokeHand className="grid gap-x-6 gap-y-10 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4">
         {CARDS.map((c) => (
           <HoloTcgCard key={c.img} def={c} />
         ))}
-      </div>
+      </PokeHand>
     </>
   )
 }

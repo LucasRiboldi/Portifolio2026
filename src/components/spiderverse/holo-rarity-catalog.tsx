@@ -1,6 +1,7 @@
 "use client"
 
 import { HoloTcgCard, HoloTcgStylesheets, type TcgCardDef } from "./holo-tcg-card"
+import { PokeHand } from "./poke-hand"
 
 /**
  * Catálogo de raridades — a apresentação do poke-holo.simey.me: cada
@@ -143,13 +144,13 @@ function Entrada({ entrada }: { entrada: Entrada }) {
           </p>
           <p className="text-sm leading-relaxed text-white/75">{entrada.descricao}</p>
         </div>
-        <div
+        <PokeHand
           className={`grid gap-x-5 gap-y-8 ${entrada.cartas.length > 1 ? "grid-cols-2" : "max-w-[240px] grid-cols-1"}`}
         >
           {entrada.cartas.map((c) => (
             <HoloTcgCard key={c.img} def={c} />
           ))}
-        </div>
+        </PokeHand>
       </div>
     </section>
   )
