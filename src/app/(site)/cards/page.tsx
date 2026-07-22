@@ -5,6 +5,7 @@ import { PokeHoloGallery } from "@/components/spiderverse/poke-holo-gallery"
 import { ThundercatsGallery } from "@/components/spiderverse/thundercats-gallery"
 import { Stacked3dGallery } from "@/components/spiderverse/stacked-3d-gallery"
 import { Stacked3dHoloGallery } from "@/components/spiderverse/stacked-3d-holo"
+import { HoloTutorial } from "@/components/spiderverse/holo-tutorial"
 
 export const metadata = { title: "Cards" }
 
@@ -81,6 +82,18 @@ export default function CardsPage() {
           subtitle="As cartas reais — Pokémon e ThunderCats — com o foil holográfico correndo na face enquanto anel, placa e emblema descolam em profundidades diferentes. Um ponteiro só alimenta os dois efeitos."
         />
         <Stacked3dHoloGallery />
+      </section>
+
+      {/* ---------- 6. TUTORIAL ---------- */}
+      <section className="mt-16 sm:mt-24" aria-label="Tutorial: como fazer os efeitos holo">
+        <ComicHeader
+          as="h2"
+          kicker="Passo a passo"
+          title="Como se faz"
+          highlight="um holo"
+          subtitle="O tutorial completo em português: da posição do ponteiro até o foil metálico e as camadas em 3D. Cada trecho de código é o mesmo que roda na demo ao lado — passe o mouse nelas."
+        />
+        <HoloTutorial />
       </section>
     </SvCanvas>
   )

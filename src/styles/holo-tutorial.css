@@ -1,0 +1,192 @@
+/* ==========================================================================
+   Tutorial holo — as cartas de demonstração
+   --------------------------------------------------------------------------
+   Este arquivo é DIDÁTICO: cada bloco corresponde a um passo do tutorial em
+   /cards, e o código exibido na tela é copiado daqui. Se mexer aqui, mexa
+   também no snippet do passo correspondente (holo-tutorial.tsx) — um
+   tutorial cujo código não bate com a demo é pior do que nenhum tutorial.
+
+   As classes são acumulativas: `.tut-card` sozinha é a carta chapada, e
+   cada modificador `--tilt`, `--shine`, `--glare` liga uma camada.
+   ========================================================================== */
+
+.tut-card {
+  position: relative;
+  aspect-ratio: 660 / 921;
+  border-radius: 12px;
+  overflow: hidden;
+  border: 3px solid #000;
+  box-shadow: 0 14px 26px -14px rgba(0, 0, 0, 0.7);
+}
+
+/* ---- Passo 2: a inclinação ---------------------------------------------- */
+.tut-card--tilt {
+  /* a perspectiva precisa vir ANTES das rotações na mesma declaração */
+  transform: perspective(900px) rotateX(var(--rx, 0deg)) rotateY(var(--ry, 0deg));
+  will-change: transform;
+}
+
+/* Fundo da carta — só para a demo ter o que refletir. */
+.tut-card__art {
+  position: absolute;
+  inset: 0;
+  background:
+    radial-gradient(circle at 22% 18%, rgba(255, 255, 255, 0.18), transparent 45%),
+    linear-gradient(160deg, #3a1580, #5a1fb0 48%, #8f2fb8);
+}
+
+.tut-card__art::after {
+  /* uma "janela de arte", como a moldura de uma carta de verdade */
+  content: "";
+  position: absolute;
+  inset: 12% 8% 34% 8%;
+  border: 2px solid rgba(0, 0, 0, 0.55);
+  border-radius: 4px;
+  background:
+    repeating-linear-gradient(45deg, rgba(255, 255, 255, 0.06) 0 6px, transparent 6px 12px),
+    linear-gradient(200deg, #17c8d8, #1b3fa0);
+}
+
+/* ---- Passo 3: o foil (shine) -------------------------------------------- */
+.tut-card__shine {
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+  opacity: var(--o, 0);
+
+  /* 1. os "sunpillars": um arco-íris que se repete */
+  background-image: repeating-linear-gradient(
+    110deg,
+    hsl(2, 100%, 73%) 0%,
+    hsl(53, 100%, 69%) 5%,
+    hsl(93, 100%, 69%) 10%,
+    hsl(176, 100%, 76%) 15%,
+    hsl(228, 100%, 74%) 20%,
+    hsl(283, 100%, 73%) 25%,
+    hsl(2, 100%, 73%) 30%
+  );
+  background-size: 400% 400%;
+
+  /* 2. o truque central: o foil corre CONTRA o ponteiro, com ganho.
+        (50% - --bx) inverte o sentido; o × 2.6 exagera o deslocamento. */
+  background-position:
+    calc(((50% - var(--bx, 50%)) * 2.6) + 50%)
+    calc(((50% - var(--by, 50%)) * 3.5) + 50%);
+
+  /* 3. sem isto é um arco-íris de festa junina; com isto vira metal */
+  filter: brightness(0.8) contrast(2.1) saturate(0.85);
+  mix-blend-mode: color-dodge;
+}
+
+/* Modo "camada crua": desliga o blend e o filtro para o aluno ver o
+   gradiente puro que está por baixo do efeito. */
+.tut-card--raw .tut-card__shine {
+  filter: none;
+  mix-blend-mode: normal;
+  opacity: 1;
+}
+
+/* ---- Passo 4: o reflexo (glare) ----------------------------------------- */
+.tut-card__glare {
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+  opacity: var(--o, 0);
+  background: radial-gradient(
+    farthest-corner circle at var(--mx, 50%) var(--my, 50%),
+    rgba(255, 255, 255, 0.75) 10%,
+    rgba(255, 255, 255, 0.28) 24%,
+    rgba(0, 0, 0, 0.5) 90%
+  );
+  mix-blend-mode: overlay;
+}
+
+.tut-card--raw .tut-card__glare {
+  mix-blend-mode: normal;
+  opacity: 1;
+}
+
+/* ---- Passo 6: as camadas do stacked 3D ---------------------------------- */
+.tut-stack {
+  position: relative;
+  aspect-ratio: 660 / 921;
+  transform: perspective(900px) rotateX(var(--rx, 0deg)) rotateY(var(--ry, 0deg));
+  transform-style: preserve-3d;
+}
+
+.tut-stack__layer {
+  position: absolute;
+  inset: 0;
+  /* --z é o FATOR de profundidade: 0, 1 ou 2 */
+  transform: translateZ(calc(var(--o, 0) * 40px * var(--z, 0)));
+  border-radius: 12px;
+}
+
+.tut-stack__base {
+  border: 3px solid #000;
+  background: linear-gradient(160deg, #3a1580, #5a1fb0 48%, #8f2fb8);
+}
+
+.tut-stack__mid {
+  inset: 12%;
+  border: 2px solid rgba(255, 255, 255, 0.85);
+}
+
+.tut-stack__top {
+  display: grid;
+  place-items: center;
+  color: var(--sv-yellow, #ffe600);
+  font-weight: 900;
+  font-size: 2.5rem;
+}
+
+/* ---- Blocos de código --------------------------------------------------- */
+.tut-code {
+  overflow-x: auto;
+  border: 2px solid rgba(255, 255, 255, 0.16);
+  border-radius: 8px;
+  background: #12101f;
+  padding: 0.9rem 1rem;
+  font-size: 12px;
+  line-height: 1.65;
+  tab-size: 2;
+}
+
+.tut-code code {
+  font-family: ui-monospace, "SFMono-Regular", "Cascadia Code", Menlo, monospace;
+  color: #e6e2ff;
+  white-space: pre;
+  /* inline-block para o code medir a LINHA MAIS LARGA; o min-width garante
+     que ele nunca fique menor que o bloco. É isso que faz a faixa de realce
+     atravessar toda a largura rolável, e não só a parte visível. */
+  display: inline-block;
+  min-width: 100%;
+}
+
+/* Cada linha é um bloco. Não use inline-block aqui: com `white-space: pre`
+   não há quebra possível entre eles e as linhas se enfileiram na
+   HORIZONTAL, somindo da vista. */
+.tut-code .ln {
+  display: block;
+  min-height: 1.65em; /* linhas em branco não podem colapsar */
+}
+
+/* Realce das linhas que carregam a ideia do passo. */
+.tut-code .hl {
+  background: rgba(255, 45, 149, 0.16);
+  box-shadow: inset 3px 0 0 var(--sv-magenta, #ff2d95);
+}
+
+.tut-code .cmt {
+  color: #8f88b8;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .tut-card--tilt,
+  .tut-stack {
+    transform: none !important;
+  }
+  .tut-stack__layer {
+    transform: none !important;
+  }
+}

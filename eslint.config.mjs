@@ -22,6 +22,10 @@ const config = [
       "storybook-static/**",
       "node_modules/**",
       "next-env.d.ts",
+      // /public é asset servido, não código nosso: inclui o sistema
+      // poke-holo vendorizado e os clones de referência dos efeitos holo.
+      // (o tsconfig exclui a mesma pasta, pelo mesmo motivo)
+      "public/**",
     ],
   },
 ];

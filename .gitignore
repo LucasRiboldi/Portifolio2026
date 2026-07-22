@@ -44,3 +44,10 @@ _*.mjs
 # originais pesados do deck ThunderCats — só as webs otimizadas (/web) entram no git
 /public/cards-thundercats/*
 !/public/cards-thundercats/web/
+
+# clones de referência para estudo dos efeitos holo (28 MB).
+# Ficam fora do git de propósito: tudo em /public é servido publicamente e
+# entra no deploy — não faz sentido publicar o código-fonte de terceiros.
+# Para reler: git clone dos repos simeydotme/hover-tilt e /pokemon-cards-css
+/public/hover-tilt-main/
+/public/pokemon-cards-main/
