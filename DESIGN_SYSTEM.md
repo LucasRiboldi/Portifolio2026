@@ -955,11 +955,13 @@ components/criativo/           organismos (uma zona = um componente)
   hero.tsx  outro.tsx
   zone-atelie.tsx  zone-oficina.tsx  zone-banca.tsx  zone-cine.tsx
   zone-radio.tsx   zone-videoteca.tsx zone-mural.tsx zone-tirinhas.tsx
-  audio-visualizer.tsx           player local + Web Audio API
+  music-player.tsx               playlist + controles + Web Audio API
 
 constants/criativo-landing.ts  copy editorial e metadados das zonas
 data/criativo-zones.ts         seeds das tabelas (fallback de leitura)
 lib/repos/criativo.ts          leitores cacheados por tag
+lib/repos/playlist.ts          varredura de public/musica
+public/musica/                 pasta da trilha sonora (ver README lá dentro)
 ```
 
 ### Zone
@@ -979,13 +981,53 @@ Muito conteúdo entra sem capa. Em vez de retângulo cinzento, o fallback vira
 requadro de HQ: inicial gigante sobre retícula, na paleta da zona. O buraco
 deixa de parecer defeito e passa a parecer diagramação.
 
-### AudioVisualizer
+### MusicPlayer
 
-Player local (`<audio>`, sem embed de terceiros) com barras reagindo ao som via
-Web Audio API. O `AudioContext` só é criado no primeiro play — a política de
-autoplay dos navegadores exige gesto do utilizador, e criar antes deixa um
-contexto suspenso que nunca produz dados. Sem áudio cadastrado, entra em modo
-demo (barras por seno) para a zona não ficar com espaço morto.
+Player local da zona Rádio (`<audio>`, sem embed de terceiros): playlist,
+play/pause, anterior/próxima, barra de progresso, volume e visualizador de 48
+barras reagindo ao som via Web Audio API.
+
+Decisões que não são óbvias no código:
+
+* **Um só elemento `<audio>` para a playlist inteira**, trocando o `src`.
+  `createMediaElementSource` só pode ser chamado uma vez por elemento — montar
+  um `<audio>` por faixa quebraria o visualizador na segunda música.
+* **O `AudioContext` nasce no primeiro play**, não na montagem: a política de
+  autoplay exige gesto do utilizador, e criar antes deixa um contexto suspenso
+  que nunca produz dados. O `resume()` cobre a suspensão após pausa longa.
+* **Progresso e volume são `<input type="range">` nativos** — arrastar, setas e
+  Home/End já vêm prontos e acessíveis, sem reimplementar teclado.
+* **A última faixa para em vez de voltar ao início**: repetir a playlist sem o
+  utilizador pedir é comportamento surpreendente numa página de arquivo.
+* Faixa sem arquivo mostra aviso e desabilita os controles; sem faixa nenhuma,
+  o visualizador entra em **modo demo** (barras por seno) para a zona não ficar
+  com espaço morto.
+
+### Playlist a partir de pasta
+
+```text
+public/musica/        →  lib/repos/playlist.ts  →  getPlaylistFromFolder()
+```
+
+Qualquer `.mp3`/`.m4a`/`.ogg`/`.oga`/`.wav`/`.flac` colocado em
+`public/musica/` vira faixa automaticamente — a pasta **é** a interface de
+edição: jogar o arquivo lá e commitar já publica.
+
+Convenção de nome: `Artista - Título.mp3`. O separador exige **espaços à
+volta** do hífen; sem isso um nome em kebab-case (`esboco-sem-nome`) seria
+partido no meio da palavra. Sem separador, o nome inteiro vira o título.
+
+Ordenação alfabética com números tratados como números (`Faixa 2` antes de
+`Faixa 10`).
+
+Sem `unstable_cache` de propósito: a página é prerenderizada, logo a varredura
+roda uma vez por build, e a pasta vai dentro do bundle — o conteúdo não muda
+entre deploys. Cachear só acrescentaria uma camada para invalidar à mão que, em
+desenvolvimento, esconderia o arquivo recém-colocado.
+
+As duas fontes são somadas em `page.tsx`: a pasta primeiro, depois as faixas da
+tabela `tracks` (que carregam capa e comentário), descartando as do banco que
+apontem para o mesmo arquivo.
 
 ## Conteúdo (Supabase)
 

@@ -19,6 +19,7 @@ import {
   getTracks,
   getVideos,
 } from "@/lib/repos/criativo"
+import { getPlaylistFromFolder } from "@/lib/repos/playlist"
 
 export const metadata = {
   title: "O Multiverso",
@@ -37,16 +38,25 @@ export const metadata = {
  * Só o hero (parallax), o player de áudio e os painéis com tilt são clientes.
  */
 export default async function CriativoHome() {
-  const [projects, artworks, comics, movies, tracks, videos, notes, strips] = await Promise.all([
-    getProjects(),
-    getArtworks(),
-    getComics(),
-    getMovies(),
-    getTracks(),
-    getVideos(),
-    getNotes(),
-    getStrips(),
-  ])
+  const [projects, artworks, comics, movies, dbTracks, folderTracks, videos, notes, strips] =
+    await Promise.all([
+      getProjects(),
+      getArtworks(),
+      getComics(),
+      getMovies(),
+      getTracks(),
+      getPlaylistFromFolder(),
+      getVideos(),
+      getNotes(),
+      getStrips(),
+    ])
+
+  // A playlist tem duas fontes: os arquivos de `public/musica` (jogar o mp3 lá
+  // já publica) e as faixas cadastradas no /admin, que carregam capa e
+  // comentário. A pasta vem primeiro, e as do banco que apontam para o mesmo
+  // arquivo são descartadas para a faixa não aparecer duas vezes.
+  const folderUrls = new Set(folderTracks.map((t) => t.audio_url))
+  const tracks = [...folderTracks, ...dbTracks.filter((t) => !folderUrls.has(t.audio_url))]
 
   return (
     <>
