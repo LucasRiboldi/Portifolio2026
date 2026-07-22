@@ -245,6 +245,13 @@ foil:   {id}_foil_{tipo}_{variante}_2x.webp
   clip-path: var(--clip-stage);
 }`}
         />
+        <Nota cor="cyan">
+          <b className="text-white">Veja acontecendo.</b> No catálogo abaixo, a entrada{" "}
+          <i>&ldquo;Reverse holo — a mesma regra, quatro molduras&rdquo;</i> traz quatro cartas
+          reais com a <b className="text-white">mesma raridade e o mesmo foil</b>: um Pokémon
+          básico, um Item, um Supporter e um Stadium. Só o <code>data-supertype</code> e o{" "}
+          <code>data-subtypes</code> mudam — e o brilho aparece em alturas diferentes em cada uma.
+        </Nota>
         <Nota cor="magenta">
           <b className="text-white">Por que o nosso deck ThunderCats não usa isso.</b> Esses
           recortes são medidos na moldura Pokémon. Numa carta de Magic eles caem no lugar errado —

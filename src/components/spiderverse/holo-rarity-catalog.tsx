@@ -45,6 +45,18 @@ const CATALOGO: Entrada[] = [
     ],
   },
   {
+    titulo: "Reverse holo — a mesma regra, quatro molduras",
+    fonte: "reverse-holo.css + cards.css",
+    descricao:
+      "O melhor exemplo do clip-path por formato: as quatro cartas têm a mesma raridade, e mesmo assim o recorte do brilho cai em alturas diferentes, porque a janela de arte muda de lugar entre um Pokémon e um Treinador. Quem decide é o seletor, pelos atributos data-supertype e data-subtypes. Ler este grupo revelou um bug no projeto original: a variável --clip-trainer-invert é usada e nunca definida, o que deixava o brilho das três cartas de Treinador sem recorte nenhum. Ela é fornecida aqui, em holo-card.css.",
+    cartas: [
+      { img: `${P}/85_hires.png`, name: "Dedenne", rarity: "reverse holo", label: "Pokémon básico", desc: "recorte de Pokémon", subtypes: "basic" },
+      { img: `${P}/150_hires.png`, name: "Ultra Ball", rarity: "reverse holo", label: "Treinador · Item", desc: "janela mais baixa", supertype: "trainer", subtypes: "item" },
+      { img: `${P}/173_hires.png`, name: "Poké Kid", rarity: "reverse holo", label: "Treinador · Supporter", desc: "mesma janela de Treinador", supertype: "trainer", subtypes: "supporter" },
+      { img: `${P}/68_hires.png`, name: "PokéStop", rarity: "reverse holo", label: "Treinador · Stadium", desc: "mesma janela de Treinador", supertype: "trainer", subtypes: "stadium" },
+    ],
+  },
+  {
     titulo: "Holo clássica",
     fonte: "regular-holo.css",
     descricao:
@@ -98,6 +110,19 @@ const CATALOGO: Entrada[] = [
     cartas: [
       { img: `${P}/250_hires.png`, name: "Mew V", rarity: "rare ultra", label: "Full art", desc: "Gravação + brilho", foil: `${P}/250_foil_etched_sunpillar_2x.webp` },
       { img: `${P}/SWSH181_hires.png`, name: "Vaporeon V", rarity: "rare ultra", label: "Alt art", desc: "Mesmo efeito, outro foil", foil: `${P}/181_foil_etched_sunpillar_2x.webp` },
+      { img: `${P}/176_hires.png`, name: "Unown V", rarity: "rare ultra", label: "Full art", desc: "Foil derivado do nome do arquivo" },
+      { img: `${P}/186_hires.png`, name: "Giratina V", rarity: "rare ultra", label: "Alt art", desc: "Textura densa sobre a ilustração" },
+    ],
+  },
+  {
+    titulo: "Shiny Vault",
+    fonte: "shiny-rare.css · shiny-v.css",
+    descricao:
+      "O fundo foilado é prateado, não colorido. O truque é aplicar a imagem do foil com gradientes radiais que ESCURECEM o foil sobre o fundo branco da carta — é a subtração que produz a impressão de prata. O autor do projeto original avisa que este é o efeito que melhor funciona no Firefox.",
+    cartas: [
+      { img: `${P}/SV023_hires.png`, name: "Galarian Darumaka", rarity: "rare shiny", label: "Shiny · básico", desc: "Prata sobre fundo branco", subtypes: "basic" },
+      { img: `${P}/SV094_hires.png`, name: "Cinccino", rarity: "rare shiny", label: "Shiny · estágio 1", desc: "Moldura de evolução", subtypes: "stage1" },
+      { img: `${P}/SV110_hires.png`, name: "Lapras V", rarity: "rare shiny v", label: "Shiny V", desc: "Prata + faixas da V" },
     ],
   },
   {
@@ -126,6 +151,8 @@ const CATALOGO: Entrada[] = [
     cartas: [
       { img: `${P}/TG05_hires.png`, name: "Pikachu & Akari", rarity: "trainer gallery rare holo", label: "Trainer gallery", desc: "Aquarela holográfica", trainerGallery: true, foil: `${P}/tg05_foil_holo_rainbow_2x.webp` },
       { img: `${P}/TG17_hires.png`, name: "Pikachu VMAX", rarity: "rare holo vmax", label: "TG VMAX", desc: "V/VMAX com outra textura", subtypes: "vmax", trainerGallery: true, foil: `${P}/tg17_foil_etched_sunpillar_2x.webp` },
+      { img: `${P}/TG16_hires.png`, name: "Mimikyu V", rarity: "rare ultra", label: "TG V", desc: "V da galeria de treinadores", trainerGallery: true },
+      { img: `${P}/TG26_hires.png`, name: "Kabu", rarity: "rare ultra", label: "TG Supporter", desc: "Treinador em arte completa", supertype: "trainer", subtypes: "supporter", trainerGallery: true },
     ],
   },
 ]
