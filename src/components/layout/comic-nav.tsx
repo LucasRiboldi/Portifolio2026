@@ -9,20 +9,19 @@ import { SITE_LINKS, isActive } from "@/lib/nav"
 import { VibeToggle } from "@/components/providers/vibe-toggle"
 import { EASE } from "@/components/comic/motion"
 
-/** Acentos em ciclo, um por item — o mesmo mapa nas duas larguras. */
-const ITEM_ACCENTS = ["var(--k-yellow)", "var(--k-cyan)", "var(--k-magenta)", "var(--k-lime)"]
-
 /**
- * Navegação principal — barra inline, sempre à vista.
+ * NAV-RIFT — o menu superior "entre-dimensões".
  *
- * Substituiu o overlay em tela cheia: abrir uma tela só para escolher para onde
- * ir esconde o destino atrás de um clique extra e tira o visitante da página.
- * Aqui os quatro destinos ficam visíveis o tempo todo no desktop, e o indicador
- * de ativo desliza entre eles com `layoutId` — um só elemento animado, em vez
- * de quatro bordas acendendo e apagando.
+ * Substituiu a barra comic creme, que sumia sobre as dimensões escuras (a
+ * visibilidade não funcionava fora do realm Creative). Agora é uma barra
+ * escura única, a mesma em todos os realms, com a estética de ANOMALIA do
+ * multiverso: links com datamosh no hover, marcador de fenda no ativo, logo
+ * com falha e — no compacto — um menu que RASGA a tela como uma fenda
+ * dimensional (borda serrilhada, scanlines, camadas RGB).
  *
- * No mobile a lista desce como painel logo abaixo da barra (não cobre a
- * página): o visitante continua vendo onde estava.
+ * O glitch é só no hover/foco, com um flicker sutil e ocasional na barra;
+ * `prefers-reduced-motion` desliga todo o movimento e mantém tudo legível.
+ * As classes vivem em `nav-rift.css` (namespace `nrift-`).
  */
 export function ComicNav() {
   const pathname = usePathname()
@@ -34,8 +33,8 @@ export function ComicNav() {
     setOpen(false)
   }, [pathname])
 
-  // Esc fecha o painel mobile. Sem trava de scroll nem focus trap: o painel
-  // não é modal — a página atrás continua visível e utilizável.
+  // Esc fecha a fenda. Sem trava de scroll nem focus trap: o painel desce
+  // abaixo da barra, a página atrás continua visível.
   useEffect(() => {
     if (!open) return
     const onKey = (e: KeyboardEvent) => e.key === "Escape" && setOpen(false)
@@ -44,150 +43,96 @@ export function ComicNav() {
   }, [open])
 
   return (
-    <header className="fixed inset-x-0 top-0 z-[1300]">
-      {/* Fio de cor da capa — o mesmo arco-íris da zona multiverso. */}
-      <div
-        aria-hidden
-        className="h-1 w-full"
-        style={{
-          background:
-            "linear-gradient(90deg, var(--k-yellow), var(--k-orange), var(--k-red), var(--k-magenta), var(--k-violet), var(--k-cyan), var(--k-lime))",
-        }}
-      />
+    <header className={cn("nrift-bar", !reduced && "nrift-flicker")}>
+      {/* Fio de anomalia — a costura da fenda no topo. */}
+      <div aria-hidden className="nrift-seam" />
 
-      {/* Fundo opaco (não translúcido): o Lighthouse ignora backdrop-filter e
-          compunha o logo escuro contra o corpo escuro atrás, reprovando o
-          contraste. Opaco garante o contraste real do logo em qualquer zona. */}
-      <div className="border-b-[3px] border-[var(--k-ink)] bg-[var(--k-paper)]">
-        <div className="mx-auto flex h-[60px] max-w-container items-center justify-between gap-4 px-4 sm:px-6 lg:px-8">
-          <Link
-            href="/criativo"
-            className="k-title shrink-0 text-2xl text-[var(--k-ink)] transition-transform hover:-rotate-2"
+      <div className="mx-auto flex h-[60px] max-w-container items-center justify-between gap-4 px-4 sm:px-6 lg:px-8">
+        <Link
+          href="/criativo"
+          data-text="LR."
+          className="nrift-logo k-title shrink-0 text-2xl focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[var(--k-cyan)]"
+        >
+          LR<span className="text-[var(--k-red)]">.</span>
+        </Link>
+
+        {/* --- links inline (desktop) --------------------------------- */}
+        <nav aria-label="Navegação principal" className="hidden items-center gap-6 md:flex lg:gap-8">
+          {SITE_LINKS.map((link) => {
+            const active = isActive(pathname, link.href)
+            return (
+              <Link
+                key={link.href}
+                href={link.href}
+                data-text={link.label}
+                data-active={active || undefined}
+                aria-current={active ? "page" : undefined}
+                title={link.description}
+                className="nrift-link k-sub text-sm uppercase tracking-wide focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[var(--k-cyan)]"
+              >
+                {link.label}
+              </Link>
+            )
+          })}
+        </nav>
+
+        <div className="flex shrink-0 items-center gap-2">
+          <VibeToggle />
+
+          {/* --- gatilho da fenda (só mobile) ------------------------- */}
+          <button
+            type="button"
+            onClick={() => setOpen((v) => !v)}
+            aria-expanded={open}
+            aria-controls="nav-rift-panel"
+            aria-label={open ? "Fechar a fenda" : "Fenda de navegação"}
+            className="nrift-trigger k-sub px-3 py-1.5 text-[11px] uppercase tracking-wide md:hidden"
           >
-            LR<span className="text-[var(--k-red)]">.</span>
-          </Link>
+            <span>{open ? "Fechar" : "Fenda"}</span>
+            <span aria-hidden className="text-[13px] leading-none">
+              {open ? "✕" : "◢"}
+            </span>
+          </button>
+        </div>
+      </div>
 
-          {/* --- barra segmentada (desktop) ----------------------------- */}
-          <nav aria-label="Navegação principal" className="hidden md:block">
-            <ul className="flex items-center gap-1 rounded-full border-[3px] border-[var(--k-ink)] bg-[var(--k-white)] p-1 shadow-[4px_4px_0_0_var(--k-ink)]">
+      {/* --- a FENDA: painel que rasga a tela abaixo da barra --------- */}
+      <AnimatePresence initial={false}>
+        {open && (
+          <motion.nav
+            id="nav-rift-panel"
+            aria-label="Navegação principal"
+            initial={reduced ? false : { clipPath: "inset(0 0 100% 0)", opacity: 0 }}
+            animate={{ clipPath: "inset(0 0 0% 0)", opacity: 1 }}
+            exit={reduced ? undefined : { clipPath: "inset(0 0 100% 0)", opacity: 0 }}
+            transition={{ duration: 0.34, ease: EASE }}
+            className="nrift-panel md:hidden"
+          >
+            <ul className="relative z-[1] px-4 py-5 sm:px-6">
               {SITE_LINKS.map((link, i) => {
                 const active = isActive(pathname, link.href)
-                const accent = ITEM_ACCENTS[i % ITEM_ACCENTS.length] ?? "var(--k-yellow)"
-
                 return (
-                  <li key={link.href} className="relative">
+                  <li key={link.href} className="border-b border-white/8 last:border-0">
                     <Link
                       href={link.href}
+                      data-text={link.label}
+                      data-active={active || undefined}
                       aria-current={active ? "page" : undefined}
-                      title={link.description}
-                      className={cn(
-                        "k-sub relative block rounded-full px-4 py-2 text-xs transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[var(--k-ink)] lg:text-sm",
-                        active ? "text-[var(--k-ink)]" : "text-[var(--k-ink)]/55 hover:text-[var(--k-ink)]",
-                      )}
+                      onClick={() => setOpen(false)}
+                      className="nrift-panel-link k-title py-4 text-2xl focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[var(--k-cyan)]"
                     >
-                      {/* A pílula é um elemento só, partilhado entre os itens:
-                          o `layoutId` faz o motion interpolar a posição em vez
-                          de desvanecer quatro fundos diferentes. */}
-                      {active && (
-                        <motion.span
-                          aria-hidden
-                          layoutId="nav-pill"
-                          className="absolute inset-0 -z-10 rounded-full border-2 border-[var(--k-ink)]"
-                          style={{ background: accent }}
-                          transition={
-                            reduced ? { duration: 0 } : { type: "spring", stiffness: 420, damping: 34 }
-                          }
-                        />
-                      )}
-                      <span className="relative">{link.label}</span>
+                      <span className="mr-3 align-middle text-[11px] not-italic text-white/35">
+                        {String(i + 1).padStart(2, "0")}
+                      </span>
+                      {link.label}
                     </Link>
                   </li>
                 )
               })}
             </ul>
-          </nav>
-
-          <div className="flex shrink-0 items-center gap-2">
-            <VibeToggle />
-
-            {/* --- gatilho (só mobile) --------------------------------- */}
-            <button
-              type="button"
-              onClick={() => setOpen((v) => !v)}
-              aria-expanded={open}
-              aria-controls="nav-mobile"
-              // O nome acessível precisa conter o texto visível ("Menu"/"Fechar"),
-              // senão dá label-content-name-mismatch.
-              aria-label={open ? "Fechar navegação" : "Menu de navegação"}
-              className="k-btn k-btn--ghost k-sub px-3 py-2 text-[11px] md:hidden"
-            >
-              <span>{open ? "Fechar" : "Menu"}</span>
-              <motion.span
-                aria-hidden
-                className="relative block h-3 w-4"
-                animate={{ rotate: open ? 180 : 0 }}
-                transition={reduced ? { duration: 0 } : { duration: 0.3, ease: EASE }}
-              >
-                <span className="absolute inset-x-0 top-1/2 -translate-y-1/2 text-center text-[10px] leading-none">
-                  ▾
-                </span>
-              </motion.span>
-            </button>
-          </div>
-        </div>
-
-        {/* --- painel mobile: desce abaixo da barra, não cobre a página --- */}
-        <AnimatePresence initial={false}>
-          {open && (
-            <motion.nav
-              id="nav-mobile"
-              aria-label="Navegação principal"
-              initial={reduced ? false : { height: 0, opacity: 0 }}
-              animate={{ height: "auto", opacity: 1 }}
-              exit={reduced ? undefined : { height: 0, opacity: 0 }}
-              transition={{ duration: 0.34, ease: EASE }}
-              className="overflow-hidden border-t-2 border-[var(--k-ink)]/15 md:hidden"
-            >
-              <ul className="px-4 py-3 sm:px-6">
-                {SITE_LINKS.map((link, i) => {
-                  const active = isActive(pathname, link.href)
-                  const accent = ITEM_ACCENTS[i % ITEM_ACCENTS.length] ?? "var(--k-yellow)"
-
-                  return (
-                    <li key={link.href}>
-                      <Link
-                        href={link.href}
-                        aria-current={active ? "page" : undefined}
-                        onClick={() => setOpen(false)}
-                        className={cn(
-                          "flex items-center gap-3 rounded-md px-3 py-3 transition-colors",
-                          active ? "text-[var(--k-ink)]" : "text-[var(--k-ink)]/70",
-                        )}
-                        style={active ? { background: accent } : undefined}
-                      >
-                        <span className="k-num w-6 shrink-0 text-xs opacity-50">
-                          {String(i + 1).padStart(2, "0")}
-                        </span>
-                        <span className="min-w-0 flex-1">
-                          <span className="k-sub block text-sm">{link.label}</span>
-                          {link.description && (
-                            <span className="k-body block truncate text-[11px] opacity-60">
-                              {link.description}
-                            </span>
-                          )}
-                        </span>
-                        <span aria-hidden className="k-title shrink-0 text-lg opacity-40">
-                          →
-                        </span>
-                      </Link>
-                    </li>
-                  )
-                })}
-              </ul>
-            </motion.nav>
-          )}
-        </AnimatePresence>
-      </div>
+          </motion.nav>
+        )}
+      </AnimatePresence>
     </header>
   )
 }
