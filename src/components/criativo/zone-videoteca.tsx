@@ -65,6 +65,7 @@ export function ZoneVideoteca({ videos }: { videos: Video[] }) {
                     <MediaFrame
                       src={v.poster_image}
                       fallback={v.title}
+                      themed
                       sizes="(max-width: 1024px) 100vw, 50vw"
                       className="absolute inset-0"
                     />

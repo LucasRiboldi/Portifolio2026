@@ -39,6 +39,7 @@ export function ZoneOficina({ projects }: { projects: Project[] }) {
                   <MediaFrame
                     src={p.coverImage}
                     fallback={p.title}
+                    themed
                     sizes="(max-width: 1024px) 100vw, 50vw"
                     className="absolute inset-0"
                     priority={i === 0}

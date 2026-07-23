@@ -29,6 +29,7 @@ export function ZoneTirinhas({ strips }: { strips: Strip[] }) {
                     src={s.image}
                     alt={s.title}
                     fallback={s.title}
+                    themed
                     sizes="(max-width: 1024px) 100vw, 50vw"
                     className="aspect-[2/1]"
                   />

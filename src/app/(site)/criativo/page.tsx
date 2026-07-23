@@ -10,6 +10,7 @@ import { ZoneVideoteca } from "@/components/criativo/zone-videoteca"
 import { ZoneMural } from "@/components/criativo/zone-mural"
 import { ZoneTirinhas } from "@/components/criativo/zone-tirinhas"
 import { Outro } from "@/components/criativo/outro"
+import { CriativoExperience } from "@/components/criativo/experience"
 import { getProjects } from "@/lib/repos/projects"
 import {
   getArtworks,
@@ -78,19 +79,21 @@ export default async function CriativoHome() {
           `overflow-x-clip` (e não `hidden`) porque os blocos entram deslizando
           da lateral: sem o clipe, o estado inicial da animação cria uma barra
           de scroll horizontal — e `hidden` quebraria o `position: sticky`. */}
-      <div className="realm-hide-arcane k-body overflow-x-clip">
-        <Hero />
-        <KitStrip />
-        <ZoneAtelie artworks={artworks} />
-        <ZoneOficina projects={projects} />
-        <ZoneBanca comics={comics} />
-        <ZoneCine movies={movies} />
-        <ZoneRadio tracks={tracks} />
-        <ZoneVideoteca videos={videos} />
-        <ZoneMural notes={notes} />
-        <ZoneTirinhas strips={strips} />
-        <Outro />
-      </div>
+      <CriativoExperience>
+        <div className="realm-hide-arcane k-body overflow-x-clip">
+          <Hero />
+          <KitStrip />
+          <ZoneAtelie artworks={artworks} />
+          <ZoneOficina projects={projects} />
+          <ZoneBanca comics={comics} />
+          <ZoneCine movies={movies} />
+          <ZoneRadio tracks={tracks} />
+          <ZoneVideoteca videos={videos} />
+          <ZoneMural notes={notes} />
+          <ZoneTirinhas strips={strips} />
+          <Outro />
+        </div>
+      </CriativoExperience>
     </>
   )
 }

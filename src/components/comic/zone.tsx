@@ -2,6 +2,23 @@ import { cn } from "@/lib/utils"
 import { Burst, Caption, ComicButton, InkDivider, SpeedLines } from "./atoms"
 import { GlitchTitle, type Treatment } from "./glitch-title"
 import { Reveal } from "./reveal"
+import { ZoneScene, type SceneVariant } from "@/components/criativo/zone-scene"
+import { ScrubParallax } from "@/components/criativo/scrub-parallax"
+
+/**
+ * A "cena" (gesto de entrada) de cada dimensão — variada de propósito para que
+ * o mesmo reveal não se repita zona a zona. Cai em "rise" para quem faltar.
+ */
+const SCENE_BY_ID: Record<string, SceneVariant> = {
+  atelie: "clip",
+  oficina: "slideL",
+  banca: "skew",
+  cine: "zoom",
+  radio: "rise",
+  videoteca: "slideR",
+  mural: "pop",
+  tirinhas: "clip",
+}
 
 /**
  * CR-L1 · Intensidade do corte diagonal por dimensão (px). Faixas mais
@@ -77,6 +94,7 @@ export function Zone({
   // Alterna o corte diagonal e o lado do texto a cada faixa (par vira à direita)
   // — é o "desalinho" da página de quadrinho montada à mão.
   const flip = Number(index) % 2 === 0
+  const scene = SCENE_BY_ID[id] ?? "rise"
 
   if (panel) {
     return (
@@ -85,8 +103,10 @@ export function Zone({
           className={cn("nxb k-grain", flip && "nxb--flip")}
           style={ZONE_CUT[id] ? ({ "--nxb-cut": `${ZONE_CUT[id]}px` } as React.CSSProperties) : undefined}
         >
-          {/* Número-fantasma gigante ao fundo + retícula da impressão. */}
-          <span aria-hidden className="nxb__ghost">{index}</span>
+          {/* Número-fantasma gigante ao fundo (parallax de scroll) + retícula. */}
+          <ScrubParallax className="nxb__ghost" from={0} to={-90}>
+            {index}
+          </ScrubParallax>
           <span aria-hidden className="nxb__dots" />
           <SpeedLines x={flip ? 20 : 82} y={26} color="rgba(18,16,14,0.12)" />
 
@@ -130,12 +150,14 @@ export function Zone({
           </Reveal>
         </header>
 
-        <div
-          id={`${id}-conteudo`}
-          className="mx-auto max-w-container scroll-mt-24 px-4 py-16 sm:px-6 sm:py-20 lg:px-8"
+        <ZoneScene
+          variant={scene}
+          className="mx-auto max-w-container px-4 py-16 sm:px-6 sm:py-20 lg:px-8"
         >
-          {children}
-        </div>
+          <div id={`${id}-conteudo`} className="scroll-mt-24">
+            {children}
+          </div>
+        </ZoneScene>
 
         <InkDivider className="absolute inset-x-0 bottom-0" />
       </section>
@@ -182,9 +204,11 @@ export function Zone({
           )}
         </Reveal>
 
-        <div id={`${id}-conteudo`} className="scroll-mt-24">
-          {children}
-        </div>
+        <ZoneScene variant={scene}>
+          <div id={`${id}-conteudo`} className="scroll-mt-24">
+            {children}
+          </div>
+        </ZoneScene>
       </div>
 
       <InkDivider className="absolute inset-x-0 bottom-0" />

@@ -30,6 +30,7 @@ export function ZoneCine({ movies }: { movies: Movie[] }) {
               <MediaFrame
                 src={m.poster_image}
                 fallback={m.title}
+                themed
                 sizes="(max-width: 640px) 50vw, 25vw"
                 className="aspect-[2/3]"
               />

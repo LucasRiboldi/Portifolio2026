@@ -28,6 +28,7 @@
 @import "./nav-rift.css";
 @import "./zone-band.css";
 @import "./eightbit.css";
+@import "./criativo-fx.css";
 
 @tailwind base;
 @tailwind components;

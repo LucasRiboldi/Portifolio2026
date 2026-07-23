@@ -49,6 +49,7 @@ export function ZoneRadio({ tracks }: { tracks: Track[] }) {
                     <MediaFrame
                       src={t.cover_image}
                       fallback={t.title}
+                      themed
                       sizes="(max-width: 1024px) 50vw, 15vw"
                       className="aspect-square"
                     />

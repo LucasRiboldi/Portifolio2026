@@ -36,6 +36,7 @@ export function ZoneBanca({ comics }: { comics: Comic[] }) {
                   <MediaFrame
                     src={c.cover_image}
                     fallback={c.title}
+                    themed
                     sizes="(max-width: 640px) 50vw, (max-width: 1024px) 33vw, 20vw"
                     className="aspect-[2/3]"
                   />
