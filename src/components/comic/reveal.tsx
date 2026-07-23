@@ -11,6 +11,8 @@ interface RevealProps {
   /** Atraso extra, para escalonar irmãos que não partilham container. */
   delay?: number
   as?: "div" | "section" | "li" | "article" | "header"
+  /** Escape para o bloco revelado ser também o quadro da grelha editorial. */
+  style?: React.CSSProperties
 }
 
 /**
@@ -20,18 +22,30 @@ interface RevealProps {
  * no estado final. Não basta encurtar a duração — quem liga a preferência
  * costuma fazê-lo por enjoo de movimento, e um fade rápido ainda é movimento.
  */
-export function Reveal({ children, className, variants = REVEAL, delay = 0, as = "div" }: RevealProps) {
+export function Reveal({
+  children,
+  className,
+  variants = REVEAL,
+  delay = 0,
+  as = "div",
+  style,
+}: RevealProps) {
   const reduced = useReducedMotion()
   const Tag = motion[as]
 
   if (reduced) {
     const Plain = as
-    return <Plain className={className}>{children}</Plain>
+    return (
+      <Plain className={className} style={style}>
+        {children}
+      </Plain>
+    )
   }
 
   return (
     <Tag
       className={className}
+      style={style}
       variants={variants}
       initial="hidden"
       whileInView="show"

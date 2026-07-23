@@ -47,7 +47,7 @@ export function ZoneCine({ movies }: { movies: Movie[] }) {
   const { id, ...meta } = ZONES.cine
 
   return (
-    <Chapter id={id} palette={id} {...meta}>
+    <Chapter id={id} palette={id} scene="zoom" {...meta}>
       <RevealGroup as="ul" className="cp-grid cp-grid--rows cp-grid--dense">
         {movies.map((m, i) => {
           const { span, shape } = reel(i)

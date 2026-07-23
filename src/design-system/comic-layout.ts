@@ -6,6 +6,22 @@
  * estes tipos. O CSS que os desenha está em `styles/comic-layout.css`.
  */
 
+/**
+ * As dimensões da landing — um capítulo cada, com paleta própria em
+ * `comic-2026.css`. Vive aqui e não no componente porque é o que liga a copy
+ * (`constants/criativo-landing`) à paleta e à âncora da URL.
+ */
+export type ChapterId =
+  | "multiverso"
+  | "atelie"
+  | "oficina"
+  | "banca"
+  | "cine"
+  | "radio"
+  | "videoteca"
+  | "mural"
+  | "tirinhas"
+
 /** Formatos de requadro. Uma página só de retângulos não lê como quadrinho. */
 export type PanelShape =
   | "rect"

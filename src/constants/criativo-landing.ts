@@ -1,6 +1,6 @@
 import type { Accent } from "@/components/comic/atoms"
 import type { Treatment } from "@/components/comic/glitch-title"
-import type { ZoneId } from "@/components/comic/zone"
+import type { ChapterId } from "@/design-system/comic-layout"
 
 /**
  * Copy da landing /criativo — o multiverso pessoal do Lucas Riboldi.
@@ -33,7 +33,7 @@ export const HERO = {
 
 /** Metadados de cada zona — cabeçalho, numeração e assinatura "Terra-XXX". */
 export interface ZoneMeta {
-  id: ZoneId
+  id: ChapterId
   titleId: string
   index: string
   earth: string
@@ -44,7 +44,7 @@ export interface ZoneMeta {
   treatment?: Treatment
 }
 
-export const ZONES: Record<Exclude<ZoneId, "multiverso">, ZoneMeta> = {
+export const ZONES: Record<Exclude<ChapterId, "multiverso">, ZoneMeta> = {
   atelie: {
     id: "atelie",
     titleId: "z-atelie",

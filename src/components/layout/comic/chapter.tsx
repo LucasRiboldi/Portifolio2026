@@ -2,6 +2,8 @@ import { cn } from "@/lib/utils"
 import { Caption } from "@/components/comic/atoms"
 import { GlitchTitle, type Treatment } from "@/components/comic/glitch-title"
 import { Reveal } from "@/components/comic/reveal"
+import { ScrubParallax } from "@/components/criativo/scrub-parallax"
+import { ZoneScene, type SceneVariant } from "@/components/criativo/zone-scene"
 
 interface ChapterProps {
   /** Âncora da URL — `#atelie`. */
@@ -17,6 +19,12 @@ interface ChapterProps {
   /** "Terra-616 · Banca" — a assinatura da dimensão. */
   earth?: string
   treatment?: Treatment
+  /**
+   * Gesto de entrada do conteúdo. Varia de capítulo para capítulo de propósito:
+   * o mesmo reveal oito vezes seguidas deixa de se ler como intenção e passa a
+   * ler-se como transição de página.
+   */
+  scene?: SceneVariant
   /**
    * Variação de identidade do capítulo: aplica `k-zone--<accentZone>` para o
    * bloco herdar a paleta daquela dimensão. Sem isto o capítulo fica na paleta
@@ -49,6 +57,7 @@ export function Chapter({
   subtitle,
   earth,
   treatment = "3d",
+  scene = "rise",
   palette,
   children,
   className,
@@ -68,13 +77,16 @@ export function Chapter({
       <div className="cp-bleed">
         <Reveal as="header" className="relative mb-10 sm:mb-14">
           {/* Número-fantasma: marca a página como um capítulo de revista sem
-              ocupar espaço de leitura. */}
-          <span
-            aria-hidden
+              ocupar espaço de leitura. Sobe mais devagar que o resto do bloco —
+              é a camada de fundo do parallax, e é o deslize entre ela e o
+              cabeçalho que dá profundidade à página. */}
+          <ScrubParallax
             className="k-num k-outline pointer-events-none absolute -top-8 -left-1 select-none text-[5.5rem] leading-none opacity-60 sm:-top-14 sm:text-[9rem]"
+            from={0}
+            to={-70}
           >
             {index}
-          </span>
+          </ScrubParallax>
 
           <div className="relative flex flex-wrap items-center gap-x-3 gap-y-1">
             <Caption>{kicker}</Caption>
@@ -97,9 +109,11 @@ export function Chapter({
           )}
         </Reveal>
 
-        <div id={`${id}-conteudo`} className="scroll-mt-24">
-          {children}
-        </div>
+        <ZoneScene variant={scene}>
+          <div id={`${id}-conteudo`} className="scroll-mt-24">
+            {children}
+          </div>
+        </ZoneScene>
       </div>
     </section>
   )

@@ -1,10 +1,11 @@
 import type { Video } from "@/lib/repos/criativo"
 import { Onoma } from "@/components/comic/atoms"
-import { ComicPanel } from "@/components/comic/comic-panel"
 import { MediaFrame } from "@/components/comic/media-frame"
 import { PANEL_IN } from "@/components/comic/motion"
 import { RevealGroup, RevealItem } from "@/components/comic/reveal"
-import { Zone } from "@/components/comic/zone"
+import { Chapter } from "@/components/layout/comic/chapter"
+import { Panel, PanelBody, PanelFooter } from "@/components/layout/comic/panel"
+import { SPAN, spanVars } from "@/design-system/comic-layout"
 import { ZONES } from "@/constants/criativo-landing"
 
 /**
@@ -26,70 +27,90 @@ function embedUrl(kind: Video["kind"], url: string): string | null {
 }
 
 /**
- * Videoteca — a fita rodando.
+ * Capítulo 06 · Videoteca — a fita rodando.
  *
  * Vídeo local usa `<video controls preload="none">` com pôster: sem o
  * `preload="none"`, quatro vídeos na página puxariam metadados de todos ao
  * carregar. Embeds de terceiros entram em `loading="lazy"` pela mesma razão.
+ *
+ * Sem inclinação e sem luz no requadro, ao contrário do resto do capítulo: o
+ * quadro tem controlos dentro, e mexer um alvo de clique enquanto o rato se
+ * aproxima dele é hostil. O canto mordido alterna e chega para quebrar a fila.
  */
 export function ZoneVideoteca({ videos }: { videos: Video[] }) {
+  const { id, ...meta } = ZONES.videoteca
+
   return (
-    <Zone {...ZONES.videoteca} panel>
-      <RevealGroup as="ul" className="grid gap-8 lg:grid-cols-2">
-        {videos.map((v) => {
+    <Chapter id={id} palette={id} scene="slideR" {...meta}>
+      <RevealGroup as="ul" className="cp-grid">
+        {videos.map((v, i) => {
           const embed = embedUrl(v.kind, v.video_url)
 
           return (
-            <RevealItem key={v.id} as="li" variants={PANEL_IN}>
-              <ComicPanel accent="lime" className="relative overflow-hidden">
-                <span className="relative block aspect-video bg-[var(--k-ink)]">
-                  {v.kind === "local" && v.video_url ? (
-                    <video
-                      controls
-                      preload="none"
-                      poster={v.poster_image || undefined}
-                      className="size-full object-cover"
-                    >
-                      <source src={v.video_url} />
-                    </video>
-                  ) : embed ? (
-                    <iframe
-                      src={embed}
-                      title={v.title}
-                      loading="lazy"
-                      allow="accelerometer; clipboard-write; encrypted-media; picture-in-picture"
-                      allowFullScreen
-                      className="size-full border-0"
-                    />
-                  ) : (
-                    <MediaFrame
-                      src={v.poster_image}
-                      fallback={v.title}
-                      themed
-                      sizes="(max-width: 1024px) 100vw, 50vw"
-                      className="absolute inset-0"
-                    />
-                  )}
+            <RevealItem
+              key={v.id}
+              as="li"
+              variants={PANEL_IN}
+              className="cp-col"
+              style={spanVars(SPAN.half)}
+            >
+              <Panel as="article" shape={i % 2 === 0 ? "cutTR" : "cutBL"} accent="lime" className="h-full">
+                <PanelBody bleed>
+                  <span className="relative block aspect-video bg-[var(--k-ink)]">
+                    {v.kind === "local" && v.video_url ? (
+                      <video
+                        controls
+                        preload="none"
+                        poster={v.poster_image || undefined}
+                        className="size-full object-cover"
+                      >
+                        <source src={v.video_url} />
+                      </video>
+                    ) : embed ? (
+                      <iframe
+                        src={embed}
+                        title={v.title}
+                        loading="lazy"
+                        allow="accelerometer; clipboard-write; encrypted-media; picture-in-picture"
+                        allowFullScreen
+                        className="size-full border-0"
+                      />
+                    ) : (
+                      <MediaFrame
+                        src={v.poster_image}
+                        fallback={v.title}
+                        themed
+                        sizes="(max-width: 1024px) 100vw, 50vw"
+                        className="absolute inset-0"
+                      />
+                    )}
 
-                  {/* Scanlines de tubo por cima da imagem. */}
-                  <span aria-hidden className="k-scanlines pointer-events-none absolute inset-0 opacity-40" />
-                </span>
+                    {/* Scanlines de tubo por cima da imagem. */}
+                    <span
+                      aria-hidden
+                      className="k-scanlines pointer-events-none absolute inset-0 opacity-40"
+                    />
+                  </span>
+                </PanelBody>
 
-                <div className="border-t-[3px] border-[var(--k-ink)] p-5">
+                <PanelFooter>
                   <h3 className="k-title text-2xl">{v.title}</h3>
                   {v.description && (
                     <p className="k-body mt-2 text-sm leading-relaxed opacity-75">{v.description}</p>
                   )}
-                </div>
-              </ComicPanel>
+                </PanelFooter>
+              </Panel>
             </RevealItem>
           )
         })}
       </RevealGroup>
 
-      <Onoma accent="magenta" className="pointer-events-none absolute right-8 top-24 hidden text-5xl xl:block">
+      <Onoma
+        accent="magenta"
+        className="pointer-events-none absolute right-8 top-24 hidden text-5xl xl:block"
+      >
         REC ●
       </Onoma>
-    </Zone>
+    </Chapter>
   )
 }

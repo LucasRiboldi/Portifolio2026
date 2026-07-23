@@ -33,7 +33,7 @@ export function ZoneAtelie({ artworks }: { artworks: Artwork[] }) {
   const { id, ...meta } = ZONES.atelie
 
   return (
-    <Chapter id={id} palette={id} {...meta}>
+    <Chapter id={id} palette={id} scene="clip" {...meta}>
       <RevealGroup as="ul" className="cp-grid cp-grid--rows cp-grid--dense">
         {artworks.map((a, i) => {
           const { span, shape } = beat(i)
