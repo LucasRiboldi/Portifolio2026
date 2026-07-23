@@ -50,8 +50,9 @@ export function AdminFooterLink() {
       href="/login"
       aria-label="Área administrativa"
       // /55 sobre o rodapé escuro alcança ~4.5:1 (AA para texto pequeno); antes
-      // /25 dava 2.1:1 e reprovava. Segue discreto, mas legível.
-      className="text-white/55 transition-colors hover:text-white/80"
+      // /25 dava 2.1:1 e reprovava. O sublinhado distingue o link do texto ao
+      // redor por algo além da cor (evita o link-in-text-block). Segue discreto.
+      className="text-white/55 underline underline-offset-2 transition-colors hover:text-white/80"
     >
       Admin
     </Link>

@@ -60,7 +60,7 @@ export function Hero() {
           {/* --- coluna de texto ---------------------------------------- */}
           <div>
             <motion.div
-              initial={reduced ? false : { opacity: 0, y: 16 }}
+              initial={reduced ? false : { y: 16 }}
               animate={{ opacity: 1, y: 0 }}
               transition={{ duration: 0.6, ease: EASE }}
             >
@@ -70,7 +70,7 @@ export function Hero() {
             {/* --- assinatura do autor (anomalia Terra-138) -------------- */}
             <motion.div
               className="mt-6 flex flex-wrap items-center gap-x-4 gap-y-2"
-              initial={reduced ? false : { opacity: 0, y: 14 }}
+              initial={reduced ? false : { y: 14 }}
               animate={{ opacity: 1, y: 0 }}
               transition={{ duration: 0.65, ease: EASE, delay: 0.06 }}
             >
@@ -110,7 +110,9 @@ export function Hero() {
 
             <motion.p
               className="k-body mt-8 max-w-xl text-base font-medium leading-relaxed text-[var(--k-ink)]/85 sm:text-lg"
-              initial={reduced ? false : { opacity: 0, y: 20 }}
+              // Este parágrafo é o elemento de LCP no mobile — sem opacity:0 no
+              // início ele pinta no primeiro paint em vez de esperar a hidratação.
+              initial={reduced ? false : { y: 20 }}
               animate={{ opacity: 1, y: 0 }}
               transition={{ duration: 0.7, ease: EASE, delay: 0.44 }}
             >
@@ -119,7 +121,7 @@ export function Hero() {
 
             <motion.div
               className="mt-10 flex flex-wrap items-center gap-4"
-              initial={reduced ? false : { opacity: 0, y: 20 }}
+              initial={reduced ? false : { y: 20 }}
               animate={{ opacity: 1, y: 0 }}
               transition={{ duration: 0.7, ease: EASE, delay: 0.54 }}
             >
@@ -132,7 +134,7 @@ export function Hero() {
             {/* --- números do arquivo ----------------------------------- */}
             <motion.ul
               className="mt-12 grid max-w-xl grid-cols-2 gap-3 sm:grid-cols-4"
-              initial={reduced ? false : { opacity: 0, y: 20 }}
+              initial={reduced ? false : { y: 20 }}
               animate={{ opacity: 1, y: 0 }}
               transition={{ duration: 0.7, ease: EASE, delay: 0.64 }}
             >
@@ -148,7 +150,7 @@ export function Hero() {
           {/* --- requadro lateral --------------------------------------- */}
           <motion.div
             className="relative hidden lg:block"
-            initial={reduced ? false : { opacity: 0, x: 40, rotate: 3 }}
+            initial={reduced ? false : { x: 40, rotate: 3 }}
             animate={{ opacity: 1, x: 0, rotate: 0 }}
             transition={{ duration: 0.95, ease: EASE, delay: 0.25 }}
           >

@@ -55,7 +55,10 @@ export function ComicNav() {
         }}
       />
 
-      <div className="border-b-[3px] border-[var(--k-ink)] bg-[var(--k-paper)]/95 backdrop-blur-xl">
+      {/* Fundo opaco (não translúcido): o Lighthouse ignora backdrop-filter e
+          compunha o logo escuro contra o corpo escuro atrás, reprovando o
+          contraste. Opaco garante o contraste real do logo em qualquer zona. */}
+      <div className="border-b-[3px] border-[var(--k-ink)] bg-[var(--k-paper)]">
         <div className="mx-auto flex h-[60px] max-w-container items-center justify-between gap-4 px-4 sm:px-6 lg:px-8">
           <Link
             href="/criativo"

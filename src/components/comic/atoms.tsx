@@ -155,7 +155,7 @@ export function Bubble({
 export function Stars({ value, className }: { value: number; className?: string }) {
   if (value <= 0) return null
   return (
-    <span className={cn("k-stars text-sm", className)} aria-label={`Nota ${value} de 5`}>
+    <span role="img" className={cn("k-stars text-sm", className)} aria-label={`Nota ${value} de 5`}>
       <span aria-hidden>{"★".repeat(value)}{"☆".repeat(5 - value)}</span>
     </span>
   )
