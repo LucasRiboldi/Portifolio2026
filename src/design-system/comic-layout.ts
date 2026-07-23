@@ -69,10 +69,14 @@ export const SPAN = {
   wide: { base: 4, sm: 8, lg: 8 },
   /** Coluna estreita ao lado de um destaque. */
   rail: { base: 4, sm: 4, lg: 4 },
-  /** Quadro vertical: estreito e alto. */
-  tall: { base: 2, sm: 4, lg: 4, rows: 2 },
+  /**
+   * Quadro vertical: estreito e alto. Ocupa a largura toda no telemóvel — a
+   * meia coluna dá 170px, e texto corrido nessa medida parte em três palavras
+   * por linha. O "vertical" é uma decisão de desktop.
+   */
+  tall: { base: 4, sm: 4, lg: 4, rows: 2 },
   /** Quadro-cartaz: alto e com meia largura. */
-  poster: { base: 2, sm: 4, lg: 6, rows: 2 },
+  poster: { base: 4, sm: 4, lg: 6, rows: 2 },
 } as const satisfies Record<string, PanelSpan>
 
 /**
@@ -80,8 +84,13 @@ export const SPAN = {
  *
  * Recebe a posição do item e devolve largura e formato, para que uma lista
  * uniforme vinda do banco saia da grelha com o desalinho de uma página montada
- * à mão. O ciclo é de 5 — primo em relação às grelhas de 3 e 4 colunas, o que
- * evita que o padrão caia sempre na mesma coluna e volte a parecer catálogo.
+ * à mão.
+ *
+ * O ciclo tem 5 passos e as larguras somam 8+4 e 4+4+4 — dois pares de linhas
+ * que fecham as 12 colunas exatamente. Um ciclo que não fecha deixa uma coluna
+ * órfã no fim de cada volta, e o buraco branco lê-se como erro, não como
+ * diagramação. A variação vem do formato do requadro (e do quadro vertical no
+ * passo 2), não de larguras que não encaixam.
  */
 export function beat(i: number): { span: PanelSpan; shape: PanelShape } {
   switch (i % 5) {
@@ -94,6 +103,6 @@ export function beat(i: number): { span: PanelSpan; shape: PanelShape } {
     case 3:
       return { span: SPAN.third, shape: "octagon" }
     default:
-      return { span: SPAN.half, shape: "rect" }
+      return { span: SPAN.third, shape: "tiltR" }
   }
 }

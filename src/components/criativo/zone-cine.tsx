@@ -19,13 +19,21 @@ const STATUS_LABEL: Record<string, string> = {
  *
  * O `beat()` genérico mistura quadros largos, e um pôster largo fica errado — a
  * forma do cartaz é vertical e é isso que o olho reconhece. Aqui a variação vem
- * do *formato do requadro* (o trapézio da tela, o corte da cabine) e não da
- * proporção da imagem, que fica sempre em 2:3. A cada seis, um cartaz duplo
- * abre a fila, como a estreia em destaque na fachada do cinema.
+ * do *formato do requadro* e do tamanho, não da proporção: os cartazes ficam
+ * sempre em 2:3. A cada seis, um destaque duplo abre a fila, como a estreia na
+ * fachada do cinema.
+ *
+ * Nada de `wedge` em quadro com texto: o trapézio corta as diagonais em cima e
+ * em baixo, e foi exatamente onde a última linha do comentário desapareceu. Os
+ * formatos que só mordem um canto (`cutBR`/`cutBL`) dão a mesma quebra de
+ * grade sem comer conteúdo.
  */
 function reel(i: number): { span: PanelSpan; shape: PanelShape } {
-  if (i % 6 === 0) return { span: { base: 4, sm: 4, lg: 6, rows: 2 }, shape: "wedge" }
-  if (i % 6 === 3) return { span: SPAN.quarter, shape: "cutBR" }
+  // O destaque é largo, não duplo. Ocupar duas linhas fazia-o herdar a altura de
+  // dois cartazes empilhados (~1200px) e engolir o ecrã inteiro; largo e de uma
+  // linha só, fica ao lado dos vizinhos como a marquise fica ao lado da fila.
+  if (i % 6 === 0) return { span: { base: 4, sm: 8, lg: 6 }, shape: "cutBR" }
+  if (i % 6 === 3) return { span: SPAN.quarter, shape: "cutBL" }
   return { span: SPAN.quarter, shape: "rect" }
 }
 
@@ -43,7 +51,7 @@ export function ZoneCine({ movies }: { movies: Movie[] }) {
       <RevealGroup as="ul" className="cp-grid cp-grid--rows cp-grid--dense">
         {movies.map((m, i) => {
           const { span, shape } = reel(i)
-          const feature = span.rows != null
+          const feature = (span.lg ?? 3) > 3
 
           return (
             <RevealItem
@@ -54,13 +62,16 @@ export function ZoneCine({ movies }: { movies: Movie[] }) {
               style={spanVars(span)}
             >
               <Panel as="article" shape={shape} cut={feature ? 40 : 24} accent="orange" lit className="group h-full">
-                <PanelBody bleed className="overflow-hidden">
+                {/* O cartaz pequeno guarda o 2:3 — é a forma que faz o olho ler
+                    "pôster". O destaque é largo e por isso vai a 16:9, como o
+                    painel iluminado da fachada. */}
+                <PanelBody bleed className="flex min-h-0 flex-1 overflow-hidden">
                   <MediaFrame
                     src={m.poster_image}
                     fallback={m.title}
                     themed
-                    sizes={feature ? "(max-width: 1024px) 50vw, 40vw" : "(max-width: 640px) 50vw, 25vw"}
-                    className="aspect-[2/3] w-full"
+                    sizes={feature ? "(max-width: 1024px) 100vw, 50vw" : "(max-width: 640px) 50vw, 25vw"}
+                    className={feature ? "aspect-[16/9] w-full" : "aspect-[2/3] w-full"}
                   />
                 </PanelBody>
 

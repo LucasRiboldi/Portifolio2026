@@ -128,35 +128,41 @@
  * mínima que nem toda a faixa quer.
  */
 .cp-grid--rows {
-  grid-auto-rows: minmax(var(--cp-row-unit, 12rem), auto);
+  grid-auto-rows: minmax(var(--cp-row-unit, 10rem), auto);
 }
 
 @media (min-width: 1024px) {
   .cp-grid--rows {
-    grid-auto-rows: minmax(var(--cp-row-unit-lg, 14rem), auto);
+    grid-auto-rows: minmax(var(--cp-row-unit-lg, 11rem), auto);
   }
 }
 
 /* ===========================================================================
    3 · Requadro (Panel)
    =========================================================================== */
+/**
+ * O requadro herda a superfície da zona (`--k-zone-card`) e a tinta do sistema,
+ * exatamente como `.k-panel`. Uma superfície própria aqui foi tentada e estava
+ * errada: o painel deixava de mudar de dimensão para dimensão e o texto, que
+ * herda a cor da zona, ficava creme sobre creme.
+ */
 .cp-panel {
   position: relative;
+  isolation: isolate;
   display: flex;
   flex-direction: column;
   min-width: 0;
-  border: var(--cp-border) solid var(--cp-ink);
-  background: var(--k-paper, #f4efe4);
-  color: inherit;
-  /* Flutuação: sombra dupla (contacto curta + ambiente longa). */
+  background: var(--k-zone-card);
+  border: var(--k-ink-w, 3px) solid var(--k-ink);
+  border-radius: var(--k-radius);
+  /* Sombra dura deslocada — a assinatura da casa — mais um halo curto que dá
+     a flutuação sem trocar a linguagem por uma sombra difusa de UI. */
   box-shadow:
-    0 1px 0 0 var(--cp-ink),
-    0 10px 22px -14px rgb(0 0 0 / 0.55),
-    0 30px 60px -40px rgb(0 0 0 / 0.6);
+    7px 7px 0 0 var(--k-ink),
+    0 18px 34px -26px rgb(0 0 0 / 0.7);
   transition:
-    transform 380ms cubic-bezier(0.16, 1, 0.3, 1),
-    box-shadow 380ms cubic-bezier(0.16, 1, 0.3, 1),
-    filter 380ms ease;
+    transform 320ms var(--k-ease, cubic-bezier(0.16, 1, 0.3, 1)),
+    box-shadow 320ms var(--k-ease, cubic-bezier(0.16, 1, 0.3, 1));
 }
 
 .cp-panel--flush {
@@ -171,7 +177,7 @@
   justify-content: space-between;
   gap: 0.75rem;
   padding: calc(var(--cp-panel-pad) * 0.7) var(--cp-panel-pad);
-  border-bottom: var(--cp-border) solid var(--cp-ink);
+  border-bottom: var(--k-ink-w, 3px) solid var(--k-ink);
 }
 
 .cp-panel__body {
@@ -187,7 +193,7 @@
 
 .cp-panel__footer {
   padding: calc(var(--cp-panel-pad) * 0.7) var(--cp-panel-pad);
-  border-top: var(--cp-border) solid var(--cp-ink);
+  border-top: var(--k-ink-w, 3px) solid var(--k-ink);
 }
 
 /* --- Iluminação seguindo o cursor -----------------------------------------
@@ -216,10 +222,18 @@
 
 .cp-panel--lit:hover,
 .cp-panel--lit:focus-within {
+  transform: translate(-3px, -4px);
   box-shadow:
-    0 1px 0 0 var(--cp-ink),
-    0 16px 30px -16px rgb(0 0 0 / 0.6),
-    0 40px 80px -44px color-mix(in srgb, var(--k-accent, #00d4ff) 60%, transparent);
+    10px 11px 0 0 var(--k-ink),
+    0 0 0 3px var(--k-accent, var(--k-zone-a)) inset;
+}
+
+/* O `clip-path` dos formatos recorta a sombra deslocada, e um requadro cortado
+   sem sombra parece descolado da página. Nesses, o relevo vem do contorno. */
+.cp-panel[class*="cp-shape--"],
+.cp-panel[class*="cp-shape--"]:hover,
+.cp-panel[class*="cp-shape--"]:focus-within {
+  box-shadow: 0 0 0 1px var(--k-ink);
 }
 
 /* ===========================================================================

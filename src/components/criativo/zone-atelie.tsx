@@ -37,11 +37,11 @@ export function ZoneAtelie({ artworks }: { artworks: Artwork[] }) {
       <RevealGroup as="ul" className="cp-grid cp-grid--rows cp-grid--dense">
         {artworks.map((a, i) => {
           const { span, shape } = beat(i)
-          const ratio = span.rows
-            ? "aspect-[3/4]"
-            : (span.lg ?? 4) >= 8
-              ? "aspect-[16/9]"
-              : "aspect-[4/3]"
+          // A moldura estica para o que sobra do quadro em vez de impor uma
+          // proporção. Com proporção fixa, o quadro alto ganhava um vazio por
+          // baixo e a linha ficava com fundos irregulares; assim a imagem é que
+          // absorve a diferença de altura entre vizinhos.
+          const minH = span.rows ? "min-h-[22rem]" : (span.lg ?? 4) >= 8 ? "min-h-[18rem]" : "min-h-[12rem]"
 
           return (
             <RevealItem
@@ -52,13 +52,13 @@ export function ZoneAtelie({ artworks }: { artworks: Artwork[] }) {
               style={spanVars(span)}
             >
               <Panel as="article" shape={shape} accent="lime" lit className="group h-full">
-                <PanelBody bleed className="flex flex-col overflow-hidden">
+                <PanelBody bleed className="flex min-h-0 flex-1 overflow-hidden">
                   <MediaFrame
                     src={a.image}
                     fallback={a.title}
                     themed
                     sizes="(max-width: 640px) 100vw, (max-width: 1024px) 50vw, 40vw"
-                    className={`${ratio} w-full`}
+                    className={`h-full w-full ${minH}`}
                   />
                 </PanelBody>
 
