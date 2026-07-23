@@ -50,6 +50,12 @@ Dashboard, páginas de erro.
 - Snapshot visual dos componentes (Playwright)
 - Fotografia própria (hoje `planned` — requer imagens raster)
 
+## Realm Criativo — backlog chamável
+
+O repertório do realm Criativo (Comic FX, web kit 8-bit, templates de zona,
+faixas de dimensão) e os **próximos passos com ID chamável** estão em
+[`criativo-roadmap.md`](./criativo-roadmap.md) — diga o ID (ex.: `CR-8B2`) para eu executar.
+
 ## ✅ Storybook (entregue)
 
 Catálogo de componentes com **Storybook 10** (`@storybook/nextjs-vite`).
