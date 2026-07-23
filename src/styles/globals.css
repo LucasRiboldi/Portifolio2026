@@ -27,6 +27,7 @@
 @import "./comic-fx.css";
 @import "./nav-rift.css";
 @import "./zone-band.css";
+@import "./eightbit.css";
 
 @tailwind base;
 @tailwind components;

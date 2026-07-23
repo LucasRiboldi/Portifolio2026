@@ -1,0 +1,166 @@
+/* ============================================================================
+   8-BIT WEB KIT — elementos de UI retrô do realm Creative
+   ---------------------------------------------------------------------------
+   Um kit de interface em pixel: cantos serrilhados (clip-path em degraus),
+   fonte Pixelify, sombra dura sem blur e paleta de neon limitada. Namespace
+   `bit-`. Feito para o design system do Criativo — a "dimensão videogame".
+
+   O canto em degrau (--bit-s) é o que dá a leitura 8-bit; nada é arredondado
+   de verdade, tudo é bloco.
+   ============================================================================ */
+
+.bit,
+.bit-btn,
+.bit-panel,
+.bit-window,
+.bit-badge,
+.bit-input {
+  font-family: var(--font-pixel), "Courier New", monospace;
+  --bit-s: 3px;
+  image-rendering: pixelated;
+}
+
+/* Canto em degrau reutilizável — o pixel-corner de todo o kit. */
+.bit-corners {
+  clip-path: polygon(
+    0 calc(2 * var(--bit-s)), var(--bit-s) calc(2 * var(--bit-s)), var(--bit-s) var(--bit-s),
+    calc(2 * var(--bit-s)) var(--bit-s), calc(2 * var(--bit-s)) 0,
+    calc(100% - 2 * var(--bit-s)) 0, calc(100% - 2 * var(--bit-s)) var(--bit-s),
+    calc(100% - var(--bit-s)) var(--bit-s), calc(100% - var(--bit-s)) calc(2 * var(--bit-s)),
+    100% calc(2 * var(--bit-s)),
+    100% calc(100% - 2 * var(--bit-s)), calc(100% - var(--bit-s)) calc(100% - 2 * var(--bit-s)),
+    calc(100% - var(--bit-s)) calc(100% - var(--bit-s)),
+    calc(100% - 2 * var(--bit-s)) calc(100% - var(--bit-s)),
+    calc(100% - 2 * var(--bit-s)) 100%,
+    calc(2 * var(--bit-s)) 100%, calc(2 * var(--bit-s)) calc(100% - var(--bit-s)),
+    var(--bit-s) calc(100% - var(--bit-s)), var(--bit-s) calc(100% - 2 * var(--bit-s)),
+    0 calc(100% - 2 * var(--bit-s))
+  );
+}
+
+/* --- PAINEL --------------------------------------------------------------- */
+.bit-panel {
+  position: relative;
+  background: #14122a;
+  color: #eae6ff;
+  border: var(--bit-s) solid #000;
+  padding: 1rem 1.1rem;
+  box-shadow: calc(2 * var(--bit-s)) calc(2 * var(--bit-s)) 0 0 rgba(0, 0, 0, 0.55);
+}
+
+/* --- JANELA (barra de título + corpo) ------------------------------------- */
+.bit-window {
+  background: #0f0e22;
+  color: #eae6ff;
+  border: var(--bit-s) solid #000;
+  box-shadow: calc(2 * var(--bit-s)) calc(2 * var(--bit-s)) 0 0 rgba(0, 0, 0, 0.55);
+}
+.bit-window__bar {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 0.5rem;
+  padding: 0.5rem 0.7rem;
+  background: var(--k-magenta, #ff2d95);
+  color: #000;
+  border-bottom: var(--bit-s) solid #000;
+  font-size: 0.7rem;
+  text-transform: uppercase;
+}
+.bit-window__dots {
+  display: inline-flex;
+  gap: 4px;
+}
+.bit-window__dots i {
+  width: 8px;
+  height: 8px;
+  background: #000;
+  display: inline-block;
+}
+.bit-window__body {
+  padding: 0.9rem 1rem;
+  font-size: 0.72rem;
+  line-height: 1.5;
+}
+
+/* --- BOTÃO (com estado pressionado) --------------------------------------- */
+.bit-btn {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.5rem;
+  padding: 0.6rem 1rem;
+  background: var(--k-cyan, #00d4ff);
+  color: #001018;
+  border: var(--bit-s) solid #000;
+  font-size: 0.72rem;
+  text-transform: uppercase;
+  cursor: pointer;
+  box-shadow: 0 var(--bit-s) 0 0 rgba(0, 0, 0, 0.6);
+  transition: none;
+}
+.bit-btn:hover { filter: brightness(1.08); }
+.bit-btn:active {
+  transform: translateY(var(--bit-s));
+  box-shadow: 0 0 0 0 rgba(0, 0, 0, 0.6);
+}
+.bit-btn:focus-visible { outline: var(--bit-s) solid #fff; outline-offset: 2px; }
+.bit-btn--magenta { background: var(--k-magenta, #ff2d95); color: #17000c; }
+.bit-btn--lime { background: var(--k-lime, #9dff2f); color: #0c1800; }
+.bit-btn--yellow { background: var(--k-yellow, #ffd200); color: #1a1500; }
+
+/* --- BADGE ---------------------------------------------------------------- */
+.bit-badge {
+  display: inline-flex;
+  align-items: center;
+  padding: 0.25rem 0.5rem;
+  background: var(--k-violet, #8b3dff);
+  color: #fff;
+  border: 2px solid #000;
+  font-size: 0.6rem;
+  text-transform: uppercase;
+  line-height: 1;
+}
+
+/* --- BARRA DE PROGRESSO / VIDA (segmentada) ------------------------------- */
+.bit-progress {
+  height: 18px;
+  background: #060612;
+  border: var(--bit-s) solid #000;
+  padding: 2px;
+}
+.bit-progress__fill {
+  height: 100%;
+  background:
+    repeating-linear-gradient(
+      90deg,
+      var(--k-lime, #9dff2f) 0 8px,
+      #7ad11f 8px 10px
+    );
+}
+.bit-progress--hp .bit-progress__fill {
+  background: repeating-linear-gradient(90deg, var(--k-red, #ff2f4e) 0 8px, #c71f38 8px 10px);
+}
+
+/* --- INPUT ---------------------------------------------------------------- */
+.bit-input {
+  width: 100%;
+  padding: 0.55rem 0.7rem;
+  background: #060612;
+  color: #eae6ff;
+  border: var(--bit-s) solid #000;
+  font-size: 0.72rem;
+  outline: none;
+}
+.bit-input::placeholder { color: rgba(234, 230, 255, 0.4); }
+.bit-input:focus { box-shadow: inset 0 0 0 2px var(--k-cyan, #00d4ff); }
+
+/* Coração de pixel (ícone de vida), desenhado em CSS. */
+.bit-heart {
+  width: 16px;
+  height: 16px;
+  display: inline-block;
+  background: var(--k-red, #ff2f4e);
+  clip-path: polygon(
+    30% 0, 50% 18%, 70% 0, 100% 0, 100% 45%, 50% 100%, 0 45%, 0 0
+  );
+}
