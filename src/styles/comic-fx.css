@@ -1,0 +1,303 @@
+/* ============================================================================
+   COMIC FX — catálogo de 20 efeitos tipográficos do realm Creative
+   ---------------------------------------------------------------------------
+   Namespace `kfx-`, complementar ao `k-` do comic-2026.css. Cada efeito é uma
+   classe única, aplicável a qualquer texto — a base `.kfx` fixa a letra de
+   trabalho (Anton, condensada e pesada, como as amostras "COMIC" do catálogo)
+   e cada modificador acrescenta o tratamento.
+
+   Medidas em `em` de propósito: o efeito escala com o `font-size` do consumidor,
+   então a mesma classe serve num título de capa e num chip do catálogo.
+
+   Reaproveita os tokens de tinta de comic-2026.css (--k-ink, --k-yellow, …).
+   Os efeitos 3D e glitch conversam com os `.k-3d`/`.k-glitch` já existentes;
+   aqui recebem a variante `kfx-` para o catálogo ficar homogéneo.
+   ============================================================================ */
+
+.kfx {
+  font-family: var(--font-anton), Impact, "Arial Black", sans-serif;
+  font-style: italic;
+  font-weight: 400;
+  text-transform: uppercase;
+  line-height: 0.9;
+  letter-spacing: 0.01em;
+  display: inline-block;
+  color: var(--k-white);
+  -webkit-font-smoothing: antialiased;
+}
+
+/* 01 · Contorno preto grosso ------------------------------------------------ */
+.kfx-outline {
+  color: var(--k-white);
+  -webkit-text-stroke: 0.09em var(--k-ink);
+  paint-order: stroke fill;
+}
+
+/* 02 · Contorno duplo (tinta por dentro, cor por fora) ---------------------- */
+.kfx-outline-double {
+  color: var(--k-white);
+  -webkit-text-stroke: 0.05em var(--k-ink);
+  paint-order: stroke fill;
+  text-shadow:
+    0.05em 0 0 var(--k-cyan), -0.05em 0 0 var(--k-cyan),
+    0 0.05em 0 var(--k-cyan), 0 -0.05em 0 var(--k-cyan),
+    0.038em 0.038em 0 var(--k-cyan), -0.038em -0.038em 0 var(--k-cyan),
+    0.038em -0.038em 0 var(--k-cyan), -0.038em 0.038em 0 var(--k-cyan);
+}
+
+/* 03 · Sombra deslocada (dura, sem blur) ------------------------------------ */
+.kfx-shadow-hard {
+  color: var(--k-white);
+  -webkit-text-stroke: 0.04em var(--k-ink);
+  paint-order: stroke fill;
+  text-shadow: 0.12em 0.12em 0 var(--k-magenta);
+}
+
+/* 04 · Sombra longa (recua até o canto) ------------------------------------- */
+.kfx-shadow-long {
+  color: var(--k-white);
+  -webkit-text-stroke: 0.03em var(--k-ink);
+  paint-order: stroke fill;
+  text-shadow:
+    0.02em 0.02em 0 var(--k-ink), 0.04em 0.04em 0 var(--k-ink),
+    0.06em 0.06em 0 var(--k-ink), 0.08em 0.08em 0 var(--k-ink),
+    0.10em 0.10em 0 var(--k-ink), 0.12em 0.12em 0 var(--k-ink),
+    0.14em 0.14em 0 var(--k-ink), 0.16em 0.16em 0 var(--k-ink),
+    0.18em 0.18em 0 var(--k-ink), 0.20em 0.20em 0 var(--k-ink),
+    0.24em 0.24em 0 rgba(18, 16, 14, 0.55),
+    0.30em 0.30em 0 rgba(18, 16, 14, 0.25);
+}
+
+/* 05 · Extrusão 3D (parente de .k-3d, aqui em amarelo de capa) --------------- */
+.kfx-3d {
+  color: var(--k-yellow);
+  -webkit-text-stroke: 0.045em var(--k-ink);
+  paint-order: stroke fill;
+  text-shadow:
+    0.02em 0.02em 0 var(--k-orange), 0.04em 0.04em 0 var(--k-orange),
+    0.06em 0.06em 0 var(--k-orange), 0.08em 0.08em 0 var(--k-orange),
+    0.10em 0.10em 0 var(--k-orange), 0.12em 0.12em 0 var(--k-orange),
+    0.14em 0.14em 0 var(--k-ink),
+    0.20em 0.20em 0 rgba(18, 16, 14, 0.3);
+}
+
+/* 06 · Gotejamento de tinta (letra com pingos — Rubik Wet Paint) ------------- */
+.kfx-drip {
+  font-family: var(--font-drip), var(--font-anton), sans-serif;
+  font-style: normal;
+  color: var(--k-white);
+  -webkit-text-stroke: 0.02em var(--k-ink);
+  paint-order: stroke fill;
+}
+
+/* 07 · Halftone (preenchimento pontilhado) ---------------------------------- */
+.kfx-halftone {
+  color: transparent;
+  background-image: radial-gradient(var(--k-white) 32%, transparent 34%);
+  background-size: 0.13em 0.13em;
+  -webkit-background-clip: text;
+  background-clip: text;
+  -webkit-text-stroke: 0.025em var(--k-white);
+}
+
+/* 08 · Textura papel antigo (sépia + grão recortado no texto) --------------- */
+.kfx-paper {
+  color: transparent;
+  background-image:
+    url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='120' height='120'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.85' numOctaves='2'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)' opacity='0.35'/%3E%3C/svg%3E"),
+    linear-gradient(180deg, #f4e6c4 0%, #e6cfa0 55%, #cba76f 100%);
+  background-size: 120px 120px, 100% 100%;
+  -webkit-background-clip: text;
+  background-clip: text;
+  -webkit-text-stroke: 0.022em #6b4f2a;
+  paint-order: stroke fill;
+}
+
+/* 09 · Metal escovado (estrias horizontais) --------------------------------- */
+.kfx-brushed {
+  color: transparent;
+  background-image:
+    linear-gradient(180deg, rgba(255, 255, 255, 0.55), rgba(0, 0, 0, 0.25)),
+    repeating-linear-gradient(90deg, #9a9a9a 0 1px, #ececec 1px 2px, #b6b6b6 2px 3px);
+  -webkit-background-clip: text;
+  background-clip: text;
+  -webkit-text-stroke: 0.03em #3a3a3a;
+  paint-order: stroke fill;
+}
+
+/* 10 · Cromado (gradiente espelhado azul-prata) ----------------------------- */
+.kfx-chrome {
+  color: transparent;
+  background-image: linear-gradient(
+    180deg,
+    #eaf6ff 0%, #a9ccec 40%, #274a6b 50%, #d6ecff 60%, #7ea9cf 100%
+  );
+  -webkit-background-clip: text;
+  background-clip: text;
+  -webkit-text-stroke: 0.03em var(--k-ink);
+  paint-order: stroke fill;
+  filter: drop-shadow(0.03em 0.05em 0 rgba(18, 16, 14, 0.5));
+}
+
+/* 11 · Neon brilhante (brilho em camadas) ----------------------------------- */
+.kfx-neon {
+  color: #fff;
+  -webkit-text-stroke: 0.01em var(--k-magenta);
+  text-shadow:
+    0 0 0.05em #fff,
+    0 0 0.14em var(--k-magenta),
+    0 0 0.3em var(--k-magenta),
+    0 0 0.6em var(--k-magenta),
+    0 0 1em rgba(255, 45, 149, 0.6);
+}
+
+/* 12 · Letras rachadas (Rubik Distressed) ----------------------------------- */
+.kfx-cracked {
+  font-family: var(--font-cracked), var(--font-anton), sans-serif;
+  font-style: normal;
+  color: var(--k-white);
+  -webkit-text-stroke: 0.012em var(--k-ink);
+  paint-order: stroke fill;
+}
+
+/* 13 · Spray / graffiti (halo difuso + fantasma ciano) ---------------------- */
+.kfx-spray {
+  color: var(--k-magenta);
+  text-shadow:
+    0.05em 0.05em 0 var(--k-cyan),
+    0 0 0.04em var(--k-magenta),
+    0 0 0.14em rgba(255, 45, 149, 0.7),
+    0.02em 0.03em 0.1em rgba(0, 212, 255, 0.4);
+}
+
+/* 14 · Pincel seco (preenchimento quebrado por máscara estriada) ------------ */
+.kfx-drybrush {
+  color: var(--k-white);
+  -webkit-text-stroke: 0.02em var(--k-ink);
+  paint-order: stroke fill;
+  -webkit-mask-image: repeating-linear-gradient(
+    7deg,
+    #000 0 3px, rgba(0, 0, 0, 0.15) 3px 4px, #000 4px 8px, rgba(0, 0, 0, 0.2) 8px 9px
+  );
+  mask-image: repeating-linear-gradient(
+    7deg,
+    #000 0 3px, rgba(0, 0, 0, 0.15) 3px 4px, #000 4px 8px, rgba(0, 0, 0, 0.2) 8px 9px
+  );
+}
+
+/* 15 · Letras derretendo (Wet Paint esticado, quente) ----------------------- */
+.kfx-melt {
+  font-family: var(--font-drip), var(--font-anton), sans-serif;
+  font-style: normal;
+  color: var(--k-red);
+  -webkit-text-stroke: 0.014em #6e0f1e;
+  paint-order: stroke fill;
+  transform: scaleY(1.08);
+  transform-origin: top center;
+}
+
+/* 16 · Explosão atrás (estrela recortada por trás) -------------------------- */
+.kfx-burst {
+  position: relative;
+  color: var(--k-white);
+  -webkit-text-stroke: 0.045em var(--k-ink);
+  paint-order: stroke fill;
+  z-index: 0;
+}
+.kfx-burst::before {
+  content: "";
+  position: absolute;
+  inset: -0.45em -0.75em;
+  z-index: -1;
+  background: var(--k-orange);
+  border: 0.03em solid var(--k-ink);
+  clip-path: polygon(
+    50% 0%, 60% 18%, 78% 8%, 74% 30%, 96% 28%, 80% 44%, 100% 55%,
+    80% 63%, 92% 82%, 70% 76%, 68% 98%, 52% 82%, 38% 100%, 34% 78%,
+    12% 86%, 20% 64%, 0% 58%, 18% 46%, 4% 30%, 26% 32%, 22% 10%, 42% 20%
+  );
+}
+
+/* 17 · Faíscas e partículas (pontos de brasa em volta) ---------------------- */
+.kfx-sparks {
+  position: relative;
+  color: var(--k-orange);
+  -webkit-text-stroke: 0.025em var(--k-ink);
+  paint-order: stroke fill;
+  text-shadow: 0 0 0.2em rgba(255, 107, 31, 0.7);
+}
+.kfx-sparks::before {
+  content: "";
+  position: absolute;
+  inset: -0.5em -0.4em;
+  z-index: -1;
+  pointer-events: none;
+  background-image:
+    radial-gradient(circle at 8% 24%, var(--k-yellow) 0 0.03em, transparent 0.04em),
+    radial-gradient(circle at 22% 6%, var(--k-orange) 0 0.025em, transparent 0.035em),
+    radial-gradient(circle at 88% 16%, var(--k-yellow) 0 0.03em, transparent 0.04em),
+    radial-gradient(circle at 70% 4%, var(--k-red) 0 0.02em, transparent 0.03em),
+    radial-gradient(circle at 96% 60%, var(--k-orange) 0 0.03em, transparent 0.04em),
+    radial-gradient(circle at 4% 70%, var(--k-yellow) 0 0.025em, transparent 0.035em),
+    radial-gradient(circle at 40% 96%, var(--k-orange) 0 0.03em, transparent 0.04em),
+    radial-gradient(circle at 60% 92%, var(--k-yellow) 0 0.02em, transparent 0.03em);
+}
+
+/* 18 · Offset de cores (separação RGB) -------------------------------------- */
+.kfx-offset {
+  color: var(--k-white);
+  text-shadow:
+    -0.045em 0 0 var(--k-red),
+    0.045em 0 0 var(--k-cyan);
+}
+
+/* 19 · Glitch (datamosh vermelho-ciano; precisa de data-text) ---------------- */
+.kfx-glitch {
+  position: relative;
+  display: inline-block;
+  color: var(--k-white);
+  -webkit-text-stroke: 0.025em var(--k-ink);
+  paint-order: stroke fill;
+}
+.kfx-glitch::before,
+.kfx-glitch::after {
+  content: attr(data-text);
+  position: absolute;
+  inset: 0;
+  -webkit-text-stroke: 0;
+}
+.kfx-glitch::before {
+  color: var(--k-red);
+  transform: translate(-0.03em, 0.01em);
+  clip-path: inset(0 0 55% 0);
+  animation: kfx-glitch-a 2.4s steps(2) infinite;
+}
+.kfx-glitch::after {
+  color: var(--k-cyan);
+  transform: translate(0.03em, -0.01em);
+  clip-path: inset(55% 0 0 0);
+  animation: kfx-glitch-b 2s steps(2) infinite;
+}
+@keyframes kfx-glitch-a {
+  0%, 80%, 100% { transform: translate(-0.03em, 0.01em); }
+  82% { transform: translate(0.05em, 0.01em); }
+  90% { transform: translate(-0.06em, 0.01em); }
+}
+@keyframes kfx-glitch-b {
+  0%, 75%, 100% { transform: translate(0.03em, -0.01em); }
+  78% { transform: translate(-0.05em, -0.01em); }
+  88% { transform: translate(0.06em, -0.01em); }
+}
+@media (prefers-reduced-motion: reduce) {
+  .kfx-glitch::before,
+  .kfx-glitch::after { animation: none; }
+}
+
+/* 20 · Perspectiva inclinada ------------------------------------------------ */
+.kfx-skew {
+  color: var(--k-white);
+  -webkit-text-stroke: 0.045em var(--k-ink);
+  paint-order: stroke fill;
+  transform: perspective(420px) rotateY(-20deg) skewY(-5deg);
+  text-shadow: 0.09em 0.09em 0 var(--k-blue);
+}

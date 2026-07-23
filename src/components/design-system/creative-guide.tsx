@@ -32,6 +32,7 @@ import { CreativeCover } from "./creative-cover"
 import { CreativeExtras } from "./creative-extras"
 import { CreativeShowcase, CreativeLandings } from "./creative-landings"
 import { CreativeAssetsChapter } from "./creative-assets-chapter"
+import { CreativeTypographyFx } from "./creative-typography-fx"
 
 /**
  * O guia de "O Criativo" — o scaffold comic, agora com corpo próprio.
@@ -141,6 +142,9 @@ export function CreativeGuide({
           </DsCard>
         ))}
       </div>
+
+      {/* 04.1 · Comic FX — o catálogo de efeitos de título */}
+      <CreativeTypographyFx />
 
       {/* 05 · Colors */}
       <DsColors d={d} />

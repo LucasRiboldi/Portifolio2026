@@ -24,6 +24,7 @@
 @import "./comic-cover.css";
 @import "./ds-canvas.css";
 @import "./comic-2026.css";
+@import "./comic-fx.css";
 
 @tailwind base;
 @tailwind components;

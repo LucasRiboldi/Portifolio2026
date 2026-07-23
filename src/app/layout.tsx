@@ -19,6 +19,8 @@ import {
   Bebas_Neue,
   Oswald,
   Inter,
+  Rubik_Wet_Paint,
+  Rubik_Distressed,
 } from "next/font/google";
 import { cn } from "@/lib/utils";
 import { getRealmSettings } from "@/lib/repos/realms";
@@ -92,6 +94,11 @@ const bebas = Bebas_Neue({ weight: '400', subsets: ['latin'], display: 'swap', v
 const oswald = Oswald({ subsets: ['latin'], display: 'swap', variable: '--font-oswald' });
 const inter = Inter({ subsets: ['latin'], display: 'swap', variable: '--font-inter' });
 
+// Fontes do catálogo Comic FX (/design-system, seção Typography): letras que o
+// CSS não replica — gotejamento de tinta e letra rachada. Da superfamília Rubik.
+const rubikWetPaint = Rubik_Wet_Paint({ weight: '400', subsets: ['latin'], display: 'swap', variable: '--font-drip' });
+const rubikDistressed = Rubik_Distressed({ weight: '400', subsets: ['latin'], display: 'swap', variable: '--font-cracked' });
+
 
 export default async function RootLayout({
   children
@@ -116,7 +123,7 @@ export default async function RootLayout({
   return (
     <html
       lang="pt-BR"
-      suppressHydrationWarning className={cn("font-sans", geist.variable, bangers.variable, archivo.variable, nabla.variable, monoton.variable, rubikGlitch.variable, bungeeShade.variable, anton.variable, bebas.variable, oswald.variable, inter.variable)}
+      suppressHydrationWarning className={cn("font-sans", geist.variable, bangers.variable, archivo.variable, nabla.variable, monoton.variable, rubikGlitch.variable, bungeeShade.variable, anton.variable, bebas.variable, oswald.variable, inter.variable, rubikWetPaint.variable, rubikDistressed.variable)}
     >
       <body>
         <script dangerouslySetInnerHTML={{ __html: antiFouc }} />
