@@ -25,7 +25,7 @@ const KIND_LABEL: Record<string, string> = {
  */
 export function ZoneAtelie({ artworks }: { artworks: Artwork[] }) {
   return (
-    <Zone {...ZONES.atelie}>
+    <Zone {...ZONES.atelie} panel>
       <RevealGroup as="ul" className="grid grid-cols-1 gap-6 sm:grid-cols-2 lg:grid-cols-3">
         {artworks.map((a, i) => (
           <RevealItem

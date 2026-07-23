@@ -1,6 +1,15 @@
 import { cn } from "@/lib/utils"
 
-export type Treatment = "glitch" | "rainbow" | "letter" | "3d" | "3d-deep"
+export type Treatment =
+  | "glitch"
+  | "rainbow"
+  | "letter"
+  | "3d"
+  | "3d-deep"
+  | "chrome"
+  | "neon"
+  | "offset"
+  | "outline"
 
 interface GlitchTitleProps {
   children: string
@@ -43,6 +52,11 @@ export function GlitchTitle({
         treatment === "letter" && "k-letter",
         treatment === "3d" && "k-3d",
         treatment === "3d-deep" && "k-3d k-3d--deep",
+        // Efeitos do catálogo Comic FX (comic-fx.css) — escolhidos por dimensão.
+        treatment === "chrome" && "kfx-chrome",
+        treatment === "neon" && "kfx-neon",
+        treatment === "offset" && "kfx-offset",
+        treatment === "outline" && "kfx-outline-double",
         className,
       )}
       data-text={treatment === "glitch" ? children : undefined}

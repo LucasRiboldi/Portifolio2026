@@ -64,7 +64,8 @@ export const ZONES: Record<Exclude<ZoneId, "multiverso">, ZoneMeta> = {
     title: "Sites & componentes",
     subtitle:
       "O que eu construo em código: interfaces, componentes, experimentos de CSS e coisas que só existem para responder a pergunta “será que dá?”.",
-    treatment: "glitch",
+    // Fundo azul-blueprint → título cromado (metal frio, tecnologia).
+    treatment: "chrome",
   },
   banca: {
     id: "banca",
@@ -75,6 +76,8 @@ export const ZONES: Record<Exclude<ZoneId, "multiverso">, ZoneMeta> = {
     title: "O que ando lendo",
     subtitle:
       "Quadrinhos na cabeceira, na fila e os que já foram. Metade do que aparece no resto do site começou numa destas páginas.",
+    // Fundo creme de jornal → letra vermelha de contorno duro (tinta de banca).
+    treatment: "letter",
   },
   cine: {
     id: "cine",
@@ -85,6 +88,8 @@ export const ZONES: Record<Exclude<ZoneId, "multiverso">, ZoneMeta> = {
     title: "Sessão da madrugada",
     subtitle:
       "Filmes que mexeram com o jeito que eu enxergo cor, enquadramento e ritmo. Sem crítica — só anotação de quem estava olhando o fundo da cena.",
+    // Fundo escuro de projeção → neon (a marquise do cinema).
+    treatment: "neon",
   },
   radio: {
     id: "radio",
@@ -106,7 +111,8 @@ export const ZONES: Record<Exclude<ZoneId, "multiverso">, ZoneMeta> = {
     title: "Fita rodando",
     subtitle:
       "Making of, timelapse e registro em movimento das coisas que não cabem numa imagem parada.",
-    treatment: "glitch",
+    // Fundo verde-VHS escuro → separação RGB (o erro de rastreio da fita).
+    treatment: "offset",
   },
   mural: {
     id: "mural",
@@ -117,6 +123,8 @@ export const ZONES: Record<Exclude<ZoneId, "multiverso">, ZoneMeta> = {
     title: "Recados & bilhetes",
     subtitle:
       "Anotações, lembretes e recados pregados na parede. É o mais perto de um blog que este lugar chega.",
+    // Fundo creme de cortiça → contorno duplo (recorte de adesivo pregado).
+    treatment: "outline",
   },
   tirinhas: {
     id: "tirinhas",
@@ -127,6 +135,8 @@ export const ZONES: Record<Exclude<ZoneId, "multiverso">, ZoneMeta> = {
     title: "Quadrinhos de verdade",
     subtitle:
       "A parte que existe só para brincadeira. Dois quadros, uma piada, nenhuma pretensão.",
+    // Fundo azul-claro/creme → 3D profundo (a piada precisa de volume de gibi).
+    treatment: "3d-deep",
   },
 }
 

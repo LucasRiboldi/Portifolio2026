@@ -20,7 +20,7 @@ const TILTS = ["-2.2deg", "1.6deg", "-1.1deg", "2.4deg", "-1.8deg", "1.2deg"]
  */
 export function ZoneMural({ notes }: { notes: Note[] }) {
   return (
-    <Zone {...ZONES.mural}>
+    <Zone {...ZONES.mural} panel>
       <RevealGroup as="ul" className="columns-1 gap-5 sm:columns-2 lg:columns-3 [&>li]:mb-5">
         {notes.map((n, i) => (
           <RevealItem key={n.id} as="li" variants={PANEL_IN} className="break-inside-avoid">

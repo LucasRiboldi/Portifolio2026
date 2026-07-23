@@ -22,7 +22,7 @@ const STATUS_LABEL: Record<string, string> = {
  */
 export function ZoneCine({ movies }: { movies: Movie[] }) {
   return (
-    <Zone {...ZONES.cine}>
+    <Zone {...ZONES.cine} panel>
       <RevealGroup as="ul" className="grid grid-cols-2 gap-6 lg:grid-cols-4">
         {movies.map((m) => (
           <RevealItem key={m.id} as="li" variants={PANEL_IN}>

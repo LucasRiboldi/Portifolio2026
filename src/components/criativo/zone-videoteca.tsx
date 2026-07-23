@@ -34,7 +34,7 @@ function embedUrl(kind: Video["kind"], url: string): string | null {
  */
 export function ZoneVideoteca({ videos }: { videos: Video[] }) {
   return (
-    <Zone {...ZONES.videoteca}>
+    <Zone {...ZONES.videoteca} panel>
       <RevealGroup as="ul" className="grid gap-8 lg:grid-cols-2">
         {videos.map((v) => {
           const embed = embedUrl(v.kind, v.video_url)

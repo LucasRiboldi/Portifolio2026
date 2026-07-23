@@ -24,7 +24,7 @@ const STATUS: Record<string, { label: string; bg: string }> = {
  */
 export function ZoneBanca({ comics }: { comics: Comic[] }) {
   return (
-    <Zone {...ZONES.banca}>
+    <Zone {...ZONES.banca} panel>
       <RevealGroup as="ul" className="grid grid-cols-2 gap-5 sm:grid-cols-3 lg:grid-cols-5">
         {comics.map((c) => {
           const status = STATUS[c.status] ?? STATUS.lendo!

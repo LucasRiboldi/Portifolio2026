@@ -23,7 +23,7 @@ export function ZoneRadio({ tracks }: { tracks: Track[] }) {
   const withCover = tracks.filter((t) => t.cover_image).slice(0, SHELF)
 
   return (
-    <Zone {...ZONES.radio}>
+    <Zone {...ZONES.radio} panel>
       <div className="grid gap-8 lg:grid-cols-[1.15fr_0.85fr]">
         <div className="relative">
           {/* Disco girando atrás do player. */}

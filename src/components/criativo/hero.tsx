@@ -12,7 +12,6 @@ import {
   SpeedLines,
 } from "@/components/comic/atoms"
 import { GlitchTitle } from "@/components/comic/glitch-title"
-import { PunkName } from "@/components/comic/punk-name"
 import { Counter } from "@/components/comic/counter"
 import { EASE } from "@/components/comic/motion"
 import { FUN_STATS, HERO } from "@/constants/criativo-landing"
@@ -74,7 +73,15 @@ export function Hero() {
               animate={{ opacity: 1, y: 0 }}
               transition={{ duration: 0.65, ease: EASE, delay: 0.06 }}
             >
-              <PunkName className="text-[clamp(1.4rem,3.6vw,2.4rem)]">{HERO.author}</PunkName>
+              {/* Anomalia (Terra-138): o autor entra com o datamosh do design
+                  system — o corpo "fora do lugar" que pisca, literal. */}
+              <GlitchTitle
+                as="span"
+                treatment="glitch"
+                className="text-[clamp(1.4rem,3.6vw,2.4rem)]"
+              >
+                {HERO.author}
+              </GlitchTitle>
               <span className="k-kicker text-[9px] text-[var(--k-ink)]/60">{HERO.authorTag}</span>
             </motion.div>
 

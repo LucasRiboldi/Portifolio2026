@@ -18,7 +18,7 @@ import { ZONES } from "@/constants/criativo-landing"
  */
 export function ZoneTirinhas({ strips }: { strips: Strip[] }) {
   return (
-    <Zone {...ZONES.tirinhas}>
+    <Zone {...ZONES.tirinhas} panel>
       <RevealGroup as="ul" className="grid gap-8 lg:grid-cols-2">
         {strips.map((s, i) => (
           <RevealItem key={s.id} as="li" variants={PANEL_IN}>

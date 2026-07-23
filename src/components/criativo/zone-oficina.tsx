@@ -19,7 +19,7 @@ const MAX = 4
  */
 export function ZoneOficina({ projects }: { projects: Project[] }) {
   return (
-    <Zone {...ZONES.oficina}>
+    <Zone {...ZONES.oficina} panel>
       <div className="space-y-16 sm:space-y-24">
         {projects.slice(0, MAX).map((p, i) => {
           const reversed = i % 2 === 1
