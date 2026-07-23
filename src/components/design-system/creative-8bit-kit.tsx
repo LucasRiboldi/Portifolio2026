@@ -107,13 +107,170 @@ export function CreativeEightBitKit() {
         </div>
       </div>
 
+      {/* --- Segunda leva: menu, diálogo, inventário, high-score, ícones,
+          controles e balão (CR-8B1…8B7) ------------------------------------ */}
+      <div className="mt-6 grid gap-6 lg:grid-cols-2">
+        {/* CR-8B1 · Menu de pause */}
+        <div className="bit-window bit-corners">
+          <div className="bit-window__bar">
+            <span>Pausa</span>
+            <span className="bit-window__dots" aria-hidden>
+              <i />
+              <i />
+              <i />
+            </span>
+          </div>
+          <ul className="bit-menu" role="menu" aria-label="Menu de pause">
+            <li>
+              <button type="button" className="bit-menu__item" role="menuitem" aria-current="true">
+                Continuar
+              </button>
+            </li>
+            <li>
+              <button type="button" className="bit-menu__item" role="menuitem">
+                Inventário
+              </button>
+            </li>
+            <li>
+              <button type="button" className="bit-menu__item" role="menuitem">
+                Opções
+              </button>
+            </li>
+            <li>
+              <button type="button" className="bit-menu__item" role="menuitem" aria-disabled="true">
+                Salvar (indisponível)
+              </button>
+            </li>
+            <li>
+              <button type="button" className="bit-menu__item" role="menuitem">
+                Sair da dimensão
+              </button>
+            </li>
+          </ul>
+        </div>
+
+        {/* CR-8B2 · Caixa de diálogo RPG */}
+        <div className="bit-panel bit-corners">
+          <span className="bit-dialog__speaker">Guardião da Fenda</span>
+          <p className="bit-dialog">
+            <span className="bit-dialog__text">
+              Poucos atravessam a Terra-138 e voltam para contar…
+            </span>
+          </p>
+          <span className="bit-dialog__more" aria-hidden>
+            ▼ continuar
+          </span>
+        </div>
+
+        {/* CR-8B3 · Inventário */}
+        <div className="bit-panel bit-corners">
+          <p className="mb-3 text-[0.68rem] uppercase text-[var(--k-cyan)]">Inventário</p>
+          <div className="bit-inventory">
+            <div className="bit-slot">
+              <span className="bit-ico bit-ico--coin" aria-label="Moeda" role="img" />
+              <span className="bit-slot__qty">9</span>
+            </div>
+            <div className="bit-slot">
+              <span className="bit-ico bit-ico--star" aria-label="Estrela" role="img" />
+            </div>
+            <div className="bit-slot">
+              <span className="bit-ico bit-ico--mushroom" aria-label="Cogumelo" role="img" />
+              <span className="bit-slot__qty">3</span>
+            </div>
+            <div className="bit-slot">
+              <span className="bit-ico bit-ico--key" aria-label="Chave" role="img" />
+            </div>
+            <div className="bit-slot">
+              <span className="bit-ico bit-ico--potion" aria-label="Poção" role="img" />
+              <span className="bit-slot__qty">2</span>
+            </div>
+            <div className="bit-slot bit-slot--empty" aria-hidden />
+            <div className="bit-slot bit-slot--empty" aria-hidden />
+            <div className="bit-slot bit-slot--empty" aria-hidden />
+            <div className="bit-slot bit-slot--empty" aria-hidden />
+            <div className="bit-slot bit-slot--empty" aria-hidden />
+          </div>
+        </div>
+
+        {/* CR-8B4 · Placar de recordes */}
+        <div className="bit-panel bit-corners">
+          <p className="mb-3 text-[0.68rem] uppercase text-[var(--k-cyan)]">High scores</p>
+          <table className="bit-score">
+            <thead>
+              <tr>
+                <th scope="col">#</th>
+                <th scope="col">Herói</th>
+                <th scope="col">Pontos</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td>1</td>
+                <td>LUC</td>
+                <td>138000</td>
+              </tr>
+              <tr>
+                <td>2</td>
+                <td>AAA</td>
+                <td>92500</td>
+              </tr>
+              <tr>
+                <td>3</td>
+                <td>BOB</td>
+                <td>77010</td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+
+        {/* CR-8B6 · Controles pixel */}
+        <div className="bit-panel bit-corners">
+          <p className="mb-3 text-[0.68rem] uppercase text-[var(--k-cyan)]">Controles</p>
+          <div className="space-y-3">
+            <label className="bit-toggle">
+              <input type="checkbox" defaultChecked aria-label="Som" />
+              <span className="bit-toggle__track" aria-hidden />
+            </label>
+            <label className="bit-check">
+              <input type="checkbox" defaultChecked />
+              <span className="bit-check__box" aria-hidden />
+              Tela cheia
+            </label>
+            <div className="flex flex-col gap-2">
+              <label className="bit-radio">
+                <input type="radio" name="dificuldade" defaultChecked />
+                <span className="bit-radio__box" aria-hidden />
+                Normal
+              </label>
+              <label className="bit-radio">
+                <input type="radio" name="dificuldade" />
+                <span className="bit-radio__box" aria-hidden />
+                Difícil
+              </label>
+            </div>
+          </div>
+        </div>
+
+        {/* CR-8B7 · Tooltip / balão de fala */}
+        <div className="bit-panel bit-corners flex flex-wrap items-end gap-6">
+          <div>
+            <p className="mb-4 text-[0.68rem] uppercase text-[var(--k-cyan)]">Balões</p>
+            <span className="bit-balloon">Aperte ▶ para atravessar!</span>
+          </div>
+          <span className="bit-balloon bit-balloon--tip">+50 XP · combo mantido</span>
+        </div>
+      </div>
+
       <p className="mt-4 text-xs leading-snug text-white/55">
         Uso:{" "}
         <code className="text-[var(--sv-cyan)]">
           &lt;button className=&quot;bit-btn bit-corners&quot;&gt;Start&lt;/button&gt;
         </code>
         . A classe <code className="text-[var(--sv-cyan)]">.bit-corners</code> aplica o canto
-        serrilhado a qualquer peça do kit.
+        serrilhado a qualquer peça do kit. O diálogo (
+        <code className="text-[var(--sv-cyan)]">.bit-dialog__text</code>) usa animação de máquina de
+        escrever e o balão (<code className="text-[var(--sv-cyan)]">.bit-balloon</code>) traz o rabicho
+        serrilhado — ambos respeitam <code className="text-[var(--sv-cyan)]">prefers-reduced-motion</code>.
       </p>
     </section>
   )

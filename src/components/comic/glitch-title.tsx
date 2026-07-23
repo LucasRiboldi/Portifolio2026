@@ -1,15 +1,7 @@
 import { cn } from "@/lib/utils"
+import { TREATMENT_CLASS, type Treatment } from "./glitch-title-classes"
 
-export type Treatment =
-  | "glitch"
-  | "rainbow"
-  | "letter"
-  | "3d"
-  | "3d-deep"
-  | "chrome"
-  | "neon"
-  | "offset"
-  | "outline"
+export type { Treatment }
 
 interface GlitchTitleProps {
   children: string
@@ -45,20 +37,7 @@ export function GlitchTitle({
   return (
     <Tag
       id={id}
-      className={cn(
-        "k-title",
-        treatment === "glitch" && "k-glitch",
-        treatment === "rainbow" && "k-letter-rainbow",
-        treatment === "letter" && "k-letter",
-        treatment === "3d" && "k-3d",
-        treatment === "3d-deep" && "k-3d k-3d--deep",
-        // Efeitos do catálogo Comic FX (comic-fx.css) — escolhidos por dimensão.
-        treatment === "chrome" && "kfx-chrome",
-        treatment === "neon" && "kfx-neon",
-        treatment === "offset" && "kfx-offset",
-        treatment === "outline" && "kfx-outline-double",
-        className,
-      )}
+      className={cn("k-title", TREATMENT_CLASS[treatment], className)}
       data-text={treatment === "glitch" ? children : undefined}
     >
       {children}

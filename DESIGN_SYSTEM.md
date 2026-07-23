@@ -1006,13 +1006,18 @@ alinhamento das faixas quando os dois tratamentos aparecem perto.
 ### Anomalia Terra-138 · Punk
 
 ```text
-components/comic/punk-name.tsx  →  <PunkName>Lucas Riboldi</PunkName>
+components/comic/ransom-text.tsx  →  <RansomText>TEXTO</RansomText>   (base)
+components/comic/punk-name.tsx    →  <PunkName>Lucas Riboldi</PunkName> (anomalia)
 ```
 
 A assinatura do autor na capa. Cada letra é um recorte de revista com fundo,
 rotação e `clip-path` irregular próprios — bilhete de resgate, não tipografia.
 Três posições fixas recebem `k-punk-glitch`, o salto da anomalia (passos
 discretos, não interpolação: é erro de registro, não movimento).
+
+A mecânica do recorte vive em `RansomText` (base reutilizável, sem glitch); o
+`PunkName` é esse componente com as posições da Terra-138 já ligadas via
+`glitchAt`. Use `RansomText` para qualquer texto ransom que não seja a anomalia.
 
 A paleta de recortes e as posições com glitch são **fixas por índice**, nunca
 sorteadas: `Math.random()` no render daria markup diferente no servidor e no
@@ -1021,6 +1026,57 @@ cliente e a hidratação reclamaria.
 Acessibilidade: as letras são `aria-hidden` dentro de um contêiner com
 `aria-label`. Sem isso o leitor de tela soletraria "L… U… C… A… S" — que é o
 efeito visual desejado e exatamente o que não se quer no áudio.
+
+## 04.1 · Comic FX — catálogo de efeitos de título
+
+```text
+src/styles/comic-fx.css   → namespace .kfx-*, importado por globals.css
+```
+
+Trinta e dois tratamentos nomeados de letragem de capa, cada um uma classe
+`.kfx-*` aplicável a qualquer texto. A base `.kfx` fixa a fonte de trabalho
+(Anton, condensada) e cada modificador acrescenta o efeito. Medidas em `em` de
+propósito: o efeito escala com o `font-size`, então a mesma classe serve na
+manchete e no chip do catálogo.
+
+Complementa (não substitui) os modificadores `.k-*` de `.k-title`: o `GlitchTitle`
+mapeia `chrome`/`neon`/`offset`/`outline` para os `.kfx-*` correspondentes. O
+glitch (`.kfx-glitch`) precisa de `data-text` igual ao conteúdo; o 3D
+(`.kfx-3d`) recolore as faces por `--k-yellow`/`--k-orange`.
+
+Efeitos animados — `.kfx-glitch`, `.kfx-holo`, `.kfx-neon-anim` — param sob
+`prefers-reduced-motion`. Catálogo vivo em `/design-system/realms/creative`
+(seção 04.1) e stories em `comic-fx.stories.tsx`.
+
+## 04.2 · Web kit 8-bit — a dimensão videogame
+
+```text
+src/styles/eightbit.css   → namespace .bit-*, importado por globals.css
+```
+
+Kit de UI em pixel: janela, painel, botões com estado pressionado, badges,
+barras de vida/progresso segmentadas, input, **menu de pause**, **diálogo RPG**
+(máquina de escrever), **inventário** de slots, **placar high-score**, **ícones
+pixel** (moeda, estrela, cogumelo, chave, poção), **toggle/checkbox/radio** e
+**balão de fala** com rabicho serrilhado. Fonte Pixelify, cantos em degrau via
+`.bit-corners` (clip-path), sombra dura, paleta de neon limitada — nada
+arredondado.
+
+O diálogo (`.bit-dialog__text`) e a seta piscante (`.bit-dialog__more`) param sob
+`prefers-reduced-motion` (o texto aparece inteiro). Stories em `eightbit.stories.tsx`.
+
+## 04.3 · Templates de zona — layouts prontos
+
+```text
+src/components/design-system/creative-zone-templates.tsx
+```
+
+Nove blocos copy-paste montados com as peças do realm: hero split, grade de
+mundos, faixa de CTA, faixa de estatísticas (contadores `Counter`), depoimentos
+em balão comic, galeria masonry, timeline de dimensões, split art+texto
+invertível e rodapé de dimensão. Cada template herda a cor da dimensão por
+`--k-zone-bg` e usa os `.kfx-*` nos títulos — troque o efeito para mudar a "voz"
+da zona.
 
 ## Primitivos
 

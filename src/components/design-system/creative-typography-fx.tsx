@@ -41,6 +41,12 @@ const EFFECTS: { n: string; label: string; cls: string }[] = [
   { n: "24", label: "Pincel / graffiti", cls: "kfx-brush" },
   { n: "25", label: "HUD neon", cls: "kfx-hud" },
   { n: "26", label: "Graffiti coroa", cls: "kfx-crown" },
+  { n: "27", label: "Retro 3D dourado", cls: "kfx-retro-gold" },
+  { n: "28", label: "Escova branca", cls: "kfx-whitebrush" },
+  { n: "29", label: "Teia de aranha", cls: "kfx-web" },
+  { n: "30", label: "Dupla-exposição", cls: "kfx-doubleexpose" },
+  { n: "31", label: "Holograma", cls: "kfx-holo" },
+  { n: "32", label: "Neon-tubo animado", cls: "kfx-neon-anim" },
 ]
 
 /** Biblioteca de assets: a palavra MULTIVERSO em vários tratamentos + legenda. */
@@ -74,7 +80,7 @@ export function CreativeTypographyFx() {
         Comic FX — efeitos de título
       </DsSectionTitle>
       <DsLead>
-        Vinte tratamentos nomeados para texto de capa, cada um uma classe{" "}
+        {EFFECTS.length} tratamentos nomeados para texto de capa, cada um uma classe{" "}
         <code className="text-[var(--sv-cyan)]">.kfx-*</code> reutilizável. Todos escalam pelo{" "}
         <code className="text-[var(--sv-cyan)]">font-size</code> (medidas em <code>em</code>), então
         a mesma classe serve na manchete e no rótulo. Fundo escuro de propósito: é onde a tinta e o

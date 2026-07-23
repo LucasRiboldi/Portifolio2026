@@ -164,3 +164,265 @@
     30% 0, 50% 18%, 70% 0, 100% 0, 100% 45%, 50% 100%, 0 45%, 0 0
   );
 }
+
+/* --- CR-8B1 · MENU DE PAUSE (opções com cursor ▶ selecionável) ------------- */
+.bit-menu {
+  list-style: none;
+  margin: 0;
+  padding: 0.4rem;
+  display: flex;
+  flex-direction: column;
+  gap: 0.15rem;
+}
+.bit-menu__item {
+  position: relative;
+  display: flex;
+  align-items: center;
+  gap: 0.6rem;
+  padding: 0.4rem 0.7rem 0.4rem 1.7rem;
+  font-size: 0.72rem;
+  text-transform: uppercase;
+  color: #eae6ff;
+  cursor: pointer;
+  background: none;
+  border: 0;
+  width: 100%;
+  text-align: left;
+}
+.bit-menu__item::before {
+  content: "▶";
+  position: absolute;
+  left: 0.55rem;
+  opacity: 0;
+  color: var(--k-cyan, #00d4ff);
+}
+.bit-menu__item:hover,
+.bit-menu__item:focus-visible,
+.bit-menu__item[aria-current="true"] {
+  background: rgba(0, 212, 255, 0.14);
+  outline: none;
+}
+.bit-menu__item:hover::before,
+.bit-menu__item:focus-visible::before,
+.bit-menu__item[aria-current="true"]::before { opacity: 1; }
+.bit-menu__item[aria-disabled="true"] { color: rgba(234, 230, 255, 0.35); cursor: not-allowed; }
+
+/* --- CR-8B2 · CAIXA DE DIÁLOGO RPG (máquina de escrever + seta continuar) --- */
+.bit-dialog__speaker {
+  display: inline-block;
+  margin-bottom: 0.4rem;
+  padding: 0.1rem 0.4rem;
+  background: var(--k-yellow, #ffd200);
+  color: #1a1500;
+  font-size: 0.6rem;
+  text-transform: uppercase;
+}
+.bit-dialog__text {
+  display: block;
+  overflow: hidden;
+  white-space: nowrap;
+  font-size: 0.72rem;
+  line-height: 1.6;
+  animation: bit-type 2.8s steps(40, end) 1 both;
+}
+@keyframes bit-type { from { width: 0; } to { width: 100%; } }
+.bit-dialog__more {
+  display: inline-block;
+  margin-top: 0.5rem;
+  color: var(--k-cyan, #00d4ff);
+  animation: bit-blink 1s steps(1) infinite;
+}
+@keyframes bit-blink { 50% { opacity: 0; } }
+
+/* --- CR-8B3 · INVENTÁRIO / GRADE DE ITENS (slots pixel) -------------------- */
+.bit-inventory {
+  display: grid;
+  grid-template-columns: repeat(5, 1fr);
+  gap: 6px;
+}
+.bit-slot {
+  aspect-ratio: 1;
+  background: #0b0a1c;
+  border: 3px solid #000;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  box-shadow: inset 2px 2px 0 rgba(255, 255, 255, 0.06);
+}
+.bit-slot--empty { opacity: 0.5; }
+.bit-slot__qty {
+  position: absolute;
+  right: 2px;
+  bottom: 0;
+  font-size: 0.55rem;
+  color: var(--k-yellow, #ffd200);
+}
+.bit-slot { position: relative; }
+
+/* --- CR-8B4 · PLACAR DE RECORDES (tabela high-score monospace) ------------- */
+.bit-score {
+  width: 100%;
+  border-collapse: collapse;
+  font-size: 0.66rem;
+  text-transform: uppercase;
+}
+.bit-score th,
+.bit-score td {
+  padding: 0.35rem 0.5rem;
+  border-bottom: 2px solid rgba(255, 255, 255, 0.12);
+  text-align: left;
+}
+.bit-score th { color: var(--k-yellow, #ffd200); }
+.bit-score th:last-child,
+.bit-score td:last-child { text-align: right; color: var(--k-lime, #9dff2f); }
+.bit-score tbody tr:first-child td { color: #fff; }
+
+/* --- CR-8B5 · ÍCONES PIXEL EM CSS (moeda, estrela, cogumelo, chave, poção) -- */
+.bit-ico {
+  width: 20px;
+  height: 20px;
+  display: inline-block;
+  position: relative;
+  image-rendering: pixelated;
+}
+.bit-ico--coin {
+  border-radius: 50%;
+  background: radial-gradient(circle at 38% 34%, #fff2a8 0 18%, var(--k-yellow, #ffd200) 20% 58%, #b8860b 60% 100%);
+  border: 2px solid #000;
+  box-shadow: inset 0 0 0 2px rgba(184, 134, 11, 0.55);
+}
+.bit-ico--star {
+  background: var(--k-yellow, #ffd200);
+  clip-path: polygon(50% 0, 61% 35%, 98% 35%, 68% 57%, 79% 91%, 50% 70%, 21% 91%, 32% 57%, 2% 35%, 39% 35%);
+}
+.bit-ico--mushroom::before {
+  content: "";
+  position: absolute;
+  inset: 0 0 auto 0;
+  height: 58%;
+  background: var(--k-red, #ff2f4e);
+  border: 2px solid #000;
+  border-radius: 50% 50% 0 0;
+}
+.bit-ico--mushroom::after {
+  content: "";
+  position: absolute;
+  bottom: 0;
+  left: 26%;
+  right: 26%;
+  height: 46%;
+  background: #ffe9c7;
+  border: 2px solid #000;
+  border-top: 0;
+}
+.bit-ico--key {
+  background: var(--k-yellow, #ffd200);
+  clip-path: polygon(0 38%, 46% 38%, 46% 22%, 60% 22%, 60% 38%, 72% 38%, 72% 58%, 60% 58%, 60% 48%, 52% 48%, 52% 58%, 46% 58%, 46% 62%, 0 62%);
+}
+.bit-ico--potion {
+  background: linear-gradient(180deg, #d7ffb0 0 40%, var(--k-lime, #9dff2f) 40% 100%);
+  clip-path: polygon(38% 0, 62% 0, 62% 24%, 82% 58%, 82% 100%, 18% 100%, 18% 58%, 38% 24%);
+}
+
+/* --- CR-8B6 · TOGGLE / CHECKBOX / RADIO PIXEL ------------------------------ */
+.bit-toggle {
+  position: relative;
+  display: inline-flex;
+  width: 46px;
+  height: 24px;
+  cursor: pointer;
+}
+.bit-toggle input {
+  position: absolute;
+  inset: 0;
+  margin: 0;
+  opacity: 0;
+  cursor: pointer;
+}
+.bit-toggle__track {
+  flex: 1;
+  position: relative;
+  background: #060612;
+  border: 3px solid #000;
+}
+.bit-toggle__track::after {
+  content: "";
+  position: absolute;
+  inset: 0 50% 0 0;
+  background: var(--k-red, #ff2f4e);
+}
+.bit-toggle input:checked ~ .bit-toggle__track::after {
+  inset: 0 0 0 50%;
+  background: var(--k-lime, #9dff2f);
+}
+.bit-toggle:focus-within .bit-toggle__track { box-shadow: 0 0 0 2px var(--k-cyan, #00d4ff); }
+
+.bit-check,
+.bit-radio {
+  position: relative;
+  display: inline-flex;
+  align-items: center;
+  gap: 0.5rem;
+  cursor: pointer;
+  font-size: 0.7rem;
+  text-transform: uppercase;
+  color: #eae6ff;
+}
+.bit-check input,
+.bit-radio input { position: absolute; opacity: 0; cursor: pointer; }
+.bit-check__box,
+.bit-radio__box {
+  width: 18px;
+  height: 18px;
+  background: #060612;
+  border: 3px solid #000;
+  display: inline-block;
+  flex: none;
+}
+.bit-check input:checked ~ .bit-check__box {
+  background: var(--k-lime, #9dff2f);
+  box-shadow: inset 0 0 0 3px #000;
+}
+.bit-radio input:checked ~ .bit-radio__box {
+  background: var(--k-cyan, #00d4ff);
+  box-shadow: inset 0 0 0 4px #060612, inset 0 0 0 6px var(--k-cyan, #00d4ff);
+}
+.bit-check:focus-within .bit-check__box,
+.bit-radio:focus-within .bit-radio__box { outline: 2px solid var(--k-cyan, #00d4ff); outline-offset: 2px; }
+
+/* --- CR-8B7 · TOOLTIP / BALÃO DE FALA PIXEL (rabicho serrilhado) ----------- */
+.bit-balloon {
+  position: relative;
+  display: inline-block;
+  max-width: 15rem;
+  padding: 0.55rem 0.75rem;
+  background: #eae6ff;
+  color: #14122a;
+  border: 3px solid #000;
+  font-size: 0.68rem;
+  line-height: 1.5;
+}
+.bit-balloon::before {
+  content: "";
+  position: absolute;
+  left: 18px;
+  bottom: -12px;
+  width: 12px;
+  height: 12px;
+  background: #eae6ff;
+  border-right: 3px solid #000;
+  border-bottom: 3px solid #000;
+  clip-path: polygon(0 0, 100% 0, 100% 40%, 60% 40%, 60% 100%, 0 100%);
+}
+.bit-balloon--tip {
+  background: #14122a;
+  color: #eae6ff;
+  border-color: var(--k-cyan, #00d4ff);
+}
+.bit-balloon--tip::before { background: #14122a; border-color: var(--k-cyan, #00d4ff); }
+
+/* CR-M2 · reduce: sem máquina de escrever nem piscar. */
+@media (prefers-reduced-motion: reduce) {
+  .bit-dialog__text { animation: none; width: 100%; white-space: normal; }
+  .bit-dialog__more { animation: none; }
+}

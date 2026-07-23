@@ -5,6 +5,7 @@ import { isRealmId, REALMS } from "@/lib/realms"
 import { RealmKitPreview } from "./kit-preview"
 import { RealmVariantSwitcher } from "@/components/design-system/realm-variant-switcher"
 import { DsRealmNav } from "@/components/design-system/ds-realm-nav"
+import { DsGuideSections } from "@/components/design-system/ds-guide-sections"
 import { CreativeGuide } from "@/components/design-system/creative-guide"
 import { DeveloperGuide } from "@/components/design-system/developer-guide"
 import { ArcaneGuide } from "@/components/design-system/arcane-guide"
@@ -59,13 +60,15 @@ export default async function RealmDesignPage({ params }: { params: Promise<{ re
       <DsRealmNav realm={d.id} />
 
       <div className="min-w-0 flex-1">
-        {d.id === "developer" ? (
-          <DeveloperGuide d={d} kit={kit} />
-        ) : d.id === "arcane" ? (
-          <ArcaneGuide d={d} kit={kit} />
-        ) : (
-          <CreativeGuide d={d} nav={nav} kit={kit} />
-        )}
+        <DsGuideSections realm={d.id}>
+          {d.id === "developer" ? (
+            <DeveloperGuide d={d} kit={kit} />
+          ) : d.id === "arcane" ? (
+            <ArcaneGuide d={d} kit={kit} />
+          ) : (
+            <CreativeGuide d={d} nav={nav} kit={kit} />
+          )}
+        </DsGuideSections>
       </div>
     </div>
   )

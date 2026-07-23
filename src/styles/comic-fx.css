@@ -379,3 +379,107 @@
   transform: rotate(-14deg);
   pointer-events: none;
 }
+
+/* 27 · Retro 3D dourado (western/vintage — blocos de ouro, sombra vermelha) -- */
+.kfx-retro-gold {
+  color: transparent;
+  background-image: linear-gradient(180deg, #ffe9a8 0%, #e6a92b 46%, #b06a12 54%, #ffd777 100%);
+  -webkit-background-clip: text;
+  background-clip: text;
+  -webkit-text-stroke: 0.02em #5a2c0a;
+  paint-order: stroke fill;
+  text-shadow:
+    0.03em 0.03em 0 #a11627, 0.06em 0.06em 0 #a11627,
+    0.09em 0.09em 0 #6e0f1c, 0.13em 0.13em 0 rgba(18, 16, 14, 0.32);
+}
+
+/* 28 · Escova branca no escuro (traço de pincel branco — Caveat Brush) ------- */
+.kfx-whitebrush {
+  font-family: var(--font-brush), var(--font-anton), cursive;
+  font-style: normal;
+  color: var(--k-white);
+  -webkit-text-stroke: 0.008em rgba(0, 0, 0, 0.25);
+  text-shadow: 0.02em 0.03em 0.02em rgba(0, 0, 0, 0.55);
+  transform: rotate(-2deg);
+}
+
+/* 29 · Teia de aranha (fios saindo do canto por trás da letra) --------------- */
+.kfx-web {
+  position: relative;
+  color: var(--k-white);
+  -webkit-text-stroke: 0.03em var(--k-ink);
+  paint-order: stroke fill;
+  z-index: 0;
+}
+.kfx-web::before {
+  content: "";
+  position: absolute;
+  inset: -0.6em -0.5em;
+  z-index: -1;
+  pointer-events: none;
+  background:
+    repeating-conic-gradient(from 0deg at 0% 0%, rgba(255, 255, 255, 0.32) 0 0.6deg, transparent 0.6deg 20deg),
+    radial-gradient(circle at 0% 0%, transparent 0.66em, rgba(255, 255, 255, 0.2) 0.68em 0.72em, transparent 0.74em),
+    radial-gradient(circle at 0% 0%, transparent 1.3em, rgba(255, 255, 255, 0.15) 1.32em 1.36em, transparent 1.38em);
+}
+
+/* 30 · Dupla-exposição (paisagem de cor sangrando dentro das letras) --------- */
+.kfx-doubleexpose {
+  color: transparent;
+  background-image:
+    radial-gradient(circle at 28% 22%, var(--k-magenta), transparent 46%),
+    radial-gradient(circle at 76% 72%, var(--k-cyan), transparent 46%),
+    linear-gradient(180deg, #1a1030, #0a0a1a);
+  -webkit-background-clip: text;
+  background-clip: text;
+  -webkit-text-stroke: 0.014em rgba(255, 255, 255, 0.5);
+  paint-order: stroke fill;
+}
+
+/* 31 · Holograma (arco iridescente que desliza) ----------------------------- */
+.kfx-holo {
+  color: transparent;
+  background-image: linear-gradient(120deg, #7af8ff, #b39dff 25%, #ff9ecb 50%, #b39dff 75%, #7af8ff);
+  background-size: 300% 100%;
+  -webkit-background-clip: text;
+  background-clip: text;
+  -webkit-text-stroke: 0.008em rgba(255, 255, 255, 0.4);
+  filter: drop-shadow(0 0 0.12em rgba(140, 200, 255, 0.6));
+  animation: kfx-holo-shift 6s ease infinite;
+}
+@keyframes kfx-holo-shift {
+  0%, 100% { background-position: 0% 50%; }
+  50% { background-position: 100% 50%; }
+}
+
+/* 32 · Neon-tubo animado (o brilho pulsa e pisca) --------------------------- */
+.kfx-neon-anim {
+  color: #fff;
+  -webkit-text-stroke: 0.01em var(--k-magenta);
+  animation: kfx-neon-pulse 2.8s ease-in-out infinite;
+}
+@keyframes kfx-neon-pulse {
+  0%, 43%, 100% {
+    text-shadow:
+      0 0 0.05em #fff, 0 0 0.14em var(--k-magenta),
+      0 0 0.3em var(--k-magenta), 0 0 0.6em var(--k-magenta);
+  }
+  46% { text-shadow: 0 0 0.03em #fff, 0 0 0.08em var(--k-magenta); }
+  48% { text-shadow: none; color: #caa; }
+  50% {
+    text-shadow:
+      0 0 0.05em #fff, 0 0 0.14em var(--k-magenta),
+      0 0 0.3em var(--k-magenta), 0 0 0.6em var(--k-magenta);
+  }
+}
+
+/* CR-M2 · quem tem prefers-reduced-motion vê o efeito parado, sem pulso. */
+@media (prefers-reduced-motion: reduce) {
+  .kfx-holo { animation: none; background-position: 0% 50%; }
+  .kfx-neon-anim {
+    animation: none;
+    text-shadow:
+      0 0 0.05em #fff, 0 0 0.14em var(--k-magenta),
+      0 0 0.3em var(--k-magenta), 0 0 0.6em var(--k-magenta);
+  }
+}

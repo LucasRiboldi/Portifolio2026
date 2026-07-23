@@ -16,17 +16,19 @@
   overflow: hidden;
   display: flex;
   align-items: center;
+  /* intensidade do corte diagonal — ajustável por dimensão via --nxb-cut. */
+  --nxb-cut: 22px;
   min-height: clamp(320px, 46vw, 520px);
   padding: clamp(2.4rem, 6vw, 5.5rem) clamp(1.25rem, 6vw, 6rem);
   background: var(--k-zone-bg);
   color: var(--k-zone-ink);
   border-block: 4px solid var(--k-ink);
   /* corte diagonal: base desce da esquerda para a direita */
-  clip-path: polygon(0 0, 100% 22px, 100% 100%, 0 calc(100% - 22px));
+  clip-path: polygon(0 0, 100% var(--nxb-cut), 100% 100%, 0 calc(100% - var(--nxb-cut)));
 }
 /* a faixa alternada inverte o corte e joga o texto para a direita */
 .nxb--flip {
-  clip-path: polygon(0 22px, 100% 0, 100% calc(100% - 22px), 0 100%);
+  clip-path: polygon(0 var(--nxb-cut), 100% 0, 100% calc(100% - var(--nxb-cut)), 0 100%);
   justify-content: flex-end;
   text-align: right;
 }
@@ -91,5 +93,22 @@
 .nxb__title { transform: rotate(-2deg); transform-origin: left center; }
 .nxb--flip .nxb__title { transform: rotate(2deg); transform-origin: right center; }
 
-/* Reduz o exagero para quem pede menos movimento/ruído visual não muda,
-   mas o corte e o giro são estáticos — nada a desligar aqui. */
+/* CR-L4 · Selo de anomalia interativo — o burst do canto "arte" reage ao
+   passar o mouse pela faixa: endireita e cresce um tico, como se acordasse. */
+.nxb__seal {
+  transition: transform 0.35s var(--k-bounce, cubic-bezier(0.34, 1.56, 0.64, 1));
+  transform-origin: center;
+  cursor: default;
+}
+.nxb:hover .nxb__seal,
+.nxb:focus-within .nxb__seal { transform: rotate(0deg) scale(1.1); }
+.nxb__seal:hover { transform: rotate(-4deg) scale(1.16); }
+
+/* Reduz o exagero para quem pede menos movimento/ruído visual: o corte e o
+   giro são estáticos, mas o selo interativo desliga a transição. */
+@media (prefers-reduced-motion: reduce) {
+  .nxb__seal { transition: none; }
+  .nxb:hover .nxb__seal,
+  .nxb:focus-within .nxb__seal,
+  .nxb__seal:hover { transform: rotate(12deg); }
+}

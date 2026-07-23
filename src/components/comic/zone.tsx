@@ -3,6 +3,22 @@ import { Burst, Caption, ComicButton, InkDivider, SpeedLines } from "./atoms"
 import { GlitchTitle, type Treatment } from "./glitch-title"
 import { Reveal } from "./reveal"
 
+/**
+ * CR-L1 · Intensidade do corte diagonal por dimensão (px). Faixas mais
+ * "faladas" cortam mais fundo; as sóbrias quase reto. Cai no default de
+ * `--nxb-cut` (22px) para quem não estiver no mapa.
+ */
+const ZONE_CUT: Partial<Record<string, number>> = {
+  atelie: 30,
+  oficina: 14,
+  banca: 20,
+  cine: 34,
+  radio: 40,
+  videoteca: 26,
+  mural: 12,
+  tirinhas: 24,
+}
+
 /** As dimensões da landing. Cada uma tem paleta própria em `comic-2026.css`. */
 export type ZoneId =
   | "multiverso"
@@ -65,7 +81,10 @@ export function Zone({
   if (panel) {
     return (
       <section id={id} aria-labelledby={titleId} className={cn("k-zone relative overflow-x-clip", `k-zone--${id}`, className)}>
-        <header className={cn("nxb k-grain", flip && "nxb--flip")}>
+        <header
+          className={cn("nxb k-grain", flip && "nxb--flip")}
+          style={ZONE_CUT[id] ? ({ "--nxb-cut": `${ZONE_CUT[id]}px` } as React.CSSProperties) : undefined}
+        >
           {/* Número-fantasma gigante ao fundo + retícula da impressão. */}
           <span aria-hidden className="nxb__ghost">{index}</span>
           <span aria-hidden className="nxb__dots" />
@@ -75,7 +94,7 @@ export function Zone({
           <Burst
             accent="yellow"
             className={cn(
-              "absolute top-8 hidden size-28 rotate-12 lg:flex",
+              "nxb__seal absolute top-8 hidden size-28 rotate-12 lg:flex",
               flip ? "left-10" : "right-10",
             )}
           >

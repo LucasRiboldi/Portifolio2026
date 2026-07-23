@@ -92,8 +92,9 @@ export const DS_ARCHITECTURE: DsSection[] = [
     status: "ready",
     em: ["creative", "developer", "arcane"],
     subs: [
-      { id: "elevacao", n: "03.1", label: "Elevação & Raio", em: ["developer"] },
+      { id: "elevacao", n: "03.1", label: "Elevação & Raio", em: ["developer", "creative"] },
       { id: "tokens-catalogo", n: "03.1", label: "Catálogo completo", em: ["creative"] },
+      { id: "tokens-realm", n: "03.2", label: "Tokens de realm", em: ["creative"] },
     ],
   },
   {
@@ -106,6 +107,9 @@ export const DS_ARCHITECTURE: DsSection[] = [
     subs: [
       { id: "manchete", n: "04.1", label: "Hierarquia da manchete", em: ["arcane"] },
       { id: "capitular", n: "04.2", label: "Capitular", em: ["arcane"] },
+      { id: "typography-fx", n: "04.1", label: "Comic FX", em: ["creative"] },
+      { id: "web-kit-8bit", n: "04.2", label: "Web kit 8-bit", em: ["creative"] },
+      { id: "zone-templates", n: "04.3", label: "Templates de zona", em: ["creative"] },
     ],
   },
   {
@@ -124,6 +128,7 @@ export const DS_ARCHITECTURE: DsSection[] = [
     desc: "Container, colunas, margens, medianiz e breakpoints.",
     status: "ready",
     em: ["creative", "arcane", "developer"],
+    subs: [{ id: "grid-realm", n: "06.1", label: "Grelha do realm", em: ["creative"] }],
   },
   {
     id: "iconography",
@@ -184,6 +189,7 @@ export const DS_ARCHITECTURE: DsSection[] = [
       { id: "colagem", n: "09.13", label: "Colagem e letras de resgate", em: ["creative"] },
       { id: "extrapolado", n: "09.14", label: "A camada extrapolada", em: ["creative"] },
       { id: "vitrine", n: "09.15", label: "Peças de vitrine", em: ["creative"] },
+      { id: "kit", n: "09.16", label: "UI Kit", em: ["creative"] },
       { id: "figura", n: "09.1", label: "A gravura e a legenda", em: ["arcane"] },
       { id: "caixas", n: "09.2", label: "Caixas, olho e breves", em: ["arcane"] },
       { id: "classificados", n: "09.3", label: "Classificados", em: ["arcane"] },
@@ -279,7 +285,10 @@ export const DS_ARCHITECTURE: DsSection[] = [
     desc: "Downloads: SVG, JSON de tokens, config do Tailwind, Storybook.",
     status: "wip",
     em: ["creative", "developer", "arcane"],
-    subs: [{ id: "assets-pares", n: "15.1", label: "Assets em pares", em: ["creative"] }],
+    subs: [
+      { id: "assets-pares", n: "15.1", label: "Assets em pares", em: ["creative"] },
+      { id: "css", n: "15.2", label: "Folhas deste realm", em: ["creative"] },
+    ],
   },
   {
     id: "changelog",
