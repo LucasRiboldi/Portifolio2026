@@ -53,22 +53,29 @@ export function RevealItem({
   className,
   variants = REVEAL,
   as = "div",
+  style,
 }: {
   children: React.ReactNode
   className?: string
   variants?: Variants
   as?: "div" | "li" | "article"
+  /** Escape para o item ser também o quadro da grelha (spans em custom props). */
+  style?: React.CSSProperties
 }) {
   const reduced = useReducedMotion()
   const Tag = motion[as]
 
   if (reduced) {
     const Plain = as
-    return <Plain className={className}>{children}</Plain>
+    return (
+      <Plain className={className} style={style}>
+        {children}
+      </Plain>
+    )
   }
 
   return (
-    <Tag className={className} variants={variants}>
+    <Tag className={className} style={style} variants={variants}>
       {children}
     </Tag>
   )

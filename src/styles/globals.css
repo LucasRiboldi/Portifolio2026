@@ -29,6 +29,7 @@
 @import "./zone-band.css";
 @import "./eightbit.css";
 @import "./criativo-fx.css";
+@import "./comic-layout.css";
 
 @tailwind base;
 @tailwind components;

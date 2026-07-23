@@ -98,7 +98,12 @@ export function Zone({
 
   if (panel) {
     return (
-      <section id={id} aria-labelledby={titleId} className={cn("k-zone relative overflow-x-clip", `k-zone--${id}`, className)}>
+      <section
+        id={id}
+        data-chapter={id}
+        aria-labelledby={titleId}
+        className={cn("cp-chapter k-zone relative overflow-x-clip", `k-zone--${id}`, className)}
+      >
         <header
           className={cn("nxb k-grain", flip && "nxb--flip")}
           style={ZONE_CUT[id] ? ({ "--nxb-cut": `${ZONE_CUT[id]}px` } as React.CSSProperties) : undefined}
@@ -167,9 +172,10 @@ export function Zone({
   return (
     <section
       id={id}
+      data-chapter={id}
       aria-labelledby={titleId}
       className={cn(
-        "k-zone k-grain relative overflow-x-clip px-4 py-24 sm:px-6 sm:py-32 lg:px-8",
+        "cp-chapter k-zone k-grain relative overflow-x-clip px-4 py-24 sm:px-6 sm:py-32 lg:px-8",
         `k-zone--${id}`,
         className,
       )}

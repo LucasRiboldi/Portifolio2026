@@ -11,6 +11,7 @@ import { ZoneMural } from "@/components/criativo/zone-mural"
 import { ZoneTirinhas } from "@/components/criativo/zone-tirinhas"
 import { Outro } from "@/components/criativo/outro"
 import { CriativoExperience } from "@/components/criativo/experience"
+import { ComicPage } from "@/components/layout/comic/comic-page"
 import { getProjects } from "@/lib/repos/projects"
 import {
   getArtworks,
@@ -81,17 +82,26 @@ export default async function CriativoHome() {
           de scroll horizontal — e `hidden` quebraria o `position: sticky`. */}
       <CriativoExperience>
         <div className="realm-hide-arcane k-body overflow-x-clip">
-          <Hero />
-          <KitStrip />
-          <ZoneAtelie artworks={artworks} />
-          <ZoneOficina projects={projects} />
-          <ZoneBanca comics={comics} />
-          <ZoneCine movies={movies} />
-          <ZoneRadio tracks={tracks} />
-          <ZoneVideoteca videos={videos} />
-          <ZoneMural notes={notes} />
-          <ZoneTirinhas strips={strips} />
-          <Outro />
+          {/*
+            `ComicPage` é a revista: medidas do papel, superfície impressa, fundo
+            de tinta em WebGL e a câmara que persegue os capítulos. As zonas já
+            migradas (Ateliê, Cine) renderizam como `Chapter`; as restantes
+            continuam em `Zone` e ganham na mesma o papel e a câmara, porque
+            ambos vivem aqui e não dentro de cada bloco.
+          */}
+          <ComicPage>
+            <Hero />
+            <KitStrip />
+            <ZoneAtelie artworks={artworks} />
+            <ZoneOficina projects={projects} />
+            <ZoneBanca comics={comics} />
+            <ZoneCine movies={movies} />
+            <ZoneRadio tracks={tracks} />
+            <ZoneVideoteca videos={videos} />
+            <ZoneMural notes={notes} />
+            <ZoneTirinhas strips={strips} />
+            <Outro />
+          </ComicPage>
         </div>
       </CriativoExperience>
     </>

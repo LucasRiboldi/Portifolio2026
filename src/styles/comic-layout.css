@@ -1,0 +1,395 @@
+/**
+ * Sistema de diagramação da HQ — ComicPage › Chapter › Panel.
+ * ---------------------------------------------------------------------------
+ * Aqui vive só a *estrutura* editorial: medidas do papel, grelha de 12 colunas,
+ * ritmo vertical, formatos de requadro e as camadas de impressão (papel, offset,
+ * retícula). A paleta e a letragem continuam em `comic-2026.css` — este ficheiro
+ * não escolhe cor nenhuma, só desenha o quadro onde a cor entra.
+ *
+ * Motivo de ser CSS e não Tailwind: os formatos de requadro são `clip-path`
+ * compostos e as camadas de impressão são pseudo-elementos com máscara. Escrito
+ * em utilitários, cada painel carregaria vinte classes arbitrárias e o desenho
+ * deixaria de ser legível/ajustável num sítio só.
+ */
+
+/* ===========================================================================
+   1 · Medidas do papel
+   Tokens únicos para largura da mancha, margens editoriais e ritmo vertical.
+   Nada de valor solto: um capítulo novo herda estas medidas por herdar a marca.
+   =========================================================================== */
+.cp-page {
+  --cp-max: 1400px;
+  --cp-gutter: 1rem; /* margem editorial (mobile) */
+  --cp-gap: 0.875rem; /* goteira entre requadros */
+  --cp-chapter-gap: 4.5rem; /* respiro entre capítulos */
+  --cp-panel-pad: 1.25rem;
+  --cp-ink: var(--k-ink, #12100e);
+  --cp-border: 3px;
+
+  position: relative;
+  isolation: isolate;
+}
+
+@media (min-width: 640px) {
+  .cp-page {
+    --cp-gutter: 1.5rem;
+    --cp-gap: 1.125rem;
+    --cp-chapter-gap: 6rem;
+    --cp-panel-pad: 1.5rem;
+  }
+}
+
+@media (min-width: 1024px) {
+  .cp-page {
+    --cp-gutter: 2rem;
+    --cp-gap: 1.5rem;
+    --cp-chapter-gap: 8rem;
+  }
+}
+
+/* Ultrawide/4K: a mancha para de crescer e as margens é que engordam — esticar
+   a linha de texto até 2560px destrói a legibilidade editorial. */
+@media (min-width: 1800px) {
+  .cp-page {
+    --cp-max: 1600px;
+    --cp-gap: 1.75rem;
+    --cp-chapter-gap: 9rem;
+    --cp-panel-pad: 1.75rem;
+  }
+}
+
+/** A mancha: tudo que é conteúdo passa por aqui e fica centrado e contido. */
+.cp-bleed {
+  width: 100%;
+  max-width: calc(var(--cp-max) + var(--cp-gutter) * 2);
+  margin-inline: auto;
+  padding-inline: var(--cp-gutter);
+}
+
+/* ===========================================================================
+   2 · Grelha editorial de 12 colunas
+   =========================================================================== */
+.cp-grid {
+  display: grid;
+  grid-template-columns: repeat(4, minmax(0, 1fr));
+  gap: var(--cp-gap);
+  align-items: stretch;
+}
+
+@media (min-width: 640px) {
+  .cp-grid {
+    grid-template-columns: repeat(8, minmax(0, 1fr));
+  }
+}
+
+@media (min-width: 1024px) {
+  .cp-grid {
+    grid-template-columns: repeat(12, minmax(0, 1fr));
+  }
+}
+
+/**
+ * Colocação na grelha por variável, não por classe.
+ *
+ * O Tailwind não gera `col-span-*` a partir de valores calculados em runtime, e
+ * a diagramação aqui é dados (cada quadro declara a sua largura por breakpoint).
+ * Ler o span de uma custom property resolve isso sem gerar classe nenhuma:
+ * 4 colunas no telemóvel, 8 no tablet, 12 no desktop.
+ */
+.cp-col {
+  grid-column: span var(--cp-span-b, 4) / span var(--cp-span-b, 4);
+  grid-row: span var(--cp-row-b, 1) / span var(--cp-row-b, 1);
+}
+
+@media (min-width: 640px) {
+  .cp-col {
+    grid-column: span var(--cp-span-s, 8) / span var(--cp-span-s, 8);
+    grid-row: span var(--cp-row-s, 1) / span var(--cp-row-s, 1);
+  }
+}
+
+@media (min-width: 1024px) {
+  .cp-col {
+    grid-column: span var(--cp-span-l, 12) / span var(--cp-span-l, 12);
+    grid-row: span var(--cp-row-l, 1) / span var(--cp-row-l, 1);
+  }
+}
+
+/* Linhas de altura fixa para quadros "altos" — sem isto um painel vertical só
+   fica alto se o conteúdo o esticar, e a página perde o desalinho de HQ. */
+.cp-grid--dense {
+  grid-auto-flow: row dense;
+}
+
+/**
+ * Grelha com pauta de linhas — necessária para que `--cp-row-l` signifique algo.
+ * Sem uma unidade de linha, "ocupar 2 linhas" só espelha a altura do conteúdo e
+ * o quadro vertical nunca fica vertical. Fica opt-in porque impõe uma altura
+ * mínima que nem toda a faixa quer.
+ */
+.cp-grid--rows {
+  grid-auto-rows: minmax(var(--cp-row-unit, 12rem), auto);
+}
+
+@media (min-width: 1024px) {
+  .cp-grid--rows {
+    grid-auto-rows: minmax(var(--cp-row-unit-lg, 14rem), auto);
+  }
+}
+
+/* ===========================================================================
+   3 · Requadro (Panel)
+   =========================================================================== */
+.cp-panel {
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  min-width: 0;
+  border: var(--cp-border) solid var(--cp-ink);
+  background: var(--k-paper, #f4efe4);
+  color: inherit;
+  /* Flutuação: sombra dupla (contacto curta + ambiente longa). */
+  box-shadow:
+    0 1px 0 0 var(--cp-ink),
+    0 10px 22px -14px rgb(0 0 0 / 0.55),
+    0 30px 60px -40px rgb(0 0 0 / 0.6);
+  transition:
+    transform 380ms cubic-bezier(0.16, 1, 0.3, 1),
+    box-shadow 380ms cubic-bezier(0.16, 1, 0.3, 1),
+    filter 380ms ease;
+}
+
+.cp-panel--flush {
+  border: 0;
+  background: transparent;
+  box-shadow: none;
+}
+
+.cp-panel__header {
+  display: flex;
+  align-items: baseline;
+  justify-content: space-between;
+  gap: 0.75rem;
+  padding: calc(var(--cp-panel-pad) * 0.7) var(--cp-panel-pad);
+  border-bottom: var(--cp-border) solid var(--cp-ink);
+}
+
+.cp-panel__body {
+  flex: 1 1 auto;
+  min-height: 0;
+  padding: var(--cp-panel-pad);
+}
+
+/* Corpo colado à moldura — para painéis cujo conteúdo é a própria imagem. */
+.cp-panel__body--bleed {
+  padding: 0;
+}
+
+.cp-panel__footer {
+  padding: calc(var(--cp-panel-pad) * 0.7) var(--cp-panel-pad);
+  border-top: var(--cp-border) solid var(--cp-ink);
+}
+
+/* --- Iluminação seguindo o cursor -----------------------------------------
+   `--cp-mx/--cp-my` são escritos pelo Panel em % (0–100). O brilho é um
+   pseudo-elemento e não um `background` para não competir com a cor do painel. */
+.cp-panel--lit::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  z-index: 1;
+  pointer-events: none;
+  opacity: 0;
+  transition: opacity 320ms ease;
+  background: radial-gradient(
+    38rem 38rem at var(--cp-mx, 50%) var(--cp-my, 50%),
+    color-mix(in srgb, var(--k-accent, #00d4ff) 22%, transparent),
+    transparent 62%
+  );
+  mix-blend-mode: screen;
+}
+
+.cp-panel--lit:hover::before,
+.cp-panel--lit:focus-within::before {
+  opacity: 1;
+}
+
+.cp-panel--lit:hover,
+.cp-panel--lit:focus-within {
+  box-shadow:
+    0 1px 0 0 var(--cp-ink),
+    0 16px 30px -16px rgb(0 0 0 / 0.6),
+    0 40px 80px -44px color-mix(in srgb, var(--k-accent, #00d4ff) 60%, transparent);
+}
+
+/* ===========================================================================
+   4 · Formatos de requadro
+   Uma página de HQ nunca é só retângulos. Cada formato aqui é aplicável a
+   qualquer painel sem que o conteúdo saiba disso.
+   =========================================================================== */
+.cp-shape--cut-tr {
+  clip-path: polygon(0 0, calc(100% - var(--cp-cut, 32px)) 0, 100% var(--cp-cut, 32px), 100% 100%, 0 100%);
+}
+
+.cp-shape--cut-br {
+  clip-path: polygon(0 0, 100% 0, 100% calc(100% - var(--cp-cut, 32px)), calc(100% - var(--cp-cut, 32px)) 100%, 0 100%);
+}
+
+.cp-shape--cut-bl {
+  clip-path: polygon(0 0, 100% 0, 100% 100%, var(--cp-cut, 32px) 100%, 0 calc(100% - var(--cp-cut, 32px)));
+}
+
+/** Chanfro nos quatro cantos — o quadro "selo". */
+.cp-shape--octagon {
+  --cp-cut: 22px;
+  clip-path: polygon(
+    var(--cp-cut) 0,
+    calc(100% - var(--cp-cut)) 0,
+    100% var(--cp-cut),
+    100% calc(100% - var(--cp-cut)),
+    calc(100% - var(--cp-cut)) 100%,
+    var(--cp-cut) 100%,
+    0 calc(100% - var(--cp-cut)),
+    0 var(--cp-cut)
+  );
+}
+
+/** Requadro trapezoidal: as laterais fogem, como quadro em perspetiva. */
+.cp-shape--wedge {
+  clip-path: polygon(0 var(--cp-cut, 26px), 100% 0, 100% calc(100% - var(--cp-cut, 26px)), 0 100%);
+}
+
+/** Bordo rasgado (papel arrancado) na base. */
+.cp-shape--torn {
+  clip-path: polygon(
+    0 0,
+    100% 0,
+    100% calc(100% - 10px),
+    92% 100%,
+    84% calc(100% - 8px),
+    73% calc(100% - 2px),
+    61% calc(100% - 11px),
+    48% calc(100% - 1px),
+    36% calc(100% - 9px),
+    24% calc(100% - 3px),
+    12% calc(100% - 12px),
+    0 calc(100% - 4px)
+  );
+}
+
+/* Inclinações: o quadro entorta, o conteúdo desentorta — senão o texto fica
+   torto e ilegível, que é o erro clássico deste efeito. */
+.cp-tilt-l {
+  transform: rotate(-1.1deg);
+}
+.cp-tilt-r {
+  transform: rotate(1.1deg);
+}
+.cp-tilt-l > *,
+.cp-tilt-r > * {
+  transform: rotate(0deg);
+}
+.cp-tilt-l:hover,
+.cp-tilt-r:hover {
+  transform: rotate(0deg);
+}
+
+/* ===========================================================================
+   5 · Câmara virtual
+   O `CameraStage` marca cada capítulo com data-focus. Os capítulos fora de foco
+   afastam-se (escala + dessaturação) em vez de desaparecerem: continua a haver
+   página por baixo, como quem afasta o olho e não quem apaga a luz.
+   =========================================================================== */
+.cp-stage {
+  perspective: 1400px;
+  perspective-origin: 50% 45%;
+  transform-style: preserve-3d;
+}
+
+.cp-chapter {
+  position: relative;
+  transform-origin: 50% 50%;
+  will-change: transform, opacity, filter;
+}
+
+.cp-chapter[data-focus="off"] {
+  filter: saturate(0.55) brightness(0.72);
+}
+
+/* ===========================================================================
+   6 · Camadas de impressão
+   Papel, offset e retícula. Todas em pseudo-elementos `pointer-events: none`,
+   todas por cima do conteúdo e por baixo da interação.
+   =========================================================================== */
+
+/** Fibra de papel: três gradientes cruzados a baixa opacidade. */
+.cp-paper::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  z-index: 0;
+  pointer-events: none;
+  opacity: 0.5;
+  background-image:
+    repeating-linear-gradient(97deg, rgb(0 0 0 / 0.035) 0 1px, transparent 1px 3px),
+    repeating-linear-gradient(3deg, rgb(255 255 255 / 0.05) 0 1px, transparent 1px 4px),
+    radial-gradient(120% 80% at 50% 0%, rgb(0 0 0 / 0.14), transparent 60%);
+}
+
+/**
+ * Desalinho de offset: as chapas ciano e magenta imprimem 1px ao lado. É o
+ * defeito que faz o olho ler "impresso" em vez de "renderizado".
+ */
+.cp-offset {
+  position: relative;
+}
+.cp-offset::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+  z-index: 2;
+  pointer-events: none;
+  opacity: 0.16;
+  mix-blend-mode: multiply;
+  background:
+    linear-gradient(90deg, rgb(0 200 255 / 0.5), transparent 3px),
+    linear-gradient(270deg, rgb(255 0 160 / 0.5), transparent 3px);
+}
+
+/** Retícula de impressão — pontos finos, opacidade baixa, sempre por cima. */
+.cp-halftone {
+  position: relative;
+}
+.cp-halftone::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+  z-index: 2;
+  pointer-events: none;
+  opacity: var(--cp-dot-opacity, 0.14);
+  background-image: radial-gradient(
+    var(--cp-dot-color, rgb(0 0 0 / 0.9)) 0.9px,
+    transparent 1px
+  );
+  background-size: var(--cp-dot-step, 5px) var(--cp-dot-step, 5px);
+}
+
+/* ===========================================================================
+   7 · Acessibilidade
+   Quem pede menos movimento fica com a estrutura inteira e zero deslocamento:
+   sem inclinação, sem câmara, sem desfoque de profundidade.
+   =========================================================================== */
+@media (prefers-reduced-motion: reduce) {
+  .cp-panel,
+  .cp-tilt-l,
+  .cp-tilt-r,
+  .cp-chapter {
+    transform: none !important;
+    transition: none !important;
+  }
+
+  .cp-chapter[data-focus="off"] {
+    filter: none;
+    opacity: 1;
+  }
+}
