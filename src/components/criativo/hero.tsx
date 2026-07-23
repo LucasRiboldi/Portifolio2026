@@ -83,7 +83,11 @@ export function Hero() {
                 <motion.span
                   key={line}
                   className="k-title k-3d k-3d--deep block"
-                  initial={reduced ? false : { opacity: 0, y: 46, rotate: -2 }}
+                  // Sem `opacity: 0` no início: este <h1> é o elemento de LCP e
+                  // acima da dobra. Escondê-lo até o motion hidratar empurrava o
+                  // LCP para ~1,8s (98% "render delay"). Mantendo só o slide/rotate,
+                  // ele pinta já no primeiro paint e ainda desliza para o lugar.
+                  initial={reduced ? false : { y: 46, rotate: -2 }}
                   animate={{ opacity: 1, y: 0, rotate: 0 }}
                   transition={{ duration: 0.8, ease: EASE, delay: 0.1 + i * 0.09 }}
                 >
@@ -93,7 +97,8 @@ export function Hero() {
 
               <motion.span
                 className="mt-1 block"
-                initial={reduced ? false : { opacity: 0, scale: 0.88 }}
+                // Idem: escala sem apagar a opacidade, para não atrasar o LCP.
+                initial={reduced ? false : { scale: 0.88 }}
                 animate={{ opacity: 1, scale: 1 }}
                 transition={{ duration: 0.75, ease: EASE, delay: 0.3 }}
               >

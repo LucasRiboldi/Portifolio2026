@@ -55,7 +55,7 @@ export function ComicNav() {
         }}
       />
 
-      <div className="border-b-[3px] border-[var(--k-ink)] bg-[var(--k-paper)]/85 backdrop-blur-xl">
+      <div className="border-b-[3px] border-[var(--k-ink)] bg-[var(--k-paper)]/95 backdrop-blur-xl">
         <div className="mx-auto flex h-[60px] max-w-container items-center justify-between gap-4 px-4 sm:px-6 lg:px-8">
           <Link
             href="/criativo"
@@ -113,7 +113,9 @@ export function ComicNav() {
               onClick={() => setOpen((v) => !v)}
               aria-expanded={open}
               aria-controls="nav-mobile"
-              aria-label={open ? "Fechar navegação" : "Abrir navegação"}
+              // O nome acessível precisa conter o texto visível ("Menu"/"Fechar"),
+              // senão dá label-content-name-mismatch.
+              aria-label={open ? "Fechar navegação" : "Menu de navegação"}
               className="k-btn k-btn--ghost k-sub px-3 py-2 text-[11px] md:hidden"
             >
               <span>{open ? "Fechar" : "Menu"}</span>

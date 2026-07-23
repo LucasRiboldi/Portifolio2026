@@ -68,7 +68,10 @@ export function Counter({ to, suffix = "", duration = 1600, className }: Counter
   }, [to, duration])
 
   return (
-    <span ref={ref} className={className} aria-label={`${to}${suffix}`}>
+    // role="img" torna o aria-label válido (aria-label num <span> sem role é
+    // ARIA proibido): o número é uma imagem de dado, lido de uma vez pelo
+    // leitor de tela, enquanto o valor que corre por dentro fica aria-hidden.
+    <span ref={ref} role="img" className={className} aria-label={`${to}${suffix}`}>
       <span aria-hidden>
         {value}
         {suffix}
