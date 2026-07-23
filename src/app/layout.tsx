@@ -23,6 +23,7 @@ import {
   Rubik_Distressed,
   Pixelify_Sans,
   Cinzel,
+  Caveat_Brush,
 } from "next/font/google";
 import { cn } from "@/lib/utils";
 import { getRealmSettings } from "@/lib/repos/realms";
@@ -103,6 +104,8 @@ const rubikDistressed = Rubik_Distressed({ weight: '400', subsets: ['latin'], di
 // Pixel 8-bit (portal pixelado) e serifa de ouro (luxo/geometria sacra).
 const pixelify = Pixelify_Sans({ weight: '700', subsets: ['latin'], display: 'swap', variable: '--font-pixel' });
 const cinzel = Cinzel({ weight: '700', subsets: ['latin'], display: 'swap', variable: '--font-gold' });
+// Pincel de rua (graffiti/brush) — para o traço bruto e o graffiti com coroa.
+const caveatBrush = Caveat_Brush({ weight: '400', subsets: ['latin'], display: 'swap', variable: '--font-brush' });
 
 
 export default async function RootLayout({
@@ -128,7 +131,7 @@ export default async function RootLayout({
   return (
     <html
       lang="pt-BR"
-      suppressHydrationWarning className={cn("font-sans", geist.variable, bangers.variable, archivo.variable, nabla.variable, monoton.variable, rubikGlitch.variable, bungeeShade.variable, anton.variable, bebas.variable, oswald.variable, inter.variable, rubikWetPaint.variable, rubikDistressed.variable, pixelify.variable, cinzel.variable)}
+      suppressHydrationWarning className={cn("font-sans", geist.variable, bangers.variable, archivo.variable, nabla.variable, monoton.variable, rubikGlitch.variable, bungeeShade.variable, anton.variable, bebas.variable, oswald.variable, inter.variable, rubikWetPaint.variable, rubikDistressed.variable, pixelify.variable, cinzel.variable, caveatBrush.variable)}
     >
       <body>
         <script dangerouslySetInnerHTML={{ __html: antiFouc }} />

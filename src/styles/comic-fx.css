@@ -332,3 +332,50 @@
   -webkit-text-stroke: 0.008em rgba(120, 82, 12, 0.55);
   filter: drop-shadow(0 0.02em 0.03em rgba(0, 0, 0, 0.45));
 }
+
+/* 24 · Pincel bruto / graffiti (traço de rua — Caveat Brush) ---------------- */
+.kfx-brush {
+  font-family: var(--font-brush), var(--font-anton), cursive;
+  font-style: normal;
+  font-weight: 400;
+  color: var(--k-magenta);
+  -webkit-text-stroke: 0.012em var(--k-ink);
+  paint-order: stroke fill;
+  /* leve respingo/eco para não ficar limpo demais */
+  text-shadow: 0.03em 0.04em 0 rgba(139, 61, 255, 0.55);
+  transform: rotate(-2deg);
+}
+
+/* 25 · HUD neon (contorno oco cyberpunk) ------------------------------------ */
+.kfx-hud {
+  color: transparent;
+  -webkit-text-stroke: 0.02em var(--k-cyan);
+  text-shadow:
+    0 0 0.05em var(--k-cyan),
+    0 0 0.16em var(--k-cyan),
+    0 0 0.4em rgba(0, 212, 255, 0.7);
+  letter-spacing: 0.06em;
+}
+
+/* 26 · Graffiti coroa (verde de rua com respingo + coroa) ------------------- */
+.kfx-crown {
+  position: relative;
+  font-family: var(--font-brush), var(--font-anton), cursive;
+  font-style: normal;
+  color: var(--k-lime);
+  -webkit-text-stroke: 0.014em var(--k-ink);
+  paint-order: stroke fill;
+  text-shadow: 0.02em 0.05em 0.02em rgba(18, 16, 14, 0.5);
+  transform: rotate(-1.5deg);
+}
+.kfx-crown::before {
+  content: "♛";
+  position: absolute;
+  top: -0.62em;
+  left: -0.1em;
+  font-size: 0.5em;
+  color: var(--k-magenta);
+  -webkit-text-stroke: 0.02em var(--k-ink);
+  transform: rotate(-14deg);
+  pointer-events: none;
+}

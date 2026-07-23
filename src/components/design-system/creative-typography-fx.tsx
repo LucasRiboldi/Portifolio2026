@@ -10,6 +10,7 @@
    serve do chip do catálogo à manchete gigante.
    ------------------------------------------------------------------ */
 import { DsSectionTitle, DsLead } from "@/design-system/ds-ui"
+import { PunkName } from "@/components/comic/punk-name"
 import type { CSSProperties } from "react"
 
 /** Os efeitos do catálogo, na ordem. */
@@ -36,6 +37,23 @@ const EFFECTS: { n: string; label: string; cls: string }[] = [
   { n: "20", label: "Perspectiva inclinada", cls: "kfx-skew" },
   { n: "21", label: "Pixel / 8-bit", cls: "kfx-pixel" },
   { n: "22", label: "Ouro elegante", cls: "kfx-gold" },
+  { n: "23", label: "Ransom / recorte", cls: "__ransom" },
+  { n: "24", label: "Pincel / graffiti", cls: "kfx-brush" },
+  { n: "25", label: "HUD neon", cls: "kfx-hud" },
+  { n: "26", label: "Graffiti coroa", cls: "kfx-crown" },
+]
+
+/** Biblioteca de assets: a palavra MULTIVERSO em vários tratamentos + legenda. */
+const MULTIVERSE_ASSETS: { cls: string; sub: string }[] = [
+  { cls: "kfx-gold", sub: "Infinito em todas as direções." },
+  { cls: "kfx-brush", sub: "Realidades que colidem. Destinos que se cruzam." },
+  { cls: "kfx-hud", sub: "Existem mais mundos do que você imagina." },
+  { cls: "kfx-pixel", sub: "Novos mundos carregando…" },
+  { cls: "__ransom", sub: "Tantas versões. Tantas verdades." },
+  { cls: "kfx-crown", sub: "Quebre as regras. Crie seu universo." },
+  { cls: "kfx-3d", sub: "Nenhum limite. Infinitas histórias." },
+  { cls: "kfx-glitch", sub: "Cada escolha cria um novo mundo." },
+  { cls: "kfx-burst", sub: "Um universo não basta para tantas ideias!" },
 ]
 
 /** Manchetes de ação: reusa .kfx-3d recolorindo a face/lateral por CSS var. */
@@ -111,15 +129,45 @@ export function CreativeTypographyFx() {
       <ul className="grid grid-cols-2 gap-px overflow-hidden rounded-lg border-[3px] border-black bg-black sm:grid-cols-3 lg:grid-cols-5">
         {EFFECTS.map((e) => (
           <li key={e.n} className="flex flex-col items-center gap-3 bg-[#0a0a0f] px-3 py-6">
-            <span
-              className={`kfx ${e.cls} text-3xl`}
-              {...(e.cls === "kfx-glitch" ? { "data-text": "COMIC" } : {})}
-            >
-              COMIC
-            </span>
+            {e.cls === "__ransom" ? (
+              // Ransom = recorte de revista, letra a letra: é o PunkName.
+              <PunkName className="text-3xl">COMIC</PunkName>
+            ) : (
+              <span
+                className={`kfx ${e.cls} text-3xl`}
+                {...(e.cls === "kfx-glitch" ? { "data-text": "COMIC" } : {})}
+              >
+                COMIC
+              </span>
+            )}
             <span className="text-center text-[10px] uppercase leading-tight tracking-wide text-white/55">
               {e.n}. {e.label}
             </span>
+          </li>
+        ))}
+      </ul>
+
+      {/* --- Biblioteca de assets: cards MULTIVERSO ----------------------- */}
+      <p className="sv-heavy mb-3 mt-10 text-[11px] uppercase tracking-[0.2em] text-[var(--sv-magenta)]">
+        Biblioteca de assets — MULTIVERSO
+      </p>
+      <ul className="grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
+        {MULTIVERSE_ASSETS.map((a) => (
+          <li
+            key={a.sub}
+            className="flex min-h-[168px] flex-col items-center justify-center gap-4 overflow-hidden rounded-lg border-[3px] border-black bg-[radial-gradient(120%_100%_at_50%_0%,#171226,#08070d)] px-4 py-8 text-center"
+          >
+            {a.cls === "__ransom" ? (
+              <PunkName className="text-2xl sm:text-[2rem]">MULTIVERSO</PunkName>
+            ) : (
+              <span
+                className={`kfx ${a.cls} text-2xl sm:text-[2rem]`}
+                {...(a.cls === "kfx-glitch" ? { "data-text": "MULTIVERSO" } : {})}
+              >
+                MULTIVERSO
+              </span>
+            )}
+            <span className="k-kicker text-[10px] leading-snug text-white/55">{a.sub}</span>
           </li>
         ))}
       </ul>
