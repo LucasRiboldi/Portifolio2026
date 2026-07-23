@@ -34,6 +34,7 @@ import { CreativeShowcase, CreativeLandings } from "./creative-landings"
 import { CreativeAssetsChapter } from "./creative-assets-chapter"
 import { CreativeTypographyFx } from "./creative-typography-fx"
 import { CreativeEightBitKit } from "./creative-8bit-kit"
+import { CreativeZoneTemplates } from "./creative-zone-templates"
 
 /**
  * O guia de "O Criativo" — o scaffold comic, agora com corpo próprio.
@@ -149,6 +150,9 @@ export function CreativeGuide({
 
       {/* 04.2 · Web kit 8-bit — a dimensão videogame */}
       <CreativeEightBitKit />
+
+      {/* 04.3 · Templates de zona — layouts prontos */}
+      <CreativeZoneTemplates />
 
       {/* 05 · Colors */}
       <DsColors d={d} />
