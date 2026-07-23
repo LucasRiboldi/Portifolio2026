@@ -301,3 +301,34 @@
   transform: perspective(420px) rotateY(-20deg) skewY(-5deg);
   text-shadow: 0.09em 0.09em 0 var(--k-blue);
 }
+
+/* 21 · Pixel / 8-bit (o portal pixelado — Pixelify Sans) -------------------- */
+.kfx-pixel {
+  font-family: var(--font-pixel), monospace;
+  font-style: normal;
+  color: var(--k-cyan);
+  letter-spacing: 0.02em;
+  /* degrau em blocos duros, na cor da anomalia, para o falso 3D de videogame */
+  text-shadow:
+    0.06em 0.06em 0 var(--k-violet),
+    0.12em 0.12em 0 var(--k-magenta),
+    0.18em 0.18em 0 var(--k-ink);
+}
+
+/* 22 · Ouro elegante (serifa de luxo — Cinzel) ------------------------------ */
+.kfx-gold {
+  font-family: var(--font-gold), Georgia, serif;
+  font-style: normal;
+  font-weight: 700;
+  letter-spacing: 0.05em;
+  color: transparent;
+  /* faixa de ouro: reflexo claro no topo, sombra quente no meio, brilho ao pé */
+  background-image: linear-gradient(
+    180deg,
+    #fff4c9 0%, #e9bd57 28%, #a9761a 50%, #f7db83 66%, #b8860b 100%
+  );
+  -webkit-background-clip: text;
+  background-clip: text;
+  -webkit-text-stroke: 0.008em rgba(120, 82, 12, 0.55);
+  filter: drop-shadow(0 0.02em 0.03em rgba(0, 0, 0, 0.45));
+}

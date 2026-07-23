@@ -12,7 +12,7 @@
 import { DsSectionTitle, DsLead } from "@/design-system/ds-ui"
 import type { CSSProperties } from "react"
 
-/** Os 20 efeitos, na ordem do catálogo. */
+/** Os efeitos do catálogo, na ordem. */
 const EFFECTS: { n: string; label: string; cls: string }[] = [
   { n: "01", label: "Contorno preto grosso", cls: "kfx-outline" },
   { n: "02", label: "Contorno duplo", cls: "kfx-outline-double" },
@@ -34,6 +34,8 @@ const EFFECTS: { n: string; label: string; cls: string }[] = [
   { n: "18", label: "Offset de cores", cls: "kfx-offset" },
   { n: "19", label: "Efeito glitch", cls: "kfx-glitch" },
   { n: "20", label: "Perspectiva inclinada", cls: "kfx-skew" },
+  { n: "21", label: "Pixel / 8-bit", cls: "kfx-pixel" },
+  { n: "22", label: "Ouro elegante", cls: "kfx-gold" },
 ]
 
 /** Manchetes de ação: reusa .kfx-3d recolorindo a face/lateral por CSS var. */
@@ -102,9 +104,9 @@ export function CreativeTypographyFx() {
         </div>
       </div>
 
-      {/* --- 20 efeitos tipográficos -------------------------------------- */}
+      {/* --- catálogo de efeitos tipográficos ----------------------------- */}
       <p className="sv-heavy mb-3 mt-8 text-[11px] uppercase tracking-[0.2em] text-[var(--sv-cyan)]">
-        20 efeitos tipográficos
+        {EFFECTS.length} efeitos tipográficos
       </p>
       <ul className="grid grid-cols-2 gap-px overflow-hidden rounded-lg border-[3px] border-black bg-black sm:grid-cols-3 lg:grid-cols-5">
         {EFFECTS.map((e) => (
