@@ -10,12 +10,12 @@ import { config } from "@/lib/prophet-wire/config"
  */
 
 describe("getFrontNews", () => {
-  it("devolve exatamente o número de campos configurado", () => {
-    expect(getFrontNews()).toHaveLength(config.newsFields)
+  it("devolve exatamente o número de campos configurado", async () => {
+    expect(await getFrontNews()).toHaveLength(config.newsFields)
   })
 
-  it("só devolve notícias publicadas", () => {
-    expect(getFrontNews().every((n) => n.status === "publicado")).toBe(true)
+  it("só devolve notícias publicadas", async () => {
+    expect((await getFrontNews()).every((n) => n.status === "publicado")).toBe(true)
   })
 
   it("não repete slug nem hash (deduplicação)", () => {

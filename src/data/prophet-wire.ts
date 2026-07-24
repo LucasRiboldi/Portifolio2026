@@ -14,6 +14,7 @@
 
 import type { NewsItem } from "@/lib/prophet-wire/types"
 import { config } from "@/lib/prophet-wire/config"
+import { InMemoryNewsRepository, type NewsRepository } from "@/lib/prophet-wire/repository"
 
 /** Moldura de gravura vazia — a página já usa `.img-empty` à espera de arte. */
 function pendingPlate(alt: string, caption: string) {
@@ -152,9 +153,27 @@ export const seedNews: NewsItem[] = [
 ]
 
 /**
- * Devolve as notícias que a landing deve exibir, limitadas ao número de campos
- * configurado (`config.newsFields`) e apenas as publicadas.
+ * Repositório padrão da aplicação. Hoje é a impl in-memory semeada com as 6
+ * notícias estáticas; na Parte 10 passa a ser o repositório do Supabase, e esta
+ * semente vira o fallback quando o banco não responde. A landing sempre lê pelo
+ * repo — nunca da lista crua —, então a troca de impl não toca na página.
  */
-export function getFrontNews(): NewsItem[] {
-  return seedNews.filter((n) => n.status === "publicado").slice(0, config.newsFields)
+let repo: NewsRepository | null = null
+
+export function defaultRepository(): NewsRepository {
+  if (!repo) repo = new InMemoryNewsRepository(seedNews)
+  return repo
+}
+
+/** Redefine o repositório (usado em testes para injetar um fake). */
+export function setDefaultRepository(next: NewsRepository | null): void {
+  repo = next
+}
+
+/**
+ * Devolve as notícias que a landing deve exibir, limitadas ao número de campos
+ * configurado (`config.newsFields`) e apenas as publicadas — lidas via repo.
+ */
+export async function getFrontNews(): Promise<NewsItem[]> {
+  return defaultRepository().listPublished(config.newsFields)
 }

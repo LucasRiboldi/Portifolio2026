@@ -184,8 +184,8 @@ function CirculationChart() {
   )
 }
 
-export default function DailyProphetFront() {
-  const news = getFrontNews()
+export default async function DailyProphetFront() {
+  const news = await getFrontNews()
   return (
     <div className="dp-front">
       {/* ─── Barra de serviço ─── */}

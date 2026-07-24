@@ -30,9 +30,11 @@
       estruturadas, contadores fetched/discarded/published/errors, `RunReport` com
       início/fim/durationMs, `minLevel`, `echo`, `Clock` injetável) + `silentLogger`.
       Teste com relógio fixo. → commit+push.
-- [ ] **Parte 3 — Repository (interface + in-memory).** `repository.ts`: interface
-      `NewsRepository` (save, findByHash, listPublished, listDrafts) + impl em memória para
-      testes. Ainda SEM Supabase. Landing passa a ler via repo (fallback = semente). → commit+push.
+- [x] **Parte 3 — Repository (FEITO).** `repository.ts`: interface `NewsRepository`
+      (save, findByHash, findBySlug, listPublished, listDrafts, count) + `InMemoryNewsRepository`
+      (semeável, devolve cópias). `data/prophet-wire.ts` expõe `defaultRepository()`/
+      `setDefaultRepository()`; `getFrontNews()` agora async lê via repo; landing virou
+      async server component. Ainda SEM Supabase. → commit+push.
 
 ### Bloco B — Coleta e limpeza (rede real, sem IA)
 
