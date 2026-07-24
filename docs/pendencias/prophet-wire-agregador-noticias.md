@@ -12,28 +12,69 @@
 - [x] Landing renderizando os **6 campos** (título, subtítulo, categoria, resumo, imagem+ALT+legenda, fonte+link)
 - [x] Teste do seletor `getFrontNews()` — `tests/prophet-wire/seed-news.test.ts`
 
-## Roadmap (um módulo por vez — cada um com teste + doc + exemplo)
+## Passo a passo — partes pequenas, cada uma com commit+push ao final
 
-Ordem sugerida do pipeline:
+> Regra de execução: cada PARTE é autossuficiente (compila, testes verdes, build ok)
+> e termina com **commit + push**. Nunca deixar o repo quebrado entre partes, porque
+> o projeto é longo e pode ser retomado a qualquer momento.
+> Checklist do ciclo de cada parte: implementar → `test:unit` → `tsc --noEmit` →
+> (se visível) preview → **commit + push** → marcar `[x]` aqui.
 
-1. **Collector** — RSS/fetch das fontes (janela de 24h). Fontes prioritárias:
-   BoardGameGeek (News/Hotness), Dice Tower, ICv2, Gamefound, Kickstarter (Tabletop),
-   Stonemaier, CMON, Fantasy Flight, Leder, GMT, Plaid Hat, Portal, CGE, Ravensburger,
-   Kosmos, Asmodee; comunidades r/boardgames, r/soloboardgaming, r/boardgamedeals;
-   eventos Gen Con, Spiel Essen, UK Games Expo, Origins.
-2. **Parser** — extrair conteúdo limpo de cada item.
-3. **Normalizer** — mapear para `NewsItem` bruto.
-4. **Dedup** — hash de conteúdo + similaridade de título/link/jogo/campanha.
-5. **Analyzer (Claude)** — identificar título, resumo, categoria, subcategoria,
-   designer, editora, mecânicas, jogadores, tempo, complexidade, ano, idioma.
-6. **Generator** — texto original PT-BR (nunca copiar), SEO (slug, meta description,
-   keywords, hashtags, título SEO), no estilo editorial do Daily Prophet.
-7. **Publisher** — grava via `repository.ts` conforme `config.publishMode`.
-8. **Repository (Supabase)** — tabelas: `news`, `sources`, `runs`, `logs`
-   (histórico de pesquisadas/descartadas/publicadas, hash, data de coleta).
-9. **Logger** — início, fim, tempo, nº pesquisado/descartado/publicado, erros.
-10. **Scheduler** — cron diário (`scripts/prophet-wire-run.mjs`), horário em `config.cron`.
-11. **Painel admin** — última/próxima execução, fila, logs, erros, aguardando publicação.
+### Bloco A — Fundação de dados (sem IA, sem rede)
+
+- [x] **Parte 0 — Semente + landing (FEITO).** 6 campos no ar. Commit `feat(anfitriao): 6 campos…`.
+- [ ] **Parte 1 — Registry de fontes.** `src/lib/prophet-wire/sources.ts`: lista tipada de
+      todas as fontes (nome, url, tipo rss|html|api, categoria-padrão, ativo). Teste: sem
+      urls duplicadas, todas https. Doc: como adicionar fonte. → commit+push.
+- [ ] **Parte 2 — Logger.** `logger.ts`: interface `Logger` + impl de console estruturada
+      (início, fim, tempo, contagens, erros). DI-friendly. Teste do formato. → commit+push.
+- [ ] **Parte 3 — Repository (interface + in-memory).** `repository.ts`: interface
+      `NewsRepository` (save, findByHash, listPublished, listDrafts) + impl em memória para
+      testes. Ainda SEM Supabase. Landing passa a ler via repo (fallback = semente). → commit+push.
+
+### Bloco B — Coleta e limpeza (rede real, sem IA)
+
+- [ ] **Parte 4 — Collector.** `collector.ts`: busca RSS/HTTP das fontes na janela de 24h
+      (`config.collectWindowHours`). Retorna itens brutos. Timeout + erro isolado por fonte.
+      Teste com fixture (RSS salvo em `tests/prophet-wire/fixtures/`). → commit+push.
+- [ ] **Parte 5 — Parser.** `parser.ts`: extrai título, corpo, data, link, imagem de cada
+      item bruto. Teste sobre as fixtures. → commit+push.
+- [ ] **Parte 6 — Normalizer.** `normalizer.ts`: mapeia item parseado → `NewsItem` bruto
+      (sem campos de IA). Teste do mapeamento. → commit+push.
+- [ ] **Parte 7 — Dedup.** `dedup.ts`: hash de conteúdo (sha-256) + similaridade de
+      título/link/jogo/campanha. Descarta repetidos contra o repo. Teste de colisão e de
+      similaridade. → commit+push.
+
+### Bloco C — Inteligência (exige chave da API Claude)
+
+> A partir daqui é preciso `ANTHROPIC_API_KEY` no `.env` do servidor (nunca commitada).
+> Cada módulo tem interface + impl real Claude + fallback honesto (passa o item adiante
+> sem enriquecer) para o pipeline nunca travar por falta de chave.
+
+- [ ] **Parte 8 — Analyzer (Claude).** `analyzer.ts`: identifica categoria, subcategoria,
+      designer, editora, mecânicas, jogadores, tempo, complexidade, ano, idioma.
+      Teste com client mockado. → commit+push.
+- [ ] **Parte 9 — Generator (Claude).** `generator.ts`: texto original PT-BR (nunca copiar),
+      slug, meta description, keywords, hashtags, título SEO, na voz do Daily Prophet.
+      Teste com client mockado. → commit+push.
+
+### Bloco D — Persistência e automação (exige chaves do Supabase)
+
+- [ ] **Parte 10 — Repository Supabase.** impl real de `NewsRepository` + migração das
+      tabelas `news`, `sources`, `runs`, `logs`. Publica conforme `config.publishMode`.
+      → commit+push.
+- [ ] **Parte 11 — Publisher + orquestrador.** `publisher.ts` + `pipeline.ts` costurando
+      collector→parser→normalizer→dedup→analyzer→generator→publisher com logging. Teste
+      de integração end-to-end com fakes. → commit+push.
+- [ ] **Parte 12 — Scheduler.** `scripts/prophet-wire-run.mjs` (entrypoint do cron) +
+      registro de `run` a cada execução. Doc: como mudar horário (`config.cron`). → commit+push.
+
+### Bloco E — Operação
+
+- [ ] **Parte 13 — Painel admin.** Rota admin: última/próxima execução, fila, logs, erros,
+      notícias aguardando publicação, botão publicar/descartar. → commit+push.
+- [ ] **Parte 14 — Imagens.** Regra do spec: imagem oficial → pesquisa → padrão da categoria.
+      Substitui a moldura `.img-empty` quando houver arte real. → commit+push.
 
 ## Imagens (regra do spec)
 
