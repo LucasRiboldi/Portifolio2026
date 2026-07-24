@@ -28,12 +28,14 @@ export function KitStrip() {
   return (
     <section
       aria-labelledby="kit-title"
-      className="k-zone k-zone--oficina k-grain relative overflow-hidden px-4 py-16 sm:px-6 lg:px-8"
+      className="k-zone k-zone--oficina k-grain relative overflow-hidden py-16"
     >
       <SpeedLines x={12} y={20} color="rgba(255,255,255,0.07)" />
       <Halftone color="rgba(0,212,255,0.18)" step={8} />
 
-      <div className="mx-auto max-w-container">
+      {/* Mesma mancha dos capítulos: a faixa mostra o vocabulário do sistema, e
+          teria pouca autoridade a anunciá-lo desalinhada do resto da revista. */}
+      <div className="cp-bleed">
         <div className="flex flex-wrap items-end justify-between gap-4">
           <div>
             <Caption>O kit</Caption>

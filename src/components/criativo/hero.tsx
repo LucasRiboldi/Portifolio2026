@@ -17,6 +17,7 @@ import { EASE } from "@/components/comic/motion"
 import { toChars, toWords, isSpace } from "@/animations/split"
 import { useMouseParallax } from "@/hooks/use-mouse-parallax"
 import { useMagnetic } from "@/hooks/use-magnetic"
+import { Panel, PanelBody } from "@/components/layout/comic/panel"
 import { TiltCard } from "./tilt-card"
 import { FUN_STATS, HERO } from "@/constants/criativo-landing"
 
@@ -38,6 +39,17 @@ import { FUN_STATS, HERO } from "@/constants/criativo-landing"
  *
  * Acessibilidade: os pedaços de texto são `aria-hidden` e o texto real vai no
  * `aria-label` do container — o leitor de tela lê a frase, não letra a letra.
+ *
+ * ## A capa dentro da arquitetura da revista
+ *
+ * A capa assenta nas mesmas medidas dos capítulos (`cp-bleed` e a grelha de 12
+ * colunas, aqui em 8+4 — a 7+5 o requadro lateral ficava alto o bastante para
+ * empurrar os números do arquivo para fora da dobra) e usa os mesmos requadros
+ * (`Panel`, com o mesmo `cp-panel` nas fichas dos números). O que ela não tem
+ * é `data-chapter`: a câmara não deve encolher nem dessaturar a capa, porque a
+ * capa não é uma página que se vira — é a que está em cima da pilha quando o
+ * leitor chega. Encolhê-la ao entrar seria afastar o olho logo no primeiro
+ * segundo.
  */
 export function Hero() {
   const ref = useRef<HTMLElement>(null)
@@ -83,7 +95,7 @@ export function Hero() {
     <section
       ref={ref}
       aria-labelledby="hero-title"
-      className="cx-parallax k-zone k-zone--multiverso k-grain relative isolate flex min-h-[calc(100vh-var(--k-header-h))] items-center overflow-hidden px-4 pb-28 pt-12 sm:px-6 lg:px-8"
+      className="cx-parallax k-zone k-zone--multiverso k-grain relative isolate flex min-h-[calc(100vh-var(--k-header-h))] items-center overflow-hidden pb-28 pt-12"
     >
       {/* --- fundo vivo: mesh + grão (atrás de tudo) -------------------- */}
       <div aria-hidden className="pointer-events-none absolute inset-0 z-0 overflow-hidden">
@@ -125,10 +137,10 @@ export function Hero() {
         </span>
       </motion.div>
 
-      <motion.div className="relative z-10 mx-auto w-full max-w-container" style={layer(yFront)}>
-        <div className="grid items-center gap-12 lg:grid-cols-[1.1fr_0.9fr]">
+      <motion.div className="cp-bleed relative z-10" style={layer(yFront)}>
+        <div className="cp-grid items-center gap-y-12">
           {/* --- coluna de texto ---------------------------------------- */}
-          <div>
+          <div className="cp-col" style={{ "--cp-span-l": 8 } as React.CSSProperties}>
             <motion.div
               initial={reduced ? false : { y: 16 }}
               animate={{ opacity: 1, y: 0 }}
@@ -216,7 +228,10 @@ export function Hero() {
             >
               {FUN_STATS.map((s) => (
                 <li key={s.label}>
-                  <TiltCard max={10} className="k-panel px-3 py-3 text-center">
+                  {/* `cp-panel` e não `k-panel`: na capa os números são
+                      requadros como os do resto da revista, e a moldura tem de
+                      ser a mesma que o leitor vai reencontrar nos capítulos. */}
+                  <TiltCard max={10} className="cp-panel px-3 py-3 text-center">
                     <Counter to={s.value} suffix={s.suffix} className="k-num block text-3xl sm:text-4xl" />
                     <span className="k-sub mt-1 block text-[10px] leading-tight opacity-70">{s.label}</span>
                   </TiltCard>
@@ -227,29 +242,39 @@ export function Hero() {
 
           {/* --- requadro lateral (profundidade pelo ponteiro) ---------- */}
           <motion.div
-            className="cx-layer relative hidden lg:block"
-            style={{ "--cx-depth": 18 } as React.CSSProperties}
+            className="cx-layer cp-col relative hidden lg:block"
+            style={{ "--cx-depth": 18, "--cp-span-l": 4 } as React.CSSProperties}
             initial={reduced ? false : { x: 40, rotate: 3 }}
             animate={{ opacity: 1, x: 0, rotate: 0 }}
             transition={{ duration: 0.95, ease: EASE, delay: 0.25 }}
           >
-            <div className="k-panel k-tilt-r relative aspect-[4/5] overflow-hidden" data-cursor="terra-lr">
-              <Halftone color="rgba(255,45,149,0.3)" step={6} />
-              <SpeedLines x={50} y={28} color="rgba(18,16,14,0.16)" />
+            <Panel
+              as="div"
+              shape="tiltR"
+              accent="magenta"
+              lit
+              className="relative aspect-[4/5] overflow-hidden"
+            >
+              <PanelBody bleed className="absolute inset-0">
+                <div className="relative size-full" data-cursor="terra-lr">
+                  <Halftone color="rgba(255,45,149,0.3)" step={6} />
+                  <SpeedLines x={50} y={28} color="rgba(18,16,14,0.16)" />
 
-              <span
-                aria-hidden
-                className="k-title absolute inset-x-6 top-1/2 -translate-y-1/2 text-center text-[clamp(2.2rem,4vw,3.6rem)] text-[var(--k-ink)] opacity-15"
-              >
-                Terra
-                <br />
-                LR
-              </span>
+                  <span
+                    aria-hidden
+                    className="k-title absolute inset-x-6 top-1/2 -translate-y-1/2 text-center text-[clamp(2.2rem,4vw,3.6rem)] text-[var(--k-ink)] opacity-15"
+                  >
+                    Terra
+                    <br />
+                    LR
+                  </span>
 
-              <div className="absolute inset-x-6 bottom-6 space-y-4">
-                <Bubble>{HERO.bubble}</Bubble>
-              </div>
-            </div>
+                  <div className="absolute inset-x-6 bottom-6 space-y-4">
+                    <Bubble>{HERO.bubble}</Bubble>
+                  </div>
+                </div>
+              </PanelBody>
+            </Panel>
 
             <Burst accent="yellow" className="absolute -left-10 -top-8 size-28 rotate-[-8deg]">
               <span className="k-title max-w-[70%] text-sm leading-tight">Nada à venda</span>
