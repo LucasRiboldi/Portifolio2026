@@ -72,9 +72,12 @@
       bruto se IA null/ilegível; não sobrescreve com vazio). `NEWS_CATEGORIES` agora existe
       em runtime em types.ts. Teste com AIClient fake. → commit+push.
       PENDENTE: cliente real do SDK Anthropic (plugar quando houver ANTHROPIC_API_KEY).
-- [ ] **Parte 9 — Generator (Claude).** `generator.ts`: texto original PT-BR (nunca copiar),
-      slug, meta description, keywords, hashtags, título SEO, na voz do Daily Prophet.
-      Teste com client mockado. → commit+push.
+- [x] **Parte 9 — Generator (FEITO).** `generator.ts`: `generate()` reescreve título/subtítulo/
+      resumo em PT-BR na voz do Daily Prophet + SEO (slug, seoTitle, metaDescription,
+      keywords, hashtags) via IA; fallback determinístico deriva SEO do conteúdo bruto
+      (sem inventar fatos) quando IA null/ilegível. `clamp` respeita limites de SEO;
+      keywords descartam stopwords. Teste com AIClient fake. → commit+push. Fecha Bloco C.
+      PENDENTE: mesmo cliente real do SDK da Parte 8.
 
 ### Bloco D — Persistência e automação (exige chaves do Supabase)
 
