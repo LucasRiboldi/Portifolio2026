@@ -5,7 +5,6 @@ import {
   servicebar,
   lead,
   editorial,
-  reports,
   boxes,
   ads,
   briefs,
@@ -18,6 +17,7 @@ import {
   registryNumber,
 } from "@/lib/anfitriao-prophet"
 import { PressMark } from "@/components/prophet/press-mark"
+import { getFrontNews } from "@/data/prophet-wire"
 
 export const metadata = { title: "Primeira Página" }
 
@@ -185,6 +185,7 @@ function CirculationChart() {
 }
 
 export default function DailyProphetFront() {
+  const news = getFrontNews()
   return (
     <div className="dp-front">
       {/* ─── Barra de serviço ─── */}
@@ -362,30 +363,42 @@ export default function DailyProphetFront() {
         </div>
       </div>
 
-      {/* ─── Matérias secundárias ─── */}
+      {/* ─── Os 6 campos de notícia (Prophet Wire) ─── */}
+      {/* Abastecidos hoje pela semente estática `getFrontNews()`; nas próximas
+          fases, pelo pipeline automático (collector → IA → publisher). */}
       <div className="dp-reports">
-        {reports.map((r, i) => (
-          <article key={r.href} className="dp-report">
+        {news.map((n, i) => (
+          <article key={n.slug} className="dp-report">
             <p className="dp-report-kicker">
-              <span className="dp-tag">{r.kicker}</span>
+              <span className="dp-tag">{n.category}</span>
             </p>
-            <h3 className="dp-report-head">{r.head}</h3>
-            <p className="dp-report-sub">{r.sub}</p>
+            <h3 className="dp-report-head">{n.title}</h3>
+            <p className="dp-report-sub">{n.subtitle}</p>
+
+            <figure className="dp-figure" style={{ margin: "0.4rem 0" }}>
+              {n.image.src ? (
+                // eslint-disable-next-line @next/next/no-img-element
+                <img className="img-frame" src={n.image.src} alt={n.image.alt} />
+              ) : (
+                <div className="img-frame img-empty" role="img" aria-label={n.image.alt} />
+              )}
+              <figcaption className="dp-figcaption">{n.image.caption}</figcaption>
+            </figure>
 
             <p className="dp-report-body">
               {/* A primeira matéria abre com inicial em caixa; as outras com a
                   capitular solta. É a distinção que a matéria 09.12 do guia
                   documenta — uma por matéria, e a caixa é a de abertura. */}
               <span className={i === 0 ? "dp-initial dp-initial--ornate" : "dp-cap"}>
-                {r.dropcap}
+                {n.dropcap}
               </span>
-              {r.body}
+              {n.summary}
             </p>
-            <p className="dp-report-note">{r.note}</p>
+            <p className="dp-report-note">{n.note}</p>
 
-            <Link href={r.href} className="dp-more">
-              {r.cta} <b>{r.page}</b>
-            </Link>
+            <a href={n.sourceUrl} className="dp-more" target="_blank" rel="noopener noreferrer">
+              {n.sourceName} <b>↗</b>
+            </a>
           </article>
         ))}
       </div>
