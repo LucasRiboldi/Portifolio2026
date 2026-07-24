@@ -81,12 +81,16 @@
 
 ### Bloco D — Persistência e automação (exige chaves do Supabase)
 
-- [ ] **Parte 10 — Repository Supabase.** impl real de `NewsRepository` + migração das
-      tabelas `news`, `sources`, `runs`, `logs`. Publica conforme `config.publishMode`.
-      → commit+push.
-- [ ] **Parte 11 — Publisher + orquestrador.** `publisher.ts` + `pipeline.ts` costurando
-      collector→parser→normalizer→dedup→analyzer→generator→publisher com logging. Teste
-      de integração end-to-end com fakes. → commit+push.
+- [ ] **Parte 10 — Repository Supabase (ADIADA por escolha do Lucas).** impl real de
+      `NewsRepository` + migração das tabelas `news`, `sources`, `runs`, `logs`. Publica
+      conforme `config.publishMode`. Exige chaves do Supabase. Retomar quando quiser trocar
+      o in-memory pelo banco. → commit+push.
+- [x] **Parte 11 — Publisher + orquestrador (FEITO).** `publisher.ts` (grava via repo
+      respeitando publicado/rascunho, erro isolado por item, conta published) e `pipeline.ts`
+      (`runPipeline()` costura collect→parse+janela→normalize→dedup→analyze→generate→publish
+      com um RunLogger; nunca lança; devolve RunReport). Teste de integração end-to-end com
+      fakes (fixture RSS, IA fallback, repo in-memory), incl. dedup entre execuções e fonte
+      caída. → commit+push.
 - [ ] **Parte 12 — Scheduler.** `scripts/prophet-wire-run.mjs` (entrypoint do cron) +
       registro de `run` a cada execução. Doc: como mudar horário (`config.cron`). → commit+push.
 
