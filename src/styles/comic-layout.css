@@ -430,4 +430,26 @@
     filter: none;
     opacity: 1;
   }
+
+  /**
+   * Rede de segurança para o estado inicial das animações de entrada.
+   *
+   * Os blocos que entram com reveal são renderizados no servidor já em
+   * `style="opacity:0"`, porque no servidor não há como saber a preferência de
+   * movimento do visitante. No cliente, com movimento reduzido, os componentes
+   * passam a renderizar a versão estática — sem atributo `style` — e isso é uma
+   * divergência de hidratação que o React **não corrige**: ele avisa
+   * ("this won't be patched up") e mantém o `opacity: 0` que veio do servidor.
+   * Resultado sem esta regra: a página fica praticamente em branco justamente
+   * para quem pediu menos movimento.
+   *
+   * O seletor é propositadamente estreito — casa só com o estado inicial escrito
+   * pelo servidor. Alargá-lo para qualquer `transform` apagaria as rotações
+   * estáticas do desenho (o adesivo da banca, os bilhetes do mural), que são
+   * diagramação e não movimento.
+   */
+  .cp-page [style*="opacity:0"] {
+    opacity: 1 !important;
+    transform: none !important;
+  }
 }
