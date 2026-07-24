@@ -1,7 +1,9 @@
 import { cn } from "@/lib/utils"
 import { Caption } from "@/components/comic/atoms"
-import { GlitchTitle, type Treatment } from "@/components/comic/glitch-title"
+import type { Treatment } from "@/components/comic/glitch-title"
+import { SplitTitle } from "@/components/comic/split-title"
 import { Reveal } from "@/components/comic/reveal"
+import { PageTurn } from "./page-turn"
 import { ScrubParallax } from "@/components/criativo/scrub-parallax"
 import { ZoneScene, type SceneVariant } from "@/components/criativo/zone-scene"
 
@@ -74,6 +76,8 @@ export function Chapter({
       )}
       style={{ paddingBlock: "var(--cp-chapter-gap)" }}
     >
+      <PageTurn />
+
       <div className="cp-bleed">
         <Reveal as="header" className="relative mb-10 sm:mb-14">
           {/* Número-fantasma: marca a página como um capítulo de revista sem
@@ -93,14 +97,14 @@ export function Chapter({
             {earth && <span className="k-kicker text-[10px] opacity-60">{earth}</span>}
           </div>
 
-          <GlitchTitle
+          <SplitTitle
             as="h2"
             id={titleId}
             treatment={treatment}
             className="mt-5 text-[clamp(2.2rem,8vw,5rem)] leading-[0.9]"
           >
             {title}
-          </GlitchTitle>
+          </SplitTitle>
 
           {subtitle && (
             <p className="k-body mt-5 max-w-2xl text-base font-medium leading-relaxed opacity-80 sm:text-lg">

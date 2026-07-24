@@ -330,6 +330,30 @@
   filter: saturate(0.55) brightness(0.72);
 }
 
+/**
+ * A folha da virada de página. Papel da própria dimensão (`--k-zone-b`) para
+ * que a folha que sai seja da mesma tinta do capítulo que chega — uma folha
+ * neutra leria como cortina de UI, não como página. A sombra na borda direita
+ * é a dobra a levantar.
+ */
+.cp-pageturn {
+  position: absolute;
+  inset: 0;
+  z-index: 5;
+  pointer-events: none;
+  background:
+    linear-gradient(90deg, transparent 92%, rgb(0 0 0 / 0.45) 100%),
+    radial-gradient(120% 100% at 0% 50%, rgb(255 255 255 / 0.1), transparent 55%),
+    var(--k-zone-b, #12100e);
+  box-shadow: 14px 0 40px -10px rgb(0 0 0 / 0.75);
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .cp-pageturn {
+    display: none;
+  }
+}
+
 /* ===========================================================================
    6 · Camadas de impressão
    Papel, offset e retícula. Todas em pseudo-elementos `pointer-events: none`,
