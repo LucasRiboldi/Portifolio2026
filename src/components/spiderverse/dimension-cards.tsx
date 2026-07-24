@@ -42,7 +42,11 @@ export function DimensionCards({ featuredOnly, className }: DimensionCardsProps)
             <span className="sv-panel sv-shift inline-flex w-fit items-center gap-2 px-3 py-1">
               <span className="sv-heavy text-[10px] uppercase tracking-wide">Terra-{d.earth}</span>
             </span>
-            <span>
+            {/* Traço de acento no tom 10% da paleta 60/30/10 da dimensão. Torna
+                tangível o papel do acento — a mesma cor da etiqueta e do brilho
+                — em vez de o deixar só como token. Cai no ciano do sistema para
+                dimensões que a camada de identidade não cobre. */}
+            <span className="border-l-4 pl-3" style={{ borderColor: "var(--c-10, var(--sv-cyan))" }}>
               <span className="sv-display block text-2xl uppercase sm:text-3xl">{d.label}</span>
               <span className="sv-heavy mt-1 block text-[11px] uppercase tracking-wide opacity-75">
                 {d.desc}

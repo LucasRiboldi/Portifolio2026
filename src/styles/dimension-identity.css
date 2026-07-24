@@ -1,0 +1,294 @@
+/**
+ * Identidade tipográfica das dimensões — fonte, cor 60/30/10 e letra viva.
+ * ===========================================================================
+ * As paletas, os fundos e os efeitos de textura de cada dimensão vivem em
+ * `spiderverse-dimensions.css`. Este ficheiro acrescenta a camada que faltava:
+ * a *voz* de cada uma.
+ *
+ * Três coisas, por dimensão:
+ *
+ * 1. FONTE PRÓPRIA. Até aqui as vinte dimensões escreviam o título em Bangers
+ *    (`--font-display`). Uma fonte só apaga a diferença que a página inteira
+ *    tenta afirmar — o neon e o pergaminho renascentista não deviam ter a mesma
+ *    letra. Cada `.sv-dim-*` reaponta `--dim-font`, escolhida do arsenal já
+ *    carregado no `<html>` (nenhuma fonte nova: o custo de rede continua igual).
+ *
+ * 2. COR 60/30/10. Cada dimensão declara `--c-60/--c-30/--c-10` — dominante,
+ *    secundária, acento — o esqueleto de cor clássico. Os valores saem das
+ *    cores que a dimensão já usava no fundo e nos painéis; o que muda é passarem
+ *    a ter papéis nomeados, para o acento (10%) ser sempre o mesmo tom da
+ *    etiqueta e do brilho, e não três vermelhos ligeiramente diferentes.
+ *
+ * 3. LETRA CARACTERÍSTICA. O título ganha um gesto próprio no hover/foco —
+ *    o datamosh do glitch, o piscar do neon, o tremor do horror. Só no
+ *    hover/foco de propósito: o índice mostra as vinte ao mesmo tempo
+ *    (`.sv-still`), e vinte títulos a mexer sozinhos era o ruído que já se
+ *    removeu. O visitante provoca; não sofre.
+ *
+ * `--dim-font` cai em `--font-display` para qualquer dimensão que este ficheiro
+ * não cubra — nunca há título sem fonte.
+ */
+
+.sv-canvas {
+  --dim-font: var(--font-display);
+}
+
+.sv-display {
+  font-family: var(--dim-font), "Bangers", sans-serif;
+}
+
+/* ===========================================================================
+   Fonte + paleta 60/30/10 por dimensão
+   =========================================================================== */
+
+.sv-dim-neon {
+  --dim-font: var(--font-monoton); /* néon de letreiro */
+  --c-60: #1a0033;
+  --c-30: #ff00c8;
+  --c-10: #00ffc8;
+}
+.sv-dim-renaissance {
+  --dim-font: var(--font-gold); /* serifa Cinzel, capitular de manuscrito */
+  --c-60: #e8dcc0;
+  --c-30: #7a5a2e;
+  --c-10: #b8892e;
+}
+.sv-dim-nouveau {
+  --dim-font: var(--font-brush); /* pincel de aquarela */
+  --c-60: #f6efe6;
+  --c-30: #d98cae;
+  --c-10: #6ba6c9;
+}
+.sv-dim-noir {
+  --dim-font: var(--font-bebas); /* alta condensada de cartaz de cinema */
+  --c-60: #0b0b0d;
+  --c-30: #e6e6e6;
+  --c-10: #b91c2c;
+}
+.sv-dim-punk {
+  --dim-font: var(--font-cracked); /* xerox gasto de fanzine */
+  --c-60: #141414;
+  --c-30: #d5093f;
+  --c-10: #00e5d0;
+}
+.sv-dim-2099 {
+  --dim-font: var(--font-anton); /* brutalismo condensado */
+  --c-60: #0a1a2f;
+  --c-30: #10c8d0;
+  --c-10: #ff2e88;
+}
+.sv-dim-manga {
+  --dim-font: var(--font-oswald); /* condensada limpa, ocidental sobre P&B */
+  --c-60: #f3f3f3;
+  --c-30: #16161a;
+  --c-10: #ff5c8a;
+}
+.sv-dim-cartoon {
+  --dim-font: var(--font-display); /* Bangers — a voz de desenho por excelência */
+  --c-60: #ffd23f;
+  --c-30: #1b6cff;
+  --c-10: #ff2f4e;
+}
+.sv-dim-graffiti {
+  --dim-font: var(--font-drip); /* Rubik Wet Paint, tinta a escorrer */
+  --c-60: #17171a;
+  --c-30: #9dff2f;
+  --c-10: #ff2d95;
+}
+.sv-dim-pixel {
+  --dim-font: var(--font-pixel); /* Pixelify, grade de 8-bit */
+  --c-60: #10131c;
+  --c-30: #4de1ff;
+  --c-10: #ffe14d;
+}
+.sv-dim-blueprint {
+  --dim-font: var(--font-inter); /* sans técnica, legenda de planta */
+  --c-60: #0a2a4a;
+  --c-30: #7fb3ff;
+  --c-10: #ffffff;
+}
+.sv-dim-spot {
+  --dim-font: var(--font-shade); /* Bungee Shade, volume com vazios */
+  --c-60: #f4f1e8;
+  --c-30: #12100e;
+  --c-10: #e5006d;
+}
+.sv-dim-lego {
+  --dim-font: var(--font-heavy); /* Archivo Black, plástico maciço */
+  --c-60: #ffcf00;
+  --c-30: #d3231f;
+  --c-10: #0055bf;
+}
+.sv-dim-prowler {
+  --dim-font: var(--font-anton); /* condensada urbana, sombra de beco */
+  --c-60: #150a26;
+  --c-30: #6b1bb0;
+  --c-10: #ffb327;
+}
+.sv-dim-glitch {
+  --dim-font: var(--font-glitch); /* Rubik Glitch, datamosh */
+  --c-60: #0a0e14;
+  --c-30: #ff003c;
+  --c-10: #00e5ff;
+}
+.sv-dim-portal {
+  --dim-font: var(--font-nabla); /* Nabla cromática — caleidoscópio na letra */
+  --c-60: #12002e;
+  --c-30: #a02eff;
+  --c-10: #2effd5;
+}
+.sv-dim-society {
+  --dim-font: var(--font-heavy); /* brutalismo branco limpo */
+  --c-60: #eef1f5;
+  --c-30: #12100e;
+  --c-10: #00b6d4;
+}
+.sv-dim-riso {
+  --dim-font: var(--font-oswald); /* impressão de duas cores */
+  --c-60: #f2ead9;
+  --c-30: #ff4f2e;
+  --c-10: #1b53c0;
+}
+.sv-dim-horror {
+  --dim-font: var(--font-cracked); /* letra rachada, papel manchado */
+  --c-60: #0c0405;
+  --c-30: #d40000;
+  --c-10: #6f8a00;
+}
+
+/* ===========================================================================
+   Letra viva — gesto próprio no hover/foco do cartão
+   Cada regra usa `--c-*` da dimensão, então herda a paleta sem repetir cores.
+   =========================================================================== */
+
+/* Glitch/datamosh: a cópia ciano e a magenta separam-se em saltos. */
+@keyframes dim-glitch {
+  0%, 100% { transform: none; text-shadow: none; }
+  20% { transform: translate(-2px, 1px); text-shadow: 2px 0 var(--c-10), -2px 0 var(--c-30); }
+  40% { transform: translate(2px, -1px); text-shadow: -2px 0 var(--c-10), 2px 0 var(--c-30); }
+  60% { transform: translate(-1px, 0); text-shadow: 1px 0 var(--c-30), -1px 0 var(--c-10); }
+}
+.sv-dim-glitch:hover .sv-display,
+.sv-dim-glitch:focus-within .sv-display,
+.sv-dim-2099:hover .sv-display,
+.sv-dim-2099:focus-within .sv-display {
+  animation: dim-glitch 0.42s steps(2, end) 2;
+}
+
+/* Néon: o brilho pulsa e a letra acende. */
+@keyframes dim-neon {
+  0%, 100% { text-shadow: 0 0 6px var(--c-10), 0 0 16px var(--c-30); }
+  50% { text-shadow: 0 0 2px var(--c-10), 0 0 6px var(--c-30); opacity: 0.85; }
+}
+.sv-dim-neon:hover .sv-display,
+.sv-dim-neon:focus-within .sv-display {
+  animation: dim-neon 0.9s ease-in-out 2;
+}
+
+/* Horror: tremor irregular, como imagem que não fixa. */
+@keyframes dim-shudder {
+  0%, 100% { transform: none; }
+  25% { transform: translate(1px, -1px) skewX(2deg); }
+  50% { transform: translate(-1px, 1px) skewX(-1deg); }
+  75% { transform: translate(1px, 0) skewX(1deg); }
+}
+.sv-dim-horror:hover .sv-display,
+.sv-dim-horror:focus-within .sv-display {
+  animation: dim-shudder 0.3s steps(3) 3;
+}
+
+/* Salto de mola — desenho, LEGO, cartoon. */
+@keyframes dim-bounce {
+  0% { transform: scale(1); }
+  35% { transform: scale(1.06, 0.94); }
+  70% { transform: scale(0.97, 1.03); }
+  100% { transform: scale(1); }
+}
+.sv-dim-cartoon:hover .sv-display,
+.sv-dim-cartoon:focus-within .sv-display,
+.sv-dim-lego:hover .sv-display,
+.sv-dim-lego:focus-within .sv-display {
+  animation: dim-bounce 0.5s ease-out 1;
+}
+
+/* Escorrido — graffiti e riso: a letra "assenta" descendo um fio. */
+@keyframes dim-drip {
+  0% { transform: translateY(-3px); opacity: 0.6; }
+  100% { transform: translateY(0); opacity: 1; }
+}
+.sv-dim-graffiti:hover .sv-display,
+.sv-dim-graffiti:focus-within .sv-display,
+.sv-dim-riso:hover .sv-display,
+.sv-dim-riso:focus-within .sv-display {
+  animation: dim-drip 0.45s ease-out 1;
+}
+
+/* Varredura de scanline — pixel, blueprint, society, portal, spot: um brilho
+   passa pela linha de base uma vez. */
+@keyframes dim-scan {
+  0% { background-position: -120% 0; }
+  100% { background-position: 220% 0; }
+}
+.sv-dim-pixel:hover .sv-display,
+.sv-dim-pixel:focus-within .sv-display,
+.sv-dim-blueprint:hover .sv-display,
+.sv-dim-blueprint:focus-within .sv-display,
+.sv-dim-society:hover .sv-display,
+.sv-dim-society:focus-within .sv-display,
+.sv-dim-portal:hover .sv-display,
+.sv-dim-portal:focus-within .sv-display,
+.sv-dim-spot:hover .sv-display,
+.sv-dim-spot:focus-within .sv-display {
+  background-image: linear-gradient(100deg, transparent 40%, color-mix(in srgb, var(--c-10) 70%, transparent) 50%, transparent 60%);
+  background-size: 220% 100%;
+  background-repeat: no-repeat;
+  animation: dim-scan 0.7s ease-out 1;
+}
+
+/* Fade suave para as restantes (renaissance, nouveau, noir, punk, manga,
+   prowler): a letra ergue-se um fio ao ser tocada — presente, sem estardalhaço,
+   coerente com o tom mais sóbrio dessas dimensões. */
+@keyframes dim-rise {
+  0% { transform: translateY(3px); opacity: 0.7; }
+  100% { transform: translateY(0); opacity: 1; }
+}
+.sv-dim-renaissance:hover .sv-display,
+.sv-dim-renaissance:focus-within .sv-display,
+.sv-dim-nouveau:hover .sv-display,
+.sv-dim-nouveau:focus-within .sv-display,
+.sv-dim-noir:hover .sv-display,
+.sv-dim-noir:focus-within .sv-display,
+.sv-dim-punk:hover .sv-display,
+.sv-dim-punk:focus-within .sv-display,
+.sv-dim-manga:hover .sv-display,
+.sv-dim-manga:focus-within .sv-display,
+.sv-dim-prowler:hover .sv-display,
+.sv-dim-prowler:focus-within .sv-display {
+  animation: dim-rise 0.4s ease-out 1;
+}
+
+/* Movimento reduzido: nenhuma letra se mexe, em nenhuma dimensão. A fonte e a
+   paleta ficam — são identidade, não animação. */
+@media (prefers-reduced-motion: reduce) {
+  .sv-dim-neon .sv-display,
+  .sv-dim-glitch .sv-display,
+  .sv-dim-2099 .sv-display,
+  .sv-dim-horror .sv-display,
+  .sv-dim-cartoon .sv-display,
+  .sv-dim-lego .sv-display,
+  .sv-dim-graffiti .sv-display,
+  .sv-dim-riso .sv-display,
+  .sv-dim-pixel .sv-display,
+  .sv-dim-blueprint .sv-display,
+  .sv-dim-society .sv-display,
+  .sv-dim-portal .sv-display,
+  .sv-dim-spot .sv-display,
+  .sv-dim-renaissance .sv-display,
+  .sv-dim-nouveau .sv-display,
+  .sv-dim-noir .sv-display,
+  .sv-dim-punk .sv-display,
+  .sv-dim-manga .sv-display,
+  .sv-dim-prowler .sv-display {
+    animation: none !important;
+  }
+}
