@@ -30,6 +30,7 @@
 @import "./eightbit.css";
 @import "./criativo-fx.css";
 @import "./comic-layout.css";
+@import "./comic-book.css";
 
 @tailwind base;
 @tailwind components;

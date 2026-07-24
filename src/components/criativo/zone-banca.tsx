@@ -1,11 +1,10 @@
 import type { Comic } from "@/lib/repos/criativo"
 import { Bubble, Onoma, Stars } from "@/components/comic/atoms"
-import { MediaFrame } from "@/components/comic/media-frame"
+import { ComicBook } from "@/components/comic/comic-book"
 import { PANEL_IN } from "@/components/comic/motion"
 import { RevealGroup, RevealItem } from "@/components/comic/reveal"
 import { Chapter } from "@/components/layout/comic/chapter"
-import { Panel, PanelBody, PanelFooter } from "@/components/layout/comic/panel"
-import { spanVars, type PanelShape } from "@/design-system/comic-layout"
+import { spanVars } from "@/design-system/comic-layout"
 import { ZONES } from "@/constants/criativo-landing"
 
 /** Rótulo e cor de cada status — a etiqueta colada na capa. */
@@ -17,85 +16,51 @@ const STATUS: Record<string, { label: string; bg: string }> = {
 }
 
 /**
- * A prateleira: seis capas por fila no desktop, duas no telemóvel.
- *
- * As capas mantêm todas a mesma largura — numa banca o que varia é a revista,
- * não o espaço que ela ocupa na estante. A quebra da grade vem da inclinação e
- * do canto mordido, em posições primas entre si (3 e 4) para o padrão não cair
- * sempre na mesma coluna de uma fila de seis.
- */
-function shelf(i: number): PanelShape {
-  if (i % 4 === 0) return "cutBL"
-  if (i % 3 === 0) return "tiltL"
-  return "rect"
-}
-
-/**
  * Capítulo 03 · Banca — as capas na prateleira.
  *
- * A etiqueta de status fica por cima da capa, girada, como o adesivo de preço
- * que a banca cola na revista. É o que faz a prateleira parecer usada em vez de
- * catálogo.
+ * Aqui os exemplares não são requadros: são livros. Cada um tem contracapa,
+ * miolo de três folhas e uma capa que abre alguns graus sobre a lombada quando
+ * o ponteiro chega ({@link ComicBook}). Um requadro plano servia para catalogar;
+ * a estante devia parecer que dá para pegar num deles — que é a diferença entre
+ * uma lista de leituras e uma banca.
+ *
+ * Sem `Panel`, e de propósito: a moldura de tinta faria dois contornos à volta
+ * da mesma capa e mataria a espessura do volume. A ligação ao sistema fica na
+ * grelha (dois quadros por livro, seis por fila) e na tinta da própria capa.
+ *
+ * A legenda vai por baixo, como a etiqueta da prateleira — e não dentro de um
+ * rodapé, que voltaria a fechar o livro numa caixa.
  */
 export function ZoneBanca({ comics }: { comics: Comic[] }) {
   const { id, ...meta } = ZONES.banca
 
   return (
     <Chapter id={id} palette={id} scene="skew" {...meta}>
-      <RevealGroup as="ul" className="cp-grid">
-        {comics.map((c, i) => {
-          const status = STATUS[c.status] ?? STATUS.lendo!
-
-          return (
-            <RevealItem
-              key={c.id}
-              as="li"
-              variants={PANEL_IN}
-              className="cp-col"
-              style={spanVars({ base: 2, sm: 2, lg: 2 })}
+      <RevealGroup as="ul" className="cp-grid gap-y-12">
+        {comics.map((c) => (
+          <RevealItem
+            key={c.id}
+            as="li"
+            variants={PANEL_IN}
+            className="cp-col"
+            style={spanVars({ base: 2, sm: 2, lg: 2 })}
+          >
+            <ComicBook
+              title={c.title}
+              cover={c.cover_image}
+              sticker={STATUS[c.status] ?? STATUS.lendo}
+              sizes="(max-width: 640px) 50vw, (max-width: 1024px) 25vw, 17vw"
             >
-              <Panel
-                as="article"
-                shape={shelf(i)}
-                cut={20}
-                accent="red"
-                lit
-                className="group h-full"
-              >
-                <PanelBody bleed className="relative">
-                  <MediaFrame
-                    src={c.cover_image}
-                    fallback={c.title}
-                    themed
-                    sizes="(max-width: 640px) 50vw, (max-width: 1024px) 25vw, 17vw"
-                    className="aspect-[2/3] w-full"
-                  />
-
-                  {/* Acima da retícula da moldura (z-2), senão o adesivo fica por
-                      baixo dos pontos de impressão e perde o contraste. */}
-                  <span
-                    className="k-kicker absolute right-1 top-3 z-[3] border-[3px] border-[var(--k-ink)] px-2 py-1 text-[9px] text-white shadow-[3px_3px_0_var(--k-ink)]"
-                    style={{ background: status.bg, transform: "rotate(4deg)" }}
-                  >
-                    {status.label}
-                  </span>
-                </PanelBody>
-
-                <PanelFooter>
-                  <h3 className="k-title text-lg leading-tight">{c.title}</h3>
-                  <p className="k-sub mt-1 text-[10px] opacity-65">
-                    {c.author}
-                    {c.publisher && ` · ${c.publisher}`}
-                  </p>
-                  <Stars value={c.rating} className="mt-2 block" />
-                  {c.note && (
-                    <p className="k-body mt-3 text-xs leading-relaxed opacity-75">{c.note}</p>
-                  )}
-                </PanelFooter>
-              </Panel>
-            </RevealItem>
-          )
-        })}
+              <h3 className="k-title text-lg leading-tight">{c.title}</h3>
+              <p className="k-sub mt-1 text-[10px] opacity-65">
+                {c.author}
+                {c.publisher && ` · ${c.publisher}`}
+              </p>
+              <Stars value={c.rating} className="mt-2 block" />
+              {c.note && <p className="k-body mt-2 text-xs leading-relaxed opacity-75">{c.note}</p>}
+            </ComicBook>
+          </RevealItem>
+        ))}
       </RevealGroup>
 
       <Bubble className="k-tilt-l mt-12 max-w-md">
