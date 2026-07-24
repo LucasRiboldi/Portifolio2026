@@ -411,3 +411,40 @@
   .sv-glitch, .sv-glitch::before, .sv-glitch::after,
   .sv-rainbow, .sv-onoma-pop { animation: none; }
 }
+
+/**
+ * Rede de segurança do texto em gradiente.
+ *
+ * `.sv-rainbow` pinta o texto com `background-clip: text` e
+ * `-webkit-text-fill-color: transparent` — se o recorte não se aplicar, o
+ * texto fica transparente sobre o fundo, ou seja, invisível. Não é hipótese
+ * remota: basta o navegador não suportar a propriedade, ou uma extensão de
+ * leitura forçar `background: none`, para a manchete desaparecer.
+ *
+ * Aqui a cor sólida volta a valer quando o recorte não está disponível. Fica
+ * no fim do ficheiro de propósito: é uma exceção sobre a regra acima, e o
+ * `@supports not` precisa de vir depois dela.
+ */
+@supports not ((background-clip: text) or (-webkit-background-clip: text)) {
+  .sv-rainbow {
+    background: none;
+    color: var(--sv-yellow);
+    -webkit-text-fill-color: var(--sv-yellow);
+  }
+}
+
+/**
+ * Sombra empilhada + texto recortado em gradiente não se misturam.
+ *
+ * `.fx-shadow-long` desenha oito sombras pretas deslocadas para dar volume à
+ * manchete. Num texto opaco isso lê-se como extrusão; num texto com
+ * `-webkit-text-fill-color: transparent` (o caso do `.sv-rainbow`) a sombra
+ * passa a ser a única coisa visível, e o realce aparece como um borrão preto.
+ * Foi o que aconteceu com "um holo" no cabeçalho das seções de cards.
+ *
+ * A palavra sólida do título mantém a extrusão; o realce em gradiente dispensa,
+ * porque já tem contraste de sobra contra o fundo.
+ */
+.fx-shadow-long .sv-rainbow {
+  text-shadow: none;
+}

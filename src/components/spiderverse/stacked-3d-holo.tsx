@@ -73,7 +73,7 @@ const CARDS: HoloStackDef[] = [
     accent: "#ffcc45",
   },
   {
-    img: `${T}/custom-4-de-jun-de-2026-02-44-10.webp`,
+    img: `${T}/custom-4-de-jun-de-2026-02-44-10.avif`,
     name: "Lion-O",
     mark: "LO",
     label: "Secreta · Thundera",
@@ -82,7 +82,7 @@ const CARDS: HoloStackDef[] = [
     accent: "#ffb327",
   },
   {
-    img: `${T}/primalkin---majest.webp`,
+    img: `${T}/primalkin---majest.avif`,
     name: "Tygra",
     mark: "TY",
     label: "Rainbow · pastel",
@@ -91,7 +91,7 @@ const CARDS: HoloStackDef[] = [
     accent: "#9d7bff",
   },
   {
-    img: `${T}/custom-4-de-jun-de-2026-00-24-31.webp`,
+    img: `${T}/custom-4-de-jun-de-2026-00-24-31.avif`,
     name: "Mumm-Ra",
     mark: "MR",
     label: "Shiny VMAX · prata",

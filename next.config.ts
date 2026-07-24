@@ -76,6 +76,12 @@ const nextConfig: NextConfig = {
     // reencodava para WebP — maior que o arquivo que entrou.
     formats: ["image/avif", "image/webp"],
 
+    // As galerias de cartas pedem `quality={60}` (são dezenas de imagens
+    // hi-res; a 75 o peso da página duplicava sem diferença visível no foil).
+    // A partir do Next 16 uma qualidade não declarada aqui é recusada, e até lá
+    // cada imagem emite um aviso — eram 122 numa visita à página /cards.
+    qualities: [60, 75],
+
     // As capas da landing /criativo são SVG gerados por `scripts/generate-covers`
     // e o otimizador recusa SVG sem este consentimento explícito. O risco que a
     // flag sinaliza é servir SVG de terceiros (podem trazer script embutido);

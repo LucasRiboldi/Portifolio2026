@@ -72,11 +72,6 @@ interface Section {
   kicker: string
   title: string
   highlight: string
-  /**
-   * Efeito de título do catálogo Comic FX (`.kfx-*`, comic-fx.css) aplicado ao
-   * realce — cada seção ganha uma "voz" tipográfica diferente do design system.
-   */
-  fx: string
   subtitle: string
   render: () => React.ReactNode
 }
@@ -88,7 +83,6 @@ const SECTIONS: Section[] = [
     kicker: "Item raro",
     title: "Carta",
     highlight: "holográfica",
-    fx: "kfx-holo",
     subtitle:
       "A carta da casa. Mova o ponteiro sobre ela — foil, brilho e tilt reagem, como uma carta rara de verdade.",
     render: () => (
@@ -103,7 +97,6 @@ const SECTIONS: Section[] = [
     kicker: "Booster aberto",
     title: "A coleção",
     highlight: "completa",
-    fx: "kfx-gold",
     subtitle:
       "Cartas reais do TCG, uma em cada raridade — holo, cosmos, amazing, full art, VMAX e secreta.",
     render: () => <PokeHoloGallery />,
@@ -114,7 +107,6 @@ const SECTIONS: Section[] = [
     kicker: "Thunder, thunder…",
     title: "Deck",
     highlight: "ThunderCats",
-    fx: "kfx-neon-anim",
     subtitle:
       "O deck de Commander com proxies temáticos — cada carta com um efeito holográfico do sistema.",
     render: () => <ThundercatsGallery />,
@@ -125,7 +117,6 @@ const SECTIONS: Section[] = [
     kicker: "Camadas em profundidade",
     title: "Stacked",
     highlight: "3D",
-    fx: "kfx-3d",
     subtitle:
       "Cartas e moedas montadas em planos separados — cada camada flutua num translateZ diferente, então o emblema salta mais que a moldura quando você inclina a peça.",
     render: () => <Stacked3dGallery />,
@@ -136,7 +127,6 @@ const SECTIONS: Section[] = [
     kicker: "Os dois sistemas juntos",
     title: "Stacked 3D",
     highlight: "holográfico",
-    fx: "kfx-chrome",
     subtitle:
       "As cartas reais com o foil correndo na face enquanto anel, placa e emblema descolam em profundidades diferentes. Um ponteiro só alimenta os dois efeitos.",
     render: () => <Stacked3dHoloGallery />,
@@ -147,7 +137,6 @@ const SECTIONS: Section[] = [
     kicker: "Passo a passo",
     title: "Como se faz",
     highlight: "um holo",
-    fx: "kfx-hud",
     subtitle:
       "O tutorial completo em português: da posição do ponteiro até o foil metálico e as camadas em 3D. Cada trecho de código é o mesmo que roda na demo ao lado.",
     render: () => <HoloTutorial />,
@@ -158,7 +147,6 @@ const SECTIONS: Section[] = [
     kicker: "Uma a uma",
     title: "Catálogo de",
     highlight: "raridades",
-    fx: "kfx-doubleexpose",
     subtitle:
       "Cada efeito do sistema com a explicação de como ele é feito e o arquivo CSS onde a regra mora — as descrições saíram do código, não da documentação.",
     render: () => <HoloRarityCatalog />,
@@ -169,7 +157,6 @@ const SECTIONS: Section[] = [
     kicker: "O acervo inteiro",
     title: "Booster",
     highlight: "completo",
-    fx: "kfx-burst",
     subtitle:
       "As 51 cartas restantes do acervo, agrupadas por família de raridade. Cada uma foi identificada abrindo a imagem — o número do arquivo não diz se a 51 é uma VMAX comum ou uma do Shiny Vault.",
     render: () => <HoloBoosterGallery />,
@@ -229,9 +216,13 @@ export function CardsSections() {
               onClick={() => setActive(i)}
               className={cn(
                 "sv-heavy rounded-md border-2 border-black px-3 py-2 text-[11px] uppercase tracking-wide transition-all sm:px-4 sm:text-xs",
+                // A aba inativa era `bg-white/5 text-white/70`: sobre um fundo
+                // que muda de roxo a azul ao longo da página, o botão às vezes
+                // sumia e o rótulo ficava abaixo do contraste mínimo. Um fundo
+                // escuro opaco não depende do que passa por baixo.
                 selected
                   ? "bg-[var(--sv-yellow)] text-black shadow-[4px_4px_0_0_#000]"
-                  : "bg-white/5 text-white/70 hover:-translate-y-0.5 hover:text-white",
+                  : "bg-black/70 text-white hover:-translate-y-0.5 hover:bg-black/85",
               )}
             >
               {s.label}
@@ -247,15 +238,28 @@ export function CardsSections() {
         tabIndex={0}
         className="mt-8 focus-visible:outline-none"
       >
+        {/*
+          O cabeçalho da seção fala a mesma língua do cabeçalho da página, um
+          nível abaixo: etiqueta ciano, display do realm e o realce no arco-íris
+          da casa.
+
+          Antes cada seção usava um efeito diferente do catálogo Comic FX
+          (`kfx-holo`, `kfx-gold`, `kfx-hud`…). Era uma "voz por seção" na
+          intenção, mas na prática eram oito famílias de cor a trocar dentro do
+          mesmo componente — e cinco delas pintavam o texto com
+          `-webkit-text-fill-color: transparent`, apoiado só num gradiente ou
+          num contorno de 1px. Sobre o roxo desta página, o `kfx-holo` (oliva) e
+          o `kfx-hud` (só contorno ciano) ficavam ilegíveis. O catálogo continua
+          no design system, onde é demonstração; aqui o título é navegação e
+          precisa de ler igual nas oito abas.
+        */}
         <header className="mb-8">
-          <span className="sv-caption inline-block text-xs">{section.kicker}</span>
-          {/* O título mistura a display do realm (Bangers) com o realce em um
-              efeito do catálogo Comic FX — cada seção fala numa "voz" própria. */}
+          <span className="sv-caption sv-caption-cyan inline-block text-xs">{section.kicker}</span>
           <h2 className="sv-display fx-shadow-long mt-3 text-3xl uppercase leading-none sm:text-5xl">
             {section.title}{" "}
-            <span className={cn("kfx align-baseline", section.fx)}>{section.highlight}</span>
+            <span className="sv-rainbow align-baseline">{section.highlight}</span>
           </h2>
-          <p className="sv-heavy mt-3 max-w-2xl text-xs uppercase leading-snug tracking-wide text-white/70 sm:text-sm">
+          <p className="sv-heavy mt-3 max-w-2xl text-xs uppercase leading-snug tracking-wide text-white/85 sm:text-sm">
             {section.subtitle}
           </p>
         </header>
