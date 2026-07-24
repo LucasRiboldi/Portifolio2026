@@ -46,6 +46,14 @@ import {
   ArcaneLab,
   ArcaneDocumentacao,
 } from "./arcane-extras"
+import {
+  ArcaneVozes,
+  ArcaneTexturas,
+  ArcaneMotionKit,
+  ArcaneTemplatesJornal,
+  ArcaneSinalizacao,
+  ArcaneRunas,
+} from "./arcane-kit"
 
 /**
  * O guia de "O Anfitrião" — inteiro numa folha de jornal.
@@ -79,17 +87,20 @@ export function ArcaneGuide({ d, kit }: { d: RealmDesign; kit: React.ReactNode }
       {/* 01 · o editorial de abertura */}
       <ArcaneIntro d={d} />
 
-      {/* 02 · a oficina de composição, e os filetes como sua matéria */}
+      {/* 02 · a oficina de composição, os filetes e as texturas do papel */}
       <ArcaneFoundations />
       <ArcaneFiletes />
+      <ArcaneTexturas />
 
-      {/* 03 · tintas & tokens */}
+      {/* 03 · tintas & tokens, e a sinalização em cor como sua matéria */}
       <ArcaneTokens d={d} />
+      <ArcaneSinalizacao />
 
       {/* 04 · as vozes, e as duas matérias que a tipografia comanda */}
       <ArcaneTypography />
       <ArcaneManchete />
       <ArcaneCapitular />
+      <ArcaneVozes />
 
       {/* 05 · as superfícies */}
       <ArcaneColors d={d} />
@@ -97,12 +108,14 @@ export function ArcaneGuide({ d, kit }: { d: RealmDesign; kit: React.ReactNode }
       {/* 06 · a grade de colunas */}
       <ArcaneGrid />
 
-      {/* 07 · ornamentos & sinais */}
+      {/* 07 · ornamentos & sinais, e as escritas ancestrais como matéria */}
       <ArcaneIconography />
+      <ArcaneRunas />
 
       {/* 08 · movimento — e o silêncio, que é o que este realm tem de motion */}
       <ArcaneMotion d={d} />
       <ArcaneSilencio />
+      <ArcaneMotionKit />
 
       {/* 09 · a caixa de tipos, suas três matérias, e a oficina viva.
           O kit fecha o caderno de componentes em vez de flutuar no fim da
@@ -134,6 +147,7 @@ export function ArcaneGuide({ d, kit }: { d: RealmDesign; kit: React.ReactNode }
       {/* 10–11 · composições resolvidas e os cadernos */}
       <ArcanePatterns />
       <ArcaneTemplates />
+      <ArcaneTemplatesJornal />
 
       {/* 12 · as tintas sobre o papel */}
       <ArcaneAccessibility />

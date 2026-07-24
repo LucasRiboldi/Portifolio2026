@@ -64,11 +64,21 @@ export function ArcaneMasthead({ d }: { d: RealmDesign }) {
       >
         Design System · The Daily Prophet
       </p>
+      {/* O nameplate na Mugglenews — a letra de jornal do universo mágico,
+          pedida para o cabeçalho. Não é uppercase: a Mugglenews já traz a caixa
+          e o desenho próprios, e forçar maiúsculas partiria o desenho da letra.
+          Runas ladeiam o nome (ornamento, aria-hidden) para o ar de mistério. */}
       <h1
-        className="mt-1 text-5xl uppercase leading-[0.9] sm:text-7xl"
-        style={{ fontFamily: "var(--dp-wood)", color: "var(--dp-ink)" }}
+        className="mt-1 flex items-center justify-center gap-4 text-6xl leading-[0.9] sm:text-8xl"
+        style={{ fontFamily: "var(--dp-nameplate)", color: "var(--dp-ink)" }}
       >
+        <span aria-hidden className="text-2xl sm:text-4xl" style={{ fontFamily: "var(--dp-runic)", color: "var(--dp-gold)" }}>
+          ᚨᚾ
+        </span>
         O Anfitrião
+        <span aria-hidden className="text-2xl sm:text-4xl" style={{ fontFamily: "var(--dp-runic)", color: "var(--dp-gold)" }}>
+          ᚠᚱ
+        </span>
       </h1>
       <p
         className="mx-auto mt-3 max-w-2xl text-sm italic leading-snug"

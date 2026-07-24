@@ -24,6 +24,9 @@ import {
   Pixelify_Sans,
   Cinzel,
   Caveat_Brush,
+  UnifrakturCook,
+  Old_Standard_TT,
+  Special_Elite,
 } from "next/font/google";
 import { cn } from "@/lib/utils";
 import { getRealmSettings } from "@/lib/repos/realms";
@@ -107,6 +110,14 @@ const cinzel = Cinzel({ weight: '700', subsets: ['latin'], display: 'swap', vari
 // Pincel de rua (graffiti/brush) — para o traço bruto e o graffiti com coroa.
 const caveatBrush = Caveat_Brush({ weight: '400', subsets: ['latin'], display: 'swap', variable: '--font-brush' });
 
+// Trio do jornal antigo (realm Anfitrião · Daily Prophet). São webfonts reais
+// para o nameplate blackletter, o corpo old-style e a máquina de escrever não
+// dependerem de fontes de sistema (Iowan/Playbill) que faltam na maioria das
+// máquinas — sem elas a folha caía numa serifa genérica.
+const unifraktur = UnifrakturCook({ weight: '700', subsets: ['latin'], display: 'swap', variable: '--font-fraktur' });
+const oldStandard = Old_Standard_TT({ weight: ['400', '700'], style: ['normal', 'italic'], subsets: ['latin'], display: 'swap', variable: '--font-oldstyle' });
+const specialElite = Special_Elite({ weight: '400', subsets: ['latin'], display: 'swap', variable: '--font-typewriter' });
+
 
 export default async function RootLayout({
   children
@@ -131,7 +142,7 @@ export default async function RootLayout({
   return (
     <html
       lang="pt-BR"
-      suppressHydrationWarning className={cn("font-sans", geist.variable, bangers.variable, archivo.variable, nabla.variable, monoton.variable, rubikGlitch.variable, bungeeShade.variable, anton.variable, bebas.variable, oswald.variable, inter.variable, rubikWetPaint.variable, rubikDistressed.variable, pixelify.variable, cinzel.variable, caveatBrush.variable)}
+      suppressHydrationWarning className={cn("font-sans", geist.variable, bangers.variable, archivo.variable, nabla.variable, monoton.variable, rubikGlitch.variable, bungeeShade.variable, anton.variable, bebas.variable, oswald.variable, inter.variable, rubikWetPaint.variable, rubikDistressed.variable, pixelify.variable, cinzel.variable, caveatBrush.variable, unifraktur.variable, oldStandard.variable, specialElite.variable)}
     >
       <body>
         <script dangerouslySetInnerHTML={{ __html: antiFouc }} />

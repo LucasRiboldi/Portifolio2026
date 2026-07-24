@@ -71,3 +71,29 @@
   src: url("/font/woff2/purple-3.woff2") format("woff2");
   font-display: swap;
 }
+
+/* ---------------------------------------------------------------------------
+   Escritas ancestrais — runas dos anões e o alfabeto místico.
+   ---------------------------------------------------------------------------
+   Baixadas e servidas do próprio projeto (não de CDN), para carregarem em
+   qualquer site sem dependência externa. Ambas Unicode reais e OFL:
+
+   · Noto Sans Runic  — o Fuþark rúnico (as runas nórdicas/anãs). OFL, Noto.
+   · Noto Sans Ogham  — o Ogham celta, o alfabeto-árvore riscado numa haste.
+     Fica no lugar da tengwar élfica: a tengwar verdadeira não está no Unicode
+     e as versões livres não têm licença que se possa redistribuir num repo que
+     faz deploy. O Ogham é OFL, lê como escrita mística ancestral, e é honesto.
+
+   O texto latino nunca é *substituído* por estas — elas entram como ornamento
+   decorativo (`aria-hidden`), nunca como conteúdo que alguém precise de ler.
+   --------------------------------------------------------------------------- */
+@font-face {
+  font-family: "Noto Sans Runic";
+  src: url("/font/woff2/NotoSansRunic.woff2") format("woff2");
+  font-display: swap;
+}
+@font-face {
+  font-family: "Noto Sans Ogham";
+  src: url("/font/woff2/NotoSansOgham.woff2") format("woff2");
+  font-display: swap;
+}

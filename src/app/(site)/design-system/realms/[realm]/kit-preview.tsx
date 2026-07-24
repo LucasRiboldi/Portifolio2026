@@ -10,6 +10,7 @@ import "@/styles/dracula.css"
 import "@/styles/prophet.css"
 import "@/styles/daily-prophet.css"
 import "@/styles/daily-prophet-ui.css"
+import "@/styles/daily-prophet-kit.css"
 
 import * as React from "react"
 

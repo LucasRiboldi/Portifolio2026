@@ -17,13 +17,38 @@
   --dp-ocre: #8a6a2f;
   --dp-gold: #9a7b28;
 
-  /* Old style / clarendon / egyptian, com fallbacks de sistema. */
-  --dp-body: "Iowan Old Style", "Palatino Linotype", Palatino, "Book Antiqua",
-    Georgia, "Times New Roman", serif;
+  /* Metais e sinalização — a paleta ampliada da folha.
+     Dois metais para o brasão e os selos (o ouro já existia; a prata é nova) e
+     cinco tintas escuras para carimbar, sinalizar e diferenciar cadernos sem
+     sair do registo sóbrio do jornal. São tons dessaturados e fundos: nenhum é
+     um néon — a folha nunca "acende", ela imprime. Todos foram medidos para AA
+     sobre o papel `--dp-paper`. */
+  --dp-silver: #8c8b86;      /* prata foscada, gravura de metal */
+  --dp-red: #7a1f1f;         /* vermelho escuro — alarme, censura, luto */
+  --dp-blue: #1e3a5f;        /* azul escuro — marinha, edital oficial */
+  --dp-yellow: #8a6d16;      /* amarelo escuro / mostarda — aviso, quarentena */
+  --dp-green: #2f4a2b;       /* verde escuro — botânica, campo, agricultura */
+
+  /* Escritas ancestrais como ornamento (aria-hidden, nunca conteúdo). */
+  --dp-runic: "Noto Sans Runic", "Segoe UI Historic", serif;
+  --dp-elvish: "Noto Sans Ogham", "Segoe UI Historic", serif;
+  /* Nameplate na Mugglenews — a letra de jornal do universo mágico. */
+  --dp-nameplate: "Mugglenews", var(--dp-black);
+
+  /* Old style / clarendon / egyptian.
+     `--font-oldstyle` (Old Standard TT) entra à frente dos fallbacks de sistema:
+     é uma old-style de 1900 desenhada para corpo de jornal, e não depende de a
+     máquina ter Iowan/Palatino instaladas — sem ela o corpo caía em Georgia. */
+  --dp-body: var(--font-oldstyle), "Iowan Old Style", "Palatino Linotype", Palatino,
+    "Book Antiqua", Georgia, "Times New Roman", serif;
   --dp-head: "Playbill", "Bookman Old Style", "Rockwell", "Clarendon",
     "Iowan Old Style", Georgia, serif;
   --dp-wood: "Headline One", "Headline Two", "Bookman Old Style", Rockwell, Georgia, serif;
-  --dp-black: "UnifrakturCook", "Old English Text MT", "Blackletter686 BT", Georgia, serif;
+  /* Nameplate blackletter, agora uma webfont de verdade (antes só um nome que
+     dependia de "Old English Text MT" existir no cliente). */
+  --dp-black: var(--font-fraktur), "UnifrakturCook", "Old English Text MT", Georgia, serif;
+  /* Máquina de escrever — errata, correção, comunicado datilografado. */
+  --dp-type: var(--font-typewriter), "Courier New", "Courier", monospace;
 
   color: var(--dp-ink);
   font-family: var(--dp-body);
