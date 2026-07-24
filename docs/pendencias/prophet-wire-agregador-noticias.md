@@ -65,9 +65,13 @@
 > Cada módulo tem interface + impl real Claude + fallback honesto (passa o item adiante
 > sem enriquecer) para o pipeline nunca travar por falta de chave.
 
-- [ ] **Parte 8 — Analyzer (Claude).** `analyzer.ts`: identifica categoria, subcategoria,
-      designer, editora, mecânicas, jogadores, tempo, complexidade, ano, idioma.
-      Teste com client mockado. → commit+push.
+- [x] **Parte 8 — Analyzer (FEITO).** `ai-client.ts` (interface `AIClient` + `FallbackAIClient`
+      que devolve null quando IA indisponível + `extractJson`) e `analyzer.ts` (`analyze()`
+      enriquece categoria/subcategoria/designer/editora/mecânicas/jogadores/tempo/
+      complexidade/ano; valida categoria contra `NEWS_CATEGORIES`; degrada mantendo item
+      bruto se IA null/ilegível; não sobrescreve com vazio). `NEWS_CATEGORIES` agora existe
+      em runtime em types.ts. Teste com AIClient fake. → commit+push.
+      PENDENTE: cliente real do SDK Anthropic (plugar quando houver ANTHROPIC_API_KEY).
 - [ ] **Parte 9 — Generator (Claude).** `generator.ts`: texto original PT-BR (nunca copiar),
       slug, meta description, keywords, hashtags, título SEO, na voz do Daily Prophet.
       Teste com client mockado. → commit+push.

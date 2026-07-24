@@ -11,24 +11,31 @@
  * fases preencher sem alterar o contrato.
  */
 
-/** Categorias de classificação (fechadas — a IA precisa escolher uma). */
-export type NewsCategory =
-  | "Notícias"
-  | "Lançamentos"
-  | "Crowdfunding"
-  | "Kickstarter"
-  | "Gamefound"
-  | "Expansões"
-  | "Reimpressões"
-  | "Eventos"
-  | "Prêmios"
-  | "Reviews"
-  | "Preview"
-  | "Rumores"
-  | "Mercado"
-  | "Editoras"
-  | "Designers"
-  | "Promoções"
+/**
+ * Categorias de classificação (fechadas — a IA precisa escolher uma).
+ * A lista existe em runtime para o Analyzer validar o que a IA devolve; o tipo
+ * é derivado dela, então lista e união nunca saem de sincronia.
+ */
+export const NEWS_CATEGORIES = [
+  "Notícias",
+  "Lançamentos",
+  "Crowdfunding",
+  "Kickstarter",
+  "Gamefound",
+  "Expansões",
+  "Reimpressões",
+  "Eventos",
+  "Prêmios",
+  "Reviews",
+  "Preview",
+  "Rumores",
+  "Mercado",
+  "Editoras",
+  "Designers",
+  "Promoções",
+] as const
+
+export type NewsCategory = (typeof NEWS_CATEGORIES)[number]
 
 /** Estado de publicação — controlado por `config.ts` (rascunho vs. automático). */
 export type NewsStatus = "rascunho" | "publicado"
