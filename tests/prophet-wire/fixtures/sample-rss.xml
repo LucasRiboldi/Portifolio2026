@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<rss version="2.0">
+  <channel>
+    <title>Board Game Wire — Amostra</title>
+    <link>https://exemplo.test/</link>
+    <description>Fixture de RSS para o Collector</description>
+    <item>
+      <title>Nova expansão anunciada para jogo de alocação</title>
+      <link>https://exemplo.test/noticias/expansao-alocacao</link>
+      <guid>https://exemplo.test/noticias/expansao-alocacao</guid>
+      <pubDate>Wed, 23 Jul 2026 10:00:00 GMT</pubDate>
+      <description>A editora confirmou uma expansão com novos trabalhadores e tabuleiro modular.</description>
+    </item>
+    <item>
+      <title>Campanha de financiamento coletivo bate meta em horas</title>
+      <link>https://exemplo.test/noticias/campanha-meta</link>
+      <guid>https://exemplo.test/noticias/campanha-meta</guid>
+      <pubDate>Tue, 22 Jul 2026 18:30:00 GMT</pubDate>
+      <description>O projeto superou a meta inicial e liberou objetivos adicionais.</description>
+    </item>
+  </channel>
+</rss>

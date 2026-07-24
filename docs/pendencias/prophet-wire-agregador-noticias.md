@@ -38,9 +38,11 @@
 
 ### Bloco B — Coleta e limpeza (rede real, sem IA)
 
-- [ ] **Parte 4 — Collector.** `collector.ts`: busca RSS/HTTP das fontes na janela de 24h
-      (`config.collectWindowHours`). Retorna itens brutos. Timeout + erro isolado por fonte.
-      Teste com fixture (RSS salvo em `tests/prophet-wire/fixtures/`). → commit+push.
+- [x] **Parte 4 — Collector (FEITO).** `http-client.ts` (interface `HttpClient` + `FetchHttpClient`
+      com timeout via AbortController, User-Agent, `HttpError`) e `collector.ts` (`collect()`
+      percorre fontes ativas, payload bruto por fonte, erro isolado, status não-2xx tratado,
+      contadores no RunReport). Teste com fixture RSS e HttpClient fake. → commit+push.
+      NOTA: filtro da janela de 24h fica no Parser (Parte 5), que lê as datas dos itens.
 - [ ] **Parte 5 — Parser.** `parser.ts`: extrai título, corpo, data, link, imagem de cada
       item bruto. Teste sobre as fixtures. → commit+push.
 - [ ] **Parte 6 — Normalizer.** `normalizer.ts`: mapeia item parseado → `NewsItem` bruto
