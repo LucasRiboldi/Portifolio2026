@@ -48,8 +48,11 @@
       entidades). `withinWindow()` aplica a janela de 24h e descarta item sem data (conta
       discarded). Fontes html/api sem feed ficam para extractors próprios (futuro). Teste
       com fixtures RSS + Atom. → commit+push.
-- [ ] **Parte 6 — Normalizer.** `normalizer.ts`: mapeia item parseado → `NewsItem` bruto
-      (sem campos de IA). Teste do mapeamento. → commit+push.
+- [x] **Parte 6 — Normalizer (FEITO).** `normalizer.ts`: `slugify()` (remove acentos → kebab),
+      `contentHash()` (sha-256 do link|título — chave do Dedup), `normalize()` mapeia
+      ParsedItem+Source → NewsItem bruto (categoria-palpite da fonte, status via config,
+      campos de IA vazios), `normalizeBatch()` garante slugs únicos no lote. Teste do
+      mapeamento. → commit+push.
 - [ ] **Parte 7 — Dedup.** `dedup.ts`: hash de conteúdo (sha-256) + similaridade de
       título/link/jogo/campanha. Descarta repetidos contra o repo. Teste de colisão e de
       similaridade. → commit+push.
