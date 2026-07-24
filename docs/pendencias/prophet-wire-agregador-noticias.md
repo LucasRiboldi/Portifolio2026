@@ -53,9 +53,11 @@
       ParsedItem+Source → NewsItem bruto (categoria-palpite da fonte, status via config,
       campos de IA vazios), `normalizeBatch()` garante slugs únicos no lote. Teste do
       mapeamento. → commit+push.
-- [ ] **Parte 7 — Dedup.** `dedup.ts`: hash de conteúdo (sha-256) + similaridade de
-      título/link/jogo/campanha. Descarta repetidos contra o repo. Teste de colisão e de
-      similaridade. → commit+push.
+- [x] **Parte 7 — Dedup (FEITO).** `dedup.ts`: `dedup()` separa inéditos de repetidos em 3
+      frentes — hash exato (findByHash), mesmo link canônico, e título similar
+      (Sørensen–Dice sobre bigramas, `titleSimilarity`, limiar 0.82) — comparando contra o
+      acervo E contra os já aceitos no lote. Conta discarded. Teste das 3 frentes + corte
+      no lote. → commit+push.
 
 ### Bloco C — Inteligência (exige chave da API Claude)
 
