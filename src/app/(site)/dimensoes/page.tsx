@@ -7,7 +7,11 @@ export const metadata = { title: "Dimensões" }
 
 export default function DimensoesPage() {
   return (
-    <SvCanvas dimension="multiverse">
+    /* `sv-still`: o índice mostra as vinte dimensões lado a lado, e o
+       movimento contínuo de cada uma somado dá uma tela que não pára — nenhum
+       estilo se lê porque todos disputam o olho. O que reage ao ponteiro
+       continua vivo. */
+    <SvCanvas dimension="multiverse" className="sv-still">
       <Onoma color="cyan" className="pointer-events-none absolute right-2 top-0 z-[2] hidden rotate-6 md:block">
         SNAP!
       </Onoma>

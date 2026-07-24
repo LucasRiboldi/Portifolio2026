@@ -27,6 +27,12 @@
      neon aparecem, mas o papel (--sv-paper) segue AA sobre o ponto mais claro
      do gradiente (#7b2ff7 → 5.6:1). */
   --c-bg: linear-gradient(160deg, #3b1670, #5a2a9d 55%, #7b2ff7);
+  /* Cor chapada por baixo dos gradientes. Sem ela o cartão não tem
+     `background-color` nenhum: a cor que se vê é toda `background-image`, e
+     onde a imagem não pinta (falha de carregamento, alto contraste, impressão)
+     o cartão fica transparente e o texto assenta no que estiver por baixo.
+     Cada `.sv-dim-*` define a sua, tirada do primeiro tom do próprio gradiente. */
+  --c-base: #3b1670;
   --c-glow1: radial-gradient(circle at 15% 10%, rgba(255, 45, 149, 0.42), transparent 45%);
   --c-glow2: radial-gradient(circle at 85% 20%, rgba(0, 229, 255, 0.36), transparent 40%);
   --c-glow3: radial-gradient(circle at 50% 100%, rgba(255, 230, 0, 0.26), transparent 55%);
@@ -37,7 +43,8 @@
   --c-speedlines: repeating-conic-gradient(from 0deg at 70% 30%, rgba(255,230,0,0.06) 0deg 2deg, transparent 2deg 8deg);
 
   position: relative;
-  background: var(--c-glow1), var(--c-glow2), var(--c-glow3), var(--c-bg);
+  background-color: var(--c-base);
+  background-image: var(--c-glow1), var(--c-glow2), var(--c-glow3), var(--c-bg);
   color: var(--c-ink);
   overflow: hidden;
   isolation: isolate;

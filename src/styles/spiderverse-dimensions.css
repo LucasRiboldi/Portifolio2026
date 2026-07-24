@@ -11,6 +11,7 @@
    ============================================================ */
 .sv-dim-neon {
   --c-bg: linear-gradient(160deg, #1a0033, #33004d 60%, #4d0026);
+  --c-base: #1a0033;
   --c-glow1: radial-gradient(circle at 20% 15%, rgba(255, 0, 200, 0.4), transparent 40%);
   --c-glow2: radial-gradient(circle at 80% 30%, rgba(0, 255, 200, 0.35), transparent 40%);
   --c-glow3: radial-gradient(circle at 50% 95%, rgba(255, 200, 0, 0.3), transparent 55%);
@@ -34,6 +35,7 @@
    ============================================================ */
 .sv-dim-renaissance {
   --c-bg: linear-gradient(160deg, #e8dcc0, #d8c29a);
+  --c-base: #e8dcc0;
   --c-glow1: radial-gradient(circle at 20% 10%, rgba(120, 80, 30, 0.18), transparent 45%);
   --c-glow2: radial-gradient(circle at 85% 80%, rgba(80, 50, 20, 0.22), transparent 50%);
   --c-glow3: none;
@@ -58,6 +60,7 @@
    ============================================================ */
 .sv-dim-nouveau {
   --c-bg: linear-gradient(160deg, #f6efe6, #efe4d6);
+  --c-base: #f6efe6;
   --c-glow1: radial-gradient(ellipse at 25% 20%, rgba(255, 120, 180, 0.35), transparent 45%);
   --c-glow2: radial-gradient(ellipse at 80% 60%, rgba(120, 200, 255, 0.35), transparent 45%);
   --c-glow3: radial-gradient(ellipse at 50% 100%, rgba(180, 140, 255, 0.3), transparent 50%);
@@ -93,6 +96,7 @@
    ============================================================ */
 .sv-dim-noir {
   --c-bg: linear-gradient(160deg, #0b0b0d, #16161a);
+  --c-base: #0b0b0d;
   --c-glow1: radial-gradient(circle at 30% 0%, rgba(255,255,255,0.10), transparent 40%);
   --c-glow2: radial-gradient(circle at 90% 100%, rgba(255,255,255,0.05), transparent 45%);
   --c-glow3: none;
@@ -122,6 +126,7 @@
    ============================================================ */
 .sv-dim-punk {
   --c-bg: linear-gradient(160deg, #141018, #241019);
+  --c-base: #141018;
   --c-glow1: radial-gradient(circle at 15% 12%, rgba(255, 60, 90, 0.35), transparent 40%);
   --c-glow2: radial-gradient(circle at 85% 25%, rgba(0, 220, 160, 0.3), transparent 40%);
   --c-glow3: radial-gradient(circle at 50% 100%, rgba(255, 210, 0, 0.25), transparent 55%);
@@ -151,6 +156,7 @@
     linear-gradient(160deg, #04060f, #0a1030),
     repeating-linear-gradient(90deg, rgba(0,229,255,0.06) 0 1px, transparent 1px 44px),
     repeating-linear-gradient(0deg, rgba(0,229,255,0.06) 0 1px, transparent 1px 44px);
+  --c-base: #04060f;
   --c-glow1: radial-gradient(circle at 50% -10%, rgba(0, 229, 255, 0.35), transparent 45%);
   --c-glow2: radial-gradient(circle at 90% 90%, rgba(255, 45, 149, 0.25), transparent 45%);
   --c-glow3: none;
@@ -178,6 +184,7 @@
    ============================================================ */
 .sv-dim-horror {
   --c-bg: linear-gradient(160deg, #0a0000, #1a0505 60%, #050a02);
+  --c-base: #0a0000;
   --c-glow1: radial-gradient(circle at 30% 10%, rgba(180, 0, 0, 0.4), transparent 45%);
   --c-glow2: radial-gradient(circle at 80% 70%, rgba(60, 120, 0, 0.25), transparent 50%);
   --c-glow3: radial-gradient(circle at 50% 100%, rgba(120, 0, 0, 0.35), transparent 55%);
@@ -202,6 +209,7 @@
    ============================================================ */
 .sv-dim-manga {
   --c-bg: linear-gradient(160deg, #fafafa, #eceef2);
+  --c-base: #fafafa;
   --c-glow1: radial-gradient(circle at 25% 15%, rgba(255, 120, 170, 0.18), transparent 40%);
   --c-glow2: radial-gradient(circle at 80% 80%, rgba(120, 160, 255, 0.14), transparent 45%);
   --c-glow3: none;
@@ -228,6 +236,7 @@
    ============================================================ */
 .sv-dim-cartoon {
   --c-bg: linear-gradient(160deg, #4fc3ff, #7ad0ff 60%, #baf0ff);
+  --c-base: #4fc3ff;
   --c-glow1: radial-gradient(circle at 20% 12%, rgba(255, 235, 60, 0.5), transparent 40%);
   --c-glow2: radial-gradient(circle at 82% 25%, rgba(255, 120, 120, 0.4), transparent 40%);
   --c-glow3: radial-gradient(circle at 50% 100%, rgba(120, 255, 160, 0.4), transparent 50%);
@@ -255,6 +264,7 @@
     linear-gradient(160deg, rgba(10,8,14,0.9), rgba(20,10,24,0.92)),
     repeating-linear-gradient(0deg, #2a2226 0 26px, #241c20 26px 28px),
     repeating-linear-gradient(90deg, #2a2226 0 60px, #201a1e 60px 62px);
+  --c-base: #2a2226;
   --c-glow1: radial-gradient(circle at 20% 20%, rgba(255, 40, 120, 0.4), transparent 40%);
   --c-glow2: radial-gradient(circle at 82% 30%, rgba(0, 220, 255, 0.35), transparent 40%);
   --c-glow3: radial-gradient(circle at 50% 100%, rgba(180, 255, 0, 0.25), transparent 55%);
@@ -276,6 +286,7 @@
    ============================================================ */
 .sv-dim-pixel {
   --c-bg: linear-gradient(160deg, #0d0221, #1a0a2e);
+  --c-base: #0d0221;
   --c-glow1: radial-gradient(circle at 20% 15%, rgba(0, 255, 128, 0.28), transparent 38%);
   --c-glow2: radial-gradient(circle at 82% 30%, rgba(255, 0, 128, 0.28), transparent 38%);
   --c-glow3: none;
@@ -305,6 +316,7 @@
     linear-gradient(160deg, #05203a, #04162a),
     repeating-linear-gradient(90deg, rgba(120,200,255,0.08) 0 1px, transparent 1px 30px),
     repeating-linear-gradient(0deg, rgba(120,200,255,0.08) 0 1px, transparent 1px 30px);
+  --c-base: #05203a;
   --c-glow1: radial-gradient(circle at 50% 0%, rgba(120, 200, 255, 0.22), transparent 45%);
   --c-glow2: none;
   --c-glow3: none;
@@ -333,6 +345,7 @@
     linear-gradient(160deg, #f3f1ea, #e9e6dc),
     repeating-linear-gradient(90deg, rgba(60,120,220,0.10) 0 1px, transparent 1px 48px),
     repeating-linear-gradient(0deg, rgba(60,120,220,0.10) 0 1px, transparent 1px 48px);
+  --c-base: #f3f1ea;
   --c-glow1: radial-gradient(circle at 22% 18%, rgba(20, 20, 25, 0.5), transparent 12%);
   --c-glow2: radial-gradient(circle at 78% 62%, rgba(20, 20, 25, 0.45), transparent 10%);
   --c-glow3: radial-gradient(circle at 60% 88%, rgba(20, 20, 25, 0.4), transparent 8%);
@@ -365,6 +378,7 @@
    ============================================================ */
 .sv-dim-lego {
   --c-bg: linear-gradient(160deg, #ffd21a, #ffb800 55%, #ff8a00);
+  --c-base: #ffd21a;
   --c-glow1: radial-gradient(circle at 20% 15%, rgba(220, 0, 40, 0.35), transparent 40%);
   --c-glow2: radial-gradient(circle at 82% 25%, rgba(0, 120, 255, 0.35), transparent 40%);
   --c-glow3: radial-gradient(circle at 50% 100%, rgba(0, 180, 90, 0.35), transparent 50%);
@@ -402,6 +416,7 @@
    ============================================================ */
 .sv-dim-prowler {
   --c-bg: linear-gradient(160deg, #0a0410, #17082a 60%, #05010a);
+  --c-base: #0a0410;
   --c-glow1: radial-gradient(circle at 20% 10%, rgba(120, 40, 220, 0.4), transparent 42%);
   --c-glow2: radial-gradient(circle at 85% 80%, rgba(255, 180, 0, 0.2), transparent 45%);
   --c-glow3: radial-gradient(circle at 50% 50%, rgba(90, 0, 180, 0.25), transparent 55%);
@@ -430,6 +445,7 @@
    ============================================================ */
 .sv-dim-glitch {
   --c-bg: linear-gradient(160deg, #06060a, #100812);
+  --c-base: #06060a;
   --c-glow1: radial-gradient(circle at 30% 20%, rgba(255, 0, 60, 0.3), transparent 40%);
   --c-glow2: radial-gradient(circle at 70% 60%, rgba(0, 220, 255, 0.28), transparent 40%);
   --c-glow3: none;
@@ -460,6 +476,7 @@
   --c-bg:
     conic-gradient(from 0deg at 50% 45%, #ff2d95, #ff5a1f, #ffe600, #b6ff00, #00e5ff, #7b2ff7, #ff2d95),
     #05010f;
+  --c-base: #ff2d95;
   --c-glow1: radial-gradient(circle at 50% 45%, rgba(0,0,0,0.75), transparent 40%);
   --c-glow2: radial-gradient(circle at 50% 45%, transparent 55%, rgba(0,0,0,0.6) 80%);
   --c-glow3: none;
@@ -487,6 +504,7 @@
    ============================================================ */
 .sv-dim-society {
   --c-bg: linear-gradient(160deg, #fdfdff, #eef3f8);
+  --c-base: #fdfdff;
   --c-glow1: radial-gradient(circle at 50% 0%, rgba(0, 200, 255, 0.14), transparent 45%);
   --c-glow2: radial-gradient(circle at 90% 90%, rgba(255, 45, 149, 0.1), transparent 45%);
   --c-glow3: none;
@@ -512,6 +530,7 @@
    ============================================================ */
 .sv-dim-riso {
   --c-bg: linear-gradient(160deg, #f7f3e8, #efe9d8);
+  --c-base: #f7f3e8;
   --c-glow1: radial-gradient(circle at 26% 20%, rgba(255, 72, 176, 0.4), transparent 42%);
   --c-glow2: radial-gradient(circle at 74% 68%, rgba(0, 120, 255, 0.35), transparent 42%);
   --c-glow3: none;
@@ -613,4 +632,27 @@
   text-transform: uppercase;
   line-height: 0.9;
   font-size: clamp(2.5rem, 7vw, 5rem);
+}
+
+/* ============================================================
+   ÍNDICE ESTÁTICO — `.sv-still`
+   ============================================================
+   O índice mostra vinte dimensões ao mesmo tempo. Cada card é um
+   `sv-canvas`, e cada `sv-canvas` traz a retícula a derivar (`sv-drift`), a
+   etiqueta a oscilar (`sv-dimshift`), o portal a rodar (`sv-spin`) e o glitch
+   a tremer (`sv-jitter`). Isolado, cada um é assinatura da dimensão; vinte ao
+   mesmo tempo é a tela inteira a mexer sem parar, e nenhum estilo se consegue
+   ler porque todos disputam o olho.
+
+   Aqui o movimento contínuo pára. O que responde ao ponteiro — hover, foco,
+   as animações de entrada — continua: essas o visitante provoca, e provocar é
+   diferente de sofrer.
+   ============================================================ */
+.sv-still .sv-canvas::before,
+.sv-still.sv-canvas::before,
+.sv-still .sv-canvas::after,
+.sv-still .sv-shift,
+.sv-still .sv-onoma-pop,
+.sv-still .sv-rainbow {
+  animation: none;
 }
