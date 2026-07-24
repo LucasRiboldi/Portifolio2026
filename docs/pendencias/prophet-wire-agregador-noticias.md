@@ -26,8 +26,10 @@
 - [x] **Parte 1 — Registry de fontes (FEITO).** `src/lib/prophet-wire/sources.ts`: 24 fontes
       tipadas (id, nome, url, kind rss|html|api, categoria-padrão, enabled) + `activeSources()`
       e `findSource()`. Contrato `Source` em `types.ts`. Teste em `sources.test.ts`. → commit+push.
-- [ ] **Parte 2 — Logger.** `logger.ts`: interface `Logger` + impl de console estruturada
-      (início, fim, tempo, contagens, erros). DI-friendly. Teste do formato. → commit+push.
+- [x] **Parte 2 — Logger (FEITO).** `logger.ts`: interface `Logger` + `RunLogger` (entradas
+      estruturadas, contadores fetched/discarded/published/errors, `RunReport` com
+      início/fim/durationMs, `minLevel`, `echo`, `Clock` injetável) + `silentLogger`.
+      Teste com relógio fixo. → commit+push.
 - [ ] **Parte 3 — Repository (interface + in-memory).** `repository.ts`: interface
       `NewsRepository` (save, findByHash, listPublished, listDrafts) + impl em memória para
       testes. Ainda SEM Supabase. Landing passa a ler via repo (fallback = semente). → commit+push.
