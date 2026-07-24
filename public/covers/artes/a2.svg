@@ -1,0 +1,27 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1200 900" width="1200" height="900" role="img" aria-label="Capa gerada para Recorte de foil holográfico">
+  <defs>
+    <linearGradient id="bg" x1="0" y1="0" x2="0.6" y2="1">
+      <stop offset="0" stop-color="#2b0a4d"/>
+      <stop offset="1" stop-color="#7a1bc4"/>
+    </linearGradient>
+    <radialGradient id="glow" cx="0.498" cy="0.531" r="0.75">
+      <stop offset="0" stop-color="#9dff2f" stop-opacity="0.55"/>
+      <stop offset="1" stop-color="#9dff2f" stop-opacity="0"/>
+    </radialGradient>
+    <pattern id="dots" width="19.5" height="19.5" patternUnits="userSpaceOnUse">
+      <circle cx="9.8" cy="9.8" r="3.9" fill="#12100e" opacity="0.5"/>
+    </pattern>
+  </defs>
+
+  <rect width="1200" height="900" fill="url(#bg)"/>
+  <rect width="1200" height="900" fill="url(#glow)"/>
+  <path d="M805.1 471.1L2097.1 504.6L804.7 491.4ZM1004.8 533.1L2080.2 703.7L1002.8 546.0ZM967.0 615.5L1988.9 1037.5L959.6 634.1ZM1061.6 777.8L1842.6 1313.8L1051.0 793.7ZM905.3 764.5L1661.8 1534.4L886.4 783.4ZM901.6 893.7L1427.2 1727.1L862.9 919.4ZM807.8 1002.0L1106.3 1888.5L770.1 1015.6ZM714.6 951.0L887.9 1949.1L668.8 960.1ZM617.6 790.0L645.1 1976.8L597.0 790.6ZM536.0 862.6L302.6 1948.3L505.5 856.5ZM393.8 993.7L-4.0 1851.7L356.3 977.4ZM464.3 675.1L-264.6 1705.1L456.7 669.7ZM210.1 911.8L-424.9 1575.2L191.6 894.6ZM140.9 839.3L-613.2 1363.4L114.5 803.1ZM352.4 588.3L-798.4 1027.0L342.6 563.5ZM262.2 560.8L-862.7 821.5L260.3 552.6ZM330.9 499.1L-901.0 548.9L330.1 481.3ZM317.8 419.3L-863.1 135.0L321.1 405.4ZM198.9 333.1L-795.5 -79.2L209.1 307.5ZM122.5 174.9L-636.0 -376.2L146.9 139.7ZM251.4 118.9L-410.2 -633.7L274.2 98.2ZM487.0 307.6L-192.3 -797.8L494.4 303.0ZM382.2 62.3L-35.0 -882.7L418.5 45.4ZM490.6 67.0L268.0 -985.9L517.9 60.9ZM596.7 6.6L633.6 -1022.0L620.7 7.2ZM631.0 296.5L929.8 -985.2L645.2 299.8ZM708.2 157.0L1122.4 -927.6L723.8 162.8ZM811.0 142.1L1444.8 -760.1L832.8 157.0ZM987.5 100.1L1705.1 -533.8L1008.6 123.3ZM1064.7 124.3L1828.2 -379.8L1090.7 161.6ZM1104.8 240.1L1971.6 -123.5L1116.2 266.1ZM842.4 425.1L2070.3 194.0L844.4 435.2Z" fill="rgba(18,16,14,0.55)" opacity="0.85"/>
+  <g transform="rotate(4.52 600.0 450.0)">
+    <circle cx="600.0" cy="450.0" r="323.3" fill="none" stroke="#12100e" stroke-width="7"/><circle cx="600.0" cy="450.0" r="242.4" fill="#ff2d95" stroke="#12100e" stroke-width="7"/><circle cx="600.0" cy="450.0" r="161.6" fill="none" stroke="#12100e" stroke-width="7"/><circle cx="600.0" cy="450.0" r="80.8" fill="#ff2d95" stroke="#12100e" stroke-width="7"/>
+    <text x="594.6" y="444.6" text-anchor="middle" dominant-baseline="central" font-family="Impact, Haettenschweiler, 'Arial Narrow Bold', 'Franklin Gothic Heavy', sans-serif" font-size="570" font-weight="700" fill="#00d4ff" opacity="0.75">R</text>
+    <text x="605.4" y="455.4" text-anchor="middle" dominant-baseline="central" font-family="Impact, Haettenschweiler, 'Arial Narrow Bold', 'Franklin Gothic Heavy', sans-serif" font-size="570" font-weight="700" fill="#9dff2f" opacity="0.75">R</text>
+    <text x="600.0" y="450.0" text-anchor="middle" dominant-baseline="central" font-family="Impact, Haettenschweiler, 'Arial Narrow Bold', 'Franklin Gothic Heavy', sans-serif" font-size="570" font-weight="700" fill="#fff6e0" opacity="1">R</text>
+  </g>
+  <rect width="1200" height="900" fill="url(#dots)" opacity="0.22"/>
+  <rect x="6" y="6" width="1188" height="888" fill="none" stroke="#12100e" stroke-width="12"/>
+</svg>

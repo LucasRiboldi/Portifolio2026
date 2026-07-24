@@ -1,0 +1,27 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1600 1000" width="1600" height="1000" role="img" aria-label="Capa gerada para Sports Widget — réplica do Firefox">
+  <defs>
+    <linearGradient id="bg" x1="0" y1="0" x2="0.6" y2="1">
+      <stop offset="0" stop-color="#041c3a"/>
+      <stop offset="1" stop-color="#0b4a8f"/>
+    </linearGradient>
+    <radialGradient id="glow" cx="0.326" cy="0.521" r="0.75">
+      <stop offset="0" stop-color="#00d4ff" stop-opacity="0.55"/>
+      <stop offset="1" stop-color="#00d4ff" stop-opacity="0"/>
+    </radialGradient>
+    <pattern id="dots" width="18.8" height="18.8" patternUnits="userSpaceOnUse">
+      <circle cx="9.4" cy="9.4" r="3.8" fill="#12100e" opacity="0.5"/>
+    </pattern>
+  </defs>
+
+  <rect width="1600" height="1000" fill="url(#bg)"/>
+  <rect width="1600" height="1000" fill="url(#glow)"/>
+  <path d="M912.3 495.1L2407.8 450.7L913.1 518.4ZM1103.1 584.0L2394.1 758.4L1100.4 605.5ZM1101.2 689.7L2306.1 1136.3L1081.9 745.6ZM1016.9 747.2L2201.5 1381.7L994.5 791.0ZM926.6 817.4L2020.4 1668.5L913.5 834.5ZM902.2 882.0L1859.9 1852.2L884.8 899.4ZM836.1 910.8L1656.9 2028.9L809.6 930.7ZM703.6 851.0L1369.7 2207.2L678.6 863.5ZM701.2 1060.4L1058.1 2330.5L665.7 1070.9ZM649.8 1177.4L803.0 2387.2L593.4 1185.9ZM520.2 777.5L481.2 2407.8L513.3 777.3ZM465.2 967.1L217.2 2383.4L434.1 962.0ZM331.4 1044.6L-158.2 2281.2L311.5 1036.9ZM200.4 1127.9L-418.8 2156.8L159.7 1104.5ZM111.6 997.2L-728.5 1934.1L99.8 986.7ZM93.6 900.9L-909.9 1749.8L81.9 887.3ZM56.7 861.9L-1046.0 1570.4L29.8 821.7ZM309.1 605.5L-1243.8 1185.4L306.5 598.6ZM-84.4 708.6L-1306.2 986.9L-100.0 647.1ZM-179.6 591.3L-1361.9 621.2L-183.0 526.1ZM44.3 497.2L-1356.6 348.5L47.9 458.0ZM-169.9 378.2L-1317.9 104.8L-164.1 352.5ZM254.0 421.2L-1233.2 -170.2L257.7 411.7ZM-134.6 157.1L-1085.4 -466.2L-99.6 100.2ZM43.9 134.8L-891.4 -728.2L79.9 94.1ZM223.4 142.4L-623.6 -977.6L234.9 133.6ZM197.2 -17.6L-391.5 -1129.3L238.1 -40.3ZM284.4 19.5L-213.1 -1216.2L327.6 1.2ZM457.4 200.5L219.9 -1341.0L482.3 196.5ZM456.6 -65.2L372.3 -1359.4L494.1 -68.2ZM574.4 83.1L806.7 -1343.8L603.2 87.5ZM628.8 99.3L1034.4 -1294.5L652.0 105.8ZM647.6 272.1L1414.2 -1141.2L660.7 279.1ZM838.1 13.5L1542.4 -1065.8L853.1 23.1ZM1010.2 -25.5L1831.7 -837.0L1050.9 13.7ZM844.0 249.7L1983.3 -672.5L852.6 260.3ZM1045.2 197.2L2165.3 -406.2L1070.1 241.2ZM873.6 374.3L2289.1 -140.7L883.7 401.4ZM1187.9 387.8L2387.0 233.6L1197.2 448.1Z" fill="rgba(18,16,14,0.55)" opacity="0.85"/>
+  <g transform="rotate(-4.25 800.0 500.0)">
+    <g transform="rotate(-3.37 800.0 500.0)"><path d="M536.3 236.3H951.6L1063.7 348.4V763.7H536.3Z" fill="#9dff2f" stroke="#12100e" stroke-width="7" stroke-linejoin="round"/></g>
+    <text x="794.4" y="494.4" text-anchor="middle" dominant-baseline="central" font-family="Impact, Haettenschweiler, 'Arial Narrow Bold', 'Franklin Gothic Heavy', sans-serif" font-size="599" font-weight="700" fill="#ffd200" opacity="0.75">S</text>
+    <text x="805.6" y="505.6" text-anchor="middle" dominant-baseline="central" font-family="Impact, Haettenschweiler, 'Arial Narrow Bold', 'Franklin Gothic Heavy', sans-serif" font-size="599" font-weight="700" fill="#00d4ff" opacity="0.75">S</text>
+    <text x="800.0" y="500.0" text-anchor="middle" dominant-baseline="central" font-family="Impact, Haettenschweiler, 'Arial Narrow Bold', 'Franklin Gothic Heavy', sans-serif" font-size="599" font-weight="700" fill="#fff6e0" opacity="1">S</text>
+  </g>
+  <rect width="1600" height="1000" fill="url(#dots)" opacity="0.22"/>
+  <rect x="6" y="6" width="1588" height="988" fill="none" stroke="#12100e" stroke-width="12"/>
+</svg>

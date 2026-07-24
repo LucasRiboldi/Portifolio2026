@@ -1,0 +1,27 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1200 900" width="1200" height="900" role="img" aria-label="Capa gerada para Colagem do multiverso">
+  <defs>
+    <linearGradient id="bg" x1="0" y1="0" x2="0.6" y2="1">
+      <stop offset="0" stop-color="#2b0a4d"/>
+      <stop offset="1" stop-color="#7a1bc4"/>
+    </linearGradient>
+    <radialGradient id="glow" cx="0.344" cy="0.550" r="0.75">
+      <stop offset="0" stop-color="#9dff2f" stop-opacity="0.55"/>
+      <stop offset="1" stop-color="#9dff2f" stop-opacity="0"/>
+    </radialGradient>
+    <pattern id="dots" width="14.3" height="14.3" patternUnits="userSpaceOnUse">
+      <circle cx="7.2" cy="7.2" r="2.9" fill="#12100e" opacity="0.5"/>
+    </pattern>
+  </defs>
+
+  <rect width="1200" height="900" fill="url(#bg)"/>
+  <rect width="1200" height="900" fill="url(#glow)"/>
+  <path d="M991.4 453.2L1911.9 451.2L992.9 503.1ZM920.2 549.4L1900.7 683.1L917.8 568.9ZM748.9 615.1L1810.5 1039.1L741.5 634.1ZM764.7 659.5L1744.7 1184.8L750.0 687.8ZM796.3 758.0L1612.9 1394.7L772.5 789.7ZM763.9 889.1L1377.3 1643.8L739.9 909.3ZM555.0 732.1L1136.9 1808.7L536.9 742.1ZM617.1 932.9L1017.8 1867.7L597.8 941.4ZM451.0 692.2L671.2 1972.7L443.3 693.6ZM460.1 916.3L520.5 1991.3L425.9 918.7ZM401.9 698.8L265.7 1988.0L383.3 697.0ZM264.8 981.9L-52.5 1921.3L244.9 975.4ZM274.8 804.6L-242.5 1844.6L254.7 794.8ZM135.5 865.7L-515.4 1673.7L117.4 851.4ZM65.3 863.3L-669.7 1533.8L30.5 827.0ZM8.9 775.3L-847.7 1308.7L-9.0 747.7ZM43.8 669.9L-963.7 1091.8L32.9 644.9ZM30.6 595.0L-1054.1 809.7L23.3 560.7ZM169.7 524.2L-1080.9 635.3L168.5 511.8ZM-67.5 465.7L-1082.4 372.5L-65.9 446.0ZM-94.7 378.4L-1040.0 121.1L-88.0 352.4ZM50.1 333.6L-936.3 -161.0L61.7 309.8ZM189.1 343.4L-794.2 -395.7L201.7 326.3ZM254.5 340.0L-628.8 -584.5L263.2 331.6ZM89.9 61.7L-452.2 -730.4L112.3 45.9ZM244.9 160.5L-221.2 -864.4L264.1 151.5ZM272.1 118.7L-81.1 -921.3L288.6 113.0ZM356.6 14.6L263.8 -997.4L372.6 13.0ZM417.0 260.5L469.1 -1003.7L425.8 260.8ZM455.8 259.4L752.7 -965.7L477.9 264.6ZM475.9 311.1L936.2 -910.4L485.1 314.5ZM549.5 257.2L1186.0 -790.1L558.8 262.7ZM613.2 263.7L1418.9 -617.1L622.9 272.5ZM833.4 154.9L1613.1 -404.0L857.5 187.0ZM694.2 346.3L1755.2 -173.7L701.1 360.1ZM668.9 390.3L1807.7 -55.7L671.4 396.7ZM914.4 372.0L1882.5 196.4L922.6 412.7Z" fill="rgba(18,16,14,0.55)" opacity="0.85"/>
+  <g transform="rotate(-5.83 600.0 450.0)">
+    <g transform="rotate(-7.17 600.0 450.0)"><path d="M351.9 201.9H770.9L848.1 279.1V698.1H351.9Z" fill="#ff2d95" stroke="#12100e" stroke-width="7" stroke-linejoin="round"/></g>
+    <text x="593.5" y="443.5" text-anchor="middle" dominant-baseline="central" font-family="Impact, Haettenschweiler, 'Arial Narrow Bold', 'Franklin Gothic Heavy', sans-serif" font-size="469" font-weight="700" fill="#00d4ff" opacity="0.75">C</text>
+    <text x="606.5" y="456.5" text-anchor="middle" dominant-baseline="central" font-family="Impact, Haettenschweiler, 'Arial Narrow Bold', 'Franklin Gothic Heavy', sans-serif" font-size="469" font-weight="700" fill="#9dff2f" opacity="0.75">C</text>
+    <text x="600.0" y="450.0" text-anchor="middle" dominant-baseline="central" font-family="Impact, Haettenschweiler, 'Arial Narrow Bold', 'Franklin Gothic Heavy', sans-serif" font-size="469" font-weight="700" fill="#fff6e0" opacity="1">C</text>
+  </g>
+  <rect width="1200" height="900" fill="url(#dots)" opacity="0.22"/>
+  <rect x="6" y="6" width="1188" height="888" fill="none" stroke="#12100e" stroke-width="12"/>
+</svg>

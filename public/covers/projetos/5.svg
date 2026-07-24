@@ -1,0 +1,27 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1600 1000" width="1600" height="1000" role="img" aria-label="Capa gerada para Fotografia Urbana 2026">
+  <defs>
+    <linearGradient id="bg" x1="0" y1="0" x2="0.6" y2="1">
+      <stop offset="0" stop-color="#041c3a"/>
+      <stop offset="1" stop-color="#0b4a8f"/>
+    </linearGradient>
+    <radialGradient id="glow" cx="0.412" cy="0.500" r="0.75">
+      <stop offset="0" stop-color="#00d4ff" stop-opacity="0.55"/>
+      <stop offset="1" stop-color="#00d4ff" stop-opacity="0"/>
+    </radialGradient>
+    <pattern id="dots" width="15.4" height="15.4" patternUnits="userSpaceOnUse">
+      <circle cx="7.7" cy="7.7" r="3.1" fill="#12100e" opacity="0.5"/>
+    </pattern>
+  </defs>
+
+  <rect width="1600" height="1000" fill="url(#bg)"/>
+  <rect width="1600" height="1000" fill="url(#glow)"/>
+  <path d="M1287.1 496.3L2544.9 568.7L1285.2 549.6ZM1292.9 579.7L2528.4 758.5L1290.7 595.5ZM1281.8 714.3L2425.1 1165.1L1268.4 749.8ZM1314.0 835.1L2300.2 1431.7L1282.5 890.6ZM1193.1 879.6L2143.8 1664.8L1154.9 928.4ZM972.2 816.7L1937.3 1888.3L949.0 838.0ZM825.3 761.6L1596.5 2137.8L800.7 775.7ZM920.6 1100.6L1372.6 2247.0L893.1 1111.8ZM782.9 1136.0L957.3 2363.3L740.3 1142.8ZM677.3 1172.9L616.0 2386.5L610.5 1171.4ZM597.7 1027.9L355.0 2362.3L549.8 1020.1ZM524.5 930.6L57.4 2288.4L506.5 924.6ZM309.3 1152.7L-298.6 2125.7L258.1 1122.6ZM229.4 1093.8L-479.9 2004.2L204.3 1074.8ZM257.8 848.6L-811.9 1681.5L232.5 817.0ZM84.6 836.8L-980.6 1433.2L76.3 822.3ZM65.6 712.9L-1134.7 1084.4L54.2 677.9ZM147.1 589.4L-1211.7 743.7L141.3 545.0ZM84.8 514.8L-1227.4 503.3L84.8 487.5ZM-76.9 387.3L-1198.7 172.3L-71.1 354.2ZM187.9 343.2L-1115.8 -139.3L196.2 320.4ZM255.9 298.4L-1005.2 -388.2L267.2 277.3ZM329.5 231.8L-780.7 -718.9L340.2 219.2ZM361.3 196.5L-604.1 -901.1L388.1 172.4ZM349.2 -27.8L-216.2 -1171.2L401.9 -55.4ZM490.1 130.2L-48.5 -1248.8L523.7 116.6ZM518.4 -140.2L295.4 -1351.2L547.5 -145.9ZM661.1 245.7L706.0 -1386.0L670.2 245.9ZM781.8 -98.1L1060.2 -1343.5L796.4 -94.9ZM783.0 128.8L1331.3 -1262.9L814.2 140.7ZM868.4 103.4L1595.2 -1138.2L895.0 118.6ZM926.6 138.4L1840.5 -971.2L954.8 161.1ZM1226.6 36.7L2162.6 -640.1L1258.5 78.8ZM1176.0 155.3L2260.6 -497.9L1196.5 188.2ZM1351.7 226.1L2426.7 -160.6L1361.8 252.8ZM901.1 454.1L2526.6 228.9L904.2 475.6Z" fill="rgba(18,16,14,0.55)" opacity="0.85"/>
+  <g transform="rotate(7.29 800.0 500.0)">
+    <circle cx="800.0" cy="500.0" r="369.9" fill="none" stroke="#12100e" stroke-width="7"/><circle cx="800.0" cy="500.0" r="277.4" fill="#9dff2f" stroke="#12100e" stroke-width="7"/><circle cx="800.0" cy="500.0" r="185.0" fill="none" stroke="#12100e" stroke-width="7"/><circle cx="800.0" cy="500.0" r="92.5" fill="#9dff2f" stroke="#12100e" stroke-width="7"/>
+    <text x="794.4" y="494.4" text-anchor="middle" dominant-baseline="central" font-family="Impact, Haettenschweiler, 'Arial Narrow Bold', 'Franklin Gothic Heavy', sans-serif" font-size="570" font-weight="700" fill="#ffd200" opacity="0.75">F</text>
+    <text x="805.6" y="505.6" text-anchor="middle" dominant-baseline="central" font-family="Impact, Haettenschweiler, 'Arial Narrow Bold', 'Franklin Gothic Heavy', sans-serif" font-size="570" font-weight="700" fill="#00d4ff" opacity="0.75">F</text>
+    <text x="800.0" y="500.0" text-anchor="middle" dominant-baseline="central" font-family="Impact, Haettenschweiler, 'Arial Narrow Bold', 'Franklin Gothic Heavy', sans-serif" font-size="570" font-weight="700" fill="#fff6e0" opacity="1">F</text>
+  </g>
+  <rect width="1600" height="1000" fill="url(#dots)" opacity="0.22"/>
+  <rect x="6" y="6" width="1588" height="988" fill="none" stroke="#12100e" stroke-width="12"/>
+</svg>

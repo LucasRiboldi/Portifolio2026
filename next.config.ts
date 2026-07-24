@@ -76,6 +76,20 @@ const nextConfig: NextConfig = {
     // reencodava para WebP — maior que o arquivo que entrou.
     formats: ["image/avif", "image/webp"],
 
+    // As capas da landing /criativo são SVG gerados por `scripts/generate-covers`
+    // e o otimizador recusa SVG sem este consentimento explícito. O risco que a
+    // flag sinaliza é servir SVG de terceiros (podem trazer script embutido);
+    // aqui a única origem de SVG é o próprio repositório — o upload do /admin
+    // aceita apenas png/jpg/gif/webp/avif (ver `lib/admin/media-validate`).
+    //
+    // As duas linhas seguintes são a mitigação recomendada e não são opcionais:
+    // o CSP neutraliza qualquer script dentro do ficheiro e o
+    // `contentDispositionType` impede que um SVG servido pelo otimizador seja
+    // renderizado como documento na própria origem.
+    dangerouslyAllowSVG: true,
+    contentDispositionType: "attachment",
+    contentSecurityPolicy: "default-src 'self'; script-src 'none'; sandbox;",
+
     remotePatterns: [
       {
         protocol: "https",

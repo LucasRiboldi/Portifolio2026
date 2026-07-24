@@ -1,0 +1,27 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1600 1000" width="1600" height="1000" role="img" aria-label="Capa gerada para Bolão da Copa 2026">
+  <defs>
+    <linearGradient id="bg" x1="0" y1="0" x2="0.6" y2="1">
+      <stop offset="0" stop-color="#041c3a"/>
+      <stop offset="1" stop-color="#0b4a8f"/>
+    </linearGradient>
+    <radialGradient id="glow" cx="0.348" cy="0.344" r="0.75">
+      <stop offset="0" stop-color="#00d4ff" stop-opacity="0.55"/>
+      <stop offset="1" stop-color="#00d4ff" stop-opacity="0"/>
+    </radialGradient>
+    <pattern id="dots" width="22.0" height="22.0" patternUnits="userSpaceOnUse">
+      <circle cx="11.0" cy="11.0" r="4.4" fill="#12100e" opacity="0.5"/>
+    </pattern>
+  </defs>
+
+  <rect width="1600" height="1000" fill="url(#bg)"/>
+  <rect width="1600" height="1000" fill="url(#glow)"/>
+  <path d="M1017.4 343.9L2442.7 415.2L1016.1 378.1ZM780.8 387.9L2387.7 801.2L775.4 409.6ZM957.9 521.0L2243.0 1191.0L938.7 559.2ZM826.1 520.6L2079.5 1458.4L807.1 546.4ZM969.9 774.6L1814.7 1750.3L939.5 801.8ZM786.0 768.8L1409.4 2026.9L764.6 779.7ZM658.3 619.7L1127.7 2142.0L633.8 627.5ZM602.8 734.0L748.9 2220.6L591.5 735.2ZM505.2 810.8L268.8 2208.2L465.7 804.7ZM360.1 905.8L-135.2 2098.7L317.4 888.9ZM206.5 980.9L-426.8 1953.4L149.9 946.4ZM58.2 886.0L-758.3 1696.1L28.8 857.4ZM-67.6 751.3L-1065.9 1305.5L-100.4 695.9ZM-30.7 593.0L-1201.5 1026.8L-44.9 556.4ZM86.9 393.9L-1324.0 487.6L84.7 365.3ZM140.7 315.7L-1318.2 136.5L144.6 279.9ZM289.2 260.4L-1228.2 -266.6L294.3 245.3ZM-78.6 -5.1L-1055.4 -636.0L-45.2 -60.0ZM98.7 -57.2L-818.6 -947.6L128.2 -88.6ZM202.0 -158.6L-508.6 -1213.4L217.6 -169.3ZM460.9 135.4L-174.3 -1395.7L475.9 129.1ZM446.2 -347.5L297.5 -1525.3L475.7 -351.6ZM555.9 85.8L589.5 -1543.0L567.4 86.0ZM638.9 -24.8L1045.7 -1478.9L670.8 -16.3ZM774.0 -71.5L1456.1 -1315.4L786.6 -64.7ZM774.1 56.7L1754.1 -1115.1L796.2 74.9ZM990.2 -40.7L2011.1 -859.1L1015.8 -9.8ZM906.3 184.2L2288.4 -406.9L912.2 197.7ZM886.0 280.0L2415.6 16.9L887.9 291.1Z" fill="rgba(18,16,14,0.55)" opacity="0.85"/>
+  <g transform="rotate(-1.14 800.0 500.0)">
+    <g transform="rotate(4.06 800.0 500.0)"><path d="M571.9 271.9H965.0L1028.1 335.0V728.1H571.9Z" fill="#9dff2f" stroke="#12100e" stroke-width="7" stroke-linejoin="round"/></g>
+    <text x="793.4" y="493.4" text-anchor="middle" dominant-baseline="central" font-family="Impact, Haettenschweiler, 'Arial Narrow Bold', 'Franklin Gothic Heavy', sans-serif" font-size="547" font-weight="700" fill="#ffd200" opacity="0.75">B</text>
+    <text x="806.6" y="506.6" text-anchor="middle" dominant-baseline="central" font-family="Impact, Haettenschweiler, 'Arial Narrow Bold', 'Franklin Gothic Heavy', sans-serif" font-size="547" font-weight="700" fill="#00d4ff" opacity="0.75">B</text>
+    <text x="800.0" y="500.0" text-anchor="middle" dominant-baseline="central" font-family="Impact, Haettenschweiler, 'Arial Narrow Bold', 'Franklin Gothic Heavy', sans-serif" font-size="547" font-weight="700" fill="#fff6e0" opacity="1">B</text>
+  </g>
+  <rect width="1600" height="1000" fill="url(#dots)" opacity="0.22"/>
+  <rect x="6" y="6" width="1588" height="988" fill="none" stroke="#12100e" stroke-width="12"/>
+</svg>

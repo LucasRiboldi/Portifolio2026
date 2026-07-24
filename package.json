@@ -8,6 +8,8 @@
     "sync:vercel-env": "node scripts/sync-vercel-env.mjs",
     "tokens:export": "node --experimental-strip-types --no-warnings scripts/export-tokens.mjs",
     "tokens:check": "node --experimental-strip-types --no-warnings scripts/check-tokens.mjs",
+    "covers": "node scripts/generate-covers.mjs",
+    "covers:check": "node scripts/generate-covers.mjs --check",
     "dev": "next dev -p 3000",
     "build": "next build",
     "start": "next start",

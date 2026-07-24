@@ -1,0 +1,27 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1600 900" width="1600" height="900" role="img" aria-label="Capa gerada para Making of: as 20 dimensões">
+  <defs>
+    <linearGradient id="bg" x1="0" y1="0" x2="0.6" y2="1">
+      <stop offset="0" stop-color="#04180b"/>
+      <stop offset="1" stop-color="#0d5226"/>
+    </linearGradient>
+    <radialGradient id="glow" cx="0.550" cy="0.505" r="0.75">
+      <stop offset="0" stop-color="#9dff2f" stop-opacity="0.55"/>
+      <stop offset="1" stop-color="#9dff2f" stop-opacity="0"/>
+    </radialGradient>
+    <pattern id="dots" width="14.8" height="14.8" patternUnits="userSpaceOnUse">
+      <circle cx="7.4" cy="7.4" r="3.0" fill="#12100e" opacity="0.5"/>
+    </pattern>
+  </defs>
+
+  <rect width="1600" height="900" fill="url(#bg)"/>
+  <rect width="1600" height="900" fill="url(#glow)"/>
+  <path d="M1220.5 436.3L2715.3 447.1L1220.7 469.9ZM1355.1 548.3L2670.9 856.1L1349.6 572.7ZM1216.7 592.7L2561.8 1189.4L1210.1 607.9ZM1436.1 851.3L2344.1 1561.4L1413.2 881.6ZM1223.0 819.9L2089.8 1834.8L1196.9 842.8ZM995.2 651.0L1777.5 2055.7L987.0 655.6ZM980.7 703.4L1484.7 2187.7L955.4 712.2ZM949.8 957.1L1053.1 2282.0L905.3 961.3ZM850.3 867.4L686.7 2280.1L822.0 864.4ZM735.5 946.9L307.7 2198.9L704.2 936.6ZM650.2 872.9L-41.6 2042.4L630.3 861.3ZM703.5 642.2L-397.4 1773.3L697.7 636.5ZM487.3 733.3L-652.1 1466.4L469.3 706.0ZM583.3 609.9L-783.8 1231.2L570.2 581.9ZM321.7 602.1L-911.5 857.0L312.2 559.7ZM376.2 471.3L-956.1 447.4L376.3 433.8ZM288.6 307.7L-895.6 -13.1L293.0 291.1ZM424.9 248.3L-769.0 -353.0L437.9 221.7ZM675.0 321.9L-620.3 -604.0L686.1 306.2ZM415.4 -12.1L-365.6 -894.4L451.6 -45.5ZM597.1 50.1L-106.7 -1093.8L632.5 27.6ZM788.9 199.3L340.0 -1300.2L811.2 192.4ZM854.7 217.4L719.0 -1374.2L862.8 216.7ZM918.6 14.8L1115.3 -1366.1L953.9 19.4ZM989.0 122.0L1527.0 -1263.3L1016.9 132.5ZM1151.1 -60.9L1801.2 -1133.1L1192.5 -36.9ZM1334.9 -86.6L2078.6 -935.6L1348.0 -75.3ZM1461.6 16.6L2395.7 -580.6L1499.4 71.9ZM1516.9 130.6L2550.0 -306.9L1542.1 185.9ZM1358.7 368.2L2691.2 157.9L1361.2 383.5Z" fill="rgba(18,16,14,0.55)" opacity="0.85"/>
+  <g transform="rotate(-6.60 800.0 450.0)">
+    <polygon points="1084.1,450.0 945.4,492.7 1039.0,603.6 899.4,564.7 918.0,708.4 826.4,633.3 759.6,731.2 721.9,621.0 614.0,664.7 663.0,538.0 527.4,530.0 644.2,450.0 527.4,370.0 630.0,340.8 614.0,235.3 739.1,316.6 759.6,168.8 827.9,256.1 918.0,191.6 902.1,332.2 1039.0,296.4 967.6,400.8" fill="#ff2d95" stroke="#12100e" stroke-width="7" stroke-linejoin="round"/>
+    <text x="794.2" y="444.2" text-anchor="middle" dominant-baseline="central" font-family="Impact, Haettenschweiler, 'Arial Narrow Bold', 'Franklin Gothic Heavy', sans-serif" font-size="527" font-weight="700" fill="#00d4ff" opacity="0.75">M</text>
+    <text x="805.8" y="455.8" text-anchor="middle" dominant-baseline="central" font-family="Impact, Haettenschweiler, 'Arial Narrow Bold', 'Franklin Gothic Heavy', sans-serif" font-size="527" font-weight="700" fill="#9dff2f" opacity="0.75">M</text>
+    <text x="800.0" y="450.0" text-anchor="middle" dominant-baseline="central" font-family="Impact, Haettenschweiler, 'Arial Narrow Bold', 'Franklin Gothic Heavy', sans-serif" font-size="527" font-weight="700" fill="#fff6e0" opacity="1">M</text>
+  </g>
+  <rect width="1600" height="900" fill="url(#dots)" opacity="0.22"/>
+  <rect x="6" y="6" width="1588" height="888" fill="none" stroke="#12100e" stroke-width="12"/>
+</svg>

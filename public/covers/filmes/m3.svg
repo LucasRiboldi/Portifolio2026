@@ -1,0 +1,27 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 800 1200" width="800" height="1200" role="img" aria-label="Capa gerada para Blade Runner 2049">
+  <defs>
+    <linearGradient id="bg" x1="0" y1="0" x2="0.6" y2="1">
+      <stop offset="0" stop-color="#12043a"/>
+      <stop offset="1" stop-color="#4a1178"/>
+    </linearGradient>
+    <radialGradient id="glow" cx="0.325" cy="0.550" r="0.75">
+      <stop offset="0" stop-color="#ff6b1f" stop-opacity="0.55"/>
+      <stop offset="1" stop-color="#ff6b1f" stop-opacity="0"/>
+    </radialGradient>
+    <pattern id="dots" width="14.5" height="14.5" patternUnits="userSpaceOnUse">
+      <circle cx="7.3" cy="7.3" r="2.9" fill="#12100e" opacity="0.5"/>
+    </pattern>
+  </defs>
+
+  <rect width="800" height="1200" fill="url(#bg)"/>
+  <rect width="800" height="1200" fill="url(#glow)"/>
+  <path d="M530.4 667.7L1700.9 719.6L530.1 674.8ZM479.5 697.5L1674.9 938.8L477.3 708.8ZM771.9 797.1L1636.5 1090.2L758.8 839.0ZM493.8 769.9L1549.3 1306.1L487.9 781.8ZM425.7 770.2L1435.7 1495.3L418.4 780.5ZM489.5 888.4L1234.2 1723.4L467.2 908.8ZM464.3 934.9L1078.6 1847.4L444.0 948.9ZM397.6 958.7L827.7 1985.9L380.9 965.8ZM391.7 1028.1L678.8 2040.2L354.8 1039.3ZM283.6 843.5L399.6 2095.6L271.9 844.7ZM251.1 1069.6L201.6 2101.2L235.5 1069.0ZM190.9 1107.0L1.8 2079.1L167.1 1102.7ZM164.4 935.4L-254.7 2007.4L147.5 928.9ZM-15.3 1136.7L-513.6 1877.4L-54.7 1111.7ZM108.9 845.5L-701.6 1735.1L92.5 830.8ZM-164.1 1043.4L-834.2 1599.8L-183.0 1021.4ZM9.5 838.0L-935.2 1467.5L1.4 826.0ZM25.8 764.0L-1067.2 1224.7L22.7 756.7ZM20.6 737.9L-1131.1 1041.3L14.4 715.2ZM57.7 677.5L-1179.7 747.0L57.1 667.1ZM12.6 639.8L-1174.6 510.9L13.7 629.1ZM31.0 615.7L-1146.3 339.7L34.3 601.0ZM-187.8 477.7L-1062.4 84.4L-178.6 456.8ZM-15.4 503.4L-972.3 -89.4L-5.8 487.7ZM86.5 513.8L-801.8 -316.0L99.5 499.6ZM-112.7 226.3L-652.3 -457.0L-90.7 208.4ZM89.1 404.2L-479.8 -578.0L115.5 388.5ZM69.2 185.7L-222.9 -698.9L108.6 171.7ZM206.0 450.9L-31.2 -752.4L226.6 446.6ZM254.2 411.8L262.5 -782.1L266.4 411.9ZM275.9 460.5L412.2 -774.0L286.1 461.6ZM397.7 151.6L697.6 -714.1L441.5 165.6ZM395.9 321.0L856.0 -653.1L425.6 334.5ZM408.1 410.7L1027.3 -561.0L420.3 418.4ZM609.1 301.1L1285.1 -354.3L622.6 314.8ZM688.2 321.6L1414.9 -203.5L705.7 345.0ZM564.3 492.0L1533.2 -17.1L569.5 501.7ZM721.9 516.5L1644.5 256.5L726.7 533.0ZM663.7 576.4L1680.3 410.4L668.0 601.1Z" fill="rgba(18,16,14,0.55)" opacity="0.85"/>
+  <g transform="rotate(6.92 400.0 600.0)">
+    <polygon points="731.6,600.0 599.8,653.5 687.1,765.8 521.1,721.1 565.8,887.1 459.9,823.6 400.0,931.6 354.6,769.4 234.2,887.1 234.4,765.6 112.9,765.8 185.6,657.5 68.4,600.0 234.6,555.7 112.9,434.2 255.2,455.2 234.2,312.9 348.5,407.9 400.0,268.4 457.4,385.9 565.8,312.9 522.6,477.4 687.1,434.2 623.6,540.1" fill="#00d4ff" stroke="#12100e" stroke-width="7" stroke-linejoin="round"/>
+    <text x="394.0" y="594.0" text-anchor="middle" dominant-baseline="central" font-family="Impact, Haettenschweiler, 'Arial Narrow Bold', 'Franklin Gothic Heavy', sans-serif" font-size="427" font-weight="700" fill="#ff8fd0" opacity="0.75">B</text>
+    <text x="406.0" y="606.0" text-anchor="middle" dominant-baseline="central" font-family="Impact, Haettenschweiler, 'Arial Narrow Bold', 'Franklin Gothic Heavy', sans-serif" font-size="427" font-weight="700" fill="#ff6b1f" opacity="0.75">B</text>
+    <text x="400.0" y="600.0" text-anchor="middle" dominant-baseline="central" font-family="Impact, Haettenschweiler, 'Arial Narrow Bold', 'Franklin Gothic Heavy', sans-serif" font-size="427" font-weight="700" fill="#fff6e0" opacity="1">B</text>
+  </g>
+  <rect width="800" height="1200" fill="url(#dots)" opacity="0.22"/>
+  <rect x="6" y="6" width="788" height="1188" fill="none" stroke="#12100e" stroke-width="12"/>
+</svg>

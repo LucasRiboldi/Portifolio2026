@@ -1,0 +1,27 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 800 1200" width="800" height="1200" role="img" aria-label="Capa gerada para Watchmen">
+  <defs>
+    <linearGradient id="bg" x1="0" y1="0" x2="0.6" y2="1">
+      <stop offset="0" stop-color="#3a1206"/>
+      <stop offset="1" stop-color="#a8340f"/>
+    </linearGradient>
+    <radialGradient id="glow" cx="0.454" cy="0.324" r="0.75">
+      <stop offset="0" stop-color="#ff2f4e" stop-opacity="0.55"/>
+      <stop offset="1" stop-color="#ff2f4e" stop-opacity="0"/>
+    </radialGradient>
+    <pattern id="dots" width="18.6" height="18.6" patternUnits="userSpaceOnUse">
+      <circle cx="9.3" cy="9.3" r="3.7" fill="#12100e" opacity="0.5"/>
+    </pattern>
+  </defs>
+
+  <rect width="800" height="1200" fill="url(#bg)"/>
+  <rect width="800" height="1200" fill="url(#glow)"/>
+  <path d="M575.9 386.4L1804.6 424.0L575.6 401.3ZM881.0 431.7L1795.2 556.9L876.8 466.8ZM914.3 552.3L1735.5 831.0L906.1 577.8ZM778.4 564.3L1669.5 999.1L764.2 594.7ZM636.2 574.7L1542.0 1219.1L630.1 583.4ZM573.2 568.9L1413.0 1377.2L555.4 587.7ZM497.0 543.1L1293.4 1490.5L492.6 546.8ZM531.8 697.0L1022.9 1671.0L515.6 705.3ZM499.0 689.1L924.5 1717.0L483.4 695.7ZM521.6 878.2L738.9 1781.0L472.1 891.5ZM431.7 922.9L495.5 1824.7L393.0 926.4ZM353.8 756.3L301.9 1829.6L340.7 755.7ZM302.8 686.8L28.4 1791.6L281.8 681.8ZM200.1 904.3L-101.1 1754.2L177.7 896.7ZM202.5 657.5L-417.2 1601.7L184.8 646.1ZM252.4 529.6L-559.5 1497.4L244.3 522.9ZM193.3 571.7L-652.7 1412.8L181.2 559.7ZM-98.5 715.7L-838.0 1187.4L-117.1 687.7ZM-148.1 648.1L-931.8 1024.2L-154.9 634.2ZM-7.9 527.8L-1006.1 842.5L-17.6 498.6ZM-62.1 462.7L-1061.5 615.3L-64.1 450.2ZM-174.5 395.1L-1079.3 371.0L-174.2 369.1ZM-39.3 339.7L-1058.4 143.7L-32.5 300.2ZM154.5 323.0L-1005.6 -66.8L156.7 316.4ZM5.9 242.0L-958.4 -189.5L12.9 225.9ZM59.8 177.4L-794.9 -471.4L73.0 159.5ZM137.0 188.0L-680.0 -607.6L152.1 172.2ZM21.4 3.8L-565.0 -715.5L42.6 -14.0ZM264.5 207.5L-302.8 -890.8L270.9 204.2ZM161.0 -64.9L-184.5 -945.7L188.1 -76.0ZM271.0 -12.0L104.3 -1030.2L307.4 -18.7ZM311.5 -117.8L237.9 -1048.2L326.0 -119.1ZM369.3 -171.6L414.0 -1052.7L396.1 -170.7ZM406.1 158.5L657.2 -1023.2L415.1 160.3ZM550.3 -78.9L946.7 -930.1L583.0 -64.4ZM615.7 -57.7L1119.5 -839.1L647.9 -37.9ZM680.9 -59.0L1219.3 -771.7L696.9 -47.2ZM660.0 106.7L1445.5 -564.1L680.3 129.7ZM639.5 164.4L1515.1 -478.7L654.9 184.9ZM592.2 271.0L1672.3 -215.6L601.2 290.4ZM747.9 238.6L1726.5 -80.7L758.7 269.9ZM594.8 338.9L1777.2 106.8L596.2 345.7Z" fill="rgba(18,16,14,0.55)" opacity="0.85"/>
+  <g transform="rotate(3.79 400.0 600.0)">
+    <polygon points="676.4,600.0 579.7,652.8 632.5,749.4 514.8,732.5 514.8,851.4 427.4,790.7 360.7,873.5 327.6,758.5 219.0,808.9 257.4,691.7 134.8,677.9 211.5,600.0 134.8,522.1 268.1,515.3 219.0,391.1 341.0,470.8 360.7,326.5 423.5,436.7 514.8,348.6 522.2,458.9 632.5,450.6 556.9,553.9" fill="#1b6cff" stroke="#12100e" stroke-width="7" stroke-linejoin="round"/>
+    <text x="392.9" y="592.9" text-anchor="middle" dominant-baseline="central" font-family="Impact, Haettenschweiler, 'Arial Narrow Bold', 'Franklin Gothic Heavy', sans-serif" font-size="425" font-weight="700" fill="#ffffff" opacity="0.75">W</text>
+    <text x="407.1" y="607.1" text-anchor="middle" dominant-baseline="central" font-family="Impact, Haettenschweiler, 'Arial Narrow Bold', 'Franklin Gothic Heavy', sans-serif" font-size="425" font-weight="700" fill="#ff2f4e" opacity="0.75">W</text>
+    <text x="400.0" y="600.0" text-anchor="middle" dominant-baseline="central" font-family="Impact, Haettenschweiler, 'Arial Narrow Bold', 'Franklin Gothic Heavy', sans-serif" font-size="425" font-weight="700" fill="#fff6e0" opacity="1">W</text>
+  </g>
+  <rect width="800" height="1200" fill="url(#dots)" opacity="0.22"/>
+  <rect x="6" y="6" width="788" height="1188" fill="none" stroke="#12100e" stroke-width="12"/>
+</svg>

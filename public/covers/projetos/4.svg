@@ -1,0 +1,27 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1600 1000" width="1600" height="1000" role="img" aria-label="Capa gerada para Dashboard Analytics">
+  <defs>
+    <linearGradient id="bg" x1="0" y1="0" x2="0.6" y2="1">
+      <stop offset="0" stop-color="#041c3a"/>
+      <stop offset="1" stop-color="#0b4a8f"/>
+    </linearGradient>
+    <radialGradient id="glow" cx="0.450" cy="0.525" r="0.75">
+      <stop offset="0" stop-color="#00d4ff" stop-opacity="0.55"/>
+      <stop offset="1" stop-color="#00d4ff" stop-opacity="0"/>
+    </radialGradient>
+    <pattern id="dots" width="14.9" height="14.9" patternUnits="userSpaceOnUse">
+      <circle cx="7.5" cy="7.5" r="3.0" fill="#12100e" opacity="0.5"/>
+    </pattern>
+  </defs>
+
+  <rect width="1600" height="1000" fill="url(#bg)"/>
+  <rect width="1600" height="1000" fill="url(#glow)"/>
+  <path d="M1267.0 522.6L2605.7 604.4L1264.9 573.2ZM1312.1 625.6L2569.4 902.0L1304.3 664.0ZM934.7 629.6L2403.2 1378.8L931.5 635.9ZM908.0 653.0L2242.5 1640.2L899.2 665.0ZM964.0 836.9L1836.5 2046.4L945.0 850.8ZM1023.0 1146.6L1503.5 2241.7L991.7 1160.9ZM780.0 804.8L1057.2 2381.5L763.3 807.9ZM744.6 1156.5L758.7 2411.3L722.2 1157.0ZM622.5 1060.3L316.1 2367.9L585.4 1052.1ZM429.3 1170.7L-128.2 2210.0L375.0 1143.4ZM364.8 1045.4L-394.4 2047.0L331.6 1021.1ZM237.2 923.1L-760.9 1693.3L220.7 902.2ZM506.4 643.1L-974.4 1353.7L495.8 621.4ZM68.6 673.0L-1127.6 904.7L63.0 646.0ZM124.8 553.6L-1165.8 562.7L124.1 520.1ZM-20.1 414.9L-1130.0 157.4L-5.9 343.5ZM210.5 279.1L-966.7 -319.4L218.0 264.1ZM432.5 326.8L-805.9 -584.0L443.1 312.2ZM358.0 50.6L-399.2 -993.6L374.6 38.3ZM556.5 236.7L-159.4 -1144.1L575.5 226.7ZM533.3 -63.8L234.9 -1298.3L590.2 -79.0ZM735.7 -191.3L784.6 -1360.8L754.1 -190.7ZM830.6 -76.0L1124.8 -1318.0L872.3 -66.9ZM895.2 69.6L1453.3 -1213.8L924.6 82.0ZM1091.9 35.6L1916.0 -934.9L1127.2 64.5ZM924.0 343.2L2185.1 -664.7L940.2 363.1ZM978.9 407.3L2450.3 -228.8L982.6 415.8ZM949.0 473.0L2572.0 161.4L951.7 486.6Z" fill="rgba(18,16,14,0.55)" opacity="0.85"/>
+  <g transform="rotate(3.22 800.0 500.0)">
+    <circle cx="800.0" cy="500.0" r="328.5" fill="#9dff2f" stroke="#12100e" stroke-width="7"/><circle cx="800.0" cy="500.0" r="219.0" fill="none" stroke="#12100e" stroke-width="7"/><circle cx="800.0" cy="500.0" r="109.5" fill="#9dff2f" stroke="#12100e" stroke-width="7"/>
+    <text x="792.4" y="492.4" text-anchor="middle" dominant-baseline="central" font-family="Impact, Haettenschweiler, 'Arial Narrow Bold', 'Franklin Gothic Heavy', sans-serif" font-size="557" font-weight="700" fill="#ffd200" opacity="0.75">D</text>
+    <text x="807.6" y="507.6" text-anchor="middle" dominant-baseline="central" font-family="Impact, Haettenschweiler, 'Arial Narrow Bold', 'Franklin Gothic Heavy', sans-serif" font-size="557" font-weight="700" fill="#00d4ff" opacity="0.75">D</text>
+    <text x="800.0" y="500.0" text-anchor="middle" dominant-baseline="central" font-family="Impact, Haettenschweiler, 'Arial Narrow Bold', 'Franklin Gothic Heavy', sans-serif" font-size="557" font-weight="700" fill="#fff6e0" opacity="1">D</text>
+  </g>
+  <rect width="1600" height="1000" fill="url(#dots)" opacity="0.22"/>
+  <rect x="6" y="6" width="1588" height="988" fill="none" stroke="#12100e" stroke-width="12"/>
+</svg>

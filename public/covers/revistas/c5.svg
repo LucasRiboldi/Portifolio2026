@@ -1,0 +1,27 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 800 1200" width="800" height="1200" role="img" aria-label="Capa gerada para Batman: Ano Um">
+  <defs>
+    <linearGradient id="bg" x1="0" y1="0" x2="0.6" y2="1">
+      <stop offset="0" stop-color="#3a1206"/>
+      <stop offset="1" stop-color="#a8340f"/>
+    </linearGradient>
+    <radialGradient id="glow" cx="0.532" cy="0.460" r="0.75">
+      <stop offset="0" stop-color="#ff2f4e" stop-opacity="0.55"/>
+      <stop offset="1" stop-color="#ff2f4e" stop-opacity="0"/>
+    </radialGradient>
+    <pattern id="dots" width="20.2" height="20.2" patternUnits="userSpaceOnUse">
+      <circle cx="10.1" cy="10.1" r="4.0" fill="#12100e" opacity="0.5"/>
+    </pattern>
+  </defs>
+
+  <rect width="800" height="1200" fill="url(#bg)"/>
+  <rect width="800" height="1200" fill="url(#glow)"/>
+  <path d="M686.0 539.4L1868.0 554.2L685.9 564.4ZM890.2 616.4L1844.9 808.2L883.5 653.3ZM724.5 641.1L1792.1 1013.1L717.7 661.3ZM848.7 724.1L1738.8 1148.0L834.0 756.4ZM732.8 732.1L1632.6 1341.0L714.3 760.3ZM812.0 860.4L1511.8 1500.3L783.8 892.7ZM646.2 812.6L1325.6 1678.5L631.7 824.3ZM595.7 830.8L1124.1 1813.3L572.2 843.8ZM546.1 814.4L961.5 1890.4L520.1 824.8ZM537.9 949.5L772.0 1951.4L512.1 955.9ZM499.4 1073.8L575.3 1985.9L461.5 1077.8ZM415.1 749.6L320.0 1989.7L407.3 749.1ZM382.9 994.0L232.5 1980.6L349.5 989.5ZM311.0 934.1L-21.0 1922.7L293.0 928.2ZM212.1 1005.3L-215.0 1843.5L193.8 996.2ZM141.7 1018.0L-382.7 1745.7L98.0 988.4ZM273.0 720.0L-591.1 1574.1L258.0 705.1ZM138.1 760.4L-751.7 1384.2L132.8 753.0ZM137.0 720.4L-853.3 1217.7L121.7 691.2ZM151.2 654.5L-933.0 1034.8L147.7 644.9ZM67.0 635.1L-990.7 822.9L61.5 606.2ZM226.9 580.6L-1006.1 724.3L225.6 570.4ZM-117.6 513.8L-1009.3 408.2L-114.3 480.9ZM-123.0 444.5L-985.8 255.4L-119.8 428.8ZM198.2 458.9L-895.6 -26.5L203.4 447.1ZM40.9 338.8L-818.5 -177.9L52.3 319.5ZM240.8 415.8L-702.3 -347.2L252.2 401.5ZM150.3 303.6L-600.5 -461.9L174.4 279.1ZM198.7 224.8L-380.9 -644.2L207.9 218.6ZM242.8 216.7L-211.6 -742.3L271.9 202.4ZM213.9 14.9L-81.0 -798.9L232.4 8.0ZM303.4 11.6L133.5 -860.9L323.8 7.4ZM407.3 50.7L425.6 -890.8L444.2 50.7ZM466.2 173.6L647.1 -873.7L501.8 179.2ZM478.7 311.5L792.3 -843.5L497.6 316.5ZM618.2 81.6L990.6 -775.6L631.0 87.0ZM527.6 360.1L1137.7 -702.8L537.8 365.9ZM570.3 373.3L1378.8 -531.0L584.1 385.5ZM664.2 342.2L1524.1 -383.2L670.4 349.5ZM882.4 243.8L1639.9 -226.9L895.9 264.9ZM743.0 392.5L1730.2 -63.8L750.2 407.7ZM881.2 415.7L1818.8 178.0L888.0 441.0ZM661.4 514.8L1859.9 399.4L663.8 537.8Z" fill="rgba(18,16,14,0.55)" opacity="0.85"/>
+  <g transform="rotate(1.23 400.0 600.0)">
+    <circle cx="400.0" cy="600.0" r="246.7" fill="#1b6cff" stroke="#12100e" stroke-width="7"/><circle cx="400.0" cy="600.0" r="164.5" fill="none" stroke="#12100e" stroke-width="7"/><circle cx="400.0" cy="600.0" r="82.2" fill="#1b6cff" stroke="#12100e" stroke-width="7"/>
+    <text x="394.3" y="594.3" text-anchor="middle" dominant-baseline="central" font-family="Impact, Haettenschweiler, 'Arial Narrow Bold', 'Franklin Gothic Heavy', sans-serif" font-size="417" font-weight="700" fill="#ffffff" opacity="0.75">B</text>
+    <text x="405.7" y="605.7" text-anchor="middle" dominant-baseline="central" font-family="Impact, Haettenschweiler, 'Arial Narrow Bold', 'Franklin Gothic Heavy', sans-serif" font-size="417" font-weight="700" fill="#ff2f4e" opacity="0.75">B</text>
+    <text x="400.0" y="600.0" text-anchor="middle" dominant-baseline="central" font-family="Impact, Haettenschweiler, 'Arial Narrow Bold', 'Franklin Gothic Heavy', sans-serif" font-size="417" font-weight="700" fill="#fff6e0" opacity="1">B</text>
+  </g>
+  <rect width="800" height="1200" fill="url(#dots)" opacity="0.22"/>
+  <rect x="6" y="6" width="788" height="1188" fill="none" stroke="#12100e" stroke-width="12"/>
+</svg>

@@ -1,0 +1,27 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 800 1200" width="800" height="1200" role="img" aria-label="Capa gerada para Sandman">
+  <defs>
+    <linearGradient id="bg" x1="0" y1="0" x2="0.6" y2="1">
+      <stop offset="0" stop-color="#3a1206"/>
+      <stop offset="1" stop-color="#a8340f"/>
+    </linearGradient>
+    <radialGradient id="glow" cx="0.624" cy="0.589" r="0.75">
+      <stop offset="0" stop-color="#ff2f4e" stop-opacity="0.55"/>
+      <stop offset="1" stop-color="#ff2f4e" stop-opacity="0"/>
+    </radialGradient>
+    <pattern id="dots" width="16.6" height="16.6" patternUnits="userSpaceOnUse">
+      <circle cx="8.3" cy="8.3" r="3.3" fill="#12100e" opacity="0.5"/>
+    </pattern>
+  </defs>
+
+  <rect width="800" height="1200" fill="url(#bg)"/>
+  <rect width="800" height="1200" fill="url(#glow)"/>
+  <path d="M674.7 708.1L1940.9 731.0L674.6 712.4ZM921.1 774.9L1916.4 973.2L916.9 797.4ZM841.7 842.4L1824.4 1275.7L833.1 862.6ZM685.1 833.3L1668.1 1551.8L677.0 844.5ZM619.2 833.5L1442.2 1798.3L606.4 844.6ZM642.7 943.6L1228.5 1951.5L634.9 948.2ZM559.5 950.0L822.9 2112.7L550.7 952.0ZM522.1 1102.4L552.7 2148.6L505.2 1103.1ZM467.5 1008.7L301.0 2136.0L447.2 1005.9ZM333.2 1181.5L0.6 2060.8L317.5 1175.8ZM374.0 899.9L-319.9 1894.7L363.3 892.6ZM267.3 943.7L-553.4 1693.6L248.1 923.2ZM328.5 811.5L-762.9 1405.9L320.2 796.5ZM326.4 770.9L-875.8 1143.4L321.4 754.9ZM177.8 744.8L-935.9 853.0L176.8 735.2ZM-75.8 667.1L-937.9 582.1L-74.1 647.6ZM5.6 562.1L-873.9 265.4L13.5 537.5ZM115.7 511.7L-765.1 12.9L128.2 488.9ZM203.2 453.6L-566.6 -264.6L219.1 436.1ZM147.5 276.8L-357.7 -452.9L190.9 244.7ZM380.7 442.1L-40.5 -630.2L400.0 434.3ZM458.0 481.0L311.4 -722.6L480.1 478.1ZM509.1 200.8L560.7 -733.5L532.2 201.7ZM585.3 277.2L849.8 -691.5L625.8 287.4ZM622.7 457.5L1183.7 -561.9L639.8 466.7ZM829.9 336.7L1482.3 -347.6L845.4 351.2ZM773.0 483.5L1658.4 -150.3L793.3 510.9ZM963.0 481.6L1809.0 104.4L972.3 501.7ZM714.8 655.8L1907.6 398.4L716.6 663.9Z" fill="rgba(18,16,14,0.55)" opacity="0.85"/>
+  <g transform="rotate(-5.47 400.0 600.0)">
+    <g transform="rotate(6.96 400.0 600.0)"><path d="M213.1 413.1H540.9L586.9 459.1V786.9H213.1Z" fill="#1b6cff" stroke="#12100e" stroke-width="7" stroke-linejoin="round"/></g>
+    <text x="393.9" y="593.9" text-anchor="middle" dominant-baseline="central" font-family="Impact, Haettenschweiler, 'Arial Narrow Bold', 'Franklin Gothic Heavy', sans-serif" font-size="539" font-weight="700" fill="#ffffff" opacity="0.75">S</text>
+    <text x="406.1" y="606.1" text-anchor="middle" dominant-baseline="central" font-family="Impact, Haettenschweiler, 'Arial Narrow Bold', 'Franklin Gothic Heavy', sans-serif" font-size="539" font-weight="700" fill="#ff2f4e" opacity="0.75">S</text>
+    <text x="400.0" y="600.0" text-anchor="middle" dominant-baseline="central" font-family="Impact, Haettenschweiler, 'Arial Narrow Bold', 'Franklin Gothic Heavy', sans-serif" font-size="539" font-weight="700" fill="#fff6e0" opacity="1">S</text>
+  </g>
+  <rect width="800" height="1200" fill="url(#dots)" opacity="0.22"/>
+  <rect x="6" y="6" width="788" height="1188" fill="none" stroke="#12100e" stroke-width="12"/>
+</svg>

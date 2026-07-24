@@ -1,0 +1,27 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 800 1200" width="800" height="1200" role="img" aria-label="Capa gerada para Homem-Aranha: Aranhaverso">
+  <defs>
+    <linearGradient id="bg" x1="0" y1="0" x2="0.6" y2="1">
+      <stop offset="0" stop-color="#3a1206"/>
+      <stop offset="1" stop-color="#a8340f"/>
+    </linearGradient>
+    <radialGradient id="glow" cx="0.452" cy="0.400" r="0.75">
+      <stop offset="0" stop-color="#ff2f4e" stop-opacity="0.55"/>
+      <stop offset="1" stop-color="#ff2f4e" stop-opacity="0"/>
+    </radialGradient>
+    <pattern id="dots" width="16.6" height="16.6" patternUnits="userSpaceOnUse">
+      <circle cx="8.3" cy="8.3" r="3.3" fill="#12100e" opacity="0.5"/>
+    </pattern>
+  </defs>
+
+  <rect width="800" height="1200" fill="url(#bg)"/>
+  <rect width="800" height="1200" fill="url(#glow)"/>
+  <path d="M556.0 466.4L1803.6 448.7L556.4 485.1ZM686.1 510.1L1792.3 663.5L683.2 532.7ZM816.1 610.6L1738.1 911.0L809.5 631.8ZM732.3 650.9L1644.4 1139.5L716.3 682.0ZM588.5 614.4L1574.8 1260.0L578.1 630.6ZM571.4 677.4L1373.5 1507.8L555.8 692.7ZM706.1 934.2L1180.9 1667.1L664.2 963.1ZM508.5 699.6L1107.0 1714.7L487.7 712.2ZM518.2 874.3L827.0 1845.1L478.7 887.8ZM441.5 847.9L616.6 1899.5L414.9 852.7ZM387.6 773.2L463.6 1918.6L377.5 774.0ZM336.0 895.7L236.7 1916.8L315.3 893.9ZM297.9 757.7L1.8 1876.6L283.4 753.9ZM193.1 835.9L-282.8 1770.2L178.5 828.6ZM147.7 826.7L-434.6 1682.4L126.1 812.4ZM234.6 617.6L-630.3 1526.8L231.2 614.4ZM170.4 645.7L-741.2 1409.2L166.0 640.5ZM140.0 613.8L-889.7 1196.8L134.1 603.6ZM30.1 609.6L-1000.3 954.0L21.3 584.3ZM-66.9 582.0L-1056.1 743.8L-74.9 539.0ZM118.6 513.4L-1070.1 652.8L117.6 505.4ZM146.9 476.7L-1079.7 433.1L147.1 469.3ZM-64.2 376.4L-1034.7 119.6L-61.2 364.5ZM10.5 342.7L-967.2 -80.3L18.2 324.4ZM100.0 343.7L-893.4 -230.3L110.1 325.8ZM197.0 357.7L-772.8 -410.3L203.8 349.1ZM89.3 180.8L-591.8 -602.0L99.1 172.1ZM119.1 154.4L-479.6 -691.4L130.7 146.1ZM202.4 155.3L-228.0 -836.1L225.4 145.0ZM266.7 146.0L23.8 -922.1L294.2 139.4ZM321.8 78.6L237.5 -956.8L332.2 77.7ZM370.9 42.5L452.6 -959.4L407.7 44.8ZM439.3 74.5L656.6 -931.8L453.0 77.4ZM485.6 71.4L804.8 -892.5L500.2 76.1ZM634.6 -19.7L1111.0 -752.4L679.8 7.7ZM496.0 284.5L1217.2 -681.1L508.7 293.9ZM676.6 123.5L1352.8 -567.8L700.2 145.8ZM754.3 158.5L1504.7 -399.6L773.0 182.9ZM747.0 250.7L1627.7 -210.9L763.0 280.1ZM619.3 395.9L1746.5 76.8L624.2 412.7ZM674.0 423.1L1785.6 250.3L676.0 435.8Z" fill="rgba(18,16,14,0.55)" opacity="0.85"/>
+  <g transform="rotate(4.58 400.0 600.0)">
+    <polygon points="666.3,600.0 536.0,639.9 624.0,744.0 520.4,738.9 510.6,842.2 422.7,758.1 362.1,863.6 324.1,766.2 225.6,801.2 250.3,696.2 144.5,675.0 230.5,600.0 144.5,525.0 263.8,512.5 225.6,398.8 327.0,440.1 362.1,336.4 422.7,442.0 510.6,357.8 511.2,471.6 624.0,456.0 580.3,547.1" fill="#1b6cff" stroke="#12100e" stroke-width="7" stroke-linejoin="round"/>
+    <text x="392.8" y="592.8" text-anchor="middle" dominant-baseline="central" font-family="Impact, Haettenschweiler, 'Arial Narrow Bold', 'Franklin Gothic Heavy', sans-serif" font-size="542" font-weight="700" fill="#ffffff" opacity="0.75">H</text>
+    <text x="407.2" y="607.2" text-anchor="middle" dominant-baseline="central" font-family="Impact, Haettenschweiler, 'Arial Narrow Bold', 'Franklin Gothic Heavy', sans-serif" font-size="542" font-weight="700" fill="#ff2f4e" opacity="0.75">H</text>
+    <text x="400.0" y="600.0" text-anchor="middle" dominant-baseline="central" font-family="Impact, Haettenschweiler, 'Arial Narrow Bold', 'Franklin Gothic Heavy', sans-serif" font-size="542" font-weight="700" fill="#fff6e0" opacity="1">H</text>
+  </g>
+  <rect width="800" height="1200" fill="url(#dots)" opacity="0.22"/>
+  <rect x="6" y="6" width="788" height="1188" fill="none" stroke="#12100e" stroke-width="12"/>
+</svg>

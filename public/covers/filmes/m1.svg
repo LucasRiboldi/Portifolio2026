@@ -1,0 +1,27 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 800 1200" width="800" height="1200" role="img" aria-label="Capa gerada para Aranhaverso">
+  <defs>
+    <linearGradient id="bg" x1="0" y1="0" x2="0.6" y2="1">
+      <stop offset="0" stop-color="#12043a"/>
+      <stop offset="1" stop-color="#4a1178"/>
+    </linearGradient>
+    <radialGradient id="glow" cx="0.580" cy="0.392" r="0.75">
+      <stop offset="0" stop-color="#ff6b1f" stop-opacity="0.55"/>
+      <stop offset="1" stop-color="#ff6b1f" stop-opacity="0"/>
+    </radialGradient>
+    <pattern id="dots" width="15.9" height="15.9" patternUnits="userSpaceOnUse">
+      <circle cx="8.0" cy="8.0" r="3.2" fill="#12100e" opacity="0.5"/>
+    </pattern>
+  </defs>
+
+  <rect width="800" height="1200" fill="url(#bg)"/>
+  <rect width="800" height="1200" fill="url(#glow)"/>
+  <path d="M936.2 440.7L1905.7 427.2L937.1 471.7ZM955.3 540.5L1889.2 691.9L953.4 552.6ZM1004.9 664.8L1801.6 1009.9L988.5 705.6ZM667.9 613.4L1608.4 1348.2L655.1 630.2ZM719.2 729.3L1442.8 1529.7L702.1 745.1ZM664.2 777.6L1207.3 1706.3L641.6 791.2ZM595.3 828.2L902.4 1844.3L564.3 838.1ZM500.7 645.7L691.9 1894.4L484.0 648.4ZM451.5 764.0L363.4 1909.0L435.6 762.8ZM393.1 774.0L92.8 1863.9L374.6 769.1ZM289.8 849.9L-190.8 1755.3L259.4 834.4ZM156.2 902.6L-410.6 1617.0L128.6 881.6ZM192.2 742.2L-597.2 1446.9L170.6 718.7ZM151.7 636.3L-825.9 1115.3L143.8 620.6ZM291.7 523.5L-924.3 860.8L289.3 514.8ZM249.4 503.2L-969.8 625.3L247.4 484.1ZM-86.2 465.5L-975.9 390.7L-83.4 414.5ZM-79.6 324.2L-914.2 45.9L-67.6 285.2ZM180.5 327.5L-810.0 -205.5L186.8 315.7ZM29.4 159.6L-670.8 -419.7L58.8 122.2ZM188.2 107.8L-367.6 -708.0L214.9 89.0ZM234.7 65.9L-215.2 -801.9L255.6 54.8ZM344.5 28.4L110.3 -927.8L359.1 24.7ZM446.8 215.1L388.5 -969.9L454.5 214.7ZM510.2 73.0L656.1 -959.1L524.5 74.9ZM542.8 270.8L1027.4 -857.3L552.9 275.1ZM717.6 45.9L1255.7 -735.2L752.8 69.1ZM798.1 78.3L1420.3 -609.3L812.9 91.4ZM813.7 222.3L1675.5 -312.2L834.0 253.6ZM865.2 276.7L1787.6 -102.6L879.7 310.4ZM695.7 416.2L1878.8 190.1L698.8 432.1Z" fill="rgba(18,16,14,0.55)" opacity="0.85"/>
+  <g transform="rotate(-2.01 400.0 600.0)">
+    <circle cx="400.0" cy="600.0" r="287.4" fill="none" stroke="#12100e" stroke-width="7"/><circle cx="400.0" cy="600.0" r="215.6" fill="#00d4ff" stroke="#12100e" stroke-width="7"/><circle cx="400.0" cy="600.0" r="143.7" fill="none" stroke="#12100e" stroke-width="7"/><circle cx="400.0" cy="600.0" r="71.9" fill="#00d4ff" stroke="#12100e" stroke-width="7"/>
+    <text x="391.8" y="591.8" text-anchor="middle" dominant-baseline="central" font-family="Impact, Haettenschweiler, 'Arial Narrow Bold', 'Franklin Gothic Heavy', sans-serif" font-size="480" font-weight="700" fill="#ff8fd0" opacity="0.75">A</text>
+    <text x="408.2" y="608.2" text-anchor="middle" dominant-baseline="central" font-family="Impact, Haettenschweiler, 'Arial Narrow Bold', 'Franklin Gothic Heavy', sans-serif" font-size="480" font-weight="700" fill="#ff6b1f" opacity="0.75">A</text>
+    <text x="400.0" y="600.0" text-anchor="middle" dominant-baseline="central" font-family="Impact, Haettenschweiler, 'Arial Narrow Bold', 'Franklin Gothic Heavy', sans-serif" font-size="480" font-weight="700" fill="#fff6e0" opacity="1">A</text>
+  </g>
+  <rect width="800" height="1200" fill="url(#dots)" opacity="0.22"/>
+  <rect x="6" y="6" width="788" height="1188" fill="none" stroke="#12100e" stroke-width="12"/>
+</svg>

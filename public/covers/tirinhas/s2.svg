@@ -1,0 +1,27 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1600 800" width="1600" height="800" role="img" aria-label="Capa gerada para Design system">
+  <defs>
+    <linearGradient id="bg" x1="0" y1="0" x2="0.6" y2="1">
+      <stop offset="0" stop-color="#063a5e"/>
+      <stop offset="1" stop-color="#0e86c4"/>
+    </linearGradient>
+    <radialGradient id="glow" cx="0.445" cy="0.574" r="0.75">
+      <stop offset="0" stop-color="#ff2f4e" stop-opacity="0.55"/>
+      <stop offset="1" stop-color="#ff2f4e" stop-opacity="0"/>
+    </radialGradient>
+    <pattern id="dots" width="15.9" height="15.9" patternUnits="userSpaceOnUse">
+      <circle cx="8.0" cy="8.0" r="3.2" fill="#12100e" opacity="0.5"/>
+    </pattern>
+  </defs>
+
+  <rect width="1600" height="800" fill="url(#bg)"/>
+  <rect width="1600" height="800" fill="url(#glow)"/>
+  <path d="M1353.2 445.4L2500.0 483.8L1352.6 491.0ZM1148.8 491.7L2486.6 679.2L1143.4 534.9ZM1299.9 625.4L2413.3 1010.1L1285.5 669.8ZM1091.6 649.6L2292.4 1296.1L1082.4 667.0ZM1198.7 762.7L2184.2 1474.6L1168.2 807.1ZM1017.0 747.1L1984.6 1715.9L1003.0 761.3ZM891.4 681.2L1807.2 1873.3L881.1 689.2ZM970.4 891.9L1601.8 2010.9L954.1 901.3ZM810.0 728.6L1288.9 2152.5L797.6 732.8ZM781.8 801.9L1032.2 2219.3L766.2 804.7ZM758.6 916.0L848.3 2243.1L734.2 917.9ZM703.8 891.7L634.9 2246.7L681.8 890.7ZM655.1 830.2L384.7 2218.3L630.6 825.6ZM523.3 902.2L-21.9 2091.2L505.1 894.0ZM608.4 651.4L-201.0 1998.2L592.2 641.9ZM497.5 727.5L-468.8 1803.8L473.2 706.2ZM307.3 869.1L-560.2 1717.8L297.5 859.2ZM459.3 642.2L-783.3 1442.5L443.7 618.5ZM481.7 590.1L-871.5 1293.1L473.7 574.9ZM203.4 660.3L-973.6 1060.5L191.0 625.5ZM45.4 569.2L-1061.8 696.3L40.0 528.4ZM304.5 485.0L-1076.8 510.6L303.7 457.2ZM331.1 416.4L-1054.2 171.4L337.1 379.5ZM150.2 284.4L-984.3 -110.6L158.4 259.9ZM457.9 342.5L-880.4 -357.0L468.5 321.9ZM250.7 186.1L-785.6 -520.1L276.4 146.8ZM353.5 124.7L-538.4 -820.5L385.1 93.8ZM329.9 26.8L-414.1 -931.1L367.6 -3.8ZM371.1 -39.4L-239.5 -1055.8L410.1 -63.8ZM525.1 -13.1L105.0 -1223.5L553.3 -23.3ZM658.6 226.2L377.9 -1298.0L674.8 223.1ZM663.1 -210.5L617.6 -1326.9L689.1 -211.9ZM744.1 20.3L872.0 -1322.2L757.6 21.5ZM844.0 -188.7L1097.5 -1287.2L864.2 -184.2ZM792.8 245.4L1430.8 -1178.3L813.8 254.6ZM942.0 -7.5L1537.2 -1127.3L961.4 2.6ZM1032.9 -10.5L1792.7 -965.5L1077.4 23.3ZM924.9 269.8L2079.2 -693.3L934.4 281.0ZM1143.3 157.1L2200.2 -532.0L1156.8 177.5ZM943.4 323.2L2296.1 -370.1L955.5 346.4ZM1322.0 257.8L2428.1 -43.0L1334.4 300.1ZM995.9 423.2L2490.7 275.7L997.3 436.8Z" fill="rgba(18,16,14,0.55)" opacity="0.85"/>
+  <g transform="rotate(4.35 800.0 400.0)">
+    <polygon points="1120.2,400.0 961.4,443.2 1077.3,560.1 917.9,517.9 960.1,677.3 850.2,587.2 800.0,720.2 754.9,568.4 639.9,677.3 664.3,535.7 522.7,560.1 633.8,444.5 479.8,400.0 595.0,345.1 522.7,239.9 665.4,265.4 639.9,122.7 744.5,192.8 800.0,79.8 854.7,195.9 960.1,122.7 935.2,264.8 1077.3,239.9 964.5,355.9" fill="#1b6cff" stroke="#12100e" stroke-width="7" stroke-linejoin="round"/>
+    <text x="794.6" y="394.6" text-anchor="middle" dominant-baseline="central" font-family="Impact, Haettenschweiler, 'Arial Narrow Bold', 'Franklin Gothic Heavy', sans-serif" font-size="471" font-weight="700" fill="#ffd200" opacity="0.75">D</text>
+    <text x="805.4" y="405.4" text-anchor="middle" dominant-baseline="central" font-family="Impact, Haettenschweiler, 'Arial Narrow Bold', 'Franklin Gothic Heavy', sans-serif" font-size="471" font-weight="700" fill="#ff2f4e" opacity="0.75">D</text>
+    <text x="800.0" y="400.0" text-anchor="middle" dominant-baseline="central" font-family="Impact, Haettenschweiler, 'Arial Narrow Bold', 'Franklin Gothic Heavy', sans-serif" font-size="471" font-weight="700" fill="#fff6e0" opacity="1">D</text>
+  </g>
+  <rect width="1600" height="800" fill="url(#dots)" opacity="0.22"/>
+  <rect x="6" y="6" width="1588" height="788" fill="none" stroke="#12100e" stroke-width="12"/>
+</svg>

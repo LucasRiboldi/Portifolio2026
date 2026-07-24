@@ -1,0 +1,27 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1200 900" width="1200" height="900" role="img" aria-label="Capa gerada para Alfabeto de onomatopeia">
+  <defs>
+    <linearGradient id="bg" x1="0" y1="0" x2="0.6" y2="1">
+      <stop offset="0" stop-color="#2b0a4d"/>
+      <stop offset="1" stop-color="#7a1bc4"/>
+    </linearGradient>
+    <radialGradient id="glow" cx="0.392" cy="0.365" r="0.75">
+      <stop offset="0" stop-color="#9dff2f" stop-opacity="0.55"/>
+      <stop offset="1" stop-color="#9dff2f" stop-opacity="0"/>
+    </radialGradient>
+    <pattern id="dots" width="21.5" height="21.5" patternUnits="userSpaceOnUse">
+      <circle cx="10.8" cy="10.8" r="4.3" fill="#12100e" opacity="0.5"/>
+    </pattern>
+  </defs>
+
+  <rect width="1200" height="900" fill="url(#bg)"/>
+  <rect width="1200" height="900" fill="url(#glow)"/>
+  <path d="M790.2 314.8L1970.1 299.1L790.4 329.8ZM1049.1 411.8L1949.0 580.9L1044.0 442.0ZM952.2 502.0L1875.2 854.6L947.7 514.3ZM877.2 576.1L1731.4 1140.9L863.9 596.7ZM811.1 573.5L1647.3 1258.7L787.4 603.5ZM725.2 610.4L1420.4 1489.4L696.2 634.1ZM730.7 763.5L1183.0 1648.5L691.2 784.8ZM639.3 766.9L958.5 1747.0L607.0 778.0ZM572.1 727.4L798.3 1792.3L548.5 732.7ZM464.9 762.6L411.6 1827.5L441.9 761.7ZM432.7 560.0L178.0 1799.8L416.8 556.9ZM272.9 883.1L-88.4 1720.6L229.6 865.7ZM318.3 655.6L-227.7 1656.3L287.2 639.3ZM344.1 495.2L-493.2 1478.2L328.5 482.1ZM40.9 696.2L-685.2 1284.9L29.0 681.8ZM228.7 474.4L-830.8 1074.9L222.5 463.7ZM250.5 418.2L-930.2 865.5L247.0 408.9ZM71.5 398.5L-1013.5 547.7L68.4 377.0ZM257.7 329.7L-1029.5 314.1L257.7 323.4ZM258.0 297.6L-1011.1 93.7L258.8 292.4ZM173.7 225.4L-925.4 -220.7L182.9 201.9ZM86.0 115.7L-829.6 -419.7L93.2 103.2ZM228.3 158.5L-723.6 -579.3L241.8 140.8ZM91.6 -114.1L-466.7 -842.6L121.6 -138.0ZM225.7 -65.9L-257.6 -982.9L265.0 -87.7ZM324.0 -85.7L-11.7 -1091.8L334.3 -89.2ZM382.5 -41.1L190.3 -1145.0L416.5 -47.6ZM474.2 -147.8L531.9 -1170.1L505.6 -146.5ZM521.6 -59.8L709.0 -1152.3L543.8 -56.2ZM531.0 128.0L962.8 -1088.2L547.3 133.7ZM671.3 -13.2L1247.6 -954.3L680.3 -7.7ZM776.4 -92.1L1405.8 -844.0L812.6 -63.3ZM616.6 195.0L1605.3 -652.2L623.8 203.3ZM762.6 142.2L1748.3 -456.9L768.7 152.0ZM810.5 206.5L1897.5 -133.3L817.5 228.3ZM775.3 267.6L1953.0 100.7L779.6 295.2Z" fill="rgba(18,16,14,0.55)" opacity="0.85"/>
+  <g transform="rotate(3.71 600.0 450.0)">
+    <polygon points="895.9,450.0 780.2,498.3 856.2,597.9 723.3,573.3 747.9,706.2 642.1,607.2 600.0,745.9 558.7,604.1 452.1,706.2 460.4,589.6 343.8,597.9 445.0,491.5 304.1,450.0 430.4,404.6 343.8,302.1 459.1,309.1 452.1,193.8 561.2,305.0 600.0,154.1 643.7,286.8 747.9,193.8 705.2,344.8 856.2,302.1 802.4,395.8" fill="#ff2d95" stroke="#12100e" stroke-width="7" stroke-linejoin="round"/>
+    <text x="592.7" y="442.7" text-anchor="middle" dominant-baseline="central" font-family="Impact, Haettenschweiler, 'Arial Narrow Bold', 'Franklin Gothic Heavy', sans-serif" font-size="539" font-weight="700" fill="#00d4ff" opacity="0.75">A</text>
+    <text x="607.3" y="457.3" text-anchor="middle" dominant-baseline="central" font-family="Impact, Haettenschweiler, 'Arial Narrow Bold', 'Franklin Gothic Heavy', sans-serif" font-size="539" font-weight="700" fill="#9dff2f" opacity="0.75">A</text>
+    <text x="600.0" y="450.0" text-anchor="middle" dominant-baseline="central" font-family="Impact, Haettenschweiler, 'Arial Narrow Bold', 'Franklin Gothic Heavy', sans-serif" font-size="539" font-weight="700" fill="#fff6e0" opacity="1">A</text>
+  </g>
+  <rect width="1200" height="900" fill="url(#dots)" opacity="0.22"/>
+  <rect x="6" y="6" width="1188" height="888" fill="none" stroke="#12100e" stroke-width="12"/>
+</svg>

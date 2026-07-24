@@ -1,0 +1,27 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1600 1000" width="1600" height="1000" role="img" aria-label="Capa gerada para Identidade Visual — Marca X">
+  <defs>
+    <linearGradient id="bg" x1="0" y1="0" x2="0.6" y2="1">
+      <stop offset="0" stop-color="#041c3a"/>
+      <stop offset="1" stop-color="#0b4a8f"/>
+    </linearGradient>
+    <radialGradient id="glow" cx="0.323" cy="0.407" r="0.75">
+      <stop offset="0" stop-color="#00d4ff" stop-opacity="0.55"/>
+      <stop offset="1" stop-color="#00d4ff" stop-opacity="0"/>
+    </radialGradient>
+    <pattern id="dots" width="21.9" height="21.9" patternUnits="userSpaceOnUse">
+      <circle cx="10.9" cy="10.9" r="4.4" fill="#12100e" opacity="0.5"/>
+    </pattern>
+  </defs>
+
+  <rect width="1600" height="1000" fill="url(#bg)"/>
+  <rect width="1600" height="1000" fill="url(#glow)"/>
+  <path d="M1193.7 347.7L2401.5 335.3L1196.2 415.3ZM1153.8 543.0L2356.3 824.1L1150.0 559.8ZM855.7 540.6L2257.9 1132.6L849.9 554.6ZM1095.1 814.1L2020.5 1546.1L1064.7 854.3ZM843.1 740.2L1794.4 1795.1L820.9 760.6ZM691.8 687.7L1480.8 2028.9L678.5 695.6ZM617.3 660.9L1131.8 2190.9L592.8 669.4ZM590.7 794.6L807.1 2271.7L562.9 798.9ZM526.0 1026.6L487.1 2294.0L487.1 1026.0ZM438.0 809.8L75.7 2242.1L402.9 801.4ZM332.4 776.2L-384.2 2065.6L306.8 762.3ZM122.4 923.4L-687.3 1860.7L82.6 890.4ZM344.4 574.6L-873.1 1684.3L335.1 564.4ZM305.5 544.6L-1104.2 1374.3L295.4 527.6ZM-76.7 578.6L-1303.1 908.2L-80.8 563.7ZM109.9 478.3L-1353.1 664.7L105.9 449.0ZM77.2 399.9L-1367.9 302.9L79.0 366.4ZM205.1 301.6L-1257.3 -236.9L209.7 289.0ZM100.4 192.7L-1145.9 -485.8L107.6 179.3ZM325.2 252.9L-921.9 -814.2L332.7 244.1ZM233.9 43.4L-605.1 -1110.1L251.0 30.8ZM186.9 -171.6L-340.2 -1273.9L241.3 -199.3ZM451.8 158.8L105.9 -1434.2L468.8 155.0ZM475.8 -4.9L407.5 -1476.2L508.7 -6.8ZM574.5 -94.2L798.6 -1458.1L608.8 -89.0ZM665.7 11.4L1204.9 -1349.1L675.5 15.2ZM680.3 127.8L1500.5 -1202.2L690.2 133.9ZM706.2 185.2L1795.9 -978.9L722.4 200.2ZM1027.4 46.3L2089.2 -634.2L1048.1 77.7ZM1090.9 116.8L2235.8 -368.7L1114.3 168.6ZM869.3 312.4L2359.7 6.3L876.9 347.2Z" fill="rgba(18,16,14,0.55)" opacity="0.85"/>
+  <g transform="rotate(7.77 800.0 500.0)">
+    <polygon points="1116.3,500.0 998.5,558.3 1066.1,671.0 943.4,665.4 931.4,787.7 829.7,706.2 755.0,813.1 705.5,707.0 592.8,739.1 666.7,585.7 496.5,589.1 616.0,500.0 496.5,410.9 636.2,394.7 592.8,260.9 720.1,325.1 755.0,186.9 825.7,321.1 931.4,212.3 920.7,360.7 1066.1,329.0 960.5,452.9" fill="#9dff2f" stroke="#12100e" stroke-width="7" stroke-linejoin="round"/>
+    <text x="793.8" y="493.8" text-anchor="middle" dominant-baseline="central" font-family="Impact, Haettenschweiler, 'Arial Narrow Bold', 'Franklin Gothic Heavy', sans-serif" font-size="531" font-weight="700" fill="#ffd200" opacity="0.75">I</text>
+    <text x="806.2" y="506.2" text-anchor="middle" dominant-baseline="central" font-family="Impact, Haettenschweiler, 'Arial Narrow Bold', 'Franklin Gothic Heavy', sans-serif" font-size="531" font-weight="700" fill="#00d4ff" opacity="0.75">I</text>
+    <text x="800.0" y="500.0" text-anchor="middle" dominant-baseline="central" font-family="Impact, Haettenschweiler, 'Arial Narrow Bold', 'Franklin Gothic Heavy', sans-serif" font-size="531" font-weight="700" fill="#fff6e0" opacity="1">I</text>
+  </g>
+  <rect width="1600" height="1000" fill="url(#dots)" opacity="0.22"/>
+  <rect x="6" y="6" width="1588" height="988" fill="none" stroke="#12100e" stroke-width="12"/>
+</svg>

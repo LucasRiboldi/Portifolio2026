@@ -1,0 +1,27 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1200 900" width="1200" height="900" role="img" aria-label="Capa gerada para Terra-8bit">
+  <defs>
+    <linearGradient id="bg" x1="0" y1="0" x2="0.6" y2="1">
+      <stop offset="0" stop-color="#2b0a4d"/>
+      <stop offset="1" stop-color="#7a1bc4"/>
+    </linearGradient>
+    <radialGradient id="glow" cx="0.561" cy="0.387" r="0.75">
+      <stop offset="0" stop-color="#9dff2f" stop-opacity="0.55"/>
+      <stop offset="1" stop-color="#9dff2f" stop-opacity="0"/>
+    </radialGradient>
+    <pattern id="dots" width="18.0" height="18.0" patternUnits="userSpaceOnUse">
+      <circle cx="9.0" cy="9.0" r="3.6" fill="#12100e" opacity="0.5"/>
+    </pattern>
+  </defs>
+
+  <rect width="1200" height="900" fill="url(#bg)"/>
+  <rect width="1200" height="900" fill="url(#glow)"/>
+  <path d="M1090.9 344.0L2171.7 401.5L1089.6 382.8ZM869.6 377.2L2146.9 625.0L866.6 393.4ZM961.0 441.3L2076.9 875.8L950.7 468.7ZM925.2 465.9L2011.4 1025.2L916.8 482.4ZM908.2 509.4L1891.5 1222.9L900.5 520.3ZM1015.8 683.3L1698.0 1443.4L984.1 713.0ZM846.9 602.7L1503.7 1597.3L839.7 607.5ZM809.5 589.6L1347.6 1688.2L784.8 602.0ZM755.7 570.4L1134.3 1775.8L735.1 577.1ZM709.6 742.7L792.0 1843.9L698.6 743.6ZM664.3 537.4L557.0 1844.2L651.8 536.4ZM605.6 861.5L427.5 1828.5L570.7 855.7ZM614.7 527.7L141.2 1751.4L597.3 521.1ZM437.0 803.2L-60.1 1657.5L408.2 787.1ZM465.4 617.2L-285.3 1502.9L446.8 601.8ZM488.6 531.5L-428.7 1367.0L476.0 517.8ZM398.6 526.0L-600.2 1142.4L392.7 516.7ZM478.4 449.7L-686.2 984.1L470.5 432.9ZM118.3 507.1L-776.4 736.6L113.2 488.3ZM212.2 414.6L-819.9 498.8L208.3 375.8ZM85.5 321.2L-824.6 256.3L86.6 303.7ZM312.7 293.2L-797.0 48.3L319.8 258.4ZM202.2 161.9L-706.8 -240.6L212.4 137.9ZM272.4 105.8L-589.4 -462.2L285.4 85.6ZM378.8 106.0L-438.8 -658.7L402.3 80.0ZM533.3 201.8L-328.2 -768.7L541.9 194.1ZM584.7 187.2L-25.7 -978.9L589.4 184.7ZM578.4 147.1L74.1 -1026.8L589.3 142.3ZM601.4 82.1L317.6 -1108.7L613.3 79.2ZM656.8 168.2L612.1 -1150.1L673.8 167.5ZM695.1 29.0L818.6 -1144.2L712.5 30.7ZM782.2 -71.6L1085.9 -1093.3L802.3 -65.8ZM749.9 155.7L1275.8 -1024.7L762.4 161.2ZM783.6 196.2L1583.8 -842.8L790.7 201.6ZM932.3 47.1L1688.0 -755.5L951.4 64.6ZM1054.3 2.4L1826.0 -610.3L1082.7 36.6ZM903.3 236.5L2030.5 -288.7L906.3 242.9ZM891.6 264.1L2082.9 -162.4L895.0 273.3ZM903.2 319.1L2163.3 181.7L904.0 326.4Z" fill="rgba(18,16,14,0.55)" opacity="0.85"/>
+  <g transform="rotate(-5.71 600.0 450.0)">
+    <g transform="rotate(8.61 600.0 450.0)"><path d="M345.7 195.7H777.7L854.3 272.3V704.3H345.7Z" fill="#ff2d95" stroke="#12100e" stroke-width="7" stroke-linejoin="round"/></g>
+    <text x="592.4" y="442.4" text-anchor="middle" dominant-baseline="central" font-family="Impact, Haettenschweiler, 'Arial Narrow Bold', 'Franklin Gothic Heavy', sans-serif" font-size="553" font-weight="700" fill="#00d4ff" opacity="0.75">T</text>
+    <text x="607.6" y="457.6" text-anchor="middle" dominant-baseline="central" font-family="Impact, Haettenschweiler, 'Arial Narrow Bold', 'Franklin Gothic Heavy', sans-serif" font-size="553" font-weight="700" fill="#9dff2f" opacity="0.75">T</text>
+    <text x="600.0" y="450.0" text-anchor="middle" dominant-baseline="central" font-family="Impact, Haettenschweiler, 'Arial Narrow Bold', 'Franklin Gothic Heavy', sans-serif" font-size="553" font-weight="700" fill="#fff6e0" opacity="1">T</text>
+  </g>
+  <rect width="1200" height="900" fill="url(#dots)" opacity="0.22"/>
+  <rect x="6" y="6" width="1188" height="888" fill="none" stroke="#12100e" stroke-width="12"/>
+</svg>

@@ -1,0 +1,27 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 800 1200" width="800" height="1200" role="img" aria-label="Capa gerada para Akira">
+  <defs>
+    <linearGradient id="bg" x1="0" y1="0" x2="0.6" y2="1">
+      <stop offset="0" stop-color="#12043a"/>
+      <stop offset="1" stop-color="#4a1178"/>
+    </linearGradient>
+    <radialGradient id="glow" cx="0.643" cy="0.344" r="0.75">
+      <stop offset="0" stop-color="#ff6b1f" stop-opacity="0.55"/>
+      <stop offset="1" stop-color="#ff6b1f" stop-opacity="0"/>
+    </radialGradient>
+    <pattern id="dots" width="18.2" height="18.2" patternUnits="userSpaceOnUse">
+      <circle cx="9.1" cy="9.1" r="3.6" fill="#12100e" opacity="0.5"/>
+    </pattern>
+  </defs>
+
+  <rect width="800" height="1200" fill="url(#bg)"/>
+  <rect width="800" height="1200" fill="url(#glow)"/>
+  <path d="M695.9 414.0L1955.2 468.6L695.5 426.3ZM1024.9 519.3L1920.8 731.0L1020.9 537.0ZM694.3 477.0L1851.3 953.4L688.0 492.5ZM801.2 570.9L1747.0 1161.4L786.5 595.1ZM908.6 798.5L1499.0 1466.7L872.0 832.7ZM687.3 673.8L1269.1 1642.0L668.3 685.5ZM695.3 813.2L1048.2 1752.9L657.8 828.1ZM582.7 700.1L813.8 1823.9L568.1 703.2ZM531.1 989.2L519.2 1855.4L501.1 989.3ZM426.9 968.4L258.6 1832.6L402.2 964.0ZM399.2 753.3L22.5 1769.1L384.3 747.9ZM407.7 577.1L-285.9 1613.2L403.7 574.5ZM309.3 652.5L-465.4 1471.8L291.4 635.9ZM362.2 532.9L-658.2 1253.3L352.0 518.6ZM335.0 503.7L-793.5 1021.7L329.6 491.9ZM207.5 469.9L-910.7 636.7L204.8 453.1ZM332.5 413.1L-926.4 342.5L333.4 395.5ZM335.8 376.7L-891.5 90.1L337.8 368.2ZM184.2 276.0L-789.3 -204.3L198.9 244.9ZM307.0 292.8L-723.6 -327.2L310.1 287.7ZM297.7 209.2L-488.8 -623.3L317.3 190.2ZM268.1 40.1L-226.4 -824.4L301.6 20.0ZM442.4 252.7L-36.4 -919.8L451.6 248.9ZM448.4 149.4L209.6 -996.5L465.0 145.8ZM518.6 112.7L562.1 -1028.2L529.6 113.1ZM556.2 210.6L838.6 -992.0L565.0 212.6ZM656.3 80.4L1124.2 -893.6L677.9 90.5ZM612.3 238.9L1272.6 -813.4L626.1 247.5ZM676.7 229.2L1484.4 -653.7L681.8 233.9ZM959.4 94.9L1718.6 -380.0L982.4 129.8ZM829.8 288.2L1863.7 -95.2L833.8 298.8ZM1032.6 308.7L1933.8 159.4L1036.8 331.6Z" fill="rgba(18,16,14,0.55)" opacity="0.85"/>
+  <g transform="rotate(1.54 400.0 600.0)">
+    <polygon points="682.6,600.0 571.1,662.3 616.5,781.7 490.8,757.3 449.1,878.3 374.5,744.8 258.7,844.7 286.9,694.9 134.4,696.7 234.0,600.0 134.4,503.3 248.0,472.4 258.7,355.3 371.6,438.8 449.1,321.7 491.5,441.5 616.5,418.3 583.9,533.1" fill="#00d4ff" stroke="#12100e" stroke-width="7" stroke-linejoin="round"/>
+    <text x="391.1" y="591.1" text-anchor="middle" dominant-baseline="central" font-family="Impact, Haettenschweiler, 'Arial Narrow Bold', 'Franklin Gothic Heavy', sans-serif" font-size="517" font-weight="700" fill="#ff8fd0" opacity="0.75">A</text>
+    <text x="408.9" y="608.9" text-anchor="middle" dominant-baseline="central" font-family="Impact, Haettenschweiler, 'Arial Narrow Bold', 'Franklin Gothic Heavy', sans-serif" font-size="517" font-weight="700" fill="#ff6b1f" opacity="0.75">A</text>
+    <text x="400.0" y="600.0" text-anchor="middle" dominant-baseline="central" font-family="Impact, Haettenschweiler, 'Arial Narrow Bold', 'Franklin Gothic Heavy', sans-serif" font-size="517" font-weight="700" fill="#fff6e0" opacity="1">A</text>
+  </g>
+  <rect width="800" height="1200" fill="url(#dots)" opacity="0.22"/>
+  <rect x="6" y="6" width="788" height="1188" fill="none" stroke="#12100e" stroke-width="12"/>
+</svg>
