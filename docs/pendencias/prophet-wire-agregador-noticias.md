@@ -23,9 +23,9 @@
 ### Bloco A — Fundação de dados (sem IA, sem rede)
 
 - [x] **Parte 0 — Semente + landing (FEITO).** 6 campos no ar. Commit `feat(anfitriao): 6 campos…`.
-- [ ] **Parte 1 — Registry de fontes.** `src/lib/prophet-wire/sources.ts`: lista tipada de
-      todas as fontes (nome, url, tipo rss|html|api, categoria-padrão, ativo). Teste: sem
-      urls duplicadas, todas https. Doc: como adicionar fonte. → commit+push.
+- [x] **Parte 1 — Registry de fontes (FEITO).** `src/lib/prophet-wire/sources.ts`: 24 fontes
+      tipadas (id, nome, url, kind rss|html|api, categoria-padrão, enabled) + `activeSources()`
+      e `findSource()`. Contrato `Source` em `types.ts`. Teste em `sources.test.ts`. → commit+push.
 - [ ] **Parte 2 — Logger.** `logger.ts`: interface `Logger` + impl de console estruturada
       (início, fim, tempo, contagens, erros). DI-friendly. Teste do formato. → commit+push.
 - [ ] **Parte 3 — Repository (interface + in-memory).** `repository.ts`: interface

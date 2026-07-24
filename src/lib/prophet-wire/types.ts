@@ -33,6 +33,28 @@ export type NewsCategory =
 /** Estado de publicação — controlado por `config.ts` (rascunho vs. automático). */
 export type NewsStatus = "rascunho" | "publicado"
 
+/** Como o Collector (fase futura) deve buscar uma fonte. */
+export type SourceKind = "rss" | "html" | "api"
+
+/**
+ * Uma fonte de notícias. O Collector percorre este registry; o Normalizer usa
+ * `defaultCategory` como palpite inicial antes de a IA reclassificar.
+ */
+export interface Source {
+  /** Identificador estável (kebab-case), usado como chave e nos logs. */
+  id: string
+  /** Nome legível impresso na notícia (ex.: "BoardGameGeek"). */
+  name: string
+  /** Endereço do feed/página/endpoint a coletar. */
+  url: string
+  /** Estratégia de coleta. */
+  kind: SourceKind
+  /** Categoria-palpite antes da classificação por IA. */
+  defaultCategory: NewsCategory
+  /** Fonte ligada? Permite desativar sem remover do registry. */
+  enabled: boolean
+}
+
 /** A imagem de uma notícia, com os campos de acessibilidade e legenda. */
 export interface NewsImage {
   /** Caminho ou URL da arte. `null` quando ainda não há arte (moldura vazia). */
