@@ -43,8 +43,11 @@
       percorre fontes ativas, payload bruto por fonte, erro isolado, status não-2xx tratado,
       contadores no RunReport). Teste com fixture RSS e HttpClient fake. → commit+push.
       NOTA: filtro da janela de 24h fica no Parser (Parte 5), que lê as datas dos itens.
-- [ ] **Parte 5 — Parser.** `parser.ts`: extrai título, corpo, data, link, imagem de cada
-      item bruto. Teste sobre as fixtures. → commit+push.
+- [x] **Parte 5 — Parser (FEITO).** `parser.ts`: `parsePayload()` extrai título/link/data ISO/
+      resumo/imagem de feeds RSS (`<item>`) e Atom (`<entry>`), dependency-free (CDATA +
+      entidades). `withinWindow()` aplica a janela de 24h e descarta item sem data (conta
+      discarded). Fontes html/api sem feed ficam para extractors próprios (futuro). Teste
+      com fixtures RSS + Atom. → commit+push.
 - [ ] **Parte 6 — Normalizer.** `normalizer.ts`: mapeia item parseado → `NewsItem` bruto
       (sem campos de IA). Teste do mapeamento. → commit+push.
 - [ ] **Parte 7 — Dedup.** `dedup.ts`: hash de conteúdo (sha-256) + similaridade de

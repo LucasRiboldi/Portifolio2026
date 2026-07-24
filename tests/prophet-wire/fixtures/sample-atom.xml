@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="utf-8"?>
+<feed xmlns="http://www.w3.org/2005/Atom">
+  <title>Comunidade — Amostra Atom</title>
+  <link rel="alternate" href="https://exemplo.test/atom"/>
+  <updated>2026-07-23T12:00:00Z</updated>
+  <entry>
+    <title>Discussão sobre jogos solo ganha tração</title>
+    <link rel="alternate" href="https://exemplo.test/atom/solo"/>
+    <id>tag:exemplo.test,2026:solo</id>
+    <updated>2026-07-23T12:00:00Z</updated>
+    <summary>Threads sobre modos solo cresceram após novos lançamentos.</summary>
+    <media:thumbnail url="https://exemplo.test/img/solo.jpg"/>
+  </entry>
+  <entry>
+    <title>Promoção relâmpago em loja europeia</title>
+    <link rel="alternate" href="https://exemplo.test/atom/promo"/>
+    <id>tag:exemplo.test,2026:promo</id>
+    <updated>2026-07-10T09:00:00Z</updated>
+    <summary>Descontos por tempo limitado em títulos populares.</summary>
+  </entry>
+</feed>

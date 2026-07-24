@@ -1,0 +1,186 @@
+/**
+ * PROPHET WIRE — Parser (Parte 5).
+ *
+ * Converte o payload bruto do Collector em itens estruturados (`ParsedItem`) e
+ * aplica a janela de coleta (`config.collectWindowHours`) lendo a data de cada
+ * item. Aqui mora o único conhecimento sobre formatos de feed.
+ *
+ * ESCOPO: cobre feeds RSS 2.0 (`<item>`) e Atom (`<entry>`), que são a maioria
+ * das fontes do registry. Fontes `kind: "html"`/`"api"` sem feed exigem
+ * extractors site-específicos e ficam para uma parte futura — o parser as
+ * ignora com um aviso, sem inventar itens (nada de placeholder).
+ *
+ * O parser é tolerante mas dependency-free: não é um parser XML genérico, e sim
+ * um extrator de feeds. Se um formato novo aparecer, estende-se aqui.
+ */
+
+import type { RawPayload } from "./collector"
+import type { Logger } from "./logger"
+
+/** Um item de notícia extraído de um feed, ainda não mapeado para `NewsItem`. */
+export interface ParsedItem {
+  /** Id da fonte de origem (para rastrear proveniência). */
+  sourceId: string
+  title: string
+  /** URL canônica do item. */
+  link: string
+  /** Data de publicação em ISO, ou `null` se o feed não trouxe/foi ilegível. */
+  publishedAt: string | null
+  /** Resumo/descrição em texto puro (tags removidas). */
+  summary: string
+  /** Primeira imagem encontrada (enclosure/media/`<img>`), ou `null`. */
+  imageUrl: string | null
+}
+
+// ── Utilidades de texto ────────────────────────────────────────────────
+
+/** Remove CDATA e decodifica as entidades XML básicas. */
+function unwrap(value: string): string {
+  return value
+    .replace(/<!\[CDATA\[([\s\S]*?)\]\]>/g, "$1")
+    .replace(/&lt;/g, "<")
+    .replace(/&gt;/g, ">")
+    .replace(/&quot;/g, '"')
+    .replace(/&#0*39;|&apos;/g, "'")
+    .replace(/&amp;/g, "&")
+    .trim()
+}
+
+/** Tira tags HTML e colapsa espaços — o resumo vai em texto puro. */
+function stripHtml(value: string): string {
+  return unwrap(value)
+    .replace(/<[^>]+>/g, " ")
+    .replace(/\s+/g, " ")
+    .trim()
+}
+
+/** Conteúdo do primeiro `<tag>…</tag>` dentro de `block` (sem namespace). */
+function tag(block: string, name: string): string | null {
+  const re = new RegExp(`<${name}(?:\\s[^>]*)?>([\\s\\S]*?)</${name}>`, "i")
+  const m = block.match(re)
+  return m ? unwrap(m[1]!) : null
+}
+
+/** Valor de um atributo do primeiro `<tag …attr="valor">` em `block`. */
+function tagAttr(block: string, name: string, attr: string): string | null {
+  const re = new RegExp(`<${name}\\b[^>]*\\b${attr}=["']([^"']+)["'][^>]*>`, "i")
+  const m = block.match(re)
+  return m ? unwrap(m[1]!) : null
+}
+
+/** Extrai todos os blocos `<tagName>…</tagName>`. */
+function blocks(xml: string, tagName: string): string[] {
+  const re = new RegExp(`<${tagName}(?:\\s[^>]*)?>([\\s\\S]*?)</${tagName}>`, "gi")
+  return [...xml.matchAll(re)].map((m) => m[1]!)
+}
+
+/** Converte uma data de feed (RFC-822 ou ISO) em ISO, ou `null`. */
+function toIso(value: string | null): string | null {
+  if (!value) return null
+  const t = Date.parse(value)
+  return Number.isNaN(t) ? null : new Date(t).toISOString()
+}
+
+/** Primeira imagem: enclosure, media:content/thumbnail, ou `<img src>` no corpo. */
+function findImage(block: string): string | null {
+  return (
+    tagAttr(block, "enclosure", "url") ??
+    tagAttr(block, "media:content", "url") ??
+    tagAttr(block, "media:thumbnail", "url") ??
+    block.match(/<img\b[^>]*\bsrc=["']([^"']+)["']/i)?.[1] ??
+    null
+  )
+}
+
+/** Link de um `<entry>` Atom: `<link href="…">` (rel=alternate quando houver). */
+function atomLink(block: string): string {
+  const alt = block.match(/<link\b[^>]*\brel=["']alternate["'][^>]*\bhref=["']([^"']+)["']/i)
+  if (alt) return unwrap(alt[1]!)
+  return tagAttr(block, "link", "href") ?? ""
+}
+
+// ── Parsing por formato ────────────────────────────────────────────────
+
+function parseRssItem(sourceId: string, block: string): ParsedItem {
+  return {
+    sourceId,
+    title: stripHtml(tag(block, "title") ?? ""),
+    link: tag(block, "link") ?? "",
+    publishedAt: toIso(tag(block, "pubDate") ?? tag(block, "dc:date")),
+    summary: stripHtml(tag(block, "description") ?? tag(block, "content:encoded") ?? ""),
+    imageUrl: findImage(block),
+  }
+}
+
+function parseAtomEntry(sourceId: string, block: string): ParsedItem {
+  return {
+    sourceId,
+    title: stripHtml(tag(block, "title") ?? ""),
+    link: atomLink(block),
+    publishedAt: toIso(tag(block, "updated") ?? tag(block, "published")),
+    summary: stripHtml(tag(block, "summary") ?? tag(block, "content") ?? ""),
+    imageUrl: findImage(block),
+  }
+}
+
+/**
+ * Interpreta um payload de feed. Detecta RSS vs Atom pela presença de
+ * `<item>`/`<entry>`. Fontes sem feed (html/api) devolvem `[]` com aviso.
+ * Nunca lança: um payload malformado vira lista vazia + `error` no log.
+ */
+export function parsePayload(payload: RawPayload, logger: Logger): ParsedItem[] {
+  if (!payload.ok || !payload.body) return []
+  const { source, body } = payload
+
+  try {
+    const items = blocks(body, "item")
+    if (items.length > 0) return items.map((b) => parseRssItem(source.id, b))
+
+    const entries = blocks(body, "entry")
+    if (entries.length > 0) return entries.map((b) => parseAtomEntry(source.id, b))
+
+    logger.warn("payload sem <item>/<entry> — fonte precisa de extractor próprio", {
+      source: source.id,
+      kind: source.kind,
+    })
+    return []
+  } catch (err) {
+    logger.error("falha ao parsear payload", { source: source.id, error: String(err) })
+    logger.count("errors")
+    return []
+  }
+}
+
+/**
+ * Mantém só itens publicados dentro da janela (`hours`) contada a partir de
+ * `now`. Itens sem data são DESCARTADOS: não há como provar que são das últimas
+ * 24h, e o spec proíbe republicar coisa antiga. Descartes contam em `discarded`.
+ */
+export function withinWindow(
+  items: ParsedItem[],
+  hours: number,
+  now: Date,
+  logger: Logger,
+): ParsedItem[] {
+  const cutoff = now.getTime() - hours * 3_600_000
+  const kept: ParsedItem[] = []
+  for (const item of items) {
+    const ts = item.publishedAt ? Date.parse(item.publishedAt) : NaN
+    if (!Number.isNaN(ts) && ts >= cutoff && ts <= now.getTime()) {
+      kept.push(item)
+    } else {
+      logger.count("discarded")
+    }
+  }
+  return kept
+}
+
+/** Conveniência: parseia e já aplica a janela num passo só. */
+export function parseWithinWindow(
+  payload: RawPayload,
+  hours: number,
+  now: Date,
+  logger: Logger,
+): ParsedItem[] {
+  return withinWindow(parsePayload(payload, logger), hours, now, logger)
+}
