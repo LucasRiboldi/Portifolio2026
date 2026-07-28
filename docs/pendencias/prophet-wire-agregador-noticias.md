@@ -91,8 +91,31 @@
       com um RunLogger; nunca lança; devolve RunReport). Teste de integração end-to-end com
       fakes (fixture RSS, IA fallback, repo in-memory), incl. dedup entre execuções e fonte
       caída. → commit+push.
-- [ ] **Parte 12 — Scheduler.** `scripts/prophet-wire-run.mjs` (entrypoint do cron) +
-      registro de `run` a cada execução. Doc: como mudar horário (`config.cron`). → commit+push.
+- [x] **Parte 12 — Scheduler (FEITO, com desvio justificado).** O plano previa
+      `scripts/prophet-wire-run.mjs`, mas Node ESM exige extensão explícita e o script `.mjs`
+      não consegue importar os módulos `.ts` (`ERR_MODULE_NOT_FOUND`) — e o site roda na
+      Vercel, onde cron é HTTP. Implementado como endpoint:
+      `src/app/api/prophet-wire/run/route.ts` (GET p/ Vercel Cron + POST p/ disparo manual;
+      monta FetchHttpClient + FallbackAIClient + defaultRepository e chama `runPipeline`;
+      devolve o resumo do RunReport), `vercel.json` com `crons` em `0 6 * * *` (espelho de
+      `config.cron`) e `cron-auth.ts` validando `Authorization: Bearer $CRON_SECRET`.
+      Segurança: falha fechada sem segredo, comparação em tempo constante (SHA-256 +
+      timingSafeEqual), segredo nunca logado/devolvido, resposta 401 genérica, trava de
+      execução concorrente (409). Revisado por eco-security: sem bypass/vazamento/timing.
+      9 testes de auth. → commit+push.
+      **AÇÃO MANUAL NECESSÁRIA:** definir `CRON_SECRET` nas env vars da Vercel (`openssl rand
+      -hex 32`). Sem isso o endpoint recusa tudo — de propósito.
+
+### Pendências técnicas anotadas ao longo do caminho
+
+- **Rate limiting do gatilho** (apontado pelo eco-security): a trava atual é de processo e
+  não coordena instâncias serverless distintas. Um limite real exige store compartilhado
+  (Vercel KV/Upstash). Avaliar junto com a Parte 10.
+- **`/anfitriao` é prerenderizada estática** (`○` no build): quando o repositório Supabase
+  entrar (Parte 10), a página precisará de `revalidate`/ISR ou rota dinâmica, senão as
+  notícias novas só aparecem no próximo build.
+- **Cliente real de IA**: `FallbackAIClient` mantém tudo rodando; plugar o SDK Anthropic
+  quando houver `ANTHROPIC_API_KEY` (Partes 8 e 9 já falam só com a interface `AIClient`).
 
 ### Bloco E — Operação
 
