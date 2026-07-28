@@ -171,8 +171,30 @@ do Wire mostra 4 notícias porque 2 vão para as matérias inferiores — total 
       real, senão a ação some no próximo cold start. Fazer junto da Parte 10.
       NÃO VERIFICADO no browser: `/admin` exige Supabase configurado, ausente no ambiente
       local (`requireAdmin` redireciona para `/login?e=config`). Validado por build + testes.
-- [ ] **Parte 14 — Imagens.** Regra do spec: imagem oficial → pesquisa → padrão da categoria.
-      Substitui a moldura `.img-empty` quando houver arte real. → commit+push.
+- [x] **Parte 14 — Imagens (FEITO).** `image-resolver.ts` implementa a cascata do spec em
+      quatro degraus, com proveniência registrada: **fonte** → **busca** → **categoria** →
+      **gravura**. `isUsableImageUrl` exige https e caminho com cara de imagem (recusa
+      `http`, `data:`, `javascript:` e páginas HTML). `ImageSearcher` é interface com
+      `NullImageSearcher` — mesmo padrão do `AIClient`, sem fingir serviço que não existe.
+      Integrado ao pipeline entre generate e publish, e também em `getFrontNews()` (a
+      semente não passa pelo pipeline). As imagens chumbadas no JSX da página saíram.
+      → commit+push.
+
+      **Acessibilidade — dois defeitos achados na verificação, não no código:** o ALT herdado
+      do item descrevia a arte imaginada ("pavilhões de feira") enquanto a foto padrão é um
+      céu tempestuoso, e a legenda afirmava retratar o fato. Agora o mapa de categorias
+      carrega `{src, alt}` com a descrição da FOTO, e a legenda de foto de arquivo é sempre
+      "Imagem ilustrativa." — a legenda autoral só vale no degrau da gravura, onde descreve
+      o que de fato se vê.
+
+      **Limite honesto:** o acervo local tem só 3 fotografias (`mics`, `tornado`, `potions`),
+      herdadas do layout original, cobrindo 9 das 16 categorias por leitura temática. As
+      outras 7 caem na gravura vazia — que no impresso é recurso legítimo, não buraco.
+      Substituir por arte própria é acrescentar entradas em `CATEGORY_IMAGES`.
+
+      **Pendente:** plugar um `ImageSearcher` real (passo 2 da cascata) e, quando houver
+      armazenamento (Parte 10), baixar e reservir as imagens remotas em vez de hotlinkar —
+      hoje o navegador do leitor revela o IP para o domínio da fonte.
 
 ## Imagens (regra do spec)
 

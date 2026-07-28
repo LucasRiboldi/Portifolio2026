@@ -177,23 +177,18 @@ export default async function DailyProphetFront() {
           {featured && (
             <section className="newspaper-bottomarticle-first">
               <h1 className="fittext-bottomarticle-first-h1">{featured.title}</h1>
-              {featured.image.src ? (
-                <figure>
-                  {/* eslint-disable-next-line @next/next/no-img-element */}
+              {/* A arte vem resolvida do pipeline (image-resolver): imagem da
+                  fonte, busca, padrão da categoria ou — não havendo nenhuma — a
+                  gravura vazia, que no impresso é recurso legítimo. */}
+              <figure>
+                {featured.image.src ? (
+                  // eslint-disable-next-line @next/next/no-img-element
                   <img alt={featured.image.alt} src={featured.image.src} />
-                </figure>
-              ) : (
-                <figure>
-                  {/* eslint-disable-next-line @next/next/no-img-element */}
-                  <img
-                    alt={featured.image.alt}
-                    src="/dporiginal/images/mics500.jpg"
-                    srcSet="/dporiginal/images/mics500.jpg 1x, /dporiginal/images/mics100.jpg 2x"
-                    width={500}
-                    height={200}
-                  />
-                </figure>
-              )}
+                ) : (
+                  <div className="dpx-news-plate" role="img" aria-label={featured.image.alt} />
+                )}
+                {featured.image.caption ? <figcaption>{featured.image.caption}</figcaption> : null}
+              </figure>
 
               <blockquote>
                 <p>“{featured.subtitle || featured.summary.slice(0, 80)}”</p>
@@ -223,18 +218,12 @@ export default async function DailyProphetFront() {
               <div className="wrapper relative">
                 <div className="floated" />
                 <figure>
-                  {/* eslint-disable-next-line @next/next/no-img-element */}
-                  <img
-                    alt={second.image.alt}
-                    src={second.image.src ?? "/dporiginal/images/potions200.jpg"}
-                    srcSet={
-                      second.image.src
-                        ? undefined
-                        : "/dporiginal/images/potions200.jpg 1x, /dporiginal/images/potions400.jpg 2x"
-                    }
-                    width={200}
-                    height={200}
-                  />
+                  {second.image.src ? (
+                    // eslint-disable-next-line @next/next/no-img-element
+                    <img alt={second.image.alt} src={second.image.src} width={200} height={200} />
+                  ) : (
+                    <div className="dpx-news-plate" role="img" aria-label={second.image.alt} />
+                  )}
                 </figure>
 
                 <p className="newspaper-articles-anfang">{second.summary}</p>

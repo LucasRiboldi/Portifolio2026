@@ -15,6 +15,8 @@
 import type { NewsItem } from "@/lib/prophet-wire/types"
 import { config } from "@/lib/prophet-wire/config"
 import { InMemoryNewsRepository, type NewsRepository } from "@/lib/prophet-wire/repository"
+import { resolveImages } from "@/lib/prophet-wire/image-resolver"
+import { silentLogger } from "@/lib/prophet-wire/logger"
 
 /** Moldura de gravura vazia — a página já usa `.img-empty` à espera de arte. */
 function pendingPlate(alt: string, caption: string) {
@@ -173,7 +175,13 @@ export function setDefaultRepository(next: NewsRepository | null): void {
 /**
  * Devolve as notícias que a landing deve exibir, limitadas ao número de campos
  * configurado (`config.newsFields`) e apenas as publicadas — lidas via repo.
+ *
+ * A arte passa pelo resolvedor aqui também, e não só no pipeline: a semente
+ * estática não atravessa o pipeline, e sem isto ela apareceria inteira com a
+ * gravura vazia. Assim a mesma cascata (fonte → busca → categoria → gravura)
+ * vale para qualquer origem do item.
  */
 export async function getFrontNews(): Promise<NewsItem[]> {
-  return defaultRepository().listPublished(config.newsFields)
+  const items = await defaultRepository().listPublished(config.newsFields)
+  return resolveImages(items, { logger: silentLogger })
 }

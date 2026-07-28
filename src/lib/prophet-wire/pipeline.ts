@@ -3,7 +3,7 @@
  *
  * Costura os módulos numa execução diária, na ordem do spec:
  *
- *   collect → parse+janela → normalize → dedup → analyze → generate → publish
+ *   collect → parse+janela → normalize → dedup → analyze → generate → imagens → publish
  *
  * Recebe TODAS as dependências por injeção (HttpClient, AIClient, repositório,
  * fontes, relógio). Cada etapa já isola seus próprios erros e alimenta o mesmo
@@ -24,6 +24,7 @@ import { normalizeBatch } from "./normalizer"
 import { dedup } from "./dedup"
 import { analyzeBatch } from "./analyzer"
 import { generateBatch } from "./generator"
+import { resolveImages, type ImageSearcher } from "./image-resolver"
 import { publish } from "./publisher"
 
 export interface PipelineDeps {
@@ -36,6 +37,8 @@ export interface PipelineDeps {
   windowHours?: number
   /** Relógio injetável (testes / carimbo de execução). */
   now?: () => Date
+  /** Buscador de imagem oficial. Default: nenhum (cai no padrão da categoria). */
+  imageSearcher?: ImageSearcher
   /** Nível mínimo de log e eco no console. */
   logging?: { minLevel?: "debug" | "info" | "warn" | "error"; echo?: boolean }
 }
@@ -81,8 +84,14 @@ export async function runPipeline(deps: PipelineDeps): Promise<RunReport> {
     // 6) reescreve em PT-BR + SEO (ou fallback determinístico)
     const generated = await generateBatch(analyzed, { ai: deps.ai, logger })
 
-    // 7) grava conforme o modo de publicação
-    await publish(generated, deps.repo, logger)
+    // 7) resolve a arte: imagem da fonte → busca → padrão da categoria → gravura
+    const illustrated = await resolveImages(generated, {
+      logger,
+      searcher: deps.imageSearcher,
+    })
+
+    // 8) grava conforme o modo de publicação
+    await publish(illustrated, deps.repo, logger)
 
     logger.info("pipeline concluído")
   } catch (err) {
