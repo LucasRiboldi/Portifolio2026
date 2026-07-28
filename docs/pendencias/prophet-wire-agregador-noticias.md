@@ -4,6 +4,49 @@
 > o *Daily Prophet*). Objetivo: pipeline 100% automático que pesquisa, analisa com IA,
 > deduplica e preenche os campos de notícia do jornal, diariamente, sem intervenção humana.
 
+## ⇒ PRÓXIMA NECESSIDADE: Parte 10 — persistência no Supabase
+
+> Registrado em 2026-07-28, a pedido do Lucas. Tudo o mais do roadmap está feito
+> (Partes 0–9, 11–14 + o redesenho sobre o layout original e a equalização visual).
+> **Esta é a única peça que falta — e é a que destrava as outras cinco pendências.**
+
+O pipeline inteiro funciona hoje, mas escreve num repositório **em memória**: ele vive
+enquanto a instância serverless existir. Um cold start zera o acervo, e duas instâncias
+não compartilham nada. Na prática isso significa que **o agregador não tem memória entre
+execuções** — a deduplicação entre dias não funciona de verdade, e nada do que ele coleta
+sobrevive.
+
+O que a Parte 10 exige:
+
+- chaves do Supabase no ambiente (`NEXT_PUBLIC_SUPABASE_URL`, `SUPABASE_SERVICE_ROLE_KEY`);
+- migração criando `news`, `sources`, `runs`, `logs`;
+- uma segunda implementação de `NewsRepository` e de `RunStore` — as interfaces já existem
+  e todo o pipeline fala com elas, então **nenhum outro módulo muda**.
+
+O que está bloqueado esperando por ela:
+
+| Bloqueado | Onde | Por quê |
+|---|---|---|
+| Deduplicação entre execuções | `dedup.ts` | sem acervo persistente, todo dia é o primeiro dia |
+| Botões publicar/descartar | painel `/admin/prophet-wire` | a ação sumiria no próximo cold start |
+| Histórico de execuções | `run-store.ts` | o painel só mostra o que rodou naquela instância |
+| `revalidate`/ISR em `/anfitriao` | `page.tsx` | a página é prerenderizada estática (`○` no build); notícia nova só apareceria no próximo build |
+| Rate limiting do gatilho | `api/prophet-wire/run` | a trava atual é de processo e não coordena instâncias (apontado pelo eco-security) |
+| Reservir imagens em vez de hotlinkar | `image-resolver.ts` | hoje o navegador do leitor revela o IP ao domínio da fonte |
+
+## Armadilhas de operação (descobertas na prática)
+
+- **Nunca rodar `npm run build` com o dev server no ar.** Os dois escrevem em `.next` e o
+  cache corrompe: as rotas passam a devolver 500 com erros enganosos (`Cannot find module
+  './vendor-chunks/...'`, ou um símbolo importado "não definido" num arquivo onde o import
+  existe). Aconteceu duas vezes nesta sessão e custou depuração à toa. Cura: parar o dev,
+  `rm -rf .next`, subir de novo.
+- **`node_modules` local pode estar defasado** em relação ao `package.json`: `three` e
+  `@react-three/fiber` estavam declarados mas não instalados, e o build local falhava
+  enquanto o CI (que roda `npm ci`) passava. Cura: `npm install`.
+- **Crases em mensagem de commit pelo Bash** são interpretadas pelo shell e comem o trecho.
+  Usar heredoc com aspas simples (`<<'EOF'`) ou evitar crases.
+
 ## Estado atual (Fase 0 — feita)
 
 - [x] Contratos `NewsItem` / `NewsCategory` — `src/lib/prophet-wire/types.ts`
@@ -81,10 +124,11 @@
 
 ### Bloco D — Persistência e automação (exige chaves do Supabase)
 
-- [ ] **Parte 10 — Repository Supabase (ADIADA por escolha do Lucas).** impl real de
-      `NewsRepository` + migração das tabelas `news`, `sources`, `runs`, `logs`. Publica
-      conforme `config.publishMode`. Exige chaves do Supabase. Retomar quando quiser trocar
-      o in-memory pelo banco. → commit+push.
+- [ ] **Parte 10 — Repository Supabase (ADIADA por escolha do Lucas; É A ÚNICA QUE FALTA).**
+      impl real de `NewsRepository` e de `RunStore` + migração das tabelas `news`, `sources`,
+      `runs`, `logs`. Publica conforme `config.publishMode`. Exige chaves do Supabase.
+      **Ver a seção "PRÓXIMA NECESSIDADE" no topo deste arquivo** — lista as seis coisas que
+      só passam a funcionar de verdade quando esta parte entrar. → commit+push.
 - [x] **Parte 11 — Publisher + orquestrador (FEITO).** `publisher.ts` (grava via repo
       respeitando publicado/rascunho, erro isolado por item, conta published) e `pipeline.ts`
       (`runPipeline()` costura collect→parse+janela→normalize→dedup→analyze→generate→publish
