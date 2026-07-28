@@ -106,6 +106,45 @@
       **AÇÃO MANUAL NECESSÁRIA:** definir `CRON_SECRET` nas env vars da Vercel (`openssl rand
       -hex 32`). Sem isso o endpoint recusa tudo — de propósito.
 
+## Redesenho sobre o layout original (28/07/2026)
+
+O Lucas colocou o site original do Daily Prophet em `public/dporiginal` e pediu que
+`/anfitriao` ficasse igual a ele, acrescentando as zonas de notícia automática.
+Decisões dele: **substituir** o estilo em /anfitriao (preservando todo o conteúdo),
+**logo/brasão do original com textos em PT-BR**, e **favicon só nas rotas /anfitriao**.
+
+Como ficou:
+
+- `src/styles/dp-original.css` — cópia do CSS original, intacta salvo os `url()` que
+  passaram de relativos (`../fonts/`) para absolutos (`/dporiginal/fonts/`), porque o
+  bundler move o CSS para `/_next/static/css/` e os relativos apontariam para o vazio.
+  Importado só no layout de /anfitriao: ele traz seletores globais (`html`, `body`, `h1`,
+  `p`, `a`, `img`, `hr`) que quebrariam o resto do site.
+- `src/styles/dp-original-extras.css` — camada aditiva `dpx-*` (linha de data, cadernos,
+  faixa do Wire, colunas de notícia) na linguagem visual do original.
+- Layout com o cabeçalho do original (brasão + logo SVG + tagline PT-BR) e favicon por rota.
+- Página remapeada nas zonas do original: EXCLUSIVO = manchete, top article = matéria de
+  capa, aside "Rita Skeeter" = Editorial, matérias inferiores = 2 notícias automáticas,
+  faixa `dpx-wire` = as outras 4, weather = Clima das Mesas, teaser = últimas, footer = índice.
+- **Nada do conteúdo anterior foi descartado**: cupom, quadro de playtests, gravura de
+  tiragem, grimório, anúncios e o expediente (que abriga o PressMark, o acesso ao admin)
+  vivem no "caderno da oficina" ao pé da folha, sob `.prophet.dp` — o kit antigo é todo
+  escopado por classe, sem regras globais, então convive sem conflito.
+
+Três armadilhas resolvidas, todas silenciosas:
+
+1. **Fundo de madeira sumia** — `[data-realm="arcane"] body` (0,1,1) vencia o `body` (0,0,1)
+   do original. Corrigido com um seletor de especificidade maior, válido só nesta rota.
+2. **Fonte caía em Georgia** — as variáveis do `next/font` ficam na div `.newspaper`, que é
+   DESCENDENTE do `body`; variável não sobe na árvore. A família passou a ser declarada na
+   própria `.newspaper`.
+3. **FitText → `clamp()`** — o original dimensionava as manchetes em jQuery. Substituído por
+   unidades de container query, mas com teto: o FitText servia strings curtas e fixas, e
+   nossos títulos vêm do agregador (longos), o que criava rolagem horizontal no site inteiro.
+
+Pendente deste redesenho: as fontes `kind: html`/`api` continuam sem extractor, e a faixa
+do Wire mostra 4 notícias porque 2 vão para as matérias inferiores — total de 6, como pedido.
+
 ### Pendências técnicas anotadas ao longo do caminho
 
 - **Rate limiting do gatilho** (apontado pelo eco-security): a trava atual é de processo e

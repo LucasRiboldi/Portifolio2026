@@ -1,0 +1,417 @@
+/**
+ * DP ORIGINAL — camada aditiva (prefixo `dpx-`).
+ *
+ * O arquivo `dp-original.css` é o CSS do layout original, mantido intacto para
+ * preservar a fidelidade visual — só os caminhos de fonte/imagem foram
+ * reescritos. Tudo que o nosso jornal precisa ALÉM dele (linha de data,
+ * cadernos, zonas de notícia automática) mora aqui, escrito na mesma
+ * linguagem: tinta #1c1915 sobre papel #fff8ee, âmbar #FBB03B como destaque,
+ * Kreon nos títulos e Vollkorn no texto.
+ *
+ * Manter os dois separados é o que permite reaplicar o original sem perder
+ * nossas adições — e enxergar, a qualquer momento, o que é herança e o que é
+ * autoral.
+ */
+
+:root {
+  --dpx-ink: #1c1915;
+  --dpx-ink-2: #3a3a3a;
+  --dpx-paper: #fff8ee;
+  --dpx-accent: #fbb03b;
+}
+
+/* ─────────────────────────────────────────────────────────────
+   A mesa de madeira sob o jornal.
+
+   O original põe a textura no `body` (a mesa) e a folha creme no
+   `.newspaper` por cima. Mas o sistema de realms do site já define
+   `[data-realm="arcane"] body`, cuja especificidade (0,1,1) vence a
+   regra `body` (0,0,1) do original — o fundo de madeira sumia em
+   silêncio. Esta regra sobe para (0,1,2) e devolve a mesa.
+
+   Só vale em /anfitriao porque este arquivo só é carregado no layout
+   dessa rota — os demais realms seguem com o fundo deles.
+   ───────────────────────────────────────────────────────────── */
+
+html[data-realm] body,
+html body {
+  background-image: url(/dporiginal/images/woodtile2.jpg);
+  background-repeat: repeat;
+  color: var(--dpx-ink);
+}
+
+/**
+ * A fonte do corpo precisa ser declarada AQUI, e não no `body`.
+ *
+ * As variáveis do next/font (`--font-vollkorn`, `--font-kreon`) são aplicadas
+ * na div `.newspaper`, que é DESCENDENTE do body — uma variável não sobe na
+ * árvore, então `body { font-family: var(--font-vollkorn) }` resolvia para
+ * vazio e caía no serif do realm (Georgia). Declarar na própria `.newspaper`
+ * resolve pelo lado certo da cascata e alcança todo o conteúdo, que vive
+ * inteiro dentro dela.
+ */
+.newspaper {
+  font-family: var(--font-vollkorn), "Vollkorn", serif;
+  color: var(--dpx-ink);
+}
+
+/* ─────────────────────────────────────────────────────────────
+   Encaixe no grid do original.
+
+   A partir de 48em o `.newspaper` vira um grid de 6 colunas, e cada
+   seção do original declara seu `grid-column`. Nossos acréscimos
+   (linha de data, cadernos, faixa do Wire e o caderno da oficina) não
+   declaravam nada e eram auto-posicionados em 2 colunas — apareciam
+   espremidos a ~1/3 da largura. Todos ocupam a folha inteira.
+   ───────────────────────────────────────────────────────────── */
+
+.dpx-dateline,
+.dpx-sections,
+.dpx-wire,
+.newspaper > .prophet {
+  grid-column: 1 / -1;
+  min-width: 0;
+}
+
+/* ─────────────────────────────────────────────────────────────
+   Linha de data — sob o cabeçalho, entre filetes finos.
+   ───────────────────────────────────────────────────────────── */
+
+.dpx-dateline {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  justify-content: space-between;
+  gap: 0.5em 1em;
+  margin: 0 0 0.75em;
+  padding: 0.4em 0;
+  border-top: 1px solid var(--dpx-ink);
+  border-bottom: 1px solid var(--dpx-ink);
+  font-family: var(--font-vollkorn), "Vollkorn", serif;
+  font-size: 0.8125rem;
+  letter-spacing: 0.04em;
+  text-transform: uppercase;
+  color: var(--dpx-ink);
+}
+
+.dpx-dateline-price {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.75em;
+}
+
+/* ─────────────────────────────────────────────────────────────
+   Cadernos — a navegação, em versalete espaçado.
+   ───────────────────────────────────────────────────────────── */
+
+.dpx-sections {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  justify-content: center;
+  gap: 0.5em 0.9em;
+  margin: 0 0 1.25em;
+  font-family: var(--font-kreon), "Kreon", serif;
+  font-size: 0.875rem;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+}
+
+.dpx-sections a {
+  color: var(--dpx-ink);
+  text-decoration: none;
+  border-bottom: 1px solid transparent;
+  transition: border-color 0.2s ease;
+}
+
+.dpx-sections a:hover,
+.dpx-sections a:focus-visible {
+  border-bottom-color: var(--dpx-ink);
+}
+
+/* ─────────────────────────────────────────────────────────────
+   Zona de notícias automáticas (Prophet Wire).
+
+   Ocupa a mesma largura do corpo do jornal e se comporta como as
+   colunas do original: filete duplo no topo, título em Kreon,
+   corpo em Vollkorn justificado.
+   ───────────────────────────────────────────────────────────── */
+
+.dpx-wire {
+  margin: 1.5em auto;
+}
+
+.dpx-wire-title {
+  font-family: var(--font-kreon), "Kreon", serif;
+  font-size: 1.125rem;
+  letter-spacing: 0.18em;
+  text-transform: uppercase;
+  text-align: center;
+  margin: 0 0 0.75em;
+  color: var(--dpx-ink);
+}
+
+.dpx-wire-grid {
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: 1.25em;
+}
+
+@media only screen and (min-width: 40em) {
+  .dpx-wire-grid {
+    grid-template-columns: repeat(2, 1fr);
+  }
+}
+
+@media only screen and (min-width: 64em) {
+  .dpx-wire-grid {
+    grid-template-columns: repeat(4, 1fr);
+  }
+}
+
+/* Cada notícia é uma coluna separada por filete, como no impresso. */
+.dpx-news {
+  min-width: 0;
+  padding-left: 1em;
+  border-left: 1px solid var(--dpx-ink);
+}
+
+.dpx-news:first-child {
+  padding-left: 0;
+  border-left: 0;
+}
+
+@media only screen and (max-width: 63.99em) {
+  .dpx-news:nth-child(odd) {
+    padding-left: 0;
+    border-left: 0;
+  }
+}
+
+@media only screen and (max-width: 39.99em) {
+  .dpx-news {
+    padding-left: 0;
+    border-left: 0;
+    border-top: 1px solid var(--dpx-ink);
+    padding-top: 0.75em;
+  }
+  .dpx-news:first-child {
+    border-top: 0;
+    padding-top: 0;
+  }
+}
+
+.dpx-news-kicker {
+  display: inline-block;
+  font-family: var(--font-kreon), "Kreon", serif;
+  font-size: 0.6875rem;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+  background: var(--dpx-ink);
+  color: var(--dpx-paper);
+  padding: 0.15em 0.5em;
+  margin-bottom: 0.4em;
+}
+
+.dpx-news-head {
+  font-family: var(--font-kreon), "Kreon", serif;
+  font-size: 1.0625rem;
+  line-height: 1.1;
+  margin: 0 0 0.25em;
+  color: var(--dpx-ink);
+}
+
+.dpx-news-sub {
+  font-family: var(--font-vollkorn), "Vollkorn", serif;
+  font-style: italic;
+  font-size: 0.8125rem;
+  line-height: 1.3;
+  color: var(--dpx-ink-2);
+  margin: 0 0 0.5em;
+}
+
+.dpx-news figure {
+  margin: 0 0 0.5em;
+}
+
+.dpx-news img {
+  display: block;
+  width: 100%;
+  height: auto;
+  filter: grayscale(1) contrast(1.15);
+}
+
+/* Moldura vazia — enquanto a notícia não tem arte própria. */
+.dpx-news-plate {
+  width: 100%;
+  aspect-ratio: 3 / 2;
+  border: 1px solid var(--dpx-ink);
+  background-image: repeating-linear-gradient(
+    45deg,
+    rgba(28, 25, 21, 0.09) 0,
+    rgba(28, 25, 21, 0.09) 6px,
+    transparent 6px,
+    transparent 12px
+  );
+}
+
+.dpx-news figcaption {
+  font-family: var(--font-vollkorn), "Vollkorn", serif;
+  font-size: 0.6875rem;
+  font-style: italic;
+  color: var(--dpx-ink-2);
+  margin-top: 0.25em;
+}
+
+.dpx-news-body {
+  font-family: var(--font-vollkorn), "Vollkorn", serif;
+  font-size: 0.875rem;
+  line-height: 1.45;
+  text-align: justify;
+  hyphens: auto;
+  color: var(--dpx-ink);
+  margin: 0 0 0.4em;
+}
+
+/* Capitular — o original abre matérias assim. */
+.dpx-news-cap {
+  float: left;
+  font-family: var(--font-kreon), "Kreon", serif;
+  font-size: 2.75em;
+  line-height: 0.8;
+  padding: 0.05em 0.12em 0 0;
+  color: var(--dpx-ink);
+}
+
+.dpx-news-note {
+  font-family: var(--font-vollkorn), "Vollkorn", serif;
+  font-size: 0.75rem;
+  font-style: italic;
+  color: var(--dpx-ink-2);
+  margin: 0 0 0.35em;
+}
+
+.dpx-news-source {
+  font-family: var(--font-kreon), "Kreon", serif;
+  font-size: 0.75rem;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+  color: var(--dpx-ink);
+  text-decoration: none;
+  border-bottom: 1px solid var(--dpx-ink);
+}
+
+.dpx-news-source:hover,
+.dpx-news-source:focus-visible {
+  background: var(--dpx-accent);
+}
+
+/* ─────────────────────────────────────────────────────────────
+   FitText sem jQuery.
+
+   No original, as manchetes eram dimensionadas em JavaScript pelo
+   FitText, cuja fórmula é `font-size = largura do elemento / (compressor
+   × 10)`. Isso é exatamente o que as unidades de container query fazem
+   em CSS puro: `1cqw` = 1% da largura do container. Então cada
+   percentual abaixo é `100 / (compressor × 10)`, com os compressores
+   lidos de `public/dporiginal/js/main3860.js`:
+
+     exclusive-box      0.455 → 22.0cqw      toparticle-h1-1  0.60 → 16.7cqw
+     exclusive-h1       0.5   → 20.0cqw      toparticle-h1-2  0.62 → 16.1cqw
+     exclusive-span     0.65  → 15.4cqw      bottom-first-h1  1.21 →  8.3cqw
+     teaser-fatline     1.44  →  6.9cqw      second-h1        1.5  →  6.7cqw
+     second-h2          0.4   → 25.0cqw      second-h3        0.29 → 34.5cqw
+
+   Resultado: as mesmas proporções do original, sem 90kb de jQuery e
+   sem salto visual depois que a página carrega.
+   ───────────────────────────────────────────────────────────── */
+
+.newspaper-exclusive,
+.newspaper-exclusive-text,
+.newspaper-toparticle,
+.newspaper-bottomarticle-first,
+.newspaper-bottomarticle-second,
+.newspaper-teaser {
+  container-type: inline-size;
+}
+
+/**
+ * Por que `clamp()` e não o percentual puro do FitText.
+ *
+ * O FitText dimensionava STRINGS CURTAS E FIXAS — "EXCLUSIVE", "In Polyjuice",
+ * "Scandal" —, escolhidas pelo autor para caber. Nossos títulos vêm do
+ * agregador: são dinâmicos e bem mais longos. Aplicar a proporção crua fazia o
+ * texto transbordar a folha (o `-h2` chegou a 417px de texto numa coluna de
+ * 239px, criando rolagem horizontal no site inteiro).
+ *
+ * O `clamp()` mantém a escala dramática do original no meio da faixa, mas
+ * garante um teto: título comprido diminui em vez de furar a página. O mínimo
+ * preserva legibilidade no celular.
+ */
+
+.newspaper-exclusive-box {
+  font-size: clamp(1.25rem, 4.6cqw, 2.75rem);
+}
+
+.fittext-exclusive-h1 {
+  font-size: clamp(1.5rem, 9cqw, 4.5rem);
+}
+
+.fittext-exclusive-span {
+  font-size: clamp(1.2rem, 7cqw, 3.5rem);
+}
+
+.fittext-toparticle-h1-1 {
+  font-size: clamp(1.6rem, 9cqw, 5rem);
+}
+
+.fittext-toparticle-h1-2 {
+  font-size: clamp(1.6rem, 9cqw, 5rem);
+}
+
+.fittext-bottomarticle-first-h1 {
+  font-size: clamp(1.3rem, 6cqw, 2.75rem);
+}
+
+.newspaper-bottomarticle-second-h1 {
+  font-size: clamp(1rem, 5cqw, 2rem);
+}
+
+.newspaper-bottomarticle-second-h2 {
+  font-size: clamp(1.1rem, 6cqw, 2.25rem);
+}
+
+.newspaper-bottomarticle-second-h3 {
+  font-size: clamp(1.2rem, 8cqw, 2.5rem);
+}
+
+.newspaper-teaser-fatline {
+  font-size: clamp(1.2rem, 5cqw, 2.5rem);
+}
+
+/**
+ * Cinto de segurança: nenhuma manchete pode furar a folha, mesmo que o
+ * agregador traga uma palavra única e enorme (nome de jogo, URL, hashtag).
+ */
+.newspaper-exclusive-box,
+.fittext-exclusive-h1,
+.fittext-toparticle-h1-1,
+.fittext-toparticle-h1-2,
+.fittext-bottomarticle-first-h1,
+.newspaper-bottomarticle-second-h1,
+.newspaper-bottomarticle-second-h2,
+.newspaper-bottomarticle-second-h3,
+.newspaper-teaser-fatline,
+.dpx-news-head {
+  overflow-wrap: anywhere;
+  hyphens: auto;
+}
+
+/* ─────────────────────────────────────────────────────────────
+   Caderno da oficina — as peças herdadas (cupom, quadro, gravura,
+   grimório, expediente) sob `.prophet.dp`, encaixadas na folha.
+   ───────────────────────────────────────────────────────────── */
+
+.dpx-caderno {
+  margin-top: 2em;
+}

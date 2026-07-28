@@ -1,0 +1,2551 @@
+@charset "UTF-8";
+/*! normalize.css v5.0.0 | MIT License | github.com/necolas/normalize.css */
+/**
+ * 1. Change the default font family in all browsers (opinionated).
+ * 2. Correct the line height in all browsers.
+ * 3. Prevent adjustments of font size after orientation changes in
+ *    IE on Windows Phone and in iOS.
+ */
+/* Document
+   ========================================================================== */
+/* line 66, app/scss/screen.css */
+html {
+  font-family: sans-serif;
+  /* 1 */
+  line-height: 1.15;
+  /* 2 */
+  -ms-text-size-adjust: 100%;
+  /* 3 */
+  -webkit-text-size-adjust: 100%;
+  /* 3 */
+}
+
+/* Sections
+   ========================================================================== */
+/**
+ * Remove the margin in all browsers (opinionated).
+ */
+/* line 81, app/scss/screen.css */
+body {
+  margin: 0;
+}
+
+/**
+ * Add the correct display in IE 9-.
+ */
+/* line 87, app/scss/screen.css */
+article,
+aside,
+footer,
+header,
+nav,
+section {
+  display: block;
+}
+
+/**
+ * Correct the font size and margin on `h1` elements within `section` and
+ * `article` contexts in Chrome, Firefox, and Safari.
+ */
+/* line 99, app/scss/screen.css */
+h1 {
+  font-size: 2em;
+  margin: 0.67em 0;
+}
+
+/* Grouping content
+   ========================================================================== */
+/**
+ * Add the correct display in IE 9-.
+ * 1. Add the correct display in IE.
+ */
+/* line 109, app/scss/screen.css */
+figcaption,
+figure,
+main {
+  /* 1 */
+  display: block;
+}
+
+/**
+ * Add the correct margin in IE 8.
+ */
+/* line 118, app/scss/screen.css */
+figure {
+  margin: 1em 40px;
+}
+
+/**
+ * 1. Add the correct box sizing in Firefox.
+ * 2. Show the overflow in Edge and IE.
+ */
+/* line 125, app/scss/screen.css */
+hr {
+  -webkit-box-sizing: content-box;
+          box-sizing: content-box;
+  /* 1 */
+  height: 0;
+  /* 1 */
+  overflow: visible;
+  /* 2 */
+}
+
+/**
+ * 1. Correct the inheritance and scaling of font size in all browsers.
+ * 2. Correct the odd `em` font sizing in all browsers.
+ */
+/* line 137, app/scss/screen.css */
+pre {
+  font-family: monospace, monospace;
+  /* 1 */
+  font-size: 1em;
+  /* 2 */
+}
+
+/* Text-level semantics
+   ========================================================================== */
+/**
+ * 1. Remove the gray background on active links in IE 10.
+ * 2. Remove gaps in links underline in iOS 8+ and Safari 8+.
+ */
+/* line 149, app/scss/screen.css */
+a {
+  background-color: transparent;
+  /* 1 */
+  -webkit-text-decoration-skip: objects;
+  /* 2 */
+}
+
+/**
+ * Remove the outline on focused links when they are also active or hovered
+ * in all browsers (opinionated).
+ */
+/* line 159, app/scss/screen.css */
+a:active,
+a:hover {
+  outline-width: 0;
+}
+
+/**
+ * 1. Remove the bottom border in Firefox 39-.
+ * 2. Add the correct text decoration in Chrome, Edge, IE, Opera, and Safari.
+ */
+/* line 167, app/scss/screen.css */
+abbr[title] {
+  border-bottom: none;
+  /* 1 */
+  text-decoration: underline;
+  /* 2 */
+  text-decoration: underline dotted;
+  /* 2 */
+}
+
+/**
+ * Prevent the duplicate application of `bolder` by the next rule in Safari 6.
+ */
+/* line 178, app/scss/screen.css */
+b,
+strong {
+  font-weight: inherit;
+}
+
+/**
+ * Add the correct font weight in Chrome, Edge, and Safari.
+ */
+/* line 185, app/scss/screen.css */
+b,
+strong {
+  font-weight: bolder;
+}
+
+/**
+ * 1. Correct the inheritance and scaling of font size in all browsers.
+ * 2. Correct the odd `em` font sizing in all browsers.
+ */
+/* line 193, app/scss/screen.css */
+code,
+kbd,
+samp {
+  font-family: monospace, monospace;
+  /* 1 */
+  font-size: 1em;
+  /* 2 */
+}
+
+/**
+ * Add the correct font style in Android 4.3-.
+ */
+/* line 204, app/scss/screen.css */
+dfn {
+  font-style: italic;
+}
+
+/**
+ * Add the correct background and color in IE 9-.
+ */
+/* line 210, app/scss/screen.css */
+mark {
+  background-color: #ff0;
+  color: #000;
+}
+
+/**
+ * Add the correct font size in all browsers.
+ */
+/* line 217, app/scss/screen.css */
+small {
+  font-size: 80%;
+}
+
+/**
+ * Prevent `sub` and `sup` elements from affecting the line height in
+ * all browsers.
+ */
+/* line 224, app/scss/screen.css */
+sub,
+sup {
+  font-size: 75%;
+  line-height: 0;
+  position: relative;
+  vertical-align: baseline;
+}
+
+/* line 231, app/scss/screen.css */
+sub {
+  bottom: -0.25em;
+}
+
+/* line 234, app/scss/screen.css */
+sup {
+  top: -0.5em;
+}
+
+/* Embedded content
+   ========================================================================== */
+/**
+ * Add the correct display in IE 9-.
+ */
+/* line 242, app/scss/screen.css */
+audio,
+video {
+  display: inline-block;
+}
+
+/**
+ * Add the correct display in iOS 4-7.
+ */
+/* line 249, app/scss/screen.css */
+audio:not([controls]) {
+  display: none;
+  height: 0;
+}
+
+/**
+ * Remove the border on images inside links in IE 10-.
+ */
+/* line 256, app/scss/screen.css */
+img {
+  border-style: none;
+}
+
+/**
+ * Hide the overflow in IE.
+ */
+/* line 262, app/scss/screen.css */
+svg:not(:root) {
+  overflow: hidden;
+}
+
+/* Forms
+   ========================================================================== */
+/**
+ * 1. Change the font styles in all browsers (opinionated).
+ * 2. Remove the margin in Firefox and Safari.
+ */
+/* line 271, app/scss/screen.css */
+button,
+input,
+optgroup,
+select,
+textarea {
+  font-family: sans-serif;
+  /* 1 */
+  font-size: 100%;
+  /* 1 */
+  line-height: 1.15;
+  /* 1 */
+  margin: 0;
+  /* 2 */
+}
+
+/**
+ * Show the overflow in IE.
+ * 1. Show the overflow in Edge.
+ */
+/* line 289, app/scss/screen.css */
+button,
+input {
+  /* 1 */
+  overflow: visible;
+}
+
+/**
+ * Remove the inheritance of text transform in Edge, Firefox, and IE.
+ * 1. Remove the inheritance of text transform in Firefox.
+ */
+/* line 298, app/scss/screen.css */
+button,
+select {
+  /* 1 */
+  text-transform: none;
+}
+
+/**
+ * 1. Prevent a WebKit bug where (2) destroys native `audio` and `video`
+ *    controls in Android 4.
+ * 2. Correct the inability to style clickable types in iOS and Safari.
+ */
+/* line 308, app/scss/screen.css */
+button,
+html [type="button"],
+[type="reset"],
+[type="submit"] {
+  -webkit-appearance: button;
+  /* 2 */
+}
+
+/**
+ * Remove the inner border and padding in Firefox.
+ */
+/* line 318, app/scss/screen.css */
+button::-moz-focus-inner,
+[type="button"]::-moz-focus-inner,
+[type="reset"]::-moz-focus-inner,
+[type="submit"]::-moz-focus-inner {
+  border-style: none;
+  padding: 0;
+}
+
+/**
+ * Restore the focus styles unset by the previous rule.
+ */
+/* line 328, app/scss/screen.css */
+button:-moz-focusring,
+[type="button"]:-moz-focusring,
+[type="reset"]:-moz-focusring,
+[type="submit"]:-moz-focusring {
+  outline: 1px dotted ButtonText;
+}
+
+/**
+ * Change the border, margin, and padding in all browsers (opinionated).
+ */
+/* line 337, app/scss/screen.css */
+fieldset {
+  border: 1px solid #c0c0c0;
+  margin: 0 2px;
+  padding: 0.35em 0.625em 0.75em;
+}
+
+/**
+ * 1. Correct the text wrapping in Edge and IE.
+ * 2. Correct the color inheritance from `fieldset` elements in IE.
+ * 3. Remove the padding so developers are not caught out when they zero out
+ *    `fieldset` elements in all browsers.
+ */
+/* line 348, app/scss/screen.css */
+legend {
+  -webkit-box-sizing: border-box;
+          box-sizing: border-box;
+  /* 1 */
+  color: inherit;
+  /* 2 */
+  display: table;
+  /* 1 */
+  max-width: 100%;
+  /* 1 */
+  padding: 0;
+  /* 3 */
+  white-space: normal;
+  /* 1 */
+}
+
+/**
+ * 1. Add the correct display in IE 9-.
+ * 2. Add the correct vertical alignment in Chrome, Firefox, and Opera.
+ */
+/* line 366, app/scss/screen.css */
+progress {
+  display: inline-block;
+  /* 1 */
+  vertical-align: baseline;
+  /* 2 */
+}
+
+/**
+ * Remove the default vertical scrollbar in IE.
+ */
+/* line 375, app/scss/screen.css */
+textarea {
+  overflow: auto;
+}
+
+/**
+ * 1. Add the correct box sizing in IE 10-.
+ * 2. Remove the padding in IE 10-.
+ */
+/* line 382, app/scss/screen.css */
+[type="checkbox"],
+[type="radio"] {
+  -webkit-box-sizing: border-box;
+          box-sizing: border-box;
+  /* 1 */
+  padding: 0;
+  /* 2 */
+}
+
+/**
+ * Correct the cursor style of increment and decrement buttons in Chrome.
+ */
+/* line 392, app/scss/screen.css */
+[type="number"]::-webkit-inner-spin-button,
+[type="number"]::-webkit-outer-spin-button {
+  height: auto;
+}
+
+/**
+ * 1. Correct the odd appearance in Chrome and Safari.
+ * 2. Correct the outline style in Safari.
+ */
+/* line 400, app/scss/screen.css */
+[type="search"] {
+  -webkit-appearance: textfield;
+  /* 1 */
+  outline-offset: -2px;
+  /* 2 */
+}
+
+/**
+ * Remove the inner padding and cancel buttons in Chrome and Safari on macOS.
+ */
+/* line 409, app/scss/screen.css */
+[type="search"]::-webkit-search-cancel-button,
+[type="search"]::-webkit-search-decoration {
+  -webkit-appearance: none;
+}
+
+/**
+ * 1. Correct the inability to style clickable types in iOS and Safari.
+ * 2. Change font properties to `inherit` in Safari.
+ */
+/* line 417, app/scss/screen.css */
+::-webkit-file-upload-button {
+  -webkit-appearance: button;
+  /* 1 */
+  font: inherit;
+  /* 2 */
+}
+
+/* Interactive
+   ========================================================================== */
+/*
+ * Add the correct display in IE 9-.
+ * 1. Add the correct display in Edge, IE, and Firefox.
+ */
+/* line 429, app/scss/screen.css */
+details,
+menu {
+  display: block;
+}
+
+/*
+ * Add the correct display in all browsers.
+ */
+/* line 436, app/scss/screen.css */
+summary {
+  display: list-item;
+}
+
+/* Scripting
+   ========================================================================== */
+/**
+ * Add the correct display in IE 9-.
+ */
+/* line 444, app/scss/screen.css */
+canvas {
+  display: inline-block;
+}
+
+/**
+ * Add the correct display in IE.
+ */
+/* line 450, app/scss/screen.css */
+template {
+  display: none;
+}
+
+/* Hidden
+   ========================================================================== */
+/**
+ * Add the correct display in IE 10-.
+ */
+/* line 458, app/scss/screen.css */
+[hidden] {
+  display: none;
+}
+
+/**
+ * These values will not show up in content, but can be 
+ * queried by JavaScript to know which breakpoint is active.
+ * Add or remove as many breakpoints as you like.
+ */
+/* line 466, app/scss/screen.css */
+body:before {
+  content: "smartphone";
+  display: none;
+  /* Prevent from displaying. */
+}
+
+/*320*/
+@media only screen and (min-width: 20em) {
+  /* line 473, app/scss/screen.css */
+  body:before {
+    content: "320";
+  }
+}
+
+/*480*/
+@media only screen and (min-width: 30em) {
+  /* line 478, app/scss/screen.css */
+  body:before {
+    content: "480";
+  }
+}
+
+/*640*/
+@media only screen and (min-width: 40em) {
+  /* line 483, app/scss/screen.css */
+  body:before {
+    content: "640";
+  }
+}
+
+/*768*/
+@media only screen and (min-width: 48em) {
+  /* line 488, app/scss/screen.css */
+  body:before {
+    content: "768";
+  }
+}
+
+/*1024*/
+@media only screen and (min-width: 64em) {
+  /* line 493, app/scss/screen.css */
+  body:before {
+    content: "1024";
+  }
+}
+
+/*960*/
+@media only screen and (min-width: 60em) {
+  /* line 498, app/scss/screen.css */
+  body:before {
+    content: "960";
+  }
+}
+
+/*1140*/
+@media only screen and (min-width: 71.25em) {
+  /* line 503, app/scss/screen.css */
+  body:before {
+    content: "1140";
+  }
+}
+
+/*1224*/
+@media only screen and (min-width: 76.5em) {
+  /* line 508, app/scss/screen.css */
+  body:before {
+    content: "1224";
+  }
+}
+
+/*1680*/
+@media only screen and (min-width: 105em) {
+  /* line 513, app/scss/screen.css */
+  body:before {
+    content: "1680";
+  }
+}
+
+/*1824*/
+@media only screen and (min-width: 114em) {
+  /* line 518, app/scss/screen.css */
+  body:before {
+    content: "1824";
+  }
+}
+
+/* line 521, app/scss/screen.css */
+.helper-hide {
+  /* Remove the item from normal flow */
+  position: absolute;
+  /* Workaround for falsely pronounced, smushed text */
+  white-space: nowrap;
+  /* Set it to the smallest possible size (some screen readers ignore elements with zero height and width) */
+  width: 1px;
+  height: 1px;
+  /* Hide overflowing content after resizing */
+  overflow: hidden;
+  /* Reset any property that may change the elements size */
+  border: 0;
+  padding: 0;
+  /* Clipping defines what part of an element should be displayed. */
+  /* Deprecated clip property for older browsers */
+  clip: rect(0 0 0 0);
+  /* clip-path for newer browsers. inset(50%) defines an inset rectangle that makes the content disappear.  */
+  -webkit-clip-path: inset(50%);
+          clip-path: inset(50%);
+  /* It seems like at the moment nobody is quite sure why margin: -1px is there. On top of that it seems to cause issues (see: https://github.com/h5bp/html5-boilerplate/issues/1985). */
+}
+
+/* line 541, app/scss/screen.css */
+.relative {
+  position: relative;
+}
+
+/* line 544, app/scss/screen.css */
+hr {
+  border: none;
+  border-bottom: 1px solid #1c1915;
+  margin: 0.5em auto;
+}
+
+/* line 549, app/scss/screen.css */
+.hr-double-top, .hr-double-bottom {
+  border-top: 0.1875em solid #1c1915;
+  border-bottom: 1px solid #1c1915;
+  height: 0.125em;
+  margin: 0.5em auto;
+}
+
+/* line 555, app/scss/screen.css */
+.hr-double-bottom {
+  border-top: 1px solid #1c1915;
+  border-bottom: 0.1875em solid #1c1915;
+}
+
+/* line 559, app/scss/screen.css */
+.wrapper:after {
+  content: "";
+  display: table;
+  clear: both;
+}
+
+/* line 564, app/scss/screen.css */
+.helper-colsplit-2 {
+  -webkit-column-count: 2;
+     -moz-column-count: 2;
+          column-count: 2;
+  -webkit-column-gap: 0.5em;
+     -moz-column-gap: 0.5em;
+          column-gap: 0.5em;
+}
+
+/* line 568, app/scss/screen.css */
+.helper-verticaltext {
+  -webkit-transform: rotate(-90deg);
+      -ms-transform: rotate(-90deg);
+          transform: rotate(-90deg);
+}
+
+@-webkit-keyframes slideInDown {
+  0% {
+    -webkit-transform: translateY(-100%);
+    transform: translateY(-100%);
+    visibility: visible;
+  }
+  100% {
+    -webkit-transform: translateY(0);
+    transform: translateY(0);
+  }
+}
+
+@keyframes slideInDown {
+  0% {
+    -webkit-transform: translateY(-100%);
+    transform: translateY(-100%);
+    visibility: visible;
+  }
+  100% {
+    -webkit-transform: translateY(0);
+    transform: translateY(0);
+  }
+}
+
+@-webkit-keyframes singleDown {
+  0% {
+    -webkit-transform: translate(0, -120%) rotate(45deg);
+            transform: translate(0, -120%) rotate(45deg);
+    visibility: visible;
+  }
+  20% {
+    -webkit-transform: translate(40%, -100%) rotate(-45deg);
+            transform: translate(40%, -100%) rotate(-45deg);
+  }
+  /*40%{
+			transform:translate(-40%, -80%) rotate(33deg);//rotate(0);
+		}
+
+		60%{
+			transform: translate(30%, -60%) rotate(-33deg);//rotate(-45deg);
+		}*/
+  50% {
+    -webkit-transform: translate(-40%, -80%) rotate(33deg);
+            transform: translate(-40%, -80%) rotate(33deg);
+  }
+  80% {
+    -webkit-transform: translate(20%, -40%) rotate(-17deg);
+            transform: translate(20%, -40%) rotate(-17deg);
+  }
+  100% {
+    -webkit-transform: translate(0, 0) rotate(0);
+            transform: translate(0, 0) rotate(0);
+  }
+}
+
+@keyframes singleDown {
+  0% {
+    -webkit-transform: translate(0, -120%) rotate(45deg);
+            transform: translate(0, -120%) rotate(45deg);
+    visibility: visible;
+  }
+  20% {
+    -webkit-transform: translate(40%, -100%) rotate(-45deg);
+            transform: translate(40%, -100%) rotate(-45deg);
+  }
+  /*40%{
+			transform:translate(-40%, -80%) rotate(33deg);//rotate(0);
+		}
+
+		60%{
+			transform: translate(30%, -60%) rotate(-33deg);//rotate(-45deg);
+		}*/
+  50% {
+    -webkit-transform: translate(-40%, -80%) rotate(33deg);
+            transform: translate(-40%, -80%) rotate(33deg);
+  }
+  80% {
+    -webkit-transform: translate(20%, -40%) rotate(-17deg);
+            transform: translate(20%, -40%) rotate(-17deg);
+  }
+  100% {
+    -webkit-transform: translate(0, 0) rotate(0);
+            transform: translate(0, 0) rotate(0);
+  }
+}
+
+@font-face {
+  font-family: 'headline_onehplhs';
+  src: url("/dporiginal/fonts/headoh__-webfont.eot");
+  src: url("/dporiginal/fonts/headoh__-webfontd41d.eot?#iefix") format("embedded-opentype"), url("/dporiginal/fonts/headoh__-webfont.woff2") format("woff2"), url("/dporiginal/fonts/headoh__-webfont.woff") format("woff");
+  font-weight: normal;
+  font-style: normal;
+}
+
+/* line 607, app/scss/screen.css */
+p {
+  font-size: 16px;
+  font-size: 1rem;
+  font-family: var(--font-vollkorn), 'Vollkorn', serif;
+}
+
+/* line 612, app/scss/screen.css */
+a {
+  color: #fff8ee;
+  background-color: #1c1915;
+  text-decoration: none;
+  display: block;
+}
+
+/* line 617, app/scss/screen.css */
+a:hover, a:focus, a:active {
+  background-color: #FBB03B;
+  color: #1c1915;
+}
+
+/* line 621, app/scss/screen.css */
+html {
+  overflow-y: scroll;
+  /*använder font-size 100% från normalizer*/
+}
+
+/* line 625, app/scss/screen.css */
+body {
+  font-family: var(--font-vollkorn), 'Vollkorn', serif;
+  font-size: 16px;
+  font-size: 1rem;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+  background-image: url(/dporiginal/images/woodtile2.jpg);
+  background-repeat: repeat;
+  color: #1c1915;
+}
+
+/* line 635, app/scss/screen.css */
+.newspaper {
+  background-color: #fff8ee;
+  margin: 1em auto;
+  border-radius: 1em;
+  -webkit-box-sizing: border-box;
+          box-sizing: border-box;
+  padding: 1em;
+  /*1024*/
+}
+
+@media only screen and (min-width: 64em) {
+  /* line 643, app/scss/screen.css */
+  .newspaper {
+    max-width: 64em;
+  }
+}
+
+/* line 646, app/scss/screen.css */
+.newspaper-topheader {
+  background-repeat: no-repeat;
+  width: 100%;
+  display: block;
+  background-position-x: 50%;
+  /*768*/
+  /*960*/
+}
+
+@media only screen and (min-width: 48em) {
+  /* line 654, app/scss/screen.css */
+  .newspaper-topheader {
+    padding-top: 0.5em;
+  }
+}
+
+/* line 656, app/scss/screen.css */
+.newspaper-topheader figcaption {
+  text-align: center;
+  font-family: var(--font-kreon), 'Kreon', serif;
+  text-transform: uppercase;
+  position: relative;
+  letter-spacing: 2px;
+  margin: 0.375em 0.5em  0em 0.5em;
+  font-size: 10px;
+  font-size: 0.625rem;
+  /*768*/
+  /*960*/
+}
+
+@media only screen and (min-width: 48em) {
+  /* line 668, app/scss/screen.css */
+  .newspaper-topheader figcaption {
+    letter-spacing: 0.3125em;
+    font-size: 14px;
+    font-size: 0.875rem;
+  }
+  /* line 672, app/scss/screen.css */
+  .newspaper-topheader figcaption:before, .newspaper-topheader figcaption:after {
+    content: '*';
+    font-size: 24px;
+    font-size: 1.5rem;
+    position: absolute;
+    top: -0.083333333em;
+    /*768*/
+    /*960*/
+  }
+}
+
+@media only screen and (min-width: 48em) and (min-width: 48em) {
+  /* line 681, app/scss/screen.css */
+  .newspaper-topheader figcaption:before, .newspaper-topheader figcaption:after {
+    top: 0;
+  }
+}
+
+@media only screen and (min-width: 48em) and (min-width: 60em) {
+  /* line 684, app/scss/screen.css */
+  .newspaper-topheader figcaption:before, .newspaper-topheader figcaption:after {
+    top: 1px;
+  }
+}
+
+@media only screen and (min-width: 48em) {
+  /* line 687, app/scss/screen.css */
+  .newspaper-topheader figcaption:before {
+    margin-left: -0.625em;
+  }
+  /* line 689, app/scss/screen.css */
+  .newspaper-topheader figcaption:after {
+    margin-left: 0.1875em;
+  }
+}
+
+@media only screen and (min-width: 60em) {
+  /* line 692, app/scss/screen.css */
+  .newspaper-topheader figcaption {
+    font-size: 16px;
+    font-size: 1rem;
+  }
+}
+
+/* line 695, app/scss/screen.css */
+.newspaper-topheader figure {
+  margin: 0;
+}
+
+/* line 697, app/scss/screen.css */
+.newspaper-topheader img {
+  -webkit-box-sizing: border-box;
+          box-sizing: border-box;
+}
+
+/* line 699, app/scss/screen.css */
+.newspaper-topheader .hr-double-bottom {
+  margin-bottom: 0;
+}
+
+/* line 701, app/scss/screen.css */
+.newspaper-topheader .hr-double-top {
+  margin-bottom: -3%;
+}
+
+@media only screen and (min-width: 60em) {
+  /* line 704, app/scss/screen.css */
+  .newspaper-topheader .hr-double-top {
+    margin-bottom: -1.75em;
+  }
+}
+
+/* line 707, app/scss/screen.css */
+.newspaper-topheader-imgshield {
+  -webkit-animation-name: singleDown;
+          animation-name: singleDown;
+  -webkit-animation-duration: 1.66s;
+          animation-duration: 1.66s;
+  -webkit-animation-fill-mode: both;
+          animation-fill-mode: both;
+  -webkit-animation-timing-function: cubic-bezier(0, -0.57, 0, 1.66);
+          animation-timing-function: cubic-bezier(0, -0.57, 0, 1.66);
+  padding: 0 0.5em;
+  display: none;
+  /*768*/
+  /*960*/
+}
+
+@media only screen and (min-width: 48em) {
+  /* line 717, app/scss/screen.css */
+  .newspaper-topheader-imgshield {
+    display: block;
+    width: 6.25em;
+    max-width: none;
+    height: auto;
+    float: left;
+    margin-top: 2.1875em;
+  }
+}
+
+@media only screen and (min-width: 60em) {
+  /* line 725, app/scss/screen.css */
+  .newspaper-topheader-imgshield {
+    width: 9.6875em;
+    margin-top: 1em;
+  }
+}
+
+/* line 729, app/scss/screen.css */
+.newspaper-topheader-imglogo {
+  display: block;
+  width: 100%;
+  padding: 0 0.5em;
+  /*768*/
+  /*960*/
+}
+
+@media only screen and (min-width: 48em) {
+  /* line 736, app/scss/screen.css */
+  .newspaper-topheader-imglogo {
+    width: 80%;
+    width: -webkit-calc(100% - 6.25em);
+    width: calc(100% - 6.25em);
+    padding: 0 0.5em 0 0;
+  }
+}
+
+@media only screen and (min-width: 60em) {
+  /* line 741, app/scss/screen.css */
+  .newspaper-topheader-imglogo {
+    width: 70%;
+    width: -webkit-calc(100% - 9.6875em);
+    width: calc(100% - 9.6875em);
+  }
+}
+
+/* line 745, app/scss/screen.css */
+.newspaper-exclusive {
+  margin: 0.5em 0 0 0;
+}
+
+/* line 748, app/scss/screen.css */
+.newspaper-exclusive-box {
+  background-color: #1c1915;
+  color: #fff8ee;
+  font-family: "headline_onehplhs", "HelveticaNeue-Bold", "HelveticaNeue", "Roboto", Arial, Verdana, "Trebuchet MS", sans-serif;
+  font-weight: normal;
+  font-size: 32px;
+  font-size: 2rem;
+  position: relative;
+  -webkit-box-sizing: border-box;
+          box-sizing: border-box;
+  padding: 0.08333em 0.33333em  0em 0em;
+  margin: 0.16667em 0em  0em 0em;
+  /*768*/
+  /*1024*/
+}
+
+@media only screen and (min-width: 48em) {
+  /* line 762, app/scss/screen.css */
+  .newspaper-exclusive-box {
+    float: left;
+    width: 22%;
+    display: inline-block;
+  }
+}
+
+@media only screen and (min-width: 64em) {
+  /* line 767, app/scss/screen.css */
+  .newspaper-exclusive-box {
+    font-size: 48px;
+    font-size: 3rem;
+  }
+}
+
+/* line 770, app/scss/screen.css */
+.newspaper-exclusive-box:before, .newspaper-exclusive-box:after,
+.newspaper-exclusive-box span:before, .newspaper-exclusive-box span:after {
+  content: '';
+  display: block;
+  border: 0.41667em solid transparent;
+}
+
+/* line 775, app/scss/screen.css */
+.newspaper-exclusive-box:before, .newspaper-exclusive-box span:after {
+  border-left: 0.41667em solid #fff8ee;
+}
+
+/* line 777, app/scss/screen.css */
+.newspaper-exclusive-box:after, .newspaper-exclusive-box span:after {
+  left: 0;
+  top: 0;
+  position: absolute;
+}
+
+/* line 781, app/scss/screen.css */
+.newspaper-exclusive-box:after, .newspaper-exclusive-box span:before {
+  border-left: 0.41667em solid #1c1915;
+}
+
+/* line 783, app/scss/screen.css */
+.newspaper-exclusive-box:before {
+  float: left;
+  margin: 0.125em -0.20833em  0em 0.4375em;
+}
+
+/* line 786, app/scss/screen.css */
+.newspaper-exclusive-box:after {
+  margin: 0.20833em 0em  0em 0em;
+}
+
+/* line 788, app/scss/screen.css */
+.newspaper-exclusive-box span:before {
+  float: left;
+  margin: 0.125em 0em  0em 0.27083em;
+  position: absolute;
+}
+
+/* line 792, app/scss/screen.css */
+.newspaper-exclusive-box span:after {
+  margin: 0.20833em 0em  0em 0.16667em;
+}
+
+/* line 795, app/scss/screen.css */
+.newspaper-exclusive-text {
+  -webkit-box-sizing: border-box;
+          box-sizing: border-box;
+  padding: 0.375em 0.25em 0 0.25em;
+  border: 1px solid #1c1915;
+  margin: 0.5em 0 0 0;
+  /*768*/
+}
+
+@media only screen and (min-width: 48em) {
+  /* line 802, app/scss/screen.css */
+  .newspaper-exclusive-text {
+    float: right;
+    margin: 0.5em 0 0 1em;
+    width: 75%;
+    width: -webkit-calc(78% - 1em);
+    width: calc(78% - 1em);
+    padding: 0.25em 0 0 0.25em;
+  }
+}
+
+/* line 808, app/scss/screen.css */
+.newspaper-exclusive-text h1 {
+  font-family: "headline_onehplhs", "HelveticaNeue-Bold", "HelveticaNeue", "Roboto", Arial, Verdana, "Trebuchet MS", sans-serif;
+  font-weight: normal;
+  font-size: 32px;
+  font-size: 2rem;
+  margin: 0;
+  line-height: 1;
+  /*768*/
+}
+
+@media only screen and (min-width: 48em) {
+  /* line 817, app/scss/screen.css */
+  .newspaper-exclusive-text h1 {
+    width: 33.33%;
+    float: left;
+    font-size: 48px;
+    font-size: 3rem;
+  }
+  /* line 822, app/scss/screen.css */
+  .newspaper-exclusive-text h1 span {
+    font-size: 24px;
+    font-size: 1.5rem;
+    font-family: var(--font-kreon), 'Kreon', serif;
+    font-weight: 700;
+    display: block;
+    margin: 0;
+  }
+}
+
+/* line 829, app/scss/screen.css */
+.newspaper-exclusive-text p {
+  margin: 0;
+  font-style: italic;
+  font-size: 15px;
+  font-size: 0.9375rem;
+  /*768*/
+}
+
+@media only screen and (min-width: 48em) {
+  /* line 836, app/scss/screen.css */
+  .newspaper-exclusive-text p {
+    -webkit-box-sizing: border-box;
+            box-sizing: border-box;
+    padding: 0em 0em  0em 0.53333em;
+    width: 66.67%;
+    float: right;
+  }
+}
+
+/* line 841, app/scss/screen.css */
+.newspaper-exclusive-text p a {
+  text-align: right;
+  font-family: var(--font-kreon), 'Kreon', serif;
+  font-weight: 700;
+  font-style: normal;
+  margin: 0em -0.26667em;
+  padding-right: 0.266667em;
+  /*768*/
+}
+
+@media only screen and (min-width: 48em) {
+  /* line 850, app/scss/screen.css */
+  .newspaper-exclusive-text p a {
+    margin-right: 0;
+    position: relative;
+    bottom: -1px;
+  }
+}
+
+/* line 855, app/scss/screen.css */
+.newspaper-articles {
+  border: 1px solid #1c1915;
+  -webkit-box-sizing: border-box;
+          box-sizing: border-box;
+  padding: 0.25em 0.5em 0.5em 0.5em;
+  /*768*/
+}
+
+@media only screen and (min-width: 48em) {
+  /* line 861, app/scss/screen.css */
+  .newspaper-articles {
+    padding: 0;
+    margin: 0.5em 0 0 0;
+  }
+}
+
+/* line 865, app/scss/screen.css */
+.newspaper-toparticle {
+  position: relative;
+  /*768*/
+}
+
+@media only screen and (min-width: 48em) {
+  /* line 869, app/scss/screen.css */
+  .newspaper-toparticle {
+    -webkit-box-sizing: border-box;
+            box-sizing: border-box;
+    padding: 0.125em 0.125em 0 0.5em;
+  }
+}
+
+/* line 872, app/scss/screen.css */
+.newspaper-toparticle h1 {
+  font-family: "headline_onehplhs", "HelveticaNeue-Bold", "HelveticaNeue", "Roboto", Arial, Verdana, "Trebuchet MS", sans-serif;
+  font-weight: normal;
+  font-size: 46px;
+  font-size: 2.875rem;
+  margin: 0;
+  /*768*/
+}
+
+@media only screen and (min-width: 48em) {
+  /* line 880, app/scss/screen.css */
+  .newspaper-toparticle h1 {
+    width: 75%;
+    font-size: 120px;
+    font-size: 7.5rem;
+  }
+}
+
+/* line 884, app/scss/screen.css */
+.newspaper-toparticle .helper-verticaltext {
+  font-size: 16px;
+  font-size: 1rem;
+  display: inline-block;
+  margin: 0 0 0 -2.4375em;
+  position: absolute;
+  top: 31%;
+  /*640*/
+  /*960*/
+}
+
+@media only screen and (min-width: 40em) {
+  /* line 894, app/scss/screen.css */
+  .newspaper-toparticle .helper-verticaltext {
+    font-size: 24px;
+    font-size: 1.5rem;
+    margin: 0 0 0 -50px;
+  }
+}
+
+@media only screen and (min-width: 60em) {
+  /* line 899, app/scss/screen.css */
+  .newspaper-toparticle .helper-verticaltext {
+    margin: 0 0 0 -64px;
+    font-size: 30px;
+    font-size: 1.875rem;
+  }
+}
+
+/* line 904, app/scss/screen.css */
+.no-csstransforms .newspaper-toparticle .helper-verticaltext {
+  margin: 0 auto;
+  top: -17px;
+}
+
+/* line 908, app/scss/screen.css */
+.no-csstransforms .newspaper-toparticle-spanwrap {
+  padding-left: 0;
+  padding-top: 6px;
+}
+
+/* line 912, app/scss/screen.css */
+.no-csstransforms .newspaper-toparticle {
+  padding-top: 16px;
+}
+
+/* line 915, app/scss/screen.css */
+.newspaper-toparticle + hr {
+  width: 90%;
+  width: -webkit-calc(100% - 1em);
+  width: calc(100% - 1em);
+  margin: 0 auto;
+}
+
+/* line 920, app/scss/screen.css */
+.fittext-toparticle-h1-1,
+.fittext-toparticle-h1-2 {
+  display: block;
+}
+
+/* line 924, app/scss/screen.css */
+.newspaper-toparticle-spanwrap {
+  position: relative;
+  padding-left: 24px;
+  -webkit-box-sizing: border-box;
+          box-sizing: border-box;
+  /*640*/
+}
+
+@media only screen and (min-width: 40em) {
+  /* line 930, app/scss/screen.css */
+  .newspaper-toparticle-spanwrap {
+    padding-left: 32px;
+  }
+}
+
+/* line 933, app/scss/screen.css */
+.newspaper-toparticle-starttext {
+  /*768*/
+  /*960*/
+}
+
+/* line 936, app/scss/screen.css */
+.newspaper-toparticle-starttext p {
+  font-size: 14px;
+  font-size: 0.875rem;
+  line-height: 1.25;
+}
+
+/* line 940, app/scss/screen.css */
+.newspaper-toparticle-starttext p ~ p {
+  text-indent: 1em;
+}
+
+/* line 942, app/scss/screen.css */
+.newspaper-toparticle-starttext p ~ p.newspaper-articles-anfang {
+  text-indent: 0;
+}
+
+/* line 944, app/scss/screen.css */
+.newspaper-toparticle-starttext .newspaper-articles-ingress {
+  font-size: 15px;
+  font-size: 0.9375rem;
+  line-height: 1.15;
+}
+
+/* line 948, app/scss/screen.css */
+.newspaper-toparticle-starttext .newspaper-articles-anfang {
+  margin-top: 0;
+}
+
+/* line 950, app/scss/screen.css */
+.newspaper-toparticle-starttext .helper-colsplit-2 {
+  -webkit-column-count: 1;
+     -moz-column-count: 1;
+          column-count: 1;
+}
+
+@media only screen and (min-width: 48em) {
+  /* line 953, app/scss/screen.css */
+  .newspaper-toparticle-starttext {
+    margin: 0 0 1em 0;
+  }
+  /* line 955, app/scss/screen.css */
+  .newspaper-toparticle-starttext .helper-colsplit-2 {
+    -webkit-column-count: 2;
+       -moz-column-count: 2;
+            column-count: 2;
+    -webkit-column-gap: 0.5em;
+       -moz-column-gap: 0.5em;
+            column-gap: 0.5em;
+    display: inline-block;
+  }
+}
+
+@media only screen and (min-width: 60em) {
+  /* line 960, app/scss/screen.css */
+  .newspaper-toparticle-starttext {
+    width: 25%;
+    float: left;
+    margin: 0;
+    padding: 0 0.5em 0 0;
+  }
+  /* line 965, app/scss/screen.css */
+  .newspaper-toparticle-starttext .helper-colsplit-2 {
+    -webkit-column-count: 1;
+       -moz-column-count: 1;
+            column-count: 1;
+  }
+}
+
+/* line 968, app/scss/screen.css */
+.newspaper-articles-ingress {
+  font-weight: 700;
+  font-size: 15px;
+  font-size: 0.9375rem;
+  line-height: 1.15;
+}
+
+/* line 974, app/scss/screen.css */
+.newspaper-articles-anfang:first-letter {
+  font-size: 54px;
+  font-size: 3.375rem;
+  margin: -0.01852em 0.14815em  0em 0em;
+  line-height: 0.72222;
+  padding: 0.16667em 0.14815em  0em 0.14815em;
+  -webkit-box-sizing: border-box;
+          box-sizing: border-box;
+  float: left;
+  color: #1c1915;
+  font-weight: 700;
+  text-shadow: 3px 0 0px #FBB03B;
+}
+
+/* line 986, app/scss/screen.css */
+.newspaper-toparticle-story {
+  /*768*/
+  /*960*/
+}
+
+/* line 989, app/scss/screen.css */
+.newspaper-toparticle-story h2 {
+  font-family: "headline_onehplhs", "HelveticaNeue-Bold", "HelveticaNeue", "Roboto", Arial, Verdana, "Trebuchet MS", sans-serif;
+  font-weight: normal;
+  position: relative;
+  text-align: center;
+  margin: -0.125em 0em  -0.1875em 0em;
+  font-size: 32px;
+  font-size: 2rem;
+  padding-top: 0.5em;
+  /*640*/
+}
+
+@media only screen and (min-width: 40em) {
+  /* line 1000, app/scss/screen.css */
+  .newspaper-toparticle-story h2 {
+    padding-top: 0;
+  }
+}
+
+/* line 1002, app/scss/screen.css */
+.newspaper-toparticle-story h2 span {
+  color: #fff8ee;
+  background-color: #1c1915;
+  font-size: 16px;
+  font-size: 1rem;
+  display: inline-block;
+  position: absolute;
+  top: -0.3125em;
+  letter-spacing: 1px;
+  padding: 0.0625em 0.25em;
+  left: 0;
+  /*768*/
+  /*960*/
+}
+
+@media only screen and (min-width: 48em) {
+  /* line 1016, app/scss/screen.css */
+  .newspaper-toparticle-story h2 span {
+    font-size: 12px;
+    font-size: 0.75rem;
+  }
+}
+
+@media only screen and (min-width: 60em) {
+  /* line 1020, app/scss/screen.css */
+  .newspaper-toparticle-story h2 span {
+    font-size: 16px;
+    font-size: 1rem;
+  }
+}
+
+/* line 1023, app/scss/screen.css */
+.newspaper-toparticle-story blockquote {
+  font-family: var(--font-vollkorn), 'Vollkorn', serif;
+  font-weight: 700;
+  font-style: italic;
+  margin: 0;
+  padding: 0;
+  position: relative;
+  padding: 0 0 0 1.75em;
+  -webkit-box-sizing: border-box;
+          box-sizing: border-box;
+}
+
+/* line 1032, app/scss/screen.css */
+.newspaper-toparticle-story blockquote:before {
+  content: '“';
+  font-family: "headline_onehplhs", "HelveticaNeue-Bold", "HelveticaNeue", "Roboto", Arial, Verdana, "Trebuchet MS", sans-serif;
+  font-weight: normal;
+  font-style: normal;
+  font-size: 32px;
+  font-size: 2rem;
+  position: absolute;
+  margin-left: -0.625em;
+}
+
+/* line 1041, app/scss/screen.css */
+.newspaper-toparticle-story p {
+  font-size: 14px;
+  font-size: 0.875rem;
+  line-height: 1.25;
+  margin-top: 0;
+}
+
+/* line 1046, app/scss/screen.css */
+.newspaper-toparticle-story p ~ p {
+  text-indent: 1em;
+}
+
+/* line 1048, app/scss/screen.css */
+.newspaper-toparticle-story .helper-colsplit-2 {
+  margin: 1em 0 0 0;
+}
+
+/* line 1050, app/scss/screen.css */
+.newspaper-toparticle-story figure {
+  margin: 0;
+}
+
+/* line 1052, app/scss/screen.css */
+.newspaper-toparticle-story img {
+  width: 100%;
+  height: auto;
+}
+
+@media only screen and (min-width: 48em) {
+  /* line 1056, app/scss/screen.css */
+  .newspaper-toparticle-story {
+    width: 50%;
+    float: right;
+    padding: 0 0.5em;
+    -webkit-box-sizing: border-box;
+            box-sizing: border-box;
+  }
+}
+
+@media only screen and (min-width: 60em) {
+  /* line 1062, app/scss/screen.css */
+  .newspaper-toparticle-story {
+    width: 50%;
+    float: left;
+  }
+}
+
+/* line 1066, app/scss/screen.css */
+.newspaper-toparticle-aside {
+  /*768*/
+  /*960*/
+}
+
+/* line 1069, app/scss/screen.css */
+.newspaper-toparticle-aside h1 {
+  background-color: #1c1915;
+  color: #fff8ee;
+  text-align: center;
+  font-size: 32px;
+  font-size: 2rem;
+  padding: 0.25em 0em  0.125em 0em;
+  width: auto;
+}
+
+/* line 1077, app/scss/screen.css */
+.newspaper-toparticle-aside h1 span {
+  font-family: var(--font-vollkorn), 'Vollkorn', serif;
+  font-style: italic;
+  font-size: 12px;
+  font-size: 0.75rem;
+  display: block;
+}
+
+/* line 1083, app/scss/screen.css */
+.newspaper-toparticle-aside p {
+  font-size: 14px;
+  font-size: 0.875rem;
+  line-height: 1.25;
+  padding: 0em 0.57143em  0em 0em;
+}
+
+/* line 1088, app/scss/screen.css */
+.newspaper-toparticle-aside p ~ p {
+  text-indent: 1em;
+}
+
+/* line 1090, app/scss/screen.css */
+.newspaper-toparticle-aside hr {
+  margin: 0.125em 0 0 0;
+}
+
+@media only screen and (min-width: 48em) {
+  /* line 1093, app/scss/screen.css */
+  .newspaper-toparticle-aside {
+    width: 50%;
+    float: left;
+    padding: 0 0.5em 0 0;
+    -webkit-box-sizing: border-box;
+            box-sizing: border-box;
+  }
+}
+
+@media only screen and (min-width: 60em) {
+  /* line 1099, app/scss/screen.css */
+  .newspaper-toparticle-aside {
+    width: 25%;
+    float: right;
+    position: absolute;
+    top: 0.125em;
+    right: 0;
+    padding: 0 0.125em 0 0.5em;
+  }
+}
+
+/* line 1107, app/scss/screen.css */
+.newspaper-bottomarticles {
+  margin: 0 0 0.5em 0;
+}
+
+/* line 1110, app/scss/screen.css */
+.newspaper-bottomarticle-first {
+  margin: 0.5em 0 0 0;
+  /*figure:hover, blockquote:hover{
+            cursor:pointer;
+        }*/
+}
+
+/* line 1115, app/scss/screen.css */
+.newspaper-bottomarticle-first h1 {
+  font-family: "headline_onehplhs", "HelveticaNeue-Bold", "HelveticaNeue", "Roboto", Arial, Verdana, "Trebuchet MS", sans-serif;
+  font-weight: normal;
+  font-size: 32px;
+  font-size: 2rem;
+  margin: 0;
+}
+
+/* line 1121, app/scss/screen.css */
+.newspaper-bottomarticle-first blockquote {
+  background-color: #1c1915;
+  position: relative;
+  margin: 0.5em 0 0 0;
+}
+
+/* line 1125, app/scss/screen.css */
+.newspaper-bottomarticle-first p {
+  font-family: var(--font-kreon), 'Kreon', serif;
+  font-weight: 700;
+  font-size: 18px;
+  font-size: 1.125rem;
+  text-transform: uppercase;
+  margin: 0em;
+  background-color: #fff8ee;
+  margin: 0;
+  padding: 0 0.222222em 1px 0;
+  display: block;
+  /*480*/
+  /*960*/
+}
+
+@media only screen and (min-width: 30em) {
+  /* line 1139, app/scss/screen.css */
+  .newspaper-bottomarticle-first p {
+    display: inline-block;
+  }
+}
+
+@media only screen and (min-width: 60em) {
+  /* line 1142, app/scss/screen.css */
+  .newspaper-bottomarticle-first p {
+    padding-right: 0.444444em;
+  }
+}
+
+/* line 1144, app/scss/screen.css */
+.newspaper-bottomarticle-first span {
+  color: #fff8ee;
+  font-family: "headline_onehplhs", "HelveticaNeue-Bold", "HelveticaNeue", "Roboto", Arial, Verdana, "Trebuchet MS", sans-serif;
+  font-weight: normal;
+  margin: 0;
+  padding: 0em 0.44444em;
+  display: block;
+  right: 0;
+  top: 0.111111em;
+  background-color: #1c1915;
+  /*480*/
+}
+
+@media only screen and (min-width: 30em) {
+  /* line 1156, app/scss/screen.css */
+  .newspaper-bottomarticle-first span {
+    position: absolute;
+    display: inline-block;
+    background-color: transparent;
+  }
+}
+
+/* line 1160, app/scss/screen.css */
+.newspaper-bottomarticle-first figure {
+  margin: 0;
+  /*768*/
+}
+
+@media only screen and (min-width: 48em) {
+  /* line 1164, app/scss/screen.css */
+  .newspaper-bottomarticle-first figure {
+    -webkit-box-flex: 1;
+    -webkit-flex-grow: 1;
+        -ms-flex-positive: 1;
+            flex-grow: 1;
+    overflow: hidden;
+    height: 100%;
+  }
+}
+
+/* line 1168, app/scss/screen.css */
+.newspaper-bottomarticle-first img {
+  width: 100%;
+  height: auto;
+  /*768*/
+}
+
+@media only screen and (min-width: 48em) {
+  /* line 1173, app/scss/screen.css */
+  .newspaper-bottomarticle-first img {
+    width: auto;
+    height: 100%;
+    position: relative;
+  }
+}
+
+/* line 1178, app/scss/screen.css */
+.newspaper-bottomarticle-second {
+  margin: 0.5em 0 0 0;
+}
+
+/* line 1180, app/scss/screen.css */
+.newspaper-bottomarticle-second figure {
+  margin: 0 auto;
+  position: absolute;
+  width: 50%;
+  /*960*/
+}
+
+@media only screen and (min-width: 60em) {
+  /* line 1186, app/scss/screen.css */
+  .newspaper-bottomarticle-second figure {
+    margin: -1em auto 0 auto;
+  }
+}
+
+/* line 1188, app/scss/screen.css */
+.newspaper-bottomarticle-second img {
+  border-radius: 50%;
+  margin: 0 auto;
+  display: block;
+  height: auto;
+  width: 100%;
+}
+
+/* line 1194, app/scss/screen.css */
+.newspaper-bottomarticle-second h2, .newspaper-bottomarticle-second h3 {
+  font-family: "headline_onehplhs", "HelveticaNeue-Bold", "HelveticaNeue", "Roboto", Arial, Verdana, "Trebuchet MS", sans-serif;
+  font-weight: normal;
+}
+
+/* line 1197, app/scss/screen.css */
+.newspaper-bottomarticle-second h1, .newspaper-bottomarticle-second h2, .newspaper-bottomarticle-second h3 {
+  width: 50%;
+}
+
+/* line 1199, app/scss/screen.css */
+.newspaper-bottomarticle-second p {
+  font-size: 14px;
+  font-size: 0.875rem;
+  line-height: 1.25;
+  margin-bottom: 0;
+}
+
+/* line 1204, app/scss/screen.css */
+.newspaper-bottomarticle-second .floated {
+  float: left;
+  width: 50%;
+  height: 50%;
+  margin: 0 0.5em 0 0;
+  -webkit-shape-outside: circle(50%, 50%, 45%);
+  shape-outside: circle(50% at 50% 50%);
+  -webkit-clip-path: circle(45% at 50% 50%);
+  -webkit-clip-path: circle(50%, 50%, 45%);
+  -webkit-shape-margin: 10px;
+  shape-margin: 10px;
+  margin: 50% 5% 0 0;
+  /*960*/
+}
+
+@media only screen and (min-width: 60em) {
+  /* line 1218, app/scss/screen.css */
+  .newspaper-bottomarticle-second .floated {
+    margin: 47% 5% 0 0;
+  }
+}
+
+/* line 1220, app/scss/screen.css */
+.newspaper-bottomarticle-second .newspaper-articles-ingress {
+  width: 50%;
+  float: right;
+  margin: 0;
+}
+
+/* line 1225, app/scss/screen.css */
+.newspaper-bottomarticle-second-h1 {
+  font-family: var(--font-vollkorn), 'Vollkorn', serif;
+  text-transform: uppercase;
+  font-weight: normal;
+  font-size: 12px;
+  font-size: 0.75rem;
+  letter-spacing: 2px;
+  margin: 0;
+  float: left;
+}
+
+/* line 1235, app/scss/screen.css */
+.newspaper-bottomarticle-second-h2 {
+  font-size: 48px;
+  font-size: 3rem;
+  margin: 0;
+  float: right;
+}
+
+/* line 1241, app/scss/screen.css */
+.newspaper-bottomarticle-second-h3 {
+  font-size: 72px;
+  font-size: 4.5rem;
+  margin: 0;
+  float: left;
+}
+
+/*768*/
+@media only screen and (min-width: 48em) {
+  /* line 1249, app/scss/screen.css */
+  .newspaper-bottomarticle-first,
+  .newspaper-bottomarticle-second {
+    width: 50%;
+    float: left;
+    -webkit-box-sizing: border-box;
+            box-sizing: border-box;
+    padding: 0 0.5em;
+  }
+  /* line 1255, app/scss/screen.css */
+  .newspaper-bottomarticle-first {
+    border-right: 1px solid #1c1915;
+  }
+}
+
+/* line 1258, app/scss/screen.css */
+.newspaper-weather h2 {
+  text-align: center;
+  text-transform: uppercase;
+  font-weight: 700;
+  font-size: 12px;
+  font-size: 0.75rem;
+  letter-spacing: 2px;
+  position: relative;
+  display: inline-block;
+  -webkit-transform: translateX(-50%);
+      -ms-transform: translateX(-50%);
+          transform: translateX(-50%);
+  top: -2.083333em;
+  left: 50%;
+  z-index: 1;
+}
+
+/* line 1271, app/scss/screen.css */
+.newspaper-weather h2:after {
+  content: '';
+  background-color: #fff8ee;
+  width: 100%;
+  width: -webkit-calc(100% + 1.33333em);
+  width: calc(100% + 1.33333em);
+  height: 1.125em;
+  position: absolute;
+  z-index: -1;
+  -webkit-transform: translateX(-50%);
+      -ms-transform: translateX(-50%);
+          transform: translateX(-50%);
+  left: 50%;
+  display: inline;
+}
+
+/* line 1283, app/scss/screen.css */
+.no-csscalc .newspaper-weather h2:after {
+  width: 120%;
+  left: -10%;
+}
+
+/* line 1287, app/scss/screen.css */
+.no-csscalc .newspaper-weather h2 {
+  margin-left: -3%;
+}
+
+/* line 1290, app/scss/screen.css */
+.newspaper-weather-cities {
+  list-style-type: none;
+  padding: 0;
+  margin: -1.5em 0 0 0;
+  text-align: center;
+}
+
+/* line 1295, app/scss/screen.css */
+.newspaper-weather-cities li {
+  text-align: center;
+  width: 50%;
+  float: left;
+  -webkit-box-sizing: border-box;
+          box-sizing: border-box;
+  display: block;
+  padding: 0 0.25em;
+  /*640*/
+  /*768*/
+}
+
+@media only screen and (min-width: 40em) {
+  /* line 1305, app/scss/screen.css */
+  .newspaper-weather-cities li {
+    width: 33.33%;
+  }
+}
+
+@media only screen and (min-width: 48em) {
+  /* line 1308, app/scss/screen.css */
+  .newspaper-weather-cities li {
+    width: 16.667%;
+  }
+}
+
+/* line 1310, app/scss/screen.css */
+.newspaper-weather-cities h3 {
+  text-transform: uppercase;
+  text-align: center;
+  border-top: 1px solid #1c1915;
+  border-bottom: 1px solid #1c1915;
+  font-size: 16px;
+  font-size: 1rem;
+  margin: 0;
+  padding: 0.375em 0 0.1875em 0;
+}
+
+/* line 1319, app/scss/screen.css */
+.newspaper-weather-cities p {
+  font-size: 48px;
+  font-size: 3rem;
+  font-family: var(--font-kreon), 'Kreon', serif;
+  font-weight: 700;
+  position: relative;
+  margin: -0.083333em 0 0.083333em 0;
+  text-shadow: 3px 0 0px #9c9c9c;
+}
+
+/* line 1327, app/scss/screen.css */
+.newspaper-weather-cities p span {
+  font-size: 16px;
+  font-size: 1rem;
+  position: absolute;
+  top: 0.5em;
+  text-shadow: none;
+}
+
+/* line 1334, app/scss/screen.css */
+p.newspaper-weather-cities-warm {
+  text-shadow: 3px 0 0px #FBB03B;
+}
+
+/* line 1337, app/scss/screen.css */
+p.newspaper-weather-cities-cold {
+  text-shadow: 3px 0 0px #82d1ff;
+}
+
+/* line 1340, app/scss/screen.css */
+.newspaper-teaser {
+  font-family: var(--font-kreon), 'Kreon', serif;
+  font-weight: 700;
+  border-top: 0.25em solid #1c1915;
+  border-bottom: 0.25em solid #1c1915;
+  background-color: #1c1915;
+  margin: 1em 0;
+  position: relative;
+  /*768*/
+}
+
+@media only screen and (min-width: 48em) {
+  /* line 1350, app/scss/screen.css */
+  .newspaper-teaser {
+    background-color: #fff8ee;
+  }
+}
+
+/* line 1353, app/scss/screen.css */
+.newspaper-teaser-fatline {
+  background-color: #1c1915;
+  color: #fff8ee;
+  font-size: 48px;
+  font-size: 3rem;
+  padding: 0.125em 0.25em  0.16667em 0.25em;
+  margin: 0;
+  text-transform: uppercase;
+  width: 60%;
+  width: -webkit-calc(100% - 115px);
+  width: calc(100% - 115px);
+  float: left;
+  /*768*/
+}
+
+@media only screen and (min-width: 48em) {
+  /* line 1366, app/scss/screen.css */
+  .newspaper-teaser-fatline {
+    width: 60%;
+    margin: 0 0.166667em 0 0;
+    padding: 0.16667em 0em  0em 0.25em;
+  }
+}
+
+/* line 1371, app/scss/screen.css */
+.newspaper-teaser-page {
+  border: 1px solid #1c1915;
+  font-size: 48px;
+  font-size: 3rem;
+  display: inline-block;
+  border-radius: 50%;
+  position: relative;
+  width: 1.66667em;
+  height: 1.66667em;
+  text-align: center;
+  line-height: 1.75;
+  -webkit-box-shadow: 0 0 0 2px #fff8ee;
+          box-shadow: 0 0 0 2px #fff8ee;
+  -webkit-box-sizing: border-box;
+          box-sizing: border-box;
+  background-color: #fff8ee;
+  float: right;
+  margin: -0.166667em 0 0 0;
+  /*768*/
+}
+
+@media only screen and (min-width: 48em) {
+  /* line 1389, app/scss/screen.css */
+  .newspaper-teaser-page {
+    margin: 0;
+    float: left;
+    position: absolute;
+    left: auto;
+    right: 0;
+    top: -0.208333em;
+  }
+}
+
+/* line 1396, app/scss/screen.css */
+.newspaper-teaser-page:after {
+  content: '';
+  width: 100%;
+  height: 100%;
+  border: 2px solid #1c1915;
+  display: inline-block;
+  position: absolute;
+  left: -4px;
+  top: -4px;
+  border-radius: 50%;
+  padding: 2px;
+}
+
+/* line 1407, app/scss/screen.css */
+.newspaper-teaser-page span {
+  font-family: "headline_onehplhs", "HelveticaNeue-Bold", "HelveticaNeue", "Roboto", Arial, Verdana, "Trebuchet MS", sans-serif;
+  font-weight: normal;
+  font-size: 14px;
+  font-size: 0.875rem;
+  position: absolute;
+  top: 0.57142857em;
+  left: 2em;
+}
+
+/* line 1416, app/scss/screen.css */
+.newspaper-teaser-story {
+  text-transform: uppercase;
+  font-family: var(--font-kreon), 'Kreon', serif;
+  font-weight: 700;
+  font-size: 24px;
+  font-size: 1.5rem;
+  margin: -0.25em 0 0 0;
+  background-color: #fff8ee;
+  width: 100%;
+  float: left;
+  /*768*/
+}
+
+@media only screen and (min-width: 48em) {
+  /* line 1428, app/scss/screen.css */
+  .newspaper-teaser-story {
+    width: auto;
+    margin: 0.125em 0 0 0;
+  }
+}
+
+/* line 1431, app/scss/screen.css */
+.newspaper-teaser-story span {
+  text-transform: none;
+  font-size: 20px;
+  font-size: 1.25rem;
+  /*768*/
+}
+
+@media only screen and (min-width: 48em) {
+  /* line 1437, app/scss/screen.css */
+  .newspaper-teaser-story span {
+    display: block;
+  }
+}
+
+/* line 1440, app/scss/screen.css */
+.newspaper-footer {
+  font-family: "headline_onehplhs", "HelveticaNeue-Bold", "HelveticaNeue", "Roboto", Arial, Verdana, "Trebuchet MS", sans-serif;
+  font-weight: normal;
+  border: 0.125em solid #1c1915;
+  -webkit-box-sizing: border-box;
+          box-sizing: border-box;
+  padding: 0.5em;
+}
+
+/* line 1446, app/scss/screen.css */
+.newspaper-footer a {
+  background-color: #fff8ee;
+  color: #1c1915;
+}
+
+/* line 1449, app/scss/screen.css */
+.newspaper-footer a:hover, .newspaper-footer a:focus, .newspaper-footer a:active {
+  text-shadow: 2px 0 0 #FBB03B;
+}
+
+/* line 1451, app/scss/screen.css */
+.newspaper-footer a:hover span {
+  text-shadow: none;
+  background-color: #FBB03B;
+  color: #1c1915;
+}
+
+/* line 1456, app/scss/screen.css */
+.newspaper-footer-index {
+  list-style-type: none;
+  padding: 0;
+  text-align: center;
+  margin: 0.25em 0 0 0;
+}
+
+/* line 1461, app/scss/screen.css */
+.newspaper-footer-index li {
+  display: inline-block;
+  margin: 0 3.2% 0.25em 0;
+  float: left;
+}
+
+/* line 1465, app/scss/screen.css */
+.newspaper-footer-index span {
+  font-family: var(--font-kreon), 'Kreon', serif;
+  font-weight: 700;
+  margin: -0.25em 0 0 1em;
+  color: #fff8ee;
+  display: inline-block;
+  line-height: 1;
+  position: relative;
+  background-color: #1c1915;
+  width: 1.5em;
+  height: 1.5em;
+  text-align: center;
+  padding: 0.25em 0 0 0;
+  -webkit-box-sizing: border-box;
+          box-sizing: border-box;
+  border-radius: 0.75em;
+  top: -1px;
+}
+
+/* line 1482, app/scss/screen.css */
+.credits {
+  text-align: center;
+  margin: 1em 0;
+  color: #3a3a3a;
+  font-size: 14px;
+  font-size: 0.875rem;
+}
+
+@supports (display: flex) or (display: -moz-flex) or (display: -ms-flex) or (display: -o-flex) {
+  /* line 1490, app/scss/screen.css */
+  .newspaper-weather-cities {
+    display: -webkit-box;
+    display: -webkit-flex;
+    display: -ms-flexbox;
+    display: flex;
+    -webkit-box-pack: justify;
+    -webkit-justify-content: space-between;
+        -ms-flex-pack: justify;
+            justify-content: space-between;
+    -webkit-flex-wrap: wrap;
+        -ms-flex-wrap: wrap;
+            flex-wrap: wrap;
+  }
+  /* line 1494, app/scss/screen.css */
+  .newspaper-weather-cities li {
+    display: -webkit-box;
+    display: -webkit-flex;
+    display: -ms-flexbox;
+    display: flex;
+    -webkit-box-orient: vertical;
+    -webkit-box-direction: reverse;
+    -webkit-flex-direction: column-reverse;
+        -ms-flex-direction: column-reverse;
+            flex-direction: column-reverse;
+  }
+  /*768*/
+  @media only screen and (min-width: 48em) {
+    /* line 1499, app/scss/screen.css */
+    .newspaper-exclusive {
+      display: -webkit-box;
+      display: -webkit-flex;
+      display: -ms-flexbox;
+      display: flex;
+    }
+    /* line 1501, app/scss/screen.css */
+    .newspaper-exclusive-box {
+      margin-top: 0;
+      display: -webkit-box;
+      display: -webkit-flex;
+      display: -ms-flexbox;
+      display: flex;
+      -webkit-box-align: center;
+      -webkit-align-items: center;
+          -ms-flex-align: center;
+              align-items: center;
+    }
+    /* line 1505, app/scss/screen.css */
+    .newspaper-exclusive-box:after, .newspaper-exclusive-box span:after {
+      top: -webkit-calc(50% - 0.625em);
+      top: calc(50% - 0.625em);
+    }
+    /* line 1507, app/scss/screen.css */
+    .newspaper-exclusive-box:before {
+      margin: -0.06267em -0.25em  0em 0.4375em;
+    }
+    /* line 1509, app/scss/screen.css */
+    .newspaper-exclusive-box span:before {
+      margin-left: -0.75em;
+    }
+    /* line 1511, app/scss/screen.css */
+    .newspaper-exclusive-text {
+      margin-top: 0;
+      margin-bottom: 0;
+    }
+    /* line 1514, app/scss/screen.css */
+    .newspaper-exclusive-text p {
+      display: -webkit-box;
+      display: -webkit-flex;
+      display: -ms-flexbox;
+      display: flex;
+      -webkit-box-orient: vertical;
+      -webkit-box-direction: normal;
+      -webkit-flex-direction: column;
+          -ms-flex-direction: column;
+              flex-direction: column;
+    }
+    /* line 1517, app/scss/screen.css */
+    .newspaper-bottomarticles {
+      display: -webkit-box;
+      display: -webkit-flex;
+      display: -ms-flexbox;
+      display: flex;
+    }
+    /* line 1519, app/scss/screen.css */
+    .newspaper-bottomarticle-first {
+      display: -webkit-box;
+      display: -webkit-flex;
+      display: -ms-flexbox;
+      display: flex;
+      -webkit-box-orient: vertical;
+      -webkit-box-direction: normal;
+      -webkit-flex-direction: column;
+          -ms-flex-direction: column;
+              flex-direction: column;
+    }
+    /* line 1522, app/scss/screen.css */
+    .newspaper-bottomarticle-first img {
+      left: -38%;
+    }
+  }
+}
+
+@supports (display: grid) {
+  /* line 1526, app/scss/screen.css */
+  .newspaper-toparticle-spanwrap {
+    padding: 0;
+  }
+  /* line 1528, app/scss/screen.css */
+  .newspaper-toparticle .helper-verticaltext {
+    -webkit-transform: rotate(-180deg);
+        -ms-transform: rotate(-180deg);
+            transform: rotate(-180deg);
+    -webkit-writing-mode: vertical-rl;
+        /*-ms-writing-mode: tb-rl;*/
+            writing-mode: vertical-rl;
+    position: relative;
+    left: auto;
+    top: auto;
+    right: auto;
+    margin: 0 -9px 0 0;
+    font-size: 14px;
+    font-size: 0.875rem;
+  }
+  /* line 1538, app/scss/screen.css */
+  .newspaper {
+    /*display: -ms-grid;*/
+    display: grid;
+    /*-ms-grid-columns: (1fr)[6];*/
+        grid-template-columns: repeat(6, 1fr);
+    grid-column-gap: 1em;
+    grid-row-gap: 0.5em;
+  }
+  /* line 1543, app/scss/screen.css */
+  .newspaper-bottomarticles,
+  .newspaper-exclusive {
+    margin: 0;
+  }
+  /* line 1546, app/scss/screen.css */
+  .newspaper-weather-cities {
+    /*display: -ms-grid;*/
+    display: grid;
+    grid-column-gap: 1em;
+    grid-row-gap: 0.5em;
+    /*-ms-grid-columns: (1fr)[2];*/
+        grid-template-columns: repeat(2, 1fr);
+  }
+  /* line 1551, app/scss/screen.css */
+  .newspaper-weather-cities li {
+    width: auto;
+    padding: 0;
+  }
+  /* line 1554, app/scss/screen.css */
+  .newspaper-teaser {
+    /*display: -ms-grid;*/
+    display: grid;
+    /*-ms-grid-columns: (auto)[5] 80px;*/
+        grid-template-columns: repeat(5, auto) 80px;
+    /*-ms-grid-rows: 3.75em;*/
+        grid-template-rows: 3.75em;
+    margin: 0;
+  }
+  /* line 1559, app/scss/screen.css */
+  .newspaper-topheader,
+  .newspaper-exclusive,
+  .newspaper-articles,
+  .newspaper-weather,
+  .newspaper-teaser,
+  .newspaper-footer {
+    /*-ms-grid-column: 1;*/
+        grid-column-start: 1;
+    grid-column-end: 7;
+  }
+  /* line 1567, app/scss/screen.css */
+  .newspaper-teaser-fatline {
+    /*-ms-grid-column: 1;*/
+        grid-column-start: 1;
+    grid-column-end: 6;
+    -webkit-align-self: center;
+        -ms-flex-item-align: center;
+                /*-ms-grid-row-align: center;*/
+            align-self: center;
+    width: auto;
+  }
+  /* line 1572, app/scss/screen.css */
+  .newspaper-teaser-page {
+    /*-ms-grid-column: 6;*/
+        grid-column-start: 6;
+    grid-column-end: 7;
+    -webkit-align-self: center;
+        -ms-flex-item-align: center;
+                /*-ms-grid-row-align: center;*/
+            align-self: center;
+    margin: 0;
+  }
+  /* line 1577, app/scss/screen.css */
+  .newspaper-teaser-story {
+    /*-ms-grid-column: 1;*/
+        grid-column-start: 1;
+    grid-column-end: 7;
+    -webkit-align-self: center;
+        -ms-flex-item-align: center;
+                /*-ms-grid-row-align: center;*/
+            align-self: center;
+    width: auto;
+  }
+  /* line 1582, app/scss/screen.css */
+  .newspaper-footer-index {
+    /*display: -ms-grid;*/
+    display: grid;
+    /*-ms-grid-columns: (minmax(130px, 1fr))[auto-fit];*/
+        grid-template-columns: repeat(auto-fit, minmax(130px, 1fr));
+    grid-column-gap: 1em;
+  }
+  /* line 1586, app/scss/screen.css */
+  .newspaper-footer-index li {
+    margin: 0 0 0.25em 0;
+  }
+  /*640*/
+  @media only screen and (min-width: 40em) {
+    /* line 1590, app/scss/screen.css */
+    .newspaper-toparticle .helper-verticaltext {
+      margin: 0 -14px 0 0;
+      font-size: 24px;
+      font-size: 1.5rem;
+    }
+  }
+  /*768*/
+  @media only screen and (min-width: 48em) {
+    /* line 1596, app/scss/screen.css */
+    .newspaper-toparticle .helper-verticaltext {
+      margin: 0 -14px 0 0;
+      font-size: 30px;
+      font-size: 1.875rem;
+    }
+    /* line 1600, app/scss/screen.css */
+    .newspaper-articles {
+      margin: 0;
+    }
+    /* line 1602, app/scss/screen.css */
+    .newspaper-toparticle h1 {
+      width: auto;
+    }
+    /* line 1604, app/scss/screen.css */
+    .newspaper-bottomarticles {
+      /*display: -ms-grid;*/
+      display: grid;
+      /*-ms-grid-columns: (1fr)[4];*/
+          grid-template-columns: repeat(4, 1fr);
+      grid-column-gap: 0.25em;
+      grid-row-gap: 0.5em;
+    }
+    /* line 1609, app/scss/screen.css */
+    .newspaper-bottomarticle-first,
+    .newspaper-bottomarticle-second {
+      width: auto;
+    }
+    /* line 1612, app/scss/screen.css */
+    .newspaper-bottomarticle-first {
+      /*-ms-grid-column: 1;*/
+          grid-column-start: 1;
+      grid-column-end: 3;
+      /*-ms-grid-row: 1;*/
+          grid-row-start: 1;
+      /*-ms-grid-row-span: 3;*/
+          grid-row-end: span 3;
+      max-width: 100%;
+    }
+    /* line 1618, app/scss/screen.css */
+    .newspaper-bottomarticle-second {
+      /*-ms-grid-column: 3;*/
+          grid-column-start: 3;
+      grid-column-end: 5;
+      /*-ms-grid-row: 1;*/
+          grid-row-start: 1;
+      /*-ms-grid-row-span: 3;*/
+          grid-row-end: span 3;
+    }
+    /* line 1623, app/scss/screen.css */
+    .newspaper-weather-cities {
+      /*-ms-grid-columns: (1fr)[3];*/
+          grid-template-columns: repeat(3, 1fr);
+    }
+    /* line 1625, app/scss/screen.css */
+    .newspaper-teaser {
+      /*-ms-grid-columns: (auto)[4] 90px auto;*/
+          grid-template-columns: repeat(4, auto) 90px auto;
+      background-color: #fff8ee;
+      margin: 0;
+    }
+    /* line 1629, app/scss/screen.css */
+    .newspaper-teaser-fatline {
+      grid-column-end: 5;
+      margin: 0;
+    }
+    /* line 1632, app/scss/screen.css */
+    .newspaper-teaser-page {
+      /*-ms-grid-column: 5;*/
+          grid-column-start: 5;
+      grid-column-end: 6;
+      left: -0.1875em;
+      right: auto;
+      top: -0.208333em;
+    }
+    /* line 1638, app/scss/screen.css */
+    .newspaper-teaser-story {
+      /*-ms-grid-column: 6;*/
+          grid-column-start: 6;
+    }
+    /* line 1640, app/scss/screen.css */
+    .newspaper-bottomarticle-first img {
+      width: 100%;
+      left: auto;
+      object-fit: cover;
+      object-position: 50% 50%;
+    }
+  }
+  @media only screen and (min-width: 58.75em) {
+    /* line 1646, app/scss/screen.css */
+    .newspaper-weather-cities {
+      /*-ms-grid-columns: (minmax(135px, 1fr))[auto-fit];*/
+          grid-template-columns: repeat(auto-fit, minmax(135px, 1fr));
+    }
+  }
+  /*960*/
+  @media only screen and (min-width: 60em) {
+    /* line 1650, app/scss/screen.css */
+    .newspaper-toparticle .helper-verticaltext {
+      margin: 0 -20px 0 0;
+      font-size: 30px;
+      font-size: 1.875rem;
+    }
+    /* line 1654, app/scss/screen.css */
+    .newspaper-toparticle-starttext,
+    .newspaper-toparticle-story,
+    .newspaper-toparticle-aside {
+      width: auto;
+      padding: 0;
+    }
+    /* line 1659, app/scss/screen.css */
+    .newspaper-toparticle h1 {
+      /*-ms-grid-column: 1;*/
+          grid-column-start: 1;
+      grid-column-end: 4;
+    }
+    /* line 1662, app/scss/screen.css */
+    .newspaper-toparticle {
+      display: -ms-grid;
+      display: grid;
+      /*-ms-grid-columns: (1fr)[4];*/
+          grid-template-columns: repeat(4, 1fr);
+      grid-column-gap: 1em;
+      grid-row-gap: 0;
+    }
+    /* line 1667, app/scss/screen.css */
+    .newspaper-toparticle-starttext {
+      grid-column-end: 2;
+    }
+    /* line 1669, app/scss/screen.css */
+    .newspaper-toparticle-story {
+      /*-ms-grid-column: 2;*/
+          grid-column-start: 2;
+      grid-column-end: 4;
+    }
+    /* line 1672, app/scss/screen.css */
+    .newspaper-toparticle-aside {
+      /*-ms-grid-column: 4;*/
+          grid-column-start: 4;
+      grid-column-end: 5;
+      /*-ms-grid-row: 1;*/
+          grid-row-start: 1;
+      /*-ms-grid-row-span: 3;*/
+          grid-row-end: span 3;
+      position: static;
+    }
+    /* line 1678, app/scss/screen.css */
+    .newspaper-footer-index {
+      /*-ms-grid-columns: (auto)[8];*/
+          grid-template-columns: repeat(8, auto);
+    }
+    /* line 1680, app/scss/screen.css */
+    .newspaper-footer-index li {
+      margin: 0;
+    }
+  }
+}
