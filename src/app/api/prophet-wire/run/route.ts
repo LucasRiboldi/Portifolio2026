@@ -23,6 +23,7 @@ import { authorizeCron } from "@/lib/prophet-wire/cron-auth"
 import { FetchHttpClient } from "@/lib/prophet-wire/http-client"
 import { FallbackAIClient } from "@/lib/prophet-wire/ai-client"
 import { defaultRepository } from "@/data/prophet-wire"
+import { defaultRunStore } from "@/lib/prophet-wire/run-store"
 import { config } from "@/lib/prophet-wire/config"
 
 /** Nunca cachear: cada chamada é uma execução real. */
@@ -69,6 +70,8 @@ async function handle(request: Request) {
 
   try {
     const report = await execution
+    // Registra no histórico para o painel admin ler.
+    await defaultRunStore().record(report)
     // Devolve só o resumo — as entradas completas ficam no log da execução.
     return NextResponse.json({
       startedAt: report.startedAt,

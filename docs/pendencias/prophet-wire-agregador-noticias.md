@@ -119,8 +119,19 @@
 
 ### Bloco E — Operação
 
-- [ ] **Parte 13 — Painel admin.** Rota admin: última/próxima execução, fila, logs, erros,
-      notícias aguardando publicação, botão publicar/descartar. → commit+push.
+- [x] **Parte 13 — Painel admin (FEITO).** `/admin/prophet-wire` (protegido pelo
+      `requireAdmin()` do layout): números do acervo/fila/fontes, última execução com
+      contadores e duração, próxima execução calculada do cron, problemas (warn/error) da
+      última execução, tabela da fila de rascunhos e lista das fontes. Suporte novo:
+      `run-store.ts` (interface `RunStore` + `InMemoryRunStore`, guarda os últimos
+      RunReports — o endpoint agora registra cada execução) e `schedule.ts`
+      (`parseDailyCron`/`nextRunAt`, suporta só `M H * * *` e devolve null no resto, para o
+      painel admitir que não sabe). Entrada na sidebar. 17 testes novos (98 no total).
+      → commit+push.
+      NÃO FEITO ainda: botões publicar/descartar (Server Actions) — dependem de persistência
+      real, senão a ação some no próximo cold start. Fazer junto da Parte 10.
+      NÃO VERIFICADO no browser: `/admin` exige Supabase configurado, ausente no ambiente
+      local (`requireAdmin` redireciona para `/login?e=config`). Validado por build + testes.
 - [ ] **Parte 14 — Imagens.** Regra do spec: imagem oficial → pesquisa → padrão da categoria.
       Substitui a moldura `.img-empty` quando houver arte real. → commit+push.
 

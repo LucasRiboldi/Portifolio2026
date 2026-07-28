@@ -23,6 +23,7 @@ import {
   Puzzle,
   Dices,
   Printer,
+  Rss,
   PanelsTopLeft,
   Terminal as TerminalIcon,
   ScrollText,
@@ -83,6 +84,7 @@ const NAV: { section: string; items: NavItem[] }[] = [
     section: "Daily Prophet",
     items: [
       { href: "/admin/prophet", label: "A Redação", icon: Newspaper },
+      { href: "/admin/prophet-wire", label: "Prophet Wire", icon: Rss },
       { href: "/admin/tutorials", label: "Oficina", icon: GraduationCap },
       { href: "/admin/mechanics", label: "Mecânicas", icon: Puzzle },
       { href: "/admin/prototypes", label: "Laboratório", icon: Dices },
