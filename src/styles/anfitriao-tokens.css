@@ -53,7 +53,20 @@
   /* ─── Tinta ─────────────────────────────────────────────────── */
   --anf-ink: #1c1710; /* texto e títulos */
   --anf-ink-2: #43382a; /* secundário: legendas, olho, apoio */
-  --anf-ink-3: #6b5c45; /* terciário: notas, rodapé, marca d'água */
+  /**
+   * Terciário: notas, rodapé, legenda de apoio.
+   *
+   * Era #6b5c45, calibrado contra o papel principal (4.75:1, passa). Mas
+   * dentro dos quadros o fundo é `--anf-paper-2`, mais escuro, e ali o
+   * mesmo tom caía para 4.23:1 — abaixo do mínimo AA. O texto de ajuda do
+   * cupom ficava no limite da leitura.
+   *
+   * Este valor foi escolhido por medição, não por gosto: passa AA nos três
+   * tons de papel do sistema (5.91 / 5.27 / 4.76), preservando o caráter de
+   * tinta fraca. Regra que fica: toda tinta é verificada contra o papel MAIS
+   * ESCURO em que pode cair, não contra o principal.
+   */
+  --anf-ink-3: #5c4e3a;
 
   /* ─── Traço ─────────────────────────────────────────────────── */
   --anf-rule: #2a2216; /* filetes e molduras */

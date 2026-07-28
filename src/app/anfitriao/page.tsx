@@ -283,7 +283,9 @@ export default async function DailyProphetFront() {
       {/* ─── CHAMADA — as últimas notícias em telegrama ─── */}
       <section className="newspaper-teaser wrapper">
         <p className="newspaper-teaser-fatline">{briefs.title}</p>
-        <p className="newspaper-teaser-page">
+        {/* O número da página leva o erro de registro — o efeito de letra que
+            o original reserva aos algarismos grandes. Ver `.dpx-misregister`. */}
+        <p className="newspaper-teaser-page dpx-misregister">
           <span>Pág.</span>
           IV
         </p>
@@ -313,297 +315,311 @@ export default async function DailyProphetFront() {
         </ul>
       </footer>
 
-      {/* ─────────────────────────────────────────────────────────────
-          CADERNO DA OFICINA — tudo que a folha já trazia e que não tem
-          zona equivalente no original. Vive sob `.prophet.dp`, onde as
-          classes do kit antigo continuam valendo, então nada se perdeu.
-          ───────────────────────────────────────────────────────────── */}
-      <div className="prophet dp">
-        <div className="dp-sheet dpx-caderno">
-          <hr className="dp-rule--double" />
+      {/* ═══════════════════════════════════════════════════════════
+          CADERNO DA OFICINA
+          ═══════════════════════════════════════════════════════════
+          Antes isto era um bloco com grelha e vocabulário próprios,
+          encaixado no meio da folha como encarte de outra gráfica. Agora
+          são FAIXAS, iguais às de cima: largura inteira, cabeçalho de
+          editoria entre fios duplos e subdivisão interna em zonas.
+          ═══════════════════════════════════════════════════════════ */}
 
-          <div className="dp-grid">
-            <div className="dp-col">
-              <div className="dp-box">
-                <p className="dp-box-title">{boxes.curio.title}</p>
-                <ul className="dp-list dp-list--fleuron">
-                  {boxes.curio.items.map((c) => (
-                    <li key={c}>{c}</li>
-                  ))}
-                </ul>
-              </div>
+      <section className="dpx-band" aria-labelledby="oficina-titulo">
+        <header className="dpx-band-head">
+          <h2 className="dpx-band-title" id="oficina-titulo">
+            Caderno da Oficina
+          </h2>
+          <p className="dpx-band-sub">Da bancada: números, quadros e o índice técnico</p>
+        </header>
 
-              <div className="dp-ad">
-                <p className="dp-ad-head">{ads[0].head}</p>
-                <p>{ads[0].body}</p>
-                <p className="dp-ad-sign">{ads[0].sign}</p>
-              </div>
-
-              <div className="dp-box">
-                <table className="dp-table">
-                  <caption>{playtests.caption}</caption>
-                  <thead>
-                    <tr>
-                      {playtests.head.map((h) => (
-                        <th key={h}>{h}</th>
-                      ))}
-                    </tr>
-                  </thead>
-                  <tbody>
-                    {playtests.rows.map((r) => (
-                      <tr key={r.item}>
-                        <td>{r.item}</td>
-                        <td className="num">{r.players}</td>
-                        <td className="num">{r.score}</td>
-                      </tr>
-                    ))}
-                  </tbody>
-                </table>
-              </div>
-
-              <form className="dp-box dp-box--heavy" aria-labelledby="cupom-titulo">
-                <p className="dp-box-title" id="cupom-titulo">
-                  {coupon.title}
-                </p>
-                <p className="dp-help" style={{ marginBottom: "0.5rem" }}>
-                  {coupon.standfirst}
-                </p>
-
-                <div className="dp-field">
-                  <label className="dp-label" data-required="true" htmlFor="cp-nome">
-                    {coupon.fields.name.label}
-                  </label>
-                  <input
-                    id="cp-nome"
-                    name="nome"
-                    className="dp-input"
-                    placeholder={coupon.fields.name.placeholder}
-                  />
-                </div>
-
-                <div className="dp-field">
-                  <label className="dp-label" data-required="true" htmlFor="cp-praca">
-                    {coupon.fields.place.label}
-                  </label>
-                  <input
-                    id="cp-praca"
-                    name="praca"
-                    className="dp-input"
-                    placeholder={coupon.fields.place.placeholder}
-                  />
-                </div>
-
-                <fieldset
-                  className="dp-field"
-                  style={{ border: 0, padding: 0, margin: "0 0 0.85rem" }}
-                >
-                  <legend className="dp-label">{coupon.cadence.legend}</legend>
-                  {coupon.cadence.options.map((o) => (
-                    <label key={o.id} className="dp-choice">
-                      <input
-                        type="radio"
-                        name="cadencia"
-                        value={o.id}
-                        className="dp-check dp-check--radio"
-                        defaultChecked={o.default}
-                      />
-                      <span>{o.label}</span>
-                    </label>
-                  ))}
-                </fieldset>
-
-                <fieldset
-                  className="dp-field"
-                  style={{ border: 0, padding: 0, margin: "0 0 0.85rem" }}
-                >
-                  <legend className="dp-label">{coupon.extras.legend}</legend>
-                  {coupon.extras.options.map((o) => (
-                    <label key={o.id} className="dp-choice">
-                      <input
-                        type="checkbox"
-                        name={o.id}
-                        className="dp-check"
-                        defaultChecked={o.default}
-                      />
-                      <span>{o.label}</span>
-                    </label>
-                  ))}
-                </fieldset>
-
-                <div className="dp-field">
-                  <label className="dp-label" htmlFor="cp-recado">
-                    {coupon.fields.note.label}
-                  </label>
-                  <textarea id="cp-recado" name="recado" rows={2} className="dp-input dp-input--boxed" />
-                  <p className="dp-help">{coupon.fields.note.help}</p>
-                </div>
-
-                <div style={{ display: "flex", gap: "0.5rem", flexWrap: "wrap" }}>
-                  <button type="submit" className="dp-btn dp-btn--primary">
-                    {coupon.submit}
-                  </button>
-                  <button type="reset" className="dp-btn dp-btn--ghost dp-btn--sm">
-                    {coupon.reset}
-                  </button>
-                </div>
-                <p className="dp-help" style={{ marginTop: "0.5rem" }}>
-                  {coupon.fineprint}
-                </p>
-              </form>
+        <div className="dpx-zone dpx-zone--3">
+          {/* Coluna I — curiosidades e o primeiro classificado */}
+          <div>
+            <div className="dpx-box">
+              <p className="dpx-box-title">{boxes.curio.title}</p>
+              <ul className="dpx-list dpx-list--fleuron">
+                {boxes.curio.items.map((c) => (
+                  <li key={c}>{c}</li>
+                ))}
+              </ul>
             </div>
 
-            <div className="dp-col">
-              <figure className="dp-figure">
-                <svg
-                  className="dp-chart"
-                  viewBox="0 0 200 84"
-                  role="img"
-                  aria-label={circulation.aria}
-                >
-                  <line x1="22" y1="8" x2="22" y2="66" />
-                  <line x1="22" y1="66" x2="192" y2="66" />
-                  <polyline points={circulation.points} />
-                  {circulation.years.map(([x, ano]) => (
-                    <text key={ano} x={x} y="76" textAnchor="middle">
-                      {ano}
-                    </text>
-                  ))}
-                  <text x="4" y="12">
-                    {circulation.top}
-                  </text>
-                  <text x="4" y="66">
-                    {circulation.bottom}
-                  </text>
-                </svg>
-                <figcaption className="dp-figcaption">{circulation.caption}</figcaption>
-              </figure>
-
-              <div className="dp-box">
-                <p className="dp-box-title">{boxes.tip.title}</p>
-                <p>{boxes.tip.body}</p>
-              </div>
-
-              <div className="dp-ad">
-                <p className="dp-ad-head">{ads[1].head}</p>
-                <p>{ads[1].body}</p>
-                <p className="dp-ad-sign">{ads[1].sign}</p>
-              </div>
-
-              <div className="dp-signature">
-                <p className="dp-autograph">{signature.autograph}</p>
-                <div className="dp-signature-line">
-                  <p className="dp-signature-name">{signature.name}</p>
-                  <p className="dp-signature-role">{signature.role}</p>
-                </div>
-              </div>
-            </div>
-
-            <div className="dp-col dp-col--rail">
-              <div className="dp-box dp-box--heavy">
-                <p className="dp-box-title">{boxes.numbers.title}</p>
-                {boxes.numbers.rows.map(([k, v]) => (
-                  <p key={k} className="dp-kv">
-                    <b>{k}</b>
-                    <span className="dp-lining">{v}</span>
-                  </p>
-                ))}
-              </div>
-
-              <div className="dp-box">
-                <p className="dp-box-title">{briefs.title}</p>
-                <ul className="dp-briefs dp-list dp-list--dash">
-                  {briefs.items.map((b) => (
-                    <li key={b}>{b}</li>
-                  ))}
-                </ul>
-              </div>
-
-              <div className="dp-box">
-                <p className="dp-box-title">{boxes.grimoire.title}</p>
-                {boxes.grimoire.items.map((t) => (
-                  <p key={t.term} className="dp-term">
-                    <b>{t.term}</b> — <em>{t.note}</em>
-                  </p>
-                ))}
-              </div>
-
-              <div className="dp-ad">
-                <p className="dp-ad-head">{ads[2].head}</p>
-                <p>{ads[2].body}</p>
-                <p className="dp-ad-sign">{ads[2].sign}</p>
-              </div>
-
-              <p className="dp-stamp" aria-hidden>
-                Impresso
-                <br />
-                nesta casa
-              </p>
+            <div className="dpx-ad">
+              <p className="dpx-ad-head">{ads[0].head}</p>
+              <p className="dpx-ad-body">{ads[0].body}</p>
+              <p className="dpx-ad-sign">{ads[0].sign}</p>
             </div>
           </div>
 
-          {/* Expediente — abriga o acesso administrativo (PressMark). */}
-          <footer className="dp-colophon">
-            <div>
-              <p className="dp-box-title">{colophon.title}</p>
-              {colophon.lines.map(([k, v]) => (
-                <p key={k} className="dp-kv">
+          {/* Coluna II — o quadro de playtests e a gravura de tiragem */}
+          <div>
+            <div className="dpx-box">
+              <table className="dpx-table">
+                <caption>{playtests.caption}</caption>
+                <thead>
+                  <tr>
+                    {playtests.head.map((h) => (
+                      <th key={h}>{h}</th>
+                    ))}
+                  </tr>
+                </thead>
+                <tbody>
+                  {playtests.rows.map((r) => (
+                    <tr key={r.item}>
+                      <td>{r.item}</td>
+                      <td className="num">{r.players}</td>
+                      <td className="num">{r.score}</td>
+                    </tr>
+                  ))}
+                </tbody>
+              </table>
+            </div>
+
+            <figure style={{ margin: 0 }}>
+              <svg
+                className="dpx-chart"
+                viewBox="0 0 200 84"
+                role="img"
+                aria-label={circulation.aria}
+              >
+                <line x1="22" y1="8" x2="22" y2="66" />
+                <line x1="22" y1="66" x2="192" y2="66" />
+                <polyline points={circulation.points} />
+                {circulation.years.map(([x, ano]) => (
+                  <text key={ano} x={x} y="76" textAnchor="middle">
+                    {ano}
+                  </text>
+                ))}
+                <text x="4" y="12">
+                  {circulation.top}
+                </text>
+                <text x="4" y="66">
+                  {circulation.bottom}
+                </text>
+              </svg>
+              <figcaption className="dpx-figcaption">{circulation.caption}</figcaption>
+            </figure>
+          </div>
+
+          {/* Coluna III — números da casa, telegramas e o índice técnico */}
+          <div>
+            <div className="dpx-box dpx-box--heavy">
+              <p className="dpx-box-title">{boxes.numbers.title}</p>
+              {boxes.numbers.rows.map(([k, v]) => (
+                <p key={k} className="dpx-kv">
                   <b>{k}</b>
                   <span>{v}</span>
                 </p>
               ))}
-              <p className="dp-kv">
-                <b>{colophon.pressLabel}</b>
-                <span>
-                  <PressMark label={colophon.pressValue} />
-                </span>
-              </p>
             </div>
 
-            <div>
-              <p className="dp-box-title">Aviso aos Leitores</p>
-              <p className="dp-notice">{colophon.notice}</p>
-              <div className="dp-orn" aria-hidden>
-                ❦
-              </div>
-              <p className="dp-notice" style={{ textAlign: "center" }}>
-                <span className="dp-sc">{paper.place}</span>
-              </p>
+            <div className="dpx-box">
+              <p className="dpx-box-title">{briefs.title}</p>
+              <ul className="dpx-list dpx-list--dash">
+                {briefs.items.map((b) => (
+                  <li key={b}>{b}</li>
+                ))}
+              </ul>
             </div>
 
-            <div>
-              <p className="dp-box-title">Marcas de Registro</p>
-              <p className="dp-kv">
-                <b>Edição</b>
-                <span>{colophon.registry}</span>
-              </p>
-              <p className="dp-kv">
-                <b>Fecho</b>
-                <span>à meia-noite</span>
-              </p>
-              <div className="dp-postmark dp-anim-press" aria-hidden>
-                Expedido
-                <b>{registryNumber}</b>
-                Terra-2026
-              </div>
-              <div
-                className="dp-seal dp-seal--ink dp-anim-press"
-                style={{ marginTop: "0.6rem" }}
-                aria-hidden
-              >
-                <span className="dp-sc">{paper.masthead}</span>
-                {paper.established}
-              </div>
+            <div className="dpx-box">
+              <p className="dpx-box-title">{boxes.grimoire.title}</p>
+              {boxes.grimoire.items.map((t) => (
+                <p key={t.term} className="dpx-term">
+                  <b>{t.term}</b> — <em>{t.note}</em>
+                </p>
+              ))}
             </div>
-          </footer>
-
-          <hr className="dp-rule dp-rule--thick" />
-
-          <div className="dp-foot">
-            <span>{paper.masthead}</span>
-            <span className="dp-folio">— I —</span>
-            <span className="dp-oldstyle dp-liga">{paper.issue}</span>
           </div>
         </div>
+      </section>
+
+      {/* ═══ Serviço ao leitor: o cupom, o conselho e os classificados ═══ */}
+      <section className="dpx-band" aria-labelledby="servico-titulo">
+        <header className="dpx-band-head">
+          <h2 className="dpx-band-title" id="servico-titulo">
+            Serviço ao Leitor
+          </h2>
+          <p className="dpx-band-sub">Assinatura, conselho da casa e classificados</p>
+        </header>
+
+        <div className="dpx-zone dpx-zone--2">
+          {/* O cupom — a camada de formulário, impressa */}
+          <form aria-labelledby="cupom-titulo">
+            <div className="dpx-box dpx-box--heavy">
+              <p className="dpx-box-title" id="cupom-titulo">
+                {coupon.title}
+              </p>
+              <p className="dpx-help">{coupon.standfirst}</p>
+
+              <div className="dpx-field">
+                <label className="dpx-label" data-required="true" htmlFor="cp-nome">
+                  {coupon.fields.name.label}
+                </label>
+                <input
+                  id="cp-nome"
+                  name="nome"
+                  className="dpx-input"
+                  placeholder={coupon.fields.name.placeholder}
+                />
+              </div>
+
+              <div className="dpx-field">
+                <label className="dpx-label" data-required="true" htmlFor="cp-praca">
+                  {coupon.fields.place.label}
+                </label>
+                <input
+                  id="cp-praca"
+                  name="praca"
+                  className="dpx-input"
+                  placeholder={coupon.fields.place.placeholder}
+                />
+              </div>
+
+              <fieldset className="dpx-field">
+                <legend className="dpx-label">{coupon.cadence.legend}</legend>
+                {coupon.cadence.options.map((o) => (
+                  <label key={o.id} className="dpx-choice">
+                    <input
+                      type="radio"
+                      name="cadencia"
+                      value={o.id}
+                      className="dpx-check"
+                      defaultChecked={o.default}
+                    />
+                    <span>{o.label}</span>
+                  </label>
+                ))}
+              </fieldset>
+
+              <fieldset className="dpx-field">
+                <legend className="dpx-label">{coupon.extras.legend}</legend>
+                {coupon.extras.options.map((o) => (
+                  <label key={o.id} className="dpx-choice">
+                    <input
+                      type="checkbox"
+                      name={o.id}
+                      className="dpx-check"
+                      defaultChecked={o.default}
+                    />
+                    <span>{o.label}</span>
+                  </label>
+                ))}
+              </fieldset>
+
+              <div className="dpx-field">
+                <label className="dpx-label" htmlFor="cp-recado">
+                  {coupon.fields.note.label}
+                </label>
+                <textarea
+                  id="cp-recado"
+                  name="recado"
+                  rows={2}
+                  className="dpx-input dpx-input--boxed"
+                />
+                <p className="dpx-help">{coupon.fields.note.help}</p>
+              </div>
+
+              <div className="dpx-actions">
+                <button type="submit" className="dpx-btn dpx-btn--primary">
+                  {coupon.submit}
+                </button>
+                <button type="reset" className="dpx-btn dpx-btn--ghost">
+                  {coupon.reset}
+                </button>
+              </div>
+              <p className="dpx-help">{coupon.fineprint}</p>
+            </div>
+          </form>
+
+          {/* Conselho, classificados e a rubrica do editor */}
+          <div>
+            <div className="dpx-box">
+              <p className="dpx-box-title">{boxes.tip.title}</p>
+              <p className="dpx-text">{boxes.tip.body}</p>
+            </div>
+
+            <div className="dpx-ad">
+              <p className="dpx-ad-head">{ads[1].head}</p>
+              <p className="dpx-ad-body">{ads[1].body}</p>
+              <p className="dpx-ad-sign">{ads[1].sign}</p>
+            </div>
+
+            <div className="dpx-ad">
+              <p className="dpx-ad-head">{ads[2].head}</p>
+              <p className="dpx-ad-body">{ads[2].body}</p>
+              <p className="dpx-ad-sign">{ads[2].sign}</p>
+            </div>
+
+            <div className="dpx-signature">
+              <p className="dpx-autograph">{signature.autograph}</p>
+              <p className="dpx-signature-name">{signature.name}</p>
+              <p className="dpx-signature-role">{signature.role}</p>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      {/* ═══ Expediente — abriga o acesso administrativo (PressMark) ═══ */}
+      <section className="dpx-band" aria-labelledby="expediente-titulo">
+        <header className="dpx-band-head">
+          <h2 className="dpx-band-title" id="expediente-titulo">
+            {colophon.title}
+          </h2>
+        </header>
+
+        <div className="dpx-zone dpx-zone--3">
+          <div>
+            {colophon.lines.map(([k, v]) => (
+              <p key={k} className="dpx-kv">
+                <b>{k}</b>
+                <span>{v}</span>
+              </p>
+            ))}
+            <p className="dpx-kv">
+              <b>{colophon.pressLabel}</b>
+              <span>
+                <PressMark label={colophon.pressValue} />
+              </span>
+            </p>
+          </div>
+
+          <div>
+            <p className="dpx-box-title">Aviso aos Leitores</p>
+            <p className="dpx-text">{colophon.notice}</p>
+            <div className="dpx-orn" aria-hidden>
+              ❦
+            </div>
+            <p className="dpx-text" style={{ textAlign: "center" }}>
+              {paper.place}
+            </p>
+          </div>
+
+          <div>
+            <p className="dpx-box-title">Marcas de Registro</p>
+            <p className="dpx-kv">
+              <b>Edição</b>
+              <span>{colophon.registry}</span>
+            </p>
+            <p className="dpx-kv">
+              <b>Fecho</b>
+              <span>à meia-noite</span>
+            </p>
+            <div className="dpx-stamp" aria-hidden>
+              Expedido
+              <br />
+              {registryNumber}
+              <br />
+              Terra-2026
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <div className="dpx-foot">
+        <span>{paper.masthead}</span>
+        <span>— I —</span>
+        <span>{paper.issue}</span>
       </div>
     </>
   )

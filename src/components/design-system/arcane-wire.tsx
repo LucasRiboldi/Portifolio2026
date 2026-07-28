@@ -15,6 +15,7 @@
 import { Kreon, Vollkorn } from "next/font/google"
 
 import "@/styles/anfitriao-tokens.css"
+import "@/styles/anfitriao-newspaper.css"
 import "@/styles/anfitriao-wire.css"
 
 import { SubChapter, Folha, Nota } from "./arcane-chapters"
@@ -53,7 +54,7 @@ export function ArcaneWire() {
     <SubChapter
       id="wire"
       n="09.15"
-      title="Tokens do Anfitrião e a coluna do Wire"
+      title="Tokens, diagramação e a coluna do Wire"
       lead="A folha passou a viver sobre o layout original do Daily Prophet, e o encontro dos dois sistemas exigiu uma decisão em cada eixo: um papel, uma tinta, uma tríade de tipos. Esta matéria é o registro dessas decisões e das peças que nasceram delas — a linha de data, a barra de cadernos e a coluna de notícia que o agregador preenche sozinho."
     >
       <div className={`${kreon.variable} ${vollkorn.variable}`}>
@@ -174,6 +175,106 @@ export function ArcaneWire() {
             então desenha a hachura. Quando cai na foto padrão, a legenda passa a dizer{" "}
             <em>imagem ilustrativa</em>, porque foto de arquivo não pode se apresentar como
             registro do fato.
+          </Nota>
+        </Folha>
+
+        {/* ─── A estrutura: faixa, zona, peça ─── */}
+        <Folha className="mt-3">
+          <p className="mb-2 text-[11px] uppercase tracking-wide" style={{ color: "var(--dp-sepia)" }}>
+            Faixa, zona e peça — a diagramação
+          </p>
+
+          <div style={{ background: "var(--anf-paper)", padding: "var(--anf-space-4)" }}>
+            <section className="dpx-band" style={{ marginBottom: 0 }}>
+              <header className="dpx-band-head">
+                <h4 className="dpx-band-title">Nome da editoria</h4>
+                <p className="dpx-band-sub">A linha de apoio da faixa</p>
+              </header>
+
+              <div className="dpx-zone dpx-zone--3">
+                <div>
+                  <div className="dpx-box">
+                    <p className="dpx-box-title">Quadro</p>
+                    <p className="dpx-text">
+                      A peça cercada por fio, sobre o papel de recuo. Não define margem externa:
+                      quem espaça é a faixa.
+                    </p>
+                  </div>
+                </div>
+                <div>
+                  <div className="dpx-ad">
+                    <p className="dpx-ad-head">Classificado</p>
+                    <p className="dpx-ad-body">
+                      A única peça com face de cartaz — no impresso saía de outra oficina.
+                    </p>
+                    <p className="dpx-ad-sign">Assinatura do anunciante</p>
+                  </div>
+                </div>
+                <div>
+                  <p className="dpx-kv">
+                    <b>Par chave/valor</b>
+                    <span>XII</span>
+                  </p>
+                  <p className="dpx-kv">
+                    <b>Algarismo tabular</b>
+                    <span>CDXVII</span>
+                  </p>
+                  <p className="dpx-term">
+                    <b>Verbete</b> — <em>termo e definição</em>
+                  </p>
+                </div>
+              </div>
+            </section>
+          </div>
+
+          <Classes>
+            .dpx-band — a faixa: largura inteira da folha, de fio a fio · .dpx-band-head /
+            .dpx-band-title / .dpx-band-sub — o cabeçalho de editoria entre fios duplos ·
+            .dpx-zone--2 / --3 / --4 — a subdivisão interna, com filete entre colunas ·
+            .dpx-box, .dpx-ad, .dpx-table, .dpx-kv, .dpx-term, .dpx-list — as peças
+          </Classes>
+
+          <Nota>
+            A regra que faz o alinhamento fechar: <b>nenhuma peça define margem externa
+            própria</b> — quem espaça é a faixa, sempre pela escala{" "}
+            <code className="font-mono">--anf-space-*</code>. Foi assim que a folha deixou de ter
+            duas metades: antes o caderno da oficina era um bloco com grelha e vocabulário
+            próprios, encaixado no meio como encarte de outra gráfica.
+          </Nota>
+        </Folha>
+
+        {/* ─── O efeito de letra ─── */}
+        <Folha className="mt-3">
+          <p className="mb-2 text-[11px] uppercase tracking-wide" style={{ color: "var(--dp-sepia)" }}>
+            O erro de registro
+          </p>
+
+          <div style={{ background: "var(--anf-paper)", padding: "var(--anf-space-4)" }}>
+            <p
+              className="dpx-misregister"
+              style={{ fontFamily: "var(--anf-head)", fontSize: "2.4rem", margin: 0, color: "var(--anf-ink)" }}
+            >
+              27 °C
+            </p>
+            <p
+              className="dpx-misregister--ink"
+              style={{ fontFamily: "var(--anf-head)", fontSize: "2.4rem", margin: 0, color: "var(--anf-ink)" }}
+            >
+              XII
+            </p>
+          </div>
+
+          <Classes>
+            .dpx-misregister — deslocamento em ouro · .dpx-misregister--ink — em tinta fraca ·
+            .dpx-misregister--cold — no único tom frio do sistema
+          </Classes>
+
+          <Nota>
+            Herdado do original, que assina assim os algarismos grandes do quadro de clima:{" "}
+            <code className="font-mono">text-shadow: 3px 0 0</code>, deslocamento horizontal e{" "}
+            <b>sem desfoque</b>. Não é sombra — é a chapa de cor saindo fora de registro, defeito
+            clássico da rotativa. Regra de uso: <b>só em tipo grande</b>; em corpo pequeno o
+            deslocamento não lê como impressão, lê como texto borrado.
           </Nota>
         </Folha>
 

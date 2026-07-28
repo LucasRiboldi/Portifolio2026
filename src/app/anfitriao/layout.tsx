@@ -1,24 +1,23 @@
-/** Os tokens vêm primeiro: todo o resto os consome. */
+/**
+ * A folha tem UM sistema, nesta ordem:
+ *
+ *   1. tokens    — papel, tinta, tipos, escalas. Todo o resto os consome.
+ *   2. original  — a grelha e as proporções herdadas de `public/dporiginal`.
+ *   3. página    — o que é específico desta rota (mesa de madeira, manchetes).
+ *   4. sistema   — faixas, zonas e peças da diagramação.
+ *   5. wire      — os componentes de notícia automática.
+ *
+ * O kit antigo (`daily-prophet*.css`, escopo `.dp`) saiu daqui de propósito:
+ * a página inteira passou a falar o vocabulário `dpx-*`, e manter os dois
+ * carregados era o que fazia a folha parecer dois impressos grampeados.
+ * Aquele kit continua vivo e documentado no style guide do realm — é lá que
+ * ele tem função.
+ */
 import "@/styles/anfitriao-tokens.css"
 import "@/styles/dp-original.css"
 import "@/styles/dp-original-extras.css"
-/** Componentes do Wire — o mesmo arquivo que o style guide importa. */
+import "@/styles/anfitriao-newspaper.css"
 import "@/styles/anfitriao-wire.css"
-
-/**
- * O kit antigo continua importado de propósito: as peças auxiliares da folha
- * (cupom de assinatura, quadro de playtests, gravura de tiragem, grimório e o
- * expediente) usam classes `.dp-*`, todas escopadas sob `.dp` — nenhuma regra
- * global — então convivem sem conflito com o CSS do original e nada do
- * conteúdo atual precisa ser descartado.
- */
-import "@/styles/fonts-arcane.css"
-import "@/styles/daily-prophet.css"
-import "@/styles/daily-prophet-ui.css"
-import "@/styles/daily-prophet-kit.css"
-
-/** Por último: reaponta o vocabulário `--dp-*` para os tokens únicos. */
-import "@/styles/anfitriao-equalize.css"
 
 import type { ReactNode } from "react"
 import Link from "next/link"

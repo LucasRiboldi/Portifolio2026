@@ -1,0 +1,740 @@
+/**
+ * O ANFITRIÃO — sistema de diagramação da folha.
+ *
+ * ------------------------------------------------------------------
+ * O PROBLEMA QUE ESTE ARQUIVO RESOLVE
+ * ------------------------------------------------------------------
+ * A página tinha duas metades. Não por causa das cores — essas já haviam
+ * sido unificadas pelos tokens —, mas por causa da ESTRUTURA: a parte de
+ * cima seguia a grelha do layout original (faixas de largura inteira que
+ * se subdividem por dentro), enquanto o "caderno da oficina" era um bloco
+ * com grelha própria, margens próprias e vocabulário próprio (`.dp-*`),
+ * encaixado no meio como um encarte de outra gráfica.
+ *
+ * Aqui a folha passa a ter UMA estrutura só, copiada da que o original já
+ * usava e que é como jornal de verdade se diagrama:
+ *
+ *   FAIXA (band)  — ocupa a largura inteira da folha, de fio a fio.
+ *   ZONA          — a subdivisão interna da faixa, em 2, 3 ou 4 colunas.
+ *   PEÇA          — o que mora na zona: quadro, classificado, tabela,
+ *                   cupom, gravura, verbete.
+ *
+ * Nenhuma peça define margem externa própria: quem espaça é a faixa. É o
+ * que faz o alinhamento fechar de ponta a ponta em vez de cada bloco
+ * negociar o seu recuo.
+ *
+ * ------------------------------------------------------------------
+ * RITMO VERTICAL
+ * ------------------------------------------------------------------
+ * Todo espaço vem da escala `--anf-space-*`. Não há número solto neste
+ * arquivo: se uma medida não está na escala, ela não entra na folha.
+ */
+
+/* ══════════════════════════════════════════════════════════════
+   0 · POLÍTICA DE LINKS — e o defeito que ela conserta
+   ══════════════════════════════════════════════════════════════
+
+   O layout original declara, para TODO link da página:
+
+     a { color: <papel>; background-color: <tinta>; display: block }
+
+   Isto é, todo link é um bloco entintado com texto claro. Funciona no
+   índice do rodapé, que era o único lugar onde o autor usava links — e
+   quebra em qualquer outro. Duas consequências apareceram assim que a
+   folha ganhou links de verdade:
+
+   1. TEXTO INVISÍVEL. As peças novas (crédito da fonte, barra de
+      cadernos, chamada da manchete) definiam `color: tinta` sem mexer no
+      fundo herdado, que também é tinta. Resultado: contraste 1.0 —
+      literalmente tinta sobre tinta. Treze ocorrências na página.
+
+   2. LINK INLINE VIRANDO BLOCO. `display: block` quebrava a linha no meio
+      da frase em «Leia no Laboratório».
+
+   A política abaixo devolve o comportamento de texto impresso: o link é
+   inline, herda a cor da coluna e se marca por sublinhado — como nota de
+   remissão em jornal. O bloco entintado continua existindo, mas só onde
+   é decisão de projeto: no índice do rodapé, que o original já trata à
+   parte, e em quem pedir explicitamente `.dpx-link--block`.
+   ══════════════════════════════════════════════════════════════ */
+
+.newspaper a {
+  display: inline;
+  background-color: transparent;
+  color: inherit;
+  text-decoration: none;
+}
+
+/** O link de texto se anuncia por fio, não por cor — a folha é bicromática. */
+.newspaper p a,
+.newspaper li a,
+.newspaper dd a {
+  border-bottom: 1px solid var(--anf-rule-hair);
+}
+
+.newspaper a:hover,
+.newspaper a:focus-visible {
+  border-bottom-color: var(--anf-ink);
+}
+
+.newspaper a:focus-visible {
+  outline: 2px solid var(--anf-accent);
+  outline-offset: 2px;
+}
+
+/** O cabeçalho embrulha imagens num link: precisa não interferir no layout. */
+.newspaper-topheader a {
+  display: contents;
+}
+
+/** Quem quiser o bloco entintado do original, pede por nome. */
+.dpx-link--block {
+  display: block;
+  background-color: var(--anf-ink);
+  color: var(--anf-paper);
+  padding: var(--anf-space-1) var(--anf-space-2);
+  border-bottom: 0;
+}
+
+/* ══════════════════════════════════════════════════════════════
+   0.1 · A COLUNA DE CLIMA — conteúdo nosso em molde alheio
+
+   No original esta zona listava temperaturas: «27 °C», três caracteres
+   em corpo 48 fixo. A nossa lista o estado das mesas — «blefe
+   encoberto», «3/6 a libra» —, frases inteiras no mesmo corpo. No
+   celular elas furavam a folha e criavam rolagem horizontal.
+
+   O corpo passa a acompanhar a largura, com piso e teto, e a palavra
+   pode quebrar. É a mesma correção aplicada às manchetes, pela mesma
+   razão: molde desenhado para texto fixo recebendo texto variável.
+   ══════════════════════════════════════════════════════════════ */
+
+.newspaper-weather-cities li {
+  min-width: 0;
+}
+
+.newspaper-weather-cities p {
+  font-size: clamp(1.1rem, 5vw, 3rem);
+  overflow-wrap: anywhere;
+  hyphens: auto;
+}
+
+/* ══════════════════════════════════════════════════════════════
+   1 · FAIXAS — a unidade de diagramação
+   ══════════════════════════════════════════════════════════════ */
+
+/**
+ * Uma faixa ocupa a folha inteira. Dentro do grid de seis colunas do
+ * original isso é `1 / -1`; fora dele, comporta-se como bloco normal.
+ */
+.dpx-band {
+  grid-column: 1 / -1;
+  min-width: 0;
+  margin: 0 0 var(--anf-space-6);
+}
+
+.dpx-band:last-child {
+  margin-bottom: 0;
+}
+
+/** Cabeçalho de faixa: o rótulo da editoria, entre fios duplos. */
+.dpx-band-head {
+  margin: 0 0 var(--anf-space-4);
+  border-top: 0.1875em solid var(--anf-rule);
+  border-bottom: 1px solid var(--anf-rule);
+  padding: var(--anf-space-2) 0;
+  text-align: center;
+}
+
+.dpx-band-title {
+  margin: 0;
+  font-family: var(--anf-head);
+  font-size: var(--anf-text-md);
+  line-height: var(--anf-leading-tight);
+  letter-spacing: var(--anf-tracking-caps);
+  text-transform: uppercase;
+  color: var(--anf-ink);
+}
+
+.dpx-band-sub {
+  margin: var(--anf-space-1) 0 0;
+  font-family: var(--anf-body);
+  font-style: italic;
+  font-size: var(--anf-text-sm);
+  color: var(--anf-ink-2);
+}
+
+/* ══════════════════════════════════════════════════════════════
+   2 · ZONAS — a subdivisão interna, sempre com filete entre colunas
+   ══════════════════════════════════════════════════════════════ */
+
+.dpx-zone {
+  display: grid;
+  gap: var(--anf-space-4);
+  grid-template-columns: 1fr;
+}
+
+/**
+ * Filete vertical entre colunas, como no impresso. O primeiro item de
+ * cada LINHA não recebe fio — por isso o cálculo por `nth-child` em cada
+ * faixa de largura, e não um simples `:first-child`.
+ */
+.dpx-zone > * {
+  min-width: 0;
+}
+
+@media only screen and (min-width: 40em) {
+  .dpx-zone--2,
+  .dpx-zone--3,
+  .dpx-zone--4 {
+    grid-template-columns: repeat(2, 1fr);
+  }
+  .dpx-zone--2 > *:nth-child(2n),
+  .dpx-zone--3 > *:nth-child(2n),
+  .dpx-zone--4 > *:nth-child(2n) {
+    border-left: 1px solid var(--anf-rule-hair);
+    padding-left: var(--anf-space-4);
+  }
+}
+
+@media only screen and (min-width: 64em) {
+  .dpx-zone--3 {
+    grid-template-columns: repeat(3, 1fr);
+  }
+  .dpx-zone--4 {
+    grid-template-columns: repeat(4, 1fr);
+  }
+  /* Redefine os fios para a nova contagem de colunas. */
+  .dpx-zone--3 > *,
+  .dpx-zone--4 > * {
+    border-left: 1px solid var(--anf-rule-hair);
+    padding-left: var(--anf-space-4);
+  }
+  .dpx-zone--3 > *:nth-child(3n + 1),
+  .dpx-zone--4 > *:nth-child(4n + 1) {
+    border-left: 0;
+    padding-left: 0;
+  }
+}
+
+/* Empilhado no celular: o fio vira horizontal, que é como a folha dobra. */
+@media only screen and (max-width: 39.99em) {
+  .dpx-zone > * + * {
+    border-top: 1px solid var(--anf-rule-hair);
+    padding-top: var(--anf-space-4);
+  }
+}
+
+/* ══════════════════════════════════════════════════════════════
+   3 · FILETES — o vocabulário de fios da folha
+   ══════════════════════════════════════════════════════════════ */
+
+.dpx-rule {
+  border: 0;
+  border-top: 1px solid var(--anf-rule);
+  margin: var(--anf-space-4) 0;
+}
+
+.dpx-rule--hair {
+  border-top-color: var(--anf-rule-hair);
+}
+
+.dpx-rule--thick {
+  border-top-width: 3px;
+}
+
+.dpx-rule--double {
+  border-top: 0.1875em solid var(--anf-rule);
+  border-bottom: 1px solid var(--anf-rule);
+  height: 0.125em;
+}
+
+/** Vinheta ornamental — separa sem fio. */
+.dpx-orn {
+  margin: var(--anf-space-4) 0;
+  text-align: center;
+  font-size: var(--anf-text-sm);
+  letter-spacing: 0.4em;
+  color: var(--anf-ink-3);
+}
+
+/* ══════════════════════════════════════════════════════════════
+   4 · PEÇAS — quadro, classificado, tabela, verbete
+   ══════════════════════════════════════════════════════════════ */
+
+/** O quadro: conteúdo cercado por fio, sobre o papel de recuo. */
+.dpx-box {
+  border: 1px solid var(--anf-rule);
+  background: var(--anf-paper-2);
+  padding: var(--anf-space-4);
+  margin: 0 0 var(--anf-space-4);
+}
+
+.dpx-box:last-child {
+  margin-bottom: 0;
+}
+
+.dpx-box--heavy {
+  border-width: 3px;
+}
+
+.dpx-box-title {
+  margin: 0 0 var(--anf-space-2);
+  font-family: var(--anf-head);
+  font-size: var(--anf-text-sm);
+  letter-spacing: var(--anf-tracking-caps);
+  text-transform: uppercase;
+  color: var(--anf-ink);
+}
+
+/** Texto de peça — o corpo padrão dentro de quadros e colunas. */
+.dpx-text {
+  margin: 0 0 var(--anf-space-2);
+  font-family: var(--anf-body);
+  font-size: var(--anf-text-sm);
+  line-height: var(--anf-leading);
+  color: var(--anf-ink);
+}
+
+.dpx-text:last-child {
+  margin-bottom: 0;
+}
+
+/** Listas da folha — com fleurão ou travessão no lugar do disco. */
+.dpx-list {
+  margin: 0;
+  padding: 0;
+  list-style: none;
+  font-family: var(--anf-body);
+  font-size: var(--anf-text-sm);
+  line-height: var(--anf-leading);
+  color: var(--anf-ink);
+}
+
+.dpx-list li {
+  padding-left: var(--anf-space-4);
+  margin-bottom: var(--anf-space-2);
+  position: relative;
+}
+
+.dpx-list li:last-child {
+  margin-bottom: 0;
+}
+
+.dpx-list--fleuron li::before {
+  content: "❦";
+  position: absolute;
+  left: 0;
+  color: var(--anf-accent-2);
+}
+
+.dpx-list--dash li::before {
+  content: "—";
+  position: absolute;
+  left: 0;
+  color: var(--anf-ink-3);
+}
+
+/** Par chave/valor — números da casa, expediente. */
+.dpx-kv {
+  display: flex;
+  justify-content: space-between;
+  gap: var(--anf-space-2);
+  margin: 0 0 var(--anf-space-1);
+  font-family: var(--anf-body);
+  font-size: var(--anf-text-sm);
+  color: var(--anf-ink);
+  border-bottom: 1px dotted var(--anf-rule-hair);
+  padding-bottom: var(--anf-space-1);
+}
+
+.dpx-kv b {
+  font-weight: 400;
+  color: var(--anf-ink-2);
+}
+
+.dpx-kv span {
+  font-variant-numeric: tabular-nums lining-nums;
+  text-align: right;
+}
+
+/** Verbete do glossário técnico. */
+.dpx-term {
+  margin: 0 0 var(--anf-space-2);
+  font-family: var(--anf-body);
+  font-size: var(--anf-text-sm);
+  line-height: 1.35;
+  color: var(--anf-ink);
+}
+
+.dpx-term b {
+  font-variant: small-caps;
+  letter-spacing: 0.04em;
+}
+
+.dpx-term em {
+  color: var(--anf-ink-2);
+}
+
+/** O classificado — a única peça com face de cartaz. */
+.dpx-ad {
+  border: 3px double var(--anf-rule);
+  padding: var(--anf-space-3);
+  margin: 0 0 var(--anf-space-4);
+  text-align: center;
+}
+
+.dpx-ad-head {
+  margin: 0 0 var(--anf-space-2);
+  font-family: var(--anf-poster);
+  font-size: var(--anf-text-md);
+  line-height: var(--anf-leading-tight);
+  letter-spacing: 0.04em;
+  text-transform: uppercase;
+  color: var(--anf-ink);
+}
+
+.dpx-ad-body {
+  margin: 0 0 var(--anf-space-2);
+  font-family: var(--anf-body);
+  font-size: var(--anf-text-xs);
+  line-height: 1.4;
+  color: var(--anf-ink);
+}
+
+.dpx-ad-sign {
+  margin: 0;
+  font-family: var(--anf-body);
+  font-style: italic;
+  font-size: var(--anf-text-xs);
+  color: var(--anf-ink-3);
+}
+
+/** A tabela — quadro de dados, com algarismo tabular nas colunas de número. */
+.dpx-table {
+  width: 100%;
+  border-collapse: collapse;
+  font-family: var(--anf-body);
+  font-size: var(--anf-text-sm);
+  color: var(--anf-ink);
+}
+
+.dpx-table caption {
+  caption-side: top;
+  text-align: left;
+  padding-bottom: var(--anf-space-2);
+  font-family: var(--anf-head);
+  font-size: var(--anf-text-xs);
+  letter-spacing: var(--anf-tracking-caps);
+  text-transform: uppercase;
+  color: var(--anf-ink-2);
+}
+
+.dpx-table th {
+  text-align: left;
+  font-family: var(--anf-head);
+  font-size: var(--anf-text-xs);
+  font-weight: 400;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+  border-bottom: 1px solid var(--anf-rule);
+  padding: var(--anf-space-1) var(--anf-space-2) var(--anf-space-1) 0;
+}
+
+.dpx-table td {
+  border-bottom: 1px solid var(--anf-rule-hair);
+  padding: var(--anf-space-1) var(--anf-space-2) var(--anf-space-1) 0;
+}
+
+.dpx-table .num {
+  text-align: right;
+  font-variant-numeric: tabular-nums lining-nums;
+  padding-right: 0;
+}
+
+/** A gravura de dados — traço de nanquim, sem preenchimento. */
+.dpx-chart {
+  width: 100%;
+  height: auto;
+}
+
+.dpx-chart line,
+.dpx-chart polyline {
+  fill: none;
+  stroke: var(--anf-ink);
+  stroke-width: 1.5;
+}
+
+.dpx-chart text {
+  font-family: var(--anf-body);
+  font-size: 7px;
+  fill: var(--anf-ink-3);
+}
+
+.dpx-figcaption {
+  margin: var(--anf-space-1) 0 0;
+  font-family: var(--anf-body);
+  font-style: italic;
+  font-size: var(--anf-text-xs);
+  color: var(--anf-ink-2);
+}
+
+/* ══════════════════════════════════════════════════════════════
+   5 · O CUPOM — a camada de formulário, impressa
+   ══════════════════════════════════════════════════════════════ */
+
+.dpx-field {
+  margin: 0 0 var(--anf-space-3);
+  border: 0;
+  padding: 0;
+}
+
+.dpx-label {
+  display: block;
+  margin-bottom: var(--anf-space-1);
+  font-family: var(--anf-head);
+  font-size: var(--anf-text-xs);
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+  color: var(--anf-ink-2);
+}
+
+.dpx-label[data-required="true"]::after {
+  content: " ·";
+  color: var(--anf-alarm);
+}
+
+/**
+ * O campo é uma linha para preencher à caneta, não uma caixa de tela:
+ * fundo transparente e só o fio de base. `color` explícito porque o
+ * navegador aplica preto do sistema em `input`, que sobre este papel
+ * ficaria fora da paleta.
+ */
+.dpx-input {
+  width: 100%;
+  background: transparent;
+  border: 0;
+  border-bottom: 1px solid var(--anf-rule);
+  padding: var(--anf-space-1) 0;
+  font-family: var(--anf-body);
+  font-size: var(--anf-text-sm);
+  color: var(--anf-ink);
+}
+
+.dpx-input::placeholder {
+  color: var(--anf-ink-3);
+  font-style: italic;
+}
+
+.dpx-input--boxed {
+  border: 1px solid var(--anf-rule);
+  padding: var(--anf-space-2);
+}
+
+.dpx-input:focus-visible {
+  outline: 2px solid var(--anf-accent);
+  outline-offset: 2px;
+}
+
+.dpx-choice {
+  display: flex;
+  align-items: center;
+  gap: var(--anf-space-2);
+  margin-bottom: var(--anf-space-1);
+  font-family: var(--anf-body);
+  font-size: var(--anf-text-sm);
+  color: var(--anf-ink);
+}
+
+.dpx-check {
+  accent-color: var(--anf-ink);
+  width: 0.9em;
+  height: 0.9em;
+}
+
+.dpx-help {
+  margin: var(--anf-space-1) 0 0;
+  font-family: var(--anf-body);
+  font-style: italic;
+  font-size: var(--anf-text-xs);
+  color: var(--anf-ink-3);
+}
+
+.dpx-actions {
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--anf-space-2);
+  margin-top: var(--anf-space-3);
+}
+
+/**
+ * O botão da folha é um bloco de tipo entintado — não tem raio, sombra
+ * nem transição de tela.
+ */
+.dpx-btn {
+  font-family: var(--anf-head);
+  font-size: var(--anf-text-xs);
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  padding: var(--anf-space-2) var(--anf-space-4);
+  border: 1px solid var(--anf-rule);
+  background: transparent;
+  color: var(--anf-ink);
+  cursor: pointer;
+}
+
+.dpx-btn--primary {
+  background: var(--anf-ink);
+  color: var(--anf-paper);
+}
+
+.dpx-btn--ghost {
+  border-style: dashed;
+}
+
+.dpx-btn:focus-visible {
+  outline: 2px solid var(--anf-accent);
+  outline-offset: 2px;
+}
+
+/* ══════════════════════════════════════════════════════════════
+   6 · MARCAS — carimbo, selo, assinatura, expediente
+   ══════════════════════════════════════════════════════════════ */
+
+.dpx-stamp {
+  display: inline-block;
+  border: 2px solid var(--anf-accent-2);
+  padding: var(--anf-space-2) var(--anf-space-3);
+  font-family: var(--anf-head);
+  font-size: var(--anf-text-xs);
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  text-align: center;
+  color: var(--anf-accent-2);
+  transform: rotate(-4deg);
+  opacity: 0.72;
+}
+
+.dpx-seal {
+  display: inline-block;
+  border: 1px solid var(--anf-rule);
+  border-radius: 50%;
+  width: 6.5em;
+  height: 6.5em;
+  display: grid;
+  place-content: center;
+  text-align: center;
+  font-family: var(--anf-head);
+  font-size: var(--anf-text-xs);
+  letter-spacing: 0.06em;
+  color: var(--anf-ink-2);
+}
+
+.dpx-signature {
+  margin-top: var(--anf-space-4);
+}
+
+.dpx-autograph {
+  margin: 0;
+  font-family: var(--anf-display);
+  font-size: var(--anf-text-lg);
+  color: var(--anf-ink);
+  transform: rotate(-2deg);
+}
+
+.dpx-signature-name {
+  margin: var(--anf-space-1) 0 0;
+  font-family: var(--anf-body);
+  font-size: var(--anf-text-sm);
+  color: var(--anf-ink);
+  border-top: 1px solid var(--anf-rule-hair);
+  padding-top: var(--anf-space-1);
+}
+
+.dpx-signature-role {
+  margin: 0;
+  font-family: var(--anf-body);
+  font-style: italic;
+  font-size: var(--anf-text-xs);
+  color: var(--anf-ink-3);
+}
+
+/** O expediente — e o link do prelo, que é o acesso administrativo. */
+.dpx-press {
+  color: inherit;
+  text-decoration: none;
+  border-bottom: 1px dotted transparent;
+}
+
+.dpx-press:hover,
+.dpx-press:focus-visible {
+  color: var(--anf-accent-2);
+  border-bottom-color: var(--anf-accent-2);
+}
+
+/**
+ * Fólio e pé da folha.
+ *
+ * `grid-column` explícito porque é filho direto do `.newspaper`, que é uma
+ * grelha de seis colunas: sem isto o pé era auto-posicionado numa única
+ * coluna e ficava com 152px enquanto todas as outras faixas mediam 992 — o
+ * único elemento da página fora do alinhamento.
+ */
+.dpx-foot {
+  grid-column: 1 / -1;
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: space-between;
+  gap: var(--anf-space-2);
+  padding-top: var(--anf-space-2);
+  border-top: 3px solid var(--anf-rule);
+  font-family: var(--anf-head);
+  font-size: var(--anf-text-xs);
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  color: var(--anf-ink-2);
+}
+
+/* ══════════════════════════════════════════════════════════════
+   7 · EFEITO DE LETRA — o erro de registro da impressão
+
+   O original assina os números grandes do quadro de clima com
+   `text-shadow: 3px 0 0` — deslocamento horizontal, sem desfoque. Não é
+   sombra: é a chapa de cor saindo fora de registro, defeito clássico de
+   impressão em rotativa. Reproduzido aqui como classe utilitária, para
+   que a folha inteira possa usá-lo com intenção em vez de o efeito ficar
+   preso a uma seção.
+
+   Regra de uso: só em tipo grande. Em corpo pequeno o deslocamento não
+   lê como impressão, lê como texto borrado.
+   ══════════════════════════════════════════════════════════════ */
+
+.dpx-misregister {
+  text-shadow: 3px 0 0 var(--anf-accent);
+}
+
+.dpx-misregister--ink {
+  text-shadow: 3px 0 0 var(--anf-ink-3);
+}
+
+.dpx-misregister--cold {
+  text-shadow: 3px 0 0 var(--anf-cold);
+}
+
+@media (prefers-reduced-motion: no-preference) {
+  /* Sem animação: o efeito é estático por natureza. Este bloco existe só
+     para deixar registrado que não há movimento a suprimir aqui. */
+}
+
+/* ══════════════════════════════════════════════════════════════
+   8 · CAPITULAR — a inicial que abre matéria
+   ══════════════════════════════════════════════════════════════ */
+
+.dpx-cap {
+  float: left;
+  font-family: var(--anf-display);
+  font-size: 3.2em;
+  line-height: 0.72;
+  padding: 0.08em 0.12em 0 0;
+  color: var(--anf-ink);
+}
