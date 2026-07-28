@@ -1,0 +1,252 @@
+/**
+ * O ANFITRIÃO — componentes do Prophet Wire (prefixo `dpx-`).
+ *
+ * As peças que a folha ganhou para abrigar o agregador de notícias: a linha
+ * de data, a barra de cadernos e a coluna de notícia com todas as suas
+ * partes (chapéu, título, olho, gravura, corpo com capitular, nota e crédito
+ * da fonte).
+ *
+ * Este arquivo foi SEPARADO de `dp-original-extras.css` de propósito. Aquele
+ * traz regras de página — fundo de madeira no `body`, encaixe no grid do
+ * original, escalas de manchete — que só fazem sentido em /anfitriao e
+ * quebrariam qualquer outra rota. Aqui só há regras de COMPONENTE, presas às
+ * suas próprias classes e alimentadas por `anfitriao-tokens.css`.
+ *
+ * Essa separação é o que permite ao style guide do realm (matéria 09.15)
+ * importar e exibir as peças de verdade, em vez de capturas de tela — a
+ * regra da casa: se uma classe quebrar, quebra no guia também.
+ */
+
+
+/* ─────────────────────────────────────────────────────────────
+   Linha de data — sob o cabeçalho, entre filetes finos.
+   ───────────────────────────────────────────────────────────── */
+
+.dpx-dateline {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  justify-content: space-between;
+  gap: 0.5em 1em;
+  margin: 0 0 0.75em;
+  padding: 0.4em 0;
+  border-top: 1px solid var(--anf-ink);
+  border-bottom: 1px solid var(--anf-ink);
+  font-family: var(--anf-body);
+  font-size: var(--anf-text-sm);
+  letter-spacing: 0.04em;
+  text-transform: uppercase;
+  color: var(--anf-ink);
+}
+
+.dpx-dateline-price {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.75em;
+}
+
+/* ─────────────────────────────────────────────────────────────
+   Cadernos — a navegação, em versalete espaçado.
+   ───────────────────────────────────────────────────────────── */
+
+.dpx-sections {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  justify-content: center;
+  gap: 0.5em 0.9em;
+  margin: 0 0 1.25em;
+  font-family: var(--anf-head);
+  font-size: var(--anf-text-sm);
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+}
+
+.dpx-sections a {
+  color: var(--anf-ink);
+  text-decoration: none;
+  border-bottom: 1px solid transparent;
+  transition: border-color 0.2s ease;
+}
+
+.dpx-sections a:hover,
+.dpx-sections a:focus-visible {
+  border-bottom-color: var(--anf-ink);
+}
+
+/* ─────────────────────────────────────────────────────────────
+   Zona de notícias automáticas (Prophet Wire).
+
+   Ocupa a mesma largura do corpo do jornal e se comporta como as
+   colunas do original: filete duplo no topo, título em Kreon,
+   corpo em Vollkorn justificado.
+   ───────────────────────────────────────────────────────────── */
+
+.dpx-wire {
+  margin: 1.5em auto;
+}
+
+.dpx-wire-title {
+  font-family: var(--anf-head);
+  font-size: var(--anf-text-md);
+  letter-spacing: 0.18em;
+  text-transform: uppercase;
+  text-align: center;
+  margin: 0 0 0.75em;
+  color: var(--anf-ink);
+}
+
+.dpx-wire-grid {
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: 1.25em;
+}
+
+@media only screen and (min-width: 40em) {
+  .dpx-wire-grid {
+    grid-template-columns: repeat(2, 1fr);
+  }
+}
+
+@media only screen and (min-width: 64em) {
+  .dpx-wire-grid {
+    grid-template-columns: repeat(4, 1fr);
+  }
+}
+
+/* Cada notícia é uma coluna separada por filete, como no impresso. */
+.dpx-news {
+  min-width: 0;
+  padding-left: 1em;
+  border-left: 1px solid var(--anf-ink);
+}
+
+.dpx-news:first-child {
+  padding-left: 0;
+  border-left: 0;
+}
+
+@media only screen and (max-width: 63.99em) {
+  .dpx-news:nth-child(odd) {
+    padding-left: 0;
+    border-left: 0;
+  }
+}
+
+@media only screen and (max-width: 39.99em) {
+  .dpx-news {
+    padding-left: 0;
+    border-left: 0;
+    border-top: 1px solid var(--anf-ink);
+    padding-top: 0.75em;
+  }
+  .dpx-news:first-child {
+    border-top: 0;
+    padding-top: 0;
+  }
+}
+
+.dpx-news-kicker {
+  display: inline-block;
+  font-family: var(--anf-head);
+  font-size: var(--anf-text-xs);
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+  background: var(--anf-ink);
+  color: var(--anf-paper);
+  padding: 0.15em 0.5em;
+  margin-bottom: 0.4em;
+}
+
+.dpx-news-head {
+  font-family: var(--anf-head);
+  font-size: var(--anf-text-md);
+  line-height: var(--anf-leading-tight);
+  margin: 0 0 0.25em;
+  color: var(--anf-ink);
+}
+
+.dpx-news-sub {
+  font-family: var(--anf-body);
+  font-style: italic;
+  font-size: var(--anf-text-sm);
+  line-height: 1.3;
+  color: var(--anf-ink-2);
+  margin: 0 0 0.5em;
+}
+
+.dpx-news figure {
+  margin: 0 0 0.5em;
+}
+
+.dpx-news img {
+  display: block;
+  width: 100%;
+  height: auto;
+  filter: grayscale(1) contrast(1.15);
+}
+
+/* Moldura vazia — enquanto a notícia não tem arte própria. */
+.dpx-news-plate {
+  width: 100%;
+  aspect-ratio: 3 / 2;
+  border: 1px solid var(--anf-ink);
+  background-image: repeating-linear-gradient(
+    45deg,
+    rgba(28, 25, 21, 0.09) 0,
+    rgba(28, 25, 21, 0.09) 6px,
+    transparent 6px,
+    transparent 12px
+  );
+}
+
+.dpx-news figcaption {
+  font-family: var(--anf-body);
+  font-size: var(--anf-text-xs);
+  font-style: italic;
+  color: var(--anf-ink-2);
+  margin-top: 0.25em;
+}
+
+.dpx-news-body {
+  font-family: var(--anf-body);
+  font-size: var(--anf-text-sm);
+  line-height: var(--anf-leading);
+  text-align: justify;
+  hyphens: auto;
+  color: var(--anf-ink);
+  margin: 0 0 0.4em;
+}
+
+/* Capitular — o original abre matérias assim. */
+.dpx-news-cap {
+  float: left;
+  font-family: var(--anf-head);
+  font-size: 2.75em;
+  line-height: 0.8;
+  padding: 0.05em 0.12em 0 0;
+  color: var(--anf-ink);
+}
+
+.dpx-news-note {
+  font-family: var(--anf-body);
+  font-size: var(--anf-text-xs);
+  font-style: italic;
+  color: var(--anf-ink-2);
+  margin: 0 0 0.35em;
+}
+
+.dpx-news-source {
+  font-family: var(--anf-head);
+  font-size: var(--anf-text-xs);
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+  color: var(--anf-ink);
+  text-decoration: none;
+  border-bottom: 1px solid var(--anf-ink);
+}
+
+.dpx-news-source:hover,
+.dpx-news-source:focus-visible {
+  background: var(--anf-accent);
+}

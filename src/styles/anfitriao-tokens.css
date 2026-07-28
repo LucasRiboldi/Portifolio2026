@@ -1,0 +1,130 @@
+/**
+ * O ANFITRIÃO — camada única de tokens.
+ *
+ * ------------------------------------------------------------------
+ * POR QUE ESTE ARQUIVO EXISTE
+ * ------------------------------------------------------------------
+ * A folha passou a viver sobre dois sistemas que nunca se falaram:
+ *
+ *   • o layout original (`dp-original.css`) — papel #fff8ee quase branco,
+ *     tinta #1c1915, âmbar #FBB03B, tipos Kreon/Vollkorn/Mugglenews;
+ *   • o kit da casa (`daily-prophet.css`, escopo `.dp`) — papel envelhecido
+ *     #e8dcbe, tinta #1c1710, ouro #9a7b28, tipos Playbill/Iowan Old Style.
+ *
+ * Postos lado a lado na mesma página, liam-se como dois impressos diferentes
+ * grampeados juntos: dois brancos de papel, dois pretos de tinta, duas
+ * famílias de título. Este arquivo é a decisão de qual dos dois vence em cada
+ * eixo — e passa a ser o ÚNICO lugar onde essas respostas moram.
+ *
+ * ------------------------------------------------------------------
+ * AS DECISÕES, E O MOTIVO DE CADA UMA
+ * ------------------------------------------------------------------
+ * PAPEL — vence o envelhecido (#e8dcbe). O #fff8ee do original é quase
+ *   branco: numa tela iluminada ele lê como interface, não como papel. O tom
+ *   envelhecido é o que o resto do multiverso Arcane já usava.
+ *
+ * TINTA — vence a do kit (#1c1710), com a escala de três níveis que ele já
+ *   tinha. A do original (#1c1915) é praticamente a mesma cor; manter duas
+ *   seria guardar uma diferença que ninguém enxerga e todo mundo tropeça.
+ *
+ * DESTAQUE — vence o ouro do kit (#9a7b28). O âmbar #FBB03B do original foi
+ *   escolhido contra papel quase branco; sobre papel envelhecido ele acende
+ *   como adesivo fluorescente. O ouro pertence à mesma família térmica do
+ *   papel e se comporta como tinta metálica de impresso.
+ *
+ * TIPOS — vencem os do original (Mugglenews no logotipo, Kreon nos títulos,
+ *   Vollkorn no texto). São eles que dão ao jornal a identidade que o Lucas
+ *   pediu para preservar, e formam uma tríade completa: display, título e
+ *   corpo. Playbill fica disponível como face de cartaz para o caderno de
+ *   classificados, um papel específico e declarado — não uma segunda voz
+ *   para a mesma função.
+ *
+ * ESCALAS — uma só de tipo e uma só de espaço, ambas em progressão fixa, para
+ *   que nenhuma medida na página seja um número inventado no lugar.
+ * ------------------------------------------------------------------
+ */
+
+:root {
+  /* ─── Papel ─────────────────────────────────────────────────── */
+  --anf-paper: #e8dcbe; /* a folha */
+  --anf-paper-2: #ded0ac; /* recuo: caixas, quadros, anúncios */
+  --anf-paper-3: #d6c69c; /* recuo forte: cabeçalho de tabela, selo */
+
+  /* ─── Tinta ─────────────────────────────────────────────────── */
+  --anf-ink: #1c1710; /* texto e títulos */
+  --anf-ink-2: #43382a; /* secundário: legendas, olho, apoio */
+  --anf-ink-3: #6b5c45; /* terciário: notas, rodapé, marca d'água */
+
+  /* ─── Traço ─────────────────────────────────────────────────── */
+  --anf-rule: #2a2216; /* filetes e molduras */
+  --anf-rule-hair: rgba(42, 34, 22, 0.42); /* fio de cabelo */
+
+  /* ─── Destaque ──────────────────────────────────────────────── */
+  --anf-accent: #9a7b28; /* ouro — selo, realce, marcação */
+  --anf-accent-2: #7a5c34; /* sépia — segunda tinta */
+  --anf-alarm: #7a1f1f; /* vermelho de carimbo, só para alerta */
+  /* Único tom frio do sistema, reservado à coluna de clima (temperatura
+     negativa). O original usava #82d1ff, um azul de tela que sobre papel
+     envelhecido parecia luz de monitor; este é azul de tinta. */
+  --anf-cold: #1e3a5f;
+
+  /* ─── Tipos ─────────────────────────────────────────────────────
+     Declarados aqui pelos NOMES das famílias, sem referência ao
+     `next/font`. O motivo é uma armadilha de CSS que custou uma
+     depuração: um `var()` irresolvível DENTRO de um custom property
+     invalida o token inteiro em tempo de cálculo, e toda propriedade que
+     o consome cai para o valor herdado. Como as variáveis do next/font
+     (`--font-kreon`, `--font-vollkorn`) são aplicadas por className na
+     div `.newspaper`, referenciá-las aqui no `:root` — onde não existem —
+     fazia a página inteira desabar para sans-serif, silenciosamente.
+
+     Estes valores são o piso seguro, válido em qualquer contexto. O bloco
+     `.newspaper` abaixo os promove para as fontes servidas localmente. */
+
+  /* Display: só o logotipo e as manchetes de primeira página. */
+  --anf-display: "headline_onehplhs", "Mugglenews", "Playbill", serif;
+  /* Título: tudo que titula abaixo da manchete. */
+  --anf-head: "Kreon", "Bookman Old Style", serif;
+  /* Corpo: texto corrido, legendas, formulários. */
+  --anf-body: "Vollkorn", "Iowan Old Style", Georgia, serif;
+  /* Cartaz: face de anúncio e classificado. Papel declarado, não voz solta. */
+  --anf-poster: "Playbill", "Rockwell", "Clarendon", serif;
+
+  /* ─── Escala tipográfica (razão 1.25, base 16px) ────────────── */
+  --anf-text-xs: 0.64rem; /* nota de rodapé, crédito */
+  --anf-text-sm: 0.8rem; /* legenda, olho, tabela */
+  --anf-text-base: 1rem; /* corpo */
+  --anf-text-md: 1.25rem; /* subtítulo, título de caixa */
+  --anf-text-lg: 1.563rem; /* título de matéria */
+  --anf-text-xl: 1.953rem; /* título de seção */
+  --anf-text-2xl: 2.441rem; /* chamada */
+
+  /* ─── Escala de espaço (razão 2, base 0.25rem) ──────────────── */
+  --anf-space-1: 0.25rem;
+  --anf-space-2: 0.5rem;
+  --anf-space-3: 0.75rem;
+  --anf-space-4: 1rem;
+  --anf-space-6: 1.5rem;
+  --anf-space-8: 2rem;
+  --anf-space-12: 3rem;
+
+  /* ─── Métricas de composição ────────────────────────────────── */
+  --anf-leading-tight: 1.1; /* títulos */
+  --anf-leading: 1.45; /* corpo justificado */
+  --anf-measure: 34em; /* medida máxima de coluna legível */
+  --anf-tracking-caps: 0.12em; /* versalete espaçado */
+}
+
+/**
+ * Promoção para as fontes servidas localmente.
+ *
+ * `.newspaper` é a div que recebe as classes do `next/font`, então é o
+ * primeiro ponto da árvore onde `--font-kreon` e `--font-vollkorn` existem.
+ * Aqui — e só aqui — os tokens de tipo podem referenciá-las com segurança.
+ * Tudo que a folha contém é descendente desta div, então a promoção alcança
+ * a página inteira, inclusive o caderno da oficina.
+ */
+.newspaper {
+  --anf-head: var(--font-kreon), "Kreon", "Bookman Old Style", serif;
+  --anf-body: var(--font-vollkorn), "Vollkorn", "Iowan Old Style", Georgia, serif;
+}

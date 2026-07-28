@@ -1,5 +1,9 @@
+/** Os tokens vêm primeiro: todo o resto os consome. */
+import "@/styles/anfitriao-tokens.css"
 import "@/styles/dp-original.css"
 import "@/styles/dp-original-extras.css"
+/** Componentes do Wire — o mesmo arquivo que o style guide importa. */
+import "@/styles/anfitriao-wire.css"
 
 /**
  * O kit antigo continua importado de propósito: as peças auxiliares da folha
@@ -12,6 +16,9 @@ import "@/styles/fonts-arcane.css"
 import "@/styles/daily-prophet.css"
 import "@/styles/daily-prophet-ui.css"
 import "@/styles/daily-prophet-kit.css"
+
+/** Por último: reaponta o vocabulário `--dp-*` para os tokens únicos. */
+import "@/styles/anfitriao-equalize.css"
 
 import type { ReactNode } from "react"
 import Link from "next/link"

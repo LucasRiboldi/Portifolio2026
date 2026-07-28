@@ -20,6 +20,7 @@ import {
 import { ArcaneMarcas, ArcaneCabecalho } from "./arcane-marcas"
 import { ArcaneBotoes, ArcaneFormulario, ArcaneSelos } from "./arcane-ui"
 import { ArcaneLetras, ArcanePrensa } from "./arcane-ui-letras"
+import { ArcaneWire } from "./arcane-wire"
 import {
   ArcaneMasthead,
   ArcaneIntro,
@@ -135,6 +136,7 @@ export function ArcaneGuide({ d, kit }: { d: RealmDesign; kit: React.ReactNode }
       <ArcaneSelos />
       <ArcaneLetras />
       <ArcanePrensa />
+      <ArcaneWire />
       <SubChapter
         id="kit"
         n="09.14"

@@ -342,7 +342,7 @@ button:-moz-focusring,
  */
 /* line 337, app/scss/screen.css */
 fieldset {
-  border: 1px solid #c0c0c0;
+  border: 1px solid var(--anf-rule-hair);
   margin: 0 2px;
   padding: 0.35em 0.625em 0.75em;
 }
@@ -617,22 +617,22 @@ body:before {
 /* line 544, app/scss/screen.css */
 hr {
   border: none;
-  border-bottom: 1px solid #1c1915;
+  border-bottom: 1px solid var(--anf-ink);
   margin: 0.5em auto;
 }
 
 /* line 549, app/scss/screen.css */
 .hr-double-top, .hr-double-bottom {
-  border-top: 0.1875em solid #1c1915;
-  border-bottom: 1px solid #1c1915;
+  border-top: 0.1875em solid var(--anf-ink);
+  border-bottom: 1px solid var(--anf-ink);
   height: 0.125em;
   margin: 0.5em auto;
 }
 
 /* line 555, app/scss/screen.css */
 .hr-double-bottom {
-  border-top: 1px solid #1c1915;
-  border-bottom: 0.1875em solid #1c1915;
+  border-top: 1px solid var(--anf-ink);
+  border-bottom: 0.1875em solid var(--anf-ink);
 }
 
 /* line 559, app/scss/screen.css */
@@ -757,21 +757,21 @@ hr {
 p {
   font-size: 16px;
   font-size: 1rem;
-  font-family: var(--font-vollkorn), 'Vollkorn', serif;
+  font-family: var(--anf-body);
 }
 
 /* line 612, app/scss/screen.css */
 a {
-  color: #fff8ee;
-  background-color: #1c1915;
+  color: var(--anf-paper);
+  background-color: var(--anf-ink);
   text-decoration: none;
   display: block;
 }
 
 /* line 617, app/scss/screen.css */
 a:hover, a:focus, a:active {
-  background-color: #FBB03B;
-  color: #1c1915;
+  background-color: var(--anf-accent);
+  color: var(--anf-ink);
 }
 
 /* line 621, app/scss/screen.css */
@@ -782,19 +782,19 @@ html {
 
 /* line 625, app/scss/screen.css */
 body {
-  font-family: var(--font-vollkorn), 'Vollkorn', serif;
+  font-family: var(--anf-body);
   font-size: 16px;
   font-size: 1rem;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
   background-image: url(/dporiginal/images/woodtile2.jpg);
   background-repeat: repeat;
-  color: #1c1915;
+  color: var(--anf-ink);
 }
 
 /* line 635, app/scss/screen.css */
 .newspaper {
-  background-color: #fff8ee;
+  background-color: var(--anf-paper);
   margin: 1em auto;
   border-radius: 1em;
   -webkit-box-sizing: border-box;
@@ -830,7 +830,7 @@ body {
 /* line 656, app/scss/screen.css */
 .newspaper-topheader figcaption {
   text-align: center;
-  font-family: var(--font-kreon), 'Kreon', serif;
+  font-family: var(--anf-head);
   text-transform: uppercase;
   position: relative;
   letter-spacing: 2px;
@@ -992,9 +992,9 @@ body {
 
 /* line 748, app/scss/screen.css */
 .newspaper-exclusive-box {
-  background-color: #1c1915;
-  color: #fff8ee;
-  font-family: "headline_onehplhs", "HelveticaNeue-Bold", "HelveticaNeue", "Roboto", Arial, Verdana, "Trebuchet MS", sans-serif;
+  background-color: var(--anf-ink);
+  color: var(--anf-paper);
+  font-family: var(--anf-display);
   font-weight: normal;
   font-size: 32px;
   font-size: 2rem;
@@ -1034,7 +1034,7 @@ body {
 
 /* line 775, app/scss/screen.css */
 .newspaper-exclusive-box:before, .newspaper-exclusive-box span:after {
-  border-left: 0.41667em solid #fff8ee;
+  border-left: 0.41667em solid var(--anf-paper);
 }
 
 /* line 777, app/scss/screen.css */
@@ -1046,7 +1046,7 @@ body {
 
 /* line 781, app/scss/screen.css */
 .newspaper-exclusive-box:after, .newspaper-exclusive-box span:before {
-  border-left: 0.41667em solid #1c1915;
+  border-left: 0.41667em solid var(--anf-ink);
 }
 
 /* line 783, app/scss/screen.css */
@@ -1077,7 +1077,7 @@ body {
   -webkit-box-sizing: border-box;
           box-sizing: border-box;
   padding: 0.375em 0.25em 0 0.25em;
-  border: 1px solid #1c1915;
+  border: 1px solid var(--anf-ink);
   margin: 0.5em 0 0 0;
   /*768*/
 }
@@ -1096,7 +1096,7 @@ body {
 
 /* line 808, app/scss/screen.css */
 .newspaper-exclusive-text h1 {
-  font-family: "headline_onehplhs", "HelveticaNeue-Bold", "HelveticaNeue", "Roboto", Arial, Verdana, "Trebuchet MS", sans-serif;
+  font-family: var(--anf-display);
   font-weight: normal;
   font-size: 32px;
   font-size: 2rem;
@@ -1117,7 +1117,7 @@ body {
   .newspaper-exclusive-text h1 span {
     font-size: 24px;
     font-size: 1.5rem;
-    font-family: var(--font-kreon), 'Kreon', serif;
+    font-family: var(--anf-head);
     font-weight: 700;
     display: block;
     margin: 0;
@@ -1147,7 +1147,7 @@ body {
 /* line 841, app/scss/screen.css */
 .newspaper-exclusive-text p a {
   text-align: right;
-  font-family: var(--font-kreon), 'Kreon', serif;
+  font-family: var(--anf-head);
   font-weight: 700;
   font-style: normal;
   margin: 0em -0.26667em;
@@ -1166,7 +1166,7 @@ body {
 
 /* line 855, app/scss/screen.css */
 .newspaper-articles {
-  border: 1px solid #1c1915;
+  border: 1px solid var(--anf-ink);
   -webkit-box-sizing: border-box;
           box-sizing: border-box;
   padding: 0.25em 0.5em 0.5em 0.5em;
@@ -1198,7 +1198,7 @@ body {
 
 /* line 872, app/scss/screen.css */
 .newspaper-toparticle h1 {
-  font-family: "headline_onehplhs", "HelveticaNeue-Bold", "HelveticaNeue", "Roboto", Arial, Verdana, "Trebuchet MS", sans-serif;
+  font-family: var(--anf-display);
   font-weight: normal;
   font-size: 46px;
   font-size: 2.875rem;
@@ -1385,9 +1385,9 @@ body {
   -webkit-box-sizing: border-box;
           box-sizing: border-box;
   float: left;
-  color: #1c1915;
+  color: var(--anf-ink);
   font-weight: 700;
-  text-shadow: 3px 0 0px #FBB03B;
+  text-shadow: 3px 0 0px var(--anf-accent);
 }
 
 /* line 986, app/scss/screen.css */
@@ -1398,7 +1398,7 @@ body {
 
 /* line 989, app/scss/screen.css */
 .newspaper-toparticle-story h2 {
-  font-family: "headline_onehplhs", "HelveticaNeue-Bold", "HelveticaNeue", "Roboto", Arial, Verdana, "Trebuchet MS", sans-serif;
+  font-family: var(--anf-display);
   font-weight: normal;
   position: relative;
   text-align: center;
@@ -1418,8 +1418,8 @@ body {
 
 /* line 1002, app/scss/screen.css */
 .newspaper-toparticle-story h2 span {
-  color: #fff8ee;
-  background-color: #1c1915;
+  color: var(--anf-paper);
+  background-color: var(--anf-ink);
   font-size: 16px;
   font-size: 1rem;
   display: inline-block;
@@ -1450,7 +1450,7 @@ body {
 
 /* line 1023, app/scss/screen.css */
 .newspaper-toparticle-story blockquote {
-  font-family: var(--font-vollkorn), 'Vollkorn', serif;
+  font-family: var(--anf-body);
   font-weight: 700;
   font-style: italic;
   margin: 0;
@@ -1464,7 +1464,7 @@ body {
 /* line 1032, app/scss/screen.css */
 .newspaper-toparticle-story blockquote:before {
   content: '“';
-  font-family: "headline_onehplhs", "HelveticaNeue-Bold", "HelveticaNeue", "Roboto", Arial, Verdana, "Trebuchet MS", sans-serif;
+  font-family: var(--anf-display);
   font-weight: normal;
   font-style: normal;
   font-size: 32px;
@@ -1529,8 +1529,8 @@ body {
 
 /* line 1069, app/scss/screen.css */
 .newspaper-toparticle-aside h1 {
-  background-color: #1c1915;
-  color: #fff8ee;
+  background-color: var(--anf-ink);
+  color: var(--anf-paper);
   text-align: center;
   font-size: 32px;
   font-size: 2rem;
@@ -1540,7 +1540,7 @@ body {
 
 /* line 1077, app/scss/screen.css */
 .newspaper-toparticle-aside h1 span {
-  font-family: var(--font-vollkorn), 'Vollkorn', serif;
+  font-family: var(--anf-body);
   font-style: italic;
   font-size: 12px;
   font-size: 0.75rem;
@@ -1603,7 +1603,7 @@ body {
 
 /* line 1115, app/scss/screen.css */
 .newspaper-bottomarticle-first h1 {
-  font-family: "headline_onehplhs", "HelveticaNeue-Bold", "HelveticaNeue", "Roboto", Arial, Verdana, "Trebuchet MS", sans-serif;
+  font-family: var(--anf-display);
   font-weight: normal;
   font-size: 32px;
   font-size: 2rem;
@@ -1612,20 +1612,20 @@ body {
 
 /* line 1121, app/scss/screen.css */
 .newspaper-bottomarticle-first blockquote {
-  background-color: #1c1915;
+  background-color: var(--anf-ink);
   position: relative;
   margin: 0.5em 0 0 0;
 }
 
 /* line 1125, app/scss/screen.css */
 .newspaper-bottomarticle-first p {
-  font-family: var(--font-kreon), 'Kreon', serif;
+  font-family: var(--anf-head);
   font-weight: 700;
   font-size: 18px;
   font-size: 1.125rem;
   text-transform: uppercase;
   margin: 0em;
-  background-color: #fff8ee;
+  background-color: var(--anf-paper);
   margin: 0;
   padding: 0 0.222222em 1px 0;
   display: block;
@@ -1649,15 +1649,15 @@ body {
 
 /* line 1144, app/scss/screen.css */
 .newspaper-bottomarticle-first span {
-  color: #fff8ee;
-  font-family: "headline_onehplhs", "HelveticaNeue-Bold", "HelveticaNeue", "Roboto", Arial, Verdana, "Trebuchet MS", sans-serif;
+  color: var(--anf-paper);
+  font-family: var(--anf-display);
   font-weight: normal;
   margin: 0;
   padding: 0em 0.44444em;
   display: block;
   right: 0;
   top: 0.111111em;
-  background-color: #1c1915;
+  background-color: var(--anf-ink);
   /*480*/
 }
 
@@ -1735,7 +1735,7 @@ body {
 
 /* line 1194, app/scss/screen.css */
 .newspaper-bottomarticle-second h2, .newspaper-bottomarticle-second h3 {
-  font-family: "headline_onehplhs", "HelveticaNeue-Bold", "HelveticaNeue", "Roboto", Arial, Verdana, "Trebuchet MS", sans-serif;
+  font-family: var(--anf-display);
   font-weight: normal;
 }
 
@@ -1784,7 +1784,7 @@ body {
 
 /* line 1225, app/scss/screen.css */
 .newspaper-bottomarticle-second-h1 {
-  font-family: var(--font-vollkorn), 'Vollkorn', serif;
+  font-family: var(--anf-body);
   text-transform: uppercase;
   font-weight: normal;
   font-size: 12px;
@@ -1823,7 +1823,7 @@ body {
   }
   /* line 1255, app/scss/screen.css */
   .newspaper-bottomarticle-first {
-    border-right: 1px solid #1c1915;
+    border-right: 1px solid var(--anf-ink);
   }
 }
 
@@ -1848,7 +1848,7 @@ body {
 /* line 1271, app/scss/screen.css */
 .newspaper-weather h2:after {
   content: '';
-  background-color: #fff8ee;
+  background-color: var(--anf-paper);
   width: 100%;
   width: -webkit-calc(100% + 1.33333em);
   width: calc(100% + 1.33333em);
@@ -1912,8 +1912,8 @@ body {
 .newspaper-weather-cities h3 {
   text-transform: uppercase;
   text-align: center;
-  border-top: 1px solid #1c1915;
-  border-bottom: 1px solid #1c1915;
+  border-top: 1px solid var(--anf-ink);
+  border-bottom: 1px solid var(--anf-ink);
   font-size: 16px;
   font-size: 1rem;
   margin: 0;
@@ -1924,11 +1924,11 @@ body {
 .newspaper-weather-cities p {
   font-size: 48px;
   font-size: 3rem;
-  font-family: var(--font-kreon), 'Kreon', serif;
+  font-family: var(--anf-head);
   font-weight: 700;
   position: relative;
   margin: -0.083333em 0 0.083333em 0;
-  text-shadow: 3px 0 0px #9c9c9c;
+  text-shadow: 3px 0 0px var(--anf-ink-3);
 }
 
 /* line 1327, app/scss/screen.css */
@@ -1942,21 +1942,21 @@ body {
 
 /* line 1334, app/scss/screen.css */
 p.newspaper-weather-cities-warm {
-  text-shadow: 3px 0 0px #FBB03B;
+  text-shadow: 3px 0 0px var(--anf-accent);
 }
 
 /* line 1337, app/scss/screen.css */
 p.newspaper-weather-cities-cold {
-  text-shadow: 3px 0 0px #82d1ff;
+  text-shadow: 3px 0 0px var(--anf-cold);
 }
 
 /* line 1340, app/scss/screen.css */
 .newspaper-teaser {
-  font-family: var(--font-kreon), 'Kreon', serif;
+  font-family: var(--anf-head);
   font-weight: 700;
-  border-top: 0.25em solid #1c1915;
-  border-bottom: 0.25em solid #1c1915;
-  background-color: #1c1915;
+  border-top: 0.25em solid var(--anf-ink);
+  border-bottom: 0.25em solid var(--anf-ink);
+  background-color: var(--anf-ink);
   margin: 1em 0;
   position: relative;
   /*768*/
@@ -1965,14 +1965,14 @@ p.newspaper-weather-cities-cold {
 @media only screen and (min-width: 48em) {
   /* line 1350, app/scss/screen.css */
   .newspaper-teaser {
-    background-color: #fff8ee;
+    background-color: var(--anf-paper);
   }
 }
 
 /* line 1353, app/scss/screen.css */
 .newspaper-teaser-fatline {
-  background-color: #1c1915;
-  color: #fff8ee;
+  background-color: var(--anf-ink);
+  color: var(--anf-paper);
   font-size: 48px;
   font-size: 3rem;
   padding: 0.125em 0.25em  0.16667em 0.25em;
@@ -1996,7 +1996,7 @@ p.newspaper-weather-cities-cold {
 
 /* line 1371, app/scss/screen.css */
 .newspaper-teaser-page {
-  border: 1px solid #1c1915;
+  border: 1px solid var(--anf-ink);
   font-size: 48px;
   font-size: 3rem;
   display: inline-block;
@@ -2006,11 +2006,11 @@ p.newspaper-weather-cities-cold {
   height: 1.66667em;
   text-align: center;
   line-height: 1.75;
-  -webkit-box-shadow: 0 0 0 2px #fff8ee;
-          box-shadow: 0 0 0 2px #fff8ee;
+  -webkit-box-shadow: 0 0 0 2px var(--anf-paper);
+          box-shadow: 0 0 0 2px var(--anf-paper);
   -webkit-box-sizing: border-box;
           box-sizing: border-box;
-  background-color: #fff8ee;
+  background-color: var(--anf-paper);
   float: right;
   margin: -0.166667em 0 0 0;
   /*768*/
@@ -2033,7 +2033,7 @@ p.newspaper-weather-cities-cold {
   content: '';
   width: 100%;
   height: 100%;
-  border: 2px solid #1c1915;
+  border: 2px solid var(--anf-ink);
   display: inline-block;
   position: absolute;
   left: -4px;
@@ -2044,7 +2044,7 @@ p.newspaper-weather-cities-cold {
 
 /* line 1407, app/scss/screen.css */
 .newspaper-teaser-page span {
-  font-family: "headline_onehplhs", "HelveticaNeue-Bold", "HelveticaNeue", "Roboto", Arial, Verdana, "Trebuchet MS", sans-serif;
+  font-family: var(--anf-display);
   font-weight: normal;
   font-size: 14px;
   font-size: 0.875rem;
@@ -2056,12 +2056,12 @@ p.newspaper-weather-cities-cold {
 /* line 1416, app/scss/screen.css */
 .newspaper-teaser-story {
   text-transform: uppercase;
-  font-family: var(--font-kreon), 'Kreon', serif;
+  font-family: var(--anf-head);
   font-weight: 700;
   font-size: 24px;
   font-size: 1.5rem;
   margin: -0.25em 0 0 0;
-  background-color: #fff8ee;
+  background-color: var(--anf-paper);
   width: 100%;
   float: left;
   /*768*/
@@ -2092,9 +2092,9 @@ p.newspaper-weather-cities-cold {
 
 /* line 1440, app/scss/screen.css */
 .newspaper-footer {
-  font-family: "headline_onehplhs", "HelveticaNeue-Bold", "HelveticaNeue", "Roboto", Arial, Verdana, "Trebuchet MS", sans-serif;
+  font-family: var(--anf-display);
   font-weight: normal;
-  border: 0.125em solid #1c1915;
+  border: 0.125em solid var(--anf-ink);
   -webkit-box-sizing: border-box;
           box-sizing: border-box;
   padding: 0.5em;
@@ -2102,20 +2102,20 @@ p.newspaper-weather-cities-cold {
 
 /* line 1446, app/scss/screen.css */
 .newspaper-footer a {
-  background-color: #fff8ee;
-  color: #1c1915;
+  background-color: var(--anf-paper);
+  color: var(--anf-ink);
 }
 
 /* line 1449, app/scss/screen.css */
 .newspaper-footer a:hover, .newspaper-footer a:focus, .newspaper-footer a:active {
-  text-shadow: 2px 0 0 #FBB03B;
+  text-shadow: 2px 0 0 var(--anf-accent);
 }
 
 /* line 1451, app/scss/screen.css */
 .newspaper-footer a:hover span {
   text-shadow: none;
-  background-color: #FBB03B;
-  color: #1c1915;
+  background-color: var(--anf-accent);
+  color: var(--anf-ink);
 }
 
 /* line 1456, app/scss/screen.css */
@@ -2135,14 +2135,14 @@ p.newspaper-weather-cities-cold {
 
 /* line 1465, app/scss/screen.css */
 .newspaper-footer-index span {
-  font-family: var(--font-kreon), 'Kreon', serif;
+  font-family: var(--anf-head);
   font-weight: 700;
   margin: -0.25em 0 0 1em;
-  color: #fff8ee;
+  color: var(--anf-paper);
   display: inline-block;
   line-height: 1;
   position: relative;
-  background-color: #1c1915;
+  background-color: var(--anf-ink);
   width: 1.5em;
   height: 1.5em;
   text-align: center;
@@ -2157,7 +2157,7 @@ p.newspaper-weather-cities-cold {
 .credits {
   text-align: center;
   margin: 1em 0;
-  color: #3a3a3a;
+  color: var(--anf-ink-2);
   font-size: 14px;
   font-size: 0.875rem;
 }
@@ -2450,7 +2450,7 @@ p.newspaper-weather-cities-cold {
     .newspaper-teaser {
       /*-ms-grid-columns: (auto)[4] 90px auto;*/
           grid-template-columns: repeat(4, auto) 90px auto;
-      background-color: #fff8ee;
+      background-color: var(--anf-paper);
       margin: 0;
     }
     /* line 1629, app/scss/screen.css */

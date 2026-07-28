@@ -204,6 +204,7 @@ export const DS_ARCHITECTURE: DsSection[] = [
       { id: "letras", n: "09.12", label: "Letras e marcadores", em: ["arcane"] },
       { id: "prensa", n: "09.13", label: "O movimento da prensa", em: ["arcane"] },
       { id: "kit", n: "09.14", label: "UI Kit", em: ["arcane"] },
+      { id: "wire", n: "09.15", label: "Tokens e a coluna do Wire", em: ["arcane"] },
     ],
   },
   {
