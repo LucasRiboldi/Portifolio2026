@@ -1,0 +1,27 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1600 800" width="1600" height="800" role="img" aria-label="Capa gerada para O commit honesto">
+  <defs>
+    <linearGradient id="bg" x1="0" y1="0" x2="0.6" y2="1">
+      <stop offset="0" stop-color="#063a5e"/>
+      <stop offset="1" stop-color="#0e86c4"/>
+    </linearGradient>
+    <radialGradient id="glow" cx="0.455" cy="0.394" r="0.75">
+      <stop offset="0" stop-color="#ff2f4e" stop-opacity="0.55"/>
+      <stop offset="1" stop-color="#ff2f4e" stop-opacity="0"/>
+    </radialGradient>
+    <pattern id="dots" width="18.8" height="18.8" patternUnits="userSpaceOnUse">
+      <circle cx="9.4" cy="9.4" r="3.8" fill="#12100e" opacity="0.5"/>
+    </pattern>
+  </defs>
+
+  <rect width="1600" height="800" fill="url(#bg)"/>
+  <rect width="1600" height="800" fill="url(#glow)"/>
+  <path d="M966.1 315.2L2516.2 357.0L965.8 326.1ZM1074.2 357.7L2492.3 610.0L1069.2 387.3ZM1051.6 423.0L2405.3 936.4L1043.8 444.0ZM1285.4 610.9L2295.3 1177.2L1276.3 627.5ZM1011.3 521.6L2159.6 1387.5L1005.7 529.0ZM903.7 475.0L2026.2 1545.7L897.0 482.1ZM1029.8 749.6L1694.9 1820.0L997.6 770.3ZM958.9 735.3L1561.9 1897.6L943.9 743.2ZM904.0 787.3L1295.1 2011.6L871.2 798.3ZM783.8 780.0L911.6 2094.4L768.1 781.6ZM711.7 883.8L648.4 2102.1L693.5 883.0ZM626.4 921.3L389.5 2071.6L596.9 915.6ZM503.6 903.9L59.6 1974.4L481.4 895.0ZM534.0 726.8L-113.6 1893.6L494.1 705.5ZM469.2 643.4L-401.3 1702.5L458.9 635.0ZM474.6 561.6L-579.6 1535.9L464.6 550.9ZM132.2 668.9L-827.1 1199.4L119.2 646.2ZM85.3 585.4L-939.0 964.4L71.8 550.6ZM223.4 452.6L-1013.7 723.4L214.9 416.1ZM432.2 333.4L-1059.2 393.9L431.7 322.8ZM406.5 300.1L-1054.9 167.5L408.4 277.0ZM320.6 210.3L-988.2 -190.1L328.8 182.4ZM277.6 150.5L-942.7 -324.6L282.8 136.8ZM239.5 16.4L-771.7 -660.2L256.8 -10.2ZM205.4 -78.3L-659.8 -813.9L236.5 -116.5ZM320.8 -156.2L-373.2 -1094.8L369.3 -194.1ZM427.2 -169.0L-141.8 -1248.2L475.1 -195.7ZM547.2 -127.4L81.2 -1352.8L563.0 -133.5ZM649.6 -16.8L388.2 -1441.3L676.8 -22.1ZM717.1 92.1L680.2 -1473.2L726.7 91.9ZM768.3 -274.0L891.3 -1466.3L795.3 -271.6ZM814.1 40.8L1294.8 -1381.6L823.9 44.1ZM944.2 -196.5L1505.8 -1295.8L994.0 -172.4ZM976.7 -42.4L1800.9 -1116.2L1001.2 -24.1ZM1077.2 -53.8L2003.9 -938.6L1102.8 -27.7ZM1067.8 27.9L2121.1 -807.0L1080.9 44.2ZM929.0 205.2L2308.9 -521.8L931.8 210.4ZM1334.6 118.5L2440.8 -200.6L1342.3 144.0ZM1256.7 226.3L2499.9 70.6L1261.0 257.3Z" fill="rgba(18,16,14,0.55)" opacity="0.85"/>
+  <g transform="rotate(8.00 800.0 400.0)">
+    <circle cx="800.0" cy="400.0" r="325.8" fill="none" stroke="#12100e" stroke-width="7"/><circle cx="800.0" cy="400.0" r="244.4" fill="#1b6cff" stroke="#12100e" stroke-width="7"/><circle cx="800.0" cy="400.0" r="162.9" fill="none" stroke="#12100e" stroke-width="7"/><circle cx="800.0" cy="400.0" r="81.5" fill="#1b6cff" stroke="#12100e" stroke-width="7"/>
+    <text x="794.4" y="394.4" text-anchor="middle" dominant-baseline="central" font-family="Impact, Haettenschweiler, 'Arial Narrow Bold', 'Franklin Gothic Heavy', sans-serif" font-size="446" font-weight="700" fill="#ffd200" opacity="0.75">O</text>
+    <text x="805.6" y="405.6" text-anchor="middle" dominant-baseline="central" font-family="Impact, Haettenschweiler, 'Arial Narrow Bold', 'Franklin Gothic Heavy', sans-serif" font-size="446" font-weight="700" fill="#ff2f4e" opacity="0.75">O</text>
+    <text x="800.0" y="400.0" text-anchor="middle" dominant-baseline="central" font-family="Impact, Haettenschweiler, 'Arial Narrow Bold', 'Franklin Gothic Heavy', sans-serif" font-size="446" font-weight="700" fill="#fff6e0" opacity="1">O</text>
+  </g>
+  <rect width="1600" height="800" fill="url(#dots)" opacity="0.22"/>
+  <rect x="6" y="6" width="1588" height="788" fill="none" stroke="#12100e" stroke-width="12"/>
+</svg>

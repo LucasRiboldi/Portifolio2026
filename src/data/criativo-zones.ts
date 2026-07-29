@@ -288,6 +288,30 @@ export const notes: Note[] = [
     accent: "lime",
     pinned: false,
   },
+  {
+    id: "n5",
+    title: "Aprendido na marra",
+    body: "Efeito bonito que ninguém consegue desligar não é efeito, é obstáculo. O cursor customizado durou onze meses e saiu por isso.",
+    author: "Lucas",
+    accent: "orange",
+    pinned: false,
+  },
+  {
+    id: "n6",
+    title: "Critério de tirinha",
+    body: "Se a piada precisa de legenda explicando a piada, o problema está no segundo quadro — não no leitor.",
+    author: "Lucas",
+    accent: "violet",
+    pinned: false,
+  },
+  {
+    id: "n7",
+    title: "Encontrado num caderno velho",
+    body: "\"Desenhar todo dia\" escrito quatorze vezes em páginas diferentes, cada uma com uma data. A última é de anteontem.",
+    author: "Achado",
+    accent: "cyan",
+    pinned: false,
+  },
 ]
 
 export const strips: Strip[] = [
@@ -311,5 +335,40 @@ export const strips: Strip[] = [
     image: "/covers/tirinhas/s3.svg",
     setup: "É só mudar uma cor.",
     punchline: "Três dias depois, ainda mudando a cor.",
+  },
+  {
+    id: "s4",
+    title: "O commit honesto",
+    image: "/covers/tirinhas/s4.svg",
+    setup: "Escreve aí o que essa mudança faz.",
+    punchline: "\"ajustes\". Trezentos e quarenta arquivos.",
+  },
+  {
+    id: "s5",
+    title: "Cobertura",
+    image: "/covers/tirinhas/s5.svg",
+    setup: "Cem por cento de cobertura de testes.",
+    punchline: "E nenhum deles testa o que o usuário faz.",
+  },
+  {
+    id: "s6",
+    title: "A reunião",
+    image: "/covers/tirinhas/s6.svg",
+    setup: "Essa reunião podia ter sido um e-mail.",
+    punchline: "Esse e-mail podia ter sido um silêncio.",
+  },
+  {
+    id: "s7",
+    title: "Modo escuro",
+    image: "/covers/tirinhas/s7.svg",
+    setup: "Já tem modo escuro?",
+    punchline: "Tem modo escuro. O modo claro é que nunca foi testado.",
+  },
+  {
+    id: "s8",
+    title: "Retrocompatibilidade",
+    image: "/covers/tirinhas/s8.svg",
+    setup: "Ninguém mais usa esse parâmetro.",
+    punchline: "Uma pessoa usa. Ela abre chamado às sextas.",
   },
 ]

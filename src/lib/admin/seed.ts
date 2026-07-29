@@ -20,6 +20,7 @@ import {
   tracks,
   videos,
 } from "@/data/criativo-zones"
+import { devlogs, labExperiments, snippets, wikiDocs, ideas } from "@/data/dev"
 import { REALMS, REALM_ORDER, DEFAULT_REALM } from "@/lib/realms"
 import * as arcane from "@/lib/arcane-content"
 
@@ -168,6 +169,80 @@ export async function seedDatabase(): Promise<SeedReport> {
       rows.map(({ id: _id, ...rest }, i) => ({ ...rest, published: true, sort: i })),
     )
   }
+
+  // ─── Realm dev ────────────────────────────────────────────────────────
+  // Banco novo já nasce com o acervo técnico. Em banco existente estas
+  // tabelas não estarão vazias depois do primeiro sync, e `seedIfEmpty`
+  // desiste — que é o comportamento correto: o painel manda.
+  report.devlogs = await seedIfEmpty(
+    supabase,
+    "devlogs",
+    devlogs.map((d, i) => ({
+      slug: d.slug,
+      title: d.title,
+      date: d.date,
+      summary: d.summary,
+      body: d.body,
+      tags: d.tags,
+      published: true,
+      sort: i,
+    })),
+  )
+
+  report.lab_experiments = await seedIfEmpty(
+    supabase,
+    "lab_experiments",
+    labExperiments.map((x, i) => ({
+      title: x.title,
+      description: x.description,
+      status: x.status,
+      stack: x.stack,
+      demo_url: x.demoUrl ?? null,
+      repo_url: x.repoUrl ?? null,
+      published: true,
+      sort: i,
+    })),
+  )
+
+  report.snippets = await seedIfEmpty(
+    supabase,
+    "snippets",
+    snippets.map((s, i) => ({
+      title: s.title,
+      language: s.language,
+      description: s.description,
+      code: s.code,
+      tags: s.tags,
+      published: true,
+      sort: i,
+    })),
+  )
+
+  report.wiki = await seedIfEmpty(
+    supabase,
+    "wiki",
+    wikiDocs.map((w, i) => ({
+      slug: w.slug,
+      title: w.title,
+      category: w.category,
+      body: w.body,
+      published: true,
+      sort: i,
+    })),
+  )
+
+  report.ideas = await seedIfEmpty(
+    supabase,
+    "ideas",
+    ideas.map((x, i) => ({
+      title: x.title,
+      description: x.description,
+      status: x.status,
+      tags: x.tags,
+      published: true,
+      sort: i,
+    })),
+  )
 
   return report
 }

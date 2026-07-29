@@ -1,0 +1,27 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1600 800" width="1600" height="800" role="img" aria-label="Capa gerada para Retrocompatibilidade">
+  <defs>
+    <linearGradient id="bg" x1="0" y1="0" x2="0.6" y2="1">
+      <stop offset="0" stop-color="#063a5e"/>
+      <stop offset="1" stop-color="#0e86c4"/>
+    </linearGradient>
+    <radialGradient id="glow" cx="0.446" cy="0.600" r="0.75">
+      <stop offset="0" stop-color="#ff2f4e" stop-opacity="0.55"/>
+      <stop offset="1" stop-color="#ff2f4e" stop-opacity="0"/>
+    </radialGradient>
+    <pattern id="dots" width="19.1" height="19.1" patternUnits="userSpaceOnUse">
+      <circle cx="9.6" cy="9.6" r="3.8" fill="#12100e" opacity="0.5"/>
+    </pattern>
+  </defs>
+
+  <rect width="1600" height="800" fill="url(#bg)"/>
+  <rect width="1600" height="800" fill="url(#glow)"/>
+  <path d="M1182.2 474.9L2501.6 534.7L1181.1 513.6ZM1179.6 566.5L2455.5 887.3L1169.7 609.0ZM1200.5 685.4L2345.6 1212.3L1190.8 707.1ZM1283.6 840.1L2205.9 1466.4L1268.3 863.2ZM1094.6 833.9L1973.9 1749.4L1064.8 863.4ZM862.5 705.0L1626.9 2018.1L839.9 718.4ZM886.6 994.0L1203.7 2200.3L837.5 1008.0ZM764.2 731.9L981.6 2248.6L739.9 735.6ZM678.3 1022.6L573.3 2263.3L663.6 1021.5ZM615.5 766.8L80.7 2153.1L597.3 760.0ZM585.9 718.0L-201.2 2017.2L565.2 705.7ZM391.7 873.9L-447.9 1840.4L375.0 859.6ZM294.5 840.9L-687.3 1592.3L267.0 806.3ZM465.6 610.1L-889.8 1273.0L459.6 598.0ZM365.5 561.7L-1043.2 817.2L360.0 532.9ZM285.4 469.6L-1074.0 414.2L285.8 458.7ZM44.0 322.0L-1017.3 28.4L52.2 290.6ZM226.1 284.9L-938.9 -205.1L231.0 272.8ZM499.5 317.4L-685.9 -634.3L507.3 307.7ZM374.8 167.8L-544.1 -792.2L405.4 137.6ZM529.9 206.4L-209.9 -1052.1L557.5 189.7ZM536.3 -101.3L216.2 -1238.4L553.0 -106.2ZM670.3 -52.8L593.7 -1304.9L685.3 -53.8ZM723.0 260.5L844.4 -1304.2L736.3 261.5ZM866.8 1.5L1306.5 -1207.8L893.3 10.8ZM889.9 147.3L1584.5 -1082.7L903.8 155.0ZM1093.2 29.4L1916.0 -844.6L1125.4 58.6ZM946.9 301.1L2168.3 -561.1L958.1 316.8ZM976.1 361.9L2360.7 -217.9L980.9 373.4ZM1395.5 325.8L2474.4 164.3L1406.6 387.6Z" fill="rgba(18,16,14,0.55)" opacity="0.85"/>
+  <g transform="rotate(7.79 800.0 400.0)">
+    <g transform="rotate(5.30 800.0 400.0)"><path d="M564.9 164.9H967.7L1035.1 232.3V635.1H564.9Z" fill="#1b6cff" stroke="#12100e" stroke-width="7" stroke-linejoin="round"/></g>
+    <text x="794.7" y="394.7" text-anchor="middle" dominant-baseline="central" font-family="Impact, Haettenschweiler, 'Arial Narrow Bold', 'Franklin Gothic Heavy', sans-serif" font-size="455" font-weight="700" fill="#ffd200" opacity="0.75">R</text>
+    <text x="805.3" y="405.3" text-anchor="middle" dominant-baseline="central" font-family="Impact, Haettenschweiler, 'Arial Narrow Bold', 'Franklin Gothic Heavy', sans-serif" font-size="455" font-weight="700" fill="#ff2f4e" opacity="0.75">R</text>
+    <text x="800.0" y="400.0" text-anchor="middle" dominant-baseline="central" font-family="Impact, Haettenschweiler, 'Arial Narrow Bold', 'Franklin Gothic Heavy', sans-serif" font-size="455" font-weight="700" fill="#fff6e0" opacity="1">R</text>
+  </g>
+  <rect width="1600" height="800" fill="url(#dots)" opacity="0.22"/>
+  <rect x="6" y="6" width="1588" height="788" fill="none" stroke="#12100e" stroke-width="12"/>
+</svg>

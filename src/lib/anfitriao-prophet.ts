@@ -199,6 +199,10 @@ export const boxes = {
       "O baralho de 52 cartas espelha o ano: 52 semanas, 4 estações, 13 lunações.",
       "«Jogo alemão» virou gênero por causa do prêmio: o Spiel des Jahres premia desde 1979.",
       "O Hanabi ganhou o louro de 2013 sendo um jogo de cartas em que ninguém vê a própria mão.",
+      "O xadrez levou quatro séculos para fixar as regras: a dama só ganhou o passo longo no fim do século XV.",
+      "O Monopoly nasceu como crítica ao monopólio de terras — e foi vendido como celebração dele.",
+      "O tabuleiro de gamão aparece em túmulos persas com cinco mil anos e as mesmas vinte e quatro casas.",
+      "A palavra «trunfo» vem de «triunfo», o naipe que desfila por cima dos outros.",
     ],
   },
   numbers: {
@@ -225,6 +229,10 @@ export const boxes = {
       { term: "Push Your Luck", note: "a tensão de arriscar mais um dado" },
       { term: "Cooperativo", note: "a mesa inteira contra o jogo — ver Pandemic" },
       { term: "Legacy", note: "campanhas que alteram o jogo em definitivo" },
+      { term: "Engine Building", note: "montar uma máquina que produz sozinha — ver Terraforming Mars" },
+      { term: "Bluff", note: "a informação escondida vale mais que a carta" },
+      { term: "Rondel", note: "roda de ações: escolher perto é barato, longe custa" },
+      { term: "Assimétrico", note: "cada jogador com regras próprias — ver Root" },
     ],
   },
 }
@@ -246,6 +254,21 @@ export const ads = [
     body: "Playtesters de constituição robusta e paciência incomum, para mesas de tabuleiro e de cartas. Paga-se em pizza e em créditos na caixa.",
     sign: "Dirigir-se a esta Redação",
   },
+  {
+    head: "DADOS & AZARES",
+    body: "Poliedros em resina translúcida, de quatro a cem faces, aferidos em salmoura contra o vício de rolagem. Conjunto completo em estojo de feltro. Trocamos o dado que teimar em cair sempre no mesmo número.",
+    sign: "Casa da Sorte Aferida — Travessa dos Vinte, 20",
+  },
+  {
+    head: "ENCADERNAÇÃO DE REGRAS",
+    body: "Livrinhos de regra costurados à linha, capa dura e lombada que abre em mesa sem fechar sozinha no meio da partida. Este último detalhe custa mais e vale cada centavo.",
+    sign: "Oficina Lombada Firme — Beco do Papel, 3",
+  },
+  {
+    head: "VENDE-SE COLEÇÃO",
+    body: "Senhora desfaz-se do acervo do falecido esposo: setenta e duas caixas, algumas ainda lacradas. Aceita-se visita para exame. Não se aceita proposta pelo conjunto inteiro — as caixas devem ir para casas diferentes, era vontade dele.",
+    sign: "Recados na portaria desta Folha",
+  },
 ] as const
 
 /** Notícias curtas em telegrama — a bancada e a praça, em linha única. */
@@ -258,6 +281,11 @@ export const briefs = {
     "MINIATURAS — Nova leva sai do tanque de cura; pintura em lavagem começa segunda.",
     "3D — Bico de 0,2mm restabelecido após entupimento; camadas voltam ao normal.",
     "MERCADO — Tiragens declaradas revistas: Uno segue à frente da praça de cartas.",
+    "REGRAS — Livrinho da terceira edição reduzido de vinte e quatro folhas para dezesseis.",
+    "MESA — Feltro verde reposto após acidente com tinta; a mancha ficou de lembrança no avesso.",
+    "CORREIO — Chegam duas cartas de leitores apontando o mesmo erro na tabela de custos.",
+    "OFICINA — Guilhotina afiada e recalibrada; o corte volta a sair sem rebarba.",
+    "ÍNDICE — Verbetes técnicos passam de oito para doze com a entrada do rondel.",
   ],
 }
 

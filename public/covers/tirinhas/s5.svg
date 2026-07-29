@@ -1,0 +1,27 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1600 800" width="1600" height="800" role="img" aria-label="Capa gerada para Cobertura">
+  <defs>
+    <linearGradient id="bg" x1="0" y1="0" x2="0.6" y2="1">
+      <stop offset="0" stop-color="#063a5e"/>
+      <stop offset="1" stop-color="#0e86c4"/>
+    </linearGradient>
+    <radialGradient id="glow" cx="0.411" cy="0.422" r="0.75">
+      <stop offset="0" stop-color="#ff2f4e" stop-opacity="0.55"/>
+      <stop offset="1" stop-color="#ff2f4e" stop-opacity="0"/>
+    </radialGradient>
+    <pattern id="dots" width="16.7" height="16.7" patternUnits="userSpaceOnUse">
+      <circle cx="8.3" cy="8.3" r="3.3" fill="#12100e" opacity="0.5"/>
+    </pattern>
+  </defs>
+
+  <rect width="1600" height="800" fill="url(#bg)"/>
+  <rect width="1600" height="800" fill="url(#glow)"/>
+  <path d="M1164.1 324.5L2445.8 353.5L1163.8 360.2ZM1234.0 430.7L2408.8 699.9L1223.5 481.5ZM1288.1 600.3L2275.1 1100.7L1260.9 657.9ZM896.4 479.3L2151.1 1321.6L881.4 502.1ZM1141.8 772.8L1960.3 1563.3L1120.8 795.1ZM1019.0 881.4L1603.1 1856.2L985.3 902.4ZM904.2 936.7L1298.7 2007.8L874.4 948.2ZM714.5 574.9L1027.3 2088.1L700.4 577.9ZM664.3 574.8L670.6 2126.8L653.2 574.9ZM522.5 948.3L236.3 2076.7L497.6 942.3ZM439.7 941.5L-25.6 1991.5L385.3 919.0ZM383.4 825.8L-275.9 1864.3L347.6 803.9ZM424.3 608.6L-551.4 1657.0L407.7 593.4ZM107.6 725.1L-830.1 1332.3L89.3 697.8ZM130.5 548.6L-1012.3 981.2L125.3 535.1ZM301.0 410.3L-1107.5 632.4L296.8 385.2ZM137.7 326.9L-1130.7 271.9L138.3 310.7ZM376.6 286.8L-1085.5 -66.8L382.8 260.4ZM324.0 225.5L-1019.1 -287.0L331.6 205.0ZM238.9 70.9L-836.2 -647.0L246.9 58.8ZM307.5 45.2L-663.2 -869.2L334.2 16.0ZM309.9 -118.5L-369.9 -1126.8L346.2 -144.0ZM539.8 100.5L-74.1 -1294.7L557.8 92.4ZM576.5 -10.6L285.9 -1412.0L589.0 -13.3ZM671.7 -253.3L727.2 -1449.5L688.7 -252.6ZM700.0 94.7L1045.9 -1408.1L721.2 99.5ZM880.3 -329.0L1306.8 -1328.7L944.1 -304.1ZM854.1 8.5L1600.7 -1181.7L864.9 15.2ZM1054.2 -121.2L1867.8 -978.8L1081.3 -96.3ZM930.4 133.7L2103.1 -715.0L935.4 140.5ZM1106.5 154.7L2328.8 -298.3L1114.7 176.1ZM1036.2 256.0L2417.0 18.0L1040.8 281.2Z" fill="rgba(18,16,14,0.55)" opacity="0.85"/>
+  <g transform="rotate(-3.39 800.0 400.0)">
+    <polygon points="1048.7,400.0 956.7,442.0 1015.4,524.4 899.0,499.0 924.4,615.4 844.5,566.2 800.0,648.7 760.9,546.1 675.6,615.4 683.7,516.3 584.6,524.4 660.5,437.4 551.3,400.0 663.0,363.3 584.6,275.6 691.9,291.9 675.6,184.6 763.2,262.7 800.0,151.3 838.6,255.8 924.4,184.6 904.6,295.4 1015.4,275.6 953.2,358.9" fill="#1b6cff" stroke="#12100e" stroke-width="7" stroke-linejoin="round"/>
+    <text x="794.4" y="394.4" text-anchor="middle" dominant-baseline="central" font-family="Impact, Haettenschweiler, 'Arial Narrow Bold', 'Franklin Gothic Heavy', sans-serif" font-size="540" font-weight="700" fill="#ffd200" opacity="0.75">C</text>
+    <text x="805.6" y="405.6" text-anchor="middle" dominant-baseline="central" font-family="Impact, Haettenschweiler, 'Arial Narrow Bold', 'Franklin Gothic Heavy', sans-serif" font-size="540" font-weight="700" fill="#ff2f4e" opacity="0.75">C</text>
+    <text x="800.0" y="400.0" text-anchor="middle" dominant-baseline="central" font-family="Impact, Haettenschweiler, 'Arial Narrow Bold', 'Franklin Gothic Heavy', sans-serif" font-size="540" font-weight="700" fill="#fff6e0" opacity="1">C</text>
+  </g>
+  <rect width="1600" height="800" fill="url(#dots)" opacity="0.22"/>
+  <rect x="6" y="6" width="1588" height="788" fill="none" stroke="#12100e" stroke-width="12"/>
+</svg>
