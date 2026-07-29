@@ -16,6 +16,11 @@ export type FieldType =
   | "tags"
   | "boolean"
   | "media"
+  /** Prosa em blocos: `## intertítulo` abre bloco, linha em branco separa
+   *  parágrafo. Serializa para o jsonb do corpo da matéria. */
+  | "prose"
+  /** Estrutura tabular editada como JSON indentado. */
+  | "json"
 
 export interface FieldConfig {
   name: string

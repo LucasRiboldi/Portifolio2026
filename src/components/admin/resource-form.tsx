@@ -6,6 +6,7 @@ import { useRouter } from "next/navigation"
 import type { FieldConfig } from "@/lib/admin/resources"
 import { saveResource } from "@/app/admin/crud-actions"
 import { MediaPicker } from "@/components/admin/media-picker"
+import { blocosParaTexto, jsonParaTexto } from "@/lib/admin/materia-format"
 
 interface ResourceFormProps {
   slug: string
@@ -17,6 +18,11 @@ interface ResourceFormProps {
 
 function toInputValue(field: FieldConfig, raw: unknown): string {
   if (field.type === "tags") return Array.isArray(raw) ? raw.join(", ") : ""
+  // Os dois tipos abaixo guardam jsonb no banco e texto no formulário. A
+  // serialização vem do mesmo módulo que a validação usa no servidor — é o
+  // que impede as duas pontas de divergirem.
+  if (field.type === "prose") return blocosParaTexto(raw)
+  if (field.type === "json") return jsonParaTexto(raw)
   if (raw == null) return ""
   return String(raw)
 }
@@ -60,6 +66,31 @@ export function ResourceForm({ slug, singular, fields, id, initial }: ResourceFo
 
             {field.type === "markdown" && (
               <textarea id={field.name} name={field.name} defaultValue={value} rows={12} className={`${inputCls} font-mono`} />
+            )}
+
+            {/* Prosa longa: a caixa é alta porque o corpo de uma matéria tem
+                dezenas de linhas, e rolar dentro de uma janelinha de três
+                linhas é o que faz quem escreve desistir do painel. */}
+            {field.type === "prose" && (
+              <textarea
+                id={field.name}
+                name={field.name}
+                defaultValue={value}
+                rows={20}
+                spellCheck
+                className={inputCls}
+              />
+            )}
+
+            {field.type === "json" && (
+              <textarea
+                id={field.name}
+                name={field.name}
+                defaultValue={value}
+                rows={8}
+                spellCheck={false}
+                className={`${inputCls} font-mono text-xs`}
+              />
             )}
 
             {field.type === "select" && (

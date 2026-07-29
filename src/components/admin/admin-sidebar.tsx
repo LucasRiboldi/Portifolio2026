@@ -19,6 +19,7 @@ import {
   BookOpen,
   FlaskConical,
   Newspaper,
+  NotebookText,
   GraduationCap,
   Puzzle,
   Dices,
@@ -84,6 +85,7 @@ const NAV: { section: string; items: NavItem[] }[] = [
     section: "Daily Prophet",
     items: [
       { href: "/admin/prophet", label: "A Redação", icon: Newspaper },
+      { href: "/admin/materias", label: "Matérias", icon: NotebookText },
       { href: "/admin/prophet-wire", label: "Prophet Wire", icon: Rss },
       { href: "/admin/tutorials", label: "Oficina", icon: GraduationCap },
       { href: "/admin/mechanics", label: "Mecânicas", icon: Puzzle },

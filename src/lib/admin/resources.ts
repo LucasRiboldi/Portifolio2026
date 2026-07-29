@@ -15,12 +15,14 @@
 import type { ResourceConfig } from "./resource-types"
 import { CONTENT_RESOURCES } from "./resource-defs-content"
 import { MEDIA_RESOURCES } from "./resource-defs-media"
+import { MATERIA_RESOURCES } from "./resource-defs-materias"
 
 export type { FieldType, FieldConfig, ResourceConfig } from "./resource-types"
 
 export const RESOURCES: Record<string, ResourceConfig> = {
   ...CONTENT_RESOURCES,
   ...MEDIA_RESOURCES,
+  ...MATERIA_RESOURCES,
 }
 
 /** Recurso destino do "table" no Supabase (nem sempre == slug). */
@@ -30,6 +32,7 @@ const TABLE_MAP: Record<string, string> = {
   mechanics: "prophet_mechanics",
   prototypes: "prophet_prototypes",
   resources: "prophet_resources",
+  materias: "prophet_materias",
 }
 export function resourceTable(slug: string): string {
   return TABLE_MAP[slug] ?? slug
