@@ -6,6 +6,8 @@
  *   3. página    — o que é específico desta rota (mesa de madeira, manchetes).
  *   4. sistema   — faixas, zonas e peças da diagramação.
  *   5. wire      — os componentes de notícia automática.
+ *   6. larguras  — a política de breakpoints da folha inteira. Vem por
+ *                  último de propósito: é a camada que ajusta as anteriores.
  *
  * O kit antigo (`daily-prophet*.css`, escopo `.dp`) saiu daqui de propósito:
  * a página inteira passou a falar o vocabulário `dpx-*`, e manter os dois
@@ -18,6 +20,7 @@ import "@/styles/dp-original.css"
 import "@/styles/dp-original-extras.css"
 import "@/styles/anfitriao-newspaper.css"
 import "@/styles/anfitriao-wire.css"
+import "@/styles/anfitriao-responsive.css"
 
 import type { ReactNode } from "react"
 import Link from "next/link"
@@ -80,7 +83,17 @@ export default function DailyProphetLayout({ children }: { children: ReactNode }
     .replace(/^\w/, (c) => c.toUpperCase())
 
   return (
-    <div className={`newspaper ${kreon.variable} ${vollkorn.variable}`} role="main">
+    <div className={`newspaper ${kreon.variable} ${vollkorn.variable}`}>
+      {/*
+        Salto para o conteúdo — a primeira parada do teclado. A folha abre com
+        cabeçalho, linha de data e barra de cadernos; sem esta rota de fuga,
+        quem navega por Tab passa por todas elas antes da primeira matéria, em
+        toda visita. Fica invisível até receber foco (ver `.dpx-skiplink`).
+      */}
+      <a className="dpx-skiplink" href="#folha">
+        Ir para o conteúdo
+      </a>
+
       {/* ─── Cabeçalho: a peça mais reconhecível do original ─── */}
       <header className="newspaper-topheader">
         <hr className="hr-double-top" />
@@ -132,7 +145,20 @@ export default function DailyProphetLayout({ children }: { children: ReactNode }
         ))}
       </nav>
 
-      {children}
+      {/*
+        `<main>` de verdade, no lugar do `role="main"` que estava na div —
+        aquele atributo declarava a folha INTEIRA como conteúdo principal,
+        cabeçalho e navegação inclusos, o que anula a utilidade do landmark
+        (o leitor de tela "pula para o principal" e cai no topo da página).
+
+        `display: contents` (ver `.dpx-main`) faz o elemento sumir da caixa de
+        layout: as seções continuam sendo filhas diretas da grelha de seis
+        colunas do original, exatamente como antes. Landmark correto, grelha
+        intacta.
+      */}
+      <main id="folha" className="dpx-main" tabIndex={-1}>
+        {children}
+      </main>
     </div>
   )
 }

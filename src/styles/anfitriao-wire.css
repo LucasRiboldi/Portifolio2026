@@ -83,25 +83,44 @@
   display: inline-flex;
 }
 
+/* ── O botão: três fios que viram cruz ao abrir ─────────────────
+   O estado vem de `aria-expanded`, não de uma classe paralela: o
+   atributo que o leitor de tela consulta é o mesmo que desenha o
+   botão, então os dois não podem divergir. */
+
 .dpx-navmenu-btn {
   display: inline-flex;
   flex-direction: column;
   justify-content: center;
   align-items: center;
   gap: 0.25em;
-  width: 1.6em;
-  height: 1.6em;
+  width: 2.25em; /* ≥44px de alvo em corpo 0.8rem — mínimo de toque */
+  height: 2.25em;
   padding: 0;
   border: 1px solid var(--anf-ink);
   background: transparent;
   cursor: pointer;
+  color: var(--anf-ink);
 }
 
 .dpx-navmenu-btn span {
   display: block;
-  width: 0.9em;
+  width: 1.1em;
   height: 1px;
-  background: var(--anf-ink);
+  background: currentColor;
+  transition:
+    transform 220ms ease,
+    opacity 140ms ease;
+}
+
+.dpx-navmenu-btn[aria-expanded="true"] span:nth-child(1) {
+  transform: translateY(calc(0.25em + 1px)) rotate(45deg);
+}
+.dpx-navmenu-btn[aria-expanded="true"] span:nth-child(2) {
+  opacity: 0;
+}
+.dpx-navmenu-btn[aria-expanded="true"] span:nth-child(3) {
+  transform: translateY(calc(-0.25em - 1px)) rotate(-45deg);
 }
 
 .dpx-navmenu-btn:hover,
@@ -109,19 +128,102 @@
   background: var(--anf-accent);
 }
 
+.dpx-navmenu-btn:focus-visible {
+  outline: 2px solid var(--anf-ink);
+  outline-offset: 2px;
+}
+
+/* ── O véu — só na faixa em que o painel cobre a folha ────────── */
+
+.dpx-navmenu-veil {
+  display: none;
+}
+
+@media only screen and (max-width: 47.99em) {
+  .dpx-navmenu-veil {
+    display: block;
+    position: fixed;
+    inset: 0;
+    z-index: 19;
+    background: rgba(28, 23, 16, 0.55);
+    opacity: 0;
+    visibility: hidden;
+    transition:
+      opacity 200ms ease,
+      visibility 0s linear 200ms;
+  }
+
+  .dpx-navmenu-veil[data-open="true"] {
+    opacity: 1;
+    visibility: visible;
+    transition:
+      opacity 200ms ease,
+      visibility 0s;
+  }
+}
+
+/* ── O painel ──────────────────────────────────────────────────
+   Não usa mais o atributo `hidden`: `display:none` não interpola, e
+   era isso que impedia qualquer animação de abertura. O painel agora
+   sai de cena por `opacity`/`visibility` (animáveis) e por `inert`
+   (que tira do foco e do leitor de tela) — o mesmo resultado de
+   acessibilidade, com o movimento de volta. */
+
 .dpx-navmenu-panel {
   position: absolute;
   z-index: 20;
   top: calc(100% + 0.5em);
   left: 0;
   min-width: 16em;
-  max-width: min(20em, 90vw);
+  max-width: min(22em, calc(100vw - 2rem));
+  max-height: min(70vh, 32em);
+  overflow-y: auto;
+  overscroll-behavior: contain;
   padding: 0.75em 0.9em;
   background: var(--anf-paper);
   border: 1px solid var(--anf-ink);
   box-shadow: 0.2em 0.2em 0 var(--anf-ink);
+
+  /* O painel mora dentro da linha de data, que compõe em versalete espaçado
+     e — no celular — centralizado. Nada disso serve a uma lista de sumário:
+     o `text-align` herdado empurrava rótulo e fólio para o meio da linha,
+     desfazendo o alinhamento de índice. A peça reinicia a composição. */
   text-transform: none;
   letter-spacing: normal;
+  text-align: left;
+
+  opacity: 0;
+  visibility: hidden;
+  transform: translateY(-0.4em);
+  transition:
+    opacity 180ms ease,
+    transform 220ms ease,
+    visibility 0s linear 220ms;
+}
+
+.dpx-navmenu-panel[data-open="true"] {
+  opacity: 1;
+  visibility: visible;
+  transform: none;
+  transition:
+    opacity 180ms ease,
+    transform 220ms ease,
+    visibility 0s;
+}
+
+/* No celular o painel deixa de ser um bilhete ao lado do botão e passa a
+   ser a folha de sumário: ancorado à esquerda da janela, com o véu atrás. */
+@media only screen and (max-width: 47.99em) {
+  .dpx-navmenu-panel {
+    position: fixed;
+    top: auto;
+    left: 1rem;
+    right: 1rem;
+    bottom: 1rem;
+    max-width: none;
+    max-height: 72vh;
+    transform: translateY(0.75em);
+  }
 }
 
 .dpx-navmenu-title {
@@ -139,21 +241,74 @@
   margin: 0;
   padding: 0;
   display: grid;
-  gap: 0.4em;
+  gap: 0.15em;
 }
 
-.dpx-navmenu-panel a {
-  display: block;
+/**
+ * A entrada do sumário é uma linha de índice impresso: rótulo à esquerda,
+ * fólio à direita, filete separando as linhas. Alvo de toque de 2.4em — a
+ * versão anterior era só a altura do texto (~18px), abaixo do mínimo.
+ *
+ * O seletor precisa do painel junto (duas classes, 0,2,0) para vencer a
+ * política de links da folha — `.newspaper p a` (0,1,2) e `.newspaper a`
+ * (0,1,1), em `anfitriao-newspaper.css`. Sem isso o link permanecia
+ * `display: inline`: o flex era ignorado (rótulo e fólio colados), a altura
+ * de toque não se aplicava (caixa inline não tem altura) e o filete de link
+ * de texto desenhava no meio da entrada, parecendo texto riscado. Não é
+ * disputa de ordem de importação — é contagem de especificidade, e por isso
+ * a correção é o seletor, não mover o arquivo.
+ */
+.dpx-navmenu-panel .dpx-navmenu-link {
+  display: flex;
+  /* `baseline` deixava o texto no topo de uma caixa de 2.4em, com o filete
+     lá embaixo — a distância fazia o fio parecer riscar a entrada seguinte,
+     não separá-la. Centrado, o fio volta a ler como fio de índice. */
+  align-items: center;
+  justify-content: space-between;
+  gap: 0.75em;
+  min-height: 2.4em;
+  padding: 0.35em 0.25em;
   font-family: var(--anf-body);
   font-size: var(--anf-text-sm);
   color: var(--anf-ink);
   text-decoration: none;
-  border-bottom: 1px solid transparent;
+  border-bottom: 1px dotted var(--anf-rule-hair);
+  transition: background-color 140ms ease;
 }
 
-.dpx-navmenu-panel a:hover,
-.dpx-navmenu-panel a:focus-visible {
+.dpx-navmenu-panel .dpx-navmenu-link > span:first-child {
+  flex: 1 1 auto;
+}
+
+.dpx-navmenu-page {
+  flex: 0 0 auto;
+  font-family: var(--anf-head);
+  font-size: var(--anf-text-xs);
+  letter-spacing: 0.08em;
+  color: var(--anf-ink-2);
+}
+
+.dpx-navmenu-panel .dpx-navmenu-link:hover,
+.dpx-navmenu-panel .dpx-navmenu-link:focus-visible {
+  background: var(--anf-paper-3);
   border-bottom-color: var(--anf-ink);
+}
+
+.dpx-navmenu-panel .dpx-navmenu-link:focus-visible {
+  outline: 2px solid var(--anf-accent);
+  outline-offset: -2px;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .dpx-navmenu-btn span,
+  .dpx-navmenu-panel,
+  .dpx-navmenu-veil,
+  .dpx-navmenu-panel .dpx-navmenu-link {
+    transition-duration: 0s;
+  }
+  .dpx-navmenu-panel {
+    transform: none;
+  }
 }
 
 /* ─────────────────────────────────────────────────────────────

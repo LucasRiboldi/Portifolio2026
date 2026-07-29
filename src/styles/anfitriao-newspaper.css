@@ -632,12 +632,13 @@
 }
 
 .dpx-seal {
-  display: inline-block;
+  /* Havia dois `display` aqui (`inline-block` e `grid`); o primeiro nunca
+     valeu nada — a declaração seguinte o sobrescrevia na mesma regra. */
+  display: inline-grid;
   border: 1px solid var(--anf-rule);
   border-radius: 50%;
   width: 6.5em;
   height: 6.5em;
-  display: grid;
   place-content: center;
   text-align: center;
   font-family: var(--anf-head);
@@ -737,10 +738,9 @@
   text-shadow: 3px 0 0 var(--anf-cold);
 }
 
-@media (prefers-reduced-motion: no-preference) {
-  /* Sem animação: o efeito é estático por natureza. Este bloco existe só
-     para deixar registrado que não há movimento a suprimir aqui. */
-}
+/* O efeito é estático por natureza — não há movimento a suprimir sob
+   `prefers-reduced-motion`. (Havia aqui um bloco de media query vazio
+   dizendo isso em CSS; um comentário diz o mesmo sem gerar regra.) */
 
 /* ══════════════════════════════════════════════════════════════
    8 · CAPITULAR — a inicial que abre matéria
@@ -753,4 +753,13 @@
   line-height: 0.72;
   padding: 0.08em 0.12em 0 0;
   color: var(--anf-ink);
+}
+
+/* ══════════════════════════════════════════════════════════════
+   9 · UTILITÁRIOS DE PEÇA
+   ══════════════════════════════════════════════════════════════ */
+
+/** Gravura encostada na coluna, sem a margem que o `figure` traz do agente. */
+.dpx-figure--flush {
+  margin: 0;
 }

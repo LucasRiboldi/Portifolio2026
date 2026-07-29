@@ -47,7 +47,7 @@ function NewsPlate({ news }: { news: NewsItem }) {
     <figure>
       {news.image.src ? (
         // eslint-disable-next-line @next/next/no-img-element
-        <img src={news.image.src} alt={news.image.alt} />
+        <img src={news.image.src} alt={news.image.alt} loading="lazy" decoding="async" />
       ) : (
         <div className="dpx-news-plate" role="img" aria-label={news.image.alt} />
       )}
@@ -95,17 +95,19 @@ export default async function DailyProphetFront() {
   return (
     <>
       {/* ─── EXCLUSIVO — a faixa de manchete do original ─── */}
-      <section className="newspaper-exclusive wrapper">
-        <span id="anf-manchete-principal" className="helper-hide dpx-anchor">
-          Manchete Principal
-        </span>
+      <section
+        id="anf-manchete-principal"
+        className="newspaper-exclusive wrapper dpx-anchor"
+        aria-label="Manchete Principal"
+        tabIndex={-1}
+      >
         <p className="newspaper-exclusive-box">
           <span>EXCLUSIVO</span>
         </p>
         <article className="newspaper-exclusive-text wrapper">
-          <h1 className="fittext-exclusive-h1">
+          <h2 className="fittext-exclusive-h1">
             {lead.headline} <span className="fittext-exclusive-span">{lead.kicker}</span>
-          </h1>
+          </h2>
           {/* O link saiu de dentro do parágrafo do subtítulo. Ali ele era
               irmão inline de um `<span>` com `column-count: 2`, e o espaço
               que os separava desaparecia na fronteira entre as colunas —
@@ -120,16 +122,18 @@ export default async function DailyProphetFront() {
 
       {/* ─── MATÉRIAS ─── */}
       <section className="newspaper-articles">
-        <article className="newspaper-toparticle wrapper">
-          <span id="anf-colunas-texto" className="helper-hide dpx-anchor">
-            Colunas de Texto
-          </span>
-          <h1 className="fittext-toparticle-h1-1">
+        <article
+          id="anf-colunas-texto"
+          className="newspaper-toparticle wrapper dpx-anchor"
+          aria-labelledby="colunas-titulo"
+          tabIndex={-1}
+        >
+          <h2 className="fittext-toparticle-h1-1" id="colunas-titulo">
             <span className="newspaper-toparticle-spanwrap">
               <span className="helper-verticaltext">Oficina</span> A regra que
             </span>{" "}
             <span className="fittext-toparticle-h1-2">desaparece</span>
-          </h1>
+          </h2>
 
           <section className="newspaper-toparticle-starttext">
             <p className="newspaper-articles-ingress">{lead.standfirst}</p>
@@ -142,10 +146,7 @@ export default async function DailyProphetFront() {
           </section>
 
           <section className="newspaper-toparticle-story">
-            <figure>
-              <span id="anf-ilustracoes" className="helper-hide dpx-anchor">
-                Ilustrações
-              </span>
+            <figure id="anf-ilustracoes" className="dpx-anchor" tabIndex={-1}>
               {/* eslint-disable-next-line @next/next/no-img-element */}
               <img
                 alt="Bancada da oficina ao anoitecer"
@@ -153,13 +154,14 @@ export default async function DailyProphetFront() {
                 srcSet="/dporiginal/images/tornado508.jpg 1x, /dporiginal/images/tornado1016.jpg 2x"
                 width={508}
                 height={188}
+                decoding="async"
               />
             </figure>
 
             <hr className="hr-double-top" />
-            <h2>
+            <h3>
               <span>{signature.autograph}</span> na bancada
-            </h2>
+            </h3>
             <hr className="hr-double-bottom" />
             <blockquote>{lead.pullquote}</blockquote>
             <div className="helper-colsplit-2">
@@ -171,13 +173,15 @@ export default async function DailyProphetFront() {
           </section>
 
           {/* O aside "Rita Skeeter reports" do original vira o nosso Editorial. */}
-          <aside className="newspaper-toparticle-aside">
-            <span id="anf-editorial" className="helper-hide dpx-anchor">
-              Editorial
-            </span>
-            <h1>
+          <aside
+            id="anf-editorial"
+            className="newspaper-toparticle-aside dpx-anchor"
+            aria-labelledby="editorial-titulo"
+            tabIndex={-1}
+          >
+            <h2 id="editorial-titulo">
               {editorial.title} <span>{editorial.headline}</span>
-            </h1>
+            </h2>
             <hr />
             {editorial.body.map((p, i) => (
               <p key={i} className={i === 0 ? "newspaper-articles-anfang" : undefined}>
@@ -192,20 +196,27 @@ export default async function DailyProphetFront() {
         <hr />
 
         {/* ─── Matérias inferiores: as duas primeiras notícias automáticas ─── */}
-        <article className="newspaper-bottomarticles wrapper">
-          <span id="anf-noticias-secundarias" className="helper-hide dpx-anchor">
-            Notícias Secundárias
-          </span>
+        <article
+          id="anf-noticias-secundarias"
+          className="newspaper-bottomarticles wrapper dpx-anchor"
+          aria-label="Notícias Secundárias"
+          tabIndex={-1}
+        >
           {featured && (
             <section className="newspaper-bottomarticle-first">
-              <h1 className="fittext-bottomarticle-first-h1">{featured.title}</h1>
+              <h2 className="fittext-bottomarticle-first-h1">{featured.title}</h2>
               {/* A arte vem resolvida do pipeline (image-resolver): imagem da
                   fonte, busca, padrão da categoria ou — não havendo nenhuma — a
                   gravura vazia, que no impresso é recurso legítimo. */}
               <figure>
                 {featured.image.src ? (
                   // eslint-disable-next-line @next/next/no-img-element
-                  <img alt={featured.image.alt} src={featured.image.src} />
+                  <img
+                    alt={featured.image.alt}
+                    src={featured.image.src}
+                    loading="lazy"
+                    decoding="async"
+                  />
                 ) : (
                   <div className="dpx-news-plate" role="img" aria-label={featured.image.alt} />
                 )}
@@ -231,9 +242,20 @@ export default async function DailyProphetFront() {
           {second && (
             <section className="newspaper-bottomarticle-second wrapper">
               <div className="wrapper">
-                <h1 className="newspaper-bottomarticle-second-h1">{second.category}</h1>
-                <h2 className="newspaper-bottomarticle-second-h2">{second.title}</h2>
-                <h3 className="newspaper-bottomarticle-second-h3">{second.dropcap}</h3>
+                {/*
+                  Estes três eram `<h1>`, `<h2>` e `<h3>` — e só um deles é
+                  título. `category` é chapéu de editoria (rótulo, vira `<p>`)
+                  e `dropcap` é UMA LETRA de ornamento: como cabeçalho, ela
+                  entrava na lista de títulos do leitor de tela como uma
+                  entrada de um caractere. Vira ornamento declarado, fora da
+                  árvore de acessibilidade. As classes seguem as mesmas, e o
+                  CSS herdado passou a mirar nelas em vez das tags.
+                */}
+                <p className="newspaper-bottomarticle-second-h1">{second.category}</p>
+                <h3 className="newspaper-bottomarticle-second-h2">{second.title}</h3>
+                <p className="newspaper-bottomarticle-second-h3" aria-hidden>
+                  {second.dropcap}
+                </p>
                 <p className="newspaper-articles-ingress">{second.subtitle || second.note}</p>
               </div>
 
@@ -242,7 +264,14 @@ export default async function DailyProphetFront() {
                 <figure>
                   {second.image.src ? (
                     // eslint-disable-next-line @next/next/no-img-element
-                    <img alt={second.image.alt} src={second.image.src} width={200} height={200} />
+                    <img
+                      alt={second.image.alt}
+                      src={second.image.src}
+                      width={200}
+                      height={200}
+                      loading="lazy"
+                      decoding="async"
+                    />
                   ) : (
                     <div className="dpx-news-plate" role="img" aria-label={second.image.alt} />
                   )}
@@ -267,10 +296,12 @@ export default async function DailyProphetFront() {
 
       {/* ─── PROPHET WIRE — as demais notícias automáticas ─── */}
       {rest.length > 0 && (
-        <section className="dpx-wire wrapper" aria-labelledby="wire-titulo">
-          <span id="anf-noticias-internacionais" className="helper-hide dpx-anchor">
-            Notícias Internacionais
-          </span>
+        <section
+          id="anf-noticias-internacionais"
+          className="dpx-wire wrapper dpx-anchor"
+          aria-labelledby="wire-titulo"
+          tabIndex={-1}
+        >
           <hr className="hr-double-top" />
           <h2 className="dpx-wire-title" id="wire-titulo">
             Notícias Internacionais — Do Telégrafo, as Mesas do Mundo
@@ -286,12 +317,14 @@ export default async function DailyProphetFront() {
       )}
 
       {/* ─── MERCADO — cotações da oficina e sentimento das mesas, na zona de weather do original ─── */}
-      <section className="newspaper-weather">
-        <span id="anf-mercado" className="helper-hide dpx-anchor">
-          Mercado Financeiro e Comércio
-        </span>
+      <section
+        id="anf-mercado"
+        className="newspaper-weather dpx-anchor"
+        aria-labelledby="mercado-titulo"
+        tabIndex={-1}
+      >
         <hr className="hr-double-top" />
-        <h2>{servicebar.weather.title}</h2>
+        <h2 id="mercado-titulo">{servicebar.weather.title}</h2>
         <ul className="newspaper-weather-cities wrapper">
           {servicebar.weather.rows.map(([k, v]) => (
             <li key={k}>
@@ -316,10 +349,12 @@ export default async function DailyProphetFront() {
           telegrama é a abertura da coleção (já se chamava "Coleção em
           Telegrama") e a banda "Coleção da Casa" vem logo abaixo. Com a
           âncora na banda, este bloco ficava fora do alcance do menu. */}
-      <section className="newspaper-teaser wrapper">
-        <span id="anf-colecao" className="helper-hide dpx-anchor">
-          Coleção
-        </span>
+      <section
+        id="anf-colecao"
+        className="newspaper-teaser wrapper dpx-anchor"
+        aria-label="Coleção"
+        tabIndex={-1}
+      >
         <p className="newspaper-teaser-fatline">{briefs.title}</p>
         {/* O número da página leva o erro de registro — o efeito de letra que
             o original reserva aos algarismos grandes. Ver `.dpx-misregister`. */}
@@ -379,7 +414,6 @@ export default async function DailyProphetFront() {
                 </tbody>
               </table>
             </div>
-
           </div>
 
           {/* Coluna II — a linhagem, o quadro de playtests e a gravura */}
@@ -419,7 +453,7 @@ export default async function DailyProphetFront() {
               </table>
             </div>
 
-            <figure style={{ margin: 0 }}>
+            <figure className="dpx-figure--flush">
               <svg
                 className="dpx-chart"
                 viewBox="0 0 200 84"
@@ -492,10 +526,12 @@ export default async function DailyProphetFront() {
           dois na do Serviço ao Leitor. Uma zona do menu precisa ser UM lugar
           — clicar em "Anúncios Publicitários" levava a um deles e escondia os
           outros dois numa seção de outro assunto. Agora é uma faixa só. */}
-      <section className="dpx-band" aria-labelledby="anuncios-titulo">
-        <span id="anf-anuncios" className="helper-hide dpx-anchor">
-          Anúncios Publicitários
-        </span>
+      <section
+        id="anf-anuncios"
+        className="dpx-band dpx-anchor"
+        aria-labelledby="anuncios-titulo"
+        tabIndex={-1}
+      >
         <header className="dpx-band-head">
           <h2 className="dpx-band-title" id="anuncios-titulo">
             Anúncios Publicitários
@@ -515,10 +551,12 @@ export default async function DailyProphetFront() {
       </section>
 
       {/* ═══ Serviço ao leitor: o cupom, o conselho e a rubrica ═══ */}
-      <section className="dpx-band" aria-labelledby="servico-titulo">
-        <span id="anf-servico" className="helper-hide dpx-anchor">
-          Serviço ao Leitor
-        </span>
+      <section
+        id="anf-servico"
+        className="dpx-band dpx-anchor"
+        aria-labelledby="servico-titulo"
+        tabIndex={-1}
+      >
         <header className="dpx-band-head">
           <h2 className="dpx-band-title" id="servico-titulo">
             Serviço ao Leitor
@@ -646,10 +684,12 @@ export default async function DailyProphetFront() {
       </section>
 
       {/* ═══ Expediente — abriga o acesso administrativo (PressMark) ═══ */}
-      <section className="dpx-band" aria-labelledby="expediente-titulo">
-        <span id="anf-expediente" className="helper-hide dpx-anchor">
-          Expediente
-        </span>
+      <section
+        id="anf-expediente"
+        className="dpx-band dpx-anchor"
+        aria-labelledby="expediente-titulo"
+        tabIndex={-1}
+      >
         <header className="dpx-band-head">
           <h2 className="dpx-band-title" id="expediente-titulo">
             {colophon.title}
@@ -713,10 +753,12 @@ export default async function DailyProphetFront() {
 
           A lista vem de `index`, derivada de `zones`: o mesmo sumário do menu
           sanduíche, impresso. */}
-      <footer className="newspaper-footer">
-        <span id="anf-indice" className="helper-hide dpx-anchor">
-          Índice desta Edição
-        </span>
+      <footer
+        id="anf-indice"
+        className="newspaper-footer dpx-anchor"
+        aria-label="Índice desta Edição"
+        tabIndex={-1}
+      >
         <ul className="newspaper-footer-index wrapper">
           {index.map((i) => (
             <li key={i.label}>

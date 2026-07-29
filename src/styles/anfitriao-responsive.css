@@ -1,0 +1,197 @@
+/**
+ * O ANFITRIÃO — política de larguras.
+ *
+ * ------------------------------------------------------------------
+ * POR QUE ESTE ARQUIVO EXISTE
+ * ------------------------------------------------------------------
+ * As regras de breakpoint estavam espalhadas por quatro arquivos, cada um
+ * respondendo por um pedaço do comportamento em tela pequena. O resultado é
+ * conhecido: ninguém consegue responder "o que acontece em 390px?" sem abrir
+ * os quatro. Aqui ficam as decisões que valem para a FOLHA INTEIRA — o que é
+ * de componente segue morando com o componente.
+ *
+ * ------------------------------------------------------------------
+ * A DECISÃO CENTRAL: A FOLHA TEM TAMANHO FÍSICO
+ * ------------------------------------------------------------------
+ * O original trava a folha em `max-width: 64em` a partir de 1024px. Isso é
+ * correto — jornal é objeto de tamanho fixo, e esticar a mancha até 2560px
+ * daria linhas de 300 caracteres, ilegíveis. Mas travar em pixels tem o outro
+ * defeito: num monitor de 2560 a folha vira um selo perdido no meio da mesa.
+ *
+ * A saída não é redesenhar a grelha por faixa de largura — é IMPRIMIR MAIOR.
+ * Acima de 1600px a folha inteira cresce proporcionalmente, pelo tamanho de
+ * fonte da raiz: como toda medida do sistema é relativa (`em`, `rem`, `cqw`),
+ * papel, tipo, filetes, margens e capitulares crescem no mesmo passo. Nenhuma
+ * proporção muda; muda a escala de impressão.
+ *
+ * Duas notas técnicas que justificam a forma escolhida:
+ *
+ *   • O valor é PERCENTUAL, não pixel. Assim o ajuste multiplica o tamanho
+ *     que o leitor configurou no navegador em vez de substituí-lo — quem
+ *     aumentou a fonte por necessidade continua sendo atendido.
+ *   • O `em` de uma media query é sempre o tamanho INICIAL do navegador,
+ *     nunca o `font-size` que a própria regra aplica. Não há realimentação:
+ *     a consulta não se move quando a raiz cresce.
+ *
+ * ------------------------------------------------------------------
+ * AS FAIXAS
+ * ------------------------------------------------------------------
+ *   ≤ 39.99em (≤639px)   celular:  coluna única, fios horizontais
+ *     40em    (640px)    tablet:   zonas em 2 colunas
+ *     48em    (768px)    a grelha de 6 colunas do original entra
+ *     64em   (1024px)    zonas em 3/4 colunas; folha atinge 64em
+ *    100em   (1600px)    a folha passa a ser impressa maior
+ *    120em   (1920px)
+ *    160em   (2560px)
+ *
+ * Os breakpoints de 40/48/64em vêm do original e não se mexem — é deles que
+ * vem a fidelidade da diagramação. Os três últimos são acréscimo nosso e só
+ * mudam a escala, nunca o arranjo.
+ */
+
+/* ══════════════════════════════════════════════════════════════
+   1 · TELAS GRANDES — a folha impressa em corpo maior
+   ══════════════════════════════════════════════════════════════ */
+
+@media only screen and (min-width: 100em) {
+  html {
+    font-size: 106.25%; /* 17px — folha ≈ 1088px */
+  }
+}
+
+@media only screen and (min-width: 120em) {
+  html {
+    font-size: 112.5%; /* 18px — folha ≈ 1152px */
+  }
+}
+
+@media only screen and (min-width: 160em) {
+  html {
+    font-size: 125%; /* 20px — folha ≈ 1280px */
+  }
+}
+
+/* ══════════════════════════════════════════════════════════════
+   2 · TELAS ESTREITAS — 320px é o piso, não uma exceção
+   ══════════════════════════════════════════════════════════════
+
+   Em 320px a folha oferece 288px de mancha (1em de padding de cada
+   lado). Tudo abaixo é sobre não furar essa medida.
+   ══════════════════════════════════════════════════════════════ */
+
+/**
+ * A linha de data tem cinco peças (sumário, volume, data, preço, dimensão).
+ * Com `space-between` e quebra, a última linha ficava com um item solto
+ * empurrado para a esquerda e um vazio enorme à direita — o defeito clássico
+ * de `space-between` com wrap. Centralizar resolve pelo lado certo: em linha
+ * cheia o resultado é o mesmo; em linha quebrada, o texto fica composto.
+ */
+@media only screen and (max-width: 47.99em) {
+  .dpx-dateline {
+    justify-content: center;
+    text-align: center;
+    row-gap: 0.6em;
+  }
+}
+
+/**
+ * Alvos de toque. O ponteiro grosso (dedo) precisa de ~44px; o fino (mouse)
+ * não, e forçar a mesma altura nele afrouxaria o índice impresso do rodapé,
+ * que é composto justamente por linhas juntas. `pointer: coarse` aplica a
+ * folga só onde ela é necessária.
+ */
+@media (pointer: coarse) {
+  .dpx-sections a,
+  .newspaper-footer-index a {
+    display: inline-block;
+    min-height: 2.75em;
+    padding-block: 0.5em;
+  }
+}
+
+/**
+ * O par chave/valor é `display: flex` com os dois lados em largura automática.
+ * Valor longo em coluna estreita (o expediente, no celular) empurrava a chave
+ * para fora da caixa. Ambos os lados passam a poder encolher e quebrar.
+ */
+.dpx-kv b,
+.dpx-kv span {
+  min-width: 0;
+  overflow-wrap: anywhere;
+}
+
+/**
+ * A tabela é a peça que menos perdoa largura: três colunas de texto em 288px.
+ * Sem hifenização, um título de jogo com uma palavra longa alarga a coluna e
+ * a tabela transborda a folha, criando rolagem horizontal na página inteira —
+ * o pior defeito possível num layout de leitura.
+ */
+.dpx-table td,
+.dpx-table th {
+  overflow-wrap: anywhere;
+  hyphens: auto;
+}
+
+/* ══════════════════════════════════════════════════════════════
+   3 · MEDIDA DE LEITURA
+   ══════════════════════════════════════════════════════════════
+
+   `--anf-measure` (34em) existia nos tokens e não era consumido por
+   ninguém — um limite declarado e nunca aplicado. Ele vale para o texto
+   que corre em UMA coluna larga: com a folha impressa maior (seção 1),
+   a linha do aviso do expediente e a do olho de faixa chegavam perto de
+   110 caracteres. Entre 45 e 75 é onde o olho reencontra o início da
+   linha seguinte sem se perder.
+   ══════════════════════════════════════════════════════════════ */
+
+.dpx-band-sub,
+.dpx-market-note {
+  max-width: var(--anf-measure);
+  margin-inline: auto;
+}
+
+/* ══════════════════════════════════════════════════════════════
+   4 · IMPRESSÃO — a folha em papel de verdade
+   ══════════════════════════════════════════════════════════════
+
+   A página simula um jornal; imprimi-la deveria produzir um. Sai a mesa
+   de madeira (tinta desperdiçada), saem os controles de tela, e os
+   endereços dos links de fonte passam a ser impressos ao lado do texto,
+   como nota de remissão.
+   ══════════════════════════════════════════════════════════════ */
+
+@media print {
+  html[data-realm] body,
+  html body {
+    background-image: none;
+    background-color: #fff;
+  }
+
+  .newspaper {
+    max-width: none;
+    margin: 0;
+    border-radius: 0;
+    padding: 0;
+  }
+
+  .dpx-navmenu,
+  .dpx-navmenu-veil,
+  .dpx-skiplink,
+  .dpx-sections {
+    display: none;
+  }
+
+  .dpx-news-source[href^="http"]::after {
+    content: " (" attr(href) ")";
+    font-size: 0.85em;
+    word-break: break-all;
+  }
+
+  /* Nenhuma faixa deve ser partida ao meio pela dobra da página. */
+  .dpx-band,
+  .dpx-box,
+  .dpx-ad,
+  .dpx-news {
+    break-inside: avoid;
+  }
+}

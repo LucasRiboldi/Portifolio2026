@@ -63,11 +63,15 @@ html body {
 
 .dpx-dateline,
 .dpx-sections,
-.dpx-wire,
-.newspaper > .prophet {
+.dpx-wire {
   grid-column: 1 / -1;
   min-width: 0;
 }
+/* `.newspaper > .prophet` saiu desta lista: o caderno `.dp` deixou de ser
+   carregado nesta rota (ver o cabeçalho de `layout.tsx`) e não existe mais
+   marcação com essa classe aqui. A folha de harmonização que servia àquele
+   kit (`anfitriao-equalize.css`) foi removida pelo mesmo motivo — não era
+   importada por ninguém. */
 /* Os componentes `dpx-*` (linha de data, cadernos, coluna de notícia) foram
    extraídos para `anfitriao-wire.css`, que o style guide também importa. */
 
@@ -302,8 +306,59 @@ html body {
 }
 
 /* ─────────────────────────────────────────────────────────────
-   Âncoras do sumário — rolagem suave até a zona, sem escondê-la
-   sob o cabeçalho ao chegar no topo da folha.
+   LANDMARK, SALTO E ÂNCORAS
+   ─────────────────────────────────────────────────────────────
+
+   O `<main>` não pode formar caixa: `.newspaper` é a grelha de seis
+   colunas do original e as seções precisam continuar sendo filhas
+   DIRETAS dela. `display: contents` dá o landmark sem o nível extra.
+   ───────────────────────────────────────────────────────────── */
+
+.dpx-main {
+  display: contents;
+}
+
+/**
+ * O salto para o conteúdo. Fora da tela até receber foco, quando desce
+ * como um selo entintado no canto superior esquerdo.
+ */
+.dpx-skiplink {
+  position: absolute;
+  z-index: 40;
+  top: 0;
+  left: 0;
+  transform: translateY(-120%);
+  padding: 0.5em 1em;
+  background: var(--anf-ink);
+  color: var(--anf-paper);
+  font-family: var(--anf-head);
+  font-size: var(--anf-text-sm);
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  text-decoration: none;
+  transition: transform 160ms ease;
+}
+
+.dpx-skiplink:focus-visible {
+  transform: translateY(0);
+  outline: 2px solid var(--anf-accent);
+  outline-offset: -4px;
+}
+
+/* ─────────────────────────────────────────────────────────────
+   Âncoras do sumário.
+
+   Antes cada zona carregava um `<span class="helper-hide">` de 1×1px
+   como alvo. Dois problemas: `helper-hide` é `position: absolute`, e um
+   alvo absoluto rola até onde o seu CONTEXTO DE POSICIONAMENTO o coloca
+   — não até a zona; e o alvo não recebia foco, então quem navega por
+   teclado continuava no cabeçalho depois de "ir" para a Coleção.
+
+   Agora o alvo é a PRÓPRIA seção, com `tabindex="-1"` para poder receber
+   foco por programa (ver `section-nav.tsx`). O contorno de foco é
+   suprimido só nesse caso — foco em bloco de conteúdo é sinalização de
+   contexto, não um controle a destacar; `:focus-visible` de controles
+   reais segue intacto.
    ───────────────────────────────────────────────────────────── */
 
 html {
@@ -311,11 +366,19 @@ html {
 }
 
 .dpx-anchor {
-  scroll-margin-top: 1.5em;
+  scroll-margin-top: var(--anf-space-8);
+}
+
+.dpx-anchor:focus {
+  outline: none;
 }
 
 @media (prefers-reduced-motion: reduce) {
   html {
     scroll-behavior: auto;
+  }
+
+  .dpx-skiplink {
+    transition-duration: 0s;
   }
 }

@@ -1095,7 +1095,7 @@ body {
 }
 
 /* line 808, app/scss/screen.css */
-.newspaper-exclusive-text h1 {
+.newspaper-exclusive-text :is(h1, h2) {
   font-family: var(--anf-display);
   font-weight: normal;
   font-size: 32px;
@@ -1107,14 +1107,14 @@ body {
 
 @media only screen and (min-width: 48em) {
   /* line 817, app/scss/screen.css */
-  .newspaper-exclusive-text h1 {
+  .newspaper-exclusive-text :is(h1, h2) {
     width: 33.33%;
     float: left;
     font-size: 48px;
     font-size: 3rem;
   }
   /* line 822, app/scss/screen.css */
-  .newspaper-exclusive-text h1 span {
+  .newspaper-exclusive-text :is(h1, h2) span {
     font-size: 24px;
     font-size: 1.5rem;
     font-family: var(--anf-head);
@@ -1197,7 +1197,7 @@ body {
 }
 
 /* line 872, app/scss/screen.css */
-.newspaper-toparticle h1 {
+.newspaper-toparticle :is(h1, h2) {
   font-family: var(--anf-display);
   font-weight: normal;
   font-size: 46px;
@@ -1208,7 +1208,7 @@ body {
 
 @media only screen and (min-width: 48em) {
   /* line 880, app/scss/screen.css */
-  .newspaper-toparticle h1 {
+  .newspaper-toparticle :is(h1, h2) {
     width: 75%;
     font-size: 120px;
     font-size: 7.5rem;
@@ -1397,7 +1397,7 @@ body {
 }
 
 /* line 989, app/scss/screen.css */
-.newspaper-toparticle-story h2 {
+.newspaper-toparticle-story :is(h2, h3) {
   font-family: var(--anf-display);
   font-weight: normal;
   position: relative;
@@ -1411,13 +1411,13 @@ body {
 
 @media only screen and (min-width: 40em) {
   /* line 1000, app/scss/screen.css */
-  .newspaper-toparticle-story h2 {
+  .newspaper-toparticle-story :is(h2, h3) {
     padding-top: 0;
   }
 }
 
 /* line 1002, app/scss/screen.css */
-.newspaper-toparticle-story h2 span {
+.newspaper-toparticle-story :is(h2, h3) span {
   color: var(--anf-paper);
   background-color: var(--anf-ink);
   font-size: 16px;
@@ -1434,7 +1434,7 @@ body {
 
 @media only screen and (min-width: 48em) {
   /* line 1016, app/scss/screen.css */
-  .newspaper-toparticle-story h2 span {
+  .newspaper-toparticle-story :is(h2, h3) span {
     font-size: 12px;
     font-size: 0.75rem;
   }
@@ -1442,7 +1442,7 @@ body {
 
 @media only screen and (min-width: 60em) {
   /* line 1020, app/scss/screen.css */
-  .newspaper-toparticle-story h2 span {
+  .newspaper-toparticle-story :is(h2, h3) span {
     font-size: 16px;
     font-size: 1rem;
   }
@@ -1528,7 +1528,7 @@ body {
 }
 
 /* line 1069, app/scss/screen.css */
-.newspaper-toparticle-aside h1 {
+.newspaper-toparticle-aside :is(h1, h2) {
   background-color: var(--anf-ink);
   color: var(--anf-paper);
   text-align: center;
@@ -1539,7 +1539,7 @@ body {
 }
 
 /* line 1077, app/scss/screen.css */
-.newspaper-toparticle-aside h1 span {
+.newspaper-toparticle-aside :is(h1, h2) span {
   font-family: var(--anf-body);
   font-style: italic;
   font-size: 12px;
@@ -1602,7 +1602,7 @@ body {
 }
 
 /* line 1115, app/scss/screen.css */
-.newspaper-bottomarticle-first h1 {
+.newspaper-bottomarticle-first :is(h1, h2) {
   font-family: var(--anf-display);
   font-weight: normal;
   font-size: 32px;
@@ -1734,18 +1734,23 @@ body {
 }
 
 /* line 1194, app/scss/screen.css */
-.newspaper-bottomarticle-second h2, .newspaper-bottomarticle-second h3 {
+.newspaper-bottomarticle-second-h2, .newspaper-bottomarticle-second-h3 {
   font-family: var(--anf-display);
   font-weight: normal;
 }
 
 /* line 1197, app/scss/screen.css */
-.newspaper-bottomarticle-second h1, .newspaper-bottomarticle-second h2, .newspaper-bottomarticle-second h3 {
+.newspaper-bottomarticle-second-h1, .newspaper-bottomarticle-second-h2, .newspaper-bottomarticle-second-h3 {
   width: 50%;
 }
 
 /* line 1199, app/scss/screen.css */
-.newspaper-bottomarticle-second p {
+/* O chapéu de editoria e a capitular desta matéria deixaram de ser cabeçalhos
+   e passaram a `<p>` (ver `page.tsx`): eram título só na aparência. Este
+   seletor de elemento, mais específico (0,1,1) que as classes que os desenham
+   (0,1,0), sobrescreveria o corpo de ambos. Ficam de fora por nome. */
+.newspaper-bottomarticle-second
+  p:not(.newspaper-bottomarticle-second-h1):not(.newspaper-bottomarticle-second-h3) {
   font-size: 14px;
   font-size: 0.875rem;
   line-height: 1.25;
@@ -2403,7 +2408,7 @@ p.newspaper-weather-cities-cold {
       margin: 0;
     }
     /* line 1602, app/scss/screen.css */
-    .newspaper-toparticle h1 {
+    .newspaper-toparticle :is(h1, h2) {
       width: auto;
     }
     /* line 1604, app/scss/screen.css */
@@ -2503,7 +2508,7 @@ p.newspaper-weather-cities-cold {
       padding: 0;
     }
     /* line 1659, app/scss/screen.css */
-    .newspaper-toparticle h1 {
+    .newspaper-toparticle :is(h1, h2) {
       /*-ms-grid-column: 1;*/
           grid-column-start: 1;
       grid-column-end: 4;
