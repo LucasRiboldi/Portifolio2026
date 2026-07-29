@@ -86,6 +86,29 @@ export default function DailyProphetLayout({ children }: { children: ReactNode }
   return (
     <div className={`newspaper ${kreon.variable} ${vollkorn.variable}`}>
       {/*
+        Pré-carga da face-título do original.
+
+        Ela é declarada com `font-display: optional` (ver o `@font-face` em
+        `dp-original.css`): o navegador só a usa se estiver pronta no primeiro
+        desenho — é o que garante deslocamento zero. Sem pré-carga, "pronta a
+        tempo" quase nunca acontece, porque o pedido da fonte só nasce depois
+        de o CSS ser lido E o texto ser diagramado; a folha então abriria em
+        Kreon quase sempre, e a face do jornal só apareceria na segunda visita.
+        A dica aqui antecipa o pedido para junto do HTML.
+
+        `crossOrigin` é obrigatório mesmo sendo mesma origem: fonte é sempre
+        buscada em modo CORS, e sem o atributo a pré-carga não casa com o
+        pedido real — o arquivo seria baixado duas vezes.
+      */}
+      <link
+        rel="preload"
+        as="font"
+        type="font/woff2"
+        href="/dporiginal/fonts/headoh__-webfont.woff2"
+        crossOrigin="anonymous"
+      />
+
+      {/*
         Salto para o conteúdo — a primeira parada do teclado. A folha abre com
         cabeçalho, linha de data e barra de cadernos; sem esta rota de fuga,
         quem navega por Tab passa por todas elas antes da primeira matéria, em

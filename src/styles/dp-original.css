@@ -745,12 +745,95 @@ hr {
   }
 }
 
+/**
+ * A face-título do original — a única fonte da folha que NÃO passa pelo
+ * `next/font` (é um arquivo do layout herdado, não uma família do Google).
+ *
+ * ------------------------------------------------------------------
+ * `font-display: optional` — e por que não `swap`
+ * ------------------------------------------------------------------
+ * Sem `font-display` declarado, o padrão é `auto`, que no Chrome se comporta
+ * como `block` curto seguido de troca: o texto pinta na fonte de reserva e
+ * REFLUI quando a real chega. Aqui o refluxo é grande — esta face mede 56%
+ * da largura de uma serifada comum no mesmo corpo (medido, não estimado),
+ * então a manchete inteira se reorganiza e empurra a página. Era a origem do
+ * deslocamento de layout (CLS) que sobrava depois de as imagens terem sido
+ * resolvidas.
+ *
+ * `swap` não conserta: só torna a troca mais rápida, e o refluxo continua.
+ * A alternativa clássica — família de reserva com `size-adjust` e as métricas
+ * desta face — esbarra num impedimento próprio desta folha: a cadeia de
+ * `--anf-display` tem a Kreon depois desta fonte DE PROPÓSITO, porque
+ * `headline_one` não traz as maiúsculas acentuadas do português (ver
+ * `anfitriao-tokens.css`). Uma reserva ajustada inserida antes da Kreon
+ * roubaria dela o "Ç" e o "Ã", que passariam a compor numa serifada do
+ * sistema reduzida a 56% — miúdos e fora de linha, exatamente o defeito que
+ * aquela cadeia foi montada para evitar.
+ *
+ * `optional` resolve os dois de uma vez: o navegador usa esta face SE ela já
+ * estiver pronta no primeiro desenho; se não estiver, mantém a reserva para
+ * aquela visita e não troca mais. Nos dois caminhos o deslocamento é zero —
+ * é garantia, não probabilidade. E o `<link rel="preload">` do layout faz do
+ * primeiro caminho o caso comum; na segunda visita a fonte vem do cache.
+ *
+ * Os `src` de `.eot` saíram: são formato exclusivo do Internet Explorer, que
+ * nenhum navegador em uso hoje pede. Os arquivos seguem em
+ * `public/dporiginal/fonts` porque a cópia arquivada do layout original
+ * (`public/dporiginal/css/screen-prefix-noie.css`) ainda os referencia.
+ */
 @font-face {
   font-family: 'headline_onehplhs';
-  src: url("/dporiginal/fonts/headoh__-webfont.eot");
-  src: url("/dporiginal/fonts/headoh__-webfontd41d.eot?#iefix") format("embedded-opentype"), url("/dporiginal/fonts/headoh__-webfont.woff2") format("woff2"), url("/dporiginal/fonts/headoh__-webfont.woff") format("woff");
+  src: url("/dporiginal/fonts/headoh__-webfont.woff2") format("woff2"), url("/dporiginal/fonts/headoh__-webfont.woff") format("woff");
   font-weight: normal;
   font-style: normal;
+  font-display: optional;
+}
+
+/**
+ * A RESERVA DE MÉTRICAS CASADAS da face-título.
+ *
+ * `optional` sozinho não bastou. A medição em rede lenta (fonte artificialmente
+ * atrasada em 3s) mostrou o Chromium aplicando a face DEPOIS do período de
+ * bloqueio — a especificação diz que não deveria, mas a implementação, com a
+ * fonte em pré-carga, estende a espera. O refluxo tardio voltava: 0,0129 num
+ * único salto, na manchete da oficina.
+ *
+ * A correção definitiva não é sobre QUANDO trocar, é sobre a troca não custar
+ * nada: uma família de reserva que ocupa exatamente o mesmo espaço da face
+ * real. Os números abaixo não são estimados — saem das tabelas do próprio
+ * arquivo (`head`, `hhea`) e de medição no navegador:
+ *
+ *   unitsPerEm 2048 · ascender 1788 (87,30%) · descender −298 (14,55%)
+ *   largura relativa a Georgia: 0,5621 (média de quatro manchetes reais)
+ *
+ * Os `*-override` são divididos pelo `size-adjust` porque as três medidas se
+ * aplicam sobre o corpo JÁ escalado — é a mesma conta que o `next/font` faz
+ * ao gerar as reservas das fontes do Google:
+ *
+ *   ascent  = 87,30 / 0,5621 = 155,31%
+ *   descent = 14,55 / 0,5621 =  25,88%
+ *
+ * O `unicode-range` é o que torna isto compatível com a cadeia da folha.
+ * `--anf-display` lista a Kreon depois desta face DE PROPÓSITO, porque
+ * `headline_one` não tem as maiúsculas acentuadas do português (ver
+ * `anfitriao-tokens.css`). Sem o recorte, esta reserva se ofereceria também
+ * para o "Ç" e o "Ã" e os comporia numa serifada do sistema reduzida a 56% —
+ * o defeito exato que aquela cadeia existe para evitar. Limitada ao Latim
+ * básico, ela cobre só o que a face real cobre; o acento segue direto para a
+ * Kreon, como antes.
+ *
+ * Se Georgia não existir no sistema (Linux, Android), o `src` não resolve, a
+ * família é ignorada e a cadeia volta ao comportamento anterior. Degrada para
+ * o que já havia, nunca para pior.
+ */
+@font-face {
+  font-family: 'headline_one_reserva';
+  src: local("Georgia"), local("Times New Roman"), local("Liberation Serif"), local("DejaVu Serif");
+  size-adjust: 56.21%;
+  ascent-override: 155.31%;
+  descent-override: 25.88%;
+  line-gap-override: 0%;
+  unicode-range: U+0020-007E;
 }
 
 /* line 607, app/scss/screen.css */

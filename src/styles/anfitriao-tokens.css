@@ -100,8 +100,16 @@
      sob `text-transform: uppercase`, "Edição" saía "EDIçãO" — o Ç e o Ã
      caindo, glifo a glifo, no serif do sistema, miúdos e fora de linha.
      Kreon cobre o Latin Extended e é a irmã tipográfica desta folha, então
-     o remendo passa despercebido; o resto do texto segue na fonte original. */
-  --anf-display: "headline_onehplhs", "Mugglenews", "Kreon", "Playbill", serif;
+     o remendo passa despercebido; o resto do texto segue na fonte original.
+
+     `headline_one_reserva` entra logo DEPOIS da face real e ANTES da Kreon:
+     é a reserva de métricas casadas (definida em `dp-original.css`), que
+     ocupa exatamente o mesmo espaço de `headline_one` e por isso não refluí
+     quando a face real chega. Ela é recortada por `unicode-range` ao Latim
+     básico, então a posição na cadeia não interfere no remendo de acento
+     acima: o "Ç" e o "Ã" passam por ela sem serem atendidos e seguem para a
+     Kreon, como antes. */
+  --anf-display: "headline_onehplhs", "headline_one_reserva", "Mugglenews", "Kreon", "Playbill", serif;
   /* Título: tudo que titula abaixo da manchete. */
   --anf-head: "Kreon", "Bookman Old Style", serif;
   /* Corpo: texto corrido, legendas, formulários. */
@@ -148,5 +156,6 @@
   --anf-body: var(--font-vollkorn), "Vollkorn", "Iowan Old Style", Georgia, serif;
   /* Mesmo remendo de acento da definição global, agora com a Kreon servida
      localmente — sem isto o fallback dependeria da Kreon estar instalada. */
-  --anf-display: "headline_onehplhs", "Mugglenews", var(--font-kreon), "Playbill", serif;
+  --anf-display: "headline_onehplhs", "headline_one_reserva", "Mugglenews", var(--font-kreon), "Playbill",
+    serif;
 }
