@@ -94,8 +94,14 @@
      Estes valores são o piso seguro, válido em qualquer contexto. O bloco
      `.newspaper` abaixo os promove para as fontes servidas localmente. */
 
-  /* Display: só o logotipo e as manchetes de primeira página. */
-  --anf-display: "headline_onehplhs", "Mugglenews", "Playbill", serif;
+  /* Display: só o logotipo e as manchetes de primeira página.
+     `Kreon` entra na cadeia ANTES do serif genérico porque a fonte do
+     original (`headline_one`) não tem os acentos maiúsculos do português:
+     sob `text-transform: uppercase`, "Edição" saía "EDIçãO" — o Ç e o Ã
+     caindo, glifo a glifo, no serif do sistema, miúdos e fora de linha.
+     Kreon cobre o Latin Extended e é a irmã tipográfica desta folha, então
+     o remendo passa despercebido; o resto do texto segue na fonte original. */
+  --anf-display: "headline_onehplhs", "Mugglenews", "Kreon", "Playbill", serif;
   /* Título: tudo que titula abaixo da manchete. */
   --anf-head: "Kreon", "Bookman Old Style", serif;
   /* Corpo: texto corrido, legendas, formulários. */
@@ -140,4 +146,7 @@
 .newspaper {
   --anf-head: var(--font-kreon), "Kreon", "Bookman Old Style", serif;
   --anf-body: var(--font-vollkorn), "Vollkorn", "Iowan Old Style", Georgia, serif;
+  /* Mesmo remendo de acento da definição global, agora com a Kreon servida
+     localmente — sem isto o fallback dependeria da Kreon estar instalada. */
+  --anf-display: "headline_onehplhs", "Mugglenews", var(--font-kreon), "Playbill", serif;
 }

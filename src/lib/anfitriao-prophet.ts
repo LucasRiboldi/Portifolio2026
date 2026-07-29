@@ -21,7 +21,7 @@ export const paper = {
 /** Barra de serviço abaixo do masthead — clima, cotações, efemérides. */
 export const servicebar = {
   weather: {
-    title: "Clima das Mesas",
+    title: "Mercado Financeiro e Comércio",
     rows: [
       ["manhã", "dados quentes ↑"],
       ["tarde", "blefe encoberto"],
@@ -159,7 +159,7 @@ export const ads = [
 
 /** Notícias curtas em telegrama. */
 export const briefs = {
-  title: "Últimas Notícias",
+  title: "Coleção em Telegrama",
   items: [
     "MINIATURAS — Nova leva sai do tanque de cura; pintura em lavagem começa segunda.",
     "3D — Bico de 0,2mm restabelecido após entupimento; camadas voltam ao normal.",
@@ -170,9 +170,23 @@ export const briefs = {
   ],
 }
 
-/** Índice / seções — o menu incorporado como sumário de jornal. */
+/**
+ * Índice / seções — o menu incorporado como sumário de jornal.
+ *
+ * As entradas com `href` de âncora apontam para as zonas editoriais da
+ * primeira página (as mesmas do menu sanduíche, em `section-nav.tsx`). Antes
+ * havia só a rota do Laboratório, e o rodapé — que é uma grelha de colunas
+ * automáticas — ficava com a maior parte da largura vazia.
+ */
 export const index = [
   { label: "Laboratório de Protótipos", href: "/anfitriao/laboratorio", page: "IV" },
+  { label: "Manchete Principal", href: "#anf-manchete-principal", page: "I" },
+  { label: "Notícias Secundárias", href: "#anf-noticias-secundarias", page: "I" },
+  { label: "Notícias Internacionais", href: "#anf-noticias-internacionais", page: "II" },
+  { label: "Mercado & Comércio", href: "#anf-mercado", page: "II" },
+  { label: "Coleção", href: "#anf-colecao", page: "III" },
+  { label: "Editorial", href: "#anf-editorial", page: "I" },
+  { label: "Classificados", href: "#anf-anuncios", page: "III" },
 ]
 
 /** Cadernos anunciados na barra de seções (mapeados às rotas reais). */

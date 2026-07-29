@@ -181,3 +181,141 @@ html body {
 .dpx-caderno {
   margin-top: 2em;
 }
+
+/**
+ * `.newspaper-teaser` diagrama a fatline, o selo de página e a chamada em
+ * FLOAT (herdado do original), sem clearfix. Com texto curto e fixo isso
+ * nunca apareceu; com `briefs.items` (dinâmico, mais longo) o texto da
+ * chamada extrapola a altura da fatline, o container não CONTABILIZA essa
+ * altura extra (floats não esticam o pai) e a faixa seguinte (Coleção)
+ * desenha por cima do fim do texto — texto sobre texto. O clearfix devolve
+ * ao container a altura real do conteúdo.
+ */
+.newspaper-teaser::after {
+  content: "";
+  display: block;
+  clear: both;
+}
+
+/**
+ * Mesma causa, um nível acima: `.newspaper-weather-cities li` também é
+ * FLOAT sem clearfix. Sem conter a altura dos floats, o contexto deles
+ * "vaza" para a seção seguinte — é por isso que `.newspaper-teaser-story`
+ * (também float) calculava sua posição a partir de floats ainda "ativos"
+ * da faixa de mercado, acima do próprio container. Fecha o contexto aqui.
+ */
+.newspaper-weather-cities::after {
+  content: "";
+  display: block;
+  clear: both;
+}
+
+/**
+ * `.newspaper-teaser-story` some FLOAT ao lado da fatline e do selo. Com o
+ * texto dinâmico da Coleção o float acabava calculando uma posição ACIMA do
+ * próprio container (`offsetTop` negativo), sobrepondo a faixa anterior —
+ * um efeito colateral conhecido de floats concorrentes que este projeto não
+ * foi investigar a fundo. `overflow: hidden` troca o float por um novo
+ * contexto de formatação de bloco: continua encaixando ao lado da fatline
+ * (preenche a largura restante), mas não pode mais renderizar acima do
+ * início do container — o padrão robusto para "texto ao lado de float".
+ */
+@media only screen and (min-width: 48em) {
+  .newspaper-teaser-story {
+    float: none;
+    overflow: hidden;
+  }
+}
+
+/**
+ * A causa real do "texto sobre texto" na chamada: a partir de 64em o
+ * original vira GRID e reserva à fatline uma linha de altura FIXA
+ * (`grid-template-rows: 3.75em`), pensada para o texto curto original. A
+ * chamada (`briefs`) é mais longa; com `align-self: center` (herdado do
+ * original) ela transborda a linha IGUALMENTE para cima e para baixo —
+ * a metade de cima cobria a faixa de Mercado, logo acima. Alinhar ao
+ * início da linha faz o texto crescer só para baixo, dentro da própria
+ * faixa (já contida pelo clearfix/grid do container).
+ */
+@media only screen and (min-width: 64em) {
+  .newspaper-teaser-story {
+    align-self: start;
+  }
+}
+
+/**
+ * O mesmo `grid-template-rows: 3.75em` fixo mantinha a FAIXA com 68px
+ * enquanto o conteúdo media 129px — o excedente sangrava para fora e
+ * cobria o índice do rodapé. `minmax(3.75em, auto)` conserva a altura
+ * mínima do original (é ela que dá o bloco chapado da fatline) e deixa a
+ * linha crescer quando a chamada for mais longa que a do original.
+ */
+@media only screen and (min-width: 48em) {
+  .newspaper-teaser {
+    grid-template-rows: minmax(3.75em, auto);
+  }
+}
+
+/**
+ * O rodapé usa `--anf-display` (a fonte-título do original, `headline_one`),
+ * que NÃO tem os glifos acentuados maiúsculos do português. Sob
+ * `text-transform: uppercase`, "Laboratório" virava "LABORATóRIO": o Ó caía
+ * no serif de sistema e saía miúdo e fora de linha. O rodapé passa a compor
+ * em Kreon (`--anf-head`), que cobre o Latin Extended — a fonte do original
+ * segue no logotipo e nas manchetes, onde os textos são nossos e sem acento.
+ */
+.newspaper-footer {
+  font-family: var(--anf-head);
+}
+
+/**
+ * Mesma causa, caso mais visível: `headline_one` é uma face TODA EM CAIXA
+ * ALTA por desenho (as minúsculas já saem como capitais) e não tem os
+ * acentos do português. Em "Edição Especial" o E-d-i-o vinha da face do
+ * original, em bloco, e o ç e o ã caíam na fonte de reserva como minúsculas
+ * de verdade — "EDIçãO", com dois corpos diferentes na mesma palavra.
+ * Este subtítulo é texto NOSSO e acentuado; compõe em Kreon inteiro. A face
+ * do original segue na manchete acima, que não tem acento.
+ */
+.fittext-exclusive-span {
+  font-family: var(--anf-head);
+}
+
+/**
+ * O selo de página é desenhado para MONTAR sobre a borda direita da fatline
+ * — é assim no original, e é o que dá o ar de carimbo. Mas lá o texto era
+ * curto e terminava bem antes; o nosso ("Coleção em Telegrama") ia até a
+ * borda e passava POR BAIXO do selo. A reserva à direita mantém o carimbo no
+ * lugar e devolve ao texto um fim visível.
+ */
+@media only screen and (min-width: 48em) {
+  .newspaper-teaser-fatline {
+    padding-right: 1.25em;
+    /* Com a linha crescendo para acomodar a chamada, o `align-self: center`
+       do original deixava um vazio de tinta acima e abaixo do bloco preto.
+       Esticado, o bloco ocupa a altura inteira da faixa — que é o que o
+       impresso faz quando a coluna ao lado é mais longa. */
+    align-self: stretch;
+    display: flex;
+    align-items: center;
+  }
+}
+
+/* ─────────────────────────────────────────────────────────────
+   Âncoras do sumário — rolagem suave até a zona, sem escondê-la
+   sob o cabeçalho ao chegar no topo da folha.
+   ───────────────────────────────────────────────────────────── */
+
+html {
+  scroll-behavior: smooth;
+}
+
+.dpx-anchor {
+  scroll-margin-top: 1.5em;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  html {
+    scroll-behavior: auto;
+  }
+}

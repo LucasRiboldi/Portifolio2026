@@ -24,6 +24,7 @@ import Link from "next/link"
 import { Kreon, Vollkorn } from "next/font/google"
 
 import { VibeToggle } from "@/components/providers/vibe-toggle"
+import { SectionNav } from "@/components/anfitriao/section-nav"
 import { paper, sections } from "@/lib/anfitriao-prophet"
 
 /**
@@ -107,17 +108,18 @@ export default function DailyProphetLayout({ children }: { children: ReactNode }
         <hr className="hr-double-bottom" />
       </header>
 
-      {/* ─── Linha de data: nossa, no idioma visual do jornal ─── */}
+      {/* ─── Linha de data: nossa, no idioma visual do jornal ───
+          Cinco peças distribuídas na largura da linha: o sumário
+          (menu sanduíche), volume, dia, preço e o botão de dimensão. */}
       <div className="dpx-dateline wrapper">
+        <SectionNav />
         <span>
           {paper.volume} — {paper.issue}
         </span>
         <span>{today}</span>
-        <span className="dpx-dateline-price">
-          {paper.price}
-          {/* Troca de multiverso — preservada do layout anterior. */}
-          <VibeToggle />
-        </span>
+        <span>{paper.price}</span>
+        {/* Troca de multiverso — preservada do layout anterior. */}
+        <VibeToggle />
       </div>
 
       {/* ─── Cadernos ─── */}

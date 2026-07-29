@@ -107,14 +107,23 @@
    O corpo passa a acompanhar a largura, com piso e teto, e a palavra
    pode quebrar. É a mesma correção aplicada às manchetes, pela mesma
    razão: molde desenhado para texto fixo recebendo texto variável.
+
+   Correção adicional: o piso/teto original usava `vw` (largura da
+   JANELA), não da COLUNA. A partir de 48em a folha vira grid de 6
+   colunas — a coluna é bem mais estreita que a janela —, então o `vw`
+   ainda calculava corpo grande o bastante para quebrar no meio da
+   palavra ("encobe/rto") e a lista invadir a faixa seguinte. Trocado
+   por `cqw` (largura do PRÓPRIO `li`, via `container-type`), a mesma
+   técnica das manchetes.
    ══════════════════════════════════════════════════════════════ */
 
 .newspaper-weather-cities li {
   min-width: 0;
+  container-type: inline-size;
 }
 
 .newspaper-weather-cities p {
-  font-size: clamp(1.1rem, 5vw, 3rem);
+  font-size: clamp(1rem, 13cqw, 3rem);
   overflow-wrap: anywhere;
   hyphens: auto;
 }

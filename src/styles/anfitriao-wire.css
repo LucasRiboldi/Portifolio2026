@@ -39,10 +39,94 @@
   color: var(--anf-ink);
 }
 
-.dpx-dateline-price {
+/* Chamada de leitura da faixa EXCLUSIVO — alinhada à direita, como o
+   original alinha a sua. */
+.dpx-exclusive-cta {
+  margin: 0.25em 0 0;
+  text-align: right;
+}
+
+/* ─────────────────────────────────────────────────────────────
+   Menu sanduíche — sumário da edição, à esquerda do volume.
+   Fica escondido (painel fechado) até o leitor clicar no botão.
+   ───────────────────────────────────────────────────────────── */
+
+.dpx-navmenu {
+  position: relative;
   display: inline-flex;
+}
+
+.dpx-navmenu-btn {
+  display: inline-flex;
+  flex-direction: column;
+  justify-content: center;
   align-items: center;
-  gap: 0.75em;
+  gap: 0.25em;
+  width: 1.6em;
+  height: 1.6em;
+  padding: 0;
+  border: 1px solid var(--anf-ink);
+  background: transparent;
+  cursor: pointer;
+}
+
+.dpx-navmenu-btn span {
+  display: block;
+  width: 0.9em;
+  height: 1px;
+  background: var(--anf-ink);
+}
+
+.dpx-navmenu-btn:hover,
+.dpx-navmenu-btn:focus-visible {
+  background: var(--anf-accent);
+}
+
+.dpx-navmenu-panel {
+  position: absolute;
+  z-index: 20;
+  top: calc(100% + 0.5em);
+  left: 0;
+  min-width: 16em;
+  max-width: min(20em, 90vw);
+  padding: 0.75em 0.9em;
+  background: var(--anf-paper);
+  border: 1px solid var(--anf-ink);
+  box-shadow: 0.2em 0.2em 0 var(--anf-ink);
+  text-transform: none;
+  letter-spacing: normal;
+}
+
+.dpx-navmenu-title {
+  margin: 0 0 0.5em;
+  font-family: var(--anf-head);
+  font-size: var(--anf-text-xs);
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  border-bottom: 1px solid var(--anf-ink);
+  padding-bottom: 0.4em;
+}
+
+.dpx-navmenu-panel ul {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  display: grid;
+  gap: 0.4em;
+}
+
+.dpx-navmenu-panel a {
+  display: block;
+  font-family: var(--anf-body);
+  font-size: var(--anf-text-sm);
+  color: var(--anf-ink);
+  text-decoration: none;
+  border-bottom: 1px solid transparent;
+}
+
+.dpx-navmenu-panel a:hover,
+.dpx-navmenu-panel a:focus-visible {
+  border-bottom-color: var(--anf-ink);
 }
 
 /* ─────────────────────────────────────────────────────────────

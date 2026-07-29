@@ -94,6 +94,9 @@ export default async function DailyProphetFront() {
     <>
       {/* ─── EXCLUSIVO — a faixa de manchete do original ─── */}
       <section className="newspaper-exclusive wrapper">
+        <span id="anf-manchete-principal" className="helper-hide dpx-anchor">
+          Manchete principal
+        </span>
         <p className="newspaper-exclusive-box">
           <span>EXCLUSIVO</span>
         </p>
@@ -101,8 +104,13 @@ export default async function DailyProphetFront() {
           <h1 className="fittext-exclusive-h1">
             {lead.headline} <span className="fittext-exclusive-span">{lead.kicker}</span>
           </h1>
-          <p>
-            <span className="helper-colsplit-2">{lead.subhead}</span>
+          {/* O link saiu de dentro do parágrafo do subtítulo. Ali ele era
+              irmão inline de um `<span>` com `column-count: 2`, e o espaço
+              que os separava desaparecia na fronteira entre as colunas —
+              saía "…em silêncioLeia no Laboratório.". Como chamada de
+              leitura, ele também é um bloco à parte por direito próprio. */}
+          <p className="helper-colsplit-2">{lead.subhead}</p>
+          <p className="dpx-exclusive-cta">
             <Link href="/anfitriao/laboratorio">Leia no Laboratório.</Link>
           </p>
         </article>
@@ -111,6 +119,9 @@ export default async function DailyProphetFront() {
       {/* ─── MATÉRIAS ─── */}
       <section className="newspaper-articles">
         <article className="newspaper-toparticle wrapper">
+          <span id="anf-colunas-texto" className="helper-hide dpx-anchor">
+            Colunas de texto
+          </span>
           <h1 className="fittext-toparticle-h1-1">
             <span className="newspaper-toparticle-spanwrap">
               <span className="helper-verticaltext">Oficina</span> A regra que
@@ -130,6 +141,9 @@ export default async function DailyProphetFront() {
 
           <section className="newspaper-toparticle-story">
             <figure>
+              <span id="anf-ilustracoes" className="helper-hide dpx-anchor">
+                Ilustrações
+              </span>
               {/* eslint-disable-next-line @next/next/no-img-element */}
               <img
                 alt="Bancada da oficina ao anoitecer"
@@ -156,6 +170,9 @@ export default async function DailyProphetFront() {
 
           {/* O aside "Rita Skeeter reports" do original vira o nosso Editorial. */}
           <aside className="newspaper-toparticle-aside">
+            <span id="anf-editorial" className="helper-hide dpx-anchor">
+              Editorial
+            </span>
             <h1>
               {editorial.title} <span>{editorial.headline}</span>
             </h1>
@@ -174,6 +191,9 @@ export default async function DailyProphetFront() {
 
         {/* ─── Matérias inferiores: as duas primeiras notícias automáticas ─── */}
         <article className="newspaper-bottomarticles wrapper">
+          <span id="anf-noticias-secundarias" className="helper-hide dpx-anchor">
+            Notícias secundárias
+          </span>
           {featured && (
             <section className="newspaper-bottomarticle-first">
               <h1 className="fittext-bottomarticle-first-h1">{featured.title}</h1>
@@ -246,9 +266,12 @@ export default async function DailyProphetFront() {
       {/* ─── PROPHET WIRE — as demais notícias automáticas ─── */}
       {rest.length > 0 && (
         <section className="dpx-wire wrapper" aria-labelledby="wire-titulo">
+          <span id="anf-noticias-internacionais" className="helper-hide dpx-anchor">
+            Notícias internacionais
+          </span>
           <hr className="hr-double-top" />
           <h2 className="dpx-wire-title" id="wire-titulo">
-            Do Telégrafo — Notícias das Mesas do Mundo
+            Notícias Internacionais — Do Telégrafo, as Mesas do Mundo
           </h2>
           <hr className="hr-double-bottom" />
 
@@ -260,8 +283,11 @@ export default async function DailyProphetFront() {
         </section>
       )}
 
-      {/* ─── CLIMA — o "Clima das Mesas" na zona de weather do original ─── */}
+      {/* ─── MERCADO — cotações da oficina e sentimento das mesas, na zona de weather do original ─── */}
       <section className="newspaper-weather">
+        <span id="anf-mercado" className="helper-hide dpx-anchor">
+          Mercado financeiro e comércio
+        </span>
         <hr className="hr-double-top" />
         <h2>{servicebar.weather.title}</h2>
         <ul className="newspaper-weather-cities wrapper">
@@ -305,11 +331,14 @@ export default async function DailyProphetFront() {
               </Link>
             </li>
           ))}
+          {/* Sem `<span>` envolvendo o texto: `.newspaper-footer-index span`
+              é a regra do SELO NUMERADO do original (círculo de 1.5em, fundo
+              de tinta). Um span externo recebia esse estilo e espremia a
+              efeméride inteira dentro do círculo — "Playtest público…" saía
+              como "Pla". O texto vai solto no `li`; só o número é span. */}
           {servicebar.ephemeris.lines.map((l, i) => (
-            <li key={l}>
-              <span title={l}>
-                {l} <span>{i + 1}</span>
-              </span>
+            <li key={l} title={l}>
+              {l} <span>{i + 1}</span>
             </li>
           ))}
         </ul>
@@ -325,6 +354,9 @@ export default async function DailyProphetFront() {
           ═══════════════════════════════════════════════════════════ */}
 
       <section className="dpx-band" aria-labelledby="oficina-titulo">
+        <span id="anf-colecao" className="helper-hide dpx-anchor">
+          Coleção
+        </span>
         <header className="dpx-band-head">
           <h2 className="dpx-band-title" id="oficina-titulo">
             Caderno da Oficina
@@ -344,7 +376,10 @@ export default async function DailyProphetFront() {
               </ul>
             </div>
 
-            <div className="dpx-ad">
+            <div className="dpx-ad" aria-label="Anúncio publicitário">
+              <span id="anf-anuncios" className="helper-hide dpx-anchor">
+                Anúncios publicitários
+              </span>
               <p className="dpx-ad-head">{ads[0].head}</p>
               <p className="dpx-ad-body">{ads[0].body}</p>
               <p className="dpx-ad-sign">{ads[0].sign}</p>
@@ -539,13 +574,13 @@ export default async function DailyProphetFront() {
               <p className="dpx-text">{boxes.tip.body}</p>
             </div>
 
-            <div className="dpx-ad">
+            <div className="dpx-ad" aria-label="Anúncio publicitário">
               <p className="dpx-ad-head">{ads[1].head}</p>
               <p className="dpx-ad-body">{ads[1].body}</p>
               <p className="dpx-ad-sign">{ads[1].sign}</p>
             </div>
 
-            <div className="dpx-ad">
+            <div className="dpx-ad" aria-label="Anúncio publicitário">
               <p className="dpx-ad-head">{ads[2].head}</p>
               <p className="dpx-ad-body">{ads[2].body}</p>
               <p className="dpx-ad-sign">{ads[2].sign}</p>
