@@ -21,6 +21,7 @@ import {
   videos,
 } from "@/data/criativo-zones"
 import { devlogs, labExperiments, snippets, wikiDocs, ideas } from "@/data/dev"
+import { materias } from "@/data/anfitriao-materias"
 import { REALMS, REALM_ORDER, DEFAULT_REALM } from "@/lib/realms"
 import * as arcane from "@/lib/arcane-content"
 
@@ -239,6 +240,36 @@ export async function seedDatabase(): Promise<SeedReport> {
       description: x.description,
       status: x.status,
       tags: x.tags,
+      published: true,
+      sort: i,
+    })),
+  )
+
+  // ─── Matérias das páginas internas do jornal (migration 0008) ─────────
+  report.prophet_materias = await seedIfEmpty(
+    supabase,
+    "prophet_materias",
+    materias.map((m, i) => ({
+      slug: m.slug,
+      caderno: m.caderno,
+      page: m.page,
+      kicker: m.kicker,
+      headline: m.headline,
+      subhead: m.subhead,
+      standfirst: m.standfirst,
+      byline: m.byline,
+      byline_role: m.bylineRole,
+      dateline: m.dateline,
+      continua_de: m.continuaDe ?? null,
+      dropcap: m.dropcap,
+      open_line: m.openLine,
+      blocos: m.blocos,
+      pullquote: m.pullquote,
+      figure: m.figure,
+      boxes: m.boxes,
+      sign: m.sign,
+      colofao: m.colofao,
+      remissoes: m.remissoes,
       published: true,
       sort: i,
     })),

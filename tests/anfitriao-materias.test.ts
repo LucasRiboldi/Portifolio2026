@@ -133,6 +133,89 @@ describe("convenções do realm", () => {
   })
 })
 
+describe("migração para o Supabase", () => {
+  const MIGRATION = ler("supabase/migrations/0008_anfitriao_materias.sql")
+  const LEITOR = semComentarios(ler("src/lib/repos/anfitriao-materias.ts"))
+  const SYNC = semComentarios(ler("src/lib/admin/sync-content.ts"))
+  const SEED = semComentarios(ler("src/lib/admin/seed.ts"))
+  const DADOS = ler("src/data/anfitriao-materias.ts")
+
+  /** Os campos da matéria, lidos da interface — a fonte da verdade. */
+  const camposDaMateria = (() => {
+    const bloco = DADOS.match(/export interface Materia \{([\s\S]*?)\n\}/)![1]!
+    return [...bloco.matchAll(/^\s{2}(\w+)\??:/gm)].map((m) => m[1]!)
+  })()
+
+  it("a interface tem os campos que a página usa", () => {
+    expect(camposDaMateria).toContain("bylineRole")
+    expect(camposDaMateria).toContain("openLine")
+    expect(camposDaMateria.length).toBeGreaterThan(15)
+  })
+
+  /**
+   * O risco desta migração não é o banco: é a tradução.
+   *
+   * A tabela fala snake_case, o componente fala camelCase, e um campo
+   * esquecido no meio do caminho não gera erro nenhum — a matéria
+   * simplesmente perde a assinatura, ou o olho, ou o colofão, e ninguém
+   * percebe até ler a página inteira. Os três testes seguintes fecham as três
+   * pontas: leitor, escritor e tabela.
+   */
+  it("o leitor traduz TODOS os campos da matéria", () => {
+    const ausentes = camposDaMateria.filter((c) => !new RegExp(`\\b${c}:`).test(LEITOR))
+    expect(ausentes, "campos que o leitor esqueceu de mapear").toEqual([])
+  })
+
+  it("o sync escreve TODOS os campos da matéria", () => {
+    // No sync os nomes são de COLUNA (snake_case); a comparação converte.
+    const paraColuna = (c: string) => c.replace(/[A-Z]/g, (l) => `_${l.toLowerCase()}`)
+    const ausentes = camposDaMateria
+      .filter((c) => c !== "slug")
+      .filter((c) => !new RegExp(`\\b${paraColuna(c)}:`).test(SYNC))
+    expect(ausentes.map(paraColuna), "colunas que o sync não preenche").toEqual([])
+  })
+
+  it("a tabela tem coluna para todo campo da matéria", () => {
+    const paraColuna = (c: string) => c.replace(/[A-Z]/g, (l) => `_${l.toLowerCase()}`)
+    const ausentes = camposDaMateria.filter(
+      (c) => !new RegExp(`^\\s{2}${paraColuna(c)}\\s`, "m").test(MIGRATION),
+    )
+    expect(ausentes.map(paraColuna), "campos sem coluna na 0008").toEqual([])
+  })
+
+  it("a tabela é publicável pelo seed e pelo sync", () => {
+    expect(SYNC).toContain('"prophet_materias"')
+    expect(SEED).toContain('"prophet_materias"')
+  })
+
+  it("a folha não abre vazia quando o banco falha", () => {
+    // Mesmo contrato das zonas do criativo: página de jornal sem matéria não
+    // é estado vazio legítimo, é folha em branco.
+    expect(LEITOR).toContain("materiasSeed")
+    expect(LEITOR).toMatch(/if \(!supabase\) return materiasSeed/)
+    expect(LEITOR).toMatch(/data\.length === 0\) return materiasSeed/)
+  })
+
+  it("as estruturas aninhadas têm CHECK de forma no banco", () => {
+    // jsonb aceita qualquer coisa; sem o CHECK, um objeto onde deveria haver
+    // array quebraria a renderização em vez de falhar na escrita.
+    expect(MIGRATION).toMatch(/jsonb_typeof\(blocos\) = 'array'/)
+    expect(MIGRATION).toMatch(/jsonb_typeof\(figure\) = 'object'/)
+  })
+
+  it("a rota lê do repositório, não do arquivo de dados", () => {
+    expect(ROTA).toContain('from "@/lib/repos/anfitriao-materias"')
+    expect(ROTA).not.toMatch(/import \{[^}]*\bmaterias\b[^}]*\} from "@\/data\/anfitriao-materias"/)
+  })
+
+  it("publicar revalida todas as tags, não uma lista escrita à mão", () => {
+    // A lista manual ficou para trás a cada tabela nova: o conteúdo entrava
+    // no banco e a página seguia servindo o cache antigo, sem erro nenhum.
+    const ACTIONS = semComentarios(ler("src/app/admin/actions.ts"))
+    expect(ACTIONS).toContain("Object.values(CACHE_TAGS)")
+  })
+})
+
 /**
  * FORA DE COBERTURA (verificação manual, precisa de navegador):
  * - medida por coluna entre 34 e 46 caracteres nos vários tamanhos;

@@ -16,6 +16,8 @@ export const CACHE_TAGS = {
   prototypes: "prototypes",
   resources: "resources",
   prophetAbout: "prophet-about",
+  /** Matérias das páginas internas do jornal. */
+  materias: "prophet-materias",
   pages: "page-content",
   // Zonas da landing /criativo
   artworks: "artworks",

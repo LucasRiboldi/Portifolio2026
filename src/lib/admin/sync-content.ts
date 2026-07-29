@@ -20,6 +20,7 @@ import { posts } from "@/data/posts"
 import { tools } from "@/data/tools"
 import { devlogs, labExperiments, snippets, wikiDocs, ideas } from "@/data/dev"
 import { artworks, comics, movies, notes, strips, tracks, videos } from "@/data/criativo-zones"
+import { materias } from "@/data/anfitriao-materias"
 
 export interface SyncReport {
   /** Nomes/títulos inseridos por tabela (vazio = nada faltava). */
@@ -267,6 +268,42 @@ export async function syncNewContent(): Promise<SyncReport> {
       ({ id: _id, ...resto }) => ({ ...resto, published: true }),
     )
   }
+
+  // ─── Matérias das páginas internas do jornal ──────────────────────────
+  // As estruturas aninhadas (blocos, caixas, remissões, gravura, colofão)
+  // vão como jsonb; o resto é coluna. A migration 0008 tem CHECK de forma
+  // sobre as cinco, então um formato torto falha na escrita em vez de
+  // aparecer quebrado na folha.
+  report.prophet_materias = await inserirFaltantes(
+    supabase,
+    "prophet_materias",
+    "slug",
+    materias,
+    (m) => m.slug,
+    (m) => ({
+      slug: m.slug,
+      caderno: m.caderno,
+      page: m.page,
+      kicker: m.kicker,
+      headline: m.headline,
+      subhead: m.subhead,
+      standfirst: m.standfirst,
+      byline: m.byline,
+      byline_role: m.bylineRole,
+      dateline: m.dateline,
+      continua_de: m.continuaDe ?? null,
+      dropcap: m.dropcap,
+      open_line: m.openLine,
+      blocos: m.blocos,
+      pullquote: m.pullquote,
+      figure: m.figure,
+      boxes: m.boxes,
+      sign: m.sign,
+      colofao: m.colofao,
+      remissoes: m.remissoes,
+      published: true,
+    }),
+  )
 
   return report
 }

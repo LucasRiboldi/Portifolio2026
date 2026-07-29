@@ -4,7 +4,8 @@ import type { Metadata } from "next"
 import Link from "next/link"
 import { notFound } from "next/navigation"
 
-import { materias, getMateria, type MateriaBox } from "@/data/anfitriao-materias"
+import { getMaterias, getMateria } from "@/lib/repos/anfitriao-materias"
+import type { MateriaBox } from "@/data/anfitriao-materias"
 import { paper } from "@/lib/anfitriao-prophet"
 
 /**
@@ -23,8 +24,17 @@ import { paper } from "@/lib/anfitriao-prophet"
  * página, que é a rota crítica do realm.
  */
 
-/** Todas as matérias são conhecidas em build — a folha é fechada, não um feed. */
-export function generateStaticParams() {
+/**
+ * As matérias conhecidas em build.
+ *
+ * Vêm do repositório (banco, com queda para o seed) e não mais do arquivo: as
+ * que forem escritas pelo painel depois deste build passam a existir mesmo
+ * assim, porque `dynamicParams` continua ligado — o Next as renderiza sob
+ * demanda na primeira visita e as guarda. O que esta lista garante é que as
+ * matérias já publicadas saiam prontas do build, sem esperar leitor.
+ */
+export async function generateStaticParams() {
+  const materias = await getMaterias()
   return materias.map((m) => ({ slug: m.slug }))
 }
 
@@ -34,7 +44,7 @@ export async function generateMetadata({
   params: Promise<{ slug: string }>
 }): Promise<Metadata> {
   const { slug } = await params
-  const m = getMateria(slug)
+  const m = await getMateria(slug)
   if (!m) return { title: "Matéria não encontrada" }
   return {
     title: m.headline,
@@ -72,7 +82,7 @@ function Box({ box }: { box: MateriaBox }) {
 
 export default async function MateriaPage({ params }: { params: Promise<{ slug: string }> }) {
   const { slug } = await params
-  const m = getMateria(slug)
+  const m = await getMateria(slug)
   if (!m) notFound()
 
   return (
