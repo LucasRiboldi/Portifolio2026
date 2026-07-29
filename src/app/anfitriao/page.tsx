@@ -249,6 +249,13 @@ export default async function DailyProphetFront() {
                 <p key={p.slice(0, 24)}>{p}</p>
               ))}
               <p>{lead.caption}</p>
+              {/* A continuação existe de fato: leva à página II, onde a
+                  matéria prossegue. Enquanto não havia página interna, esta
+                  chamada teria sido mentira tipográfica — por isso não
+                  existia. */}
+              <Link href="/anfitriao/materia/a-regra-que-desaparece" className="dpx-mat-continua">
+                Continua na página II ❦
+              </Link>
             </div>
           </section>
 

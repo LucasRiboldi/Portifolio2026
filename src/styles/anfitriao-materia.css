@@ -1,0 +1,379 @@
+/**
+ * PÁGINA INTERNA DA FOLHA.
+ *
+ * A primeira página é uma vitrine: manchete grande, chamadas curtas, muita
+ * peça disputando o olho. A página interna é o contrário — existe para ser
+ * LIDA de cabo a rabo, e por isso obedece a outra gramática: coluna estreita,
+ * corpo constante, intertítulo para respirar e nada que dispute com o texto.
+ *
+ * Escopo `.newspaper` como o resto do realm. Vocabulário `dpx-mat-*` para não
+ * colidir com as peças da capa, que têm outra função.
+ *
+ * Depende de `anfitriao-tokens.css` (papel, tinta, tipos, escalas).
+ */
+
+/* ─── A página, dentro da grelha do original ────────────────────────────
+   `.newspaper` é uma grelha de seis colunas e `.dpx-main` é `display:
+   contents` — de modo que os filhos da rota são colocados DIRETAMENTE nas
+   colunas do jornal. Sem atravessar a grelha, a matéria cai numa célula só:
+   em 320px a mancha ficava com 160px, metade da tela, e o texto justificado
+   com hifenização ficava ilegível.
+
+   As seções da primeira página não precisam disto porque cada uma traz a
+   própria regra de posicionamento herdada do original; esta rota é nova e
+   não tinha nenhuma. */
+.dpx-mat {
+  grid-column: 1 / -1;
+  padding-block: var(--anf-space-6);
+}
+
+/* ─── Folio: a tarja de página interna ──────────────────────────────────
+   O impresso identifica cada página par/ímpar com caderno, número e data.
+   Não é ornamento: é o que diz ao leitor onde ele está depois de virar a
+   folha — informação que na primeira página o cabeçalho já dava. */
+.dpx-mat-folio {
+  display: flex;
+  align-items: baseline;
+  justify-content: space-between;
+  gap: var(--anf-space-4);
+  flex-wrap: wrap;
+  margin-bottom: var(--anf-space-4);
+  padding-bottom: var(--anf-space-2);
+  border-bottom: 1px solid var(--anf-rule);
+  font-family: var(--anf-head);
+  font-size: var(--anf-text-xs);
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  color: var(--anf-ink-2);
+}
+.dpx-mat-folio b {
+  font-weight: 700;
+  color: var(--anf-ink);
+}
+
+/* ─── Cabeça da matéria ───────────────────────────────────────────────── */
+.dpx-mat-head {
+  margin-bottom: var(--anf-space-6);
+  text-align: center;
+}
+.dpx-mat-kicker {
+  font-family: var(--anf-head);
+  font-size: var(--anf-text-xs);
+  letter-spacing: 0.16em;
+  text-transform: uppercase;
+  color: var(--anf-accent-2);
+}
+.dpx-mat-head h2 {
+  margin: var(--anf-space-2) 0;
+  font-family: var(--anf-display);
+  /* Menor que a manchete da capa de propósito: a página interna não compete
+     com a primeira, e um título gigante aqui rouba a linha de leitura. */
+  font-size: clamp(1.9rem, 1.2rem + 3vw, 3.1rem);
+  font-weight: 400;
+  line-height: 1.02;
+  color: var(--anf-ink);
+}
+.dpx-mat-subhead {
+  max-width: 46rem;
+  margin: 0 auto;
+  font-family: var(--anf-body);
+  font-style: italic;
+  font-size: var(--anf-text-md);
+  line-height: 1.35;
+  color: var(--anf-ink-2);
+}
+.dpx-mat-byline {
+  margin-top: var(--anf-space-3);
+  font-family: var(--anf-head);
+  font-size: var(--anf-text-sm);
+  color: var(--anf-ink-2);
+}
+.dpx-mat-byline b {
+  color: var(--anf-ink);
+}
+.dpx-mat-dateline {
+  font-style: italic;
+}
+
+/* ─── Olho (standfirst) ───────────────────────────────────────────────── */
+.dpx-mat-standfirst {
+  max-width: 44rem;
+  margin: 0 auto var(--anf-space-6);
+  padding: var(--anf-space-3) var(--anf-space-4);
+  border-top: 3px double var(--anf-rule);
+  border-bottom: 3px double var(--anf-rule);
+  font-family: var(--anf-body);
+  font-size: var(--anf-text-md);
+  line-height: 1.45;
+  text-align: center;
+  color: var(--anf-ink);
+}
+
+/* ─── Corpo em colunas ─────────────────────────────────────────────────
+   Duas colunas a partir do tablet, três no impresso largo. A medida por
+   coluna fica entre 34 e 46 caracteres — a do jornal, não a do livro. */
+.dpx-mat-body {
+  font-family: var(--anf-body);
+  font-size: var(--anf-text-base);
+  line-height: 1.55;
+  color: var(--anf-ink);
+  text-align: justify;
+  hyphens: auto;
+}
+@media (min-width: 48em) {
+  .dpx-mat-body {
+    column-count: 2;
+    column-gap: var(--anf-space-8);
+    /* O filete entre colunas é o que faz a mancha parecer impressa. */
+    column-rule: 1px solid var(--anf-rule-hair);
+  }
+}
+@media (min-width: 75em) {
+  .dpx-mat-body {
+    column-count: 3;
+  }
+}
+.dpx-mat-body p {
+  margin: 0;
+  /* Sem espaço entre parágrafos e com recuo na primeira linha: é a norma do
+     impresso, e é o que permite justificar sem abrir buracos na mancha. */
+  text-indent: 1.2em;
+}
+.dpx-mat-body p + p {
+  margin-top: 0;
+}
+/* O parágrafo de abertura e os que seguem intertítulo não recuam — não há
+   parágrafo anterior de onde se distinguir. */
+.dpx-mat-body > p:first-child,
+.dpx-mat-body h3 + p {
+  text-indent: 0;
+}
+
+/* ─── Capitular ───────────────────────────────────────────────────────── */
+.dpx-mat-dropcap {
+  float: left;
+  margin: 0.06em 0.08em -0.02em 0;
+  font-family: var(--anf-display);
+  font-size: 3.4em;
+  line-height: 0.78;
+  color: var(--anf-ink);
+}
+
+/* ─── Intertítulos ────────────────────────────────────────────────────── */
+.dpx-mat-body h3 {
+  margin: var(--anf-space-4) 0 var(--anf-space-2);
+  font-family: var(--anf-head);
+  font-size: var(--anf-text-base);
+  font-weight: 700;
+  letter-spacing: 0.04em;
+  text-align: center;
+  text-transform: uppercase;
+  color: var(--anf-ink);
+  /* `break-after: avoid` evita o intertítulo órfão no pé da coluna — o
+     defeito clássico de composição em colunas. */
+  break-after: avoid;
+}
+.dpx-mat-body h3::before,
+.dpx-mat-body h3::after {
+  content: "❦";
+  margin: 0 0.5em;
+  color: var(--anf-accent);
+  font-size: 0.8em;
+}
+
+/* ─── Olho de citação ─────────────────────────────────────────────────── */
+.dpx-mat-pull {
+  margin: var(--anf-space-4) 0;
+  padding: var(--anf-space-3) 0;
+  border-top: 1px solid var(--anf-rule);
+  border-bottom: 1px solid var(--anf-rule);
+  font-family: var(--anf-head);
+  font-size: var(--anf-text-md);
+  line-height: 1.25;
+  text-align: center;
+  text-indent: 0;
+  color: var(--anf-ink);
+  break-inside: avoid;
+}
+
+/* ─── Gravura ─────────────────────────────────────────────────────────
+   Não há fotografia nesta folha: há a MOLDURA da chapa, com a legenda que
+   descreve o que a gravura mostraria. É recurso legítimo do impresso — e
+   honesto, porque não finge uma imagem que não existe. */
+.dpx-mat-plate {
+  margin: var(--anf-space-4) 0;
+  break-inside: avoid;
+}
+.dpx-mat-plate-frame {
+  display: grid;
+  place-items: center;
+  aspect-ratio: 4 / 3;
+  padding: var(--anf-space-4);
+  border: 1px solid var(--anf-rule);
+  outline: 3px double var(--anf-rule);
+  outline-offset: 3px;
+  background:
+    repeating-linear-gradient(
+      45deg,
+      transparent,
+      transparent 6px,
+      rgba(42, 34, 22, 0.05) 6px,
+      rgba(42, 34, 22, 0.05) 7px
+    ),
+    var(--anf-paper-2);
+  font-family: var(--anf-head);
+  font-size: var(--anf-text-xs);
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+  color: var(--anf-ink-3);
+}
+.dpx-mat-plate figcaption {
+  margin-top: var(--anf-space-2);
+  font-family: var(--anf-body);
+  font-size: var(--anf-text-sm);
+  font-style: italic;
+  line-height: 1.35;
+  text-align: left;
+  text-indent: 0;
+  color: var(--anf-ink-2);
+}
+.dpx-mat-plate-credit {
+  display: block;
+  margin-top: var(--anf-space-1);
+  font-style: normal;
+  font-size: var(--anf-text-xs);
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  color: var(--anf-ink-3);
+}
+
+/* ─── Caixas de apoio ─────────────────────────────────────────────────── */
+.dpx-mat-box {
+  margin: var(--anf-space-4) 0;
+  padding: var(--anf-space-3) var(--anf-space-4);
+  border: 1px solid var(--anf-rule);
+  background: var(--anf-paper-2);
+  break-inside: avoid;
+  text-indent: 0;
+}
+.dpx-mat-box-title {
+  margin-bottom: var(--anf-space-2);
+  padding-bottom: var(--anf-space-1);
+  border-bottom: 1px solid var(--anf-rule-hair);
+  font-family: var(--anf-head);
+  font-size: var(--anf-text-sm);
+  font-weight: 700;
+  letter-spacing: 0.06em;
+  text-align: center;
+  text-transform: uppercase;
+}
+.dpx-mat-box p,
+.dpx-mat-box li {
+  font-size: var(--anf-text-sm);
+  line-height: 1.45;
+  text-align: left;
+  text-indent: 0;
+}
+.dpx-mat-box ul {
+  margin: 0;
+  padding-left: 1.1em;
+  list-style: none;
+}
+.dpx-mat-box li {
+  position: relative;
+}
+.dpx-mat-box li + li {
+  margin-top: var(--anf-space-2);
+}
+.dpx-mat-box li::before {
+  content: "—";
+  position: absolute;
+  left: -1.1em;
+  color: var(--anf-accent-2);
+}
+.dpx-mat-box dl {
+  margin: 0;
+  font-size: var(--anf-text-sm);
+}
+.dpx-mat-box dl > div {
+  display: flex;
+  justify-content: space-between;
+  gap: var(--anf-space-3);
+  padding: 0.15rem 0;
+  border-bottom: 1px dotted var(--anf-rule-hair);
+}
+.dpx-mat-box dl > div:last-child {
+  border-bottom: 0;
+}
+.dpx-mat-box dt {
+  text-align: left;
+}
+.dpx-mat-box dd {
+  margin: 0;
+  font-weight: 700;
+  white-space: nowrap;
+}
+
+/* ─── Assinatura de fecho ─────────────────────────────────────────────── */
+.dpx-mat-sign {
+  margin-top: var(--anf-space-3);
+  font-family: var(--anf-head);
+  font-size: var(--anf-text-sm);
+  text-align: right;
+  text-indent: 0;
+  color: var(--anf-ink-2);
+}
+
+/* ─── Pé da matéria: remissões e colofão ──────────────────────────────── */
+.dpx-mat-foot {
+  margin-top: var(--anf-space-8);
+  padding-top: var(--anf-space-3);
+  border-top: 3px double var(--anf-rule);
+}
+.dpx-mat-remissoes {
+  margin: 0 0 var(--anf-space-4);
+  padding: 0;
+  list-style: none;
+  font-family: var(--anf-body);
+  font-size: var(--anf-text-sm);
+}
+.dpx-mat-remissoes li + li {
+  margin-top: var(--anf-space-1);
+}
+/* Escopadas em `.newspaper`: a folha original declara
+   `.newspaper a { text-decoration: none }` com especificidade 0,1,1, que
+   vence `.dpx-mat-remissoes a` por ordem de cascata quando esta folha é
+   carregada num chunk separado. O escopo empata em especificidade e ganha
+   por vir depois. */
+.newspaper .dpx-mat-remissoes a {
+  color: var(--anf-ink);
+  text-decoration: underline;
+  text-underline-offset: 2px;
+}
+.newspaper .dpx-mat-remissoes a:hover {
+  color: var(--anf-accent-2);
+}
+.dpx-mat-colofao {
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--anf-space-1) var(--anf-space-4);
+  font-family: var(--anf-head);
+  font-size: var(--anf-text-xs);
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+  color: var(--anf-ink-3);
+}
+.newspaper .dpx-mat-volta {
+  display: inline-block;
+  margin-top: var(--anf-space-4);
+  font-family: var(--anf-head);
+  font-size: var(--anf-text-sm);
+  color: var(--anf-ink);
+  text-decoration: underline;
+  text-underline-offset: 3px;
+}
+
+/* A chamada "Continua na página II" NÃO mora aqui: ela é impressa na
+   primeira página, que não carrega esta folha (o Next isola CSS por segmento
+   de rota, e esta só é pedida na rota da matéria). Ficou em
+   `anfitriao-newspaper.css`, que o layout do realm carrega. */

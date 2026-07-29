@@ -829,3 +829,29 @@
 .dpx-figure--flush {
   margin: 0;
 }
+
+/**
+ * Chamada de continuação para a página interna.
+ *
+ * Mora nesta folha, e não em `anfitriao-materia.css`, porque quem a imprime é
+ * a PRIMEIRA página: o Next isola CSS por segmento de rota, e a folha da
+ * matéria só é pedida dentro de `/anfitriao/materia`. Declarada lá, a chamada
+ * apareceria sem estilo na capa.
+ */
+/* Escopada em `.newspaper` por necessidade, não por estilo: a folha original
+   declara `.newspaper a { display: inline; text-decoration: none }`, que tem
+   especificidade 0,1,1 e vence uma classe sozinha. Sem o escopo, o link saía
+   sem sublinhado e sem o `inline-block` que lhe dá a margem de topo. */
+.newspaper .dpx-mat-continua {
+  display: inline-block;
+  margin-top: var(--anf-space-2);
+  font-family: var(--anf-head);
+  font-size: var(--anf-text-sm);
+  font-style: italic;
+  color: var(--anf-ink-2);
+  text-decoration: underline;
+  text-underline-offset: 3px;
+}
+.newspaper .dpx-mat-continua:hover {
+  color: var(--anf-accent-2);
+}
