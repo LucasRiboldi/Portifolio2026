@@ -13,5 +13,8 @@ export const SUPABASE_ANON_KEY = process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY ?? ""
 /** True quando URL + anon key estão presentes (client/SSR podem falar com o banco). */
 export const isSupabaseConfigured = Boolean(SUPABASE_URL && SUPABASE_ANON_KEY)
 
+/** True quando URL + service-role estão presentes (server pode escrever ignorando RLS). */
+export const isSupabaseServiceConfigured = Boolean(SUPABASE_URL && process.env.SUPABASE_SERVICE_ROLE_KEY)
+
 /** Login do GitHub único autorizado no /admin. */
 export const ADMIN_GITHUB_LOGIN = (process.env.ADMIN_GITHUB_LOGIN ?? "").toLowerCase()

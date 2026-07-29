@@ -4,35 +4,57 @@
 > o *Daily Prophet*). Objetivo: pipeline 100% automático que pesquisa, analisa com IA,
 > deduplica e preenche os campos de notícia do jornal, diariamente, sem intervenção humana.
 
-## ⇒ PRÓXIMA NECESSIDADE: Parte 10 — persistência no Supabase
+## ⇒ PRÓXIMA NECESSIDADE: ação manual — configurar o Supabase deste projeto
 
-> Registrado em 2026-07-28, a pedido do Lucas. Tudo o mais do roadmap está feito
-> (Partes 0–9, 11–14 + o redesenho sobre o layout original e a equalização visual).
-> **Esta é a única peça que falta — e é a que destrava as outras cinco pendências.**
+> Parte 10 implementada em 2026-07-28. Todo o roadmap de código está feito
+> (Partes 0–14 + o redesenho sobre o layout original e a equalização visual).
+> **O que falta agora não é código — é configuração de ambiente.**
 
-O pipeline inteiro funciona hoje, mas escreve num repositório **em memória**: ele vive
-enquanto a instância serverless existir. Um cold start zera o acervo, e duas instâncias
-não compartilham nada. Na prática isso significa que **o agregador não tem memória entre
-execuções** — a deduplicação entre dias não funciona de verdade, e nada do que ele coleta
-sobrevive.
+O que foi feito na Parte 10:
 
-O que a Parte 10 exige:
+- `supabase/migrations/0007_prophet_wire.sql` — tabelas `prophet_wire_news` (acervo,
+  chave `slug`, índices por `hash` e por `status`+`published_at`) e `prophet_wire_runs`
+  (histórico, chave `id` = `startedAt`), RLS (`pwnews_read`/`pwnews_write`/`pwruns_*`
+  via `is_admin()`, leitura pública só de `status = 'publicado'`).
+- `SupabaseNewsRepository` (`src/lib/prophet-wire/supabase-repository.ts`) e
+  `SupabaseRunStore` (`src/lib/prophet-wire/supabase-run-store.ts`) — segunda impl de
+  `NewsRepository`/`RunStore`, mesma interface da versão in-memory. Usam o cliente
+  service-role: quem escreve é o cron (sem sessão de usuário, `is_admin()` via RLS não
+  se aplicaria) e a filtragem por `status` já ocorre na query, então o bypass de RLS
+  não vaza rascunho.
+- `defaultRepository()` (`src/data/prophet-wire.ts`) e `defaultRunStore()`
+  (`src/lib/prophet-wire/run-store.ts`) agora escolhem a impl Supabase quando
+  `isSupabaseServiceConfigured` (URL + `SUPABASE_SERVICE_ROLE_KEY`) — senão caem no
+  in-memory de sempre. **Nenhum outro módulo mudou**, como o desenho previa.
+- Build (`npm run build`) e os 115 testes unitários passam. Nada disto foi verificado
+  contra um banco real ainda — ver a ação manual abaixo.
 
-- chaves do Supabase no ambiente (`NEXT_PUBLIC_SUPABASE_URL`, `SUPABASE_SERVICE_ROLE_KEY`);
-- migração criando `news`, `sources`, `runs`, `logs`;
-- uma segunda implementação de `NewsRepository` e de `RunStore` — as interfaces já existem
-  e todo o pipeline fala com elas, então **nenhum outro módulo muda**.
+**Ação manual necessária (Lucas):**
 
-O que está bloqueado esperando por ela:
+1. No SQL Editor do Supabase, rodar `supabase/migrations/0007_prophet_wire.sql`
+   (depois das 0001–0006, se ainda não rodadas — ver `supabase/README.md`).
+2. Definir `SUPABASE_SERVICE_ROLE_KEY` (e as demais chaves do Supabase) em
+   `.env.local` (dev) e nas env vars da Vercel (produção).
+3. Rodar o gatilho uma vez (`POST /api/prophet-wire/run` com o `CRON_SECRET`) e
+   conferir no painel `/admin/prophet-wire` que o acervo e o histórico persistem
+   entre execuções.
 
-| Bloqueado | Onde | Por quê |
+O que passa a funcionar de verdade assim que as chaves entrarem no ambiente:
+
+| Destravado | Onde | Antes |
 |---|---|---|
-| Deduplicação entre execuções | `dedup.ts` | sem acervo persistente, todo dia é o primeiro dia |
-| Botões publicar/descartar | painel `/admin/prophet-wire` | a ação sumiria no próximo cold start |
-| Histórico de execuções | `run-store.ts` | o painel só mostra o que rodou naquela instância |
-| `revalidate`/ISR em `/anfitriao` | `page.tsx` | a página é prerenderizada estática (`○` no build); notícia nova só apareceria no próximo build |
-| Rate limiting do gatilho | `api/prophet-wire/run` | a trava atual é de processo e não coordena instâncias (apontado pelo eco-security) |
-| Reservir imagens em vez de hotlinkar | `image-resolver.ts` | hoje o navegador do leitor revela o IP ao domínio da fonte |
+| Deduplicação entre execuções | `dedup.ts` | sem acervo persistente, todo dia era o primeiro dia |
+| Histórico de execuções entre cold starts | `run-store.ts` | o painel só mostrava o que rodou naquela instância |
+
+O que a Parte 10 **não** cobriu — pendências técnicas ainda em aberto, não bloqueadas
+por ela:
+
+| Pendente | Onde | Por quê |
+|---|---|---|
+| Botões publicar/descartar | painel `/admin/prophet-wire` | precisa de Server Actions novas sobre o repo persistente — ainda não escritas |
+| `revalidate`/ISR em `/anfitriao` | `page.tsx` | a página continua prerenderizada estática (`○` no build); notícia nova só aparece no próximo build |
+| Rate limiting do gatilho coordenado entre instâncias | `api/prophet-wire/run` | a trava atual é de processo; um lock real exige store compartilhado (Vercel KV/Upstash) |
+| Reservir imagens em vez de hotlinkar | `image-resolver.ts` | hoje o navegador do leitor revela o IP ao domínio da fonte; exige armazenamento (Supabase Storage) |
 
 ## Armadilhas de operação (descobertas na prática)
 
@@ -124,11 +146,12 @@ O que está bloqueado esperando por ela:
 
 ### Bloco D — Persistência e automação (exige chaves do Supabase)
 
-- [ ] **Parte 10 — Repository Supabase (ADIADA por escolha do Lucas; É A ÚNICA QUE FALTA).**
-      impl real de `NewsRepository` e de `RunStore` + migração das tabelas `news`, `sources`,
-      `runs`, `logs`. Publica conforme `config.publishMode`. Exige chaves do Supabase.
-      **Ver a seção "PRÓXIMA NECESSIDADE" no topo deste arquivo** — lista as seis coisas que
-      só passam a funcionar de verdade quando esta parte entrar. → commit+push.
+- [x] **Parte 10 — Repository Supabase (FEITO).** `SupabaseNewsRepository` e
+      `SupabaseRunStore` + migração `0007_prophet_wire.sql` (`prophet_wire_news`,
+      `prophet_wire_runs`; sem tabela `sources` — o registry `sources.ts` já cobre esse
+      papel e nada lê fontes do banco, então criar a tabela seria especulativo). Publica
+      conforme `config.publishMode`. Exige chaves do Supabase no ambiente — **ação manual
+      pendente**, ver a seção "PRÓXIMA NECESSIDADE" no topo deste arquivo. → commit+push.
 - [x] **Parte 11 — Publisher + orquestrador (FEITO).** `publisher.ts` (grava via repo
       respeitando publicado/rascunho, erro isolado por item, conta published) e `pipeline.ts`
       (`runPipeline()` costura collect→parse+janela→normalize→dedup→analyze→generate→publish

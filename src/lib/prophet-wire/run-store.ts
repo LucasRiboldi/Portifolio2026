@@ -13,6 +13,8 @@
  */
 
 import type { LogEntry, RunReport } from "./logger"
+import { isSupabaseServiceConfigured } from "@/lib/supabase/config"
+import { SupabaseRunStore } from "./supabase-run-store"
 
 /** Uma execução registrada, com id e recorte dos erros para o painel. */
 export interface StoredRun extends RunReport {
@@ -63,11 +65,13 @@ export class InMemoryRunStore implements RunStore {
   }
 }
 
-/** Store padrão da aplicação (trocável em testes e na Parte 10). */
+/** Store padrão da aplicação (trocável em testes; Supabase quando configurado). */
 let store: RunStore | null = null
 
 export function defaultRunStore(): RunStore {
-  if (!store) store = new InMemoryRunStore()
+  if (!store) {
+    store = isSupabaseServiceConfigured ? new SupabaseRunStore() : new InMemoryRunStore()
+  }
   return store
 }
 

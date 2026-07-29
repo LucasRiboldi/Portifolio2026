@@ -15,8 +15,10 @@
 import type { NewsItem } from "@/lib/prophet-wire/types"
 import { config } from "@/lib/prophet-wire/config"
 import { InMemoryNewsRepository, type NewsRepository } from "@/lib/prophet-wire/repository"
+import { SupabaseNewsRepository } from "@/lib/prophet-wire/supabase-repository"
 import { resolveImages } from "@/lib/prophet-wire/image-resolver"
 import { silentLogger } from "@/lib/prophet-wire/logger"
+import { isSupabaseServiceConfigured } from "@/lib/supabase/config"
 
 /** Moldura de gravura vazia — a página já usa `.img-empty` à espera de arte. */
 function pendingPlate(alt: string, caption: string) {
@@ -155,15 +157,20 @@ export const seedNews: NewsItem[] = [
 ]
 
 /**
- * Repositório padrão da aplicação. Hoje é a impl in-memory semeada com as 6
- * notícias estáticas; na Parte 10 passa a ser o repositório do Supabase, e esta
- * semente vira o fallback quando o banco não responde. A landing sempre lê pelo
- * repo — nunca da lista crua —, então a troca de impl não toca na página.
+ * Repositório padrão da aplicação. Quando o Supabase está configurado
+ * (Parte 10), usa `SupabaseNewsRepository`; senão cai na impl in-memory
+ * semeada com as 6 notícias estáticas — o fallback honesto quando o banco não
+ * responde. A landing sempre lê pelo repo — nunca da lista crua —, então a
+ * troca de impl não toca na página.
  */
 let repo: NewsRepository | null = null
 
 export function defaultRepository(): NewsRepository {
-  if (!repo) repo = new InMemoryNewsRepository(seedNews)
+  if (!repo) {
+    repo = isSupabaseServiceConfigured
+      ? new SupabaseNewsRepository()
+      : new InMemoryNewsRepository(seedNews)
+  }
   return repo
 }
 
