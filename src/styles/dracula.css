@@ -1,7 +1,16 @@
 /**
  * Dracula — tema oficial (https://draculatheme.com) para o realm DEV.
  * Escopado em `.dracula` para não vazar nos outros realms.
+ *
+ * Esta folha é a PALETA e o catálogo de componentes do realm — e é o que o guia
+ * de design system documenta, por isso nenhuma classe daqui é renomeada ou
+ * removida. A camada semântica (o que cada cor SIGNIFICA, escalas de espaço e
+ * tipo) mora em `dev-tokens.css`; a linguagem de painel técnico e o foco moram
+ * em `dev-hud.css`. Ordem importa: os tokens precisam existir antes de serem
+ * consumidos aqui embaixo.
  */
+@import "./dev-tokens.css";
+@import "./dev-hud.css";
 
 .dracula {
   --d-bg: #282a36;
@@ -27,10 +36,15 @@
   -webkit-font-smoothing: antialiased;
 }
 
+/* Canvas do realm. A largura vem de `--dev-canvas` (cresce até 1440px em telas
+   muito largas em vez de travar em 1120px) e o respiro lateral acompanha a
+   janela — em 320px a margem de 1.25rem fixa comia 12% da linha útil. */
 .dv-container {
-  max-width: 1120px;
+  width: 100%;
+  max-width: var(--dev-canvas);
   margin: 0 auto;
-  padding: 1.5rem 1.25rem 6.5rem; /* espaço pro dock inferior */
+  padding-inline: clamp(0.85rem, 0.4rem + 2vw, 2rem);
+  padding-block: var(--dev-space-5) 6.5rem; /* espaço pro dock inferior */
 }
 
 /* ─── Topbar (logo + troca de universo) ─── */
@@ -281,19 +295,23 @@
 .dv-hero :is(h1, p.dv-hero-title) .c { color: var(--d-cyan); }
 .dv-hero p { color: var(--d-fg); opacity: 0.8; margin-top: 0.6rem; max-width: 44rem; }
 
+/* `auto-fit` em vez de 2→4 colunas fixas: com três indicadores, a grade de 2
+   deixava um buraco na segunda linha e a de 4 deixava uma coluna morta. Agora
+   os indicadores distribuem-se pela largura disponível em qualquer resolução. */
 .dv-stats {
   display: grid;
-  gap: 0.9rem;
-  grid-template-columns: repeat(2, 1fr);
-  margin-top: 1.25rem;
+  gap: var(--dev-space-3);
+  grid-template-columns: repeat(auto-fit, minmax(min(100%, 9.5rem), 1fr));
+  margin-top: var(--dev-space-5);
 }
-@media (min-width: 720px) { .dv-stats { grid-template-columns: repeat(4, 1fr); } }
 .dv-stat {
   border: 1px solid var(--d-current);
   border-radius: var(--d-radius);
   background: var(--d-bg-2);
-  padding: 1rem;
+  padding: var(--dev-space-4);
+  transition: border-color var(--dev-dur-fast) var(--dev-ease);
 }
+.dv-stat:hover { border-color: var(--dev-accent); }
 .dv-stat .n { font-size: 1.9rem; font-weight: 800; line-height: 1; }
 .dv-stat .l { color: var(--d-comment); font-size: 0.78rem; margin-top: 0.35rem; }
 
@@ -372,7 +390,10 @@
 .dv-count { color: var(--d-comment); font-size: 0.75rem; }
 
 /* ─── Timeline (devlogs) ─── */
-.dv-timeline { position: relative; margin-top: 1.5rem; padding-left: 1.5rem; }
+/* `list-style: none` porque a linha do tempo agora é um <ol> de verdade (a
+   ordem carrega significado); o marcador da linha é o ponto desenhado em
+   `.dv-tl-item::before`, não o bullet do navegador. */
+.dv-timeline { position: relative; margin-top: 1.5rem; padding-left: 1.5rem; list-style: none; }
 .dv-timeline::before {
   content: "";
   position: absolute;
@@ -394,7 +415,9 @@
   background: var(--d-bg);
   border: 2px solid var(--d-purple);
 }
-.dv-tl-date { color: var(--d-comment); font-size: 0.75rem; }
+/* `display: block` porque a data virou <time> (inline por padrão) — antes era
+   um <div> e herdava o bloco de graça. */
+.dv-tl-date { display: block; color: var(--d-comment); font-size: 0.75rem; }
 .dv-tl-item h3 { color: var(--d-cyan); font-weight: 700; margin-top: 0.15rem; }
 .dv-prose { color: var(--d-fg); opacity: 0.86; font-size: 0.9rem; margin-top: 0.5rem; }
 .dv-prose h2 { color: var(--d-orange); font-size: 1rem; font-weight: 700; margin: 0.75rem 0 0.25rem; }
@@ -776,11 +799,7 @@
 .learn-ex-diff[data-diff="intermediário"] { background: color-mix(in srgb, var(--d-yellow) 22%, transparent); color: var(--d-yellow); }
 .learn-ex-diff[data-diff="avançado"] { background: color-mix(in srgb, var(--d-red) 22%, transparent); color: var(--d-red); }
 
-/* ─── Acessibilidade: respeita prefers-reduced-motion ─── */
-@media (prefers-reduced-motion: reduce) {
-  .dv-caret,
-  [class*="dv-"],
-  [class*="learn-"] {
-    animation: none !important;
-  }
-}
+/* Acessibilidade: o bloco `prefers-reduced-motion` deste realm foi para
+   `dev-hud.css`, junto com o resto da camada de acessibilidade. O que havia
+   aqui — `[class*="dv-"] { animation: none !important }` — varria o DOM por
+   substring de classe e não admitia exceção. */

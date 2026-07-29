@@ -3,6 +3,13 @@
 import { useState } from "react"
 
 import type { LabRow } from "@/lib/repos/dev"
+import {
+  DevPanel,
+  DevPanelHead,
+  DevPanelFoot,
+  DevExternalLink,
+  TagList,
+} from "@/components/dev/ui/dev-primitives"
 
 const STATUS_LABEL: Record<string, string> = {
   wip: "WIP",
@@ -20,43 +27,46 @@ export function LabView({ items }: { items: LabRow[] }) {
 
   return (
     <div>
-      <div className="dv-controls">
+      {/* `role="group"` + `aria-pressed`: os filtros eram botões mudos — o
+          estado ligado existia só como cor (`data-on`), invisível para quem
+          não vê a tela. `type="button"` porque um <button> sem tipo submete o
+          formulário mais próximo. */}
+      <div className="dv-controls" role="group" aria-label="Filtrar por estado">
         {filters.map((s) => (
-          <button key={s} className="dv-filter" data-on={s === status} onClick={() => setStatus(s)}>
+          <button
+            key={s}
+            type="button"
+            className="dv-filter"
+            data-on={s === status}
+            aria-pressed={s === status}
+            onClick={() => setStatus(s)}
+          >
             {s === "all" ? "todos" : STATUS_LABEL[s] ?? s}
           </button>
         ))}
-        <span className="dv-count">{filtered.length} experimento(s)</span>
+        {/* `aria-live`: a contagem muda por interação, e a mudança precisa ser
+            anunciada — senão o filtro parece não ter feito nada. */}
+        <span className="dv-count" aria-live="polite">
+          {filtered.length} experimento(s)
+        </span>
       </div>
 
-      <div className="dv-grid">
+      <div className="dv-objects mt-5">
         {filtered.map((x) => (
-          <article key={x.id} className="dv-card">
-            <div className="flex items-center justify-between gap-2">
-              <h3>{x.title}</h3>
-              <span className={`dv-status ${x.status}`}>{STATUS_LABEL[x.status] ?? x.status}</span>
-            </div>
+          <DevPanel key={x.id}>
+            <DevPanelHead
+              title={x.title}
+              badge={<span className={`dv-status ${x.status}`}>{STATUS_LABEL[x.status] ?? x.status}</span>}
+            />
             <p>{x.description}</p>
-            <div className="mt-3 flex flex-wrap gap-1.5">
-              {x.stack.map((t) => (
-                <span key={t} className="dv-tag">
-                  {t}
-                </span>
-              ))}
-            </div>
-            <div className="mt-3 flex gap-4 text-sm">
-              {x.demo_url && (
-                <a href={x.demo_url} target="_blank" rel="noreferrer" className="dv-link">
-                  ❯ demo
-                </a>
-              )}
-              {x.repo_url && (
-                <a href={x.repo_url} target="_blank" rel="noreferrer" className="dv-link">
-                  ❯ repo
-                </a>
-              )}
-            </div>
-          </article>
+            <TagList items={x.stack} />
+            {(x.demo_url || x.repo_url) && (
+              <DevPanelFoot>
+                {x.demo_url && <DevExternalLink href={x.demo_url}>demo</DevExternalLink>}
+                {x.repo_url && <DevExternalLink href={x.repo_url}>repositório</DevExternalLink>}
+              </DevPanelFoot>
+            )}
+          </DevPanel>
         ))}
       </div>
     </div>

@@ -1,0 +1,321 @@
+/**
+ * DEV — camada HUD.
+ *
+ * Regra que governa esta folha: nada aqui é decorativo. Cada elemento existe
+ * porque carrega informação que o usuário precisaria procurar de outro jeito —
+ * onde ele está na página (índice de seção), quanto há dentro (contagem), em
+ * que estado o objeto se encontra (status), de onde a informação veio (fonte).
+ * A estética de painel de instrumentos é consequência de mostrar metadados, não
+ * o objetivo.
+ *
+ * Depende de `dev-tokens.css`. Não redefine nenhuma classe `.dv-*` existente:
+ * o guia de design system documenta aquelas e elas continuam intactas.
+ */
+
+/* ─────────────────────────────────────────────────────────────────────────
+   1. FOCO — o buraco de acessibilidade mais grave do realm.
+
+   Antes deste bloco, navegar o realm por teclado era navegar às cegas: dock,
+   filtros, abas, cards e links não tinham indicação de foco alguma (só dois
+   inputs mudavam a borda). Um seletor único cobre tudo o que é focável dentro
+   de `.dracula`, e `:focus-visible` garante que o anel não apareça em clique
+   de mouse.
+   ───────────────────────────────────────────────────────────────────────── */
+.dracula :is(a, button, input, textarea, select, summary, [tabindex]):focus-visible {
+  outline: var(--dev-ring-width) solid var(--dev-ring-color);
+  outline-offset: var(--dev-ring-offset);
+  border-radius: var(--dev-radius-sm);
+}
+
+/* Campos e o dock desenham o próprio arredondamento; o anel acompanha para
+   não cortar quina. */
+.dracula .dv-dock a:focus-visible,
+.dracula .dv-filter:focus-visible,
+.dracula .dv-tab:focus-visible,
+.dracula .dv-copy:focus-visible {
+  border-radius: var(--dev-radius-pill);
+}
+.dracula :is(.dv-search, .dv-tool-field):focus-visible {
+  border-radius: var(--dev-radius-md);
+}
+
+/* ─────────────────────────────────────────────────────────────────────────
+   2. SKIP LINK — salto para o conteúdo.
+
+   O realm tem um dock de 7 destinos antes do conteúdo em toda página. Sem
+   salto, quem usa teclado atravessa os 7 a cada navegação.
+   ───────────────────────────────────────────────────────────────────────── */
+.dv-skip {
+  position: absolute;
+  left: var(--dev-space-2);
+  top: var(--dev-space-2);
+  z-index: 60;
+  padding: var(--dev-space-2) var(--dev-space-4);
+  border-radius: var(--dev-radius-md);
+  background: var(--dev-accent);
+  color: var(--dev-accent-ink);
+  font-size: var(--dev-text-sm);
+  font-weight: 700;
+  transform: translateY(-200%);
+  transition: transform var(--dev-dur-fast) var(--dev-ease);
+}
+.dv-skip:focus-visible {
+  transform: translateY(0);
+}
+
+/* ─────────────────────────────────────────────────────────────────────────
+   3. SEÇÃO — bloco com identificador, título e metadados.
+
+   Substitui `.dv-section-title` solto (que era um h2 órfão, irmão de divs).
+   O identificador numérico não é enfeite: dá ao leitor uma referência estável
+   para citar a seção, e ao documento uma hierarquia visível.
+   ───────────────────────────────────────────────────────────────────────── */
+.dv-section {
+  margin-top: var(--dev-space-7);
+}
+.dv-section-head {
+  display: flex;
+  align-items: baseline;
+  gap: var(--dev-space-3);
+  flex-wrap: wrap;
+  padding-bottom: var(--dev-space-2);
+  border-bottom: 1px solid var(--dev-line);
+}
+.dv-section-id {
+  flex: none;
+  font-size: var(--dev-text-2xs);
+  font-weight: 700;
+  letter-spacing: 0.08em;
+  color: var(--dev-accent);
+}
+.dv-section-head h2 {
+  font-size: var(--dev-text-md);
+  font-weight: 700;
+  color: var(--dev-alert);
+  line-height: 1.2;
+}
+/* Empurra os metadados para a direita da régua. */
+.dv-section-meta {
+  margin-left: auto;
+  font-size: var(--dev-text-2xs);
+  letter-spacing: 0.04em;
+  color: var(--dev-ink-dim);
+  text-transform: uppercase;
+}
+.dv-section-note {
+  flex-basis: 100%;
+  max-width: var(--dev-measure);
+  margin-top: var(--dev-space-1);
+  font-size: var(--dev-text-sm);
+  color: var(--dev-ink-dim);
+}
+.dv-section-body {
+  margin-top: var(--dev-space-4);
+}
+
+/* ─────────────────────────────────────────────────────────────────────────
+   4. METADADOS — linha de pares rótulo/valor.
+
+   O realm exibia dados soltos ("3 experimentos", "TypeScript") sem dizer o que
+   eram. Um par rotulado ocupa quase o mesmo espaço e elimina a adivinhação.
+   ───────────────────────────────────────────────────────────────────────── */
+.dv-meta {
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--dev-space-2) var(--dev-space-4);
+  font-size: var(--dev-text-2xs);
+  color: var(--dev-ink-dim);
+  letter-spacing: 0.03em;
+}
+.dv-meta > * {
+  display: inline-flex;
+  align-items: baseline;
+  gap: var(--dev-space-1);
+}
+.dv-meta dt,
+.dv-meta .k {
+  text-transform: uppercase;
+  opacity: 0.75;
+}
+.dv-meta dd,
+.dv-meta .v {
+  margin: 0;
+  color: var(--dev-ink);
+  font-weight: 600;
+}
+
+/* ─────────────────────────────────────────────────────────────────────────
+   5. PILHA — ritmo vertical previsível.
+
+   Sem isto, o espaçamento entre blocos vinha de `style={{ marginTop }}` inline
+   espalhado pelo JSX, com valores diferentes em cada arquivo.
+   ───────────────────────────────────────────────────────────────────────── */
+.dv-stack {
+  display: grid;
+  gap: var(--dev-space-4);
+}
+.dv-stack-tight {
+  display: grid;
+  gap: var(--dev-space-2);
+}
+.dv-stack-loose {
+  display: grid;
+  gap: var(--dev-space-5);
+}
+
+/* ─────────────────────────────────────────────────────────────────────────
+   6. PAINEL — card com cabeçalho estruturado.
+
+   `.dv-card` continua como está (documentada no guia). `.dv-panel-head` é o
+   arranjo que quatro arquivos repetiam à mão com utilitários Tailwind soltos.
+   ───────────────────────────────────────────────────────────────────────── */
+.dv-panel-head {
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  gap: var(--dev-space-2);
+}
+.dv-panel-head h3 {
+  font-size: var(--dev-text-md);
+  line-height: 1.25;
+}
+.dv-panel-foot {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  justify-content: space-between;
+  gap: var(--dev-space-3);
+  margin-top: var(--dev-space-3);
+  padding-top: var(--dev-space-3);
+  border-top: 1px solid var(--dev-line);
+  font-size: var(--dev-text-sm);
+}
+/* Um único rodapé preenchido não deve desenhar régua para o vazio. */
+.dv-panel-foot:empty {
+  display: none;
+}
+
+/* ─────────────────────────────────────────────────────────────────────────
+   7. GRADE DE OBJETOS — densidade que responde à janela.
+
+   `auto-fit` em vez de `auto-fill`: com poucos itens a grade não deixa
+   colunas fantasmas abertas, o que fazia dois projetos parecerem quatro.
+   ───────────────────────────────────────────────────────────────────────── */
+.dv-objects {
+  display: grid;
+  gap: var(--dev-space-4);
+  grid-template-columns: repeat(auto-fit, minmax(min(100%, 17.5rem), 1fr));
+}
+
+/* ─────────────────────────────────────────────────────────────────────────
+   8. INDICADOR DE ORIGEM — links externos.
+
+   Quatro arquivos escreviam "❯ repo" à mão. O símbolo agora vem do CSS e o
+   componente só informa o destino; o `↗` marca saída do site, informação que
+   antes não existia.
+   ───────────────────────────────────────────────────────────────────────── */
+.dv-out {
+  display: inline-flex;
+  align-items: center;
+  gap: var(--dev-space-1);
+  font-size: var(--dev-text-sm);
+  color: var(--dev-mark);
+}
+.dv-out::before {
+  content: "❯";
+  color: var(--dev-ink-dim);
+}
+.dv-out[data-external="true"]::after {
+  content: "↗";
+  font-size: 0.85em;
+  opacity: 0.7;
+}
+.dv-out:hover {
+  text-decoration: underline;
+}
+
+/* ─────────────────────────────────────────────────────────────────────────
+   9. IMAGEM DE CAPA — reserva de espaço.
+
+   `aspect-ratio` fixo evita que o card salte quando a imagem chega: era CLS
+   medido em Core Web Vitals, não hipótese.
+   ───────────────────────────────────────────────────────────────────────── */
+.dv-cover {
+  display: block;
+  width: 100%;
+  aspect-ratio: 16 / 9;
+  object-fit: cover;
+  border-radius: var(--dev-radius-md);
+  border: 1px solid var(--dev-line);
+  background: var(--dev-surface-0);
+}
+.dv-cover-empty {
+  display: grid;
+  place-items: center;
+  color: var(--dev-ink-dim);
+  font-size: var(--dev-text-sm);
+  text-align: center;
+  padding: var(--dev-space-3);
+}
+
+/* ─────────────────────────────────────────────────────────────────────────
+   10. BARRAS DE PROPORÇÃO.
+
+   Saíram do `style={{}}` inline do componente GSAP, onde as cores estavam
+   escritas à mão e uma delas apontava para `--d-bg-soft`, token que não existe
+   em lugar nenhum do projeto (caía silenciosamente no fallback branco).
+   ───────────────────────────────────────────────────────────────────────── */
+.dv-bars {
+  display: grid;
+  gap: var(--dev-space-3);
+  margin-top: var(--dev-space-3);
+}
+.dv-bar-label {
+  display: flex;
+  justify-content: space-between;
+  gap: var(--dev-space-2);
+  margin-bottom: var(--dev-space-1);
+  font-size: var(--dev-text-xs);
+  color: var(--dev-ink-dim);
+}
+.dv-bar {
+  height: 8px;
+  border-radius: var(--dev-radius-pill);
+  background: var(--dev-surface-2);
+  overflow: hidden;
+}
+.dv-bar-fill {
+  height: 100%;
+  border-radius: inherit;
+  background: linear-gradient(90deg, var(--dev-ok), var(--dev-signal));
+}
+.dv-ink-ok { color: var(--dev-ok); }
+
+/* ─────────────────────────────────────────────────────────────────────────
+   11. MOVIMENTO REDUZIDO.
+
+   O bloco antigo era `[class*="dv-"] { animation: none !important }` — um
+   seletor de atributo que varria o DOM inteiro, atingia qualquer classe futura
+   com "dv-" no nome e, por causa do `!important`, não admitia exceção. Aqui as
+   animações são desligadas pelo nome, e as transições viram instantâneas em
+   vez de continuarem correndo (o bloco antigo esquecia `transition`).
+   ───────────────────────────────────────────────────────────────────────── */
+@media (prefers-reduced-motion: reduce) {
+  .dracula .dv-caret,
+  .dracula .dv-logo .blink,
+  .dracula .learn-connector[data-filled="true"]::after,
+  .dracula .learn-node[data-state="current"] .learn-node-dot,
+  .dracula .gsap-cursor {
+    animation: none;
+  }
+  .dracula *,
+  .dracula *::before,
+  .dracula *::after {
+    transition-duration: 0.01ms;
+    scroll-behavior: auto;
+  }
+  .dracula .dv-card:hover,
+  .dracula .dv-dock a:hover {
+    transform: none;
+  }
+}

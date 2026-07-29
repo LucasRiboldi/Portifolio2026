@@ -36,25 +36,29 @@ export function GsapDemo() {
   )
 
   return (
-    <div ref={root} className="dv-card" style={{ marginTop: "0.5rem" }}>
-      <div className="flex items-baseline justify-between gap-2">
-        <h3 style={{ fontSize: "1rem" }}>
-          stack.animate()<span className="gsap-cursor" style={{ color: "var(--d-green)" }}>▊</span>
+    /* As barras são <meter>-like mas não usam <meter>: o elemento nativo não
+       aceita o preenchimento animado. O papel `img` com `aria-label` entrega o
+       valor a quem não vê a barra — antes o número só existia como texto solto
+       ao lado, sem vínculo com o gráfico. */
+    <div ref={root} className="dv-card">
+      <div className="dv-panel-head">
+        <h3>
+          stack.animate()
+          <span className="gsap-cursor dv-ink-ok" aria-hidden>
+            ▊
+          </span>
         </h3>
         <span className="dv-tag">GSAP · ScrollTrigger</span>
       </div>
-      <div className="mt-3 grid gap-2.5">
+      <div className="dv-bars">
         {BARS.map((b) => (
           <div key={b.label} className="gsap-row">
-            <div className="mb-1 flex justify-between text-xs" style={{ color: "var(--d-comment)" }}>
+            <div className="dv-bar-label">
               <span>{b.label}</span>
               <span>{b.pct}%</span>
             </div>
-            <div style={{ height: 8, borderRadius: 999, background: "var(--d-bg-soft, rgba(255,255,255,0.08))", overflow: "hidden" }}>
-              <div
-                className="gsap-fill"
-                style={{ height: "100%", width: `${b.pct}%`, borderRadius: 999, background: "linear-gradient(90deg, var(--d-green), var(--d-cyan))" }}
-              />
+            <div className="dv-bar" role="img" aria-label={`${b.label}: ${b.pct} por cento`}>
+              <div className="gsap-fill dv-bar-fill" style={{ width: `${b.pct}%` }} />
             </div>
           </div>
         ))}

@@ -16,13 +16,24 @@ export function SnippetsView({ snippets }: { snippets: SnippetRow[] }) {
 
   return (
     <div>
-      <div className="dv-controls">
+      {/* Mesmo conserto do laboratório: estado do filtro exposto por
+          `aria-pressed`, `type="button"` explícito e contagem anunciada. */}
+      <div className="dv-controls" role="group" aria-label="Filtrar por linguagem">
         {languages.map((l) => (
-          <button key={l} className="dv-filter" data-on={l === lang} onClick={() => setLang(l)}>
+          <button
+            key={l}
+            type="button"
+            className="dv-filter"
+            data-on={l === lang}
+            aria-pressed={l === lang}
+            onClick={() => setLang(l)}
+          >
             {l === "all" ? "todas" : l}
           </button>
         ))}
-        <span className="dv-count">{filtered.length} snippet(s)</span>
+        <span className="dv-count" aria-live="polite">
+          {filtered.length} snippet(s)
+        </span>
       </div>
 
       <div className="mt-6 space-y-5">

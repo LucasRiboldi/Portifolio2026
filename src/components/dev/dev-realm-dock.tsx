@@ -37,8 +37,11 @@ export function DevRealmDock() {
       {ITEMS.map(({ href, label, Icon, exact }) => {
         const active = exact ? pathname === href : pathname.startsWith(href)
         return (
-          <Link key={href} href={href} data-active={active} aria-current={active ? "page" : undefined} aria-label={label}>
-            <Icon className="size-[18px]" strokeWidth={2} />
+          /* Sem `aria-label`: o rótulo já está visível dentro do link, e o
+             atributo fazia o leitor de tela anunciar o mesmo texto duas vezes.
+             O ícone é decorativo — quem informa é o texto. */
+          <Link key={href} href={href} data-active={active} aria-current={active ? "page" : undefined}>
+            <Icon className="size-[18px]" strokeWidth={2} aria-hidden />
             <span className="dock-lbl">{label}</span>
           </Link>
         )

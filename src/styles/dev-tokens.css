@@ -1,0 +1,107 @@
+/**
+ * DEV — camada semântica de tokens.
+ *
+ * Por que existe: `dracula.css` guarda a PALETA (`--d-bg`, `--d-purple`…), que é
+ * a identidade do realm e está documentada no guia de design system. Mas paleta
+ * não é sistema: até aqui cada componente escolhia à mão qual cor da paleta
+ * significava "superfície", "linha" ou "perigo", e os espaçamentos eram literais
+ * soltos (0.35rem, 1.1rem, 1.75rem) sem escala nenhuma. Mudar o ritmo vertical
+ * do realm exigia caçar dezenas de números.
+ *
+ * Esta folha nomeia INTENÇÃO em cima da paleta. `--d-*` continua sendo a única
+ * fonte de cor — nada aqui inventa valor cromático novo, tudo deriva. Quem
+ * consome `--dev-*` não precisa saber que roxo é o acento; quem trocar o acento
+ * mexe num lugar só.
+ *
+ * Escopo `.dracula` de propósito: o realm inteiro vive dentro dessa classe, e
+ * assim nenhum token vaza para os outros universos do site.
+ */
+
+.dracula {
+  /* ── Superfícies (do fundo para o objeto) ───────────────────────────── */
+  --dev-surface-0: var(--d-bg); /* fundo da página */
+  --dev-surface-1: var(--d-bg-2); /* painéis, cards, barras */
+  --dev-surface-2: var(--d-current); /* estados hover, preenchimentos */
+
+  /* ── Linhas ─────────────────────────────────────────────────────────── */
+  --dev-line: var(--d-current);
+  --dev-line-strong: color-mix(in srgb, var(--d-comment) 55%, transparent);
+
+  /* ── Texto ──────────────────────────────────────────────────────────── */
+  --dev-ink: var(--d-fg);
+  --dev-ink-soft: color-mix(in srgb, var(--d-fg) 84%, transparent);
+  --dev-ink-dim: var(--d-comment); /* metadados, rótulos, comentários */
+
+  /* ── Papéis semânticos ──────────────────────────────────────────────── */
+  --dev-accent: var(--d-purple); /* estado ativo, seleção, navegação */
+  --dev-accent-ink: var(--d-bg); /* texto SOBRE o acento */
+  --dev-signal: var(--d-cyan); /* identificadores, títulos de objeto */
+  --dev-ok: var(--d-green);
+  --dev-warn: var(--d-yellow);
+  --dev-alert: var(--d-orange);
+  --dev-danger: var(--d-red);
+  --dev-mark: var(--d-pink); /* links de saída, ações */
+
+  /* ── Escala de espaço (base 4px) ────────────────────────────────────
+     Sete degraus cobrem tudo o que o realm usa hoje; a escala é geométrica
+     o suficiente para que dois degraus vizinhos sejam distinguíveis. */
+  --dev-space-1: 0.25rem;
+  --dev-space-2: 0.5rem;
+  --dev-space-3: 0.75rem;
+  --dev-space-4: 1rem;
+  --dev-space-5: 1.5rem;
+  --dev-space-6: 2rem;
+  --dev-space-7: 3rem;
+
+  /* ── Escala tipográfica ─────────────────────────────────────────────
+     Fluida só onde o texto é grande (títulos): corpo e metadados fluidos
+     prejudicam a legibilidade em volume, que é justamente o caso de uso
+     deste realm (documentação técnica longa). */
+  --dev-text-2xs: 0.65rem; /* identificadores, marcadores */
+  --dev-text-xs: 0.72rem; /* tags, status */
+  --dev-text-sm: 0.82rem; /* metadados, legendas */
+  --dev-text-base: 0.9rem; /* corpo */
+  --dev-text-md: 1rem; /* título de card */
+  --dev-text-lg: clamp(1.15rem, 0.9rem + 0.8vw, 1.4rem);
+  --dev-text-xl: clamp(1.6rem, 1.2rem + 1.6vw, 1.9rem); /* título de página */
+  --dev-text-2xl: clamp(1.8rem, 1.2rem + 2.6vw, 2.8rem); /* hero */
+
+  /* ── Raios ──────────────────────────────────────────────────────────── */
+  --dev-radius-sm: 5px;
+  --dev-radius-md: 9px;
+  --dev-radius-lg: var(--d-radius);
+  --dev-radius-pill: 999px;
+
+  /* ── Movimento ──────────────────────────────────────────────────────── */
+  --dev-dur-fast: 0.15s;
+  --dev-dur-base: 0.25s;
+  --dev-ease: cubic-bezier(0.22, 1, 0.36, 1);
+
+  /* ── Foco ───────────────────────────────────────────────────────────
+     Um token só para o anel: assim a espessura e o afastamento são iguais
+     em dock, filtros, campos, cards e links — que era o problema. */
+  --dev-ring-width: 2px;
+  --dev-ring-offset: 2px;
+  --dev-ring-color: var(--d-cyan);
+
+  /* ── Medida de leitura ──────────────────────────────────────────────── */
+  --dev-measure: 68ch;
+
+  /* ── Largura do canvas ──────────────────────────────────────────────
+     O container cresce com a janela em vez de travar em 1120px, mas para
+     em 1440px: acima disso a linha de texto passa da medida confortável e
+     a densidade informacional cai. */
+  --dev-canvas: min(100%, 1120px);
+}
+
+@media (min-width: 1600px) {
+  .dracula {
+    --dev-canvas: min(100%, 1320px);
+  }
+}
+
+@media (min-width: 2200px) {
+  .dracula {
+    --dev-canvas: min(100%, 1440px);
+  }
+}

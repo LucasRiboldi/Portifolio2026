@@ -114,9 +114,20 @@ export function DevToolbox() {
         <span className="dv-count">utilitários que rodam no seu navegador</span>
       </div>
 
-      <div className="dv-tabs">
+      {/* Grupo com `aria-pressed` em vez de `role="tablist"`: tablist obriga a
+          implementar navegação por setas e painéis vinculados, contrato que
+          este seletor não cumpre. Prometer a semântica errada é pior do que
+          usar a mais simples que é verdadeira. */}
+      <div className="dv-tabs" role="group" aria-label="Escolher ferramenta">
         {TABS.map((t) => (
-          <button key={t.id} className="dv-tab" data-on={t.id === tab} onClick={() => setTab(t.id)}>
+          <button
+            key={t.id}
+            type="button"
+            className="dv-tab"
+            data-on={t.id === tab}
+            aria-pressed={t.id === tab}
+            onClick={() => setTab(t.id)}
+          >
             {t.label}
           </button>
         ))}

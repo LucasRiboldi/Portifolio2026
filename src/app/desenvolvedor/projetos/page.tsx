@@ -1,10 +1,21 @@
-import Link from "next/link"
+import type { Metadata } from "next"
 
 import { DevHeader, DevEmpty } from "@/components/dev/dev-header"
 import { getProjects } from "@/lib/repos/projects"
 import { getPageContent } from "@/lib/repos/page-content"
+import {
+  DevPanel,
+  DevPanelHead,
+  DevPanelFoot,
+  DevExternalLink,
+  DevInternalLink,
+  TagList,
+} from "@/components/dev/ui/dev-primitives"
 
-export const metadata = { title: "Projetos" }
+export const metadata: Metadata = {
+  title: "Projetos",
+  description: "Aplicações e produtos construídos, com stack, README e repositório.",
+}
 
 const CATEGORY: Record<string, string> = {
   code: "Código",
@@ -17,61 +28,49 @@ export default async function DevProjectsPage() {
   const [projects, c] = await Promise.all([getProjects(), getPageContent("dev.projetos")])
 
   return (
-    <div>
+    <>
       <DevHeader fn={c.kicker} title={c.title} accent={c.highlight} subtitle={c.subtitle} />
       {projects.length === 0 ? (
         <DevEmpty>Nenhum projeto ainda — adicione em /admin/projects.</DevEmpty>
       ) : (
-        <div className="dv-grid">
+        <div className="dv-objects mt-7">
           {projects.map((p) => (
-            <article key={p.id} className="dv-card flex flex-col">
+            <DevPanel key={p.id} className="flex flex-col">
               {p.coverImage ? (
-                // eslint-disable-next-line @next/next/no-img-element
-                <img src={p.coverImage} alt={p.title} className="img-frame img-wide mb-3 rounded-lg" />
+                /* Dimensões e `aspect-ratio` vêm da classe `.dv-cover`: a capa
+                   entrava sem reserva de espaço e empurrava o card inteiro ao
+                   carregar (CLS). `loading`/`decoding` tiram a imagem do
+                   caminho crítico — a grade pode ter dezenas de capas. */
+                // eslint-disable-next-line @next/next/no-img-element -- capa vem de URL externa arbitrária do admin, fora dos domínios liberados no next/image
+                <img
+                  src={p.coverImage}
+                  alt=""
+                  className="dv-cover mb-3"
+                  loading="lazy"
+                  decoding="async"
+                />
               ) : (
-                <div
-                  className="img-frame img-wide mb-3 grid place-items-center rounded-lg font-mono text-xs"
-                  style={{ background: "var(--d-bg)", color: "var(--d-comment)", border: "1px solid var(--d-current)" }}
-                >
+                <div className="dv-cover dv-cover-empty mb-3" aria-hidden>
                   {"</>"} {p.title}
                 </div>
               )}
-              <div className="flex items-center justify-between gap-2">
-                {p.slug ? (
-                  <Link href={`/desenvolvedor/projetos/${p.slug}`} className="hover:underline">
-                    <h3>{p.title}</h3>
-                  </Link>
-                ) : (
-                  <h3>{p.title}</h3>
-                )}
-                <span className="dv-tag">{CATEGORY[p.category] ?? p.category}</span>
-              </div>
+              <DevPanelHead
+                title={p.title}
+                href={p.slug ? `/desenvolvedor/projetos/${p.slug}` : undefined}
+                badge={<span className="dv-tag">{CATEGORY[p.category] ?? p.category}</span>}
+              />
               <p className="flex-1">{p.description}</p>
-              <div className="mt-3 flex flex-wrap gap-1.5">
-                {p.tags.map((t) => (
-                  <span key={t} className="dv-tag">
-                    {t}
-                  </span>
-                ))}
-              </div>
-              <div className="mt-3 flex items-center justify-between">
-                {p.slug ? (
-                  <Link href={`/desenvolvedor/projetos/${p.slug}`} className="dv-link text-sm">
-                    ver README →
-                  </Link>
-                ) : (
-                  <span />
-                )}
-                {p.href && (
-                  <a href={p.href} target="_blank" rel="noreferrer" className="dv-link text-sm">
-                    ❯ repo
-                  </a>
-                )}
-              </div>
-            </article>
+              <TagList items={p.tags} />
+              {(p.slug || p.href) && (
+                <DevPanelFoot>
+                  {p.slug && <DevInternalLink href={`/desenvolvedor/projetos/${p.slug}`}>ver README</DevInternalLink>}
+                  {p.href && <DevExternalLink href={p.href}>repositório</DevExternalLink>}
+                </DevPanelFoot>
+              )}
+            </DevPanel>
           ))}
         </div>
       )}
-    </div>
+    </>
   )
 }

@@ -125,6 +125,7 @@ export function LearnView({ languages }: { languages: LearnLanguage[] }) {
               type="button"
               className="dv-filter learn-lang"
               data-on={l.id === activeId}
+              aria-pressed={l.id === activeId}
               disabled={soon}
               title={soon ? "Em breve" : `Estudar ${l.name}`}
               onClick={() => !soon && setActiveId(l.id)}
@@ -190,13 +191,14 @@ export function LearnView({ languages }: { languages: LearnLanguage[] }) {
       )}
 
       {/* Abas */}
-      <div className="dv-tabs" style={{ marginTop: "1.5rem" }}>
+      <div className="dv-tabs mt-6" role="group" aria-label="Seção da trilha">
         {TABS.map((t) => (
           <button
             key={t.id}
             type="button"
             className="dv-tab"
             data-on={tab === t.id}
+            aria-pressed={tab === t.id}
             onClick={() => setTab(t.id)}
           >
             {t.label}
