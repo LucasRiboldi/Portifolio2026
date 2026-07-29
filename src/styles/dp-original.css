@@ -645,10 +645,8 @@ hr {
 /* line 564, app/scss/screen.css */
 .helper-colsplit-2 {
   -webkit-column-count: 2;
-     -moz-column-count: 2;
           column-count: 2;
   -webkit-column-gap: 0.5em;
-     -moz-column-gap: 0.5em;
           column-gap: 0.5em;
 }
 
@@ -1053,7 +1051,6 @@ body {
   /* line 736, app/scss/screen.css */
   .newspaper-topheader-imglogo {
     width: 80%;
-    width: -webkit-calc(100% - 6.25em);
     width: calc(100% - 6.25em);
     padding: 0 0.5em 0 0;
   }
@@ -1063,7 +1060,6 @@ body {
   /* line 741, app/scss/screen.css */
   .newspaper-topheader-imglogo {
     width: 70%;
-    width: -webkit-calc(100% - 9.6875em);
     width: calc(100% - 9.6875em);
   }
 }
@@ -1171,7 +1167,6 @@ body {
     float: right;
     margin: 0.5em 0 0 1em;
     width: 75%;
-    width: -webkit-calc(78% - 1em);
     width: calc(78% - 1em);
     padding: 0.25em 0 0 0.25em;
   }
@@ -1328,27 +1323,9 @@ body {
   }
 }
 
-/* line 904, app/scss/screen.css */
-.no-csstransforms .newspaper-toparticle .helper-verticaltext {
-  margin: 0 auto;
-  top: -17px;
-}
-
-/* line 908, app/scss/screen.css */
-.no-csstransforms .newspaper-toparticle-spanwrap {
-  padding-left: 0;
-  padding-top: 6px;
-}
-
-/* line 912, app/scss/screen.css */
-.no-csstransforms .newspaper-toparticle {
-  padding-top: 16px;
-}
-
 /* line 915, app/scss/screen.css */
 .newspaper-toparticle + hr {
   width: 90%;
-  width: -webkit-calc(100% - 1em);
   width: calc(100% - 1em);
   margin: 0 auto;
 }
@@ -1413,7 +1390,6 @@ body {
 /* line 950, app/scss/screen.css */
 .newspaper-toparticle-starttext .helper-colsplit-2 {
   -webkit-column-count: 1;
-     -moz-column-count: 1;
           column-count: 1;
 }
 
@@ -1425,10 +1401,8 @@ body {
   /* line 955, app/scss/screen.css */
   .newspaper-toparticle-starttext .helper-colsplit-2 {
     -webkit-column-count: 2;
-       -moz-column-count: 2;
             column-count: 2;
     -webkit-column-gap: 0.5em;
-       -moz-column-gap: 0.5em;
             column-gap: 0.5em;
     display: inline-block;
   }
@@ -1445,7 +1419,6 @@ body {
   /* line 965, app/scss/screen.css */
   .newspaper-toparticle-starttext .helper-colsplit-2 {
     -webkit-column-count: 1;
-       -moz-column-count: 1;
             column-count: 1;
   }
 }
@@ -1762,9 +1735,7 @@ body {
 @media only screen and (min-width: 48em) {
   /* line 1164, app/scss/screen.css */
   .newspaper-bottomarticle-first figure {
-    -webkit-box-flex: 1;
     -webkit-flex-grow: 1;
-        -ms-flex-positive: 1;
             flex-grow: 1;
     overflow: hidden;
     height: 100%;
@@ -1938,7 +1909,6 @@ body {
   content: '';
   background-color: var(--anf-paper);
   width: 100%;
-  width: -webkit-calc(100% + 1.33333em);
   width: calc(100% + 1.33333em);
   height: 1.125em;
   position: absolute;
@@ -1948,17 +1918,6 @@ body {
           transform: translateX(-50%);
   left: 50%;
   display: inline;
-}
-
-/* line 1283, app/scss/screen.css */
-.no-csscalc .newspaper-weather h2:after {
-  width: 120%;
-  left: -10%;
-}
-
-/* line 1287, app/scss/screen.css */
-.no-csscalc .newspaper-weather h2 {
-  margin-left: -3%;
 }
 
 /* line 1290, app/scss/screen.css */
@@ -2067,7 +2026,6 @@ p.newspaper-weather-cities-cold {
   margin: 0;
   text-transform: uppercase;
   width: 60%;
-  width: -webkit-calc(100% - 115px);
   width: calc(100% - 115px);
   float: left;
   /*768*/
@@ -2257,12 +2215,9 @@ p.newspaper-weather-cities-cold {
     display: -webkit-flex;
     display: -ms-flexbox;
     display: flex;
-    -webkit-box-pack: justify;
     -webkit-justify-content: space-between;
-        -ms-flex-pack: justify;
             justify-content: space-between;
     -webkit-flex-wrap: wrap;
-        -ms-flex-wrap: wrap;
             flex-wrap: wrap;
   }
   /* line 1494, app/scss/screen.css */
@@ -2271,10 +2226,7 @@ p.newspaper-weather-cities-cold {
     display: -webkit-flex;
     display: -ms-flexbox;
     display: flex;
-    -webkit-box-orient: vertical;
-    -webkit-box-direction: reverse;
     -webkit-flex-direction: column-reverse;
-        -ms-flex-direction: column-reverse;
             flex-direction: column-reverse;
   }
   /*768*/
@@ -2293,14 +2245,11 @@ p.newspaper-weather-cities-cold {
       display: -webkit-flex;
       display: -ms-flexbox;
       display: flex;
-      -webkit-box-align: center;
       -webkit-align-items: center;
-          -ms-flex-align: center;
               align-items: center;
     }
     /* line 1505, app/scss/screen.css */
     .newspaper-exclusive-box:after, .newspaper-exclusive-box span:after {
-      top: -webkit-calc(50% - 0.625em);
       top: calc(50% - 0.625em);
     }
     /* line 1507, app/scss/screen.css */
@@ -2322,10 +2271,7 @@ p.newspaper-weather-cities-cold {
       display: -webkit-flex;
       display: -ms-flexbox;
       display: flex;
-      -webkit-box-orient: vertical;
-      -webkit-box-direction: normal;
       -webkit-flex-direction: column;
-          -ms-flex-direction: column;
               flex-direction: column;
     }
     /* line 1517, app/scss/screen.css */
@@ -2341,10 +2287,7 @@ p.newspaper-weather-cities-cold {
       display: -webkit-flex;
       display: -ms-flexbox;
       display: flex;
-      -webkit-box-orient: vertical;
-      -webkit-box-direction: normal;
       -webkit-flex-direction: column;
-          -ms-flex-direction: column;
               flex-direction: column;
     }
     /* line 1522, app/scss/screen.css */
@@ -2430,7 +2373,6 @@ p.newspaper-weather-cities-cold {
         grid-column-start: 1;
     grid-column-end: 6;
     -webkit-align-self: center;
-        -ms-flex-item-align: center;
                 /*-ms-grid-row-align: center;*/
             align-self: center;
     width: auto;
@@ -2441,7 +2383,6 @@ p.newspaper-weather-cities-cold {
         grid-column-start: 6;
     grid-column-end: 7;
     -webkit-align-self: center;
-        -ms-flex-item-align: center;
                 /*-ms-grid-row-align: center;*/
             align-self: center;
     margin: 0;
@@ -2452,7 +2393,6 @@ p.newspaper-weather-cities-cold {
         grid-column-start: 1;
     grid-column-end: 7;
     -webkit-align-self: center;
-        -ms-flex-item-align: center;
                 /*-ms-grid-row-align: center;*/
             align-self: center;
     width: auto;

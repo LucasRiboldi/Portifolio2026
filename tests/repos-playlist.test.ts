@@ -18,6 +18,8 @@ describe("getPlaylistFromFolder — convenção do nome", () => {
   it("parte `Artista - Título` no hífen com espaços", async () => {
     readdir.mockResolvedValue(["Radiohead - Weird Fishes.mp3"])
     const [t] = await getPlaylistFromFolder()
+    expect(t, "a pasta tinha um arquivo válido: a lista não pode voltar vazia").toBeDefined()
+    if (!t) return
     expect(t.artist).toBe("Radiohead")
     expect(t.title).toBe("Weird Fishes")
   })
@@ -34,6 +36,8 @@ describe("getPlaylistFromFolder — convenção do nome", () => {
   it("NÃO parte kebab-case (hífen sem espaços) — vira só título", async () => {
     readdir.mockResolvedValue(["esboco-sem-nome.mp3"])
     const [t] = await getPlaylistFromFolder()
+    expect(t, "a pasta tinha um arquivo válido: a lista não pode voltar vazia").toBeDefined()
+    if (!t) return
     expect(t.artist).toBe("")
     expect(t.title).toBe("esboco-sem-nome")
   })
@@ -41,6 +45,8 @@ describe("getPlaylistFromFolder — convenção do nome", () => {
   it("com vários ` - `, o primeiro é artista e o resto remonta o título", async () => {
     readdir.mockResolvedValue(["Sufjan - Todo - Menos Isto.mp3"])
     const [t] = await getPlaylistFromFolder()
+    expect(t, "a pasta tinha um arquivo válido: a lista não pode voltar vazia").toBeDefined()
+    if (!t) return
     expect(t.artist).toBe("Sufjan")
     expect(t.title).toBe("Todo - Menos Isto")
   })
@@ -62,6 +68,8 @@ describe("getPlaylistFromFolder — filtro, ordem e URL", () => {
   it("codifica espaço e acento na audio_url e serve por /musica", async () => {
     readdir.mockResolvedValue(["Céu - Nção.mp3"])
     const [t] = await getPlaylistFromFolder()
+    expect(t, "a pasta tinha um arquivo válido: a lista não pode voltar vazia").toBeDefined()
+    if (!t) return
     expect(t.audio_url.startsWith(`/${MUSIC_DIR}/`)).toBe(true)
     expect(t.audio_url).toBe(`/${MUSIC_DIR}/${encodeURIComponent("Céu - Nção.mp3")}`)
     expect(t.audio_url).not.toContain(" ")
