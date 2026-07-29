@@ -1,0 +1,148 @@
+/**
+ * CADERNOS DA FOLHA — as páginas de listagem das seções internas.
+ *
+ * Oficina, Mecânicas, Imprensa e Laboratório são cadernos: cada um apresenta
+ * um acervo, não um texto corrido. Por isso não usam a mancha em colunas da
+ * matéria — usam verbete, que é a forma que o impresso dá a uma lista de
+ * coisas: título em versalete, filete, descrição curta e os dados ao lado.
+ *
+ * Estas rotas usavam classes `pr-*` de `prophet.css`, folha que NÃO é
+ * carregada em `/anfitriao` — e cujas variáveis vivem sob `.prophet`, escopo
+ * que esta rota também não tem. O resultado era página sem estilo nenhum.
+ *
+ * A cabeça (folio, título, olho) vem de `anfitriao-newspaper.css`, que o
+ * layout do realm carrega.
+ */
+
+/* Atravessa a grelha de seis colunas do original, como a matéria. */
+.dpx-cad {
+  grid-column: 1 / -1;
+  padding-block: var(--anf-space-6);
+}
+
+/* ─── Verbetes ────────────────────────────────────────────────────────
+   Uma coluna em tela estreita; duas a partir do tablet. Não há terceira: o
+   verbete tem descrição de duas ou três linhas, e em três colunas a linha
+   fica curta demais para prosa. */
+.dpx-verbetes {
+  display: grid;
+  gap: var(--anf-space-6);
+}
+@media (min-width: 48em) {
+  .dpx-verbetes {
+    grid-template-columns: repeat(2, 1fr);
+    column-gap: var(--anf-space-8);
+  }
+}
+
+.dpx-verbete {
+  padding-top: var(--anf-space-3);
+  border-top: 1px solid var(--anf-rule);
+}
+.dpx-verbete h3 {
+  font-family: var(--anf-head);
+  font-size: var(--anf-text-md);
+  font-weight: 700;
+  line-height: 1.2;
+  color: var(--anf-ink);
+}
+.dpx-verbete h3 a {
+  text-decoration: underline;
+  text-underline-offset: 3px;
+}
+.dpx-verbete p {
+  margin-top: var(--anf-space-2);
+  font-family: var(--anf-body);
+  font-size: var(--anf-text-base);
+  line-height: 1.5;
+  color: var(--anf-ink-2);
+}
+
+/* Linha de dados do verbete: dificuldade, jogadores, duração, formato. */
+.dpx-verbete-dados {
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--anf-space-1) var(--anf-space-4);
+  margin-top: var(--anf-space-2);
+  font-family: var(--anf-head);
+  font-size: var(--anf-text-xs);
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+  color: var(--anf-ink-3);
+}
+.dpx-verbete-dados > * {
+  display: inline-flex;
+  gap: 0.35em;
+}
+.dpx-verbete-dados dt {
+  opacity: 0.75;
+}
+.dpx-verbete-dados dd {
+  margin: 0;
+  font-weight: 700;
+  color: var(--anf-ink-2);
+}
+
+/* Selo de estado — o impresso carimba, não colore. */
+.dpx-selo {
+  display: inline-block;
+  padding: 0.05rem 0.5rem;
+  border: 1px solid var(--anf-rule);
+  font-family: var(--anf-head);
+  font-size: var(--anf-text-xs);
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  color: var(--anf-ink);
+}
+.dpx-selo[data-estado="publicado"],
+.dpx-selo[data-estado="stable"] {
+  background: var(--anf-paper-3);
+}
+.dpx-selo[data-estado="playtest"] {
+  border-style: dashed;
+}
+.dpx-selo[data-estado="conceito"] {
+  border-style: dotted;
+  color: var(--anf-ink-3);
+}
+
+/* Etiquetas de assunto. */
+.dpx-etiquetas {
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--anf-space-1) var(--anf-space-2);
+  margin: var(--anf-space-2) 0 0;
+  padding: 0;
+  list-style: none;
+  font-family: var(--anf-head);
+  font-size: var(--anf-text-xs);
+  color: var(--anf-ink-3);
+}
+.dpx-etiquetas li::before {
+  content: "❦ ";
+  color: var(--anf-accent);
+}
+
+/* Aviso de caderno vazio — no impresso, a nota da redação. */
+.dpx-cad-vazio {
+  margin-top: var(--anf-space-6);
+  padding: var(--anf-space-6);
+  border: 1px dashed var(--anf-rule);
+  font-family: var(--anf-body);
+  font-style: italic;
+  text-align: center;
+  color: var(--anf-ink-2);
+}
+
+/* Volta à primeira página, igual à da matéria. */
+.newspaper .dpx-cad-volta {
+  display: inline-block;
+  margin-top: var(--anf-space-8);
+  padding-top: var(--anf-space-3);
+  border-top: 3px double var(--anf-rule);
+  font-family: var(--anf-head);
+  font-size: var(--anf-text-sm);
+  color: var(--anf-ink);
+  text-decoration: underline;
+  text-underline-offset: 3px;
+}

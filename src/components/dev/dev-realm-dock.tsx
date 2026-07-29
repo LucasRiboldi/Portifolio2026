@@ -9,6 +9,10 @@ import {
   Wrench,
   Code2,
   GraduationCap,
+  BookOpen,
+  PenLine,
+  Lightbulb,
+  Sparkles,
   Orbit,
   type LucideIcon,
 } from "lucide-react"
@@ -20,12 +24,24 @@ interface DockItem {
   exact?: boolean
 }
 
+/**
+ * Os destinos do realm.
+ *
+ * Wiki, blog, ideias e skills tinham tabela e tela de painel, mas nenhuma
+ * rota — o conteúdo era publicado e ficava inalcançável. Com as páginas
+ * criadas, entram aqui: o dock é a única navegação do realm, e destino fora
+ * dele é destino que ninguém acha.
+ */
 const ITEMS: DockItem[] = [
   { href: "/desenvolvedor", label: "início", Icon: Home, exact: true },
   { href: "/desenvolvedor/projetos", label: "projetos", Icon: FolderGit2 },
   { href: "/desenvolvedor/laboratorio", label: "lab", Icon: FlaskConical },
   { href: "/desenvolvedor/ferramentas", label: "tools", Icon: Wrench },
   { href: "/desenvolvedor/codigo", label: "código", Icon: Code2 },
+  { href: "/desenvolvedor/wiki", label: "wiki", Icon: BookOpen },
+  { href: "/desenvolvedor/blog", label: "blog", Icon: PenLine },
+  { href: "/desenvolvedor/ideias", label: "ideias", Icon: Lightbulb },
+  { href: "/desenvolvedor/skills", label: "skills", Icon: Sparkles },
   { href: "/desenvolvedor/learn", label: "learn", Icon: GraduationCap },
   { href: "/portal", label: "portal", Icon: Orbit },
 ]

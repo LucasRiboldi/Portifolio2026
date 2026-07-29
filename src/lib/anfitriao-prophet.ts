@@ -336,8 +336,19 @@ export const index = [
 ]
 
 /** Cadernos anunciados na barra de seções (mapeados às rotas reais). */
+/**
+ * Cadernos desta edição — a barra de navegação sob a linha de data.
+ *
+ * Quatro dos cadernos existiam como tabela e tela de painel havia meses, sem
+ * rota nenhuma que os mostrasse; agora que têm página, entram aqui. A barra é
+ * a única porta para eles: caderno fora desta lista é caderno que ninguém
+ * encontra.
+ */
 export const sections = [
-  { label: "Reviews", href: "/anfitriao/laboratorio" },
+  { label: "Laboratório", href: "/anfitriao/laboratorio" },
+  { label: "Oficina", href: "/anfitriao/oficina" },
+  { label: "Mecânicas", href: "/anfitriao/mecanicas" },
+  { label: "Imprensa", href: "/anfitriao/imprensa" },
   { label: "Outras Edições", href: "/portal" },
 ]
 

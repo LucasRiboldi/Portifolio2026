@@ -292,7 +292,57 @@
 .dv-ink-ok { color: var(--dev-ok); }
 
 /* ─────────────────────────────────────────────────────────────────────────
-   11. MOVIMENTO REDUZIDO.
+   11. TABELA TÉCNICA.
+
+   Para dados tabulares densos — o catálogo de skills tem dezenas de linhas, e
+   cartão ali vira rolagem infinita com o dado acionável (o comando) perdido no
+   meio da decoração.
+
+   O invólucro rola sozinho: numa tabela de duas colunas em 320px, a
+   alternativa seria quebrar o comando no meio, e comando quebrado não se
+   copia.
+   ───────────────────────────────────────────────────────────────────────── */
+.dv-table-wrap {
+  overflow-x: auto;
+  border: 1px solid var(--dev-line);
+  border-radius: var(--dev-radius-lg);
+  background: var(--dev-surface-1);
+}
+.dv-table {
+  width: 100%;
+  border-collapse: collapse;
+  font-size: var(--dev-text-sm);
+  text-align: left;
+}
+.dv-table thead th {
+  padding: var(--dev-space-2) var(--dev-space-3);
+  border-bottom: 1px solid var(--dev-line);
+  font-size: var(--dev-text-2xs);
+  font-weight: 700;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  color: var(--dev-ink-dim);
+  white-space: nowrap;
+}
+.dv-table tbody th,
+.dv-table td {
+  padding: var(--dev-space-2) var(--dev-space-3);
+  border-top: 1px solid color-mix(in srgb, var(--dev-line) 55%, transparent);
+  vertical-align: baseline;
+  font-weight: 400;
+}
+.dv-table tbody th {
+  white-space: nowrap;
+}
+.dv-table td {
+  color: var(--dev-ink-soft);
+}
+.dv-table tbody tr:hover {
+  background: color-mix(in srgb, var(--dev-surface-2) 45%, transparent);
+}
+
+/* ─────────────────────────────────────────────────────────────────────────
+   12. MOVIMENTO REDUZIDO.
 
    O bloco antigo era `[class*="dv-"] { animation: none !important }` — um
    seletor de atributo que varria o DOM inteiro, atingia qualquer classe futura
