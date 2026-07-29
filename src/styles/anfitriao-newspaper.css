@@ -461,6 +461,13 @@
   padding-right: 0;
 }
 
+/** Coluna de ano que ABRE a linha: algarismos alinhados, mas com o respiro
+    à direita que a `.num` abre mão por encostar na borda da tabela. */
+.dpx-table .year {
+  font-variant-numeric: tabular-nums lining-nums;
+  white-space: nowrap;
+}
+
 /** A gravura de dados — traço de nanquim, sem preenchimento. */
 .dpx-chart {
   width: 100%;

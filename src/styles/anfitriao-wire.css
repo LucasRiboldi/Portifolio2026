@@ -39,6 +39,33 @@
   color: var(--anf-ink);
 }
 
+/* Procedência do quadro de mercado — miúda, sob a última linha de cotação. */
+.dpx-market-note {
+  margin: 0.35em 0 0;
+  font-family: var(--anf-body);
+  font-size: var(--anf-text-xs);
+  font-style: italic;
+  text-align: center;
+  color: var(--anf-ink-2);
+}
+
+/* Ano e autoria de cada verbete da linhagem — miúdos, sem roubar o título. */
+.dpx-term-year {
+  font-family: var(--anf-body);
+  font-weight: 400;
+  font-size: var(--anf-text-xs);
+  color: var(--anf-ink-2);
+}
+
+.dpx-term-author {
+  display: block;
+  font-family: var(--anf-head);
+  font-size: var(--anf-text-xs);
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+  color: var(--anf-ink-2);
+}
+
 /* Chamada de leitura da faixa EXCLUSIVO — alinhada à direita, como o
    original alinha a sua. */
 .dpx-exclusive-cta {

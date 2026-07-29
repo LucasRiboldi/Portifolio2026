@@ -12,6 +12,8 @@ import {
   colophon,
   coupon,
   playtests,
+  awards,
+  lineage,
   circulation,
   signature,
   registryNumber,
@@ -304,6 +306,9 @@ export default async function DailyProphetFront() {
             </li>
           ))}
         </ul>
+        {/* Procedência dos números, impressa junto — quadro sem fonte é
+            ornamento, não notícia. */}
+        <p className="dpx-market-note">{servicebar.marketNote}</p>
       </section>
 
       {/* ─── CHAMADA — as últimas notícias em telegrama ─── */}
@@ -359,21 +364,40 @@ export default async function DailyProphetFront() {
         </span>
         <header className="dpx-band-head">
           <h2 className="dpx-band-title" id="oficina-titulo">
-            Caderno da Oficina
+            Coleção da Casa
           </h2>
-          <p className="dpx-band-sub">Da bancada: números, quadros e o índice técnico</p>
+          <p className="dpx-band-sub">
+            Os premiados, a linhagem do ofício e o índice técnico das mesas
+          </p>
         </header>
 
         <div className="dpx-zone dpx-zone--3">
-          {/* Coluna I — curiosidades e o primeiro classificado */}
+          {/* Coluna I — o quadro de láureas e o primeiro classificado */}
           <div>
             <div className="dpx-box">
-              <p className="dpx-box-title">{boxes.curio.title}</p>
-              <ul className="dpx-list dpx-list--fleuron">
-                {boxes.curio.items.map((c) => (
-                  <li key={c}>{c}</li>
-                ))}
-              </ul>
+              <table className="dpx-table">
+                <caption>{awards.caption}</caption>
+                <thead>
+                  <tr>
+                    {awards.head.map((h) => (
+                      <th key={h}>{h}</th>
+                    ))}
+                  </tr>
+                </thead>
+                <tbody>
+                  {awards.rows.map((r) => (
+                    <tr key={`${r.year}-${r.title}`}>
+                      {/* Não usa `.num`: aquela classe zera o padding à direita
+                          para encostar o número na borda da tabela, e serve à
+                          ÚLTIMA coluna. Aqui o ano abre a linha — sem padding
+                          ele colava no título ("2024Sky Team"). */}
+                      <td className="year">{r.year}</td>
+                      <td>{r.title}</td>
+                      <td>{r.prize}</td>
+                    </tr>
+                  ))}
+                </tbody>
+              </table>
             </div>
 
             <div className="dpx-ad" aria-label="Anúncio publicitário">
@@ -386,8 +410,21 @@ export default async function DailyProphetFront() {
             </div>
           </div>
 
-          {/* Coluna II — o quadro de playtests e a gravura de tiragem */}
+          {/* Coluna II — a linhagem, o quadro de playtests e a gravura */}
           <div>
+            <div className="dpx-box">
+              <p className="dpx-box-title">{lineage.title}</p>
+              {lineage.items.map((l) => (
+                <p key={l.title} className="dpx-term">
+                  <b>
+                    {l.title} <span className="dpx-term-year">{l.year}</span>
+                  </b>{" "}
+                  — <em>{l.note}</em>
+                  <span className="dpx-term-author">{l.author}</span>
+                </p>
+              ))}
+            </div>
+
             <div className="dpx-box">
               <table className="dpx-table">
                 <caption>{playtests.caption}</caption>
@@ -453,6 +490,15 @@ export default async function DailyProphetFront() {
               <ul className="dpx-list dpx-list--dash">
                 {briefs.items.map((b) => (
                   <li key={b}>{b}</li>
+                ))}
+              </ul>
+            </div>
+
+            <div className="dpx-box">
+              <p className="dpx-box-title">{boxes.curio.title}</p>
+              <ul className="dpx-list dpx-list--fleuron">
+                {boxes.curio.items.map((c) => (
+                  <li key={c}>{c}</li>
                 ))}
               </ul>
             </div>

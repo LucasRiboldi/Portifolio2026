@@ -18,24 +18,35 @@ export const paper = {
   registry: "Registrado na Estação Geral dos Correios como jornal",
 } as const
 
-/** Barra de serviço abaixo do masthead — clima, cotações, efemérides. */
+/**
+ * Zona 6 — MERCADO FINANCEIRO E COMÉRCIO.
+ *
+ * A praça lida em tiragem: os títulos de maior circulação do ofício, jogos de
+ * tabuleiro e de cartas na mesma tábua, como um quadro de cotações.
+ *
+ * Sobre os números: são as tiragens DECLARADAS PELAS EDITORAS e repetidas na
+ * imprensa do ramo — ordem de grandeza, não auditoria. A legenda diz isso na
+ * folha, porque um quadro de números sem procedência é ornamento, não notícia.
+ */
 export const servicebar = {
   weather: {
     title: "Mercado Financeiro e Comércio",
     rows: [
-      ["manhã", "dados quentes ↑"],
-      ["tarde", "blefe encoberto"],
-      ["noite", "sorte variável"],
+      ["Uno · cartas", "150 mi"],
+      ["Catan", "40 mi"],
+      ["Ticket to Ride", "15 mi"],
     ] as [string, string][],
   },
   quotes: {
-    title: "Cotações da Oficina",
+    title: "Cotações da Praça",
     rows: [
-      ["Filamento PLA", "3/6 a libra"],
-      ["Cartão 300g", "1/2 a folha"],
-      ["Meeple de faia", "9d a grosa"],
+      ["Carcassonne", "12 mi"],
+      ["Pandemic", "5 mi"],
+      ["Wingspan", "1 mi"],
     ] as [string, string][],
   },
+  /** Rodapé do quadro — a procedência, impressa junto. */
+  marketNote: "Exemplares vendidos, conforme tiragem declarada pelas editoras.",
   ephemeris: {
     title: "Efemérides",
     lines: [
@@ -44,6 +55,82 @@ export const servicebar = {
       "Fecho da edição à meia-noite",
     ],
   },
+}
+
+/**
+ * Zona 5 — COLEÇÃO · os premiados.
+ *
+ * O quadro de láureas do ofício. Todos os registros abaixo são verificáveis
+ * nos anais dos próprios prêmios; nenhum foi inventado para encher a coluna, e
+ * por isso a lista para em 2024 — o que veio depois entra quando o telégrafo
+ * trouxer, não antes.
+ */
+export const awards = {
+  title: "Premiados",
+  caption: "O louro alemão e seus pares — os anos que fizeram época",
+  head: ["Ano", "Título", "Láurea"],
+  rows: [
+    { year: "2024", title: "Sky Team", prize: "Spiel des Jahres" },
+    { year: "2024", title: "Daybreak", prize: "Kennerspiel" },
+    { year: "2023", title: "Dorfromantik", prize: "Spiel des Jahres" },
+    { year: "2022", title: "Cascadia", prize: "Spiel des Jahres" },
+    { year: "2019", title: "Wingspan", prize: "Kennerspiel" },
+    { year: "2018", title: "Azul", prize: "Spiel des Jahres" },
+    { year: "2013", title: "Hanabi", prize: "Spiel des Jahres" },
+    { year: "2009", title: "Dominion", prize: "Spiel des Jahres" },
+    { year: "2004", title: "Ticket to Ride", prize: "Spiel des Jahres" },
+    { year: "2001", title: "Carcassonne", prize: "Spiel des Jahres" },
+    { year: "1995", title: "Catan", prize: "Spiel des Jahres" },
+  ],
+}
+
+/**
+ * Zona 5 — COLEÇÃO · os fundadores.
+ *
+ * Não é lista de vendas (essa está no quadro de mercado): é a linhagem. Cada
+ * verbete registra o título que INAUGUROU uma família de jogo, com autoria e
+ * ano — o que um leitor precisa para entender de onde veio o que joga hoje.
+ */
+export const lineage = {
+  title: "Linhagem do Ofício",
+  items: [
+    {
+      year: "1993",
+      title: "Magic: The Gathering",
+      author: "Richard Garfield",
+      note: "funda o jogo de cartas colecionável; toda a praça de cartas descende daqui",
+    },
+    {
+      year: "1995",
+      title: "Catan",
+      author: "Klaus Teuber",
+      note: "leva o jogo alemão ao mundo e abre a era moderna do tabuleiro",
+    },
+    {
+      year: "2000",
+      title: "Carcassonne",
+      author: "Klaus-Jürgen Wrede",
+      note: "consagra a colocação de peças — e batiza o «meeple»",
+    },
+    {
+      year: "2008",
+      title: "Pandemic",
+      author: "Matt Leacock",
+      note: "firma o jogo cooperativo: a mesa inteira contra o tabuleiro",
+    },
+    {
+      year: "2008",
+      title: "Dominion",
+      author: "Donald X. Vaccarino",
+      note: "inventa a construção de baralho durante a própria partida",
+    },
+    {
+      year: "2019",
+      title: "Wingspan",
+      author: "Elizabeth Hargrave",
+      note: "prova que motor de recursos e tema de história natural convivem",
+    },
+  ],
 }
 
 /** Manchete principal da semana. */
@@ -105,11 +192,13 @@ export const reports = [
 /** Caixas espalhadas — curiosidades, estatísticas, avisos. */
 export const boxes = {
   curio: {
-    title: "Curiosidades",
+    title: "Curiosidades do Ofício",
     items: [
-      "O «meeple» só ganhou nome em 2000 — antes disso, era apenas «o bonequinho».",
+      "O «meeple» nasceu no Carcassonne: o nome é invenção de uma jogadora, contração de «my people».",
       "Dados de vinte faces precedem o RPG em dois mil anos: há exemplares no Egito ptolomaico.",
       "O baralho de 52 cartas espelha o ano: 52 semanas, 4 estações, 13 lunações.",
+      "«Jogo alemão» virou gênero por causa do prêmio: o Spiel des Jahres premia desde 1979.",
+      "O Hanabi ganhou o louro de 2013 sendo um jogo de cartas em que ninguém vê a própria mão.",
     ],
   },
   numbers: {
@@ -128,11 +217,13 @@ export const boxes = {
   grimoire: {
     title: "No Índice Técnico",
     items: [
-      { term: "Deckbuilding", note: "construção de baralho durante a partida" },
+      { term: "Deckbuilding", note: "construção de baralho durante a partida — ver Dominion" },
+      { term: "Draft", note: "escolher uma carta e passar a mão adiante — ver 7 Wonders" },
+      { term: "Trick-taking", note: "vaza: cada rodada tem uma carta que vence as outras" },
       { term: "Worker Placement", note: "alocação de trabalhadores e disputa de espaços" },
+      { term: "Tile Laying", note: "colocação de peças que formam o tabuleiro ao jogar" },
       { term: "Push Your Luck", note: "a tensão de arriscar mais um dado" },
-      { term: "Economia de Recursos", note: "conversão, escassez e motores" },
-      { term: "Assimetria", note: "facções com regras próprias, equilibradas" },
+      { term: "Cooperativo", note: "a mesa inteira contra o jogo — ver Pandemic" },
       { term: "Legacy", note: "campanhas que alteram o jogo em definitivo" },
     ],
   },
@@ -141,32 +232,32 @@ export const boxes = {
 /** Pequenos anúncios classificados — o tempero do jornal. */
 export const ads = [
   {
+    head: "BARALHOS SOB MEDIDA",
+    body: "Cartas de linho ou liso, 300 a 330g, verso uniforme e canto arredondado. Tiragem curta para protótipo, longa para edição. O baralho é a peça que mais se toca — não se economiza nela.",
+    sign: "Prelo & Vinco, Lda. — Rua do Corte, 8",
+  },
+  {
     head: "RESINA & FILAMENTO",
-    body: "Fornecemos PLA, PETG e resina de alta definição para o cavalheiro que imprime suas próprias miniaturas. Amostras mediante carta.",
+    body: "Fornecemos PLA, PETG e resina de alta definição para o cavalheiro que imprime suas próprias miniaturas e marcadores. Amostras mediante carta.",
     sign: "Casa Prometeu — Rua da Bancada, 12",
   },
   {
-    head: "CARTÃO DE PRIMEIRA",
-    body: "Gramaturas de 250 a 350g, corte e vinco sob medida. Não há protótipo pobre — há cartão mal escolhido.",
-    sign: "Prelo & Vinco, Lda.",
-  },
-  {
     head: "PROCURA-SE",
-    body: "Playtesters de constituição robusta e paciência incomum. Paga-se em pizza e em créditos na caixa.",
+    body: "Playtesters de constituição robusta e paciência incomum, para mesas de tabuleiro e de cartas. Paga-se em pizza e em créditos na caixa.",
     sign: "Dirigir-se a esta Redação",
   },
 ] as const
 
-/** Notícias curtas em telegrama. */
+/** Notícias curtas em telegrama — a bancada e a praça, em linha única. */
 export const briefs = {
   title: "Coleção em Telegrama",
   items: [
+    "CARTAS — Terceiro corte do baralho aprovado sem emendas; parte para o prelo.",
+    "TABULEIRO — Protótipo de colocação de peças chega à quinta versão de mapa.",
+    "PREMIADOS — Quadro de láureas atualizado até o louro alemão de 2024.",
     "MINIATURAS — Nova leva sai do tanque de cura; pintura em lavagem começa segunda.",
     "3D — Bico de 0,2mm restabelecido após entupimento; camadas voltam ao normal.",
-    "RPG — Ficha reduzida a meia folha; mestres relatam alívio geral.",
-    "CROWDFUNDING — Campanha em estudo; caixa e frete ainda em contas.",
-    "TOKENS — Lote de fichas em MDF chega com queimadura de laser; será refeito.",
-    "CARTAS — Terceiro corte de baralho aprovado sem emendas.",
+    "MERCADO — Tiragens declaradas revistas: Uno segue à frente da praça de cartas.",
   ],
 }
 
@@ -267,10 +358,10 @@ export const playtests = {
   caption: "Bancada da quinzena — sessões e veredito",
   head: ["Protótipo", "Jog.", "Nota"],
   rows: [
-    { item: "Feira de Ossos", players: "2–4", score: "8" },
-    { item: "Rota do Sal", players: "3–5", score: "6" },
-    { item: "Casa Torta", players: "2", score: "9" },
-    { item: "Pilha de Cartas", players: "1–4", score: "5" },
+    { item: "Feira de Ossos — tabuleiro", players: "2–4", score: "8" },
+    { item: "Rota do Sal — tabuleiro", players: "3–5", score: "6" },
+    { item: "Casa Torta — cartas", players: "2", score: "9" },
+    { item: "Pilha de Vazas — cartas", players: "1–4", score: "5" },
   ],
 }
 
