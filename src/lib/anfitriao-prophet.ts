@@ -262,22 +262,49 @@ export const briefs = {
 }
 
 /**
- * Índice / seções — o menu incorporado como sumário de jornal.
+ * AS ZONAS DA FOLHA — fonte única, em ORDEM DE PÁGINA.
  *
- * As entradas com `href` de âncora apontam para as zonas editoriais da
- * primeira página (as mesmas do menu sanduíche, em `section-nav.tsx`). Antes
- * havia só a rota do Laboratório, e o rodapé — que é uma grelha de colunas
- * automáticas — ficava com a maior parte da largura vazia.
+ * Esta lista alimenta as três coisas que precisam concordar entre si: o menu
+ * sanduíche (`section-nav.tsx`), o índice impresso no rodapé e o título
+ * visível de cada zona. Antes a lista existia duplicada no componente do menu
+ * e no índice — duas cópias que já divergiam em nome e em ordem.
+ *
+ * A REGRA: todo bloco de conteúdo da página pertence a uma destas zonas e
+ * carrega a âncora correspondente. Se um bloco novo não couber em nenhuma,
+ * acrescenta-se a zona AQUI — e ela aparece no menu e no índice de uma vez.
+ *
+ * A ordem é a de LEITURA da folha, não a da lista original de referência:
+ * "Colunas de Texto", "Ilustrações" e "Editorial" convivem lado a lado dentro
+ * da matéria de capa, e um menu que os listasse fora dessa ordem mandaria o
+ * leitor para trás a cada clique.
+ */
+export const zones = [
+  { id: "anf-manchete-principal", label: "Manchete Principal", page: "I" },
+  { id: "anf-colunas-texto", label: "Colunas de Texto", page: "I" },
+  // Editorial antes de Ilustrações: o aside do editorial abre no alto da
+  // matéria de capa e a gravura vem mais abaixo. Ordem conferida medindo a
+  // posição real de cada âncora na folha, não pela intuição da diagramação.
+  { id: "anf-editorial", label: "Editorial", page: "I" },
+  { id: "anf-ilustracoes", label: "Ilustrações", page: "I" },
+  { id: "anf-noticias-secundarias", label: "Notícias Secundárias", page: "II" },
+  { id: "anf-noticias-internacionais", label: "Notícias Internacionais", page: "II" },
+  { id: "anf-mercado", label: "Mercado Financeiro e Comércio", page: "II" },
+  { id: "anf-colecao", label: "Coleção", page: "III" },
+  { id: "anf-anuncios", label: "Anúncios Publicitários", page: "III" },
+  { id: "anf-servico", label: "Serviço ao Leitor", page: "IV" },
+  { id: "anf-expediente", label: "Expediente", page: "IV" },
+  { id: "anf-indice", label: "Índice desta Edição", page: "IV" },
+] as const
+
+/**
+ * Índice impresso no rodapé — as zonas acima, mais a única rota externa da
+ * folha. Não lista a si mesmo (`anf-indice`): um sumário que se cita é ruído.
  */
 export const index = [
+  ...zones
+    .filter((z) => z.id !== "anf-indice")
+    .map((z) => ({ label: z.label, href: `#${z.id}`, page: z.page })),
   { label: "Laboratório de Protótipos", href: "/anfitriao/laboratorio", page: "IV" },
-  { label: "Manchete Principal", href: "#anf-manchete-principal", page: "I" },
-  { label: "Notícias Secundárias", href: "#anf-noticias-secundarias", page: "I" },
-  { label: "Notícias Internacionais", href: "#anf-noticias-internacionais", page: "II" },
-  { label: "Mercado & Comércio", href: "#anf-mercado", page: "II" },
-  { label: "Coleção", href: "#anf-colecao", page: "III" },
-  { label: "Editorial", href: "#anf-editorial", page: "I" },
-  { label: "Classificados", href: "#anf-anuncios", page: "III" },
 ]
 
 /** Cadernos anunciados na barra de seções (mapeados às rotas reais). */

@@ -1,25 +1,23 @@
 "use client"
 
 /**
- * Menu sanduíche flutuante da primeira página — navega para as 9 zonas
- * editoriais da folha (ver a âncora invisível que cada zona carrega em
- * `page.tsx`, classe `helper-hide`). Fica ao lado esquerdo do volume da
- * edição, na linha de data, escondido até o leitor clicar.
+ * Menu sanduíche flutuante da primeira página — navega para TODAS as zonas
+ * editoriais da folha, na ordem em que elas aparecem.
+ *
+ * A lista vem de `zones` (`anfitriao-prophet.ts`), a mesma que alimenta o
+ * índice do rodapé. Antes ela era declarada aqui, duplicada — e as duas
+ * cópias já haviam divergido em nome e em ordem. Cada zona carrega em
+ * `page.tsx` uma âncora invisível (`helper-hide`) com o `id` correspondente;
+ * é o que permite auditar a cobertura: zona sem âncora não rola, âncora sem
+ * zona não aparece no menu.
+ *
+ * Fica ao lado esquerdo do volume da edição, na linha de data, escondido até
+ * o leitor clicar.
  */
 
 import { useState } from "react"
 
-const ZONES = [
-  { id: "anf-manchete-principal", label: "Manchete principal" },
-  { id: "anf-noticias-secundarias", label: "Notícias secundárias" },
-  { id: "anf-colunas-texto", label: "Colunas de texto" },
-  { id: "anf-noticias-internacionais", label: "Notícias internacionais" },
-  { id: "anf-colecao", label: "Coleção" },
-  { id: "anf-mercado", label: "Mercado financeiro e comércio" },
-  { id: "anf-anuncios", label: "Anúncios publicitários" },
-  { id: "anf-editorial", label: "Editorial" },
-  { id: "anf-ilustracoes", label: "Ilustrações" },
-] as const
+import { zones } from "@/lib/anfitriao-prophet"
 
 export function SectionNav() {
   const [open, setOpen] = useState(false)
@@ -47,7 +45,7 @@ export function SectionNav() {
       >
         <p className="dpx-navmenu-title">Sumário desta edição</p>
         <ul>
-          {ZONES.map((z) => (
+          {zones.map((z) => (
             <li key={z.id}>
               <a href={`#${z.id}`} onClick={() => setOpen(false)}>
                 {z.label}

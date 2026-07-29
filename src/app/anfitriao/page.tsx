@@ -97,7 +97,7 @@ export default async function DailyProphetFront() {
       {/* ─── EXCLUSIVO — a faixa de manchete do original ─── */}
       <section className="newspaper-exclusive wrapper">
         <span id="anf-manchete-principal" className="helper-hide dpx-anchor">
-          Manchete principal
+          Manchete Principal
         </span>
         <p className="newspaper-exclusive-box">
           <span>EXCLUSIVO</span>
@@ -122,7 +122,7 @@ export default async function DailyProphetFront() {
       <section className="newspaper-articles">
         <article className="newspaper-toparticle wrapper">
           <span id="anf-colunas-texto" className="helper-hide dpx-anchor">
-            Colunas de texto
+            Colunas de Texto
           </span>
           <h1 className="fittext-toparticle-h1-1">
             <span className="newspaper-toparticle-spanwrap">
@@ -194,7 +194,7 @@ export default async function DailyProphetFront() {
         {/* ─── Matérias inferiores: as duas primeiras notícias automáticas ─── */}
         <article className="newspaper-bottomarticles wrapper">
           <span id="anf-noticias-secundarias" className="helper-hide dpx-anchor">
-            Notícias secundárias
+            Notícias Secundárias
           </span>
           {featured && (
             <section className="newspaper-bottomarticle-first">
@@ -269,7 +269,7 @@ export default async function DailyProphetFront() {
       {rest.length > 0 && (
         <section className="dpx-wire wrapper" aria-labelledby="wire-titulo">
           <span id="anf-noticias-internacionais" className="helper-hide dpx-anchor">
-            Notícias internacionais
+            Notícias Internacionais
           </span>
           <hr className="hr-double-top" />
           <h2 className="dpx-wire-title" id="wire-titulo">
@@ -288,7 +288,7 @@ export default async function DailyProphetFront() {
       {/* ─── MERCADO — cotações da oficina e sentimento das mesas, na zona de weather do original ─── */}
       <section className="newspaper-weather">
         <span id="anf-mercado" className="helper-hide dpx-anchor">
-          Mercado financeiro e comércio
+          Mercado Financeiro e Comércio
         </span>
         <hr className="hr-double-top" />
         <h2>{servicebar.weather.title}</h2>
@@ -311,8 +311,15 @@ export default async function DailyProphetFront() {
         <p className="dpx-market-note">{servicebar.marketNote}</p>
       </section>
 
-      {/* ─── CHAMADA — as últimas notícias em telegrama ─── */}
+      {/* ─── COLEÇÃO · abertura em telegrama ───
+          A âncora da zona "Coleção" vive AQUI, e não na banda seguinte: o
+          telegrama é a abertura da coleção (já se chamava "Coleção em
+          Telegrama") e a banda "Coleção da Casa" vem logo abaixo. Com a
+          âncora na banda, este bloco ficava fora do alcance do menu. */}
       <section className="newspaper-teaser wrapper">
+        <span id="anf-colecao" className="helper-hide dpx-anchor">
+          Coleção
+        </span>
         <p className="newspaper-teaser-fatline">{briefs.title}</p>
         {/* O número da página leva o erro de registro — o efeito de letra que
             o original reserva aos algarismos grandes. Ver `.dpx-misregister`. */}
@@ -326,44 +333,17 @@ export default async function DailyProphetFront() {
         </p>
       </section>
 
-      {/* ─── ÍNDICE ─── */}
-      <footer className="newspaper-footer">
-        <ul className="newspaper-footer-index wrapper">
-          {index.map((i) => (
-            <li key={i.label}>
-              <Link href={i.href} title={i.label}>
-                {i.label} <span>{i.page}</span>
-              </Link>
-            </li>
-          ))}
-          {/* Sem `<span>` envolvendo o texto: `.newspaper-footer-index span`
-              é a regra do SELO NUMERADO do original (círculo de 1.5em, fundo
-              de tinta). Um span externo recebia esse estilo e espremia a
-              efeméride inteira dentro do círculo — "Playtest público…" saía
-              como "Pla". O texto vai solto no `li`; só o número é span. */}
-          {servicebar.ephemeris.lines.map((l, i) => (
-            <li key={l} title={l}>
-              {l} <span>{i + 1}</span>
-            </li>
-          ))}
-        </ul>
-      </footer>
-
       {/* ═══════════════════════════════════════════════════════════
-          CADERNO DA OFICINA
+          COLEÇÃO — continuação da zona aberta pelo telegrama acima.
           ═══════════════════════════════════════════════════════════
-          Antes isto era um bloco com grelha e vocabulário próprios,
-          encaixado no meio da folha como encarte de outra gráfica. Agora
-          são FAIXAS, iguais às de cima: largura inteira, cabeçalho de
-          editoria entre fios duplos e subdivisão interna em zonas.
+          Sem âncora própria: a da zona "Coleção" está no telegrama, que é
+          onde o menu deve pousar. Duas âncoras com o mesmo `id` seriam id
+          duplicado — HTML inválido, e o navegador só enxerga a primeira.
           ═══════════════════════════════════════════════════════════ */}
 
-      <section className="dpx-band" aria-labelledby="oficina-titulo">
-        <span id="anf-colecao" className="helper-hide dpx-anchor">
-          Coleção
-        </span>
+      <section className="dpx-band" aria-labelledby="colecao-titulo">
         <header className="dpx-band-head">
-          <h2 className="dpx-band-title" id="oficina-titulo">
+          <h2 className="dpx-band-title" id="colecao-titulo">
             Coleção da Casa
           </h2>
           <p className="dpx-band-sub">
@@ -400,14 +380,6 @@ export default async function DailyProphetFront() {
               </table>
             </div>
 
-            <div className="dpx-ad" aria-label="Anúncio publicitário">
-              <span id="anf-anuncios" className="helper-hide dpx-anchor">
-                Anúncios publicitários
-              </span>
-              <p className="dpx-ad-head">{ads[0].head}</p>
-              <p className="dpx-ad-body">{ads[0].body}</p>
-              <p className="dpx-ad-sign">{ads[0].sign}</p>
-            </div>
           </div>
 
           {/* Coluna II — a linhagem, o quadro de playtests e a gravura */}
@@ -515,13 +487,43 @@ export default async function DailyProphetFront() {
         </div>
       </section>
 
-      {/* ═══ Serviço ao leitor: o cupom, o conselho e os classificados ═══ */}
+      {/* ═══ ANÚNCIOS PUBLICITÁRIOS — zona própria ═══
+          Os três classificados estavam repartidos: um na banda da Coleção e
+          dois na do Serviço ao Leitor. Uma zona do menu precisa ser UM lugar
+          — clicar em "Anúncios Publicitários" levava a um deles e escondia os
+          outros dois numa seção de outro assunto. Agora é uma faixa só. */}
+      <section className="dpx-band" aria-labelledby="anuncios-titulo">
+        <span id="anf-anuncios" className="helper-hide dpx-anchor">
+          Anúncios Publicitários
+        </span>
+        <header className="dpx-band-head">
+          <h2 className="dpx-band-title" id="anuncios-titulo">
+            Anúncios Publicitários
+          </h2>
+          <p className="dpx-band-sub">Os classificados desta praça</p>
+        </header>
+
+        <div className="dpx-zone dpx-zone--3">
+          {ads.map((a) => (
+            <div key={a.head} className="dpx-ad">
+              <p className="dpx-ad-head">{a.head}</p>
+              <p className="dpx-ad-body">{a.body}</p>
+              <p className="dpx-ad-sign">{a.sign}</p>
+            </div>
+          ))}
+        </div>
+      </section>
+
+      {/* ═══ Serviço ao leitor: o cupom, o conselho e a rubrica ═══ */}
       <section className="dpx-band" aria-labelledby="servico-titulo">
+        <span id="anf-servico" className="helper-hide dpx-anchor">
+          Serviço ao Leitor
+        </span>
         <header className="dpx-band-head">
           <h2 className="dpx-band-title" id="servico-titulo">
             Serviço ao Leitor
           </h2>
-          <p className="dpx-band-sub">Assinatura, conselho da casa e classificados</p>
+          <p className="dpx-band-sub">Assinatura e conselho da casa</p>
         </header>
 
         <div className="dpx-zone dpx-zone--2">
@@ -613,23 +615,25 @@ export default async function DailyProphetFront() {
             </div>
           </form>
 
-          {/* Conselho, classificados e a rubrica do editor */}
+          {/* Conselho da casa e a rubrica do editor. Os classificados que
+              viviam aqui mudaram para a faixa "Anúncios Publicitários". */}
           <div>
             <div className="dpx-box">
               <p className="dpx-box-title">{boxes.tip.title}</p>
               <p className="dpx-text">{boxes.tip.body}</p>
             </div>
 
-            <div className="dpx-ad" aria-label="Anúncio publicitário">
-              <p className="dpx-ad-head">{ads[1].head}</p>
-              <p className="dpx-ad-body">{ads[1].body}</p>
-              <p className="dpx-ad-sign">{ads[1].sign}</p>
-            </div>
-
-            <div className="dpx-ad" aria-label="Anúncio publicitário">
-              <p className="dpx-ad-head">{ads[2].head}</p>
-              <p className="dpx-ad-body">{ads[2].body}</p>
-              <p className="dpx-ad-sign">{ads[2].sign}</p>
+            {/* As efemérides estavam no índice do rodapé, entre as entradas de
+                navegação — pareciam links e não eram. Horários da casa são
+                serviço ao leitor; é aqui que se informam, e é o que preenche
+                esta coluna, antes vazia da metade para baixo. */}
+            <div className="dpx-box">
+              <p className="dpx-box-title">{servicebar.ephemeris.title}</p>
+              <ul className="dpx-list dpx-list--dash">
+                {servicebar.ephemeris.lines.map((l) => (
+                  <li key={l}>{l}</li>
+                ))}
+              </ul>
             </div>
 
             <div className="dpx-signature">
@@ -643,6 +647,9 @@ export default async function DailyProphetFront() {
 
       {/* ═══ Expediente — abriga o acesso administrativo (PressMark) ═══ */}
       <section className="dpx-band" aria-labelledby="expediente-titulo">
+        <span id="anf-expediente" className="helper-hide dpx-anchor">
+          Expediente
+        </span>
         <header className="dpx-band-head">
           <h2 className="dpx-band-title" id="expediente-titulo">
             {colophon.title}
@@ -696,6 +703,30 @@ export default async function DailyProphetFront() {
           </div>
         </div>
       </section>
+
+      {/* ─── ÍNDICE DESTA EDIÇÃO ───
+          Estava entre o telegrama e a banda da Coleção, partindo aquela zona
+          em duas metades separadas por outra seção. No layout original o
+          índice é a ÚLTIMA peça da folha; as bandas do caderno é que foram
+          acrescentadas depois dele. Devolvido ao fim, cada zona volta a ser
+          um trecho contínuo — e o menu passa a percorrer a página em ordem.
+
+          A lista vem de `index`, derivada de `zones`: o mesmo sumário do menu
+          sanduíche, impresso. */}
+      <footer className="newspaper-footer">
+        <span id="anf-indice" className="helper-hide dpx-anchor">
+          Índice desta Edição
+        </span>
+        <ul className="newspaper-footer-index wrapper">
+          {index.map((i) => (
+            <li key={i.label}>
+              <Link href={i.href} title={i.label}>
+                {i.label} <span>{i.page}</span>
+              </Link>
+            </li>
+          ))}
+        </ul>
+      </footer>
 
       <div className="dpx-foot">
         <span>{paper.masthead}</span>
