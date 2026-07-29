@@ -320,8 +320,50 @@
   transform-style: preserve-3d;
 }
 
+/**
+ * O CAPÍTULO — e a altura mínima de uma página.
+ *
+ * Medidas a 1440px antes desta regra: a Oficina ocupava 2792px e o Mural 868px,
+ * uma amplitude de 3,2×. Variação de peso entre páginas é boa numa revista — é
+ * o que separa uma splash de uma tira de gag. O problema é que aqui ela não
+ * vinha de decisão: vinha de quantos registos o banco devolveu. Um capítulo
+ * curto passava num piscar de olhos e a virada de página (`PageTurn`) mal tinha
+ * curso para anunciar a dimensão seguinte — o gesto que dá o ar de revista
+ * gastava-se em nada.
+ *
+ * `min-height: 88svh` dá a qualquer capítulo, por mais curto que seja, quase
+ * uma dobra inteira de presença — medido: 78svh não chegava a morder em
+ * nenhum deles, e um piso que nunca toca no chão não é piso.
+ *
+ * O que isto NÃO faz, de propósito: igualar. A Oficina continua com 2792px e
+ * as Tirinhas com pouco mais de 790 — a diferença de peso entre uma matéria
+ * longa e uma tira de piada é ritmo, e achatá-la daria a monotonia de um
+ * catálogo. O que se corrige é só o extremo curto: nenhuma dimensão passa num
+ * piscar de olhos, e a virada de página (`PageTurn`) ganha curso para anunciar
+ * a seguinte.
+ *
+ * `svh` e não `vh`: no telemóvel a barra do navegador recolhe durante o scroll
+ * e `vh` mede a janela grande, o que faria cada capítulo saltar de altura a
+ * meio da leitura.
+ */
 .cp-chapter {
   position: relative;
+  min-height: 88svh;
+
+  /**
+   * O piso sozinho não bastava — e a primeira tentativa mostrou porquê: com
+   * `min-height` e o conteúdo em fluxo normal, um capítulo curto ganhava a
+   * altura mas empurrava todo o vazio para BAIXO do conteúdo. Trocava-se um
+   * buraco à direita (o da tira que não fechava) por um buraco em baixo.
+   *
+   * Centrado, a folga divide-se acima e abaixo e deixa de ser resto: vira a
+   * margem que emoldura a página curta — que é o que uma revista faz com uma
+   * tira de piada, e não o que faz com uma matéria de três páginas.
+   */
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+
   transform-origin: 50% 50%;
   will-change: transform, opacity, filter;
 }

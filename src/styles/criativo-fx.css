@@ -8,64 +8,10 @@
    ============================================================================ */
 
 /* --- CURSOR DE TINTA ------------------------------------------------------- */
-.cx-cursor { display: none; }
-.cx-cursor-on,
-.cx-cursor-on * { cursor: none !important; }
 
 @media (hover: hover) and (pointer: fine) {
-  .cx-cursor { display: block; }
 }
 @media (prefers-reduced-motion: reduce) {
-  .cx-cursor { display: none !important; }
-  .cx-cursor-on,
-  .cx-cursor-on * { cursor: auto !important; }
-}
-
-.cx-cursor__dot {
-  position: fixed;
-  top: 0;
-  left: 0;
-  z-index: 9999;
-  width: 7px;
-  height: 7px;
-  background: var(--k-ink, #12100e);
-  border-radius: 50%;
-  pointer-events: none;
-  will-change: transform;
-}
-.cx-cursor__ring {
-  position: fixed;
-  top: 0;
-  left: 0;
-  z-index: 9998;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  width: 38px;
-  height: 38px;
-  border: 2px solid var(--k-ink, #12100e);
-  border-radius: 50%;
-  pointer-events: none;
-  will-change: transform;
-  transition: width 0.22s ease, height 0.22s ease, background-color 0.22s ease;
-}
-.cx-cursor[data-active="true"] .cx-cursor__ring {
-  width: 76px;
-  height: 76px;
-  background: var(--k-yellow, #ffd200);
-}
-.cx-cursor[data-down="true"] .cx-cursor__ring {
-  width: 28px;
-  height: 28px;
-  background: var(--k-magenta, #ff2d95);
-}
-.cx-cursor__label {
-  font-family: var(--font-bebas), Impact, sans-serif;
-  font-size: 12px;
-  line-height: 1;
-  text-transform: uppercase;
-  letter-spacing: 0.04em;
-  color: var(--k-ink, #12100e);
 }
 
 /* --- MAGNETISMO ------------------------------------------------------------ */

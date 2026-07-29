@@ -209,10 +209,10 @@ export function Hero() {
               animate={{ opacity: 1, y: 0 }}
               transition={{ duration: 0.7, ease: EASE, delay: 0.54 }}
             >
-              <span ref={magPrimary} className="cx-magnetic inline-block" data-cursor="ir">
+              <span ref={magPrimary} className="cx-magnetic inline-block">
                 <ComicButton href={HERO.primaryCta.href}>{HERO.primaryCta.label}</ComicButton>
               </span>
-              <span ref={magSecondary} className="cx-magnetic inline-block" data-cursor="ver">
+              <span ref={magSecondary} className="cx-magnetic inline-block">
                 <ComicButton href={HERO.secondaryCta.href} variant="ghost">
                   {HERO.secondaryCta.label} →
                 </ComicButton>
@@ -256,20 +256,67 @@ export function Hero() {
               className="relative aspect-[4/5] overflow-hidden"
             >
               <PanelBody bleed className="absolute inset-0">
-                <div className="relative size-full" data-cursor="terra-lr">
+                <div className="relative size-full">
                   <Halftone color="rgba(255,45,149,0.3)" step={6} />
                   <SpeedLines x={50} y={28} color="rgba(18,16,14,0.16)" />
 
+                  {/*
+                    O LOGOTIPO DA CAPA.
+
+                    Aqui havia "Terra / LR" a `opacity-15`: um requadro de capa
+                    com uma marca-d'água quase invisível lê-se como imagem que
+                    não carregou, não como arte. E a capa é o primeiro quadro
+                    que o leitor vê — é ela que promete o resto da revista.
+
+                    Passa a ser o que uma capa de HQ tem no lugar da marca: o
+                    logotipo, composto. Contorno cheio (`k-outline`, o mesmo
+                    tratamento dos números-fantasma dos capítulos), o nome da
+                    Terra em versalete por baixo e o selo da edição — as três
+                    linhas que qualquer capa de banca traz. Continua a ser
+                    tipografia e não ilustração, mas tipografia COMPOSTA, que
+                    é o que este projeto sabe desenhar sem inventar um asset
+                    que não existe.
+                  */}
                   <span
                     aria-hidden
-                    className="k-title absolute inset-x-6 top-1/2 -translate-y-1/2 text-center text-[clamp(2.2rem,4vw,3.6rem)] text-[var(--k-ink)] opacity-15"
+                    className="absolute inset-x-4 top-1/2 -translate-y-[58%] text-center"
                   >
-                    Terra
-                    <br />
-                    LR
+                    {/*
+                      `k-3d` e não `k-outline`: aquela classe é a dos
+                      números-fantasma dos capítulos e traz `opacity: .25` —
+                      pedi-la aqui repetia o defeito que se veio corrigir, só
+                      que em corpo maior. Um logotipo de capa não é fantasma;
+                      é a peça de maior contraste da página, e a linguagem da
+                      casa para isso é a sombra dura deslocada.
+                    */}
+                    <span className="k-title k-3d block text-[clamp(3rem,5.6vw,5rem)] leading-[0.82] text-[var(--k-ink)]">
+                      TERRA
+                      <br />
+                      LR
+                    </span>
+                    <span className="k-kicker mt-4 block text-[10px] tracking-[0.35em] text-[var(--k-ink)]/70">
+                      arquivo vivo
+                    </span>
+                    <span className="k-num mt-4 inline-block border-[3px] border-[var(--k-ink)] bg-[var(--k-yellow)] px-3 py-1 text-xs text-[var(--k-ink)]">
+                      Nº 2026
+                    </span>
                   </span>
 
-                  <div className="absolute inset-x-6 bottom-6 space-y-4">
+                  {/*
+                    O balão de fala subiu do rodapé do requadro para o topo.
+
+                    Em baixo ele ocupava exatamente a zona onde o balão de
+                    pensamento entra por fora — dois blocos de texto sobrepostos,
+                    e nenhum dos dois legível. A sobreposição com o requadro é
+                    linguagem de quadrinho e fica; a sobreposição de um texto com
+                    o outro é acidente e sai.
+
+                    No topo, a leitura ganha ordem: fala primeiro (dentro, em
+                    cima), pensamento depois (fora, em baixo). O recuo à direita
+                    e a largura máxima abrem caminho para o estouro "Nada à
+                    venda", que monta no canto superior esquerdo.
+                  */}
+                  <div className="absolute right-4 top-4 max-w-[76%]">
                     <Bubble>{HERO.bubble}</Bubble>
                   </div>
                 </div>

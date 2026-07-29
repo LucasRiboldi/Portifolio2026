@@ -46,7 +46,21 @@ export function ZoneTirinhas({ strips }: { strips: Strip[] }) {
             className="cp-col"
             style={spanVars(pagina[i]!.span)}
           >
-            <figure className={i % 2 === 0 ? "k-tilt-l" : "k-tilt-r"}>
+            {/*
+              A legenda passou a ser CAIXA DE LEGENDA, presa ao quadro.
+
+              Solta por baixo, ela flutuava: as tiras entram inclinadas em
+              sentidos opostos (`k-tilt-l` / `k-tilt-r`), e uma linha de texto
+              no fim de cada uma caía em alturas diferentes — 16px de desnível
+              entre vizinhas, que o olho lê como desalinho por descuido e não
+              como composição. Numa HQ o título da tira não flutua: é a caixa
+              de legenda no canto do quadro, e por isso acompanha o quadro.
+
+              Presa ao requadro e montando um pouco sobre ele, some o desnível
+              (a caixa nasce do quadro, não da linha de base da coluna) e ganha
+              a sobreposição que é a linguagem da página.
+            */}
+            <figure className={`relative ${i % 2 === 0 ? "k-tilt-l" : "k-tilt-r"}`}>
               {s.image ? (
                 <Panel as="div" accent="yellow" lit className="group">
                   <PanelBody bleed>
@@ -93,7 +107,11 @@ export function ZoneTirinhas({ strips }: { strips: Strip[] }) {
                 </div>
               )}
 
-              <figcaption className="k-sub mt-4 text-xs opacity-70">{s.title}</figcaption>
+              <figcaption className="k-panel absolute -bottom-3 left-4 bg-[var(--k-paper)] px-3 py-1">
+                <span className="k-sub text-[10px] tracking-[0.18em] text-[var(--k-ink)]">
+                  {s.title}
+                </span>
+              </figcaption>
             </figure>
           </RevealItem>
         ))}
