@@ -23,6 +23,7 @@ import "@/styles/anfitriao-wire.css"
 import "@/styles/anfitriao-responsive.css"
 
 import type { ReactNode } from "react"
+import Image from "next/image"
 import Link from "next/link"
 import { Kreon, Vollkorn } from "next/font/google"
 
@@ -100,19 +101,37 @@ export default function DailyProphetLayout({ children }: { children: ReactNode }
         <h1 className="helper-hide">Daily Prophet</h1>
         <figure className="wrapper">
           <Link href="/anfitriao" aria-label="Primeira página">
-            {/* eslint-disable-next-line @next/next/no-img-element */}
-            <img
+            {/*
+              O brasão é a arte que abre a folha — acima da dobra em qualquer
+              tela e forte candidata a LCP. `priority` a tira da fila de
+              carregamento tardio e emite a dica de pré-carga; o par 1x/2x
+              escrito à mão sai porque o otimizador gera a escada de larguras
+              sozinho, já em AVIF/WebP.
+            */}
+            <Image
               alt="Brasão do Daily Prophet"
               src="/dporiginal/images/logo-shield155.png"
-              srcSet="/dporiginal/images/logo-shield155.png 1x, /dporiginal/images/logo-shield310.png 2x"
               width={155}
               height={152}
+              sizes="(min-width: 60em) 155px, 100px"
+              priority
               className="newspaper-topheader-imgshield"
             />
-            {/* eslint-disable-next-line @next/next/no-img-element */}
-            <img
+            {/*
+              O logotipo é vetor: não há o que o otimizador comprima, e passá-lo
+              pelo `/_next/image` só acrescentaria um salto de rede e o cabeçalho
+              `Content-Disposition: attachment` que a rota aplica a SVG. Entra
+              como `unoptimized` — o componente pelo formato, o arquivo servido
+              direto do `public`. As medidas vêm do `viewBox` do próprio arquivo
+              (832,48 × 129,5), e é o CSS do original que o dimensiona na página.
+            */}
+            <Image
               src="/dporiginal/images/logo-cleanup.svg"
               alt="Daily Prophet"
+              width={832}
+              height={130}
+              priority
+              unoptimized
               className="newspaper-topheader-imglogo"
             />
           </Link>

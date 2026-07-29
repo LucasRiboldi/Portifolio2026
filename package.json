@@ -17,7 +17,8 @@
     "format": "prettier --write .",
     "storybook": "storybook dev -p 6006",
     "build-storybook": "storybook build",
-    "test:unit": "vitest run --config vitest.unit.config.ts"
+    "test:unit": "vitest run --config vitest.unit.config.ts",
+    "assets:anfitriao": "node scripts/optimize-anfitriao-assets.mjs"
   },
   "dependencies": {
     "@base-ui/react": "^1.5.0",

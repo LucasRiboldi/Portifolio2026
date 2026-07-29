@@ -1,3 +1,4 @@
+import Image from "next/image"
 import Link from "next/link"
 
 import {
@@ -41,16 +42,64 @@ export const metadata = { title: "Primeira Página" }
  * Wire abastece.
  */
 
-/** Gravura de uma notícia — arte real quando houver, moldura vazia quando não. */
+/**
+ * A GRAVURA — o clichê da folha.
+ *
+ * ------------------------------------------------------------------
+ * POR QUE ESTA PEÇA EXISTE
+ * ------------------------------------------------------------------
+ * A mesma lógica — "arte real quando houver, moldura vazia quando não" —
+ * estava escrita três vezes na página, cada cópia com um conjunto diferente
+ * de atributos. Aqui ela é uma peça só.
+ *
+ * ------------------------------------------------------------------
+ * A MOLDURA TEM TAMANHO FIXO, E ISSO É DECISÃO EDITORIAL
+ * ------------------------------------------------------------------
+ * A arte vem do agregador: URL remota, proporção desconhecida até baixar. Um
+ * `<img>` sem dimensão declarada reserva zero altura e empurra a coluna
+ * inteira quando a imagem chega — o salto de layout (CLS).
+ *
+ * A saída não é adivinhar a proporção de cada foto: é a que o impresso já
+ * usa. No jornal o clichê é um ESPAÇO RESERVADO na diagramação, de medida
+ * fixa, e a foto é recortada para caber nele. Aqui a moldura declara a
+ * proporção (`aspect-ratio`) e a arte preenche por `object-fit: cover`.
+ *
+ * Três coisas caem juntas com isso:
+ *   • Não há salto: a altura existe antes de a arte chegar.
+ *   • A moldura vazia e a foto ocupam EXATAMENTE o mesmo bloco — a folha se
+ *     diagrama igual, com ou sem arte disponível.
+ *   • A gravura redonda passa a ser um círculo de verdade. Antes o
+ *     `border-radius: 50%` era aplicado sobre a imagem na sua proporção
+ *     original: foto não quadrada saía elipse.
+ */
+function Plate({
+  image,
+  sizes,
+  shape = "landscape",
+}: {
+  image: NewsItem["image"]
+  /** Largura de exibição por faixa — é o que decide qual arquivo o
+      otimizador entrega. Em px porque a folha tem largura máxima: `vw`
+      superestimaria em tela grande e baixaria arte maior que a necessária. */
+  sizes: string
+  shape?: "landscape" | "round"
+}) {
+  return (
+    <div className={`dpx-plate dpx-plate--${shape}`}>
+      {image.src ? (
+        <Image src={image.src} alt={image.alt} fill sizes={sizes} className="dpx-plate-art" />
+      ) : (
+        <div className="dpx-news-plate" role="img" aria-label={image.alt} />
+      )}
+    </div>
+  )
+}
+
+/** Gravura de uma notícia da faixa do Wire, com a sua legenda. */
 function NewsPlate({ news }: { news: NewsItem }) {
   return (
     <figure>
-      {news.image.src ? (
-        // eslint-disable-next-line @next/next/no-img-element
-        <img src={news.image.src} alt={news.image.alt} loading="lazy" decoding="async" />
-      ) : (
-        <div className="dpx-news-plate" role="img" aria-label={news.image.alt} />
-      )}
+      <Plate image={news.image} sizes="(min-width: 64em) 240px, (min-width: 40em) 45vw, 90vw" />
       {news.image.caption ? <figcaption>{news.image.caption}</figcaption> : null}
     </figure>
   )
@@ -146,15 +195,18 @@ export default async function DailyProphetFront() {
           </section>
 
           <section className="newspaper-toparticle-story">
+            {/* Arte local e de proporção conhecida: dispensa moldura de
+                recorte e entra com as suas próprias medidas. O `srcSet` de
+                1x/2x que estava escrito à mão sai — o otimizador gera a
+                escada de larguras E converte para AVIF/WebP, que é o ganho
+                que o par de JPEG fixos não dava. */}
             <figure id="anf-ilustracoes" className="dpx-anchor" tabIndex={-1}>
-              {/* eslint-disable-next-line @next/next/no-img-element */}
-              <img
+              <Image
                 alt="Bancada da oficina ao anoitecer"
                 src="/dporiginal/images/tornado508.jpg"
-                srcSet="/dporiginal/images/tornado508.jpg 1x, /dporiginal/images/tornado1016.jpg 2x"
                 width={508}
                 height={188}
-                decoding="async"
+                sizes="(min-width: 64em) 480px, (min-width: 48em) 45vw, 90vw"
               />
             </figure>
 
@@ -209,17 +261,10 @@ export default async function DailyProphetFront() {
                   fonte, busca, padrão da categoria ou — não havendo nenhuma — a
                   gravura vazia, que no impresso é recurso legítimo. */}
               <figure>
-                {featured.image.src ? (
-                  // eslint-disable-next-line @next/next/no-img-element
-                  <img
-                    alt={featured.image.alt}
-                    src={featured.image.src}
-                    loading="lazy"
-                    decoding="async"
-                  />
-                ) : (
-                  <div className="dpx-news-plate" role="img" aria-label={featured.image.alt} />
-                )}
+                <Plate
+                  image={featured.image}
+                  sizes="(min-width: 64em) 480px, (min-width: 48em) 45vw, 90vw"
+                />
                 {featured.image.caption ? <figcaption>{featured.image.caption}</figcaption> : null}
               </figure>
 
@@ -262,19 +307,11 @@ export default async function DailyProphetFront() {
               <div className="wrapper relative">
                 <div className="floated" />
                 <figure>
-                  {second.image.src ? (
-                    // eslint-disable-next-line @next/next/no-img-element
-                    <img
-                      alt={second.image.alt}
-                      src={second.image.src}
-                      width={200}
-                      height={200}
-                      loading="lazy"
-                      decoding="async"
-                    />
-                  ) : (
-                    <div className="dpx-news-plate" role="img" aria-label={second.image.alt} />
-                  )}
+                  <Plate
+                    image={second.image}
+                    shape="round"
+                    sizes="(min-width: 64em) 240px, (min-width: 48em) 25vw, 45vw"
+                  />
                 </figure>
 
                 <p className="newspaper-articles-anfang">{second.summary}</p>

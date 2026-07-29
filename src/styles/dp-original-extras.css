@@ -31,7 +31,25 @@
 
 html[data-realm] body,
 html body {
+  /**
+   * A textura é `background-image`, e o otimizador do Next só atende
+   * `<Image>` — este é o único ativo da rota que seria servido cru, e é
+   * justamente o que mais pesa por repetição (ladrilha a mesa inteira).
+   *
+   * `image-set()` faz aqui o que o otimizador faz lá: o navegador escolhe o
+   * primeiro formato que entende. AVIF (1,2k, −84%), WebP (3,3k, −56%) e o
+   * JPEG original como último recurso — nenhum navegador fica sem mesa.
+   *
+   * A declaração `url()` acima do `image-set()` é o fallback para quem não
+   * conhece a função: sem ela, a propriedade inteira seria descartada.
+   * Gerados por `scripts/optimize-anfitriao-assets.mjs`.
+   */
   background-image: url(/dporiginal/images/woodtile2.jpg);
+  background-image: image-set(
+    url(/dporiginal/images/woodtile2.avif) type("image/avif"),
+    url(/dporiginal/images/woodtile2.webp) type("image/webp"),
+    url(/dporiginal/images/woodtile2.jpg) type("image/jpeg")
+  );
   background-repeat: repeat;
   color: var(--anf-ink);
 }

@@ -452,6 +452,59 @@
   filter: grayscale(1) contrast(1.15);
 }
 
+/* ─────────────────────────────────────────────────────────────
+   A MOLDURA DA GRAVURA — o clichê de medida fixa
+
+   O espaço da arte é reservado pela DIAGRAMAÇÃO, não pela imagem: a
+   moldura declara a proporção e a arte é recortada para caber, como
+   clichê de jornal. Isso mantém a altura da coluna estável antes de a
+   arte remota chegar (sem salto de layout) e faz a moldura vazia
+   ocupar exatamente o mesmo bloco que uma foto ocuparia.
+   ───────────────────────────────────────────────────────────── */
+
+.dpx-plate {
+  position: relative;
+  width: 100%;
+  overflow: hidden;
+}
+
+.dpx-plate--landscape {
+  aspect-ratio: 3 / 2;
+}
+
+/* A gravura redonda da segunda matéria. O círculo é da MOLDURA, não da
+   imagem: aplicado à imagem (como era), qualquer arte não quadrada saía
+   elipse. */
+.dpx-plate--round {
+  aspect-ratio: 1;
+  border-radius: 50%;
+}
+
+/* `fill` posiciona a arte absoluta cobrindo a moldura; o recorte é o que
+   dispensa conhecer a proporção do arquivo remoto. */
+.dpx-plate-art {
+  object-fit: cover;
+}
+
+/* A moldura vazia preenche o clichê inteiro em vez de impor a sua própria
+   proporção — quem manda na medida é a moldura de fora. */
+.dpx-plate > .dpx-news-plate {
+  aspect-ratio: auto;
+  height: 100%;
+}
+
+/**
+ * A matéria em destaque estica a gravura até o pé da coluna a partir de
+ * 48em (o `figure` do original é `flex-grow: 1; height: 100%`). Altura
+ * explícita vence a proporção — é o mesmo recorte, agora governado pela
+ * coluna.
+ */
+@media only screen and (min-width: 48em) {
+  .newspaper-bottomarticle-first .dpx-plate {
+    height: 100%;
+  }
+}
+
 /* Moldura vazia — enquanto a notícia não tem arte própria. */
 .dpx-news-plate {
   width: 100%;
