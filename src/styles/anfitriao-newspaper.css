@@ -576,6 +576,72 @@
   color: var(--anf-ink-3);
 }
 
+/**
+ * A recusa do balcão — o carimbo de erro.
+ *
+ * Vermelho de carimbo é o único uso de `--anf-alarm` na folha, e é o certo
+ * aqui: no impresso, a correção vem em segunda tinta. Não fica SÓ na cor —
+ * o campo também ganha `aria-invalid` e o recado é ligado a ele por
+ * `aria-describedby` (ver `subscription-coupon.tsx`), porque cor sozinha não
+ * comunica a quem não a distingue.
+ */
+.dpx-erro {
+  margin: var(--anf-space-1) 0 0;
+  font-family: var(--anf-body);
+  font-size: var(--anf-text-xs);
+  color: var(--anf-alarm);
+}
+
+.dpx-erro:empty {
+  margin: 0;
+}
+
+/** O aceite do balcão — em tinta normal, com o fleurão da casa. */
+.dpx-aviso {
+  margin: var(--anf-space-2) 0 0;
+  font-family: var(--anf-body);
+  font-size: var(--anf-text-sm);
+  color: var(--anf-ink);
+}
+
+.dpx-aviso:not(:empty)::before {
+  content: "❦ ";
+  color: var(--anf-accent-2);
+}
+
+.dpx-aviso:empty {
+  margin: 0;
+}
+
+/** O agrupador dos campos do cupom não desenha nada — só existe para o
+    `inert` que trava o quadro durante o envio. */
+.dpx-fieldset {
+  border: 0;
+  margin: 0;
+  padding: 0;
+}
+
+.dpx-fieldset[inert] {
+  opacity: 0.6;
+}
+
+/**
+ * A armadilha de robô.
+ *
+ * `display: none` seria o caminho óbvio e é o errado: preenchedores
+ * automáticos modernos leem o estilo e pulam o que está oculto assim. Este
+ * recuo tira o campo da folha sem declarar que ele está escondido — e o
+ * `aria-hidden` com `tabindex="-1"` no HTML garante que nem o teclado nem o
+ * leitor de tela cheguem nele.
+ */
+.dpx-fecho {
+  position: absolute;
+  left: -9999px;
+  width: 1px;
+  height: 1px;
+  overflow: hidden;
+}
+
 .dpx-actions {
   display: flex;
   flex-wrap: wrap;

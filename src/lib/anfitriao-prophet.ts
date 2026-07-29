@@ -350,6 +350,12 @@ export const coupon = {
     "Preencha, recorte pela linha pontilhada e entregue no balcão da oficina — ou remeta pelo correio.",
   fields: {
     name: { label: "Nome de quem assina", placeholder: "como deve sair no rótulo" },
+    /**
+     * O cupom passou a ser um formulário de verdade (ver `anfitriao/actions.ts`),
+     * e assinatura sem endereço de retorno não se despacha. No idioma da folha
+     * é o endereço da coruja; no banco é a coluna `email`, obrigatória.
+     */
+    email: { label: "Endereço para a coruja", placeholder: "para onde despachar a resposta" },
     place: { label: "Praça e rua", placeholder: "onde a folha há de chegar" },
     note: { label: "Recado ao expedidor", help: "Opcional. Duas linhas bastam." },
   },

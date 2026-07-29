@@ -1,3 +1,4 @@
+import type { Metadata } from "next"
 import Image from "next/image"
 import Link from "next/link"
 
@@ -11,7 +12,6 @@ import {
   briefs,
   index,
   colophon,
-  coupon,
   playtests,
   awards,
   lineage,
@@ -20,10 +20,34 @@ import {
   registryNumber,
 } from "@/lib/anfitriao-prophet"
 import { PressMark } from "@/components/prophet/press-mark"
+import { SubscriptionCoupon } from "@/components/anfitriao/subscription-coupon"
+import { ZoneLink } from "@/components/anfitriao/zone-link"
+import { NewspaperJsonLd } from "@/components/anfitriao/newspaper-jsonld"
 import { getFrontNews } from "@/data/prophet-wire"
 import type { NewsItem } from "@/lib/prophet-wire/types"
 
-export const metadata = { title: "Primeira Página" }
+/**
+ * Metadados da primeira página.
+ *
+ * Só havia `title`. A rota é a porta de entrada do realm e a única com
+ * conteúdo editorial de verdade — sem `description` própria ela herdava a do
+ * layout, e sem `openGraph` qualquer compartilhamento saía como cartão vazio.
+ * `metadataBase` e o `openGraph` base vêm do layout raiz; aqui só se declara
+ * o que é desta página.
+ */
+export const metadata: Metadata = {
+  title: "Primeira Página",
+  description:
+    "A primeira página d'O Anfitrião: manchete da oficina, editorial, notícias do telégrafo das mesas do mundo, coleção da casa e o cupom de assinatura.",
+  alternates: { canonical: "/anfitriao" },
+  openGraph: {
+    type: "article",
+    title: "O Anfitrião — Primeira Página",
+    description:
+      "Jornal das artes de mesa: game design, mecânicas, prototipagem, impressão 3D, miniaturas e print & play.",
+    url: "/anfitriao",
+  },
+}
 
 /**
  * A primeira página, reconstruída sobre a estrutura do layout original
@@ -143,6 +167,10 @@ export default async function DailyProphetFront() {
 
   return (
     <>
+      {/* Dados estruturados da folha. Fica no topo por convenção de leitura —
+          o buscador não se importa com a posição, quem lê o HTML se importa. */}
+      <NewspaperJsonLd url="https://portifolio2026-two.vercel.app/anfitriao" />
+
       {/* ─── EXCLUSIVO — a faixa de manchete do original ─── */}
       <section
         id="anf-manchete-principal"
@@ -394,10 +422,14 @@ export default async function DailyProphetFront() {
       >
         <p className="newspaper-teaser-fatline">{briefs.title}</p>
         {/* O número da página leva o erro de registro — o efeito de letra que
-            o original reserva aos algarismos grandes. Ver `.dpx-misregister`. */}
+            o original reserva aos algarismos grandes. Ver `.dpx-misregister`.
+
+            Dizia "Pág. IV" e apontava para o vazio: a Coleção é a página III
+            (ver `zones`), e IV é o Serviço ao Leitor. Chamada de jornal que
+            manda para a página errada é pior que chamada nenhuma. */}
         <p className="newspaper-teaser-page dpx-misregister">
           <span>Pág.</span>
-          IV
+          III
         </p>
         <p className="newspaper-teaser-story">
           {briefs.items[0]}
@@ -529,9 +561,20 @@ export default async function DailyProphetFront() {
             </div>
 
             <div className="dpx-box">
-              <p className="dpx-box-title">{briefs.title}</p>
+              {/*
+                Este quadro repetia o telegrama INTEIRO — mesmo título, mesmos
+                seis itens que a chamada acima já traz —, e as duas peças ficam
+                a uma rolagem de distância. Num impresso isso é erro de
+                fechamento: a mesma nota composta duas vezes na mesma página.
+
+                A relação entre as duas é a que o jornal já usava: a chamada
+                anuncia as primeiras notas e manda para onde está o resto. O
+                quadro passa a ser o RESTO — as que a chamada não deu — e diz
+                isso no título. Nenhuma nota se perde e nenhuma sai duas vezes.
+              */}
+              <p className="dpx-box-title">{briefs.title} · continuação</p>
               <ul className="dpx-list dpx-list--dash">
-                {briefs.items.map((b) => (
+                {briefs.items.slice(2).map((b) => (
                   <li key={b}>{b}</li>
                 ))}
               </ul>
@@ -602,93 +645,11 @@ export default async function DailyProphetFront() {
         </header>
 
         <div className="dpx-zone dpx-zone--2">
-          {/* O cupom — a camada de formulário, impressa */}
-          <form aria-labelledby="cupom-titulo">
-            <div className="dpx-box dpx-box--heavy">
-              <p className="dpx-box-title" id="cupom-titulo">
-                {coupon.title}
-              </p>
-              <p className="dpx-help">{coupon.standfirst}</p>
-
-              <div className="dpx-field">
-                <label className="dpx-label" data-required="true" htmlFor="cp-nome">
-                  {coupon.fields.name.label}
-                </label>
-                <input
-                  id="cp-nome"
-                  name="nome"
-                  className="dpx-input"
-                  placeholder={coupon.fields.name.placeholder}
-                />
-              </div>
-
-              <div className="dpx-field">
-                <label className="dpx-label" data-required="true" htmlFor="cp-praca">
-                  {coupon.fields.place.label}
-                </label>
-                <input
-                  id="cp-praca"
-                  name="praca"
-                  className="dpx-input"
-                  placeholder={coupon.fields.place.placeholder}
-                />
-              </div>
-
-              <fieldset className="dpx-field">
-                <legend className="dpx-label">{coupon.cadence.legend}</legend>
-                {coupon.cadence.options.map((o) => (
-                  <label key={o.id} className="dpx-choice">
-                    <input
-                      type="radio"
-                      name="cadencia"
-                      value={o.id}
-                      className="dpx-check"
-                      defaultChecked={o.default}
-                    />
-                    <span>{o.label}</span>
-                  </label>
-                ))}
-              </fieldset>
-
-              <fieldset className="dpx-field">
-                <legend className="dpx-label">{coupon.extras.legend}</legend>
-                {coupon.extras.options.map((o) => (
-                  <label key={o.id} className="dpx-choice">
-                    <input
-                      type="checkbox"
-                      name={o.id}
-                      className="dpx-check"
-                      defaultChecked={o.default}
-                    />
-                    <span>{o.label}</span>
-                  </label>
-                ))}
-              </fieldset>
-
-              <div className="dpx-field">
-                <label className="dpx-label" htmlFor="cp-recado">
-                  {coupon.fields.note.label}
-                </label>
-                <textarea
-                  id="cp-recado"
-                  name="recado"
-                  rows={2}
-                  className="dpx-input dpx-input--boxed"
-                />
-                <p className="dpx-help">{coupon.fields.note.help}</p>
-              </div>
-
-              <div className="dpx-actions">
-                <button type="submit" className="dpx-btn dpx-btn--primary">
-                  {coupon.submit}
-                </button>
-                <button type="reset" className="dpx-btn dpx-btn--ghost">
-                  {coupon.reset}
-                </button>
-              </div>
-              <p className="dpx-help">{coupon.fineprint}</p>
-            </div>
-          </form>
+          {/* O cupom — a camada de formulário, impressa. Saiu para um
+              componente de cliente porque virou formulário de verdade: tem
+              estado de envio, de aceite e de recusa. Ver
+              `components/anfitriao/subscription-coupon.tsx`. */}
+          <SubscriptionCoupon />
 
           {/* Conselho da casa e a rubrica do editor. Os classificados que
               viviam aqui mudaram para a faixa "Anúncios Publicitários". */}
@@ -799,9 +760,14 @@ export default async function DailyProphetFront() {
         <ul className="newspaper-footer-index wrapper">
           {index.map((i) => (
             <li key={i.label}>
-              <Link href={i.href} title={i.label}>
+              {/* `ZoneLink` em vez de `Link`: o índice impresso aponta para as
+                  mesmas âncoras do sumário do menu e precisa levar o foco de
+                  teclado junto, como o menu faz. A última entrada é rota de
+                  verdade (`/anfitriao/laboratorio`) — o componente reconhece e
+                  deixa a navegação com o navegador. */}
+              <ZoneLink href={i.href} title={i.label}>
                 {i.label} <span>{i.page}</span>
-              </Link>
+              </ZoneLink>
             </li>
           ))}
         </ul>

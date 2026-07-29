@@ -39,6 +39,7 @@
 import { useCallback, useEffect, useRef, useState } from "react"
 
 import { zones } from "@/lib/anfitriao-prophet"
+import { ZoneLink } from "@/components/anfitriao/zone-link"
 
 /** Abaixo desta largura o painel cobre a folha e a rolagem do corpo trava. */
 const VEIL_BREAKPOINT = "(max-width: 47.99em)"
@@ -124,19 +125,6 @@ export function SectionNav() {
     }
   }
 
-  /**
-   * A rolagem suave é do navegador (`scroll-behavior`); aqui só se acerta o
-   * foco de teclado com o destino. O `href` continua real — sem JS o link
-   * ainda funciona, e o endereço da zona fica compartilhável.
-   */
-  const goToZone = (id: string) => {
-    close(false)
-    const target = document.getElementById(id)
-    if (!target) return
-    // Depois do fechamento, para não disputar o frame com a saída do painel.
-    requestAnimationFrame(() => target.focus({ preventScroll: true }))
-  }
-
   return (
     <div className="dpx-navmenu" ref={rootRef}>
       <button
@@ -174,16 +162,20 @@ export function SectionNav() {
         <ul>
           {zones.map((z) => (
             <li key={z.id}>
-              <a
+              {/* O salto e o acerto de foco vivem em `zone-link.tsx`, que o
+                  índice do rodapé também usa — os dois caminhos para a mesma
+                  âncora precisam se comportar igual. Aqui só se acrescenta o
+                  fechamento do painel. */}
+              <ZoneLink
                 href={`#${z.id}`}
-                onClick={() => goToZone(z.id)}
                 className="dpx-navmenu-link"
+                onNavigate={() => close(false)}
               >
                 <span>{z.label}</span>
                 <span className="dpx-navmenu-page" aria-hidden>
                   {z.page}
                 </span>
-              </a>
+              </ZoneLink>
             </li>
           ))}
         </ul>
