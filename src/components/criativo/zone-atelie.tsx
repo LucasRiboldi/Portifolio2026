@@ -5,7 +5,8 @@ import { PANEL_IN } from "@/components/comic/motion"
 import { RevealGroup, RevealItem } from "@/components/comic/reveal"
 import { Chapter } from "@/components/layout/comic/chapter"
 import { Panel, PanelBody, PanelFooter } from "@/components/layout/comic/panel"
-import { beat, spanVars } from "@/design-system/comic-layout"
+import { compose, spanVars } from "@/design-system/comic-layout"
+import { panelGridClass } from "@/components/layout/comic/panel-grid"
 import { ZONES } from "@/constants/criativo-landing"
 
 const KIND_LABEL: Record<string, string> = {
@@ -31,17 +32,21 @@ const KIND_LABEL: Record<string, string> = {
  */
 export function ZoneAtelie({ artworks }: { artworks: Artwork[] }) {
   const { id, ...meta } = ZONES.atelie
+  // A diagramação conhece o total: assim a última tira fecha em vez de deixar
+  // um terço da página em branco, que era o que `beat(i)` produzia com seis
+  // peças. Ver `compose()` em `design-system/comic-layout`.
+  const pagina = compose(artworks.length)
 
   return (
     <Chapter id={id} palette={id} scene="clip" {...meta}>
-      <RevealGroup as="ul" className="cp-grid cp-grid--rows cp-grid--dense">
+      <RevealGroup as="ul" className={panelGridClass({ withRows: true, dense: true })}>
         {artworks.map((a, i) => {
-          const { span, shape } = beat(i)
+          const { span, shape, destaque } = pagina[i]!
           // A moldura estica para o que sobra do quadro em vez de impor uma
           // proporção. Com proporção fixa, o quadro alto ganhava um vazio por
           // baixo e a linha ficava com fundos irregulares; assim a imagem é que
           // absorve a diferença de altura entre vizinhos.
-          const minH = span.rows ? "min-h-[22rem]" : (span.lg ?? 4) >= 8 ? "min-h-[18rem]" : "min-h-[12rem]"
+          const minH = destaque ? "min-h-[18rem]" : "min-h-[12rem]"
 
           return (
             <RevealItem

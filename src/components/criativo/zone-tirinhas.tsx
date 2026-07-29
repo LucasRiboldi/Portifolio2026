@@ -5,7 +5,8 @@ import { PANEL_IN } from "@/components/comic/motion"
 import { RevealGroup, RevealItem } from "@/components/comic/reveal"
 import { Chapter } from "@/components/layout/comic/chapter"
 import { Panel, PanelBody } from "@/components/layout/comic/panel"
-import { SPAN, spanVars } from "@/design-system/comic-layout"
+import { compose, spanVars } from "@/design-system/comic-layout"
+import { panelGridClass } from "@/components/layout/comic/panel-grid"
 import { ZONES } from "@/constants/criativo-landing"
 
 /**
@@ -25,17 +26,25 @@ import { ZONES } from "@/constants/criativo-landing"
  */
 export function ZoneTirinhas({ strips }: { strips: Strip[] }) {
   const { id, ...meta } = ZONES.tirinhas
+  /**
+   * Três tirinhas com meia página cada deixavam a segunda tira pela metade.
+   * Aqui o desalinho é o efeito principal (as tiras entram inclinadas), e um
+   * vazio irregular ao lado some com a intenção: lê-se como falta, não como
+   * composição. Com as tiras fechando, a inclinação volta a ser a única coisa
+   * fora do esquadro — que é o ponto.
+   */
+  const pagina = compose(strips.length)
 
   return (
     <Chapter id={id} palette={id} scene="clip" {...meta}>
-      <RevealGroup as="ul" className="cp-grid">
+      <RevealGroup as="ul" className={panelGridClass()}>
         {strips.map((s, i) => (
           <RevealItem
             key={s.id}
             as="li"
             variants={PANEL_IN}
             className="cp-col"
-            style={spanVars(SPAN.half)}
+            style={spanVars(pagina[i]!.span)}
           >
             <figure className={i % 2 === 0 ? "k-tilt-l" : "k-tilt-r"}>
               {s.image ? (

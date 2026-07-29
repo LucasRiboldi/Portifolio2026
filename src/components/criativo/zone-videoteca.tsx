@@ -5,7 +5,8 @@ import { PANEL_IN } from "@/components/comic/motion"
 import { RevealGroup, RevealItem } from "@/components/comic/reveal"
 import { Chapter } from "@/components/layout/comic/chapter"
 import { Panel, PanelBody, PanelFooter } from "@/components/layout/comic/panel"
-import { SPAN, spanVars } from "@/design-system/comic-layout"
+import { compose, spanVars } from "@/design-system/comic-layout"
+import { panelGridClass } from "@/components/layout/comic/panel-grid"
 import { ZONES } from "@/constants/criativo-landing"
 
 /**
@@ -39,12 +40,20 @@ function embedUrl(kind: Video["kind"], url: string): string | null {
  */
 export function ZoneVideoteca({ videos }: { videos: Video[] }) {
   const { id, ...meta } = ZONES.videoteca
+  /**
+   * Havia UM vídeo com largura fixa de meia página: metade da folha ficava em
+   * branco à direita, e o vazio lia-se como conteúdo em falta. `compose()` dá
+   * a um item só a página inteira — a splash page, que é a resposta editorial
+   * certa para uma dimensão com uma peça.
+   */
+  const pagina = compose(videos.length)
 
   return (
     <Chapter id={id} palette={id} scene="slideR" {...meta}>
-      <RevealGroup as="ul" className="cp-grid">
+      <RevealGroup as="ul" className={panelGridClass()}>
         {videos.map((v, i) => {
           const embed = embedUrl(v.kind, v.video_url)
+          const { span, shape } = pagina[i]!
 
           return (
             <RevealItem
@@ -52,9 +61,9 @@ export function ZoneVideoteca({ videos }: { videos: Video[] }) {
               as="li"
               variants={PANEL_IN}
               className="cp-col"
-              style={spanVars(SPAN.half)}
+              style={spanVars(span)}
             >
-              <Panel as="article" shape={i % 2 === 0 ? "cutTR" : "cutBL"} accent="lime" className="h-full">
+              <Panel as="article" shape={shape} accent="lime" className="h-full">
                 <PanelBody bleed>
                   <span className="relative block aspect-video bg-[var(--k-ink)]">
                     {v.kind === "local" && v.video_url ? (

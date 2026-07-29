@@ -5,7 +5,8 @@ import { PANEL_IN } from "@/components/comic/motion"
 import { RevealGroup, RevealItem } from "@/components/comic/reveal"
 import { Chapter } from "@/components/layout/comic/chapter"
 import { Panel, PanelBody, PanelFooter } from "@/components/layout/comic/panel"
-import { SPAN, spanVars, type PanelShape, type PanelSpan } from "@/design-system/comic-layout"
+import { compose, spanVars } from "@/design-system/comic-layout"
+import { panelGridClass } from "@/components/layout/comic/panel-grid"
 import { ZONES } from "@/constants/criativo-landing"
 
 const STATUS_LABEL: Record<string, string> = {
@@ -14,44 +15,29 @@ const STATUS_LABEL: Record<string, string> = {
   fila: "Na fila",
 }
 
-/**
- * Ritmo próprio do Cine.
- *
- * O `beat()` genérico mistura quadros largos, e um pôster largo fica errado — a
- * forma do cartaz é vertical e é isso que o olho reconhece. Aqui a variação vem
- * do *formato do requadro* e do tamanho, não da proporção: os cartazes ficam
- * sempre em 2:3. A cada seis, um destaque duplo abre a fila, como a estreia na
- * fachada do cinema.
- *
- * Nada de `wedge` em quadro com texto: o trapézio corta as diagonais em cima e
- * em baixo, e foi exatamente onde a última linha do comentário desapareceu. Os
- * formatos que só mordem um canto (`cutBR`/`cutBL`) dão a mesma quebra de
- * grade sem comer conteúdo.
- */
-function reel(i: number): { span: PanelSpan; shape: PanelShape } {
-  // O destaque é largo, não duplo. Ocupar duas linhas fazia-o herdar a altura de
-  // dois cartazes empilhados (~1200px) e engolir o ecrã inteiro; largo e de uma
-  // linha só, fica ao lado dos vizinhos como a marquise fica ao lado da fila.
-  if (i % 6 === 0) return { span: { base: 4, sm: 8, lg: 6 }, shape: "cutBR" }
-  if (i % 6 === 3) return { span: SPAN.quarter, shape: "cutBL" }
-  return { span: SPAN.quarter, shape: "rect" }
-}
 
 /**
  * Capítulo 04 · Cine — a sessão da madrugada.
  *
- * Segundo capítulo migrado. O feixe de projetor continua a vir do gradiente da
- * paleta `k-zone--cine`, não de um elemento extra.
+ * O feixe de projetor continua a vir do gradiente da paleta `k-zone--cine`,
+ * não de um elemento extra.
+ *
+ * A sessão tinha diagramação própria (`reel()`), a terceira função de página
+ * do projeto — e com quatro filmes fechava a primeira tira e deixava a segunda
+ * em 24% da largura: um cartaz sozinho num vazio de três quartos. Passa a usar
+ * a mesma `compose()` das outras dimensões, que conhece o total e fecha todas
+ * as tiras. Três funções de diagramação viravam três páginas com regras
+ * diferentes; a revista tem uma gramática só.
  */
 export function ZoneCine({ movies }: { movies: Movie[] }) {
   const { id, ...meta } = ZONES.cine
+  const pagina = compose(movies.length)
 
   return (
     <Chapter id={id} palette={id} scene="zoom" {...meta}>
-      <RevealGroup as="ul" className="cp-grid cp-grid--rows cp-grid--dense">
+      <RevealGroup as="ul" className={panelGridClass({ withRows: true, dense: true })}>
         {movies.map((m, i) => {
-          const { span, shape } = reel(i)
-          const feature = (span.lg ?? 3) > 3
+          const { span, shape, destaque: feature } = pagina[i]!
 
           return (
             <RevealItem

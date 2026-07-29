@@ -5,6 +5,7 @@ import { PANEL_IN } from "@/components/comic/motion"
 import { RevealGroup, RevealItem } from "@/components/comic/reveal"
 import { Chapter } from "@/components/layout/comic/chapter"
 import { spanVars } from "@/design-system/comic-layout"
+import { panelGridClass } from "@/components/layout/comic/panel-grid"
 import { ZONES } from "@/constants/criativo-landing"
 
 /** Rótulo e cor de cada status — a etiqueta colada na capa. */
@@ -31,19 +32,44 @@ const STATUS: Record<string, { label: string; bg: string }> = {
  * A legenda vai por baixo, como a etiqueta da prateleira — e não dentro de um
  * rodapé, que voltaria a fechar o livro numa caixa.
  */
+/** Colunas ocupadas por exemplar — lombadas têm todas a mesma largura. */
+const LOMBADA = 2
+
 export function ZoneBanca({ comics }: { comics: Comic[] }) {
   const { id, ...meta } = ZONES.banca
 
+  /**
+   * Coluna onde a primeira lombada começa, para a estante ficar centrada.
+   * Só vale enquanto a fila couber numa tira: passando disso, a grelha quebra
+   * a linha sozinha e o deslocamento deixaria a segunda fila torta.
+   */
+  const ocupa = comics.length * LOMBADA
+  const recuo = ocupa < 12 ? Math.floor((12 - ocupa) / 2) + 1 : undefined
+
   return (
     <Chapter id={id} palette={id} scene="skew" {...meta}>
-      <RevealGroup as="ul" className="cp-grid gap-y-12">
-        {comics.map((c) => (
+      {/*
+        A banca é prateleira, não grelha editorial: os livros têm largura
+        igual porque são lombadas, e por isso este é o único capítulo que
+        não passa por `compose()` — impor larguras diferentes a exemplares
+        do mesmo tamanho desfaria a leitura de "estante".
+
+        O que se corrige é outra coisa: cinco lombadas de 2/12 somam 10, e as
+        duas colunas que sobravam ficavam TODAS à direita — a estante parecia
+        interrompida a três quartos. Centrada, a folga divide-se pelas duas
+        margens e lê-se como o que é: uma prateleira com espaço nas pontas.
+      */}
+      <RevealGroup as="ul" className={panelGridClass({ className: "justify-center gap-y-12" })}>
+        {comics.map((c, i) => (
           <RevealItem
             key={c.id}
             as="li"
             variants={PANEL_IN}
             className="cp-col"
-            style={spanVars({ base: 2, sm: 2, lg: 2 })}
+            style={{
+              ...spanVars({ base: 2, sm: 2, lg: LOMBADA }),
+              ...(i === 0 && recuo ? { gridColumnStart: recuo } : {}),
+            }}
           >
             <ComicBook
               title={c.title}

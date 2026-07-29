@@ -122,3 +122,135 @@ export function beat(i: number): { span: PanelSpan; shape: PanelShape } {
       return { span: SPAN.third, shape: "tiltR" }
   }
 }
+
+/* ══════════════════════════════════════════════════════════════
+   A PÁGINA MONTADA — diagramação que conhece o número de quadros
+   ══════════════════════════════════════════════════════════════
+
+   O PROBLEMA QUE ISTO RESOLVE
+
+   `beat(i)` decide a largura de um quadro olhando só para a posição dele.
+   Funciona enquanto o total for múltiplo do ciclo; deixa de funcionar no
+   resto do tempo — e medido na página, era o resto do tempo:
+
+     ateliê     6 quadros → última tira ocupa 66% da largura
+     cine       4 quadros → 24%
+     tirinhas   3 quadros → 49%
+     videoteca  1 quadro  → 49%
+     oficina    2 quadros → 41%
+
+   Sete das oito páginas terminavam num vazio irregular à direita. Numa página
+   de quadrinhos isso não acontece, e não por rigor de grelha: a TIRA é a
+   unidade de leitura, e uma tira que não fecha deixa o olho suspenso a meio
+   caminho, sem saber se desce ou se ainda falta alguma coisa ali. O letrista
+   ajusta a largura dos quadros ao número deles — quatro quadros numa tira são
+   estreitos, dois são largos, um sozinho vira splash.
+
+   É o que esta função faz: recebe QUANTOS quadros a página tem e devolve a
+   diagramação inteira, com todas as tiras fechando as 12 colunas.
+
+   O vazio deixa de ser resto e passa a ser decisão: onde a página quiser
+   respirar, é a tira `[8,4]` que abre o espaço — intencional, ancorado, com
+   o quadro estreito a segurar a margem.
+   ══════════════════════════════════════════════════════════════ */
+
+/**
+ * As tiras possíveis, por número de quadros. Cada arranjo soma 12.
+ *
+ * Duas opções por tamanho, para que páginas vizinhas não saiam com o mesmo
+ * desenho: a escolha alterna com o índice da tira. Vocabulário de HQ e não de
+ * grelha — `[8,4]` é "destaque com nota ao lado", `[4,4,4]` é "tira de três".
+ */
+const TIRAS: Record<number, readonly (readonly number[])[]> = {
+  1: [[12]],
+  2: [
+    [8, 4],
+    [4, 8],
+  ],
+  3: [
+    [4, 4, 4],
+    [6, 3, 3],
+  ],
+  4: [[3, 3, 3, 3]],
+}
+
+/**
+ * Quantos quadros por tira, para um total.
+ *
+ * A preferência é 3 → 2 → 4: a tira de três é o ritmo base de página, a de
+ * dois abre respiro, a de quatro adensa. O resto nunca fica em 1 por acidente
+ * — mas um total de 1 vira `[12]` de propósito, que é a splash page e a
+ * resposta editorial certa para uma dimensão com uma peça só.
+ */
+function tiras(total: number): number[] {
+  if (total <= 0) return []
+  if (total <= 4) return [total]
+
+  const out: number[] = []
+  let resto = total
+  let i = 0
+
+  while (resto > 0) {
+    if (resto <= 4) {
+      out.push(resto)
+      break
+    }
+    // Evita deixar para trás um resto de 1 quando ainda há tira a compor: um
+    // quadro solto no meio da página lê-se como falha, não como splash.
+    //
+    // O ajuste tem de continuar dentro do vocabulário (1 a 4 quadros por
+    // tira): somar 1 a uma tira de quatro pediria uma tira de cinco, que não
+    // existe — e a página perdia quadros em silêncio. Encontrado pelo teste
+    // de invariante, nos totais 13, 25 e 37. Quando somar não cabe, tira-se.
+    const passo = [3, 2, 3, 4][i % 4] ?? 3
+    const escolha = resto - passo !== 1 ? passo : passo < 4 ? passo + 1 : passo - 1
+    out.push(escolha)
+    resto -= escolha
+    i++
+  }
+
+  return out
+}
+
+/** Formatos, distribuídos para que dois quadros vizinhos nunca repitam recorte. */
+const RECORTES: PanelShape[] = ["cutTR", "rect", "cutBL", "octagon", "tiltR", "cutBR", "wedge"]
+
+/**
+ * Diagrama uma página inteira.
+ *
+ * Devolve um item por quadro, na ordem, com a largura que fecha a sua tira.
+ * A zona deixa de decidir diagramação e passa a descrever conteúdo — que é a
+ * divisão de trabalho certa entre editor e diagramador.
+ *
+ * `destaque` marca o primeiro quadro de cada tira larga: é onde a zona pode
+ * pedir mais altura à imagem sem desalinhar a tira.
+ */
+export function compose(
+  total: number
+): { span: PanelSpan; shape: PanelShape; destaque: boolean }[] {
+  const saida: { span: PanelSpan; shape: PanelShape; destaque: boolean }[] = []
+  let n = 0
+
+  tiras(total).forEach((quantos, linha) => {
+    const opcoes = TIRAS[quantos] ?? TIRAS[3]!
+    const arranjo = opcoes[linha % opcoes.length]!
+
+    arranjo.forEach((colunas, pos) => {
+      saida.push({
+        span: {
+          // No telemóvel a grelha tem 4 colunas: um quadro de 3/12 ali daria
+          // 60px. Abaixo de 640px tudo ocupa a largura toda, menos os pares,
+          // que continuam a caber lado a lado.
+          base: colunas <= 3 && arranjo.length === 4 ? 2 : 4,
+          sm: colunas >= 8 ? 8 : colunas >= 6 ? 8 : colunas >= 4 ? 4 : 2,
+          lg: colunas,
+        },
+        shape: RECORTES[n % RECORTES.length]!,
+        destaque: colunas >= 6,
+      })
+      n++
+    })
+  })
+
+  return saida
+}

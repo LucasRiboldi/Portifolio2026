@@ -1,5 +1,21 @@
 import { cn } from "@/lib/utils"
 
+/**
+ * A classe da grelha, para quem não pode usar o componente.
+ *
+ * As zonas animadas envolvem os quadros em `RevealGroup` (que já é o `<ul>` e
+ * orquestra a entrada). Encaixar `PanelGrid` por fora acrescentaria um nível
+ * de caixa entre a grelha e os quadros, e `display: contents` — o remendo
+ * habitual — não recebe `transform`: a animação de entrada morreria.
+ *
+ * Então o que se centraliza é a DECISÃO, não o elemento. Quem tem elemento
+ * próprio pede a classe; quem não tem usa o componente abaixo. Nos dois casos
+ * a regra de goteiras e colunas mora num sítio só.
+ */
+export function panelGridClass(o?: { withRows?: boolean; dense?: boolean; className?: string }) {
+  return cn("cp-grid", o?.withRows && "cp-grid--rows", o?.dense && "cp-grid--dense", o?.className)
+}
+
 interface PanelGridProps {
   children: React.ReactNode
   className?: string
@@ -23,6 +39,12 @@ interface PanelGridProps {
  * Um único sítio a decidir goteiras e colunas — cada quadro só declara quanto
  * ocupa (`span`), nunca onde começa. Posições absolutas partiriam no primeiro
  * item que o banco devolvesse a mais.
+ *
+ * Esta peça existia e não era usada: as nove chamadas escreviam `cp-grid` à
+ * mão, cada uma com o seu `gap-y-*` avulso, e a "decisão num sítio só" não
+ * decidia nada. Uma abstração contornada é pior que abstração nenhuma —
+ * carrega o custo de existir sem o benefício de centralizar. Agora as zonas
+ * passam por aqui.
  */
 export function PanelGrid({
   children,
@@ -32,9 +54,7 @@ export function PanelGrid({
   as: Tag = "div",
 }: PanelGridProps) {
   return (
-    <Tag
-      className={cn("cp-grid", withRows && "cp-grid--rows", dense && "cp-grid--dense", className)}
-    >
+    <Tag className={panelGridClass({ withRows, dense, className })}>
       {children}
     </Tag>
   )
