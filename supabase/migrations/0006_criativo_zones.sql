@@ -1,3 +1,15 @@
+-- IDEMPOTENTE DE PROPOSITO
+--
+-- `create table if not exists` ja era seguro, mas `create policy` e
+-- `create trigger` nao sao: numa segunda execucao eles falham com
+-- "already exists" e abortam o resto do script. Numa migration que ainda
+-- nao foi aplicada isso e uma armadilha real -- se a primeira tentativa
+-- parar no meio (timeout, erro de permissao, aba fechada), a segunda morre
+-- na primeira policy ja criada e nao ha como sair do lugar sem limpar a mao.
+--
+-- Com `drop policy if exists` antes de cada `create`, rodar de novo e sempre
+-- seguro e converge para o mesmo estado.
+
 -- ════════════════════════════════════════════════════════════════════════
 --  Zonas da landing /criativo — o multiverso pessoal do Lucas.
 --
@@ -26,6 +38,7 @@ create table if not exists public.artworks (
   created_at  timestamptz not null default now(),
   updated_at  timestamptz not null default now()
 );
+drop trigger if exists artworks_touch on public.artworks;
 create trigger artworks_touch before update on public.artworks
   for each row execute function public.touch_updated_at();
 
@@ -107,6 +120,7 @@ create table if not exists public.notes (
   created_at timestamptz not null default now(),
   updated_at timestamptz not null default now()
 );
+drop trigger if exists notes_touch on public.notes;
 create trigger notes_touch before update on public.notes
   for each row execute function public.touch_updated_at();
 
@@ -131,18 +145,32 @@ alter table public.videos   enable row level security;
 alter table public.notes    enable row level security;
 alter table public.strips   enable row level security;
 
+drop policy if exists "artworks_read" on public.artworks;
 create policy "artworks_read" on public.artworks for select using (published or public.is_admin());
+drop policy if exists "comics_read" on public.comics;
 create policy "comics_read"   on public.comics   for select using (published or public.is_admin());
+drop policy if exists "movies_read" on public.movies;
 create policy "movies_read"   on public.movies   for select using (published or public.is_admin());
+drop policy if exists "tracks_read" on public.tracks;
 create policy "tracks_read"   on public.tracks   for select using (published or public.is_admin());
+drop policy if exists "videos_read" on public.videos;
 create policy "videos_read"   on public.videos   for select using (published or public.is_admin());
+drop policy if exists "notes_read" on public.notes;
 create policy "notes_read"    on public.notes    for select using (published or public.is_admin());
+drop policy if exists "strips_read" on public.strips;
 create policy "strips_read"   on public.strips   for select using (published or public.is_admin());
 
+drop policy if exists "artworks_admin_write" on public.artworks;
 create policy "artworks_admin_write" on public.artworks for all using (public.is_admin()) with check (public.is_admin());
+drop policy if exists "comics_admin_write" on public.comics;
 create policy "comics_admin_write"   on public.comics   for all using (public.is_admin()) with check (public.is_admin());
+drop policy if exists "movies_admin_write" on public.movies;
 create policy "movies_admin_write"   on public.movies   for all using (public.is_admin()) with check (public.is_admin());
+drop policy if exists "tracks_admin_write" on public.tracks;
 create policy "tracks_admin_write"   on public.tracks   for all using (public.is_admin()) with check (public.is_admin());
+drop policy if exists "videos_admin_write" on public.videos;
 create policy "videos_admin_write"   on public.videos   for all using (public.is_admin()) with check (public.is_admin());
+drop policy if exists "notes_admin_write" on public.notes;
 create policy "notes_admin_write"    on public.notes    for all using (public.is_admin()) with check (public.is_admin());
+drop policy if exists "strips_admin_write" on public.strips;
 create policy "strips_admin_write"   on public.strips   for all using (public.is_admin()) with check (public.is_admin());

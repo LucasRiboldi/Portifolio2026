@@ -69,6 +69,7 @@ alter table public.prophet_materias
     and jsonb_typeof(colofao) = 'object'
   );
 
+drop trigger if exists prophet_materias_touch on public.prophet_materias;
 create trigger prophet_materias_touch before update on public.prophet_materias
   for each row execute function public.touch_updated_at();
 
@@ -79,8 +80,10 @@ create index if not exists prophet_materias_sort_idx
 -- ─── RLS: leitura pública do publicado, escrita só admin ────────────────
 alter table public.prophet_materias enable row level security;
 
+drop policy if exists "prophet_materias_read" on public.prophet_materias;
 create policy "prophet_materias_read" on public.prophet_materias
   for select using (published or public.is_admin());
 
+drop policy if exists "prophet_materias_admin_write" on public.prophet_materias;
 create policy "prophet_materias_admin_write" on public.prophet_materias
   for all using (public.is_admin()) with check (public.is_admin());
