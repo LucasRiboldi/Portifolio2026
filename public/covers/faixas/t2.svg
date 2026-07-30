@@ -1,0 +1,27 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1000 1000" width="1000" height="1000" role="img" aria-label="Capa gerada para Retícula em Lo-fi">
+  <defs>
+    <linearGradient id="bg" x1="0" y1="0" x2="0.6" y2="1">
+      <stop offset="0" stop-color="#2a0740"/>
+      <stop offset="1" stop-color="#6b1bb0"/>
+    </linearGradient>
+    <radialGradient id="glow" cx="0.561" cy="0.527" r="0.75">
+      <stop offset="0" stop-color="#8b3dff" stop-opacity="0.55"/>
+      <stop offset="1" stop-color="#8b3dff" stop-opacity="0"/>
+    </radialGradient>
+    <pattern id="dots" width="19.9" height="19.9" patternUnits="userSpaceOnUse">
+      <circle cx="9.9" cy="9.9" r="4.0" fill="#12100e" opacity="0.5"/>
+    </pattern>
+  </defs>
+
+  <rect width="1000" height="1000" fill="url(#bg)"/>
+  <rect width="1000" height="1000" fill="url(#glow)"/>
+  <path d="M1122.3 528.6L1974.0 592.2L1120.1 577.3ZM980.5 582.3L1957.8 750.6L976.8 605.5ZM978.9 654.9L1898.4 987.7L969.0 683.6ZM949.5 751.1L1755.3 1285.0L929.2 783.1ZM882.7 800.7L1596.7 1490.5L857.3 828.0ZM823.8 808.2L1492.5 1591.5L805.0 824.7ZM751.0 866.1L1220.2 1778.5L733.4 875.4ZM682.7 870.7L1004.5 1870.1L668.3 875.5ZM647.0 1045.8L745.4 1929.3L612.4 1050.4ZM545.5 725.8L427.7 1935.0L539.4 725.2ZM485.6 874.2L213.3 1897.9L462.3 868.3ZM416.0 952.3L52.4 1846.6L383.5 939.7ZM335.3 906.6L-199.0 1719.6L312.6 892.1ZM358.2 765.9L-382.9 1580.0L346.0 754.9ZM411.6 638.6L-586.5 1353.3L408.0 633.7ZM393.2 623.1L-687.1 1191.6L387.8 613.0ZM32.6 716.7L-787.1 953.6L19.7 676.1ZM204.7 594.2L-839.5 721.6L199.9 559.7ZM383.5 511.2L-839.4 332.4L385.9 494.0ZM311.1 465.7L-799.2 141.0L316.2 448.0ZM287.8 400.1L-700.7 -111.2L296.9 382.1ZM285.2 321.6L-559.1 -335.9L292.1 312.6ZM434.9 399.2L-407.7 -502.9L441.4 393.1ZM447.7 374.7L-245.4 -634.4L458.2 367.5ZM432.9 270.8L-46.8 -749.7L443.2 265.9ZM438.1 64.0L263.1 -855.3L482.7 54.4ZM536.7 221.7L502.5 -885.9L560.4 220.8ZM603.4 28.3L733.7 -876.5L641.2 32.9ZM689.9 75.6L978.9 -824.0L709.9 81.8ZM812.1 82.0L1289.5 -685.2L836.5 96.6ZM857.5 105.0L1414.0 -601.1L886.5 127.0ZM866.6 254.4L1657.9 -365.8L890.2 283.5ZM911.4 309.2L1790.1 -172.8L927.3 337.1ZM1048.8 329.6L1896.2 60.3L1065.6 377.8ZM762.8 481.3L1951.7 268.7L765.8 497.5Z" fill="rgba(18,16,14,0.55)" opacity="0.85"/>
+  <g transform="rotate(-3.73 500.0 500.0)">
+    <g transform="rotate(-1.82 500.0 500.0)"><path d="M249.7 249.7H631.0L750.3 369.0V750.3H249.7Z" fill="#9dff2f" stroke="#12100e" stroke-width="7" stroke-linejoin="round"/></g>
+    <text x="494.1" y="494.1" text-anchor="middle" dominant-baseline="central" font-family="Impact, Haettenschweiler, 'Arial Narrow Bold', 'Franklin Gothic Heavy', sans-serif" font-size="568" font-weight="700" fill="#ffd200" opacity="0.75">R</text>
+    <text x="505.9" y="505.9" text-anchor="middle" dominant-baseline="central" font-family="Impact, Haettenschweiler, 'Arial Narrow Bold', 'Franklin Gothic Heavy', sans-serif" font-size="568" font-weight="700" fill="#8b3dff" opacity="0.75">R</text>
+    <text x="500.0" y="500.0" text-anchor="middle" dominant-baseline="central" font-family="Impact, Haettenschweiler, 'Arial Narrow Bold', 'Franklin Gothic Heavy', sans-serif" font-size="568" font-weight="700" fill="#fff6e0" opacity="1">R</text>
+  </g>
+  <rect width="1000" height="1000" fill="url(#dots)" opacity="0.22"/>
+  <rect x="6" y="6" width="988" height="988" fill="none" stroke="#12100e" stroke-width="12"/>
+</svg>

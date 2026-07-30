@@ -264,6 +264,46 @@ export const tracks: Track[] = [
     cover_image: "/covers/faixas/t1.svg",
     note: "Suba o arquivo pelo /admin → Rádio. Enquanto não houver áudio, o visualizador roda em modo demo.",
   },
+  {
+    id: "t2",
+    title: "Retícula em Lo-fi",
+    artist: "Lucas Riboldi",
+    audio_url: "",
+    cover_image: "/covers/faixas/t2.svg",
+    note: "Loop de quatro compassos feito enquanto eu desenhava o halftone desta página. O chiado é vinil de verdade, gravado do toca-discos do meu pai.",
+  },
+  {
+    id: "t3",
+    title: "Terra-138",
+    artist: "Lucas Riboldi",
+    audio_url: "",
+    cover_image: "/covers/faixas/t3.svg",
+    note: "Tema da anomalia. Baixo sujo, bateria seca e um sintetizador que não afina de propósito — a ideia era soar como dimensão que deu errado.",
+  },
+  {
+    id: "t4",
+    title: "Compilando às 3 da manhã",
+    artist: "Lucas Riboldi",
+    audio_url: "",
+    cover_image: "/covers/faixas/t4.svg",
+    note: "Ambiente de duas notas para deixar rodando enquanto o build não termina. Não tem refrão porque refrão distrai.",
+  },
+  {
+    id: "t5",
+    title: "Onomatopeia (POW mix)",
+    artist: "Lucas Riboldi",
+    audio_url: "",
+    cover_image: "/covers/faixas/t5.svg",
+    note: "Percussão inteira montada com samples de impacto de HQ. Cada golpe é uma letra do alfabeto de letragem que virou a Terra-1610.",
+  },
+  {
+    id: "t6",
+    title: "Modo escuro",
+    artist: "Lucas Riboldi",
+    audio_url: "",
+    cover_image: "/covers/faixas/t6.svg",
+    note: "Feita para o realm dev: mesma progressão em duas oitavas, uma clara e outra grave, trocando conforme o tema. Nunca consegui sincronizar com o CSS, então ficou só a música.",
+  },
 ]
 
 export const videos: Video[] = [
@@ -273,6 +313,42 @@ export const videos: Video[] = [
     description: "Timelapse de como cada dimensão visual do site foi construída em CSS.",
     video_url: "",
     poster_image: "/covers/videos/fita-rodando.webp",
+    kind: "local",
+  },
+  {
+    id: "v2",
+    title: "Foil holográfico sem imagem",
+    description:
+      "Reconstrução do brilho de carta de TCG usando só gradiente cônico e blend mode. Da primeira tentativa (que parecia plástico molhado) até o ângulo que finalmente enganou o olho.",
+    video_url: "",
+    poster_image: "/covers/videos/v2.svg",
+    kind: "local",
+  },
+  {
+    id: "v3",
+    title: "Diário de um bug de hidratação",
+    description:
+      "Quarenta minutos caçando um 'Carregando...' eterno que era um loading.tsx na raiz. Deixei os becos sem saída no vídeo de propósito — é assim que depuração parece de verdade.",
+    video_url: "",
+    poster_image: "/covers/videos/v3.svg",
+    kind: "local",
+  },
+  {
+    id: "v4",
+    title: "Letragem: do rascunho ao vetor",
+    description:
+      "O alfabeto de onomatopeia sendo desenhado à mão e depois vetorizado. THWIP levou onze tentativas; ZAP saiu na primeira e nunca mais foi mexido.",
+    video_url: "",
+    poster_image: "/covers/videos/v4.svg",
+    kind: "local",
+  },
+  {
+    id: "v5",
+    title: "Retrato em 32×32",
+    description:
+      "Pixel art com paleta de oito cores, do esboço ao último pixel. A restrição era a graça: sem meio-tom, cada cor precisa fazer dois trabalhos.",
+    video_url: "",
+    poster_image: "/covers/videos/v5.svg",
     kind: "local",
   },
 ]

@@ -237,10 +237,44 @@ function items(file, exportName) {
   const block = nextExport === -1 ? rest : rest.slice(0, nextExport)
 
   const out = []
-  const re = /id:\s*["'`]([^"'`]+)["'`][\s\S]*?title:\s*["'`]([^"'`]+)["'`]/g
+  const re = /id:\s*["'`]([^"'`]+)["'`]([\s\S]*?)title:\s*["'`]([^"'`]+)["'`]([\s\S]*?)(?=\n  \{|$)/g
   let m
-  while ((m = re.exec(block))) out.push({ id: m[1], title: m[2] })
+  while ((m = re.exec(block))) {
+    // O caminho da capa declarado pelo próprio item, sob qualquer um dos nomes
+    // que as coleções usam (`image`, `cover_image`, `poster_image`,
+    // `coverImage`).
+    const trecho = m[2] + m[4]
+    const capa = trecho.match(/(?:cover_image|poster_image|coverImage|image):\s*["'`]([^"'`]*)["'`]/)
+    out.push({ id: m[1], title: m[3], capa: capa ? capa[1] : null })
+  }
   return out
+}
+
+/**
+ * O item tem arte própria, que este gerador não deve tentar produzir?
+ *
+ * Revistas, filmes e um dos vídeos passaram a usar capas reais em `.webp`. O
+ * gerador só sabe desenhar `<id>.svg`, então continuava a reivindicar um
+ * arquivo que a página não referencia: `--check` acusava doze capas
+ * "desatualizadas" que na verdade tinham sido substituídas por arte melhor, e
+ * gerá-las de volta criava doze órfãos.
+ *
+ * A regra é a do próprio dado: se o item aponta para um caminho que NÃO é o
+ * `<id>.svg` desta coleção, quem manda é o dado — o gerador sai da frente.
+ * Item sem capa declarada continua a receber a peça desenhada, que é o caso de
+ * uso original.
+ */
+function temArtePropria(item, pasta) {
+  // Campo ausente: a coleção não declara capa nenhuma e o gerador é a fonte.
+  // É o caso de uso original, e continua valendo.
+  if (item.capa === null) return false
+
+  // Declarado vazio é uma DECISÃO, não uma lacuna: o item pede o fallback
+  // desenhado da `MediaFrame` (a Saga, sem capa no arquivo). Gerar um SVG aqui
+  // produziria um arquivo que ninguém referencia.
+  if (item.capa === "") return true
+
+  return item.capa !== `/covers/${pasta}/${item.id}.svg`
 }
 
 /** Coleção → pasta, zona da paleta e proporção da peça. */
@@ -260,6 +294,7 @@ const COLLECTIONS = [
 
 const check = process.argv.includes("--check")
 let written = 0
+let skipped = 0
 let stale = []
 
 for (const col of COLLECTIONS) {
@@ -267,6 +302,11 @@ for (const col of COLLECTIONS) {
   if (!check) mkdirSync(dir, { recursive: true })
 
   for (const item of items(col.file, col.exportName)) {
+    if (temArtePropria(item, col.name)) {
+      skipped++
+      continue
+    }
+
     const svg = cover({ id: item.id, title: item.title, zone: col.zone, ratio: col.ratio })
     const file = join(dir, `${item.id}.svg`)
 
@@ -289,7 +329,7 @@ if (check) {
     console.error("\nCorre `node scripts/generate-covers.mjs` e commita o resultado.")
     process.exit(1)
   }
-  console.log("Capas em dia.")
+  console.log(`Capas em dia.${skipped ? ` ${skipped} com arte própria, ignoradas.` : ""}`)
 } else {
-  console.log(`${written} capas escritas em public/covers/`)
+  console.log(`${written} capas escritas em public/covers/${skipped ? ` (${skipped} com arte própria, ignoradas)` : ""}`)
 }

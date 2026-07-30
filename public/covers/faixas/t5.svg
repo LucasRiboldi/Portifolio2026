@@ -1,0 +1,27 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1000 1000" width="1000" height="1000" role="img" aria-label="Capa gerada para Onomatopeia (POW mix)">
+  <defs>
+    <linearGradient id="bg" x1="0" y1="0" x2="0.6" y2="1">
+      <stop offset="0" stop-color="#2a0740"/>
+      <stop offset="1" stop-color="#6b1bb0"/>
+    </linearGradient>
+    <radialGradient id="glow" cx="0.329" cy="0.536" r="0.75">
+      <stop offset="0" stop-color="#8b3dff" stop-opacity="0.55"/>
+      <stop offset="1" stop-color="#8b3dff" stop-opacity="0"/>
+    </radialGradient>
+    <pattern id="dots" width="16.5" height="16.5" patternUnits="userSpaceOnUse">
+      <circle cx="8.3" cy="8.3" r="3.3" fill="#12100e" opacity="0.5"/>
+    </pattern>
+  </defs>
+
+  <rect width="1000" height="1000" fill="url(#bg)"/>
+  <rect width="1000" height="1000" fill="url(#glow)"/>
+  <path d="M864.5 525.1L1743.3 560.7L863.8 565.7ZM688.8 593.7L1716.2 812.5L683.4 620.7ZM830.3 795.5L1554.4 1242.6L804.7 839.9ZM580.8 762.9L1351.6 1513.2L567.2 777.1ZM459.6 705.6L1174.9 1669.7L454.6 709.4ZM451.8 851.8L809.2 1866.4L436.6 857.3ZM382.2 904.5L470.2 1943.3L350.4 907.7ZM288.4 889.5L135.0 1936.9L272.5 887.2ZM153.7 1072.7L-128.1 1874.3L139.7 1067.9ZM164.5 799.4L-464.5 1706.6L145.7 786.6ZM6.4 843.6L-730.9 1472.1L-15.8 818.4ZM9.3 709.0L-926.9 1185.7L3.2 697.3ZM-212.2 677.0L-1048.4 855.6L-219.0 647.9ZM-174.3 527.5L-1084.1 488.6L-173.7 510.9ZM-205.8 444.8L-1053.1 237.9L-195.9 398.7ZM151.5 450.1L-912.9 -139.9L160.5 433.5ZM51.6 291.3L-696.6 -437.3L70.2 271.7ZM199.9 342.4L-433.3 -654.8L207.5 337.6ZM229.4 327.2L-231.5 -762.1L245.7 320.2ZM286.8 296.1L125.2 -863.3L301.4 294.0ZM380.1 72.5L503.2 -867.4L393.2 74.1ZM434.6 211.0L795.3 -799.1L449.2 216.1ZM565.3 205.8L1172.8 -599.0L577.4 214.9ZM642.3 240.3L1395.4 -393.1L665.1 266.5ZM525.8 429.8L1582.9 -118.5L528.9 435.6ZM607.4 453.1L1701.8 195.4L613.9 479.4Z" fill="rgba(18,16,14,0.55)" opacity="0.85"/>
+  <g transform="rotate(-7.10 500.0 500.0)">
+    <circle cx="500.0" cy="500.0" r="321.3" fill="#9dff2f" stroke="#12100e" stroke-width="7"/><circle cx="500.0" cy="500.0" r="214.2" fill="none" stroke="#12100e" stroke-width="7"/><circle cx="500.0" cy="500.0" r="107.1" fill="#9dff2f" stroke="#12100e" stroke-width="7"/>
+    <text x="494.7" y="494.7" text-anchor="middle" dominant-baseline="central" font-family="Impact, Haettenschweiler, 'Arial Narrow Bold', 'Franklin Gothic Heavy', sans-serif" font-size="609" font-weight="700" fill="#ffd200" opacity="0.75">O</text>
+    <text x="505.3" y="505.3" text-anchor="middle" dominant-baseline="central" font-family="Impact, Haettenschweiler, 'Arial Narrow Bold', 'Franklin Gothic Heavy', sans-serif" font-size="609" font-weight="700" fill="#8b3dff" opacity="0.75">O</text>
+    <text x="500.0" y="500.0" text-anchor="middle" dominant-baseline="central" font-family="Impact, Haettenschweiler, 'Arial Narrow Bold', 'Franklin Gothic Heavy', sans-serif" font-size="609" font-weight="700" fill="#fff6e0" opacity="1">O</text>
+  </g>
+  <rect width="1000" height="1000" fill="url(#dots)" opacity="0.22"/>
+  <rect x="6" y="6" width="988" height="988" fill="none" stroke="#12100e" stroke-width="12"/>
+</svg>

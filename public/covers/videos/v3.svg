@@ -1,0 +1,27 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1600 900" width="1600" height="900" role="img" aria-label="Capa gerada para Diário de um bug de hidratação">
+  <defs>
+    <linearGradient id="bg" x1="0" y1="0" x2="0.6" y2="1">
+      <stop offset="0" stop-color="#04180b"/>
+      <stop offset="1" stop-color="#0d5226"/>
+    </linearGradient>
+    <radialGradient id="glow" cx="0.650" cy="0.341" r="0.75">
+      <stop offset="0" stop-color="#9dff2f" stop-opacity="0.55"/>
+      <stop offset="1" stop-color="#9dff2f" stop-opacity="0"/>
+    </radialGradient>
+    <pattern id="dots" width="18.4" height="18.4" patternUnits="userSpaceOnUse">
+      <circle cx="9.2" cy="9.2" r="3.7" fill="#12100e" opacity="0.5"/>
+    </pattern>
+  </defs>
+
+  <rect width="1600" height="900" fill="url(#bg)"/>
+  <rect width="1600" height="900" fill="url(#glow)"/>
+  <path d="M1622.2 269.8L2875.4 266.9L1623.2 318.6ZM1676.5 431.0L2824.0 740.3L1662.5 488.7ZM1601.0 571.6L2683.3 1125.4L1589.3 595.1ZM1422.6 578.0L2488.8 1434.4L1396.8 611.2ZM1357.7 641.2L2248.6 1688.8L1329.1 666.2ZM1284.7 707.7L1923.7 1916.0L1247.0 728.4ZM1154.1 594.8L1684.8 2025.8L1143.5 598.7ZM1096.5 751.3L1232.5 2132.6L1077.6 753.3ZM1000.3 624.1L783.0 2124.6L990.4 622.7ZM923.9 775.2L535.9 2072.1L891.4 766.0ZM812.8 781.5L186.5 1932.2L778.4 763.5ZM800.3 614.5L-134.3 1717.9L781.1 598.6ZM808.7 493.6L-437.1 1396.8L793.5 472.9ZM784.9 439.9L-608.8 1113.9L778.5 426.8ZM351.3 473.6L-752.4 703.2L345.2 446.1ZM681.2 336.3L-794.3 378.4L680.0 305.5ZM579.6 213.4L-752.6 -88.3L582.9 198.2ZM687.7 151.5L-612.2 -493.0L699.6 126.8ZM847.7 170.9L-415.8 -811.3L859.1 156.1ZM705.5 -31.8L-233.7 -1015.0L714.0 -40.0ZM822.6 -21.2L59.8 -1245.2L837.2 -30.5ZM851.4 -285.1L551.9 -1462.7L898.5 -298.1ZM957.2 -347.2L864.2 -1520.4L996.7 -351.0ZM1055.5 28.9L1191.8 -1522.6L1070.7 30.1ZM1221.7 -293.8L1597.3 -1442.2L1239.4 -288.1ZM1341.6 -275.1L1925.3 -1301.3L1370.6 -259.1ZM1318.5 -1.1L2298.5 -1029.7L1330.8 10.4ZM1569.8 -60.1L2574.1 -701.4L1587.1 -33.8ZM1665.8 -26.4L2691.5 -494.8L1689.0 21.5ZM1629.8 172.1L2845.2 -27.3L1639.0 221.7Z" fill="rgba(18,16,14,0.55)" opacity="0.85"/>
+  <g transform="rotate(-3.87 800.0 450.0)">
+    <polygon points="1170.5,450.0 1049.3,540.7 1083.9,688.2 895.1,614.7 864.3,814.9 756.4,697.3 614.7,770.9 631.7,591.3 451.8,576.7 568.6,450.0 451.8,323.3 627.4,305.2 614.7,129.1 754.1,189.9 864.3,85.1 898.3,279.7 1083.9,211.8 1000.5,377.0" fill="#ff2d95" stroke="#12100e" stroke-width="7" stroke-linejoin="round"/>
+    <text x="793.7" y="443.7" text-anchor="middle" dominant-baseline="central" font-family="Impact, Haettenschweiler, 'Arial Narrow Bold', 'Franklin Gothic Heavy', sans-serif" font-size="608" font-weight="700" fill="#00d4ff" opacity="0.75">D</text>
+    <text x="806.3" y="456.3" text-anchor="middle" dominant-baseline="central" font-family="Impact, Haettenschweiler, 'Arial Narrow Bold', 'Franklin Gothic Heavy', sans-serif" font-size="608" font-weight="700" fill="#9dff2f" opacity="0.75">D</text>
+    <text x="800.0" y="450.0" text-anchor="middle" dominant-baseline="central" font-family="Impact, Haettenschweiler, 'Arial Narrow Bold', 'Franklin Gothic Heavy', sans-serif" font-size="608" font-weight="700" fill="#fff6e0" opacity="1">D</text>
+  </g>
+  <rect width="1600" height="900" fill="url(#dots)" opacity="0.22"/>
+  <rect x="6" y="6" width="1588" height="888" fill="none" stroke="#12100e" stroke-width="12"/>
+</svg>

@@ -1,0 +1,27 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1600 900" width="1600" height="900" role="img" aria-label="Capa gerada para Letragem: do rascunho ao vetor">
+  <defs>
+    <linearGradient id="bg" x1="0" y1="0" x2="0.6" y2="1">
+      <stop offset="0" stop-color="#04180b"/>
+      <stop offset="1" stop-color="#0d5226"/>
+    </linearGradient>
+    <radialGradient id="glow" cx="0.509" cy="0.354" r="0.75">
+      <stop offset="0" stop-color="#9dff2f" stop-opacity="0.55"/>
+      <stop offset="1" stop-color="#9dff2f" stop-opacity="0"/>
+    </radialGradient>
+    <pattern id="dots" width="16.8" height="16.8" patternUnits="userSpaceOnUse">
+      <circle cx="8.4" cy="8.4" r="3.4" fill="#12100e" opacity="0.5"/>
+    </pattern>
+  </defs>
+
+  <rect width="1600" height="900" fill="url(#bg)"/>
+  <rect width="1600" height="900" fill="url(#glow)"/>
+  <path d="M1152.6 319.9L2649.8 366.8L1152.2 335.1ZM1299.7 430.3L2586.9 797.2L1289.9 466.3ZM1056.6 428.9L2465.7 1121.1L1050.9 440.7ZM1055.3 494.3L2266.1 1442.5L1045.1 507.6ZM1178.9 738.7L1985.8 1732.3L1159.7 754.6ZM936.6 573.2L1533.7 2007.7L913.7 583.0ZM930.0 733.2L1232.2 2106.2L894.9 741.4ZM844.0 702.3L869.0 2153.5L808.1 703.3ZM692.6 887.2L372.5 2100.3L656.7 878.3ZM686.2 592.3L8.3 1967.8L677.5 588.1ZM428.0 813.9L-373.9 1717.6L388.4 780.2ZM584.6 524.6L-588.3 1502.5L572.9 510.7ZM169.4 613.6L-871.4 1044.8L157.0 584.7ZM277.4 480.2L-964.9 769.4L265.2 432.3ZM294.5 315.0L-1020.7 282.3L294.8 301.7ZM136.9 183.5L-967.0 -123.6L152.4 121.1ZM177.1 56.0L-862.0 -429.0L193.2 19.8ZM300.3 -64.1L-620.9 -825.6L326.9 -97.5ZM520.3 -31.9L-340.4 -1108.2L533.2 -42.2ZM577.9 -76.3L-57.7 -1296.6L614.3 -95.9ZM606.0 -348.8L352.9 -1458.1L671.9 -365.9ZM787.3 -385.7L767.4 -1516.5L805.7 -386.2ZM920.6 -391.1L1176.1 -1481.2L990.9 -377.0ZM977.2 -16.1L1680.7 -1300.0L1002.9 -2.3ZM1209.2 -274.3L1900.7 -1161.5L1261.9 -235.6ZM999.9 140.5L2198.2 -888.0L1016.3 159.3ZM1056.0 206.9L2503.8 -400.4L1062.4 222.1ZM1392.9 159.5L2602.2 -99.3L1403.5 204.8Z" fill="rgba(18,16,14,0.55)" opacity="0.85"/>
+  <g transform="rotate(6.52 800.0 450.0)">
+    <g transform="rotate(7.59 800.0 450.0)"><path d="M568.7 218.7H961.5L1031.3 288.5V681.3H568.7Z" fill="#ff2d95" stroke="#12100e" stroke-width="7" stroke-linejoin="round"/></g>
+    <text x="792.7" y="442.7" text-anchor="middle" dominant-baseline="central" font-family="Impact, Haettenschweiler, 'Arial Narrow Bold', 'Franklin Gothic Heavy', sans-serif" font-size="524" font-weight="700" fill="#00d4ff" opacity="0.75">L</text>
+    <text x="807.3" y="457.3" text-anchor="middle" dominant-baseline="central" font-family="Impact, Haettenschweiler, 'Arial Narrow Bold', 'Franklin Gothic Heavy', sans-serif" font-size="524" font-weight="700" fill="#9dff2f" opacity="0.75">L</text>
+    <text x="800.0" y="450.0" text-anchor="middle" dominant-baseline="central" font-family="Impact, Haettenschweiler, 'Arial Narrow Bold', 'Franklin Gothic Heavy', sans-serif" font-size="524" font-weight="700" fill="#fff6e0" opacity="1">L</text>
+  </g>
+  <rect width="1600" height="900" fill="url(#dots)" opacity="0.22"/>
+  <rect x="6" y="6" width="1588" height="888" fill="none" stroke="#12100e" stroke-width="12"/>
+</svg>

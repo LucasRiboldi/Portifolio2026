@@ -1,0 +1,27 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1000 1000" width="1000" height="1000" role="img" aria-label="Capa gerada para Compilando às 3 da manhã">
+  <defs>
+    <linearGradient id="bg" x1="0" y1="0" x2="0.6" y2="1">
+      <stop offset="0" stop-color="#2a0740"/>
+      <stop offset="1" stop-color="#6b1bb0"/>
+    </linearGradient>
+    <radialGradient id="glow" cx="0.315" cy="0.369" r="0.75">
+      <stop offset="0" stop-color="#8b3dff" stop-opacity="0.55"/>
+      <stop offset="1" stop-color="#8b3dff" stop-opacity="0"/>
+    </radialGradient>
+    <pattern id="dots" width="16.0" height="16.0" patternUnits="userSpaceOnUse">
+      <circle cx="8.0" cy="8.0" r="3.2" fill="#12100e" opacity="0.5"/>
+    </pattern>
+  </defs>
+
+  <rect width="1000" height="1000" fill="url(#bg)"/>
+  <rect width="1000" height="1000" fill="url(#glow)"/>
+  <path d="M587.0 354.3L1728.3 320.7L587.4 365.0ZM723.4 408.6L1714.3 573.1L717.7 447.6ZM670.7 466.4L1672.7 764.5L667.4 477.8ZM565.4 481.1L1582.5 995.9L556.1 499.9ZM543.6 527.1L1463.6 1193.9L537.9 535.1ZM580.8 634.8L1267.3 1414.4L554.9 658.4ZM452.2 556.9L1131.0 1523.9L446.3 561.1ZM537.5 784.1L958.8 1628.1L521.2 792.4ZM388.7 565.5L772.7 1707.0L377.1 569.5ZM431.4 866.0L577.5 1758.5L387.8 874.2ZM345.7 890.9L345.0 1782.8L306.4 891.7ZM265.2 696.0L80.3 1763.5L254.8 694.2ZM249.5 580.4L-146.0 1705.9L236.2 575.8ZM181.9 608.6L-388.8 1595.6L175.2 604.7ZM201.8 534.0L-521.0 1509.6L191.6 526.6ZM-43.9 719.8L-729.8 1322.1L-67.3 694.2ZM40.2 583.1L-828.1 1201.7L26.9 564.8ZM-148.5 649.7L-927.4 1044.8L-172.6 605.4ZM14.7 486.8L-1015.8 847.6L8.4 469.2ZM-119.8 466.3L-1070.1 654.9L-122.8 451.7ZM-65.8 379.1L-1099.3 364.1L-65.7 356.2ZM-10.8 336.5L-1083.6 159.0L-6.0 304.3ZM-18.3 281.3L-1036.0 -49.4L-9.5 252.9ZM-184.6 112.1L-927.0 -307.6L-171.8 88.6ZM122.2 243.6L-846.4 -438.1L130.2 232.0ZM-90.1 15.7L-720.5 -594.4L-66.6 -9.5ZM-16.2 -32.1L-564.3 -738.8L-0.5 -44.6ZM209.7 188.4L-354.9 -876.6L222.3 181.6ZM226.4 132.1L-126.5 -974.6L245.7 125.8ZM259.3 39.2L143.9 -1034.9L289.8 35.4ZM311.5 151.0L342.6 -1045.0L326.9 151.3ZM363.3 -71.6L491.6 -1034.2L377.3 -69.8ZM447.8 -72.3L779.3 -966.9L484.4 -59.5ZM526.7 -60.0L1002.9 -866.7L568.0 -37.0ZM645.5 -76.9L1195.2 -737.9L674.9 -53.6ZM607.1 89.9L1353.0 -591.5L615.7 99.3ZM489.2 235.7L1450.8 -473.6L493.0 240.8ZM748.0 112.8L1546.2 -326.8L757.8 130.1ZM531.0 288.7L1653.8 -86.4L535.1 300.8ZM741.4 292.3L1716.2 178.2L746.3 328.8Z" fill="rgba(18,16,14,0.55)" opacity="0.85"/>
+  <g transform="rotate(7.63 500.0 500.0)">
+    <polygon points="862.3,500.0 723.4,559.9 813.8,681.1 638.8,638.8 681.1,813.8 558.1,716.7 500.0,862.3 447.0,697.9 318.9,813.8 318.2,681.8 186.2,681.1 284.8,557.7 137.7,500.0 313.7,450.1 186.2,318.9 339.4,339.4 318.9,186.2 450.6,315.5 500.0,137.7 560.6,273.7 681.1,186.2 670.4,329.6 813.8,318.9 684.6,450.5" fill="#9dff2f" stroke="#12100e" stroke-width="7" stroke-linejoin="round"/>
+    <text x="493.1" y="493.1" text-anchor="middle" dominant-baseline="central" font-family="Impact, Haettenschweiler, 'Arial Narrow Bold', 'Franklin Gothic Heavy', sans-serif" font-size="564" font-weight="700" fill="#ffd200" opacity="0.75">C</text>
+    <text x="506.9" y="506.9" text-anchor="middle" dominant-baseline="central" font-family="Impact, Haettenschweiler, 'Arial Narrow Bold', 'Franklin Gothic Heavy', sans-serif" font-size="564" font-weight="700" fill="#8b3dff" opacity="0.75">C</text>
+    <text x="500.0" y="500.0" text-anchor="middle" dominant-baseline="central" font-family="Impact, Haettenschweiler, 'Arial Narrow Bold', 'Franklin Gothic Heavy', sans-serif" font-size="564" font-weight="700" fill="#fff6e0" opacity="1">C</text>
+  </g>
+  <rect width="1000" height="1000" fill="url(#dots)" opacity="0.22"/>
+  <rect x="6" y="6" width="988" height="988" fill="none" stroke="#12100e" stroke-width="12"/>
+</svg>

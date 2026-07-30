@@ -1,0 +1,27 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1000 1000" width="1000" height="1000" role="img" aria-label="Capa gerada para Terra-138">
+  <defs>
+    <linearGradient id="bg" x1="0" y1="0" x2="0.6" y2="1">
+      <stop offset="0" stop-color="#2a0740"/>
+      <stop offset="1" stop-color="#6b1bb0"/>
+    </linearGradient>
+    <radialGradient id="glow" cx="0.693" cy="0.373" r="0.75">
+      <stop offset="0" stop-color="#8b3dff" stop-opacity="0.55"/>
+      <stop offset="1" stop-color="#8b3dff" stop-opacity="0"/>
+    </radialGradient>
+    <pattern id="dots" width="20.7" height="20.7" patternUnits="userSpaceOnUse">
+      <circle cx="10.3" cy="10.3" r="4.1" fill="#12100e" opacity="0.5"/>
+    </pattern>
+  </defs>
+
+  <rect width="1000" height="1000" fill="url(#bg)"/>
+  <rect width="1000" height="1000" fill="url(#glow)"/>
+  <path d="M959.7 372.0L2107.0 418.2L959.1 391.8ZM998.8 428.2L2075.5 673.5L994.0 450.3ZM1203.3 555.5L2012.5 883.5L1193.2 581.8ZM1015.5 569.8L1867.4 1162.0L997.0 597.3ZM959.1 670.2L1615.6 1445.7L947.1 680.6ZM812.0 563.9L1410.0 1592.7L802.1 569.7ZM844.8 802.1L1112.7 1724.1L811.4 812.4ZM747.2 670.2L903.6 1772.0L729.3 672.9ZM683.6 576.6L575.4 1782.8L669.4 575.4ZM596.8 730.1L287.5 1728.2L578.0 724.5ZM549.5 629.1L-18.2 1595.6L542.2 624.9ZM412.5 686.0L-274.9 1404.1L399.0 673.4ZM402.4 588.3L-483.1 1158.1L383.2 559.6ZM317.1 526.9L-625.5 883.7L311.8 513.3ZM292.4 473.8L-688.4 674.1L287.0 448.9ZM352.1 379.6L-720.6 352.4L352.4 357.1ZM523.1 344.7L-696.9 114.8L524.1 339.0ZM179.9 179.7L-616.4 -159.7L190.6 153.5ZM395.1 175.0L-472.5 -426.9L401.0 166.4ZM573.3 241.3L-206.3 -717.6L586.6 230.4ZM581.5 183.7L-1.6 -858.1L588.9 179.6ZM563.0 -24.3L298.7 -984.5L590.3 -32.2ZM657.7 -82.0L615.4 -1038.6L678.8 -83.2ZM708.2 -68.2L787.4 -1037.6L737.4 -66.3ZM752.6 115.9L1062.9 -991.6L772.3 121.2ZM792.2 192.4L1412.1 -844.6L804.2 199.5ZM997.3 -30.8L1590.2 -720.1L1030.4 -3.7ZM986.6 161.0L1860.3 -425.6L997.6 177.0ZM886.3 268.6L1962.7 -250.2L894.3 284.9ZM1013.8 312.7L2088.9 143.7L1016.3 328.3Z" fill="rgba(18,16,14,0.55)" opacity="0.85"/>
+  <g transform="rotate(4.74 500.0 500.0)">
+    <g transform="rotate(3.33 500.0 500.0)"><path d="M270.8 270.8H650.7L729.2 349.3V729.2H270.8Z" fill="#9dff2f" stroke="#12100e" stroke-width="7" stroke-linejoin="round"/></g>
+    <text x="492.7" y="492.7" text-anchor="middle" dominant-baseline="central" font-family="Impact, Haettenschweiler, 'Arial Narrow Bold', 'Franklin Gothic Heavy', sans-serif" font-size="574" font-weight="700" fill="#ffd200" opacity="0.75">T</text>
+    <text x="507.3" y="507.3" text-anchor="middle" dominant-baseline="central" font-family="Impact, Haettenschweiler, 'Arial Narrow Bold', 'Franklin Gothic Heavy', sans-serif" font-size="574" font-weight="700" fill="#8b3dff" opacity="0.75">T</text>
+    <text x="500.0" y="500.0" text-anchor="middle" dominant-baseline="central" font-family="Impact, Haettenschweiler, 'Arial Narrow Bold', 'Franklin Gothic Heavy', sans-serif" font-size="574" font-weight="700" fill="#fff6e0" opacity="1">T</text>
+  </g>
+  <rect width="1000" height="1000" fill="url(#dots)" opacity="0.22"/>
+  <rect x="6" y="6" width="988" height="988" fill="none" stroke="#12100e" stroke-width="12"/>
+</svg>
