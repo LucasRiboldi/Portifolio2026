@@ -24,7 +24,22 @@ import { materias } from "@/data/anfitriao-materias"
 
 export interface SyncReport {
   /** Nomes/títulos inseridos por tabela (vazio = nada faltava). */
-  [table: string]: string[]
+  inseridos: Record<string, string[]>
+  /**
+   * Tabela → motivo da falha.
+   *
+   * Existe porque uma tabela ausente derrubava a publicação inteira: o sync
+   * percorre dezesseis tabelas em sequência e a primeira que lançava abortava
+   * todas as seguintes. Pior, `runSyncContentAction` revalida o cache DEPOIS do
+   * sync — então o que já tinha sido inserido antes do erro ficava no banco mas
+   * invisível no site, e o relatório do que entrou era descartado junto com a
+   * exceção.
+   *
+   * Foi o que aconteceu com `artworks` (migration 0006 não aplicada): as oito
+   * tabelas anteriores gravaram, a publicação reportou só o erro, e nada
+   * apareceu. Agora cada tabela falha sozinha e o relatório diz qual.
+   */
+  falhas: Record<string, string>
 }
 
 /**
@@ -69,11 +84,29 @@ async function inserirFaltantes<T>(
 
 export async function syncNewContent(): Promise<SyncReport> {
   const supabase = createAdminClient()
-  const report: SyncReport = { projects: [], tools: [], posts: [] }
+  const report: SyncReport = { inseridos: {}, falhas: {} }
+
+  /**
+   * Roda a publicação de UMA tabela isolando a falha dela.
+   *
+   * A regra é "uma tabela quebrada não cala as outras quinze". Sem isto, a
+   * ordem de execução virava dependência escondida: tudo que vinha depois da
+   * primeira tabela com problema simplesmente não era tentado, e quem lia o
+   * erro não tinha como saber disso.
+   */
+  async function tentar(tabela: string, executar: () => Promise<string[]>) {
+    try {
+      report.inseridos[tabela] = await executar()
+    } catch (err) {
+      report.falhas[tabela] = err instanceof Error ? err.message : String(err)
+      report.inseridos[tabela] = []
+    }
+  }
 
   // ─── Projetos (chave: title) ───
+  await tentar("projects", async () => {
   const { data: projRows, error: projErr } = await supabase.from("projects").select("title, sort")
-  if (projErr) throw new Error(`projects: ${projErr.message}`)
+  if (projErr) throw new Error(projErr.message)
   const projHave = new Set((projRows ?? []).map((r) => r.title))
   const projMax = Math.max(0, ...(projRows ?? []).map((r) => r.sort ?? 0))
   const projMissing = projects.filter((p) => !projHave.has(p.title))
@@ -83,7 +116,7 @@ export async function syncNewContent(): Promise<SyncReport> {
     // os antigos perdem o holofote antes da inserção.
     if (projMissing.some((p) => p.featured)) {
       const { error } = await supabase.from("projects").update({ featured: false }).eq("featured", true)
-      if (error) throw new Error(`projects (featured): ${error.message}`)
+      if (error) throw new Error(`ao limpar o destaque anterior: ${error.message}`)
     }
     const { error } = await supabase.from("projects").insert(
       projMissing.map((p, i) => ({
@@ -99,13 +132,15 @@ export async function syncNewContent(): Promise<SyncReport> {
         sort: p.featured ? -1 : projMax + 1 + i,
       })),
     )
-    if (error) throw new Error(`projects: ${error.message}`)
-    report.projects = projMissing.map((p) => p.title)
+    if (error) throw new Error(error.message)
   }
+  return projMissing.map((p) => p.title)
+  })
 
   // ─── Ferramentas (chave: name) ───
+  await tentar("tools", async () => {
   const { data: toolRows, error: toolErr } = await supabase.from("tools").select("name, sort")
-  if (toolErr) throw new Error(`tools: ${toolErr.message}`)
+  if (toolErr) throw new Error(toolErr.message)
   const toolHave = new Set((toolRows ?? []).map((r) => r.name))
   const toolMax = Math.max(0, ...(toolRows ?? []).map((r) => r.sort ?? 0))
   const toolMissing = tools.filter((t) => !toolHave.has(t.name))
@@ -123,13 +158,15 @@ export async function syncNewContent(): Promise<SyncReport> {
         sort: toolMax + 1 + i,
       })),
     )
-    if (error) throw new Error(`tools: ${error.message}`)
-    report.tools = toolMissing.map((t) => t.name)
+    if (error) throw new Error(error.message)
   }
+  return toolMissing.map((t) => t.name)
+  })
 
   // ─── Posts (chave: slug) ───
+  await tentar("posts", async () => {
   const { data: postRows, error: postErr } = await supabase.from("posts").select("slug, sort")
-  if (postErr) throw new Error(`posts: ${postErr.message}`)
+  if (postErr) throw new Error(postErr.message)
   const postHave = new Set((postRows ?? []).map((r) => r.slug))
   const postMax = Math.max(0, ...(postRows ?? []).map((r) => r.sort ?? 0))
   const postMissing = posts.filter((p) => !postHave.has(p.slug))
@@ -149,9 +186,10 @@ export async function syncNewContent(): Promise<SyncReport> {
         sort: postMax + 1 + i,
       })),
     )
-    if (error) throw new Error(`posts: ${error.message}`)
-    report.posts = postMissing.map((p) => p.title)
+    if (error) throw new Error(error.message)
   }
+  return postMissing.map((p) => p.title)
+  })
 
   // ─── Realm dev ────────────────────────────────────────────────────────
   // Estas cinco tabelas existiam no banco desde a migration 0003, mas não
@@ -159,7 +197,8 @@ export async function syncNewContent(): Promise<SyncReport> {
   // `src/data`. Na prática, o acervo técnico do laboratório só podia ser
   // escrito à mão pelo painel — e por isso estava vazio.
 
-  report.devlogs = await inserirFaltantes(
+  await tentar("devlogs", () =>
+    inserirFaltantes(
     supabase,
     "devlogs",
     "slug",
@@ -174,9 +213,10 @@ export async function syncNewContent(): Promise<SyncReport> {
       tags: d.tags,
       published: true,
     }),
-  )
+  ))
 
-  report.lab_experiments = await inserirFaltantes(
+  await tentar("lab_experiments", () =>
+    inserirFaltantes(
     supabase,
     "lab_experiments",
     "title",
@@ -191,9 +231,10 @@ export async function syncNewContent(): Promise<SyncReport> {
       repo_url: x.repoUrl ?? null,
       published: true,
     }),
-  )
+  ))
 
-  report.snippets = await inserirFaltantes(
+  await tentar("snippets", () =>
+    inserirFaltantes(
     supabase,
     "snippets",
     "title",
@@ -207,9 +248,10 @@ export async function syncNewContent(): Promise<SyncReport> {
       tags: s.tags,
       published: true,
     }),
-  )
+  ))
 
-  report.wiki = await inserirFaltantes(
+  await tentar("wiki", () =>
+    inserirFaltantes(
     supabase,
     "wiki",
     "slug",
@@ -222,9 +264,10 @@ export async function syncNewContent(): Promise<SyncReport> {
       body: w.body,
       published: true,
     }),
-  )
+  ))
 
-  report.ideas = await inserirFaltantes(
+  await tentar("ideas", () =>
+    inserirFaltantes(
     supabase,
     "ideas",
     "title",
@@ -237,7 +280,7 @@ export async function syncNewContent(): Promise<SyncReport> {
       tags: i.tags,
       published: true,
     }),
-  )
+  ))
 
   // ─── Zonas do realm criativo ──────────────────────────────────────────
   // Mesmo buraco das tabelas do dev, por outro caminho: as sete zonas
@@ -258,14 +301,19 @@ export async function syncNewContent(): Promise<SyncReport> {
     ["strips", strips],
   ]
 
+  // Cada zona é tentada por si: a migration 0006 pode não ter sido aplicada
+  // (foi o caso de `artworks`), e uma tabela ausente aqui não pode impedir as
+  // outras seis nem as matérias do jornal, que vêm depois.
   for (const [tabela, linhas] of zonas) {
-    report[tabela] = await inserirFaltantes(
-      supabase,
-      tabela,
-      "title",
-      linhas,
-      (z) => z.title,
-      ({ id: _id, ...resto }) => ({ ...resto, published: true }),
+    await tentar(tabela, () =>
+      inserirFaltantes(
+        supabase,
+        tabela,
+        "title",
+        linhas,
+        (z) => z.title,
+        ({ id: _id, ...resto }) => ({ ...resto, published: true }),
+      ),
     )
   }
 
@@ -274,7 +322,8 @@ export async function syncNewContent(): Promise<SyncReport> {
   // vão como jsonb; o resto é coluna. A migration 0008 tem CHECK de forma
   // sobre as cinco, então um formato torto falha na escrita em vez de
   // aparecer quebrado na folha.
-  report.prophet_materias = await inserirFaltantes(
+  await tentar("prophet_materias", () =>
+    inserirFaltantes(
     supabase,
     "prophet_materias",
     "slug",
@@ -303,7 +352,7 @@ export async function syncNewContent(): Promise<SyncReport> {
       remissoes: m.remissoes,
       published: true,
     }),
-  )
+  ))
 
   return report
 }

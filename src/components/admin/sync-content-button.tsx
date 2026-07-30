@@ -22,10 +22,26 @@ export function SyncContentButton() {
         setErr(res.error)
         return
       }
-      const added = Object.entries(res.report)
+
+      const added = Object.entries(res.report.inseridos)
         .filter(([, items]) => items.length > 0)
         .map(([table, items]) => `${table}: ${items.join(", ")}`)
       setMsg(added.length ? `Publicado — ${added.join(" · ")}` : "Nada novo a publicar: o banco já está em dia.")
+
+      /**
+       * Sucesso e falha convivem no mesmo resultado.
+       *
+       * O sync isola cada tabela, então é normal terminar com quinze publicadas
+       * e uma quebrada. Mostrar só a mensagem verde nesse caso esconderia o
+       * problema; mostrar só a vermelha faria parecer que nada entrou. As duas
+       * aparecem juntas porque as duas são verdade.
+       */
+      const falhas = Object.entries(res.report.falhas)
+      setErr(
+        falhas.length
+          ? `Falharam — ${falhas.map(([t, m]) => `${t}: ${m}`).join(" · ")}`
+          : null,
+      )
     })
   }
 

@@ -53,6 +53,43 @@ describe("toda tabela lida tem caminho de publicação", () => {
   )
 })
 
+describe("uma tabela quebrada não cala as outras", () => {
+  /**
+   * O sync percorre dezesseis tabelas em sequência, e cada uma lançava direto.
+   * A primeira que falhasse abortava todas as seguintes — e como
+   * `runSyncContentAction` revalida o cache DEPOIS do sync, o que já tinha sido
+   * gravado ficava no banco e invisível no site, com o relatório descartado
+   * junto da exceção.
+   *
+   * Aconteceu de verdade: `artworks` não existia (migration 0006 não aplicada),
+   * a publicação morreu ali e as oito tabelas anteriores sumiram do relatório.
+   * O erro na tela não dizia que elas tinham gravado.
+   *
+   * A verificação é estática porque o defeito é de ESTRUTURA, não de resultado:
+   * exercitá-lo exigiria um Supabase falso devolvendo erro numa tabela do meio,
+   * e ainda assim não impediria alguém de acrescentar a décima sétima tabela
+   * fora do isolamento — que é exatamente como a falha nasceu.
+   */
+  it("toda escrita passa pelo isolamento por tabela", () => {
+    // O padrão antigo: atribuir direto ao relatório, sem try/catch em volta.
+    expect(SYNC).not.toMatch(/report\.\w+\s*=\s*await\s+inserirFaltantes\(/)
+    expect(SYNC).not.toMatch(/report\[\w+\]\s*=\s*await\s+inserirFaltantes\(/)
+  })
+
+  it("o relatório separa o que entrou do que falhou", () => {
+    // Sem os dois campos, a UI volta a ter de escolher entre mostrar sucesso
+    // ou erro — e some com metade da verdade.
+    expect(SYNC).toContain("inseridos")
+    expect(SYNC).toContain("falhas")
+  })
+
+  it("o isolamento cobre as tabelas de escrita direta", () => {
+    for (const tabela of ["projects", "tools", "posts"]) {
+      expect(SYNC).toContain(`tentar("${tabela}"`)
+    }
+  })
+})
+
 describe("zonas do criativo", () => {
   /**
    * As sete zonas estavam no seed, mas não no sync — e `seedIfEmpty` desiste
