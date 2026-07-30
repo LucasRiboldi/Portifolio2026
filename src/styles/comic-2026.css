@@ -631,8 +631,14 @@
   border-radius: 50%;
 }
 
-/* Onomatopeia solta — o POW! do canto do quadro. */
+/* Onomatopeia solta — o POW! do canto do quadro.
+   `position: relative` + `z-index` alto garante que fica sempre em primeiro
+   plano: `.k-zone > * { z-index: 1 }` empata com qualquer card/painel irmão e
+   a ordem no DOM decide quem cobre quem — o que já escondeu onomatopeias
+   atrás de requadros posteriores. Aqui o z-index vence essa disputa sempre. */
 .k-onoma {
+  position: relative;
+  z-index: 30;
   font-family: var(--font-anton), Impact, sans-serif;
   text-transform: uppercase;
   color: var(--k-zone-c);

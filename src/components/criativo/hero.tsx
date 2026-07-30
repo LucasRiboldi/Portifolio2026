@@ -3,8 +3,6 @@
 import { useRef } from "react"
 import { motion, useReducedMotion, useScroll, useTransform } from "motion/react"
 import {
-  Bubble,
-  Burst,
   Caption,
   ComicButton,
   Halftone,
@@ -17,7 +15,6 @@ import { EASE } from "@/components/comic/motion"
 import { toChars, toWords, isSpace } from "@/animations/split"
 import { useMouseParallax } from "@/hooks/use-mouse-parallax"
 import { useMagnetic } from "@/hooks/use-magnetic"
-import { Panel, PanelBody } from "@/components/layout/comic/panel"
 import { TiltCard } from "./tilt-card"
 import { FUN_STATS, HERO } from "@/constants/criativo-landing"
 
@@ -140,7 +137,7 @@ export function Hero() {
       <motion.div className="cp-bleed relative z-10" style={layer(yFront)}>
         <div className="cp-grid items-center gap-y-12">
           {/* --- coluna de texto ---------------------------------------- */}
-          <div className="cp-col" style={{ "--cp-span-l": 8 } as React.CSSProperties}>
+          <div className="cp-col" style={{ "--cp-span-l": 12 } as React.CSSProperties}>
             <motion.div
               initial={reduced ? false : { y: 16 }}
               animate={{ opacity: 1, y: 0 }}
@@ -240,97 +237,6 @@ export function Hero() {
             </motion.ul>
           </div>
 
-          {/* --- requadro lateral (profundidade pelo ponteiro) ---------- */}
-          <motion.div
-            className="cx-layer cp-col relative hidden lg:block"
-            style={{ "--cx-depth": 18, "--cp-span-l": 4 } as React.CSSProperties}
-            initial={reduced ? false : { x: 40, rotate: 3 }}
-            animate={{ opacity: 1, x: 0, rotate: 0 }}
-            transition={{ duration: 0.95, ease: EASE, delay: 0.25 }}
-          >
-            <Panel
-              as="div"
-              shape="tiltR"
-              accent="magenta"
-              lit
-              className="relative aspect-[4/5] overflow-hidden"
-            >
-              <PanelBody bleed className="absolute inset-0">
-                <div className="relative size-full">
-                  <Halftone color="rgba(255,45,149,0.3)" step={6} />
-                  <SpeedLines x={50} y={28} color="rgba(18,16,14,0.16)" />
-
-                  {/*
-                    O LOGOTIPO DA CAPA.
-
-                    Aqui havia "Terra / LR" a `opacity-15`: um requadro de capa
-                    com uma marca-d'água quase invisível lê-se como imagem que
-                    não carregou, não como arte. E a capa é o primeiro quadro
-                    que o leitor vê — é ela que promete o resto da revista.
-
-                    Passa a ser o que uma capa de HQ tem no lugar da marca: o
-                    logotipo, composto. Contorno cheio (`k-outline`, o mesmo
-                    tratamento dos números-fantasma dos capítulos), o nome da
-                    Terra em versalete por baixo e o selo da edição — as três
-                    linhas que qualquer capa de banca traz. Continua a ser
-                    tipografia e não ilustração, mas tipografia COMPOSTA, que
-                    é o que este projeto sabe desenhar sem inventar um asset
-                    que não existe.
-                  */}
-                  <span
-                    aria-hidden
-                    className="absolute inset-x-4 top-1/2 -translate-y-[58%] text-center"
-                  >
-                    {/*
-                      `k-3d` e não `k-outline`: aquela classe é a dos
-                      números-fantasma dos capítulos e traz `opacity: .25` —
-                      pedi-la aqui repetia o defeito que se veio corrigir, só
-                      que em corpo maior. Um logotipo de capa não é fantasma;
-                      é a peça de maior contraste da página, e a linguagem da
-                      casa para isso é a sombra dura deslocada.
-                    */}
-                    <span className="k-title k-3d block text-[clamp(3rem,5.6vw,5rem)] leading-[0.82] text-[var(--k-ink)]">
-                      TERRA
-                      <br />
-                      LR
-                    </span>
-                    <span className="k-kicker mt-4 block text-[10px] tracking-[0.35em] text-[var(--k-ink)]/70">
-                      arquivo vivo
-                    </span>
-                    <span className="k-num mt-4 inline-block border-[3px] border-[var(--k-ink)] bg-[var(--k-yellow)] px-3 py-1 text-xs text-[var(--k-ink)]">
-                      Nº 2026
-                    </span>
-                  </span>
-
-                  {/*
-                    O balão de fala subiu do rodapé do requadro para o topo.
-
-                    Em baixo ele ocupava exatamente a zona onde o balão de
-                    pensamento entra por fora — dois blocos de texto sobrepostos,
-                    e nenhum dos dois legível. A sobreposição com o requadro é
-                    linguagem de quadrinho e fica; a sobreposição de um texto com
-                    o outro é acidente e sai.
-
-                    No topo, a leitura ganha ordem: fala primeiro (dentro, em
-                    cima), pensamento depois (fora, em baixo). O recuo à direita
-                    e a largura máxima abrem caminho para o estouro "Nada à
-                    venda", que monta no canto superior esquerdo.
-                  */}
-                  <div className="absolute right-4 top-4 max-w-[76%]">
-                    <Bubble>{HERO.bubble}</Bubble>
-                  </div>
-                </div>
-              </PanelBody>
-            </Panel>
-
-            <Burst accent="yellow" className="absolute -left-10 -top-8 size-28 rotate-[-8deg]">
-              <span className="k-title max-w-[70%] text-sm leading-tight">Nada à venda</span>
-            </Burst>
-
-            <Bubble thought className="k-tilt-l absolute -bottom-10 -left-6 max-w-[15rem]">
-              {HERO.thought}
-            </Bubble>
-          </motion.div>
         </div>
       </motion.div>
 
