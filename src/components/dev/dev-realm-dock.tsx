@@ -14,6 +14,10 @@ import {
   Lightbulb,
   Sparkles,
   Orbit,
+  Coffee,
+  Shapes,
+  Library,
+  Brain,
   type LucideIcon,
 } from "lucide-react"
 
@@ -43,6 +47,12 @@ const ITEMS: DockItem[] = [
   { href: "/desenvolvedor/ideias", label: "ideias", Icon: Lightbulb },
   { href: "/desenvolvedor/skills", label: "skills", Icon: Sparkles },
   { href: "/desenvolvedor/learn", label: "learn", Icon: GraduationCap },
+  // Acervo de referência. Mesma regra do comentário acima: rota que não está
+  // no dock é rota que só quem sabe o URL alcança.
+  { href: "/desenvolvedor/java", label: "java", Icon: Coffee },
+  { href: "/desenvolvedor/padroes", label: "padrões", Icon: Shapes },
+  { href: "/desenvolvedor/estante", label: "estante", Icon: Library },
+  { href: "/desenvolvedor/conhecimento", label: "acervo", Icon: Brain },
   { href: "/portal", label: "portal", Icon: Orbit },
 ]
 

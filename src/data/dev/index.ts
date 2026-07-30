@@ -11,3 +11,21 @@ export { labExperiments, type LabExperiment } from "./lab"
 export { snippets, type Snippet } from "./snippets"
 export { wikiDocs, type WikiDoc } from "./wiki"
 export { ideas, type Idea } from "./ideas"
+
+/**
+ * Acervo de referência — material de estudo, não conteúdo editorial.
+ *
+ * Diferente dos cinco acima, estes NÃO passam pelo Supabase: são revisados por
+ * commit e lidos direto do arquivo. O raciocínio completo está no cabeçalho de
+ * `java.ts`, e `tests/acervo-referencia.test.ts` guarda a coerência deles.
+ */
+export {
+  javaRoadmap,
+  javaCheatSheets,
+  type RoadmapEtapa,
+  type EtapaStatus,
+  type CheatSheet,
+  type CheatSheetItem,
+} from "./java"
+export { certificacoes, livros, type Certificacao, type CertStatus, type Livro, type LivroStatus } from "./estante"
+export { designPatterns, type DesignPattern, type PatternCategoria } from "./patterns"

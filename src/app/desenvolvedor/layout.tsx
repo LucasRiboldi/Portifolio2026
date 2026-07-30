@@ -1,4 +1,8 @@
 import "@/styles/dracula.css"
+// Camada do acervo de referência (notícias, roadmap, badges, estante,
+// padrões). Depois de `dracula.css` de propósito: compõe com as classes de
+// lá e nunca as redefine.
+import "@/styles/dev-acervo.css"
 
 import type { ReactNode } from "react"
 import type { Metadata } from "next"
