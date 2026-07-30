@@ -65,7 +65,9 @@ async function inserirFaltantes<T>(
   paraLinha: (item: T) => Record<string, unknown>,
 ): Promise<string[]> {
   const { data, error } = await supabase.from(table).select(`${chave}, sort`)
-  if (error) throw new Error(`${table}: ${error.message}`)
+  // Sem prefixo de tabela: `tentar` já indexa a falha pelo nome dela, e
+  // repetir aqui produzia "artworks: artworks: Could not find…" no relatório.
+  if (error) throw new Error(error.message)
 
   const linhas = (data ?? []) as unknown as Record<string, unknown>[]
   const jaTem = new Set(linhas.map((r) => r[chave] as string))
@@ -77,7 +79,7 @@ async function inserirFaltantes<T>(
     .from(table)
     // Entra no fim da fila: a ordem arrumada no painel continua valendo.
     .insert(faltando.map((i, n) => ({ ...paraLinha(i), sort: maiorSort + 1 + n })))
-  if (insErr) throw new Error(`${table}: ${insErr.message}`)
+  if (insErr) throw new Error(insErr.message)
 
   return faltando.map(chaveDe)
 }
