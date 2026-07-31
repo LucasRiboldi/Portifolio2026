@@ -1,10 +1,8 @@
 "use client"
 
-import { useEffect, useState } from "react"
 import Link from "next/link"
 
-import { createClient } from "@/lib/supabase/client"
-import { isSupabaseConfigured } from "@/lib/supabase/config"
+import { useAuthState } from "@/lib/auth/use-auth-state"
 
 /**
  * Acesso administrativo incorporado ao expediente do jornal.
@@ -16,19 +14,7 @@ import { isSupabaseConfigured } from "@/lib/supabase/config"
  *  - logado    → /admin
  */
 export function PressMark({ label }: { label: string }) {
-  const [authed, setAuthed] = useState(false)
-
-  useEffect(() => {
-    if (!isSupabaseConfigured) return
-    let active = true
-    const supabase = createClient()
-    supabase.auth.getUser().then(({ data }) => {
-      if (active) setAuthed(Boolean(data.user))
-    })
-    return () => {
-      active = false
-    }
-  }, [])
+  const authed = useAuthState() ?? false
 
   return (
     <Link

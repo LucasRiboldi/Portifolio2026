@@ -1,54 +1,30 @@
 /**
- * Middleware — renova a sessão do Supabase em cada request e protege /admin.
- * A checagem de allowlist definitiva é server-side (requireAdmin); aqui só
- * barramos quem não tem sessão nenhuma (redireciona para /login).
+ * Middleware — barra /admin para quem não tem cookie de sessão.
+ *
+ * Diferença importante em relação ao arranjo anterior: aqui NÃO validamos a
+ * sessão. O middleware roda no Edge Runtime, onde o Firebase Admin SDK (que
+ * depende de APIs Node e de criptografia própria) não roda — não há como
+ * verificar a assinatura do cookie neste ponto.
+ *
+ * Isso é seguro porque a verificação real nunca esteve aqui: `requireAdmin()`
+ * é chamado no topo de toda página e Server Action do /admin, e é ele quem
+ * decide. Este middleware é um filtro barato, que evita renderizar o painel
+ * para quem obviamente não está logado — um cookie forjado passa por ele e
+ * morre no `requireAdmin()`, com redirect para /login.
  */
 import { NextResponse, type NextRequest } from "next/server"
-import { createServerClient } from "@supabase/ssr"
 
-import { SUPABASE_ANON_KEY, SUPABASE_URL, isSupabaseConfigured } from "@/lib/supabase/config"
+import { SESSION_COOKIE } from "@/lib/firebase/config"
 
-export async function middleware(request: NextRequest) {
-  let response = NextResponse.next({ request })
-
-  // Sem Supabase configurado: /admin fica inacessível (sem como autenticar).
-  if (!isSupabaseConfigured) {
-    if (request.nextUrl.pathname.startsWith("/admin")) {
-      const url = request.nextUrl.clone()
-      url.pathname = "/login"
-      url.searchParams.set("e", "config")
-      return NextResponse.redirect(url)
-    }
-    return response
-  }
-
-  const supabase = createServerClient(SUPABASE_URL, SUPABASE_ANON_KEY, {
-    cookies: {
-      getAll() {
-        return request.cookies.getAll()
-      },
-      setAll(cookiesToSet) {
-        cookiesToSet.forEach(({ name, value }) => request.cookies.set(name, value))
-        response = NextResponse.next({ request })
-        cookiesToSet.forEach(({ name, value, options }) =>
-          response.cookies.set(name, value, options),
-        )
-      },
-    },
-  })
-
-  const {
-    data: { user },
-  } = await supabase.auth.getUser()
-
-  if (request.nextUrl.pathname.startsWith("/admin") && !user) {
+export function middleware(request: NextRequest) {
+  if (!request.cookies.get(SESSION_COOKIE)?.value) {
     const url = request.nextUrl.clone()
     url.pathname = "/login"
     url.searchParams.set("next", request.nextUrl.pathname)
     return NextResponse.redirect(url)
   }
 
-  return response
+  return NextResponse.next()
 }
 
 export const config = {

@@ -3,14 +3,14 @@ import { redirect } from "next/navigation"
 
 import { GithubLoginButton } from "@/components/auth/github-login-button"
 import { isAdmin } from "@/lib/auth/is-admin"
-import { isSupabaseConfigured } from "@/lib/supabase/config"
+import { isFirebaseConfigured } from "@/lib/firebase/config"
 
 export const metadata = { title: "Entrar" }
 
 const ERRORS: Record<string, string> = {
   auth: "Não foi possível completar o login. Tente novamente.",
   forbidden: "Esta conta do GitHub não tem acesso ao painel.",
-  config: "O backend (Supabase) ainda não foi configurado neste ambiente.",
+  config: "O backend (Firebase) ainda não foi configurado neste ambiente.",
 }
 
 export default async function LoginPage({
@@ -35,11 +35,11 @@ export default async function LoginPage({
         </p>
 
         <div className="mt-6">
-          {isSupabaseConfigured ? (
+          {isFirebaseConfigured ? (
             <GithubLoginButton next={next} />
           ) : (
             <p className="rounded-lg border border-amber-500/30 bg-amber-500/10 p-3 text-sm text-amber-300">
-              Configure o Supabase (.env) para habilitar o login.
+              Configure o Firebase (.env) para habilitar o login.
             </p>
           )}
         </div>

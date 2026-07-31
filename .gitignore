@@ -51,3 +51,9 @@ _*.mjs
 # Para reler: git clone dos repos simeydotme/hover-tilt e /pokemon-cards-css
 /public/hover-tilt-main/
 /public/pokemon-cards-main/
+.env*
+
+# Chave privada do Firebase Admin SDK — acesso total ao projeto. NUNCA commitar.
+serviceAccountKey.json
+*-serviceAccountKey.json
+serviceAccount*.json
