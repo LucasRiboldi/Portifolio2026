@@ -3,7 +3,7 @@
 > Resumo executivo do estado real do projeto. Atualize a cada marco.
 > Para o conhecimento estável e detalhado, veja `docs/project-knowledge/`.
 >
-> **Última atualização:** 2026-07-31 (bug do /login fechado; itens 7, 10 e 12)
+> **Última atualização:** 2026-07-31 (bug do /login fechado; itens 6, 7, 10 e 12)
 
 ---
 
@@ -85,7 +85,7 @@ ambiente local.
 | Firebase Storage | ❌ Não usado — exige plano Blaze. Mídia vai para o Vercel Blob |
 | Vercel Blob | ✅ Store `portfolio-midia` criado e vinculado |
 | Env vars (Production) | ✅ Completas, incluindo `FIREBASE_CLIENT_EMAIL` / `FIREBASE_PRIVATE_KEY` |
-| Env vars (Preview) | ❌ Só `BLOB_STORE_ID` e `BLOB_WEBHOOK_PUBLIC_KEY` (medido 31/07). Falta todo o Firebase — e a Vercel **não deixa ler** valores sensíveis de produção para copiar |
+| Env vars (Preview) | ✅ 10 variáveis definidas em 31/07 (Firebase cliente + Admin SDK + `ADMIN_GITHUB_LOGIN`). Falta só `BLOB_READ_WRITE_TOKEN` |
 | CI (GitHub Actions) | ✅ `tokens:check`, lint, **testes** e build em push/PR para `main`. O passo de testes entrou em 31/07 |
 | Protection Bypass | ✅ Ligado em 31/07 para permitir testar previews por `curl` |
 | Projeto Supabase antigo | ⚠️ Continua no ar como rede de segurança. Desligar quando o Firebase estiver validado |

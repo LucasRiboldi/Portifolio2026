@@ -82,7 +82,29 @@ em `/admin/prophet-wire`.
 
 # 🟡 Correções e melhorias
 
-## 6. Variáveis do ambiente Preview — precisa de você
+## 6. Variáveis do ambiente Preview ✅ fechado (menos o Blob)
+
+Em 31/07/2026 as 10 variáveis do Firebase e do admin foram definidas no ambiente
+*preview*: as seis `NEXT_PUBLIC_*`, `ADMIN_GITHUB_LOGIN`, `FIREBASE_PROJECT_ID`,
+`FIREBASE_CLIENT_EMAIL` e `FIREBASE_PRIVATE_KEY`.
+
+**Provado por controle:** o `/login` do preview novo renderiza o botão do GitHub;
+o do preview anterior, sem as variáveis, mostrava "Configure o Firebase". O
+`page.tsx:38` só renderiza o botão quando `isFirebaseConfigured` é verdadeiro.
+
+**Não provado:** que o preview *lê do Firestore* em vez de cair no seed. O banco
+foi populado a partir de `src/data`, então conteúdo e ordem são idênticos — não
+existe discriminador observável de fora. Só uma escrita pelo painel (item 2)
+resolve isso.
+
+**Falta:** `BLOB_READ_WRITE_TOKEN`. O fluxo novo da Vercel não o cria ao conectar
+o store — o diálogo de conexão só oferece `BLOB_STORE_ID` e
+`BLOB_WEBHOOK_PUBLIC_KEY`, **e nenhum dos dois é lido pelo código**. Sem o token,
+só o upload de mídia recusa (`admin/media/actions.ts:40`). Alternativa: validar o
+item 3 direto em produção, onde o token já existe.
+
+<details>
+<summary>Contexto de como isso foi feito (para repetir depois de rotacionar a chave)</summary>
 
 O ambiente *preview* tem só `BLOB_STORE_ID` e `BLOB_WEBHOOK_PUBLIC_KEY`
 (verificado 31/07/2026). Falta todo o Firebase, o `BLOB_READ_WRITE_TOKEN` e o
@@ -104,7 +126,11 @@ preview`.
 **Nota sobre o script:** o `parseEnv` lê linha a linha, então só aceita a
 `FIREBASE_PRIVATE_KEY` em uma única linha com `\n` escapados — há uma guarda que
 aborta se vier truncada. Um `.env.local` gerado por `vercel env pull` **não**
-serve como entrada.
+serve como entrada. Em 31/07 a chave foi enviada direto do
+`serviceAccountKey.json`, escapada em memória e passada por stdin ao CLI, sem
+nunca tocar o `.env.local` — que é como refazer isto com segurança.
+
+</details>
 
 ## 7. CI não rodava os testes ✅ corrigido
 
@@ -136,8 +162,9 @@ privacidade, anotada no próprio arquivo.
 Saiu de `lib/firebase/schema.ts` em 31/07/2026 (não era lida por ninguém; a
 allowlist virou `ADMIN_GITHUB_LOGIN` + custom claim).
 
-**Falta:** apagar a coleção no Firestore. Exige credencial — não dá para fazer
-sem acesso ao projeto.
+**Nada mais a fazer:** a coleção **não existe** no Firestore. Listadas as 19
+coleções reais em 31/07/2026, `admin_allowlist` não está entre elas — era
+declaração órfã no schema, nunca chegou a existir como dado. Item encerrado.
 
 ## 11. Quatro coleções permanentemente vazias
 
