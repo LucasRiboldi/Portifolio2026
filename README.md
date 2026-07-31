@@ -225,6 +225,8 @@ Dois arquivos na raiz completam o conjunto:
 
 - **[`PROJECT_STATE.md`](PROJECT_STATE.md)** — estado do momento: o que está
   pronto, o que está quebrado, o que nunca foi verificado.
+- **[`NEXT_STEPS.md`](NEXT_STEPS.md)** — backlog acionável, com passo a passo e
+  critério de pronto para cada item.
 - **[`CLAUDE.md`](CLAUDE.md)** — resumo de alto valor para sessões de IA.
 
 ## 🤝 Contribuindo

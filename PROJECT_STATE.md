@@ -84,7 +84,7 @@ Detalhes completos: `docs/project-knowledge/migrations/supabase-to-firebase.md`.
 | Item | Estado |
 |---|---|
 | Firestore | ✅ Provisionado, 19 coleções povoadas, 20 índices publicados |
-| Firebase Auth | ✅ Habilitado, provider GitHub configurado, **0 usuários** (ninguém logou ainda) |
+| Firebase Auth | ✅ Habilitado. **Login verificado**: 1 usuário com claim `admin:true` e `githubLogin:lucasriboldi` |
 | Firebase Storage | ❌ Não usado — exige plano Blaze. Mídia vai para o Vercel Blob |
 | Vercel Blob | ✅ Store `portfolio-midia` criado e vinculado |
 | Env vars (Production) | ✅ Completas, incluindo `FIREBASE_CLIENT_EMAIL` / `FIREBASE_PRIVATE_KEY` |
@@ -93,15 +93,20 @@ Detalhes completos: `docs/project-knowledge/migrations/supabase-to-firebase.md`.
 
 ---
 
-## 5. O que nunca foi verificado
+## 5. Verificado x não verificado
 
-Ser honesto sobre isto evita retrabalho e falsa confiança:
+**✅ Login funciona (local).** Em 2026-07-31 o fluxo completou: usuário criado
+com `customClaims: {"admin":true,"githubLogin":"lucasriboldi"}`. Isso valida a
+cadeia inteira — popup → ID token → `verifyIdToken` → id numérico do provider →
+API do GitHub → allowlist → custom claim → session cookie.
 
-- **Login completo no browser.** Zero usuários no Firebase Auth. O popup abre
-  corretamente (verificado via Playwright), mas ninguém concluiu o fluxo.
+**Ainda não exercido** (ver `NEXT_STEPS.md` itens 2–5):
+
 - **CRUD pelo painel.** Nenhuma edição real foi feita pelo `/admin`.
 - **Upload de mídia no Vercel Blob.** Código escrito e tipado, nunca executado.
-- **O cupom público do jornal** (`/anfitriao` → `contact_messages`).
+- **Cupom público do jornal** (`/anfitriao` → `contact_messages`).
+- **Gatilho do Prophet Wire** — `CRON_SECRET` está vazio.
+- **Login em produção** — bloqueado pelo 500 do `/login`.
 
 ---
 
@@ -143,6 +148,8 @@ npx firebase-tools deploy --only firestore --project portifolio-ac32a
 ---
 
 ## 8. Débitos técnicos conhecidos
+
+> Backlog acionável, com passo a passo: **`NEXT_STEPS.md`**.
 
 1. **`/login` 500 em produção** — ver seção 3. Prioridade máxima.
 2. Env vars do ambiente **Preview** não sincronizadas.

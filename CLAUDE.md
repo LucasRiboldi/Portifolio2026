@@ -4,8 +4,9 @@
 > entender o projeto **sem reanalisar tudo**. Se algo aqui divergir do código, o
 > código vence — e corrija este arquivo.
 >
-> Companheiros: `PROJECT_STATE.md` (estado atual, bugs abertos) e
-> `docs/project-knowledge/` (conhecimento estável e detalhado).
+> Companheiros: `PROJECT_STATE.md` (estado atual, bugs abertos),
+> `NEXT_STEPS.md` (backlog acionável — comece por ele se a pergunta for "o que
+> falta?") e `docs/project-knowledge/` (conhecimento estável e detalhado).
 
 ---
 
@@ -156,5 +157,8 @@ configuração. Quase nada precisa de código novo.
 
 ## Estado atual
 
-Ver **`PROJECT_STATE.md`**. Em 2026-07-31 há **um bug aberto**: `/login`
-responde 500 em produção (`require() of ES Module` no bundle serverless).
+Ver **`PROJECT_STATE.md`** (estado) e **`NEXT_STEPS.md`** (o que fazer).
+
+Em 2026-07-31: login **verificado localmente** (usuário criado com claim
+`admin`). **Um bloqueio aberto**: `/login` responde 500 em produção
+(`require() of ES Module` no bundle serverless) — `NEXT_STEPS.md` item 1.
