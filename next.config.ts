@@ -78,6 +78,24 @@ const securityHeaders = [
 const nextConfig: NextConfig = {
   reactStrictMode: true,
 
+  /**
+   * O Admin SDK fica FORA do bundle do servidor.
+   *
+   * `firebase-admin` é CommonJS mas arrasta dependências que são ESM puro.
+   * Quando o empacotador serverless o inclui, o resultado tenta `require()`
+   * nessas dependências e o runtime lança
+   * `Error: require() of ES Module /var/task/node_modules/...`.
+   *
+   * Isso não aparece em `next dev` nem em `next build` local — o Node resolve
+   * os dois formatos sem ajuda. Só quebra no empacotamento da Vercel, e só na
+   * primeira rota dinâmica que toca o SDK (`/login`); as demais páginas são
+   * pré-renderizadas no build e nunca chegam a executá-lo em runtime.
+   *
+   * Declarar como externo faz o Next deixá-lo em node_modules e carregá-lo
+   * pelo resolvedor do Node, que sabe lidar com a mistura.
+   */
+  serverExternalPackages: ["firebase-admin"],
+
   // Fixa a raiz do workspace neste projeto. Sem isto o Next detecta o
   // package-lock.json órfão em C:\Users\lucas e infere a raiz errada,
   // emitindo o warning de "multiple lockfiles" a cada boot.
