@@ -41,7 +41,7 @@ export default async function AdminDashboard() {
           className="mm-card p-4 text-sm"
           style={{ background: "var(--mm-light-warning)", borderColor: "transparent", color: "#8a6100" }}
         >
-          Supabase não configurado neste ambiente — exibindo conteúdo estático.
+          Firebase não configurado neste ambiente — exibindo conteúdo estático.
         </div>
       )}
 
@@ -85,7 +85,7 @@ export default async function AdminDashboard() {
               <h2 className="font-semibold">Banco vazio — importe o conteúdo atual</h2>
               <p className="mb-4 mt-1 text-sm" style={{ color: "var(--mm-text-2)" }}>
                 Copia projetos, posts, skills, ferramentas, config e realms do código
-                para o Supabase. Só popula tabelas vazias.
+                para o Firestore. Só popula coleções vazias.
               </p>
               <SeedButton />
             </>

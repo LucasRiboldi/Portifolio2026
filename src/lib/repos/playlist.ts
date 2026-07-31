@@ -35,7 +35,7 @@ function parseName(file: string): { title: string; artist: string } {
 /**
  * Lê a playlist da pasta `public/musica`.
  *
- * É `fs` e não Supabase de propósito: a pasta é a interface de edição pedida —
+ * É `fs` e não banco de propósito: a pasta é a interface de edição pedida —
  * jogar o mp3 lá dentro e commitar já publica a faixa, sem passar pelo admin.
  * As faixas cadastradas na tabela `tracks` continuam válidas e são somadas a
  * estas em `ZoneRadio`.

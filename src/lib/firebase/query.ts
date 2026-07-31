@@ -19,6 +19,7 @@ import "server-only"
 import type { Query } from "firebase-admin/firestore"
 
 import { getDbOrNull } from "./admin"
+import { doFirestore } from "./nested"
 
 export interface Filtro {
   campo: string
@@ -62,7 +63,7 @@ export async function buscarLinhas<T>(colecao: string, opts: Opcoes = {}): Promi
     const snap = await q.get()
     // O id do documento vem por último de propósito: se um campo `id` sobrou
     // dentro do data (herança do schema antigo), o id real prevalece.
-    return snap.docs.map((d) => ({ ...d.data(), id: d.id }) as T)
+    return snap.docs.map((d) => doFirestore({ ...d.data(), id: d.id }) as T)
   } catch {
     return null
   }
@@ -81,7 +82,7 @@ export async function buscarPorId<T>(colecao: string, id: string): Promise<T | n
   try {
     const doc = await db.collection(colecao).doc(id).get()
     if (!doc.exists) return null
-    return { ...doc.data(), id: doc.id } as T
+    return doFirestore({ ...doc.data(), id: doc.id }) as T
   } catch {
     return null
   }

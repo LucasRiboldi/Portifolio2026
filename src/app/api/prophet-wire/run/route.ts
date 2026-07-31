@@ -9,7 +9,7 @@
  * in-memory, que vive só enquanto a invocação serverless existe — ou seja, hoje
  * a execução processa as fontes e produz o relatório, mas NÃO persiste entre
  * execuções (e portanto a deduplicação entre dias não tem memória). Isso passa a
- * valer de verdade quando a Parte 10 (repositório Supabase) entrar; a troca é de
+ * valer de verdade com o repositório do Firestore ligado; a troca é de
  * uma linha aqui, porque tudo fala com a interface `NewsRepository`.
  *
  * Mesma razão para a IA: enquanto não houver `ANTHROPIC_API_KEY` e um cliente

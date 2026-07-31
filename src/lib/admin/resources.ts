@@ -25,7 +25,7 @@ export const RESOURCES: Record<string, ResourceConfig> = {
   ...MATERIA_RESOURCES,
 }
 
-/** Recurso destino do "table" no Supabase (nem sempre == slug). */
+/** Coleção destino do recurso no Firestore (nem sempre == slug). */
 const TABLE_MAP: Record<string, string> = {
   lab: "lab_experiments",
   tutorials: "prophet_tutorials",

@@ -21,6 +21,7 @@ import "server-only"
 import { FieldValue, type Firestore } from "firebase-admin/firestore"
 
 import { getDb } from "./admin"
+import { paraFirestore } from "./nested"
 
 /** Limite de operações por batch no Firestore. */
 const BATCH_MAX = 500
@@ -46,7 +47,7 @@ export async function criarDoc(
   dados: Record<string, unknown>,
   id?: string,
 ): Promise<string> {
-  const payload = { created_at: new Date().toISOString(), ...dados }
+  const payload = paraFirestore({ created_at: new Date().toISOString(), ...dados })
   if (id) {
     await db().collection(colecao).doc(id).set(payload)
     return id
@@ -64,7 +65,7 @@ export async function atualizarDoc(
   await db()
     .collection(colecao)
     .doc(id)
-    .set({ ...dados, updated_at: new Date().toISOString() }, { merge: true })
+    .set(paraFirestore({ ...dados, updated_at: new Date().toISOString() }), { merge: true })
 }
 
 /** Apaga um documento. */
@@ -121,7 +122,7 @@ export async function gravarLote(colecao: string, docs: DocParaGravar[]): Promis
     const batch = db().batch()
     for (const { id, dados } of fatia) {
       const ref = id ? base.doc(id) : base.doc()
-      batch.set(ref, { created_at: new Date().toISOString(), ...dados }, { merge: true })
+      batch.set(ref, paraFirestore({ created_at: new Date().toISOString(), ...dados }), { merge: true })
     }
     await batch.commit()
     gravados += fatia.length
@@ -147,7 +148,8 @@ export async function atualizarOnde(
 
   for (let i = 0; i < snap.docs.length; i += BATCH_MAX) {
     const batch = db().batch()
-    for (const doc of snap.docs.slice(i, i + BATCH_MAX)) batch.set(doc.ref, patch, { merge: true })
+    for (const doc of snap.docs.slice(i, i + BATCH_MAX))
+      batch.set(doc.ref, paraFirestore(patch), { merge: true })
     await batch.commit()
   }
   return snap.size

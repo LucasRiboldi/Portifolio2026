@@ -8,8 +8,8 @@
     "sync:vercel-env": "node scripts/sync-vercel-env.mjs",
     "tokens:export": "node --experimental-strip-types --no-warnings scripts/export-tokens.mjs",
     "tokens:check": "node --experimental-strip-types --no-warnings scripts/check-tokens.mjs",
-    "db:status": "node scripts/db-migrate.mjs --status",
-    "db:migrate": "node scripts/db-migrate.mjs",
+    "db:seed": "tsx --tsconfig tsconfig.scripts.json scripts/firestore-seed.ts",
+    "db:sync": "tsx --tsconfig tsconfig.scripts.json scripts/firestore-seed.ts --sync",
     "covers": "node scripts/generate-covers.mjs",
     "covers:check": "node scripts/generate-covers.mjs --check",
     "dev": "next dev -p 3000",
@@ -80,6 +80,7 @@
     "prettier": "^3",
     "storybook": "^10.5.0",
     "tailwindcss": "^3",
+    "tsx": "^4.23.1",
     "typescript": "^5",
     "vite": "^8.1.4",
     "vitest": "^4.1.10"

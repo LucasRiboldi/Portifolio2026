@@ -2,7 +2,7 @@
 
 import { useEffect, useRef, useState, useCallback } from "react"
 
-import { isSupabaseConfigured } from "@/lib/supabase/config"
+import { isFirebaseConfigured } from "@/lib/firebase/config"
 import { listMedia, uploadMedia, deleteMedia, type MediaItem } from "@/app/admin/media/actions"
 import { ACCEPT_ATTR, ACCEPTED_HINT } from "@/lib/admin/media-accept"
 
@@ -14,7 +14,7 @@ export function MediaManager() {
   const fileRef = useRef<HTMLInputElement>(null)
 
   const load = useCallback(async () => {
-    if (!isSupabaseConfigured) return
+    if (!isFirebaseConfigured) return
     const res = await listMedia()
     if (!res.ok) {
       setError(res.error)
@@ -62,8 +62,8 @@ export function MediaManager() {
     setTimeout(() => setCopied(null), 1500)
   }
 
-  if (!isSupabaseConfigured) {
-    return <p className="text-sm text-amber-300">Configure o Supabase para usar a mídia.</p>
+  if (!isFirebaseConfigured) {
+    return <p className="text-sm text-amber-300">Configure o Firebase para usar a mídia.</p>
   }
 
   return (

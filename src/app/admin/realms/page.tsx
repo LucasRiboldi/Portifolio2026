@@ -1,16 +1,13 @@
-import { createClient } from "@/lib/supabase/server"
-import { isSupabaseConfigured } from "@/lib/supabase/config"
+import { buscarLinhas } from "@/lib/firebase/query"
 import { REALMS, REALM_ORDER } from "@/lib/realms"
 import type { RealmRow } from "@/lib/firebase/types"
 import { AdminForm } from "@/components/admin/admin-form"
 import { saveRealms } from "./actions"
 
 async function loadRealms(): Promise<Record<string, RealmRow>> {
-  if (!isSupabaseConfigured) return {}
-  const supabase = await createClient()
-  const { data } = await supabase.from("realms").select("*")
+  const data = await buscarLinhas<RealmRow>("realms")
   const map: Record<string, RealmRow> = {}
-  for (const r of (data ?? []) as RealmRow[]) map[r.id] = r
+  for (const r of data ?? []) map[r.id] = r
   return map
 }
 

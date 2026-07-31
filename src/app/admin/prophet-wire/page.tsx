@@ -89,7 +89,7 @@ export default async function ProphetWirePanel() {
           <b style={{ color: "var(--mm-text)" }}>Persistência ainda em memória.</b> O acervo e
           o histórico de execuções vivem apenas enquanto a instância do servidor existir — um
           reinício zera ambos, e instâncias diferentes não compartilham dados. Os números
-          abaixo são reais, mas não permanentes. Isso muda quando o repositório do Supabase
+          abaixo são reais, mas não permanentes. Isso muda quando o repositório do Firestore
           entrar (Parte 10).
         </span>
       </div>

@@ -34,10 +34,14 @@ async function seedIfEmpty(
   rows: Record<string, unknown>[],
 ): Promise<number | "já populada"> {
   if ((await contarDocs(table)) > 0) return "já populada"
-  await gravarLote(
-    table,
-    rows.map((dados) => ({ id: idNatural(dados), dados })),
-  )
+  try {
+    await gravarLote(
+      table,
+      rows.map((dados) => ({ id: idNatural(dados), dados })),
+    )
+  } catch (err) {
+    throw new Error(`${table}: ${err instanceof Error ? err.message : String(err)}`)
+  }
   return rows.length
 }
 

@@ -1,7 +1,7 @@
 import "server-only"
 
 /**
- * Sincroniza conteúdo NOVO de `src/data/*.ts` para o Supabase.
+ * Sincroniza conteúdo NOVO de `src/data/*.ts` para o Firestore.
  *
  * Diferente de `seedDatabase()` (que só popula tabelas vazias), este sync serve
  * para quando a tabela já tem dados e faltam registros novos — o caso comum

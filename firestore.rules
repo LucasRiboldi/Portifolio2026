@@ -1,0 +1,95 @@
+rules_version = '2';
+
+// ─────────────────────────────────────────────────────────────────────────────
+// FIRESTORE — regras de acesso
+//
+// Conversão das 63 RLS policies do Postgres. Antes de ler as regras, é preciso
+// saber uma coisa sobre como o app funciona, porque muda o papel delas:
+//
+//   NENHUM cliente lê o Firestore neste projeto.
+//
+// Todo acesso a dados acontece no servidor, via Admin SDK (`lib/firebase/admin`),
+// que ignora Security Rules por definição. O SDK web só é usado para o login.
+// Portanto estas regras não são a autorização do painel — quem autoriza é o
+// `requireAdmin()` no topo de cada Server Action. Elas guardam a porta que o app
+// não usa, para que ela não fique aberta.
+//
+// DIFERENÇAS DE COMPORTAMENTO EM RELAÇÃO À RLS (deliberadas):
+//
+//  1. ESCRITA DE CLIENTE É NEGADA EM TUDO. No Postgres, `*_admin_write` permitia
+//     escrita a quem passasse por `is_admin()`, e `messages_public_insert`
+//     deixava qualquer um inserir mensagem. Aqui nada disso é possível pelo
+//     cliente: as duas operações passam por Server Actions que validam antes.
+//     É estritamente mais restritivo que o arranjo anterior.
+//
+//  2. `is_admin()` consultava uma tabela de allowlist a cada query; o custom
+//     claim `admin` é gravado no login. Ele só é lido aqui para permitir leitura
+//     de rascunho — a escrita continua negada mesmo para o admin.
+//
+//  3. A RLS filtrava LINHA A LINHA de forma transparente: um `select *` numa
+//     tabela devolvia só o permitido. No Firestore, uma query que peça
+//     documentos não permitidos é REJEITADA INTEIRA, não filtrada. Por isso as
+//     regras de leitura pública exigem `published == true` no documento, e uma
+//     eventual query de cliente precisaria declarar esse filtro.
+// ─────────────────────────────────────────────────────────────────────────────
+
+service cloud.firestore {
+  match /databases/{database}/documents {
+
+    // O admin é reconhecido pelo custom claim gravado na criação da sessão.
+    function isAdmin() {
+      return request.auth != null && request.auth.token.admin == true;
+    }
+
+    // Equivalente a `*_read_published`: visível quando publicado.
+    function publicado() {
+      return resource.data.published == true;
+    }
+
+    // ── Conteúdo com flag de publicação ───────────────────────────────────
+    // Espelha as policies `projects_read_published`, `posts_read_published`,
+    // `devlogs_read`, `ideas_read`, `snippets_read`, `wiki_read`, `lab_read`,
+    // `ptut_read`, `pmec_read`, `ppro_read`, `pres_read` e as zonas criativas.
+    match /{colecao}/{doc} {
+      allow read: if colecao in [
+        'projects', 'posts',
+        'devlogs', 'ideas', 'snippets', 'wiki', 'lab_experiments',
+        'artworks', 'comics', 'movies', 'tracks', 'videos', 'notes', 'strips',
+        'prophet_tutorials', 'prophet_mechanics', 'prophet_prototypes',
+        'prophet_resources', 'prophet_materias'
+      ] && (publicado() || isAdmin());
+
+      // Escrita: sempre pelo servidor. Ver o cabeçalho.
+      allow write: if false;
+    }
+
+    // ── Conteúdo sem flag: público por natureza ───────────────────────────
+    // Espelha `skills_read`, `tools_read`, `site_read`, `realms_read`,
+    // `pabout_read` — que eram `using (true)`.
+    match /skills/{doc}      { allow read: if true; allow write: if false; }
+    match /tools/{doc}       { allow read: if true; allow write: if false; }
+    match /site_config/{doc} { allow read: if true; allow write: if false; }
+    match /realms/{doc}      { allow read: if true; allow write: if false; }
+    match /page_content/{doc}   { allow read: if true; allow write: if false; }
+    match /prophet_about/{doc}  { allow read: if true; allow write: if false; }
+
+    // ── Notícias: rascunho não vaza ───────────────────────────────────────
+    // A landing só enxerga `publicado`; a fila de rascunhos é do painel.
+    match /prophet_wire_news/{doc} {
+      allow read: if resource.data.status == 'publicado' || isAdmin();
+      allow write: if false;
+    }
+
+    // ── Somente admin ─────────────────────────────────────────────────────
+    // `messages_admin_read`/`messages_admin_update` e o histórico de execuções.
+    // A inserção pública de mensagens (antiga `messages_public_insert`) virou
+    // Server Action com validação — ver `app/anfitriao/actions.ts`.
+    match /contact_messages/{doc}  { allow read: if isAdmin(); allow write: if false; }
+    match /prophet_wire_runs/{doc} { allow read: if isAdmin(); allow write: if false; }
+
+    // Nada mais é acessível por cliente.
+    match /{document=**} {
+      allow read, write: if false;
+    }
+  }
+}
