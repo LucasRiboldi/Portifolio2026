@@ -6,7 +6,7 @@
 > Ao concluir um item: remova-o daqui, atualize `PROJECT_STATE.md` e diga no
 > commit o que foi verificado de verdade.
 >
-> **Atualizado:** 2026-07-31 (correção do /login em produção; itens 7, 10 e 12)
+> **Atualizado:** 2026-07-31 (itens 1, 6, 7, 8, 9, 10, 11, 12 e o 1º alvo do 13)
 
 ---
 
@@ -193,13 +193,28 @@ allowlist virou `ADMIN_GITHUB_LOGIN` + custom claim).
 coleções reais em 31/07/2026, `admin_allowlist` não está entre elas — era
 declaração órfã no schema, nunca chegou a existir como dado. Item encerrado.
 
-## 11. Quatro coleções permanentemente vazias
+## 11. Quatro coleções vazias — semeadas no código, **ainda não publicadas**
 
-`prophet_tutorials`, `prophet_mechanics`, `prophet_prototypes` e
-`prophet_resources` nunca tiveram conteúdo — nem no Postgres.
+Decidido em 31/07/2026: semear (não remover — as quatro páginas públicas
+`/anfitriao/oficina`, `/mecanicas`, `/laboratorio` e `/imprensa` já estavam no
+ar, e tirar o catálogo do painel deixaria as quatro impossíveis de preencher).
 
-**Decisão a tomar:** criar seed, ou remover do catálogo do painel. Telas que
-nunca mostram nada confundem quem usa.
+O seed está em `src/data/prophet-arcano.ts`, ligado ao `seed.ts` e ao
+`sync-content.ts`. Três tutoriais, três mecânicas, três conceitos de protótipo e
+três materiais.
+
+**FALTA PUBLICAR — é o passo que torna o conteúdo visível.** As coleções
+continuam vazias no Firestore; nada disso está no site. Publique por:
+
+- `/admin` → botão **"Publicar conteúdo novo do código"**, ou
+- `npm run db:sync` (com `serviceAccountKey.json` na raiz).
+
+**Antes de publicar, leia.** O texto foi escrito pelo Claude, não por você, e sai
+no site com a sua assinatura. Duas regras foram seguidas para que nada ali seja
+falso: nenhum texto afirma histórico pessoal (playtest, tiragem, parceria) e
+nenhum `file_url` aponta para arquivo inexistente — os três materiais estão com
+`null` e a descrição diz que o arquivo não está disponível. Ainda assim, é
+rascunho para você reescrever no painel, não texto final.
 
 ## 12. Warning de lint ✅ corrigido
 
