@@ -62,6 +62,20 @@ async function inserirFaltantes<T>(
   chaveDe: (item: T) => string,
   /** Converte o item na linha da tabela, sem `sort` (que é atribuído aqui). */
   paraLinha: (item: T) => Record<string, unknown>,
+  /**
+   * Os três casos especiais que sobraram de fora do helper (`projects`,
+   * `tools`, `posts`) precisavam de apenas isto para caber aqui. Sem estes
+   * ganchos, o jeito de acomodá-los era repetir o ritual inteiro — que foi
+   * exatamente o que aconteceu, e o que esta refatoração desfaz.
+   */
+  opcoes: {
+    /** Roda antes da gravação, só quando há algo a inserir. */
+    antes?: (faltando: T[]) => Promise<void>
+    /** Substitui o `sort` sequencial. Usado pelo destaque da home. */
+    sortDe?: (item: T, indice: number, maiorSort: number) => number
+    /** Nome no relatório, quando difere da chave natural. */
+    rotuloDe?: (item: T) => string
+  } = {},
 ): Promise<string[]> {
   // Sem prefixo de tabela: `tentar` já indexa a falha pelo nome dela, e
   // repetir aqui produzia "artworks: artworks: Could not find…" no relatório.
@@ -71,14 +85,19 @@ async function inserirFaltantes<T>(
   const faltando = itens.filter((i) => !jaTem.has(chaveDe(i)))
   if (faltando.length === 0) return []
 
+  await opcoes.antes?.(faltando)
+
   // Entra no fim da fila: a ordem arrumada no painel continua valendo.
-  const novos = faltando.map((i, n) => ({ ...paraLinha(i), sort: maiorSort + 1 + n }))
+  const novos = faltando.map((i, n) => ({
+    ...paraLinha(i),
+    sort: opcoes.sortDe ? opcoes.sortDe(i, n, maiorSort) : maiorSort + 1 + n,
+  }))
   await gravarLote(
     table,
     novos.map((dados) => ({ id: idNatural(dados), dados })),
   )
 
-  return faltando.map(chaveDe)
+  return faltando.map(opcoes.rotuloDe ?? chaveDe)
 }
 
 export async function syncNewContent(): Promise<SyncReport> {
@@ -102,21 +121,13 @@ export async function syncNewContent(): Promise<SyncReport> {
   }
 
   // ─── Projetos (chave: title) ───
-  await tentar("projects", async () => {
-  const projRows = await listarCampos<{ title: string; sort?: number }>("projects", ["title", "sort"])
-  const projHave = new Set(projRows.map((r) => r.title))
-  const projMax = Math.max(0, ...projRows.map((r) => r.sort ?? 0))
-  const projMissing = projects.filter((p) => !projHave.has(p.title))
-
-  if (projMissing.length) {
-    // A home renderiza um único destaque: se algum entrante é featured,
-    // os antigos perdem o holofote antes da inserção.
-    if (projMissing.some((p) => p.featured)) {
-      await atualizarOnde("projects", { campo: "featured", valor: true }, { featured: false })
-    }
-    await gravarLote(
+  await tentar("projects", () =>
+    inserirFaltantes(
       "projects",
-      projMissing.map((p, i) => ({ dados: {
+      "title",
+      projects,
+      (p) => p.title,
+      (p) => ({
         title: p.title,
         description: p.description,
         category: p.category,
@@ -125,25 +136,28 @@ export async function syncNewContent(): Promise<SyncReport> {
         href: p.href ?? null,
         featured: p.featured ?? false,
         published: true,
+      }),
+      {
+        // A home renderiza um único destaque: se algum entrante é featured,
+        // os antigos perdem o holofote antes da inserção.
+        antes: async (faltando) => {
+          if (faltando.some((p) => p.featured)) {
+            await atualizarOnde("projects", { campo: "featured", valor: true }, { featured: false })
+          }
+        },
         // Destaque vai para o topo; o resto entra no fim da fila.
-        sort: p.featured ? -1 : projMax + 1 + i,
-      } })),
-    )
-  }
-  return projMissing.map((p) => p.title)
-  })
+        sortDe: (p, i, maior) => (p.featured ? -1 : maior + 1 + i),
+      },
+    ))
 
   // ─── Ferramentas (chave: name) ───
-  await tentar("tools", async () => {
-  const toolRows = await listarCampos<{ name: string; sort?: number }>("tools", ["name", "sort"])
-  const toolHave = new Set(toolRows.map((r) => r.name))
-  const toolMax = Math.max(0, ...toolRows.map((r) => r.sort ?? 0))
-  const toolMissing = tools.filter((t) => !toolHave.has(t.name))
-
-  if (toolMissing.length) {
-    await gravarLote(
+  await tentar("tools", () =>
+    inserirFaltantes(
       "tools",
-      toolMissing.map((t, i) => ({ dados: {
+      "name",
+      tools,
+      (t) => t.name,
+      (t) => ({
         name: t.name,
         description: t.description,
         type: t.type,
@@ -151,24 +165,19 @@ export async function syncNewContent(): Promise<SyncReport> {
         emoji: t.emoji,
         demo_url: t.demoUrl ?? null,
         github_url: t.githubUrl ?? null,
-        sort: toolMax + 1 + i,
-      } })),
-    )
-  }
-  return toolMissing.map((t) => t.name)
-  })
+      }),
+    ))
 
   // ─── Posts (chave: slug) ───
-  await tentar("posts", async () => {
-  const postRows = await listarCampos<{ slug: string; sort?: number }>("posts", ["slug", "sort"])
-  const postHave = new Set(postRows.map((r) => r.slug))
-  const postMax = Math.max(0, ...postRows.map((r) => r.sort ?? 0))
-  const postMissing = posts.filter((p) => !postHave.has(p.slug))
-
-  if (postMissing.length) {
-    await gravarLote(
+  // O `id` do documento continua sendo o slug: `idNatural` o encontra no
+  // próprio `dados`, então o comportamento não muda ao passar pelo helper.
+  await tentar("posts", () =>
+    inserirFaltantes(
       "posts",
-      postMissing.map((p, i) => ({ id: p.slug, dados: {
+      "slug",
+      posts,
+      (p) => p.slug,
+      (p) => ({
         slug: p.slug,
         title: p.title,
         excerpt: p.excerpt,
@@ -178,12 +187,10 @@ export async function syncNewContent(): Promise<SyncReport> {
         accent: p.accent,
         body: p.body,
         published: true,
-        sort: postMax + 1 + i,
-      } })),
-    )
-  }
-  return postMissing.map((p) => p.title)
-  })
+      }),
+      // O relatório sempre mostrou o título, não o slug.
+      { rotuloDe: (p) => p.title },
+    ))
 
   // ─── Realm dev ────────────────────────────────────────────────────────
   // Estas cinco tabelas existiam no banco desde a migration 0003, mas não
