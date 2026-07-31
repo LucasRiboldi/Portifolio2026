@@ -2,7 +2,7 @@ import "server-only"
 
 import { unstable_cache } from "next/cache"
 
-import { createPublicClient } from "@/lib/supabase/public"
+import { buscarLinhas } from "@/lib/firebase/query"
 import { CACHE_TAGS } from "./tags"
 import {
   materias as materiasSeed,
@@ -84,18 +84,13 @@ function daLinha(r: MateriaRow): Materia {
 
 export const getMaterias = unstable_cache(
   async (): Promise<Materia[]> => {
-    const supabase = createPublicClient()
-    if (!supabase) return materiasSeed
+    const data = await buscarLinhas<MateriaRow>("prophet_materias", {
+      where: [{ campo: "published", valor: true }],
+      orderBy: [{ campo: "sort" }, { campo: "created_at" }],
+    })
 
-    const { data, error } = await supabase
-      .from("prophet_materias")
-      .select("*")
-      .eq("published", true)
-      .order("sort", { ascending: true })
-      .order("created_at", { ascending: true })
-
-    if (error || !data || data.length === 0) return materiasSeed
-    return (data as MateriaRow[]).map(daLinha)
+    if (!data || data.length === 0) return materiasSeed
+    return data.map(daLinha)
   },
   ["prophet_materias"],
   { tags: [CACHE_TAGS.materias] },

@@ -2,7 +2,7 @@ import "server-only"
 
 import { unstable_cache } from "next/cache"
 
-import { createPublicClient } from "@/lib/supabase/public"
+import { buscarLinhas } from "@/lib/firebase/query"
 import { CACHE_TAGS } from "./tags"
 
 export interface DevlogRow {
@@ -50,15 +50,11 @@ export interface LabRow {
 function publishedReader<T>(table: string, tag: string, order: string, asc: boolean) {
   return unstable_cache(
     async (): Promise<T[]> => {
-      const supabase = createPublicClient()
-      if (!supabase) return []
-      const { data, error } = await supabase
-        .from(table)
-        .select("*")
-        .eq("published", true)
-        .order(order, { ascending: asc })
-      if (error || !data) return []
-      return data as T[]
+      const data = await buscarLinhas<T>(table, {
+        where: [{ campo: "published", valor: true }],
+        orderBy: [{ campo: order, asc }],
+      })
+      return data ?? []
     },
     [table],
     { tags: [tag] },

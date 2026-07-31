@@ -2,7 +2,7 @@ import "server-only"
 
 import { unstable_cache } from "next/cache"
 
-import { createPublicClient } from "@/lib/supabase/public"
+import { buscarLinhas, buscarPorId } from "@/lib/firebase/query"
 import { CACHE_TAGS } from "./tags"
 
 export interface TutorialRow {
@@ -48,15 +48,11 @@ export interface ProphetAbout {
 function reader<T>(table: string, tag: string, order: string, asc: boolean) {
   return unstable_cache(
     async (): Promise<T[]> => {
-      const supabase = createPublicClient()
-      if (!supabase) return []
-      const { data, error } = await supabase
-        .from(table)
-        .select("*")
-        .eq("published", true)
-        .order(order, { ascending: asc })
-      if (error || !data) return []
-      return data as T[]
+      const data = await buscarLinhas<T>(table, {
+        where: [{ campo: "published", valor: true }],
+        orderBy: [{ campo: order, asc }],
+      })
+      return data ?? []
     },
     [table],
     { tags: [tag] },
@@ -86,14 +82,13 @@ const FALLBACK_ABOUT: ProphetAbout = {
 
 export const getProphetAbout = unstable_cache(
   async (): Promise<ProphetAbout> => {
-    const supabase = createPublicClient()
-    if (!supabase) return FALLBACK_ABOUT
-    const { data, error } = await supabase
-      .from("prophet_about")
-      .select("*")
-      .eq("id", "default")
-      .maybeSingle()
-    if (error || !data) return FALLBACK_ABOUT
+    const data = await buscarPorId<{
+      author?: string
+      intro?: string
+      passion?: string
+      proposal?: string
+    }>("prophet_about", "default")
+    if (!data) return FALLBACK_ABOUT
     return {
       author: data.author || FALLBACK_ABOUT.author,
       intro: data.intro || FALLBACK_ABOUT.intro,

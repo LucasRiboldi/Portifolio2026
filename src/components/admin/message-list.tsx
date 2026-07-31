@@ -3,7 +3,7 @@
 import { useRouter } from "next/navigation"
 import { useTransition } from "react"
 
-import type { ContactMessageRow } from "@/lib/supabase/types"
+import type { ContactMessageRow } from "@/lib/firebase/types"
 import { markMessageRead, deleteMessage } from "@/app/admin/messages/actions"
 
 export function MessageList({ messages }: { messages: ContactMessageRow[] }) {

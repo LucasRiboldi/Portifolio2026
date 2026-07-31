@@ -2,7 +2,7 @@ import "server-only"
 
 import { unstable_cache } from "next/cache"
 
-import { createPublicClient } from "@/lib/supabase/public"
+import { buscarLinhas } from "@/lib/firebase/query"
 import { CACHE_TAGS } from "./tags"
 import { posts as postsSeed, type Post } from "@/data/posts"
 
@@ -44,18 +44,14 @@ function daLinha(r: PostRow): Post {
 
 export const getPosts = unstable_cache(
   async (): Promise<Post[]> => {
-    const supabase = createPublicClient()
-    if (!supabase) return postsSeed
-
-    const { data, error } = await supabase
-      .from("posts")
-      .select("*")
-      .eq("published", true)
+    const data = await buscarLinhas<PostRow>("posts", {
+      where: [{ campo: "published", valor: true }],
       // Mais recente primeiro: é um blog, a ordem é cronológica invertida.
-      .order("date", { ascending: false })
+      orderBy: [{ campo: "date", asc: false }],
+    })
 
-    if (error || !data || data.length === 0) return postsSeed
-    return (data as PostRow[]).map(daLinha)
+    if (!data || data.length === 0) return postsSeed
+    return data.map(daLinha)
   },
   ["posts"],
   { tags: [CACHE_TAGS.posts] },

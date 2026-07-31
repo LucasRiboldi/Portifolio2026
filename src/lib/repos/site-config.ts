@@ -2,8 +2,8 @@ import "server-only"
 
 import { unstable_cache } from "next/cache"
 
-import { createPublicClient } from "@/lib/supabase/public"
-import type { SiteConfigRow } from "@/lib/supabase/types"
+import { buscarLinhas, buscarPorId } from "@/lib/firebase/query"
+import type { SiteConfigRow } from "@/lib/firebase/types"
 import { siteConfig as seed } from "@/constants/site"
 import { CACHE_TAGS } from "./tags"
 
@@ -36,16 +36,8 @@ function rowToConfig(r: SiteConfigRow): SiteConfig {
 /** Config do site (cacheado, com fallback ao seed estático). */
 export const getSiteConfig = unstable_cache(
   async (): Promise<SiteConfig> => {
-    const supabase = createPublicClient()
-    if (!supabase) return seed
-
-    const { data, error } = await supabase
-      .from("site_config")
-      .select("*")
-      .eq("id", "default")
-      .maybeSingle()
-
-    if (error || !data) return seed
+    const data = await buscarPorId<SiteConfigRow>("site_config", "default")
+    if (!data) return seed
     return rowToConfig(data)
   },
   ["site-config"],

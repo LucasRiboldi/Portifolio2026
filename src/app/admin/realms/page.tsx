@@ -1,7 +1,7 @@
 import { createClient } from "@/lib/supabase/server"
 import { isSupabaseConfigured } from "@/lib/supabase/config"
 import { REALMS, REALM_ORDER } from "@/lib/realms"
-import type { RealmRow } from "@/lib/supabase/types"
+import type { RealmRow } from "@/lib/firebase/types"
 import { AdminForm } from "@/components/admin/admin-form"
 import { saveRealms } from "./actions"
 

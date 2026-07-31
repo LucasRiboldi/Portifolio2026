@@ -2,8 +2,8 @@ import "server-only"
 
 import { unstable_cache } from "next/cache"
 
-import { createPublicClient } from "@/lib/supabase/public"
-import type { ToolRow } from "@/lib/supabase/types"
+import { buscarLinhas } from "@/lib/firebase/query"
+import type { ToolRow } from "@/lib/firebase/types"
 import { tools as seed, type Tool } from "@/data/tools"
 import { CACHE_TAGS } from "./tags"
 
@@ -23,16 +23,11 @@ function rowToTool(r: ToolRow): Tool {
 /** Ferramentas (cacheado, com fallback ao seed). */
 export const getTools = unstable_cache(
   async (): Promise<Tool[]> => {
-    const supabase = createPublicClient()
-    if (!supabase) return seed
+    const data = await buscarLinhas<ToolRow>("tools", {
+      orderBy: [{ campo: "sort" }, { campo: "name" }],
+    })
 
-    const { data, error } = await supabase
-      .from("tools")
-      .select("*")
-      .order("sort", { ascending: true })
-      .order("name", { ascending: true })
-
-    if (error || !data) return seed
+    if (!data) return seed
     return data.map(rowToTool)
   },
   ["tools"],

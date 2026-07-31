@@ -2,8 +2,8 @@ import "server-only"
 
 import { unstable_cache } from "next/cache"
 
-import { createPublicClient } from "@/lib/supabase/public"
-import type { RealmRow } from "@/lib/supabase/types"
+import { buscarLinhas } from "@/lib/firebase/query"
+import type { RealmRow } from "@/lib/firebase/types"
 import { REALMS, REALM_ORDER, DEFAULT_REALM, type RealmId } from "@/lib/realms"
 import { CACHE_TAGS } from "./tags"
 
@@ -28,15 +28,11 @@ function seedSettings(): RealmSettings {
 /** Configuração dos realms controlada pelo admin (cacheado, com fallback). */
 export const getRealmSettings = unstable_cache(
   async (): Promise<RealmSettings> => {
-    const supabase = createPublicClient()
-    if (!supabase) return seedSettings()
+    const data = await buscarLinhas<RealmRow>("realms", {
+      orderBy: [{ campo: "sort" }],
+    })
 
-    const { data, error } = await supabase
-      .from("realms")
-      .select("*")
-      .order("sort", { ascending: true })
-
-    if (error || !data || data.length === 0) return seedSettings()
+    if (!data || data.length === 0) return seedSettings()
 
     const enabled = data
       .filter((r) => r.enabled && r.id in REALMS)

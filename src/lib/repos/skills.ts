@@ -2,7 +2,7 @@ import "server-only"
 
 import { unstable_cache } from "next/cache"
 
-import { createPublicClient } from "@/lib/supabase/public"
+import { buscarLinhas } from "@/lib/firebase/query"
 import { CACHE_TAGS } from "./tags"
 import { skills as skillsSeed, type Skill } from "@/data/skills"
 
@@ -14,16 +14,12 @@ import { skills as skillsSeed, type Skill } from "@/data/skills"
  */
 export const getSkills = unstable_cache(
   async (): Promise<Skill[]> => {
-    const supabase = createPublicClient()
-    if (!supabase) return skillsSeed
+    const data = await buscarLinhas<Skill>("skills", {
+      orderBy: [{ campo: "sort" }],
+    })
 
-    const { data, error } = await supabase
-      .from("skills")
-      .select("*")
-      .order("sort", { ascending: true })
-
-    if (error || !data || data.length === 0) return skillsSeed
-    return data as Skill[]
+    if (!data || data.length === 0) return skillsSeed
+    return data
   },
   ["skills"],
   { tags: [CACHE_TAGS.skills] },
