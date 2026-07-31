@@ -57,3 +57,7 @@ _*.mjs
 serviceAccountKey.json
 *-serviceAccountKey.json
 serviceAccount*.json
+
+# Log do emulador do Firestore (npm run test:integration).
+firestore-debug.log
+firebase-debug.log

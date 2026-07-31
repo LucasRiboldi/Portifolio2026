@@ -141,14 +141,32 @@ suíte inteira com o CI verde. Passo de testes acrescentado em 31/07/2026.
 Não há passo de `tsc --noEmit`: o `next build` já faz a checagem de tipos, já que
 não existe `typescript.ignoreBuildErrors` no `next.config.ts`.
 
-## 8. Sem teste de integração da camada de dados
+## 8. Teste de integração da camada de dados ✅ feito
 
-Os 535 testes mockam `lib/firebase/query`. Nada exercita `collection.ts` contra
-um Firestore real — `criarDoc`, `atualizarOnde`, `gravarLote` e o envelope de
-arrays aninhados nunca foram testados de verdade.
+```bash
+npm run test:integration
+```
 
-**Como:** emulador do Firebase (`firebase emulators:start --only firestore`) e
-uma suíte separada, fora da unitária.
+Sobe o emulador do Firestore, roda `tests-integration/` e o derruba. 16 casos
+sobre `collection.ts` e `query.ts` com o motor real: `criarDoc` preenchendo
+`created_at`, idempotência e merge do `gravarLote`, alcance do `atualizarOnde`,
+incremento atômico, projeção do `listarCampos` e o ciclo completo do envelope de
+arrays aninhados.
+
+Dois casos merecem nota, porque são os que um mock **nunca** pegaria:
+
+- **O Firestore recusa array dentro de array.** Há um teste que escreve a forma
+  crua e exige que ela falhe — guarda contra alguém "simplificar" o `nested.ts`
+  achando que não faz nada.
+- **Documento sem o campo ordenado some do `orderBy`.** A query não falha; o
+  documento apenas não vem. É a razão de `criarDoc` sempre gravar `created_at`.
+
+Fica **fora** da suíte unitária de propósito: `npm run test:unit` continua sem
+rede e sem credencial. Exige Java (o emulador é um jar) e não roda no CI hoje.
+
+**Ainda não coberto:** as Server Actions do `/admin` de ponta a ponta, e as
+Security Rules — o emulador as carregaria, mas o app não passa por elas (todo
+acesso é via Admin SDK, que as ignora).
 
 ## 9. `image-resolver` hotlinka imagens ✅ premissa errada, item encerrado
 
