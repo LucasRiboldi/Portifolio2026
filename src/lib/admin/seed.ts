@@ -22,6 +22,12 @@ import {
 } from "@/data/criativo-zones"
 import { devlogs, labExperiments, snippets, wikiDocs, ideas } from "@/data/dev"
 import { materias } from "@/data/anfitriao-materias"
+import {
+  prophetTutorials,
+  prophetMechanics,
+  prophetPrototypes,
+  prophetResources,
+} from "@/data/prophet-arcano"
 import { REALMS, REALM_ORDER, DEFAULT_REALM } from "@/lib/realms"
 import * as arcane from "@/lib/arcane-content"
 
@@ -259,6 +265,65 @@ export async function seedDatabase(): Promise<SeedReport> {
       sign: m.sign,
       colofao: m.colofao,
       remissoes: m.remissoes,
+      published: true,
+      sort: i,
+    })),
+  )
+
+  // ─── Cadernos do realm arcano ──────────────────────────────────────────
+  // As quatro nunca tiveram conteúdo — nem no Postgres. As páginas públicas
+  // (`/anfitriao/oficina`, `/mecanicas`, `/laboratorio`, `/imprensa`) já
+  // existiam e renderizavam vazias, porque os leitores fazem `data ?? []`,
+  // sem fallback no seed.
+
+  report.prophet_tutorials = await seedIfEmpty(
+    "prophet_tutorials",
+    prophetTutorials.map((t, i) => ({
+      slug: t.slug,
+      title: t.title,
+      summary: t.summary,
+      body: t.body,
+      difficulty: t.difficulty,
+      tags: t.tags,
+      published: true,
+      sort: i,
+    })),
+  )
+
+  report.prophet_mechanics = await seedIfEmpty(
+    "prophet_mechanics",
+    prophetMechanics.map((m, i) => ({
+      slug: m.slug,
+      title: m.title,
+      summary: m.summary,
+      body: m.body,
+      tags: m.tags,
+      published: true,
+      sort: i,
+    })),
+  )
+
+  report.prophet_prototypes = await seedIfEmpty(
+    "prophet_prototypes",
+    prophetPrototypes.map((p, i) => ({
+      title: p.title,
+      description: p.description,
+      status: p.status,
+      players: p.players,
+      playtime: p.playtime,
+      tags: p.tags,
+      published: true,
+      sort: i,
+    })),
+  )
+
+  report.prophet_resources = await seedIfEmpty(
+    "prophet_resources",
+    prophetResources.map((r, i) => ({
+      title: r.title,
+      description: r.description,
+      type: r.type,
+      file_url: r.fileUrl,
       published: true,
       sort: i,
     })),

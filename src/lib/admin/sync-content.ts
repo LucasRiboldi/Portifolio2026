@@ -21,6 +21,12 @@ import { tools } from "@/data/tools"
 import { devlogs, labExperiments, snippets, wikiDocs, ideas } from "@/data/dev"
 import { artworks, comics, movies, notes, strips, tracks, videos } from "@/data/criativo-zones"
 import { materias } from "@/data/anfitriao-materias"
+import {
+  prophetTutorials,
+  prophetMechanics,
+  prophetPrototypes,
+  prophetResources,
+} from "@/data/prophet-arcano"
 
 export interface SyncReport {
   /** Nomes/títulos inseridos por tabela (vazio = nada faltava). */
@@ -347,6 +353,78 @@ export async function syncNewContent(): Promise<SyncReport> {
       published: true,
     }),
   ))
+
+  // ─── Cadernos do realm arcano ──────────────────────────────────────────
+  // Quatro coleções que nunca tiveram conteúdo, com quatro páginas públicas
+  // já no ar renderizando vazio. Entram aqui e no seed: no seed para banco
+  // novo, aqui para o banco que já existe.
+
+  await tentar("prophet_tutorials", () =>
+    inserirFaltantes(
+      "prophet_tutorials",
+      "slug",
+      prophetTutorials,
+      (t) => t.slug,
+      (t) => ({
+        slug: t.slug,
+        title: t.title,
+        summary: t.summary,
+        body: t.body,
+        difficulty: t.difficulty,
+        tags: t.tags,
+        published: true,
+      }),
+      { rotuloDe: (t) => t.title },
+    ))
+
+  await tentar("prophet_mechanics", () =>
+    inserirFaltantes(
+      "prophet_mechanics",
+      "slug",
+      prophetMechanics,
+      (m) => m.slug,
+      (m) => ({
+        slug: m.slug,
+        title: m.title,
+        summary: m.summary,
+        body: m.body,
+        tags: m.tags,
+        published: true,
+      }),
+      { rotuloDe: (m) => m.title },
+    ))
+
+  await tentar("prophet_prototypes", () =>
+    inserirFaltantes(
+      "prophet_prototypes",
+      "title",
+      prophetPrototypes,
+      (p) => p.title,
+      (p) => ({
+        title: p.title,
+        description: p.description,
+        status: p.status,
+        players: p.players,
+        playtime: p.playtime,
+        tags: p.tags,
+        published: true,
+      }),
+    ))
+
+  await tentar("prophet_resources", () =>
+    inserirFaltantes(
+      "prophet_resources",
+      "title",
+      prophetResources,
+      (r) => r.title,
+      (r) => ({
+        title: r.title,
+        description: r.description,
+        type: r.type,
+        file_url: r.fileUrl,
+        published: true,
+      }),
+    ))
 
   return report
 }

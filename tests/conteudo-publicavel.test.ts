@@ -53,6 +53,32 @@ describe("toda tabela lida tem caminho de publicação", () => {
   )
 })
 
+describe("cadernos do realm arcano", () => {
+  /**
+   * As quatro passaram meses vazias com as páginas públicas já no ar: os
+   * leitores fazem `data ?? []`, sem fallback, então `/anfitriao/oficina`,
+   * `/mecanicas`, `/laboratorio` e `/imprensa` renderizavam nada — sem erro,
+   * sem aviso, como se fosse o estado legítimo.
+   *
+   * Semeadas em 31/07/2026. Este bloco existe para que ninguém acrescente um
+   * caderno novo repetindo a história.
+   */
+  const CADERNOS = [
+    "prophet_tutorials",
+    "prophet_mechanics",
+    "prophet_prototypes",
+    "prophet_resources",
+  ]
+
+  it.each(CADERNOS)("`%s` é publicável pelo sync do /admin", (tabela) => {
+    expect(SYNC).toContain(`"${tabela}"`)
+  })
+
+  it.each(CADERNOS)("`%s` entra no seed de banco novo", (tabela) => {
+    expect(SEED).toContain(`"${tabela}"`)
+  })
+})
+
 describe("uma tabela quebrada não cala as outras", () => {
   /**
    * O sync percorre dezesseis tabelas em sequência, e cada uma lançava direto.
