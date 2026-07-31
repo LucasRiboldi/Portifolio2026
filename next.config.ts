@@ -93,6 +93,22 @@ const nextConfig: NextConfig = {
    *
    * Declarar como externo faz o Next deixá-lo em node_modules e carregá-lo
    * pelo resolvedor do Node, que sabe lidar com a mistura.
+   *
+   * ATENÇÃO: isto sozinho NÃO resolveu o 500 do `/login` (31/07/2026). O
+   * culpado real era `jwks-rsa@4.1.0`, dependência do Admin SDK: ele é
+   * `type: commonjs` e faz `require('jose')` na primeira linha de
+   * `src/utils.js`, mas declara `jose: ^6.1.3` — e o jose 6 é ESM puro (sem
+   * condição `require` no mapa de exports). O pacote é internamente
+   * inconsistente.
+   *
+   * Localmente passa porque o Node 22+ suporta `require()` de ESM nativamente;
+   * na Vercel a função é empacotada e carregada pelo shim do bundler
+   * (`/opt/rust/nodejs.js` no stack trace), que não implementa esse suporte.
+   * A diferença é de carregador de módulos, não de código.
+   *
+   * A correção está no `overrides` do package.json, que prende o jose do
+   * jwks-rsa na v5 — a última com build CommonJS. Se algum dia o jwks-rsa
+   * corrigir o próprio require, esse override pode sair.
    */
   serverExternalPackages: ["firebase-admin"],
 
