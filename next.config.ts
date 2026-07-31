@@ -14,16 +14,30 @@ const isDev = process.env.NODE_ENV === "development";
 const scriptSrc = [
   "'self'",
   "'unsafe-inline'",
+  // O Firebase Auth carrega o gapi para montar o iframe do popup de OAuth.
+  // Sem esta origem o popup abre e morre com `auth/internal-error` — que não
+  // diz nada sobre CSP, e por isso custa caro de diagnosticar.
+  "https://apis.google.com",
   isDev && "'unsafe-eval'",
   isDev && "https://va.vercel-scripts.com",
 ]
   .filter(Boolean)
   .join(" ");
 
+/** Domínio que o Firebase usa para hospedar o handler do OAuth. */
+const authDomain = process.env.NEXT_PUBLIC_FIREBASE_AUTH_DOMAIN || "";
+
 /**
  * Content-Security-Policy — permissiva o suficiente para o Next App Router
- * (scripts/estilos inline de hidratação), Vercel Analytics e Supabase
- * (REST + realtime via wss), mas bloqueando origens externas de script.
+ * (scripts/estilos inline de hidratação), Vercel Analytics e o login do
+ * Firebase, mas bloqueando origens externas de script.
+ *
+ * O login exige três aberturas, todas por causa do popup de OAuth:
+ *  - `script-src https://apis.google.com` — o gapi que monta o iframe;
+ *  - `frame-src` do domínio de auth e do apis.google.com — onde o popup vive;
+ *  - `connect-src` do identitytoolkit e do securetoken — as chamadas da API.
+ * Sem elas o popup falha como `auth/internal-error`, mensagem que não menciona
+ * CSP em momento nenhum.
  *
  * Nota: 'unsafe-inline' em script-src é o compromisso de um CSP por header
  * (sem nonce por-request). Um CSP estrito por nonce exigiria middleware em
@@ -35,7 +49,16 @@ const csp = [
   "style-src 'self' 'unsafe-inline'",
   "img-src 'self' data: blob: https:",
   "font-src 'self' data:",
-  "connect-src 'self' https://*.supabase.co wss://*.supabase.co https://vitals.vercel-insights.com https://va.vercel-scripts.com",
+  [
+    "connect-src 'self'",
+    "https://identitytoolkit.googleapis.com",
+    "https://securetoken.googleapis.com",
+    "https://vitals.vercel-insights.com",
+    "https://va.vercel-scripts.com",
+  ].join(" "),
+  ["frame-src 'self'", "https://apis.google.com", authDomain && `https://${authDomain}`]
+    .filter(Boolean)
+    .join(" "),
   "frame-ancestors 'none'",
   "base-uri 'self'",
   "form-action 'self'",
