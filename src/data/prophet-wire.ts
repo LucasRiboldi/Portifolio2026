@@ -9,16 +9,16 @@
  *
  * Quando o pipeline estiver pronto, `repository.ts` devolverá `NewsItem[]` do
  * Supabase e esta lista passa a ser o fallback honesto (offline / falha de
- * coleta), preservado por [[conteudo-vem-do-supabase]].
+ * coleta), preservado por [[conteudo-vem-do-banco]].
  */
 
 import type { NewsItem } from "@/lib/prophet-wire/types"
 import { config } from "@/lib/prophet-wire/config"
 import { InMemoryNewsRepository, type NewsRepository } from "@/lib/prophet-wire/repository"
-import { SupabaseNewsRepository } from "@/lib/prophet-wire/supabase-repository"
+import { FirestoreNewsRepository } from "@/lib/prophet-wire/firestore-repository"
 import { resolveImages } from "@/lib/prophet-wire/image-resolver"
 import { silentLogger } from "@/lib/prophet-wire/logger"
-import { isSupabaseServiceConfigured } from "@/lib/supabase/config"
+import { isFirebaseAdminConfigured } from "@/lib/firebase/admin"
 
 /** Moldura de gravura vazia — a página já usa `.img-empty` à espera de arte. */
 function pendingPlate(alt: string, caption: string) {
@@ -157,8 +157,8 @@ export const seedNews: NewsItem[] = [
 ]
 
 /**
- * Repositório padrão da aplicação. Quando o Supabase está configurado
- * (Parte 10), usa `SupabaseNewsRepository`; senão cai na impl in-memory
+ * Repositório padrão da aplicação. Quando o Firestore está configurado, usa
+ * `FirestoreNewsRepository`; senão cai na impl in-memory
  * semeada com as 6 notícias estáticas — o fallback honesto quando o banco não
  * responde. A landing sempre lê pelo repo — nunca da lista crua —, então a
  * troca de impl não toca na página.
@@ -167,8 +167,8 @@ let repo: NewsRepository | null = null
 
 export function defaultRepository(): NewsRepository {
   if (!repo) {
-    repo = isSupabaseServiceConfigured
-      ? new SupabaseNewsRepository()
+    repo = isFirebaseAdminConfigured
+      ? new FirestoreNewsRepository()
       : new InMemoryNewsRepository(seedNews)
   }
   return repo

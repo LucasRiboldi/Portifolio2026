@@ -60,7 +60,9 @@ export async function buscarLinhas<T>(colecao: string, opts: Opcoes = {}): Promi
   if (!q) return null
   try {
     const snap = await q.get()
-    return snap.docs.map((d) => ({ id: d.id, ...d.data() }) as T)
+    // O id do documento vem por último de propósito: se um campo `id` sobrou
+    // dentro do data (herança do schema antigo), o id real prevalece.
+    return snap.docs.map((d) => ({ ...d.data(), id: d.id }) as T)
   } catch {
     return null
   }
@@ -79,7 +81,7 @@ export async function buscarPorId<T>(colecao: string, id: string): Promise<T | n
   try {
     const doc = await db.collection(colecao).doc(id).get()
     if (!doc.exists) return null
-    return { id: doc.id, ...doc.data() } as T
+    return { ...doc.data(), id: doc.id } as T
   } catch {
     return null
   }

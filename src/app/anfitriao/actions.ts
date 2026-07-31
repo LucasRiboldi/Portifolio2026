@@ -15,8 +15,7 @@
  * ------------------------------------------------------------------
  * POR QUE `contact_messages`, E NÃO UMA TABELA NOVA
  * ------------------------------------------------------------------
- * A tabela já existe, com a política `messages_public_insert` (qualquer um
- * insere, só o admin lê) e um inbox pronto em `/admin/messages`. O que havia
+ * A coleção já existe e tem um inbox pronto em `/admin/messages`. O que havia
  * sumido era o lado da escrita — `lib/repos/messages.ts` registra que "a
  * escrita saiu junto com a página /contact". A infraestrutura ficou esperando
  * um formulário público; o cupom é ele.
@@ -27,15 +26,23 @@
  * ------------------------------------------------------------------
  * VALIDAÇÃO
  * ------------------------------------------------------------------
- * A política aceita insert anônimo — é uma fronteira de sistema aberta ao
- * mundo. Toda a validação acontece AQUI, no servidor, e não no formulário:
- * o cliente é conselho, o servidor é lei. Os tetos de tamanho existem para
- * que um envio automatizado não use o campo de recado como depósito.
+ * Esta é uma fronteira de sistema aberta ao mundo: qualquer visitante pode
+ * disparar esta action. Toda a validação acontece AQUI, no servidor, e não no
+ * formulário: o cliente é conselho, o servidor é lei. Os tetos de tamanho
+ * existem para que um envio automatizado não use o campo de recado como
+ * depósito.
+ *
+ * Antes a escrita anônima era autorizada por uma policy de RLS
+ * (`messages_public_insert`). Agora ela grava pelo Admin SDK — a permissão
+ * deixou de ser declarativa no banco e passou a ser esta função, que é a única
+ * porta e valida antes de gravar. As Storage/Firestore Rules negam escrita
+ * direta de cliente justamente para que esta continue sendo a única entrada.
  */
 
 import { z } from "zod"
 
-import { createPublicClient } from "@/lib/supabase/public"
+import { criarDoc } from "@/lib/firebase/collection"
+import { isFirebaseAdminConfigured } from "@/lib/firebase/admin"
 import { coupon } from "@/lib/anfitriao-prophet"
 
 /**
@@ -146,10 +153,9 @@ export async function assinarFolha(
     return { status: "ok", message: "Cupom recebido. A primeira edição sai no próximo fecho." }
   }
 
-  const supabase = createPublicClient()
-  if (!supabase) {
-    // Sem Supabase configurado o site inteiro roda em semente estática (ver
-    // `lib/supabase/config`). Dizer "enviado" aqui seria mentir ao leitor.
+  if (!isFirebaseAdminConfigured) {
+    // Sem Firebase configurado o site inteiro roda em semente estática (ver
+    // `lib/firebase/admin`). Dizer "enviado" aqui seria mentir ao leitor.
     return {
       status: "error",
       message: "O balcão está fechado nesta edição. Tente pelo endereço do expediente.",
@@ -157,13 +163,14 @@ export async function assinarFolha(
     }
   }
 
-  const { error } = await supabase.from("contact_messages").insert({
-    name: parsed.data.nome,
-    email: parsed.data.email,
-    message: compor(parsed.data),
-  })
-
-  if (error) {
+  try {
+    await criarDoc("contact_messages", {
+      name: parsed.data.nome,
+      email: parsed.data.email,
+      message: compor(parsed.data),
+      read: false,
+    })
+  } catch {
     return {
       status: "error",
       message: "O cupom não chegou ao balcão. Tente de novo em instantes.",

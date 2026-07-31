@@ -2,11 +2,12 @@
 
 /**
  * Server Actions genéricas de CRUD para os recursos de conteúdo. Validam com
- * zod, exigem admin, escrevem via client autenticado (RLS reforça) e revalidam
- * a tag de cache do recurso.
+ * zod, exigem admin, escrevem via Admin SDK e revalidam a tag de cache do
+ * recurso.
  */
 import { revalidatePath } from "next/cache"
 
+import { criarDoc, atualizarDoc, removerDoc } from "@/lib/firebase/collection"
 import { getResource, resourceTable } from "@/lib/admin/resources"
 import { adminContext, revalidate, ok, fail, type ActionResult } from "@/lib/admin/action-helpers"
 
@@ -37,16 +38,16 @@ export async function saveResource(
     return fail(parsed.error.issues.map((i) => i.message).join(" · "))
   }
 
-  const { supabase } = await adminContext()
+  await adminContext()
   const payload = parsed.data as Record<string, unknown>
   const table = resourceTable(slug)
 
-  const query = id
-    ? supabase.from(table).update(payload).eq("id", id)
-    : supabase.from(table).insert(payload)
-
-  const { error } = await query
-  if (error) return fail(error.message)
+  try {
+    if (id) await atualizarDoc(table, id, payload)
+    else await criarDoc(table, payload)
+  } catch (err) {
+    return fail(err instanceof Error ? err.message : "Falha ao gravar.")
+  }
 
   revalidate(res.tag)
   revalidatePath(`/admin/${slug}`)
@@ -57,9 +58,12 @@ export async function deleteResource(slug: string, id: string): Promise<ActionRe
   const res = getResource(slug)
   if (!res) return fail("Recurso inválido.")
 
-  const { supabase } = await adminContext()
-  const { error } = await supabase.from(resourceTable(slug)).delete().eq("id", id)
-  if (error) return fail(error.message)
+  await adminContext()
+  try {
+    await removerDoc(resourceTable(slug), id)
+  } catch (err) {
+    return fail(err instanceof Error ? err.message : "Falha ao apagar.")
+  }
 
   revalidate(res.tag)
   revalidatePath(`/admin/${slug}`)

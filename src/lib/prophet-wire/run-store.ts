@@ -8,13 +8,13 @@
  * MESMA LIMITAÇÃO DO REPOSITÓRIO, declarada: a impl é em memória, viva apenas
  * enquanto a instância serverless existir. Um cold start zera o histórico, e
  * instâncias diferentes não compartilham nada. É honesto para o estágio atual
- * (o acervo também é in-memory) e some quando a Parte 10 trouxer o Supabase:
+ * (o acervo também é in-memory) e some quando há Firestore configurado:
  * basta uma segunda impl desta mesma interface.
  */
 
 import type { LogEntry, RunReport } from "./logger"
-import { isSupabaseServiceConfigured } from "@/lib/supabase/config"
-import { SupabaseRunStore } from "./supabase-run-store"
+import { isFirebaseAdminConfigured } from "@/lib/firebase/admin"
+import { FirestoreRunStore } from "./firestore-run-store"
 
 /** Uma execução registrada, com id e recorte dos erros para o painel. */
 export interface StoredRun extends RunReport {
@@ -24,7 +24,7 @@ export interface StoredRun extends RunReport {
   problems: LogEntry[]
 }
 
-/** Contrato de histórico — o Supabase implementará este mesmo shape. */
+/** Contrato de histórico — o Firestore implementa este mesmo shape. */
 export interface RunStore {
   /** Registra uma execução concluída. */
   record(report: RunReport): Promise<StoredRun>
@@ -65,12 +65,12 @@ export class InMemoryRunStore implements RunStore {
   }
 }
 
-/** Store padrão da aplicação (trocável em testes; Supabase quando configurado). */
+/** Store padrão da aplicação (trocável em testes; Firestore quando configurado). */
 let store: RunStore | null = null
 
 export function defaultRunStore(): RunStore {
   if (!store) {
-    store = isSupabaseServiceConfigured ? new SupabaseRunStore() : new InMemoryRunStore()
+    store = isFirebaseAdminConfigured ? new FirestoreRunStore() : new InMemoryRunStore()
   }
   return store
 }

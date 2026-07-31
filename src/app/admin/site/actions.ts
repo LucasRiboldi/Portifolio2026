@@ -2,6 +2,7 @@
 
 import { z } from "zod"
 
+import { atualizarDoc } from "@/lib/firebase/collection"
 import { adminContext, revalidate, ok, fail, type ActionResult } from "@/lib/admin/action-helpers"
 import { CACHE_TAGS } from "@/lib/repos/tags"
 
@@ -22,11 +23,12 @@ export async function saveSiteConfig(formData: FormData): Promise<ActionResult> 
   const parsed = schema.safeParse(raw)
   if (!parsed.success) return fail(parsed.error.issues.map((i) => i.message).join(" · "))
 
-  const { supabase } = await adminContext()
-  const { error } = await supabase
-    .from("site_config")
-    .upsert({ id: "default", ...parsed.data })
-  if (error) return fail(error.message)
+  await adminContext()
+  try {
+    await atualizarDoc("site_config", "default", parsed.data)
+  } catch (err) {
+    return fail(err instanceof Error ? err.message : "Falha ao gravar.")
+  }
 
   revalidate(CACHE_TAGS.site)
   return ok()

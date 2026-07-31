@@ -2,10 +2,10 @@ import "server-only"
 
 /**
  * Seed inicial — copia o conteúdo estático de `src/data/*.ts` (a fonte de
- * verdade histórica) para o Supabase. Idempotente: só popula tabelas vazias.
- * Usa o client service-role (ignora RLS). Chamado pela action do dashboard.
+ * verdade histórica) para o Firestore. Idempotente: só popula coleções vazias.
+ * Usa o Admin SDK. Chamado pela action do dashboard.
  */
-import { createAdminClient } from "@/lib/supabase/admin"
+import { contarDocs, gravarLote, idNatural } from "@/lib/firebase/collection"
 import { projects } from "@/data/projects"
 import { posts } from "@/data/posts"
 import { skills } from "@/data/skills"
@@ -30,25 +30,21 @@ export interface SeedReport {
 }
 
 async function seedIfEmpty(
-  supabase: ReturnType<typeof createAdminClient>,
   table: string,
   rows: Record<string, unknown>[],
 ): Promise<number | "já populada"> {
-  const { count } = await supabase
-    .from(table)
-    .select("*", { count: "exact", head: true })
-  if ((count ?? 0) > 0) return "já populada"
-  const { error } = await supabase.from(table).insert(rows)
-  if (error) throw new Error(`${table}: ${error.message}`)
+  if ((await contarDocs(table)) > 0) return "já populada"
+  await gravarLote(
+    table,
+    rows.map((dados) => ({ id: idNatural(dados), dados })),
+  )
   return rows.length
 }
 
 export async function seedDatabase(): Promise<SeedReport> {
-  const supabase = createAdminClient()
   const report: SeedReport = {}
 
   report.projects = await seedIfEmpty(
-    supabase,
     "projects",
     projects.map((p, i) => ({
       title: p.title,
@@ -64,7 +60,6 @@ export async function seedDatabase(): Promise<SeedReport> {
   )
 
   report.posts = await seedIfEmpty(
-    supabase,
     "posts",
     posts.map((p, i) => ({
       slug: p.slug,
@@ -81,7 +76,6 @@ export async function seedDatabase(): Promise<SeedReport> {
   )
 
   report.skills = await seedIfEmpty(
-    supabase,
     "skills",
     skills.map((s, i) => ({
       name: s.name,
@@ -93,7 +87,6 @@ export async function seedDatabase(): Promise<SeedReport> {
   )
 
   report.tools = await seedIfEmpty(
-    supabase,
     "tools",
     tools.map((t, i) => ({
       name: t.name,
@@ -107,7 +100,7 @@ export async function seedDatabase(): Promise<SeedReport> {
     })),
   )
 
-  report.site_config = await seedIfEmpty(supabase, "site_config", [
+  report.site_config = await seedIfEmpty("site_config", [
     {
       id: "default",
       name: siteConfig.name,
@@ -121,7 +114,6 @@ export async function seedDatabase(): Promise<SeedReport> {
   ])
 
   report.realms = await seedIfEmpty(
-    supabase,
     "realms",
     REALM_ORDER.map((id, i) => {
       const r = REALMS[id]
@@ -165,7 +157,6 @@ export async function seedDatabase(): Promise<SeedReport> {
 
   for (const [table, rows] of zones) {
     report[table] = await seedIfEmpty(
-      supabase,
       table,
       rows.map(({ id: _id, ...rest }, i) => ({ ...rest, published: true, sort: i })),
     )
@@ -176,7 +167,6 @@ export async function seedDatabase(): Promise<SeedReport> {
   // tabelas não estarão vazias depois do primeiro sync, e `seedIfEmpty`
   // desiste — que é o comportamento correto: o painel manda.
   report.devlogs = await seedIfEmpty(
-    supabase,
     "devlogs",
     devlogs.map((d, i) => ({
       slug: d.slug,
@@ -191,7 +181,6 @@ export async function seedDatabase(): Promise<SeedReport> {
   )
 
   report.lab_experiments = await seedIfEmpty(
-    supabase,
     "lab_experiments",
     labExperiments.map((x, i) => ({
       title: x.title,
@@ -206,7 +195,6 @@ export async function seedDatabase(): Promise<SeedReport> {
   )
 
   report.snippets = await seedIfEmpty(
-    supabase,
     "snippets",
     snippets.map((s, i) => ({
       title: s.title,
@@ -220,7 +208,6 @@ export async function seedDatabase(): Promise<SeedReport> {
   )
 
   report.wiki = await seedIfEmpty(
-    supabase,
     "wiki",
     wikiDocs.map((w, i) => ({
       slug: w.slug,
@@ -233,7 +220,6 @@ export async function seedDatabase(): Promise<SeedReport> {
   )
 
   report.ideas = await seedIfEmpty(
-    supabase,
     "ideas",
     ideas.map((x, i) => ({
       title: x.title,
@@ -247,7 +233,6 @@ export async function seedDatabase(): Promise<SeedReport> {
 
   // ─── Matérias das páginas internas do jornal (migration 0008) ─────────
   report.prophet_materias = await seedIfEmpty(
-    supabase,
     "prophet_materias",
     materias.map((m, i) => ({
       slug: m.slug,

@@ -14,7 +14,7 @@ import "server-only"
  *    desmarcados, já que a home mostra um único destaque.
  *  - Idempotente: rodar de novo não duplica nada.
  */
-import { createAdminClient } from "@/lib/supabase/admin"
+import { atualizarOnde, gravarLote, idNatural, listarCampos } from "@/lib/firebase/collection"
 import { projects } from "@/data/projects"
 import { posts } from "@/data/posts"
 import { tools } from "@/data/tools"
@@ -54,7 +54,6 @@ export interface SyncReport {
  * (conteúdo editado no painel é intocável), e rodar de novo não duplica nada.
  */
 async function inserirFaltantes<T>(
-  supabase: ReturnType<typeof createAdminClient>,
   table: string,
   /** Coluna que identifica o registro — `title`, `name` ou `slug`. */
   chave: string,
@@ -64,28 +63,25 @@ async function inserirFaltantes<T>(
   /** Converte o item na linha da tabela, sem `sort` (que é atribuído aqui). */
   paraLinha: (item: T) => Record<string, unknown>,
 ): Promise<string[]> {
-  const { data, error } = await supabase.from(table).select(`${chave}, sort`)
   // Sem prefixo de tabela: `tentar` já indexa a falha pelo nome dela, e
   // repetir aqui produzia "artworks: artworks: Could not find…" no relatório.
-  if (error) throw new Error(error.message)
-
-  const linhas = (data ?? []) as unknown as Record<string, unknown>[]
+  const linhas = await listarCampos<Record<string, unknown>>(table, [chave, "sort"])
   const jaTem = new Set(linhas.map((r) => r[chave] as string))
   const maiorSort = Math.max(0, ...linhas.map((r) => (r.sort as number) ?? 0))
   const faltando = itens.filter((i) => !jaTem.has(chaveDe(i)))
   if (faltando.length === 0) return []
 
-  const { error: insErr } = await supabase
-    .from(table)
-    // Entra no fim da fila: a ordem arrumada no painel continua valendo.
-    .insert(faltando.map((i, n) => ({ ...paraLinha(i), sort: maiorSort + 1 + n })))
-  if (insErr) throw new Error(insErr.message)
+  // Entra no fim da fila: a ordem arrumada no painel continua valendo.
+  const novos = faltando.map((i, n) => ({ ...paraLinha(i), sort: maiorSort + 1 + n }))
+  await gravarLote(
+    table,
+    novos.map((dados) => ({ id: idNatural(dados), dados })),
+  )
 
   return faltando.map(chaveDe)
 }
 
 export async function syncNewContent(): Promise<SyncReport> {
-  const supabase = createAdminClient()
   const report: SyncReport = { inseridos: {}, falhas: {} }
 
   /**
@@ -107,21 +103,20 @@ export async function syncNewContent(): Promise<SyncReport> {
 
   // ─── Projetos (chave: title) ───
   await tentar("projects", async () => {
-  const { data: projRows, error: projErr } = await supabase.from("projects").select("title, sort")
-  if (projErr) throw new Error(projErr.message)
-  const projHave = new Set((projRows ?? []).map((r) => r.title))
-  const projMax = Math.max(0, ...(projRows ?? []).map((r) => r.sort ?? 0))
+  const projRows = await listarCampos<{ title: string; sort?: number }>("projects", ["title", "sort"])
+  const projHave = new Set(projRows.map((r) => r.title))
+  const projMax = Math.max(0, ...projRows.map((r) => r.sort ?? 0))
   const projMissing = projects.filter((p) => !projHave.has(p.title))
 
   if (projMissing.length) {
     // A home renderiza um único destaque: se algum entrante é featured,
     // os antigos perdem o holofote antes da inserção.
     if (projMissing.some((p) => p.featured)) {
-      const { error } = await supabase.from("projects").update({ featured: false }).eq("featured", true)
-      if (error) throw new Error(`ao limpar o destaque anterior: ${error.message}`)
+      await atualizarOnde("projects", { campo: "featured", valor: true }, { featured: false })
     }
-    const { error } = await supabase.from("projects").insert(
-      projMissing.map((p, i) => ({
+    await gravarLote(
+      "projects",
+      projMissing.map((p, i) => ({ dados: {
         title: p.title,
         description: p.description,
         category: p.category,
@@ -132,24 +127,23 @@ export async function syncNewContent(): Promise<SyncReport> {
         published: true,
         // Destaque vai para o topo; o resto entra no fim da fila.
         sort: p.featured ? -1 : projMax + 1 + i,
-      })),
+      } })),
     )
-    if (error) throw new Error(error.message)
   }
   return projMissing.map((p) => p.title)
   })
 
   // ─── Ferramentas (chave: name) ───
   await tentar("tools", async () => {
-  const { data: toolRows, error: toolErr } = await supabase.from("tools").select("name, sort")
-  if (toolErr) throw new Error(toolErr.message)
-  const toolHave = new Set((toolRows ?? []).map((r) => r.name))
-  const toolMax = Math.max(0, ...(toolRows ?? []).map((r) => r.sort ?? 0))
+  const toolRows = await listarCampos<{ name: string; sort?: number }>("tools", ["name", "sort"])
+  const toolHave = new Set(toolRows.map((r) => r.name))
+  const toolMax = Math.max(0, ...toolRows.map((r) => r.sort ?? 0))
   const toolMissing = tools.filter((t) => !toolHave.has(t.name))
 
   if (toolMissing.length) {
-    const { error } = await supabase.from("tools").insert(
-      toolMissing.map((t, i) => ({
+    await gravarLote(
+      "tools",
+      toolMissing.map((t, i) => ({ dados: {
         name: t.name,
         description: t.description,
         type: t.type,
@@ -158,24 +152,23 @@ export async function syncNewContent(): Promise<SyncReport> {
         demo_url: t.demoUrl ?? null,
         github_url: t.githubUrl ?? null,
         sort: toolMax + 1 + i,
-      })),
+      } })),
     )
-    if (error) throw new Error(error.message)
   }
   return toolMissing.map((t) => t.name)
   })
 
   // ─── Posts (chave: slug) ───
   await tentar("posts", async () => {
-  const { data: postRows, error: postErr } = await supabase.from("posts").select("slug, sort")
-  if (postErr) throw new Error(postErr.message)
-  const postHave = new Set((postRows ?? []).map((r) => r.slug))
-  const postMax = Math.max(0, ...(postRows ?? []).map((r) => r.sort ?? 0))
+  const postRows = await listarCampos<{ slug: string; sort?: number }>("posts", ["slug", "sort"])
+  const postHave = new Set(postRows.map((r) => r.slug))
+  const postMax = Math.max(0, ...postRows.map((r) => r.sort ?? 0))
   const postMissing = posts.filter((p) => !postHave.has(p.slug))
 
   if (postMissing.length) {
-    const { error } = await supabase.from("posts").insert(
-      postMissing.map((p, i) => ({
+    await gravarLote(
+      "posts",
+      postMissing.map((p, i) => ({ id: p.slug, dados: {
         slug: p.slug,
         title: p.title,
         excerpt: p.excerpt,
@@ -186,9 +179,8 @@ export async function syncNewContent(): Promise<SyncReport> {
         body: p.body,
         published: true,
         sort: postMax + 1 + i,
-      })),
+      } })),
     )
-    if (error) throw new Error(error.message)
   }
   return postMissing.map((p) => p.title)
   })
@@ -201,7 +193,6 @@ export async function syncNewContent(): Promise<SyncReport> {
 
   await tentar("devlogs", () =>
     inserirFaltantes(
-    supabase,
     "devlogs",
     "slug",
     devlogs,
@@ -219,7 +210,6 @@ export async function syncNewContent(): Promise<SyncReport> {
 
   await tentar("lab_experiments", () =>
     inserirFaltantes(
-    supabase,
     "lab_experiments",
     "title",
     labExperiments,
@@ -237,7 +227,6 @@ export async function syncNewContent(): Promise<SyncReport> {
 
   await tentar("snippets", () =>
     inserirFaltantes(
-    supabase,
     "snippets",
     "title",
     snippets,
@@ -254,7 +243,6 @@ export async function syncNewContent(): Promise<SyncReport> {
 
   await tentar("wiki", () =>
     inserirFaltantes(
-    supabase,
     "wiki",
     "slug",
     wikiDocs,
@@ -270,7 +258,6 @@ export async function syncNewContent(): Promise<SyncReport> {
 
   await tentar("ideas", () =>
     inserirFaltantes(
-    supabase,
     "ideas",
     "title",
     ideas,
@@ -309,7 +296,6 @@ export async function syncNewContent(): Promise<SyncReport> {
   for (const [tabela, linhas] of zonas) {
     await tentar(tabela, () =>
       inserirFaltantes(
-        supabase,
         tabela,
         "title",
         linhas,
@@ -326,7 +312,6 @@ export async function syncNewContent(): Promise<SyncReport> {
   // aparecer quebrado na folha.
   await tentar("prophet_materias", () =>
     inserirFaltantes(
-    supabase,
     "prophet_materias",
     "slug",
     materias,

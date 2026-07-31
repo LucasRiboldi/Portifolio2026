@@ -3,7 +3,7 @@
  *
  * Ponto único de acesso à persistência. O pipeline (Publisher, Dedup) e a
  * landing falam com esta INTERFACE, nunca com o banco direto — é o que permite
- * trocar a impl in-memory (agora) pela do Supabase (Parte 10) sem tocar em quem
+ * trocar a impl in-memory pela do Firestore sem tocar em quem
  * consome.
  *
  * A impl in-memory serve a dois papéis reais: (1) testes de integração do

@@ -1,11 +1,12 @@
 "use server"
 
+import { atualizarDoc } from "@/lib/firebase/collection"
 import { adminContext, revalidate, ok, fail, type ActionResult } from "@/lib/admin/action-helpers"
 import { CACHE_TAGS } from "@/lib/repos/tags"
 import { REALM_ORDER } from "@/lib/realms"
 
 export async function saveRealms(formData: FormData): Promise<ActionResult> {
-  const { supabase } = await adminContext()
+  await adminContext()
   const defaultRealm = String(formData.get("default") ?? "")
 
   // valida JSON do Arcane, se enviado
@@ -30,8 +31,11 @@ export async function saveRealms(formData: FormData): Promise<ActionResult> {
     if (id === "arcane" && arcaneContent !== undefined) {
       patch.arcane_content = arcaneContent
     }
-    const { error } = await supabase.from("realms").update(patch).eq("id", id)
-    if (error) return fail(`${id}: ${error.message}`)
+    try {
+      await atualizarDoc("realms", id, patch)
+    } catch (err) {
+      return fail(`${id}: ${err instanceof Error ? err.message : "falha ao gravar"}`)
+    }
   }
 
   revalidate(CACHE_TAGS.realms)

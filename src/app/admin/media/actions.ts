@@ -13,8 +13,7 @@
  * em `docs/storage-policies.sql`.
  */
 import { requireAdmin } from "@/lib/auth/is-admin"
-import { createAdminClient } from "@/lib/supabase/admin"
-import { isSupabaseConfigured } from "@/lib/supabase/config"
+import { getBucket, isFirebaseAdminConfigured } from "@/lib/firebase/admin"
 import {
   validateImage,
   safeObjectName,
@@ -22,7 +21,23 @@ import {
   MAX_BYTES,
 } from "@/lib/admin/media-validate"
 
-const BUCKET = "public-media"
+/**
+ * Prefixo dos objetos no bucket. No Supabase isto era um *bucket* dedicado;
+ * o Firebase Storage tem um bucket por projeto, então a separação vira pasta.
+ */
+const PREFIX = "public-media"
+
+/**
+ * URL pública de um objeto.
+ *
+ * Diferença relevante em relação ao Supabase: lá o bucket era marcado "public"
+ * e a URL era previsível. Aqui a leitura pública depende das Storage Rules
+ * (ver `storage.rules`) e a URL canônica passa pelo endpoint de download com o
+ * nome do objeto encodado.
+ */
+function publicUrl(bucket: string, objeto: string): string {
+  return `https://firebasestorage.googleapis.com/v0/b/${bucket}/o/${encodeURIComponent(objeto)}?alt=media`
+}
 
 export interface MediaItem {
   name: string
@@ -33,26 +48,31 @@ export type MediaResult<T> = { ok: true; data: T } | { ok: false; error: string 
 
 export async function listMedia(): Promise<MediaResult<MediaItem[]>> {
   await requireAdmin()
-  if (!isSupabaseConfigured) return { ok: false, error: "Supabase não configurado." }
+  if (!isFirebaseAdminConfigured) return { ok: false, error: "Firebase não configurado." }
 
-  const supabase = createAdminClient()
-  const { data, error } = await supabase.storage
-    .from(BUCKET)
-    .list("", { sortBy: { column: "created_at", order: "desc" }, limit: 100 })
-  if (error) return { ok: false, error: error.message }
+  try {
+    const bucket = getBucket()
+    const [files] = await bucket.getFiles({ prefix: `${PREFIX}/` })
 
-  const items = (data ?? [])
-    .filter((f) => f.id)
-    .map((f) => ({
-      name: f.name,
-      url: supabase.storage.from(BUCKET).getPublicUrl(f.name).data.publicUrl,
-    }))
-  return { ok: true, data: items }
+    // O Storage não ordena por data na listagem — ordenamos aqui para manter o
+    // "mais recente primeiro" que o painel já mostrava.
+    const items = files
+      .filter((f) => !f.name.endsWith("/"))
+      .sort((a, b) => (b.metadata.timeCreated ?? "").localeCompare(a.metadata.timeCreated ?? ""))
+      .slice(0, 100)
+      .map((f) => ({
+        name: f.name.slice(PREFIX.length + 1),
+        url: publicUrl(bucket.name, f.name),
+      }))
+    return { ok: true, data: items }
+  } catch (err) {
+    return { ok: false, error: err instanceof Error ? err.message : "Falha ao listar." }
+  }
 }
 
 export async function uploadMedia(formData: FormData): Promise<MediaResult<MediaItem>> {
   await requireAdmin()
-  if (!isSupabaseConfigured) return { ok: false, error: "Supabase não configurado." }
+  if (!isFirebaseAdminConfigured) return { ok: false, error: "Firebase não configurado." }
 
   const file = formData.get("file")
   if (!(file instanceof File)) return { ok: false, error: "Nenhum arquivo recebido." }
@@ -67,27 +87,33 @@ export async function uploadMedia(formData: FormData): Promise<MediaResult<Media
   if ("error" in checked) return { ok: false, error: checked.error }
 
   const name = safeObjectName(checked.kind)
-  const supabase = createAdminClient()
-  const { error } = await supabase.storage.from(BUCKET).upload(name, checked.bytes, {
-    // contentType vem do conteúdo real, não do que o browser declarou.
-    contentType: checked.contentType,
-    upsert: false,
-  })
-  if (error) return { ok: false, error: error.message }
 
-  const url = supabase.storage.from(BUCKET).getPublicUrl(name).data.publicUrl
-  return { ok: true, data: { name, url } }
+  try {
+    const bucket = getBucket()
+    const objeto = `${PREFIX}/${name}`
+    await bucket.file(objeto).save(Buffer.from(checked.bytes), {
+      // contentType vem do conteúdo real, não do que o browser declarou.
+      contentType: checked.contentType,
+      // Sobrescrever é irrelevante aqui: safeObjectName() gera nome único.
+      metadata: { cacheControl: "public, max-age=31536000, immutable" },
+    })
+    return { ok: true, data: { name, url: publicUrl(bucket.name, objeto) } }
+  } catch (err) {
+    return { ok: false, error: err instanceof Error ? err.message : "Falha no upload." }
+  }
 }
 
 export async function deleteMedia(name: string): Promise<MediaResult<null>> {
   await requireAdmin()
-  if (!isSupabaseConfigured) return { ok: false, error: "Supabase não configurado." }
+  if (!isFirebaseAdminConfigured) return { ok: false, error: "Firebase não configurado." }
 
   // Só aceita o formato de nome que nós geramos — nada de caminhos.
   if (!isSafeObjectName(name)) return { ok: false, error: "Nome de arquivo inválido." }
 
-  const supabase = createAdminClient()
-  const { error } = await supabase.storage.from(BUCKET).remove([name])
-  if (error) return { ok: false, error: error.message }
-  return { ok: true, data: null }
+  try {
+    await getBucket().file(`${PREFIX}/${name}`).delete()
+    return { ok: true, data: null }
+  } catch (err) {
+    return { ok: false, error: err instanceof Error ? err.message : "Falha ao apagar." }
+  }
 }

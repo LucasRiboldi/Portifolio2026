@@ -1,17 +1,22 @@
 import "server-only"
 
 /**
- * PROPHET WIRE — implementação Supabase de `NewsRepository` (Parte 10).
+ * PROPHET WIRE — implementação Firestore de `NewsRepository`.
  *
  * Mesma interface que `InMemoryNewsRepository`; troca de impl não toca em
- * quem consome (pipeline, painel admin, landing). Usa o cliente service-role
- * porque quem escreve é o cron (sem sessão de usuário — `is_admin()` via RLS
- * não se aplicaria) e quem lê inclui a landing pública; a filtragem por
- * `status` já é feita na query, então o bypass de RLS não vaza rascunho.
+ * quem consome (pipeline, painel admin, landing). Usa o Admin SDK porque quem
+ * escreve é o cron, que não tem sessão de usuário. A filtragem por `status`
+ * acontece na query, então a landing pública nunca enxerga rascunho — a
+ * garantia que antes vinha da RLS agora é responsabilidade destas consultas.
+ *
+ * O `slug` é o id do documento: era a chave de conflito do upsert no Postgres
+ * (`onConflict: "slug"`) e continua sendo a identidade aqui.
  */
 
-import { createAdminClient } from "@/lib/supabase/admin"
+import { getDb } from "@/lib/firebase/admin"
 import type { NewsRepository } from "./repository"
+
+const COLECAO = "prophet_wire_news"
 import type { NewsItem, NewsCategory, NewsStatus } from "./types"
 
 interface NewsRow {
@@ -105,38 +110,24 @@ function fromRow(row: NewsRow): NewsItem {
   }
 }
 
-export class SupabaseNewsRepository implements NewsRepository {
+export class FirestoreNewsRepository implements NewsRepository {
   async save(item: NewsItem): Promise<NewsItem> {
-    const supabase = createAdminClient()
-    const { data, error } = await supabase
-      .from("prophet_wire_news")
-      .upsert(toRow(item), { onConflict: "slug" })
-      .select("*")
-      .single()
-    if (error || !data) throw new Error(`SupabaseNewsRepository.save: ${error?.message ?? "sem dados"}`)
-    return fromRow(data as NewsRow)
+    const row = toRow(item)
+    await getDb().collection(COLECAO).doc(item.slug).set(row, { merge: true })
+    return fromRow(row)
   }
 
   async findByHash(hash: string): Promise<NewsItem | null> {
-    const supabase = createAdminClient()
-    const { data, error } = await supabase
-      .from("prophet_wire_news")
-      .select("*")
-      .eq("hash", hash)
-      .maybeSingle()
-    if (error || !data) return null
-    return fromRow(data as NewsRow)
+    const snap = await getDb().collection(COLECAO).where("hash", "==", hash).limit(1).get()
+    const doc = snap.docs[0]
+    if (!doc) return null
+    return fromRow(doc.data() as NewsRow)
   }
 
   async findBySlug(slug: string): Promise<NewsItem | null> {
-    const supabase = createAdminClient()
-    const { data, error } = await supabase
-      .from("prophet_wire_news")
-      .select("*")
-      .eq("slug", slug)
-      .maybeSingle()
-    if (error || !data) return null
-    return fromRow(data as NewsRow)
+    const doc = await getDb().collection(COLECAO).doc(slug).get()
+    if (!doc.exists) return null
+    return fromRow(doc.data() as NewsRow)
   }
 
   async listPublished(limit?: number): Promise<NewsItem[]> {
@@ -148,24 +139,25 @@ export class SupabaseNewsRepository implements NewsRepository {
   }
 
   async count(): Promise<number> {
-    const supabase = createAdminClient()
-    const { count, error } = await supabase
-      .from("prophet_wire_news")
-      .select("slug", { count: "exact", head: true })
-    if (error || count === null) return 0
-    return count
+    try {
+      const snap = await getDb().collection(COLECAO).count().get()
+      return snap.data().count
+    } catch {
+      return 0
+    }
   }
 
   private async list(status: NewsStatus, limit?: number): Promise<NewsItem[]> {
-    const supabase = createAdminClient()
-    let query = supabase
-      .from("prophet_wire_news")
-      .select("*")
-      .eq("status", status)
-      .order("published_at", { ascending: false })
-    if (typeof limit === "number") query = query.limit(limit)
-    const { data, error } = await query
-    if (error || !data) return []
-    return (data as NewsRow[]).map(fromRow)
+    try {
+      let query = getDb()
+        .collection(COLECAO)
+        .where("status", "==", status)
+        .orderBy("published_at", "desc")
+      if (typeof limit === "number") query = query.limit(limit)
+      const snap = await query.get()
+      return snap.docs.map((d) => fromRow(d.data() as NewsRow))
+    } catch {
+      return []
+    }
   }
 }

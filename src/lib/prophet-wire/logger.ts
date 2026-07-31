@@ -9,7 +9,7 @@
  *
  * Nenhum módulo do pipeline importa `console` direto: todos recebem um `Logger`.
  * Isso mantém os testes silenciosos e deixa a Parte 10 trocar a saída por
- * Supabase sem tocar em quem loga.
+ * Firestore sem tocar em quem loga.
  */
 
 export type LogLevel = "debug" | "info" | "warn" | "error"

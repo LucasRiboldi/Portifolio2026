@@ -16,7 +16,7 @@
  * fonte é hotlinking — o dono pode trocar ou remover o arquivo, e o navegador
  * do leitor revela o IP dele para aquele domínio. É um custo real e conhecido;
  * a alternativa (baixar e reservir) exige armazenamento, que entra junto com o
- * Supabase da Parte 10.
+ * Firestore.
  */
 
 import type { NewsCategory, NewsImage, NewsItem } from "./types"
