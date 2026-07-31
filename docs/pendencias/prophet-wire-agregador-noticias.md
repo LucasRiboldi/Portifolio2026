@@ -32,7 +32,7 @@ Estado da persistência depois da migração:
 **Ação manual necessária (Lucas):**
 
 1. No console do Firebase, habilitar **Authentication** (provedor GitHub) e
-   criar o bucket do **Storage** — ver `docs/deploy.md`.
+   configurar a midia — ver `docs/project-knowledge/deployment.md`.
 2. Definir as chaves do Firebase em `.env.local` (dev) e nas env vars da Vercel
    (produção). Em dev, `serviceAccountKey.json` na raiz substitui as do Admin SDK.
 3. Rodar o gatilho uma vez (`POST /api/prophet-wire/run` com o `CRON_SECRET`) e

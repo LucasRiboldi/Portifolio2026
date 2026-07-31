@@ -204,6 +204,41 @@ npx firebase-tools deploy --only firestore --project <seu-projeto>
 Para popular o banco a partir de `src/data/*`: `npm run db:seed` (só coleções
 vazias) ou `npm run db:sync` (insere o que falta).
 
+## 📚 Documentação
+
+O conhecimento do projeto vive em [`docs/project-knowledge/`](docs/project-knowledge/)
+— escrito para não ser preciso reanalisar o código para entender uma decisão.
+
+| Assunto | Documento |
+|---|---|
+| Arquitetura, camadas e fluxo de dados | [architecture.md](docs/project-knowledge/architecture.md) |
+| Regras de negócio e fluxos | [business-rules.md](docs/project-knowledge/business-rules.md) |
+| Banco: coleções, índices, seed | [database.md](docs/project-knowledge/database.md) |
+| Autenticação e autorização | [auth.md](docs/project-knowledge/auth.md) |
+| Serviços externos | [integrations.md](docs/project-knowledge/integrations.md) |
+| Deploy, ambientes e variáveis | [deployment.md](docs/project-knowledge/deployment.md) |
+| Convenções de código | [conventions.md](docs/project-knowledge/conventions.md) |
+| Débito técnico | [technical-debt.md](docs/project-knowledge/technical-debt.md) |
+| Migração Supabase → Firebase | [migrations/](docs/project-knowledge/migrations/supabase-to-firebase.md) |
+
+Dois arquivos na raiz completam o conjunto:
+
+- **[`PROJECT_STATE.md`](PROJECT_STATE.md)** — estado do momento: o que está
+  pronto, o que está quebrado, o que nunca foi verificado.
+- **[`CLAUDE.md`](CLAUDE.md)** — resumo de alto valor para sessões de IA.
+
+## 🤝 Contribuindo
+
+Antes de escrever código novo, procure implementação semelhante: os leitores
+compartilham `publishedReader` e o CRUD do painel é dirigido por configuração —
+quase nada precisa de arquivo novo.
+
+As convenções obrigatórias estão em
+[conventions.md](docs/project-knowledge/conventions.md). Em resumo: comentário
+explica **por que**, arquivos abaixo de 500 linhas, `requireAdmin()` no topo de
+toda Server Action, testes sem rede e sem credencial, e o que não foi verificado
+não entra na mensagem de commit como se tivesse sido.
+
 ### 🎮 Scripts
 
 | Comando | O que faz |
