@@ -1,4 +1,4 @@
-# Deploy — Portfólio LR (Vercel + Supabase)
+# Deploy — Portfólio LR (Vercel + Firebase)
 
 Guia para colocar o site + CMS no ar. O site já roda em **modo fallback** (conteúdo
 estático) sem nenhuma configuração; os passos abaixo ativam o CMS em produção.
@@ -8,26 +8,50 @@ Deploy automático: cada `git push origin main` dispara um build de produção.
 
 ## Ordem recomendada
 
-### 1. Supabase (uma vez)
+### 1. Firebase (uma vez)
 
-Siga [`supabase/README.md`](../supabase/README.md):
-criar projeto → rodar `0001_schema.sql` e `0002_storage.sql` → inserir seu login
-na `admin_allowlist` → configurar GitHub OAuth.
+No [console do Firebase](https://console.firebase.google.com):
+
+1. **Firestore Database** → criar (modo produção).
+2. **Authentication** → *Get started* → habilitar o provedor **GitHub**.
+   Crie o OAuth App no GitHub (Settings → Developer settings → OAuth Apps) e
+   cole `Client ID` / `Client Secret`. O callback é o que o Firebase mostra:
+   `https://<projeto>.firebaseapp.com/__/auth/handler`.
+3. **Storage** → criar o bucket padrão (necessário para a mídia do painel).
+4. **Project settings → Service accounts** → *Generate new private key*.
+
+Publique regras e índices:
+
+```bash
+npx firebase-tools deploy --only firestore,storage --project <seu-projeto>
+```
 
 ### 2. Preencher `.env.local`
 
-Copie os valores do Supabase (Settings → API) e do Resend para o `.env.local`:
+Config do SDK web em **Project settings → General → Your apps**; a service
+account no passo 1.4. Ver `.env.example` para a lista completa.
 
 ```
-NEXT_PUBLIC_SUPABASE_URL=https://xxxx.supabase.co
-NEXT_PUBLIC_SUPABASE_ANON_KEY=eyJ...
-SUPABASE_SERVICE_ROLE_KEY=eyJ...       # segredo
+NEXT_PUBLIC_FIREBASE_API_KEY=...
+NEXT_PUBLIC_FIREBASE_AUTH_DOMAIN=<projeto>.firebaseapp.com
+NEXT_PUBLIC_FIREBASE_PROJECT_ID=<projeto>
+NEXT_PUBLIC_FIREBASE_STORAGE_BUCKET=<projeto>.firebasestorage.app
+NEXT_PUBLIC_FIREBASE_MESSAGING_SENDER_ID=...
+NEXT_PUBLIC_FIREBASE_APP_ID=...
+FIREBASE_PROJECT_ID=<projeto>
+FIREBASE_CLIENT_EMAIL=firebase-adminsdk-...@<projeto>.iam.gserviceaccount.com
+FIREBASE_PRIVATE_KEY="-----BEGIN PRIVATE KEY-----
+...
+-----END PRIVATE KEY-----
+"
 ADMIN_GITHUB_LOGIN=LucasRiboldi
-RESEND_API_KEY=re_...                  # opcional
-CONTACT_TO_EMAIL=lucasriboldi.dev@gmail.com
 ```
 
-Teste local: `npm run dev` → `/login` → entrar com GitHub → Dashboard → **Popular banco**.
+Em desenvolvimento, as duas últimas do Admin SDK podem ser substituídas pelo
+arquivo `serviceAccountKey.json` na raiz (gitignored).
+
+Popular o banco: `npm run db:seed` (pela linha de comando, não exige login) ou
+`/login` → Dashboard → **Popular banco**.
 
 ### 3. Enviar as variáveis para o Vercel
 
@@ -42,11 +66,15 @@ node scripts/sync-vercel-env.mjs production
 O script pula variáveis vazias e reaplica as existentes (espelha o `.env.local`).
 Alternativa manual: **Vercel → Project → Settings → Environment Variables**.
 
-### 4. Configurar URLs de redirect do Supabase (produção)
+> ⚠️ `FIREBASE_PRIVATE_KEY` tem quebras de linha. Ao colar no painel da Vercel,
+> mantenha os `
+` escapados — `lib/firebase/admin.ts` os desescapa na leitura.
 
-Em **Supabase → Authentication → URL Configuration**, adicione a URL de produção
-às *Redirect URLs* (ex.: `https://portifolio2026-two.vercel.app/**`). O callback
-do GitHub OAuth aponta para `https://<projeto>.supabase.co/auth/v1/callback`.
+### 4. Autorizar o domínio de produção no Firebase
+
+Em **Authentication → Settings → Authorized domains**, adicione o domínio de
+produção (ex.: `portifolio2026-two.vercel.app`). Sem isso o popup de login é
+recusado pelo Firebase.
 
 ### 5. Deploy
 
@@ -58,19 +86,22 @@ vercel --prod
 
 ## Checklist rápido
 
-- [ ] Migrations `0001` e `0002` aplicadas no Supabase
-- [ ] Login inserido em `admin_allowlist`
-- [ ] GitHub OAuth App criado e provider habilitado no Supabase
+- [ ] Firestore, Authentication (GitHub) e Storage habilitados no console
+- [ ] `firebase-tools deploy --only firestore,storage` executado
 - [ ] `.env.local` preenchido e testado com `npm run dev`
+- [ ] `npm run db:seed` rodado (uma vez)
 - [ ] `npm run sync:vercel-env` executado
-- [ ] Redirect URLs de produção no Supabase
+- [ ] Domínio de produção em *Authorized domains*
 - [ ] Deploy feito (`git push` ou `vercel --prod`)
 - [ ] `/login` em produção autentica e Dashboard mostra os contadores
-- [ ] "Popular banco" rodado em produção (uma vez)
 
 ## Segurança
 
-- `SUPABASE_SERVICE_ROLE_KEY` **nunca** vai para o client — usado só em
-  `src/lib/supabase/admin.ts` (server). Não commitar `.env.local` (gitignored).
-- `/admin` é protegido por middleware + `requireAdmin()` + RLS (`is_admin()`),
-  restrito ao login em `ADMIN_GITHUB_LOGIN` / `admin_allowlist`.
+- `FIREBASE_PRIVATE_KEY` **nunca** vai para o client — usada só em
+  `src/lib/firebase/admin.ts` (server). Não commitar `.env.local` nem
+  `serviceAccountKey.json` (ambos gitignored).
+- A config `NEXT_PUBLIC_FIREBASE_*` é pública por design: vai no bundle do
+  browser. Quem protege são as Security Rules e o Auth, não o segredo dela.
+- `/admin` é protegido por middleware (presença do cookie) + `requireAdmin()`
+  (verificação real), restrito ao login em `ADMIN_GITHUB_LOGIN`. O Admin SDK
+  ignora Security Rules, então `requireAdmin()` é a autorização, não um reforço.

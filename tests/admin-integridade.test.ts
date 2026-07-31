@@ -3,6 +3,8 @@ import path from "node:path"
 
 import { describe, it, expect } from "vitest"
 
+import { COLECOES } from "@/lib/firebase/schema"
+
 import { RESOURCES, resourceTable } from "@/lib/admin/resources"
 
 /**
@@ -10,7 +12,7 @@ import { RESOURCES, resourceTable } from "@/lib/admin/resources"
  *
  * O /admin tem quatro camadas que precisam concordar e que ninguém obriga a
  * concordar: o MENU (uma lista escrita à mão no sidebar), os RECURSOS (a
- * configuração declarativa), as TABELAS (as migrations) e as COLUNAS. Cada uma
+ * configuração declarativa), as COLEÇÕES e os CAMPOS (lib/firebase/schema). Cada uma
  * é editada por um motivo diferente, e as divergências não aparecem em
  * compilação nem em revisão — aparecem quando alguém clica em salvar.
  *
@@ -34,33 +36,11 @@ const MENU = [
   ),
 ].map((m) => ({ href: m[1]!, label: m[2]! }))
 
-/** Colunas de cada tabela, somando `create table` e `add column`. */
-const COLUNAS: Record<string, string[]> = (() => {
-  const mapa: Record<string, string[]> = {}
-  const dir = path.join(RAIZ, "supabase/migrations")
-  for (const arquivo of readdirSync(dir).filter((f) => f.endsWith(".sql"))) {
-    const sql = readFileSync(path.join(dir, arquivo), "utf8")
-
-    for (const m of sql.matchAll(/create table if not exists public\.(\w+)\s*\(([\s\S]*?)\n\);/g)) {
-      const tabela = m[1]!
-      mapa[tabela] ??= []
-      for (const linha of m[2]!.split("\n")) {
-        const col = linha.match(/^\s{2}(\w+)\s+\S/)
-        // `constraint`/`check`/`primary` abrem linha como se fossem coluna.
-        if (col && !["constraint", "check", "primary", "unique", "foreign"].includes(col[1]!)) {
-          mapa[tabela]!.push(col[1]!)
-        }
-      }
-    }
-    for (const m of sql.matchAll(
-      /alter table (?:if exists )?public\.(\w+)\s+add column (?:if not exists )?(\w+)/g,
-    )) {
-      mapa[m[1]!] ??= []
-      mapa[m[1]!]!.push(m[2]!)
-    }
-  }
-  return mapa
-})()
+/**
+ * Campos de cada coleção. Vinham do SQL das migrations; agora da declaração
+ * explícita em `lib/firebase/schema.ts` — o Firestore não tem schema próprio.
+ */
+const COLUNAS: Record<string, readonly string[]> = COLECOES
 
 /** Rotas do painel com página própria (não passam pelo CRUD genérico). */
 const ROTAS_PROPRIAS = ["/admin", "/admin/prophet", "/admin/prophet-wire", "/admin/realms", "/admin/site", "/admin/media", "/admin/messages"]
@@ -112,7 +92,7 @@ describe("menu e recursos", () => {
 describe("recursos e banco", () => {
   it.each(Object.keys(RESOURCES))("«%s» aponta para uma tabela que existe", (slug) => {
     const tabela = resourceTable(slug)
-    expect(COLUNAS[tabela], `tabela ${tabela} não existe em migration nenhuma`).toBeDefined()
+    expect(COLUNAS[tabela], `coleção ${tabela} não está declarada em lib/firebase/schema.ts`).toBeDefined()
   })
 
   /**

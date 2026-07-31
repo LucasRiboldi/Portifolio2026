@@ -1195,13 +1195,13 @@ As duas fontes são somadas em `page.tsx`: a pasta primeiro, depois as faixas da
 tabela `tracks` (que carregam capa e comentário), descartando as do banco que
 apontem para o mesmo arquivo.
 
-## Conteúdo (Supabase)
+## Conteúdo (Firestore)
 
-Sete tabelas novas em `supabase/migrations/0006_criativo_zones.sql`:
-`artworks`, `comics`, `movies`, `tracks`, `videos`, `notes`, `strips`.
+Sete coleções: `artworks`, `comics`, `movies`, `tracks`, `videos`, `notes`,
+`strips` — declaradas em `src/lib/firebase/schema.ts`.
 
-Todas seguem o contrato das anteriores: `published` + `sort`, RLS com leitura
-pública do publicado e escrita só para admin. `notes` é **somente leitura
+Todas seguem o contrato das anteriores: `published` + `sort`, com leitura
+pública do publicado e escrita só pelo servidor (ver `firestore.rules`). `notes` é **somente leitura
 pública** — sem formulário de visitante não há superfície de spam nem fila de
 moderação.
 

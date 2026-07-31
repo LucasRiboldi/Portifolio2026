@@ -28,7 +28,7 @@
 [![React](https://img.shields.io/badge/React_19-ff2d95?style=flat-square&logo=react&logoColor=white)](https://react.dev)
 [![TypeScript](https://img.shields.io/badge/TypeScript_5-00e5ff?style=flat-square&logo=typescript&logoColor=black)](https://www.typescriptlang.org)
 [![Tailwind](https://img.shields.io/badge/Tailwind_3-7b2ff7?style=flat-square&logo=tailwindcss&logoColor=white)](https://tailwindcss.com)
-[![Supabase](https://img.shields.io/badge/Supabase-3ecf8e?style=flat-square&logo=supabase&logoColor=white)](https://supabase.com)
+[![Firebase](https://img.shields.io/badge/Firebase-ffca28?style=flat-square&logo=firebase&logoColor=black)](https://firebase.google.com)
 [![Motion](https://img.shields.io/badge/Motion_12-ffe600?style=flat-square&logoColor=black)](https://motion.dev)
 
 </div>
@@ -148,7 +148,7 @@ O desenho é inteiramente CSS, e `prefers-reduced-motion` desliga o tilt.
 
 ## 🔐 O painel (CMS próprio)
 
-O conteúdo do site **vem do Supabase**, editável em `/admin` — sem redeploy para publicar.
+O conteúdo do site **vem do Firestore**, editável em `/admin` — sem redeploy para publicar.
 
 - **13 CRUDs** dirigidos por um único catálogo declarativo ([`lib/admin/resources.ts`](src/lib/admin/resources.ts)):
   colunas, campos, validação Zod e tag de cache numa entrada só. Nova entidade = uma entrada.
@@ -160,14 +160,14 @@ O conteúdo do site **vem do Supabase**, editável em `/admin` — sem redeploy 
   UUID. Coberto por testes com payloads hostis.
 - **Cache por tags** — cada edição revalida só o que mudou (`unstable_cache` + `revalidateTag`).
 
-> ⚠️ Os arquivos em `src/data/*` são **seed/fallback**, usados quando o Supabase não está
+> ⚠️ Os arquivos em `src/data/*` são **seed/fallback**, usados quando o Firebase não está
 > configurado (o caso do dev local). Editá-los **não** publica nada: para levar conteúdo novo
 > ao ar, use o botão **"Publicar conteúdo novo do código"** no `/admin`.
 
 ## 🛠 Stack
 
 `Next.js 15` · `React 19` · `TypeScript 5` · `Tailwind 3` · `Motion 12` · `GSAP 3` · `Lottie` ·
-`Supabase` (Postgres + Auth + Storage) · `Radix / Base UI` · `React Hook Form + Zod 4` ·
+`Firebase` (Firestore + Auth + Storage) · `Radix / Base UI` · `React Hook Form + Zod 4` ·
 `react-markdown` · `Storybook 10` · `Vitest 4`
 
 Hospedado na **Vercel** — deploy automático no push da `main`.
@@ -183,18 +183,26 @@ npm install
 npm run dev            # 🌐 http://localhost:3000
 ```
 
-**Sem `.env` o site roda normalmente** — sem Supabase configurado, ele serve o conteúdo
+**Sem `.env` o site roda normalmente** — sem Firebase configurado, ele serve o conteúdo
 estático de `src/data/*`. O `/admin` fica inacessível (não há como autenticar). Para o
 painel e o conteúdo dinâmico, copie `.env.example` para `.env.local` e preencha:
 
 | Variável | Para quê |
 |---|---|
-| `NEXT_PUBLIC_SUPABASE_URL` · `NEXT_PUBLIC_SUPABASE_ANON_KEY` | Leitura pública e sessão |
-| `SUPABASE_SERVICE_ROLE_KEY` | Seed, sync e upload de mídia (**só no servidor**) |
+| `NEXT_PUBLIC_FIREBASE_*` (6 chaves) | Config do SDK web — só o login roda no browser |
+| `FIREBASE_CLIENT_EMAIL` · `FIREBASE_PRIVATE_KEY` | Admin SDK: todo acesso a dados, seed, sync e mídia (**só no servidor**) |
 | `ADMIN_GITHUB_LOGIN` | Allowlist de quem entra no `/admin` |
 
-As policies do bucket de mídia estão em [`docs/storage-policies.sql`](docs/storage-policies.sql)
-— rode no SQL Editor do Supabase.
+As regras de acesso estão em [`firestore.rules`](firestore.rules) e
+[`storage.rules`](storage.rules); os índices compostos em
+[`firestore.indexes.json`](firestore.indexes.json). Publique com:
+
+```bash
+npx firebase-tools deploy --only firestore,storage --project <seu-projeto>
+```
+
+Para popular o banco a partir de `src/data/*`: `npm run db:seed` (só coleções
+vazias) ou `npm run db:sync` (insere o que falta).
 
 ### 🎮 Scripts
 
@@ -230,9 +238,9 @@ src/
 │   ├── portal/ dev/ prophet/ gazette/   # 🎭 componentes por realm
 │   └── admin/             # 🔐 formulários, listas, mídia
 ├── lib/
-│   ├── repos/             # 🗄️ leitura do Supabase (cacheada, com fallback)
+│   ├── repos/             # 🗄️ leitura do Firestore (cacheada, com fallback)
 │   ├── admin/             # ⚙️ catálogo de recursos, seed, sync, validação
-│   ├── supabase/ auth/    # 🔑 clients e autorização
+│   ├── firebase/ auth/    # 🔑 SDKs, sessão e autorização
 │   └── realms.ts          # 🌐 definição dos três universos
 ├── design-system/         # ⚛️ tokens.ts, registry.ts, motion.ts, gsap.ts
 ├── data/                  # 📇 seed/fallback tipado (projetos, tools, posts…)

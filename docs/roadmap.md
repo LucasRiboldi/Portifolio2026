@@ -20,7 +20,7 @@ Daily Prophet). Itens não implementados ainda; ordenados por área. Marque com
 
 ## Daily Prophet (`/prophet`, jornal)
 - [ ] **Imprensa**: cards de download reais (upload de PDF / print&play via
-      Supabase Storage) com contador de downloads.
+      Firebase Storage) com contador de downloads.
 - [ ] **Índice** do Caderno das Mecânicas (âncoras / navegação lateral).
 - [ ] "Primeira Página" com **manchete rotativa** e seção de últimas edições.
 - [ ] Página de **protótipo individual** com galeria de playtests.
@@ -41,5 +41,5 @@ Daily Prophet). Itens não implementados ainda; ordenados por área. Marque com
 
 ## Segurança / operação (pendências conhecidas)
 - [ ] Rotacionar/limpar do histórico do git a antiga `service_role` (revogada).
-- [ ] Revogar o Personal Access Token do Supabase quando não for mais necessário.
+- [ ] Desligar o projeto Supabase antigo — a migração para o Firebase saiu, mas o banco continua no ar.
 - [ ] Página **home** e **prophet "Primeira Página"** editáveis via `page_content`.

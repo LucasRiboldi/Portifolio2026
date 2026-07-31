@@ -31,7 +31,7 @@ O sistema deve funcionar como:
 
 ## Backend
 
-- Supabase
+- Firebase (Firestore + Auth + Storage)
 
 ### Utilizado para
 

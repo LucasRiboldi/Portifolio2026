@@ -4,37 +4,37 @@
 > o *Daily Prophet*). Objetivo: pipeline 100% automático que pesquisa, analisa com IA,
 > deduplica e preenche os campos de notícia do jornal, diariamente, sem intervenção humana.
 
-## ⇒ PRÓXIMA NECESSIDADE: ação manual — configurar o Supabase deste projeto
+## ⇒ PRÓXIMA NECESSIDADE: ação manual — habilitar o Auth e rodar o gatilho
 
-> Parte 10 implementada em 2026-07-28. Todo o roadmap de código está feito
-> (Partes 0–14 + o redesenho sobre o layout original e a equalização visual).
-> **O que falta agora não é código — é configuração de ambiente.**
+> **2026-07-31 — o projeto migrou de Supabase para Firebase.** O que está abaixo
+> foi reescrito para o arranjo novo. O histórico das Partes 0–14, mais adiante
+> neste arquivo, fala em Supabase porque era o que existia quando foi escrito —
+> ficou como está de propósito: é registro, não instrução.
 
-O que foi feito na Parte 10:
+Todo o roadmap de código está feito (Partes 0–14 + o redesenho sobre o layout
+original e a equalização visual). **O que falta não é código — é configuração.**
 
-- `supabase/migrations/0007_prophet_wire.sql` — tabelas `prophet_wire_news` (acervo,
-  chave `slug`, índices por `hash` e por `status`+`published_at`) e `prophet_wire_runs`
-  (histórico, chave `id` = `startedAt`), RLS (`pwnews_read`/`pwnews_write`/`pwruns_*`
-  via `is_admin()`, leitura pública só de `status = 'publicado'`).
-- `SupabaseNewsRepository` (`src/lib/prophet-wire/supabase-repository.ts`) e
-  `SupabaseRunStore` (`src/lib/prophet-wire/supabase-run-store.ts`) — segunda impl de
-  `NewsRepository`/`RunStore`, mesma interface da versão in-memory. Usam o cliente
-  service-role: quem escreve é o cron (sem sessão de usuário, `is_admin()` via RLS não
-  se aplicaria) e a filtragem por `status` já ocorre na query, então o bypass de RLS
-  não vaza rascunho.
+Estado da persistência depois da migração:
+
+- `FirestoreNewsRepository` (`src/lib/prophet-wire/firestore-repository.ts`) e
+  `FirestoreRunStore` (`src/lib/prophet-wire/firestore-run-store.ts`) — mesma
+  interface `NewsRepository`/`RunStore` da versão in-memory. As coleções são
+  `prophet_wire_news` (id do documento = `slug`) e `prophet_wire_runs`
+  (id = `startedAt`); o índice composto `status` + `published_at` está em
+  `firestore.indexes.json` e já foi publicado.
 - `defaultRepository()` (`src/data/prophet-wire.ts`) e `defaultRunStore()`
-  (`src/lib/prophet-wire/run-store.ts`) agora escolhem a impl Supabase quando
-  `isSupabaseServiceConfigured` (URL + `SUPABASE_SERVICE_ROLE_KEY`) — senão caem no
+  (`src/lib/prophet-wire/run-store.ts`) escolhem a impl do Firestore quando há
+  credencial de Admin SDK (`isFirebaseAdminConfigured`) — senão caem no
   in-memory de sempre. **Nenhum outro módulo mudou**, como o desenho previa.
-- Build (`npm run build`) e os 115 testes unitários passam. Nada disto foi verificado
-  contra um banco real ainda — ver a ação manual abaixo.
+- A leitura pública só enxerga `status = 'publicado'`; a garantia que vinha da
+  RLS agora está na query e em `firestore.rules`.
 
 **Ação manual necessária (Lucas):**
 
-1. No SQL Editor do Supabase, rodar `supabase/migrations/0007_prophet_wire.sql`
-   (depois das 0001–0006, se ainda não rodadas — ver `supabase/README.md`).
-2. Definir `SUPABASE_SERVICE_ROLE_KEY` (e as demais chaves do Supabase) em
-   `.env.local` (dev) e nas env vars da Vercel (produção).
+1. No console do Firebase, habilitar **Authentication** (provedor GitHub) e
+   criar o bucket do **Storage** — ver `docs/deploy.md`.
+2. Definir as chaves do Firebase em `.env.local` (dev) e nas env vars da Vercel
+   (produção). Em dev, `serviceAccountKey.json` na raiz substitui as do Admin SDK.
 3. Rodar o gatilho uma vez (`POST /api/prophet-wire/run` com o `CRON_SECRET`) e
    conferir no painel `/admin/prophet-wire` que o acervo e o histórico persistem
    entre execuções.
@@ -54,7 +54,7 @@ por ela:
 | Botões publicar/descartar | painel `/admin/prophet-wire` | precisa de Server Actions novas sobre o repo persistente — ainda não escritas |
 | `revalidate`/ISR em `/anfitriao` | `page.tsx` | a página continua prerenderizada estática (`○` no build); notícia nova só aparece no próximo build |
 | Rate limiting do gatilho coordenado entre instâncias | `api/prophet-wire/run` | a trava atual é de processo; um lock real exige store compartilhado (Vercel KV/Upstash) |
-| Reservir imagens em vez de hotlinkar | `image-resolver.ts` | hoje o navegador do leitor revela o IP ao domínio da fonte; exige armazenamento (Supabase Storage) |
+| Reservir imagens em vez de hotlinkar | `image-resolver.ts` | hoje o navegador do leitor revela o IP ao domínio da fonte; exige armazenamento (Firebase Storage) |
 
 ## Armadilhas de operação (descobertas na prática)
 
@@ -217,7 +217,7 @@ do Wire mostra 4 notícias porque 2 vão para as matérias inferiores — total 
 - **Rate limiting do gatilho** (apontado pelo eco-security): a trava atual é de processo e
   não coordena instâncias serverless distintas. Um limite real exige store compartilhado
   (Vercel KV/Upstash). Avaliar junto com a Parte 10.
-- **`/anfitriao` é prerenderizada estática** (`○` no build): quando o repositório Supabase
+- **`/anfitriao` é prerenderizada estática** (`○` no build): quando o repositório do Firestore
   entrar (Parte 10), a página precisará de `revalidate`/ISR ou rota dinâmica, senão as
   notícias novas só aparecem no próximo build.
 - **Cliente real de IA**: `FallbackAIClient` mantém tudo rodando; plugar o SDK Anthropic
@@ -236,7 +236,7 @@ do Wire mostra 4 notícias porque 2 vão para as matérias inferiores — total 
       → commit+push.
       NÃO FEITO ainda: botões publicar/descartar (Server Actions) — dependem de persistência
       real, senão a ação some no próximo cold start. Fazer junto da Parte 10.
-      NÃO VERIFICADO no browser: `/admin` exige Supabase configurado, ausente no ambiente
+      NÃO VERIFICADO no browser: `/admin` exige backend configurado, ausente no ambiente
       local (`requireAdmin` redireciona para `/login?e=config`). Validado por build + testes.
 - [x] **Parte 14 — Imagens (FEITO).** `image-resolver.ts` implementa a cascata do spec em
       quatro degraus, com proveniência registrada: **fonte** → **busca** → **categoria** →
@@ -283,4 +283,4 @@ acoplamento. Sem placeholders quando a implementação real for possível.
 ## Regra inviolável
 
 Preservar todo o conteúdo atual do site — ver memória [[three-realms-preserve-content]].
-Produção lê do Supabase — ver [[conteudo-vem-do-supabase]].
+Produção lê do Firestore — ver [[conteudo-vem-do-banco]].

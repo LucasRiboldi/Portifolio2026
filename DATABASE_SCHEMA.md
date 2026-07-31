@@ -338,7 +338,7 @@ Capturar leads.
 
 ## Integrações
 
-* [ ] Supabase
+* [ ] Firebase
 * [ ] Email
 
 ## Critério de Conclusão
@@ -387,7 +387,7 @@ Conteúdo gerenciado sem editar código.
 
 Persistência de dados.
 
-## Supabase
+## Firestore
 
 ### Tabelas
 

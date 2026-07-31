@@ -3,6 +3,9 @@ import path from "node:path"
 
 import { describe, it, expect } from "vitest"
 
+import { camposDe } from "@/lib/firebase/schema"
+import { paraFirestore, doFirestore } from "@/lib/firebase/nested"
+
 import { materias, getMateria } from "@/data/anfitriao-materias"
 
 /**
@@ -133,8 +136,7 @@ describe("convenções do realm", () => {
   })
 })
 
-describe("migração para o Supabase", () => {
-  const MIGRATION = ler("supabase/migrations/0008_anfitriao_materias.sql")
+describe("persistência no Firestore", () => {
   const LEITOR = semComentarios(ler("src/lib/repos/anfitriao-materias.ts"))
   const SYNC = semComentarios(ler("src/lib/admin/sync-content.ts"))
   const SEED = semComentarios(ler("src/lib/admin/seed.ts"))
@@ -175,12 +177,11 @@ describe("migração para o Supabase", () => {
     expect(ausentes.map(paraColuna), "colunas que o sync não preenche").toEqual([])
   })
 
-  it("a tabela tem coluna para todo campo da matéria", () => {
+  it("a coleção declara campo para toda propriedade da matéria", () => {
     const paraColuna = (c: string) => c.replace(/[A-Z]/g, (l) => `_${l.toLowerCase()}`)
-    const ausentes = camposDaMateria.filter(
-      (c) => !new RegExp(`^\\s{2}${paraColuna(c)}\\s`, "m").test(MIGRATION),
-    )
-    expect(ausentes.map(paraColuna), "campos sem coluna na 0008").toEqual([])
+    const declarados = camposDe("prophet_materias")
+    const ausentes = camposDaMateria.filter((c) => !declarados.includes(paraColuna(c)))
+    expect(ausentes.map(paraColuna), "campos fora de lib/firebase/schema.ts").toEqual([])
   })
 
   it("a tabela é publicável pelo seed e pelo sync", () => {
@@ -192,15 +193,20 @@ describe("migração para o Supabase", () => {
     // Mesmo contrato das zonas do criativo: página de jornal sem matéria não
     // é estado vazio legítimo, é folha em branco.
     expect(LEITOR).toContain("materiasSeed")
-    expect(LEITOR).toMatch(/if \(!supabase\) return materiasSeed/)
-    expect(LEITOR).toMatch(/data\.length === 0\) return materiasSeed/)
+    expect(LEITOR).toMatch(/!data \|\| data\.length === 0\) return materiasSeed/)
   })
 
-  it("as estruturas aninhadas têm CHECK de forma no banco", () => {
-    // jsonb aceita qualquer coisa; sem o CHECK, um objeto onde deveria haver
-    // array quebraria a renderização em vez de falhar na escrita.
-    expect(MIGRATION).toMatch(/jsonb_typeof\(blocos\) = 'array'/)
-    expect(MIGRATION).toMatch(/jsonb_typeof\(figure\) = 'object'/)
+  it("a matriz aninhada sobrevive à ida e volta do Firestore", () => {
+    // O CHECK de jsonb_typeof que garantia a forma no Postgres não tem
+    // equivalente no Firestore, que é schemaless. O risco mudou de lugar: aqui
+    // o perigo não é forma errada, é o banco RECUSAR `boxes[].rows`, que é
+    // array dentro de array. `lib/firebase/nested.ts` envelopa na gravação e
+    // desenvelopa na leitura — e é essa volta que precisa ser fiel.
+    const original = { blocos: [{ tipo: "p" }], boxes: [{ rows: [["a", "b"], ["c"]] }] }
+    const ida = paraFirestore(original)
+    const gravado = ida.boxes[0]?.rows as unknown[]
+    expect(Array.isArray(gravado[0])).toBe(false)
+    expect(doFirestore(ida)).toEqual(original)
   })
 
   it("a rota lê do repositório, não do arquivo de dados", () => {
