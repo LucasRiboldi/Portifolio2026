@@ -17,14 +17,27 @@ No [console do Firebase](https://console.firebase.google.com):
    Crie o OAuth App no GitHub (Settings → Developer settings → OAuth Apps) e
    cole `Client ID` / `Client Secret`. O callback é o que o Firebase mostra:
    `https://<projeto>.firebaseapp.com/__/auth/handler`.
-3. **Storage** → criar o bucket padrão (necessário para a mídia do painel).
-4. **Project settings → Service accounts** → *Generate new private key*.
+3. **Project settings → Service accounts** → *Generate new private key*.
+
+> O **Storage do Firebase não é usado**: exige o plano Blaze (cartão). Firestore
+> e Auth cabem no plano gratuito; a mídia do painel vai para o Vercel Blob.
 
 Publique regras e índices:
 
 ```bash
-npx firebase-tools deploy --only firestore,storage --project <seu-projeto>
+npx firebase-tools deploy --only firestore --project <seu-projeto>
 ```
+
+### 1b. Vercel Blob (mídia)
+
+**Vercel → Storage → Create → Blob**, ou pelo CLI:
+
+```bash
+vercel blob create-store portfolio-midia --access public
+```
+
+Depois **vincule ao projeto** (Storage → o store → *Connect Project*): é isso que
+injeta `BLOB_READ_WRITE_TOKEN`. Traga para o `.env.local` com `vercel env pull`.
 
 ### 2. Preencher `.env.local`
 
@@ -86,8 +99,9 @@ vercel --prod
 
 ## Checklist rápido
 
-- [ ] Firestore, Authentication (GitHub) e Storage habilitados no console
-- [ ] `firebase-tools deploy --only firestore,storage` executado
+- [ ] Firestore e Authentication (GitHub) habilitados no console
+- [ ] Blob store criado e **vinculado** ao projeto na Vercel
+- [ ] `firebase-tools deploy --only firestore` executado
 - [ ] `.env.local` preenchido e testado com `npm run dev`
 - [ ] `npm run db:seed` rodado (uma vez)
 - [ ] `npm run sync:vercel-env` executado

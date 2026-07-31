@@ -167,7 +167,7 @@ O conteúdo do site **vem do Firestore**, editável em `/admin` — sem redeploy
 ## 🛠 Stack
 
 `Next.js 15` · `React 19` · `TypeScript 5` · `Tailwind 3` · `Motion 12` · `GSAP 3` · `Lottie` ·
-`Firebase` (Firestore + Auth + Storage) · `Radix / Base UI` · `React Hook Form + Zod 4` ·
+`Firebase` (Firestore + Auth) · `Vercel Blob` (mídia) · `Radix / Base UI` · `React Hook Form + Zod 4` ·
 `react-markdown` · `Storybook 10` · `Vitest 4`
 
 Hospedado na **Vercel** — deploy automático no push da `main`.
@@ -190,15 +190,15 @@ painel e o conteúdo dinâmico, copie `.env.example` para `.env.local` e preench
 | Variável | Para quê |
 |---|---|
 | `NEXT_PUBLIC_FIREBASE_*` (6 chaves) | Config do SDK web — só o login roda no browser |
-| `FIREBASE_CLIENT_EMAIL` · `FIREBASE_PRIVATE_KEY` | Admin SDK: todo acesso a dados, seed, sync e mídia (**só no servidor**) |
+| `FIREBASE_CLIENT_EMAIL` · `FIREBASE_PRIVATE_KEY` | Admin SDK: todo acesso a dados, seed e sync (**só no servidor**) |
+| `BLOB_READ_WRITE_TOKEN` | Upload de mídia no Vercel Blob (**só no servidor**) |
 | `ADMIN_GITHUB_LOGIN` | Allowlist de quem entra no `/admin` |
 
-As regras de acesso estão em [`firestore.rules`](firestore.rules) e
-[`storage.rules`](storage.rules); os índices compostos em
-[`firestore.indexes.json`](firestore.indexes.json). Publique com:
+As regras de acesso estão em [`firestore.rules`](firestore.rules) e os índices
+compostos em [`firestore.indexes.json`](firestore.indexes.json). Publique com:
 
 ```bash
-npx firebase-tools deploy --only firestore,storage --project <seu-projeto>
+npx firebase-tools deploy --only firestore --project <seu-projeto>
 ```
 
 Para popular o banco a partir de `src/data/*`: `npm run db:seed` (só coleções

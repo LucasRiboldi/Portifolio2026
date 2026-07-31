@@ -2,7 +2,6 @@
 
 import { useRef, useState } from "react"
 
-import { isFirebaseConfigured } from "@/lib/firebase/config"
 import { uploadMedia } from "@/app/admin/media/actions"
 import { ACCEPT_ATTR, ACCEPTED_HINT } from "@/lib/admin/media-accept"
 
@@ -47,7 +46,7 @@ export function MediaPicker({ name, defaultValue, inputClassName }: MediaPickerP
           placeholder="https://… ou envie um arquivo"
           className={inputClassName}
         />
-        {isFirebaseConfigured && (
+        {(
           <button
             type="button"
             onClick={() => fileRef.current?.click()}
@@ -68,7 +67,7 @@ export function MediaPicker({ name, defaultValue, inputClassName }: MediaPickerP
           if (file) upload(file)
         }}
       />
-      {isFirebaseConfigured && (
+      {(
         <p className="text-xs text-[color:var(--mm-text-2)]">{ACCEPTED_HINT}</p>
       )}
       {url && (

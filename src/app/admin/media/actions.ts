@@ -3,17 +3,29 @@
 /**
  * Mídia — Server Actions.
  *
- * Antes o cliente falava direto com o Storage usando a anon key: a única
+ * Antes o cliente falava direto com o storage usando a chave pública: a única
  * barreira era `accept="image/*"` no input (contornável) e as policies do
  * bucket, que enxergam "autenticado" mas não conhecem a allowlist de admin
- * do app. Qualquer usuário Supabase logado podia enviar ou apagar arquivos.
+ * do app. Qualquer usuário logado podia enviar ou apagar arquivos.
  *
- * Agora todo acesso passa por aqui: requireAdmin() + validação por magic bytes
- * + service-role. O bucket pode (e deve) negar escrita a clientes — ver o SQL
- * em `docs/storage-policies.sql`.
+ * Agora todo acesso passa por aqui: requireAdmin() + validação por magic bytes.
+ * Nenhum token de escrita chega ao browser.
+ *
+ * ------------------------------------------------------------------
+ * POR QUE VERCEL BLOB, E NÃO FIREBASE STORAGE
+ * ------------------------------------------------------------------
+ * O resto do backend é Firebase, e o natural seria o Storage dele. Mas o Cloud
+ * Storage exige o plano Blaze — cartão cadastrado — enquanto Firestore e Auth
+ * cabem no plano gratuito. Como o projeto precisa custar zero, a mídia foi para
+ * o Vercel Blob, que entra na cota inclusa do Hobby e roda na mesma plataforma
+ * onde o site já está.
+ *
+ * O custo dessa escolha é ter dois fornecedores no backend. O ganho é o painel
+ * continuar publicando imagem sem redeploy, que é a razão de ele existir.
  */
+import { list, put, del } from "@vercel/blob"
+
 import { requireAdmin } from "@/lib/auth/is-admin"
-import { getBucket, isFirebaseAdminConfigured } from "@/lib/firebase/admin"
 import {
   validateImage,
   safeObjectName,
@@ -21,23 +33,13 @@ import {
   MAX_BYTES,
 } from "@/lib/admin/media-validate"
 
-/**
- * Prefixo dos objetos no bucket. No Supabase isto era um *bucket* dedicado;
- * o Firebase Storage tem um bucket por projeto, então a separação vira pasta.
- */
+/** Pasta dos objetos dentro do store. Mantém o nome que o bucket antigo tinha. */
 const PREFIX = "public-media"
 
-/**
- * URL pública de um objeto.
- *
- * Diferença relevante em relação ao Supabase: lá o bucket era marcado "public"
- * e a URL era previsível. Aqui a leitura pública depende das Storage Rules
- * (ver `storage.rules`) e a URL canônica passa pelo endpoint de download com o
- * nome do objeto encodado.
- */
-function publicUrl(bucket: string, objeto: string): string {
-  return `https://firebasestorage.googleapis.com/v0/b/${bucket}/o/${encodeURIComponent(objeto)}?alt=media`
-}
+/** True quando há token de escrita — injetado pela Vercel ao vincular o store. */
+const temBlob = Boolean(process.env.BLOB_READ_WRITE_TOKEN)
+
+const SEM_TOKEN = "Armazenamento de mídia não configurado (BLOB_READ_WRITE_TOKEN ausente)."
 
 export interface MediaItem {
   name: string
@@ -48,22 +50,15 @@ export type MediaResult<T> = { ok: true; data: T } | { ok: false; error: string 
 
 export async function listMedia(): Promise<MediaResult<MediaItem[]>> {
   await requireAdmin()
-  if (!isFirebaseAdminConfigured) return { ok: false, error: "Firebase não configurado." }
+  if (!temBlob) return { ok: false, error: SEM_TOKEN }
 
   try {
-    const bucket = getBucket()
-    const [files] = await bucket.getFiles({ prefix: `${PREFIX}/` })
+    const { blobs } = await list({ prefix: `${PREFIX}/`, limit: 100 })
 
-    // O Storage não ordena por data na listagem — ordenamos aqui para manter o
-    // "mais recente primeiro" que o painel já mostrava.
-    const items = files
-      .filter((f) => !f.name.endsWith("/"))
-      .sort((a, b) => (b.metadata.timeCreated ?? "").localeCompare(a.metadata.timeCreated ?? ""))
-      .slice(0, 100)
-      .map((f) => ({
-        name: f.name.slice(PREFIX.length + 1),
-        url: publicUrl(bucket.name, f.name),
-      }))
+    // A listagem vem por pathname; o painel mostra "mais recente primeiro".
+    const items = blobs
+      .sort((a, b) => b.uploadedAt.getTime() - a.uploadedAt.getTime())
+      .map((b) => ({ name: b.pathname.slice(PREFIX.length + 1), url: b.url }))
     return { ok: true, data: items }
   } catch (err) {
     return { ok: false, error: err instanceof Error ? err.message : "Falha ao listar." }
@@ -72,7 +67,7 @@ export async function listMedia(): Promise<MediaResult<MediaItem[]>> {
 
 export async function uploadMedia(formData: FormData): Promise<MediaResult<MediaItem>> {
   await requireAdmin()
-  if (!isFirebaseAdminConfigured) return { ok: false, error: "Firebase não configurado." }
+  if (!temBlob) return { ok: false, error: SEM_TOKEN }
 
   const file = formData.get("file")
   if (!(file instanceof File)) return { ok: false, error: "Nenhum arquivo recebido." }
@@ -89,15 +84,15 @@ export async function uploadMedia(formData: FormData): Promise<MediaResult<Media
   const name = safeObjectName(checked.kind)
 
   try {
-    const bucket = getBucket()
-    const objeto = `${PREFIX}/${name}`
-    await bucket.file(objeto).save(Buffer.from(checked.bytes), {
+    const blob = await put(`${PREFIX}/${name}`, Buffer.from(checked.bytes), {
+      access: "public",
       // contentType vem do conteúdo real, não do que o browser declarou.
       contentType: checked.contentType,
-      // Sobrescrever é irrelevante aqui: safeObjectName() gera nome único.
-      metadata: { cacheControl: "public, max-age=31536000, immutable" },
+      // `safeObjectName` já garante nome único; sufixo aleatório só sujaria a URL.
+      addRandomSuffix: false,
+      cacheControlMaxAge: 31536000,
     })
-    return { ok: true, data: { name, url: publicUrl(bucket.name, objeto) } }
+    return { ok: true, data: { name, url: blob.url } }
   } catch (err) {
     return { ok: false, error: err instanceof Error ? err.message : "Falha no upload." }
   }
@@ -105,13 +100,19 @@ export async function uploadMedia(formData: FormData): Promise<MediaResult<Media
 
 export async function deleteMedia(name: string): Promise<MediaResult<null>> {
   await requireAdmin()
-  if (!isFirebaseAdminConfigured) return { ok: false, error: "Firebase não configurado." }
+  if (!temBlob) return { ok: false, error: SEM_TOKEN }
 
   // Só aceita o formato de nome que nós geramos — nada de caminhos.
   if (!isSafeObjectName(name)) return { ok: false, error: "Nome de arquivo inválido." }
 
   try {
-    await getBucket().file(`${PREFIX}/${name}`).delete()
+    // `del` trabalha com a URL do blob, que inclui o id do store — por isso a
+    // busca antes. Apagar é raro; a ida extra não pesa e evita adivinhar a URL.
+    const { blobs } = await list({ prefix: `${PREFIX}/${name}`, limit: 1 })
+    const alvo = blobs[0]
+    if (!alvo) return { ok: false, error: "Arquivo não encontrado." }
+
+    await del(alvo.url)
     return { ok: true, data: null }
   } catch (err) {
     return { ok: false, error: err instanceof Error ? err.message : "Falha ao apagar." }

@@ -2,7 +2,6 @@
 
 import { useEffect, useRef, useState, useCallback } from "react"
 
-import { isFirebaseConfigured } from "@/lib/firebase/config"
 import { listMedia, uploadMedia, deleteMedia, type MediaItem } from "@/app/admin/media/actions"
 import { ACCEPT_ATTR, ACCEPTED_HINT } from "@/lib/admin/media-accept"
 
@@ -13,8 +12,10 @@ export function MediaManager() {
   const [copied, setCopied] = useState<string | null>(null)
   const fileRef = useRef<HTMLInputElement>(null)
 
+  // Sem gate no client: quem sabe se a mídia está configurada é o servidor
+  // (o token do Blob nunca chega aqui). A action devolve o motivo, e o motivo
+  // é o que o painel mostra — uma verdade só, em vez de duas que divergem.
   const load = useCallback(async () => {
-    if (!isFirebaseConfigured) return
     const res = await listMedia()
     if (!res.ok) {
       setError(res.error)
@@ -60,10 +61,6 @@ export function MediaManager() {
     navigator.clipboard.writeText(url)
     setCopied(url)
     setTimeout(() => setCopied(null), 1500)
-  }
-
-  if (!isFirebaseConfigured) {
-    return <p className="text-sm text-amber-300">Configure o Firebase para usar a mídia.</p>
   }
 
   return (

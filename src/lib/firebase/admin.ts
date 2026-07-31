@@ -1,13 +1,17 @@
 import "server-only"
 
 /**
- * Firebase Admin SDK — a única porta de entrada para Firestore e Storage.
+ * Firebase Admin SDK — a única porta de entrada para o Firestore.
  *
  * Decisão de arquitetura: **todo acesso a dados passa por aqui**, no servidor.
  * O SDK web (`client.ts`) cuida apenas do login. Isso mantém a superfície de
  * ataque mínima — nenhum documento é lido pelo browser — e é por isso que as
  * Security Rules em `firestore.rules` podem ser tão restritivas: elas guardam a
  * porta que o app não usa, em vez de serem a defesa principal.
+ *
+ * O Storage do Firebase não é usado: exige o plano Blaze, e o projeto roda no
+ * gratuito. A mídia do painel vai para o Vercel Blob — ver
+ * `app/admin/media/actions.ts`.
  *
  * O Admin SDK ignora Security Rules por definição. A autorização real do painel
  * continua sendo `requireAdmin()`, chamado no topo de toda Server Action.
@@ -22,9 +26,8 @@ import { resolve } from "node:path"
 import { getApps, initializeApp, cert, applicationDefault, type App } from "firebase-admin/app"
 import { getFirestore, type Firestore } from "firebase-admin/firestore"
 import { getAuth, type Auth } from "firebase-admin/auth"
-import { getStorage } from "firebase-admin/storage"
 
-import { FIREBASE_PROJECT_ID, FIREBASE_STORAGE_BUCKET } from "./config"
+import { FIREBASE_PROJECT_ID } from "./config"
 
 const KEY_FILE = resolve(process.cwd(), "serviceAccountKey.json")
 
@@ -63,13 +66,6 @@ export const isFirebaseAdminConfigured = Boolean(
   serviceAccount() || process.env.GOOGLE_APPLICATION_CREDENTIALS,
 )
 
-/** Bucket padrão do Storage, derivado do projeto quando não declarado. */
-export function storageBucketName(): string {
-  if (FIREBASE_STORAGE_BUCKET) return FIREBASE_STORAGE_BUCKET
-  const id = serviceAccount()?.project_id || FIREBASE_PROJECT_ID
-  return id ? `${id}.firebasestorage.app` : ""
-}
-
 /**
  * App Admin como singleton. O Next reaproveita o módulo entre requests em dev
  * (HMR) e entre invocações em serverless — reinicializar lançaria erro.
@@ -79,7 +75,6 @@ function app(): App {
   if (existente) return existente
 
   const sa = serviceAccount()
-  const bucket = storageBucketName()
 
   if (sa) {
     return initializeApp({
@@ -89,7 +84,6 @@ function app(): App {
         privateKey: sa.private_key,
       }),
       projectId: sa.project_id,
-      storageBucket: bucket || undefined,
     })
   }
 
@@ -97,7 +91,6 @@ function app(): App {
     return initializeApp({
       credential: applicationDefault(),
       projectId: FIREBASE_PROJECT_ID || undefined,
-      storageBucket: bucket || undefined,
     })
   }
 
@@ -127,9 +120,3 @@ export function getAdminAuth(): Auth {
   return getAuth(app())
 }
 
-/** Bucket do Storage para a mídia do painel. */
-export function getBucket() {
-  const nome = storageBucketName()
-  if (!nome) throw new Error("Storage bucket não configurado (NEXT_PUBLIC_FIREBASE_STORAGE_BUCKET).")
-  return getStorage(app()).bucket(nome)
-}
