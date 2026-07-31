@@ -2,9 +2,7 @@
 
 import { useState } from "react"
 import { useRouter } from "next/navigation"
-import { signInWithPopup } from "firebase/auth"
-
-import { getClientAuth, githubProvider } from "@/lib/firebase/client"
+import { signInComGithub } from "@/lib/firebase/client"
 
 /**
  * Login com GitHub.
@@ -23,9 +21,8 @@ export function GithubLoginButton({ next }: { next?: string }) {
     setLoading(true)
     setError(null)
     try {
-      const auth = getClientAuth()
-      const cred = await signInWithPopup(auth, githubProvider())
-      const idToken = await cred.user.getIdToken()
+      const { auth, credencial } = await signInComGithub()
+      const idToken = await credencial.user.getIdToken()
 
       const res = await fetch("/auth/session", {
         method: "POST",

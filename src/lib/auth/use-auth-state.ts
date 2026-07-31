@@ -13,9 +13,8 @@
  * sessão de verdade, e quem decide é o `requireAdmin()` no servidor.
  */
 import { useEffect, useState } from "react"
-import { onAuthStateChanged } from "firebase/auth"
 
-import { getClientAuth } from "@/lib/firebase/client"
+import { observarLogin } from "@/lib/firebase/client"
 import { isFirebaseConfigured } from "@/lib/firebase/config"
 
 /** null enquanto indefinido; depois true/false. */
@@ -27,7 +26,18 @@ export function useAuthState(): boolean | null {
       setAuthed(false)
       return
     }
-    return onAuthStateChanged(getClientAuth(), (user) => setAuthed(Boolean(user)))
+    // O SDK é carregado sob demanda, então a inscrição é assíncrona: guardamos
+    // a função de cancelamento e respeitamos o desmonte que possa vir antes.
+    let vivo = true
+    let cancelar: (() => void) | undefined
+    observarLogin((logado) => setAuthed(logado)).then((fn) => {
+      if (vivo) cancelar = fn
+      else fn()
+    })
+    return () => {
+      vivo = false
+      cancelar?.()
+    }
   }, [])
 
   return authed
