@@ -150,12 +150,21 @@ arrays aninhados nunca foram testados de verdade.
 **Como:** emulador do Firebase (`firebase emulators:start --only firestore`) e
 uma suíte separada, fora da unitária.
 
-## 9. `image-resolver` hotlinka imagens da fonte
+## 9. `image-resolver` hotlinka imagens ✅ premissa errada, item encerrado
 
-O navegador do leitor revela o IP ao domínio de origem da notícia — questão de
-privacidade, anotada no próprio arquivo.
+**A questão de privacidade não existe.** Verificado em produção em 31/07/2026: a
+página `/anfitriao` trazia **43 URLs `/_next/image` e nenhuma** apontando para
+host externo. As artes passam pelo `next/image` (o `Plate` em
+`app/anfitriao/page.tsx:114`), e o otimizador busca a imagem no servidor e a
+serve pelo nosso domínio — o navegador do leitor nunca fala com o site da fonte.
 
-**Como:** baixar e reservir pelo Vercel Blob, que agora existe.
+Construir a rota de proxy que este item pedia acrescentaria superfície de SSRF
+para resolver um problema inexistente. O comentário obsoleto em
+`lib/prophet-wire/image-resolver.ts` foi corrigido.
+
+**O que sobra, e é outro assunto:** durabilidade. O dono da imagem pode trocar ou
+remover o arquivo e a arte some. Reservir pelo Blob resolveria — quando houver
+`BLOB_READ_WRITE_TOKEN`. Prioridade baixa.
 
 ## 10. `admin_allowlist` — declaração removida ✅ / coleção pendente
 

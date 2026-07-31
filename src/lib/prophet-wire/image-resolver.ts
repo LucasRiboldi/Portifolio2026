@@ -12,11 +12,18 @@
  * fluxo cai para o passo 3 sem travar. Plugar um buscador de verdade depois não
  * exige tocar em mais nada.
  *
- * Sobre imagens remotas: só aceitamos `https`. Carregar arte direto do site da
- * fonte é hotlinking — o dono pode trocar ou remover o arquivo, e o navegador
- * do leitor revela o IP dele para aquele domínio. É um custo real e conhecido;
- * a alternativa (baixar e reservir) exige armazenamento, que entra junto com o
- * Firestore.
+ * Sobre imagens remotas: só aceitamos `https`.
+ *
+ * Este bloco já afirmou que o navegador do leitor revelava o IP dele ao domínio
+ * da fonte. **Não revela** (verificado em produção em 31/07/2026): as artes são
+ * renderizadas pelo `next/image` (o `Plate` em `app/anfitriao/page.tsx`), e o
+ * otimizador do Next busca a imagem NO SERVIDOR e a serve pelo nosso domínio.
+ * A página do anfitrião trazia 43 URLs `/_next/image` e nenhuma apontando para
+ * host externo.
+ *
+ * O que continua verdade é a fragilidade: o dono da imagem pode trocar ou
+ * remover o arquivo, e aí a arte some. Baixar e reservir pelo Blob resolveria
+ * isso — mas é durabilidade, não privacidade, e não urge.
  */
 
 import type { NewsCategory, NewsImage, NewsItem } from "./types"
