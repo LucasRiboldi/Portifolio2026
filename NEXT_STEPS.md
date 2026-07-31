@@ -37,6 +37,45 @@ streamando enquanto se bate na rota. E a correção só conta como provada com o
 
 ---
 
+# 🔑 Credenciais — fazer na próxima sessão
+
+Tarefas de higiene, anotadas em 31/07/2026. **Ordem importa**: gerar a nova
+credencial e atualizá-la em todos os ambientes ANTES de invalidar a antiga —
+inverter a ordem derruba o backend de produção no intervalo.
+
+1. **Rotacionar a chave de conta de serviço do Firebase.**
+   Console do Google Cloud → IAM → Contas de serviço → `firebase-adminsdk-fbsvc`
+   → Chaves → criar nova. Depois:
+   - substituir o `serviceAccountKey.json` da raiz;
+   - atualizar `FIREBASE_PRIVATE_KEY` e `FIREBASE_CLIENT_EMAIL` na Vercel em
+     **Production E Preview** (as duas — o preview foi preenchido em 31/07 e
+     apontaria para chave morta);
+   - redeploy e conferir `/login` → 200;
+   - só então apagar a chave antiga.
+
+2. **Revogar o token de acesso da Vercel** usado nesta máquina
+   (https://vercel.com/account/tokens) e limpar a variável de usuário:
+   `setx VERCEL_TOKEN ""`. Gerar outro só quando for preciso operar o CLI.
+
+3. **`BLOB_READ_WRITE_TOKEN`** — ainda não localizado no painel. Ver item 6.
+
+---
+
+# 📤 Conteúdo escrito e não publicado
+
+O seed dos quatro cadernos do arcano (`src/data/prophet-arcano.ts`) está em
+produção **como código**, mas as coleções seguem vazias — as páginas mostram "A
+bancada está limpa nesta edição". Deploy publica código; isto é dado.
+
+**Antes de publicar, leia o texto**: foi escrito pelo Claude e sai com a
+assinatura do autor do site. Ver item 11.
+
+```bash
+npm run db:sync     # ou o botão "Publicar conteúdo novo do código" no /admin
+```
+
+---
+
 # 🟠 Validação — nunca foi exercido
 
 Cada item é rápido e revela bug real. Ordem sugerida.
