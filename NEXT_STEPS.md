@@ -6,56 +6,34 @@
 > Ao concluir um item: remova-o daqui, atualize `PROJECT_STATE.md` e diga no
 > commit o que foi verificado de verdade.
 >
-> **Atualizado:** 2026-07-31
+> **Atualizado:** 2026-07-31 (correção do /login em produção; itens 7, 10 e 12)
 
 ---
 
 ## Estado em uma linha
 
-Site no ar e funcionando. Login **verificado localmente** (usuário criado com
-claim `admin`). **Um bloqueio:** `/login` responde 500 em produção.
+Site no ar e funcionando. **Sem bloqueios:** o 500 do `/login` foi corrigido e
+verificado em produção (31/07/2026, commit `634f3f5`). O que resta é validação
+de caminhos nunca exercitados e higiene.
 
 ---
 
-# 🔴 BLOQUEIO — resolver primeiro
+<details>
+<summary>✅ RESOLVIDO — 1. <code>/login</code> retornava 500 em produção</summary>
 
-## 1. `/login` retorna 500 em produção
+Corrigido em 31/07/2026. A causa não era `node-fetch`, como se supunha aqui:
+`jwks-rsa@4.1.0` (dependência do Admin SDK) é `type: commonjs` e faz
+`require('jose')`, mas declara `jose ^6.1.3` — que é ESM puro. Passava local
+porque o Node 22+ suporta `require()` de ESM; quebrava na Vercel porque o shim
+do bundler não. Correção: `overrides` prendendo o jose do jwks-rsa na v5.
+Detalhes no comentário do `next.config.ts`.
 
-Todas as outras rotas respondem 200. Sem isto, não há painel em produção.
+**Lição que vale para o próximo:** o log completo veio de `vercel logs <url>`
+streamando enquanto se bate na rota. E a correção só conta como provada com o
+**controle** — deploy sem ela, confirmando que quebra.
 
-**Erro:** `require() of ES Module /var/task/node_modules/…` nos logs de runtime
-(o CLI da Vercel trunca o nome do módulo).
+</details>
 
-**Causa provável:** `firebase-admin` arrasta dependências ESM-only. O trace do
-lambda confirma `node-fetch` v3 e família (`fetch-blob`, `formdata-polyfill`,
-`data-uri-to-buffer`, `web-streams-polyfill`) e `jose`.
-
-**Por que só o `/login`:** é a primeira rota **dinâmica** que toca o Admin SDK
-em runtime. As demais são pré-renderizadas no build.
-
-**Por que não reproduz localmente:** `next dev`, `next build` e `next start`
-resolvem ESM e CJS sem ajuda. Já testado: `next start` responde 200.
-
-### Passo a passo
-
-1. **Obtenha a mensagem completa.** Vercel → projeto → **Observability →
-   Runtime Logs** → filtre por `/login`. É o passo que faltou: sem o nome do
-   módulo, o resto é adivinhação.
-2. **Confirme qual commit está no ar.** Vercel → Deployments → o de produção
-   deve conter `serverExternalPackages` (commit `19248cf` ou posterior). Se for
-   anterior, force um redeploy antes de mudar código.
-3. **Corrija conforme o módulo apontado**, em ordem de preferência:
-   - acrescente o pacote a `serverExternalPackages` em `next.config.ts`;
-   - ou force `node-fetch` em v2 via `overrides` no `package.json`;
-   - ou isole o Admin SDK atrás de uma Route Handler com
-     `export const runtime = "nodejs"` explícito.
-4. **Valide antes de ir para produção:** crie uma branch, deixe a Vercel gerar
-   o preview e teste o `/login` **no preview**. Esta classe de erro não aparece
-   local — validar em preview é a lição registrada em
-   `docs/project-knowledge/migrations/supabase-to-firebase.md` §9.
-
-**Pronto quando:** `curl -o /dev/null -w "%{http_code}" https://<site>/login`
-devolver `200` e o login completar no browser em produção.
 
 ---
 
@@ -104,25 +82,38 @@ em `/admin/prophet-wire`.
 
 # 🟡 Correções e melhorias
 
-## 6. Variáveis do ambiente Preview
+## 6. Variáveis do ambiente Preview — precisa de você
 
-`npm run sync:vercel-env` falhou para *preview*. Deploys de branch sobem sem
-backend — o que atrapalha justamente a validação em preview do item 1.
+O ambiente *preview* tem só `BLOB_STORE_ID` e `BLOB_WEBHOOK_PUBLIC_KEY`
+(verificado 31/07/2026). Falta todo o Firebase, o `BLOB_READ_WRITE_TOKEN` e o
+`ADMIN_GITHUB_LOGIN` — deploys de branch sobem sem backend.
 
-**Como:** `node scripts/sync-vercel-env.mjs preview`, ou pelo painel da Vercel.
+**Por que não dá para automatizar copiando de produção:** a Vercel marca essas
+variáveis como *sensitive*. `vercel env pull` devolve o literal `[SENSITIVE]` no
+lugar do valor, e o painel também não os exibe. Não existe caminho de leitura —
+os valores têm de vir de fora.
 
-## 7. Sem CI
+**Como:** preencha um `.env.local` com os valores reais (o console do Firebase
+tem as `NEXT_PUBLIC_*` em Project settings; a `FIREBASE_PRIVATE_KEY` exige gerar
+nova chave de conta de serviço) e rode `node scripts/sync-vercel-env.mjs
+preview`.
 
-Nenhum pipeline. Hoje a validação depende de disciplina local.
+**Armadilha:** `vercel link` e `vercel env pull` **sobrescrevem o
+`.env.local`** sem avisar. Faça cópia antes.
 
-**Como:** workflow do GitHub Actions em PR e push para `main`:
+**Nota sobre o script:** o `parseEnv` lê linha a linha, então só aceita a
+`FIREBASE_PRIVATE_KEY` em uma única linha com `\n` escapados — há uma guarda que
+aborta se vier truncada. Um `.env.local` gerado por `vercel env pull` **não**
+serve como entrada.
 
-```bash
-npx tsc --noEmit && npm run lint && npm run test:unit && npm run build
-```
+## 7. CI não rodava os testes ✅ corrigido
 
-**Pronto quando:** o badge do workflow fica verde e um PR com erro de tipo é
-barrado.
+O workflow existia (`.github/workflows/ci.yml`), mas rodava só `tokens:check`,
+`lint` e `build`. Os 535 testes nunca eram executados — um PR podia quebrar a
+suíte inteira com o CI verde. Passo de testes acrescentado em 31/07/2026.
+
+Não há passo de `tsc --noEmit`: o `next build` já faz a checagem de tipos, já que
+não existe `typescript.ignoreBuildErrors` no `next.config.ts`.
 
 ## 8. Sem teste de integração da camada de dados
 
@@ -140,12 +131,13 @@ privacidade, anotada no próprio arquivo.
 
 **Como:** baixar e reservir pelo Vercel Blob, que agora existe.
 
-## 10. `admin_allowlist` é coleção órfã
+## 10. `admin_allowlist` — declaração removida ✅ / coleção pendente
 
-Está em `lib/firebase/schema.ts` e não é usada por ninguém: a allowlist virou
-`ADMIN_GITHUB_LOGIN` + custom claim.
+Saiu de `lib/firebase/schema.ts` em 31/07/2026 (não era lida por ninguém; a
+allowlist virou `ADMIN_GITHUB_LOGIN` + custom claim).
 
-**Como:** remover da declaração e apagar a coleção.
+**Falta:** apagar a coleção no Firestore. Exige credencial — não dá para fazer
+sem acesso ao projeto.
 
 ## 11. Quatro coleções permanentemente vazias
 
@@ -155,15 +147,16 @@ Está em `lib/firebase/schema.ts` e não é usada por ninguém: a allowlist viro
 **Decisão a tomar:** criar seed, ou remover do catálogo do painel. Telas que
 nunca mostram nada confundem quem usa.
 
-## 12. Warning de lint pré-existente
+## 12. Warning de lint ✅ corrigido
 
-`src/hooks/use-mouse-parallax.ts:56` — dependência `ref` faltando no
-`useEffect`. Único warning do projeto.
+`src/hooks/use-mouse-parallax.ts` — `ref` acrescentado ao array de dependências
+em 31/07/2026. O `ref` é estável (vem de `useRef` ou do chamador), então não
+reexecuta o efeito à toa. `npm run lint` agora sai com zero avisos.
 
-## 13. Refatoração (Fase 5, não executada)
+## 13. Refatoração (Fase 5, não executada) — desbloqueada
 
-Adiada de propósito: com produção instável, refatorar arrisca confundir causa de
-bug com efeito de refatoração. Retomar **depois do item 1**.
+Estava adiada porque, com produção instável, refatorar arrisca confundir causa de
+bug com efeito de refatoração. O item 1 saiu em 31/07/2026: **pode começar**.
 
 Alvos concretos, não genéricos:
 - `lib/admin/sync-content.ts` — os blocos de `projects`, `tools` e `posts`
@@ -180,8 +173,8 @@ Alvos concretos, não genéricos:
 
 ## 14. Desligar o projeto Supabase
 
-Continua no ar como rede de segurança. Desligar quando os itens 1 a 4 estiverem
-validados.
+Continua no ar como rede de segurança. Desligar quando os itens 2 a 4 estiverem
+validados (o 1 já saiu).
 
 **Como:** https://app.supabase.com → projeto → Settings → General → Delete
 project. **Irreversível.**

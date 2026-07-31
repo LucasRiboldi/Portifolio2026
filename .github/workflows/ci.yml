@@ -27,5 +27,14 @@ jobs:
       - name: Lint
         run: npm run lint
 
+      # Os 535 testes rodavam só na máquina do dev — um PR podia quebrar a
+      # suíte inteira e o CI ficava verde. Eles não usam rede nem credencial,
+      # então não precisam de secrets.
+      - name: Testes
+        run: npm run test:unit
+
+      # `next build` já faz a checagem de tipos (não há
+      # typescript.ignoreBuildErrors no next.config), então não há passo
+      # separado de tsc.
       - name: Build
         run: npm run build

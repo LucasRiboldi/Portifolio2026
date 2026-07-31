@@ -53,7 +53,11 @@ export function useMouseParallax<T extends HTMLElement = HTMLElement>(external?:
       el.removeEventListener("mouseleave", reset)
       cancelAnimationFrame(raf)
     }
-  }, [])
+    // `ref` é estável: ou é o `own` do useRef, ou o objeto que o chamador
+    // passou — e refs não trocam de identidade entre renders. Declará-lo não
+    // reexecuta o efeito à toa, e se o chamador realmente trocar de elemento os
+    // listeners passam a ser religados no novo, que é o comportamento correto.
+  }, [ref])
 
   return ref
 }

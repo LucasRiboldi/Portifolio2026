@@ -3,7 +3,7 @@
 > Resumo executivo do estado real do projeto. Atualize a cada marco.
 > Para o conhecimento estável e detalhado, veja `docs/project-knowledge/`.
 >
-> **Última atualização:** 2026-07-31
+> **Última atualização:** 2026-07-31 (bug do /login fechado; itens 7, 10 e 12)
 
 ---
 
@@ -39,43 +39,40 @@ Detalhes completos: `docs/project-knowledge/migrations/supabase-to-firebase.md`.
 
 ---
 
-## 3. 🔴 BUG ABERTO — `/login` responde 500 em produção
+## 3. ✅ RESOLVIDO — `/login` respondia 500 em produção
 
-**Estado:** não resolvido. É o único bloqueio conhecido.
+Corrigido e **verificado em produção** em 31/07/2026 (commit `634f3f5`).
+`curl` em `/login` devolve 200 e a página renderiza o botão "Entrar com GitHub".
 
-- **Sintoma:** `GET /login` → 500. Todas as demais rotas respondem 200.
-- **Erro (logs de runtime da Vercel):**
-  `Error: require() of ES Module /var/task/node_modules/…` (o CLI trunca o nome
-  do módulo; não consegui a mensagem completa).
-- **Causa provável:** `firebase-admin` arrasta dependências ESM-only. O trace do
-  lambda (`.next/server/app/login/page.js.nft.json`) confirma a presença de
-  `node-fetch` v3 e família (`fetch-blob`, `formdata-polyfill`,
-  `data-uri-to-buffer`, `web-streams-polyfill`) e `jose`.
-- **Por que só o `/login`:** é a primeira rota **dinâmica** que toca o Admin SDK
-  em runtime. As demais são pré-renderizadas no build.
-- **Por que não aparece localmente:** `next dev`, `next build` e `next start`
-  resolvem ESM e CJS sem ajuda. Reproduzi com `next start` → 200. O erro só
-  existe no empacotamento serverless da Vercel.
+**Causa real:** `jwks-rsa@4.1.0`, dependência do `firebase-admin`, é
+`type: commonjs` e faz `require('jose')` na linha 1 de `src/utils.js` — mas
+declara `jose ^6.1.3`, e o jose 6 é ESM puro (o mapa de exports só tem
+`default` → `dist/webapi/`, sem condição `require`). O pacote é internamente
+inconsistente.
 
-**Tentativas já feitas:**
+**Por que passava local e quebrava na Vercel:** não era diferença de código nem
+de env — era de **carregador de módulos**. O Node 22+ suporta `require()` de ESM
+nativamente; a função serverless da Vercel é empacotada e carregada por um shim
+(`/opt/rust/nodejs.js` no stack trace) que não implementa esse suporte.
 
-1. `serverExternalPackages: ["firebase-admin"]` em `next.config.ts` (commit
-   `19248cf`) — ataca o alvo certo, mas **não confirmei** se o deploy que
-   testei já continha esta mudança.
-2. Lazy-loading do SDK web em `lib/firebase/client.ts` (commit `12fcc5f`) —
-   partiu de uma hipótese **errada**: o pacote `firebase` não aparece no trace
-   do lambda. Fica como boa prática (sai do bundle inicial), não como correção.
+**Correção:** `overrides` no `package.json` prendendo o jose do jwks-rsa na v5,
+a última com build CommonJS. `importJWK` e `exportSPKI` — as duas funções que o
+jwks-rsa usa — existem nela.
 
-**Próximos passos sugeridos, em ordem:**
+**As duas hipóteses anteriores estavam erradas** e ficam registradas para não
+serem repetidas: `serverExternalPackages: ["firebase-admin"]` (commit `19248cf`)
+não resolveu — o deploy que o continha seguia dando 500; e o lazy-loading do SDK
+web (commit `12fcc5f`) partiu de premissa falsa. `node-fetch` nunca foi o
+culpado.
 
-1. Confirmar qual commit está no deploy de produção (`vercel inspect` não
-   mostrou o SHA; olhar no dashboard da Vercel).
-2. Se o `serverExternalPackages` já estiver no ar e o erro persistir, obter a
-   mensagem **completa** pelo dashboard (Observability → Runtime Logs) para
-   saber o módulo exato.
-3. Correções alternativas: adicionar os pacotes ESM ao `serverExternalPackages`,
-   ou forçar `runtime = "nodejs"` explícito na rota, ou fixar `node-fetch` em
-   v2 via `overrides` no `package.json`.
+**Como foi provado:** dois previews com a mesma base, só o `overrides` variando
+— sem ele `/login` → 500, com ele → 200. Uma correção sem esse controle é
+suposição.
+
+**Descoberta lateral:** o `node_modules` local estava defasado — nem
+`firebase-admin` nem `jwks-rsa` estavam instalados. A migração veio por
+`git pull` e ninguém rodou `npm install`. Foi isso que escondeu o bug do
+ambiente local.
 
 ---
 
@@ -88,7 +85,9 @@ Detalhes completos: `docs/project-knowledge/migrations/supabase-to-firebase.md`.
 | Firebase Storage | ❌ Não usado — exige plano Blaze. Mídia vai para o Vercel Blob |
 | Vercel Blob | ✅ Store `portfolio-midia` criado e vinculado |
 | Env vars (Production) | ✅ Completas, incluindo `FIREBASE_CLIENT_EMAIL` / `FIREBASE_PRIVATE_KEY` |
-| Env vars (Preview) | ⚠️ Sync falhou — só afeta deploys de branch |
+| Env vars (Preview) | ❌ Só `BLOB_STORE_ID` e `BLOB_WEBHOOK_PUBLIC_KEY` (medido 31/07). Falta todo o Firebase — e a Vercel **não deixa ler** valores sensíveis de produção para copiar |
+| CI (GitHub Actions) | ✅ `tokens:check`, lint, **testes** e build em push/PR para `main`. O passo de testes entrou em 31/07 |
+| Protection Bypass | ✅ Ligado em 31/07 para permitir testar previews por `curl` |
 | Projeto Supabase antigo | ⚠️ Continua no ar como rede de segurança. Desligar quando o Firebase estiver validado |
 
 ---
@@ -106,7 +105,9 @@ API do GitHub → allowlist → custom claim → session cookie.
 - **Upload de mídia no Vercel Blob.** Código escrito e tipado, nunca executado.
 - **Cupom público do jornal** (`/anfitriao` → `contact_messages`).
 - **Gatilho do Prophet Wire** — `CRON_SECRET` está vazio.
-- **Login em produção** — bloqueado pelo 500 do `/login`.
+- **Login em produção.** A página `/login` agora responde 200 e renderiza o
+  botão, mas **ninguém completou o fluxo de OAuth em produção** — rota
+  desbloqueada não é login verificado.
 
 ---
 

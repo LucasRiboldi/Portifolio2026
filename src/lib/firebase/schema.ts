@@ -14,8 +14,10 @@
  * o teste cobra.
  */
 
+// `admin_allowlist` saiu daqui em 31/07/2026: a autorização virou
+// `ADMIN_GITHUB_LOGIN` + custom claim, e a coleção não era lida por ninguém.
+// A coleção órfã pode continuar no Firestore — apagar exige credencial.
 export const COLECOES: Record<string, readonly string[]> = {
-  admin_allowlist: ["github_login"],
   artworks: ["id", "title", "description", "kind", "image", "tools", "year", "published", "sort", "created_at", "updated_at"],
   comics: ["id", "title", "author", "publisher", "cover_image", "status", "rating", "note", "published", "sort", "created_at"],
   contact_messages: ["id", "name", "email", "message", "read", "created_at"],
