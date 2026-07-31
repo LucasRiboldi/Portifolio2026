@@ -61,18 +61,18 @@ inverter a ordem derruba o backend de produção no intervalo.
 
 ---
 
-# 📤 Conteúdo escrito e não publicado
+# 📤 Conteúdo do arcano — publicado em 31/07/2026
 
-O seed dos quatro cadernos do arcano (`src/data/prophet-arcano.ts`) está em
-produção **como código**, mas as coleções seguem vazias — as páginas mostram "A
-bancada está limpa nesta edição". Deploy publica código; isto é dado.
+`npm run db:sync` gravou os 12 documentos e as quatro páginas estão no ar com
+conteúdo. **O texto foi escrito pelo Claude e sai com a sua assinatura** — leia
+e reescreva no `/admin` quando puder. Nada ali afirma histórico pessoal e
+nenhum material aponta para arquivo inexistente (ver item 11), mas é rascunho.
 
-**Antes de publicar, leia o texto**: foi escrito pelo Claude e sai com a
-assinatura do autor do site. Ver item 11.
-
-```bash
-npm run db:sync     # ou o botão "Publicar conteúdo novo do código" no /admin
-```
+**A armadilha que apareceu aqui, e vai reaparecer:** o `db:sync` escreve no
+banco e **não revalida o cache**. A revalidação por tag é feita pela Server
+Action do painel, não pelo script — então, publicando por linha de comando, as
+páginas continuam servindo o cache antigo até um deploy novo. Publicando pelo
+botão do `/admin`, não: a action chama `revalidateTag`.
 
 ---
 
@@ -232,7 +232,7 @@ allowlist virou `ADMIN_GITHUB_LOGIN` + custom claim).
 coleções reais em 31/07/2026, `admin_allowlist` não está entre elas — era
 declaração órfã no schema, nunca chegou a existir como dado. Item encerrado.
 
-## 11. Quatro coleções vazias — semeadas no código, **ainda não publicadas**
+## 11. Quatro coleções vazias ✅ semeadas e publicadas
 
 Decidido em 31/07/2026: semear (não remover — as quatro páginas públicas
 `/anfitriao/oficina`, `/mecanicas`, `/laboratorio` e `/imprensa` já estavam no
@@ -242,13 +242,10 @@ O seed está em `src/data/prophet-arcano.ts`, ligado ao `seed.ts` e ao
 `sync-content.ts`. Três tutoriais, três mecânicas, três conceitos de protótipo e
 três materiais.
 
-**FALTA PUBLICAR — é o passo que torna o conteúdo visível.** As coleções
-continuam vazias no Firestore; nada disso está no site. Publique por:
+**Publicado em 31/07/2026** por `npm run db:sync` — 12 documentos, e as quatro
+páginas verificadas no ar com conteúdo.
 
-- `/admin` → botão **"Publicar conteúdo novo do código"**, ou
-- `npm run db:sync` (com `serviceAccountKey.json` na raiz).
-
-**Antes de publicar, leia.** O texto foi escrito pelo Claude, não por você, e sai
+**Leia o que está publicado.** O texto foi escrito pelo Claude, não por você, e sai
 no site com a sua assinatura. Duas regras foram seguidas para que nada ali seja
 falso: nenhum texto afirma histórico pessoal (playtest, tiragem, parceria) e
 nenhum `file_url` aponta para arquivo inexistente — os três materiais estão com
