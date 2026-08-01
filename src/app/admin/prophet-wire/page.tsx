@@ -5,6 +5,7 @@ import { defaultRunStore } from "@/lib/prophet-wire/run-store"
 import { nextRunFromCron } from "@/lib/prophet-wire/schedule"
 import { SOURCES, activeSources } from "@/lib/prophet-wire/sources"
 import { config } from "@/lib/prophet-wire/config"
+import { WireFila } from "@/components/admin/wire-fila"
 
 /**
  * Painel do Prophet Wire (Parte 13).
@@ -45,6 +46,16 @@ export default async function ProphetWirePanel() {
     defaultRunStore().last(),
   ])
 
+  // Rascunhos primeiro: é neles que há decisão a tomar.
+  const fila = [...drafts, ...published].map((n) => ({
+    slug: n.slug,
+    title: n.title,
+    sourceName: n.sourceName,
+    sourceUrl: n.sourceUrl,
+    publishedAt: n.publishedAt,
+    status: n.status,
+  }))
+
   const nextRun = nextRunFromCron(config.cron, new Date())
   const cronSecretSet = Boolean(process.env.CRON_SECRET?.trim())
   const active = activeSources()
@@ -80,21 +91,7 @@ export default async function ProphetWirePanel() {
         </div>
       )}
 
-      <div
-        className="mm-card flex items-start gap-3 p-4 text-sm"
-        style={{ background: "var(--mm-light-primary)", borderColor: "transparent" }}
-      >
-        <Database className="mt-0.5 size-4 shrink-0" style={{ color: "var(--mm-primary)" }} />
-        <span style={{ color: "var(--mm-text-2)" }}>
-          <b style={{ color: "var(--mm-text)" }}>Persistência ainda em memória.</b> O acervo e
-          o histórico de execuções vivem apenas enquanto a instância do servidor existir — um
-          reinício zera ambos, e instâncias diferentes não compartilham dados. Os números
-          abaixo são reais, mas não permanentes. Isso muda quando o repositório do Firestore
-          entrar (Parte 10).
-        </span>
-      </div>
-
-      {/* ─── Números ─── */}
+{/* ─── Números ─── */}
       <div className="grid grid-cols-1 gap-5 sm:grid-cols-2 xl:grid-cols-4">
         {stats.map((s) => {
           const Icon = s.icon
@@ -109,6 +106,15 @@ export default async function ProphetWirePanel() {
           )
         })}
       </div>
+
+      {/* ─── Fila: onde as notícias viram decisão ─── */}
+      <section className="mm-card p-5">
+        <h2 className="font-semibold">Fila</h2>
+        <p className="mb-4 mt-1 text-sm text-[color:var(--mm-text-2)]">
+          O agregador coleta em rascunho. Nada aparece na primeira página até ser publicado aqui.
+        </p>
+        <WireFila itens={fila} />
+      </section>
 
       {/* ─── Execuções ─── */}
       <div className="grid grid-cols-1 gap-5 lg:grid-cols-2">

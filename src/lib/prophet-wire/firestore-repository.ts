@@ -117,6 +117,10 @@ export class FirestoreNewsRepository implements NewsRepository {
     return fromRow(row)
   }
 
+  async remove(slug: string): Promise<void> {
+    await getDb().collection(COLECAO).doc(slug).delete()
+  }
+
   async findByHash(hash: string): Promise<NewsItem | null> {
     const snap = await getDb().collection(COLECAO).where("hash", "==", hash).limit(1).get()
     const doc = snap.docs[0]

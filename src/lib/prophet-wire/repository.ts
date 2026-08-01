@@ -30,6 +30,11 @@ export interface NewsRepository {
   listDrafts(limit?: number): Promise<NewsItem[]>
   /** Total de itens no acervo (usado no painel admin). */
   count(): Promise<number>
+  /**
+   * Remove do acervo. Existe para o painel: sem isto, um item ruim coletado
+   * pelo agregador fica preso na fila para sempre — não há de onde tirá-lo.
+   */
+  remove(slug: string): Promise<void>
 }
 
 /** Ordena por `publishedAt` decrescente (mais recente primeiro). */
@@ -53,6 +58,10 @@ export class InMemoryNewsRepository implements NewsRepository {
     const stored = { ...item }
     this.bySlug.set(item.slug, stored)
     return { ...stored }
+  }
+
+  async remove(slug: string): Promise<void> {
+    this.bySlug.delete(slug)
   }
 
   async findByHash(hash: string): Promise<NewsItem | null> {
