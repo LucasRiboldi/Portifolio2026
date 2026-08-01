@@ -114,7 +114,7 @@ compara com `ADMIN_GITHUB_LOGIN` → custom claim + session cookie httpOnly.
 ```bash
 npm run dev          # local, porta 3000
 npm run build        # NÃO rode com o dev server no ar
-npm run test:unit    # 535 testes
+npm run test:unit    # 575 testes
 npm run lint
 npm run db:seed      # popula coleções vazias a partir de src/data
 npm run db:sync      # insere o que falta em coleções já povoadas

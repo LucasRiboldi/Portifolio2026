@@ -3,7 +3,8 @@
 > Resumo executivo do estado real do projeto. Atualize a cada marco.
 > Para o conhecimento estável e detalhado, veja `docs/project-knowledge/`.
 >
-> **Última atualização:** 2026-07-31 (bug do /login fechado; itens 6, 7, 10 e 12)
+> **Última atualização:** 2026-08-01 (login em produção completado; CRUD e cupom
+> validados; upload de áudio/vídeo implementado)
 
 ---
 
@@ -74,6 +75,26 @@ suposição.
 `git pull` e ninguém rodou `npm install`. Foi isso que escondeu o bug do
 ambiente local.
 
+### 3.1 `auth/unauthorized-domain` — o obstáculo seguinte ao 500
+
+Resolvido o 500, o `/login` de produção passou a renderizar mas o popup do
+GitHub recusava com `Firebase: Error (auth/unauthorized-domain)`.
+
+**Causa:** o Firebase Auth só abre o popup em origens da allowlist de
+*Authorized domains*, que por padrão traz apenas `localhost`,
+`portifolio-ac32a.firebaseapp.com` e `portifolio-ac32a.web.app`. O domínio da
+Vercel nunca esteve lá — foi exatamente por isso que o login funcionou local em
+31/07 e falhou no ar.
+
+**Correção:** Console → Authentication → Settings → Authorized domains →
+adicionar `portifolio2026-two.vercel.app`. Efeito imediato, sem redeploy.
+Não há código envolvido, e não há como fazer pelo CLI nem pelo MCP do Firebase.
+
+**Consequência que fica:** deploys de *preview* recebem URL com hash único a
+cada build, então **login não funciona em preview** e não há como
+pré-autorizar. Validação de `/admin` acontece em produção ou em `localhost`. Se
+isso incomodar, a saída é um alias fixo de branch na Vercel, autorizado uma vez.
+
 ---
 
 ## 4. Estado da infraestrutura
@@ -81,7 +102,8 @@ ambiente local.
 | Item | Estado |
 |---|---|
 | Firestore | ✅ Provisionado, 19 coleções povoadas, 20 índices publicados |
-| Firebase Auth | ✅ Habilitado. **Login verificado**: 1 usuário com claim `admin:true` e `githubLogin:lucasriboldi` |
+| Firebase Auth | ✅ Habilitado. **Login verificado em produção** (01/08/2026) — fluxo OAuth completo, não só a rota respondendo |
+| Domínios autorizados (Auth) | ✅ `portifolio2026-two.vercel.app` acrescentado em 01/08. Ver seção 3.1 — previews continuam de fora, por construção |
 | Firebase Storage | ❌ Não usado — exige plano Blaze. Mídia vai para o Vercel Blob |
 | Vercel Blob | ✅ Store `portfolio-midia` criado e vinculado |
 | Env vars (Production) | ✅ Completas, incluindo `FIREBASE_CLIENT_EMAIL` / `FIREBASE_PRIVATE_KEY` |
@@ -94,20 +116,27 @@ ambiente local.
 
 ## 5. Verificado x não verificado
 
-**✅ Login funciona (local).** Em 2026-07-31 o fluxo completou: usuário criado
-com `customClaims: {"admin":true,"githubLogin":"lucasriboldi"}`. Isso valida a
-cadeia inteira — popup → ID token → `verifyIdToken` → id numérico do provider →
-API do GitHub → allowlist → custom claim → session cookie.
+**✅ Login completo em produção** (01/08/2026), depois de autorizar o domínio
+(seção 3.1). Valida a cadeia inteira — popup → ID token → `verifyIdToken` → id
+numérico do provider → API do GitHub → allowlist → custom claim → session
+cookie.
 
-**Ainda não exercido** (ver `NEXT_STEPS.md` itens 2–5):
+**✅ CRUD pelo painel** (01/08). Edição em `/admin` apareceu no site público e
+persistiu. Prova três coisas de uma vez: a escrita chega ao Firestore, o
+`revalidateTag` da Server Action funciona, e **o site lê do banco, não do seed**
+— era a dúvida em aberto do item 6, insolúvel por observação porque banco e
+`src/data` têm conteúdo idêntico. Só uma escrita cria o discriminador.
 
-- **CRUD pelo painel.** Nenhuma edição real foi feita pelo `/admin`.
-- **Upload de mídia no Vercel Blob.** Código escrito e tipado, nunca executado.
-- **Cupom público do jornal** (`/anfitriao` → `contact_messages`).
+**✅ Cupom público do jornal** (01/08). Formulário de `/anfitriao` chega em
+`/admin/messages`.
+
+**Ainda não exercido:**
+
+- **Upload de mídia.** O de imagem nunca foi executado. Áudio e vídeo eram
+  impossíveis até 01/08 (ver seção 9) e o caminho novo **não foi testado no
+  ar** — build e testes passam, o que não é a mesma coisa.
 - **Gatilho do Prophet Wire** — `CRON_SECRET` está vazio.
-- **Login em produção.** A página `/login` agora responde 200 e renderiza o
-  botão, mas **ninguém completou o fluxo de OAuth em produção** — rota
-  desbloqueada não é login verificado.
+- **Login em preview** — impossível por construção, ver seção 3.1.
 
 ---
 
@@ -134,7 +163,7 @@ API do GitHub → allowlist → custom claim → session cookie.
 ```bash
 npm run dev            # servidor local (porta 3000)
 npm run build          # build de produção — NÃO rode com o dev server no ar
-npm run test:unit      # 535 testes
+npm run test:unit      # 575 testes
 npm run lint
 npm run db:seed        # popula coleções vazias a partir de src/data
 npm run db:sync        # insere o que falta em coleções já povoadas
@@ -152,11 +181,43 @@ npx firebase-tools deploy --only firestore --project portifolio-ac32a
 
 > Backlog acionável, com passo a passo: **`NEXT_STEPS.md`**.
 
-1. **`/login` 500 em produção** — ver seção 3. Prioridade máxima.
-2. Env vars do ambiente **Preview** não sincronizadas.
-3. `use-mouse-parallax.ts:56` — warning de lint pré-existente (dependência
-   `ref` faltando no `useEffect`).
-4. Projeto Supabase antigo ainda ativo e pagando (se for plano pago).
-5. `prophet_tutorials`, `prophet_mechanics`, `prophet_prototypes` e
-   `prophet_resources` estão **vazias** — sempre estiveram, inclusive no
-   Postgres. Não há seed para elas.
+1. **Chave de conta de serviço do Firebase não rotacionada** e token da Vercel
+   ainda válido nesta máquina. Higiene de credencial pendente.
+2. Projeto Supabase antigo ainda ativo (rede de segurança).
+3. `BLOB_READ_WRITE_TOKEN` ausente no ambiente **Preview** — só o upload de
+   mídia recusa lá; o resto do preview funciona.
+4. `file_url` (materiais) ainda declara só imagem: é campo de PDF/print-and-play
+   e precisaria de uma espécie `document` em `media-accept.ts`.
+5. CSP com `unsafe-inline` em `script-src`.
+
+Os débitos 1 a 3 e o 5 da lista anterior foram fechados em 31/07 e 01/08
+(`/login` 500, env do preview, warning de lint, coleções vazias do arcano).
+
+---
+
+## 9. Upload de mídia — áudio e vídeo (01/08/2026)
+
+Commit `dcf22af`. Eram **dois bugs distintos** sob o mesmo sintoma aparente.
+
+**Áudio:** `type: "media"` era genérico — os 11 campos (capa, pôster, imagem,
+áudio, vídeo) usavam o mesmo picker só-imagem, e o validador só conhecia os
+cinco formatos de imagem. `FieldConfig` ganhou `accept: MediaClass[]`, e
+`validateMedia` recusa espécie fora do declarado. Sem essa segunda metade, o
+fix abriria outro buraco: salvar um mp3 no campo "Imagem de capa".
+
+**Vídeo:** o erro `An unexpected response was received from the server` **não
+vinha do validador** — é o `bodySizeLimit` do Next estourando, com o arquivo
+nem chegando à Server Action. Liberar o formato mp4 não teria resolvido nada.
+Vídeo agora sobe direto do navegador para o Blob via `api/admin/blob-upload`.
+
+**Trade-off assumido, documentado na rota:** no caminho direto não há como
+conferir magic bytes — o arquivo não passa pelo nosso servidor. Resta o
+allowlist de content-type, declarado pelo cliente. Aceitável porque só quem
+passa por `isAdmin()` recebe token, e o modelo de ameaça do upload é "arquivo
+hostil de terceiro". **Imagem e áudio seguem pela Server Action justamente para
+não abrir mão da validação por conteúdo** — não unifique os dois caminhos sem
+entender o que se perde.
+
+Tetos por espécie (`lib/admin/media-accept.ts`): imagem 5 MB, áudio 25 MB,
+vídeo 200 MB. O `bodySizeLimit` foi de 6mb para 26mb para caber o áudio —
+**mexer no teto de áudio exige mexer nele junto**.
