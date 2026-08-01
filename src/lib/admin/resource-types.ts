@@ -6,6 +6,7 @@
 import { z } from "zod"
 
 import { type CacheTag } from "@/lib/repos/tags"
+import { type MediaClass } from "@/lib/admin/media-accept"
 
 export type FieldType =
   | "text"
@@ -30,6 +31,11 @@ export interface FieldConfig {
   options?: { value: string; label: string }[]
   placeholder?: string
   help?: string
+  /**
+   * Só para `type: "media"`. Espécies que o campo aceita; omitido, só imagem.
+   * É o que impede um mp3 de ser salvo num campo de capa.
+   */
+  accept?: MediaClass[]
 }
 
 export interface ResourceConfig {

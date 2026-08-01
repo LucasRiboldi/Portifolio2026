@@ -3,7 +3,17 @@
 import { useEffect, useRef, useState, useCallback } from "react"
 
 import { listMedia, uploadMedia, deleteMedia, type MediaItem } from "@/app/admin/media/actions"
-import { ACCEPT_ATTR, ACCEPTED_HINT } from "@/lib/admin/media-accept"
+import { acceptAttr, acceptedHint, type MediaClass } from "@/lib/admin/media-accept"
+
+/**
+ * A biblioteca sobe pela Server Action, que confere magic bytes — por isso
+ * aceita imagem e áudio, mas não vídeo. Vídeo vai direto para o Blob e só o
+ * campo "Vídeo" do formulário tem esse caminho.
+ */
+const CLASSES: MediaClass[] = ["image", "audio"]
+
+/** O preview do grid muda por espécie: <img> não renderiza um mp3. */
+const ehAudio = (nome: string) => /\.(mp3|ogg|wav|m4a)$/i.test(nome)
 
 export function MediaManager() {
   const [items, setItems] = useState<MediaItem[]>([])
@@ -34,6 +44,7 @@ export function MediaManager() {
     try {
       const fd = new FormData()
       fd.set("file", file)
+      fd.set("classes", CLASSES.join(","))
       const res = await uploadMedia(fd)
       if (!res.ok) {
         setError(res.error)
@@ -72,13 +83,13 @@ export function MediaManager() {
           disabled={uploading}
           className="mm-btn mm-btn-primary"
         >
-          {uploading ? "Enviando…" : "Enviar imagem"}
+          {uploading ? "Enviando…" : "Enviar arquivo"}
         </button>
-        <p className="mt-1 text-xs text-[color:var(--mm-text-2)]">{ACCEPTED_HINT}</p>
+        <p className="mt-1 text-xs text-[color:var(--mm-text-2)]">{acceptedHint(CLASSES)}</p>
         <input
           ref={fileRef}
           type="file"
-          accept={ACCEPT_ATTR}
+          accept={acceptAttr(CLASSES)}
           hidden
           onChange={(e) => {
             const f = e.target.files?.[0]
@@ -92,8 +103,12 @@ export function MediaManager() {
       <div className="grid grid-cols-2 gap-4 md:grid-cols-3 lg:grid-cols-4">
         {items.map((item) => (
           <div key={item.name} className="space-y-2 rounded-xl border border-[color:var(--mm-border)] p-2">
-            {/* eslint-disable-next-line @next/next/no-img-element */}
-            <img src={item.url} alt={item.name} className="img-frame img-wide rounded-lg" />
+            {ehAudio(item.name) ? (
+              <audio src={item.url} controls className="w-full" />
+            ) : (
+              // eslint-disable-next-line @next/next/no-img-element
+              <img src={item.url} alt={item.name} className="img-frame img-wide rounded-lg" />
+            )}
             <div className="flex gap-2">
               <button
                 type="button"
@@ -115,7 +130,7 @@ export function MediaManager() {
       </div>
 
       {items.length === 0 && !error && (
-        <p className="text-sm text-[color:var(--mm-text-2)]">Nenhuma imagem enviada ainda.</p>
+        <p className="text-sm text-[color:var(--mm-text-2)]">Nenhum arquivo enviado ainda.</p>
       )}
     </div>
   )

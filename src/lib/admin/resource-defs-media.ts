@@ -268,7 +268,13 @@ export const MEDIA_RESOURCES: Record<string, ResourceConfig> = {
     fields: [
       { name: "title", label: "Título", type: "text", required: true },
       { name: "artist", label: "Artista", type: "text" },
-      { name: "audio_url", label: "Áudio (mp3/ogg)", type: "media", help: "o player é local, não embed" },
+      {
+        name: "audio_url",
+        label: "Áudio",
+        type: "media",
+        accept: ["audio"],
+        help: "o player é local, não embed",
+      },
       { name: "cover_image", label: "Capa", type: "media" },
       { name: "note", label: "Comentário", type: "textarea" },
       { name: "published", label: "Publicado", type: "boolean" },
@@ -298,7 +304,13 @@ export const MEDIA_RESOURCES: Record<string, ResourceConfig> = {
     fields: [
       { name: "title", label: "Título", type: "text", required: true },
       { name: "description", label: "Descrição", type: "textarea" },
-      { name: "video_url", label: "Vídeo (arquivo ou URL)", type: "media" },
+      {
+        name: "video_url",
+        label: "Vídeo (arquivo ou URL)",
+        type: "media",
+        accept: ["video"],
+        help: "arquivo sobe direto para o Blob; URL de YouTube/Vimeo também serve",
+      },
       { name: "poster_image", label: "Pôster", type: "media" },
       {
         name: "kind",

@@ -27,14 +27,11 @@ import { list, put, del } from "@vercel/blob"
 
 import { requireAdmin } from "@/lib/auth/is-admin"
 import {
-  validateImage,
+  validateMedia,
   safeObjectName,
   isSafeObjectName,
-  MAX_BYTES,
 } from "@/lib/admin/media-validate"
-
-/** Pasta dos objetos dentro do store. Mantém o nome que o bucket antigo tinha. */
-const PREFIX = "public-media"
+import { DEFAULT_CLASSES, MAX_BYTES, PREFIX, type MediaClass } from "@/lib/admin/media-accept"
 
 /** True quando há token de escrita — injetado pela Vercel ao vincular o store. */
 const temBlob = Boolean(process.env.BLOB_READ_WRITE_TOKEN)
@@ -47,6 +44,21 @@ export interface MediaItem {
 }
 
 export type MediaResult<T> = { ok: true; data: T } | { ok: false; error: string }
+
+const CLASSES_VALIDAS: MediaClass[] = ["image", "audio", "video"]
+
+/**
+ * Lê as espécies aceitas que o formulário declarou. Vem do cliente, então é
+ * filtrado contra a lista conhecida — na falta de valor válido, cai no padrão
+ * (só imagem), que é o comportamento restritivo.
+ */
+function lerClasses(bruto: FormDataEntryValue | null): MediaClass[] {
+  if (typeof bruto !== "string") return DEFAULT_CLASSES
+  const pedidas = bruto.split(",").filter((c): c is MediaClass =>
+    (CLASSES_VALIDAS as string[]).includes(c),
+  )
+  return pedidas.length > 0 ? pedidas : DEFAULT_CLASSES
+}
 
 export async function listMedia(): Promise<MediaResult<MediaItem[]>> {
   await requireAdmin()
@@ -72,13 +84,18 @@ export async function uploadMedia(formData: FormData): Promise<MediaResult<Media
   const file = formData.get("file")
   if (!(file instanceof File)) return { ok: false, error: "Nenhum arquivo recebido." }
 
-  // Corta antes de ler o corpo inteiro na memória.
-  if (file.size > MAX_BYTES) {
-    return { ok: false, error: `Arquivo de ${(file.size / 1024 / 1024).toFixed(1)} MB excede 5 MB.` }
+  const classes = lerClasses(formData.get("classes"))
+
+  // Corta antes de ler o corpo inteiro na memória. Usa o maior teto entre as
+  // espécies aceitas; o teto exato da espécie real é conferido em `validateMedia`.
+  const tetoMax = Math.max(...classes.map((c) => MAX_BYTES[c]))
+  if (file.size > tetoMax) {
+    const mb = (file.size / 1024 / 1024).toFixed(1)
+    return { ok: false, error: `Arquivo de ${mb} MB excede ${Math.round(tetoMax / 1024 / 1024)} MB.` }
   }
 
   const bytes = new Uint8Array(await file.arrayBuffer())
-  const checked = validateImage(bytes)
+  const checked = validateMedia(bytes, classes)
   if ("error" in checked) return { ok: false, error: checked.error }
 
   const name = safeObjectName(checked.kind)

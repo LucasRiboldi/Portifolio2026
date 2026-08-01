@@ -116,7 +116,12 @@ export function ResourceForm({ slug, singular, fields, id, initial }: ResourceFo
             )}
 
             {field.type === "media" && (
-              <MediaPicker name={field.name} defaultValue={value} inputClassName={inputCls} />
+              <MediaPicker
+                name={field.name}
+                defaultValue={value}
+                inputClassName={inputCls}
+                accept={field.accept}
+              />
             )}
 
             {(field.type === "text" || field.type === "tags" || field.type === "number") && (

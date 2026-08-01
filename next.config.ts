@@ -119,11 +119,16 @@ const nextConfig: NextConfig = {
 
   experimental: {
     serverActions: {
-      // O upload de mídia passa por Server Action e o teto do arquivo é 5 MB
-      // (ver lib/admin/media-validate). O default de 1 MB rejeitaria imagens
-      // legítimas antes da nossa validação rodar; a folga cobre o overhead do
+      // Imagem (5 MB) e áudio (25 MB) sobem por Server Action — os tetos estão
+      // em lib/admin/media-accept. O default de 1 MB rejeitaria arquivos
+      // legítimos antes da nossa validação rodar; a folga cobre o overhead do
       // multipart. Quem barra de fato é o validador, não este limite.
-      bodySizeLimit: "6mb",
+      //
+      // Vídeo NÃO passa por aqui: vai direto do navegador para o Blob via
+      // api/admin/blob-upload. Estourar este limite devolve ao cliente um
+      // "An unexpected response was received from the server" — erro opaco que
+      // não menciona tamanho. Se subir o teto de áudio, suba este junto.
+      bodySizeLimit: "26mb",
     },
   },
 
