@@ -27,9 +27,9 @@ jobs:
       - name: Lint
         run: npm run lint
 
-      # Os 535 testes rodavam só na máquina do dev — um PR podia quebrar a
-      # suíte inteira e o CI ficava verde. Eles não usam rede nem credencial,
-      # então não precisam de secrets.
+      # Os testes rodavam só na máquina do dev — um PR podia quebrar a suíte
+      # inteira e o CI ficava verde. Eles não usam rede nem credencial, então
+      # não precisam de secrets.
       - name: Testes
         run: npm run test:unit
 
@@ -38,3 +38,39 @@ jobs:
       # separado de tsc.
       - name: Build
         run: npm run build
+
+  # Job separado de propósito: a integração precisa de JDK e do firebase-tools,
+  # que o build não usa. Junto, atrasaria o retorno do CI em todo PR; separado,
+  # os dois correm em paralelo e o build continua rápido.
+  #
+  # O `firebase-tools` não é devDependency para não somar seu peso ao `npm ci`
+  # de quem só quer rodar a unitária — instalar aqui custa só a este job.
+  integration:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Setup Node
+        uses: actions/setup-node@v4
+        with:
+          node-version: 22
+          cache: npm
+
+      # O emulador do Firestore é um jar, e o firebase-tools recusa Java abaixo
+      # de 21 ("no longer supports Java version before 21").
+      - name: Setup Java
+        uses: actions/setup-java@v4
+        with:
+          distribution: temurin
+          java-version: 21
+
+      - name: Install
+        run: npm ci
+
+      - name: Install firebase-tools
+        run: npm i -g firebase-tools
+
+      # Sobe o emulador, roda tests-integration/ e o derruba. Sem credencial: o
+      # Admin SDK dispensa quando FIRESTORE_EMULATOR_HOST está definido.
+      - name: Testes de integração
+        run: npm run test:integration

@@ -27,6 +27,8 @@ const OGG = bytes("OggS", [0, 2, 0, 0])
 const WAV = bytes("RIFF", [1, 2, 3, 4], "WAVE", [1, 2])
 const M4A = bytes([0, 0, 0, 0], "ftyp", "M4A ", [1, 2])
 
+const PDF = bytes("%PDF-1.7", [0x0a, 1, 2])
+
 const MP4 = bytes([0, 0, 0, 0], "ftyp", "isom", [1, 2])
 const WEBM = bytes([0x1a, 0x45, 0xdf, 0xa3], [1, 2, 3])
 const MOV = bytes([0, 0, 0, 0], "ftyp", "qt  ", [1, 2])
@@ -46,6 +48,7 @@ describe("sniffMedia — formatos legítimos", () => {
     ["mp4", MP4],
     ["webm", WEBM],
     ["mov", MOV],
+    ["pdf", PDF],
   ])("reconhece %s pelo conteúdo", (kind, buf) => {
     expect(sniffMedia(buf)).toBe(kind)
   })
@@ -115,6 +118,19 @@ describe("validateMedia — espécie precisa ser permitida pelo campo", () => {
     expect(validateMedia(OGG, ["image", "audio"])).toMatchObject({ kind: "ogg" })
   })
 
+  it("aceita PDF num campo de documento — materiais print-and-play", () => {
+    expect(validateMedia(PDF, ["document"])).toMatchObject({
+      kind: "pdf",
+      mediaClass: "document",
+      contentType: "application/pdf",
+    })
+  })
+
+  it("recusa PDF num campo de imagem, e imagem num campo de documento", () => {
+    expect(validateMedia(PDF, ["image"])).toHaveProperty("error")
+    expect(validateMedia(PNG, ["document"])).toHaveProperty("error")
+  })
+
   it("sem espécie declarada, aceita só imagem — o padrão restritivo", () => {
     expect(validateMedia(PNG)).toMatchObject({ kind: "png" })
     expect(validateMedia(MP3_ID3)).toHaveProperty("error")
@@ -150,7 +166,7 @@ describe("validateMedia — tamanho por espécie", () => {
 })
 
 describe("isSafeObjectName — barra path traversal e sufixo duplo", () => {
-  it.each(["png", "mp3", "ogg", "wav", "m4a", "mp4", "webm", "mov"])(
+  it.each(["png", "mp3", "ogg", "wav", "m4a", "mp4", "webm", "mov", "pdf"])(
     "aceita o nome que nós geramos (.%s)",
     (ext) => {
       expect(isSafeObjectName(`a1b2c3d4-e5f6-7890-abcd-ef1234567890.${ext}`)).toBe(true)
@@ -164,6 +180,7 @@ describe("isSafeObjectName — barra path traversal e sufixo duplo", () => {
     "foto.svg",
     "arquivo.exe",
     "musica.mp3.exe",
+    "material.pdf.js",
     "",
   ])("rejeita %j", (name) => {
     expect(isSafeObjectName(name)).toBe(false)

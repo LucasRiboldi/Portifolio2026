@@ -45,7 +45,7 @@ export interface MediaItem {
 
 export type MediaResult<T> = { ok: true; data: T } | { ok: false; error: string }
 
-const CLASSES_VALIDAS: MediaClass[] = ["image", "audio", "video"]
+const CLASSES_VALIDAS: MediaClass[] = ["image", "audio", "video", "document"]
 
 /**
  * Lê as espécies aceitas que o formulário declarou. Vem do cliente, então é

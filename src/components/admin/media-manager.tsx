@@ -7,13 +7,14 @@ import { acceptAttr, acceptedHint, type MediaClass } from "@/lib/admin/media-acc
 
 /**
  * A biblioteca sobe pela Server Action, que confere magic bytes — por isso
- * aceita imagem e áudio, mas não vídeo. Vídeo vai direto para o Blob e só o
+ * aceita imagem, áudio e PDF, mas não vídeo. Vídeo vai direto para o Blob e só o
  * campo "Vídeo" do formulário tem esse caminho.
  */
-const CLASSES: MediaClass[] = ["image", "audio"]
+const CLASSES: MediaClass[] = ["image", "audio", "document"]
 
-/** O preview do grid muda por espécie: <img> não renderiza um mp3. */
+/** O preview do grid muda por espécie: <img> não renderiza um mp3 nem um PDF. */
 const ehAudio = (nome: string) => /\.(mp3|ogg|wav|m4a)$/i.test(nome)
+const ehPdf = (nome: string) => /\.pdf$/i.test(nome)
 
 export function MediaManager() {
   const [items, setItems] = useState<MediaItem[]>([])
@@ -105,6 +106,15 @@ export function MediaManager() {
           <div key={item.name} className="space-y-2 rounded-xl border border-[color:var(--mm-border)] p-2">
             {ehAudio(item.name) ? (
               <audio src={item.url} controls className="w-full" />
+            ) : ehPdf(item.name) ? (
+              <a
+                href={item.url}
+                target="_blank"
+                rel="noopener noreferrer"
+                className="img-frame img-wide flex items-center justify-center rounded-lg text-xs underline"
+              >
+                Abrir PDF
+              </a>
             ) : (
               // eslint-disable-next-line @next/next/no-img-element
               <img src={item.url} alt={item.name} className="img-frame img-wide rounded-lg" />

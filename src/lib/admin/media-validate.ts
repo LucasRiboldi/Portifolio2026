@@ -16,15 +16,16 @@ import {
  * daí — nunca do nome original, o que também elimina path traversal
  * (`../../evil.png`) e nomes com sufixo duplo (`foto.png.html`).
  *
- * Vale para imagem e áudio, que sobem pela Server Action. Vídeo vai direto do
- * navegador para o Blob e não passa por aqui — ver o comentário da rota
- * `api/admin/blob-upload`, que explica o que se perde e por quê.
+ * Vale para imagem, áudio e documento, que sobem pela Server Action. Vídeo vai
+ * direto do navegador para o Blob e não passa por aqui — ver o comentário da
+ * rota `api/admin/blob-upload`, que explica o que se perde e por quê.
  */
 
 export type ImageKind = "png" | "jpg" | "gif" | "webp" | "avif"
 export type AudioKind = "mp3" | "ogg" | "wav" | "m4a"
 export type VideoKind = "mp4" | "webm" | "mov"
-export type MediaKind = ImageKind | AudioKind | VideoKind
+export type DocumentKind = "pdf"
+export type MediaKind = ImageKind | AudioKind | VideoKind | DocumentKind
 
 /** Teto de imagem. Mantido como export próprio por ser o caso mais citado. */
 export const IMAGE_MAX_BYTES = MAX_BYTES.image
@@ -42,6 +43,7 @@ const CLASS_OF: Record<MediaKind, MediaClass> = {
   mp4: "video",
   webm: "video",
   mov: "video",
+  pdf: "document",
 }
 
 const CONTENT_TYPE: Record<MediaKind, string> = {
@@ -57,6 +59,7 @@ const CONTENT_TYPE: Record<MediaKind, string> = {
   mp4: "video/mp4",
   webm: "video/webm",
   mov: "video/quicktime",
+  pdf: "application/pdf",
 }
 
 /** Todas as extensões que `safeObjectName` pode gerar. */
@@ -109,6 +112,9 @@ export function sniffMedia(bytes: Uint8Array): MediaKind | null {
   if (ftyp(bytes, "qt  ")) return "mov"
   // Marcas usuais de MP4. Deixado por último: `M4A ` e `avif` também são ftyp.
   if (["isom", "iso2", "mp41", "mp42", "avc1", "M4V "].some((b) => ftyp(bytes, b))) return "mp4"
+
+  // — documento —
+  if (ascii(bytes, 0, "%PDF-")) return "pdf"
 
   return null
 }

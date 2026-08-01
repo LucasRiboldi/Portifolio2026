@@ -37,6 +37,7 @@ function especieDaUrl(url: string): MediaClass | null {
   if (["png", "jpg", "jpeg", "gif", "webp", "avif"].includes(ext)) return "image"
   if (["mp3", "ogg", "wav", "m4a"].includes(ext)) return "audio"
   if (["mp4", "webm", "mov"].includes(ext)) return "video"
+  if (ext === "pdf") return "document"
   return null
 }
 
@@ -148,6 +149,18 @@ export function MediaPicker({
       {especie === "audio" && <audio src={url} controls className="w-full" />}
       {especie === "video" && (
         <video src={url} controls className="max-h-48 rounded-lg border border-[color:var(--mm-border)]" />
+      )}
+      {especie === "document" && (
+        // PDF não tem preview barato que valha a pena embutir; o link confirma
+        // que o arquivo subiu e abre para conferência.
+        <a
+          href={url}
+          target="_blank"
+          rel="noopener noreferrer"
+          className="inline-block text-xs underline text-[color:var(--mm-text-2)]"
+        >
+          Abrir PDF em nova aba
+        </a>
       )}
 
       {error && <p className="text-xs text-[color:var(--mm-error)]">{error}</p>}

@@ -7,7 +7,7 @@
  */
 
 /** Que espécie de mídia um campo aceita. Um campo pode aceitar mais de uma. */
-export type MediaClass = "image" | "audio" | "video"
+export type MediaClass = "image" | "audio" | "video" | "document"
 
 /**
  * Pasta dos objetos dentro do store. Mantém o nome que o bucket antigo tinha.
@@ -28,6 +28,7 @@ export const MAX_BYTES: Record<MediaClass, number> = {
   image: 5 * 1024 * 1024,
   audio: 25 * 1024 * 1024,
   video: 200 * 1024 * 1024,
+  document: 25 * 1024 * 1024,
 }
 
 /**
@@ -41,12 +42,14 @@ const ACCEPT_BY_CLASS: Record<MediaClass, string> = {
   image: "image/png,image/jpeg,image/gif,image/webp,image/avif",
   audio: "audio/mpeg,audio/ogg,audio/wav,audio/mp4",
   video: "video/mp4,video/webm,video/quicktime",
+  document: "application/pdf",
 }
 
 const LABEL_BY_CLASS: Record<MediaClass, string> = {
   image: "PNG, JPEG, GIF, WebP ou AVIF",
   audio: "MP3, OGG, WAV ou M4A",
   video: "MP4, WebM ou MOV",
+  document: "PDF",
 }
 
 /** Espécies aceitas quando o campo não declara nada. Preserva o padrão antigo. */
