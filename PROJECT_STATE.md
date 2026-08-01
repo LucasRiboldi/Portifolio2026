@@ -104,7 +104,7 @@ acontece em produção ou em `localhost`.
 | Vercel Blob | ✅ Store `portfolio-midia` criado e vinculado. Autentica por **OIDC** (`BLOB_STORE_ID` + `VERCEL_OIDC_TOKEN`) por padrão; o token estático é fallback e só ele serve para upload direto de vídeo |
 | Env vars (Production) | ✅ Completas, incluindo `FIREBASE_CLIENT_EMAIL` / `FIREBASE_PRIVATE_KEY` |
 | Env vars (Preview) | ✅ 10 variáveis definidas em 31/07 (Firebase cliente + Admin SDK + `ADMIN_GITHUB_LOGIN`). Falta só `BLOB_READ_WRITE_TOKEN` |
-| CI (GitHub Actions) | ✅ Dois jobs em paralelo: `build` (`tokens:check`, lint, unitários, build) e `integration` (emulador do Firestore, 21 casos). O de integração entrou em 01/08 e passou no primeiro run |
+| CI (GitHub Actions) | ✅ Dois jobs em paralelo: `build` (`tokens:check`, lint, 580 unitários, build, **13 de fumaça**) e `integration` (emulador do Firestore, 21 casos). Integração e fumaça entraram em 01/08 |
 | Protection Bypass | ✅ Ligado em 31/07 para permitir testar previews por `curl` |
 | Projeto Supabase antigo | ⚠️ No ar como rede de segurança, mas **conferido em 01/08: seguro apagar** — 0 URLs do Supabase em 170 documentos do Firestore, nenhuma dependência instalada |
 
@@ -162,7 +162,9 @@ persistiu. Prova três coisas de uma vez: a escrita chega ao Firestore, o
 ```bash
 npm run dev            # servidor local (porta 3000)
 npm run build          # build de produção — NÃO rode com o dev server no ar
-npm run test:unit      # 580 testes
+npm run test:unit      # 580 testes (sem rede, sem credencial)
+npm run test:smoke     # sobe o build e confere os portoes
+npm run test:integration  # emulador do Firestore (precisa de JDK 21)
 npm run lint
 npm run db:seed        # popula coleções vazias a partir de src/data
 npm run db:sync        # insere o que falta em coleções já povoadas
