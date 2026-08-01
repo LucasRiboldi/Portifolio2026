@@ -126,12 +126,43 @@ No console do Firebase:
 1. **Authentication → provedor GitHub** habilitado, com Client ID e Secret.
 2. **OAuth App no GitHub** com *Authorization callback URL* exatamente
    `https://<projeto>.firebaseapp.com/__/auth/handler`.
-3. **Authorized domains** incluindo o domínio de produção.
+3. **Authorized domains** incluindo o domínio de produção — ver 6.1.
 
 > Armadilha real, já vivida: reaproveitar o OAuth App da era Supabase deixa o
 > callback apontando para `*.supabase.co`. O GitHub reconhece o app (a tela de
 > login aparece) mas recusa o redirect **depois** do login — e a validação não
 > acontece antes, então testar deslogado não detecta o problema.
+
+### 6.1 `auth/unauthorized-domain` — e por que login não funciona em preview
+
+O `signInWithPopup` só abre em origens que estejam na allowlist de
+**Authentication → Settings → Authorized domains**. Fora dela, o SDK recusa
+antes de qualquer ida ao GitHub, com `Firebase: Error (auth/unauthorized-domain)`.
+
+A lista padrão traz apenas `localhost`, `<projeto>.firebaseapp.com` e
+`<projeto>.web.app`. **O domínio da Vercel não entra sozinho** — tem de ser
+acrescentado à mão no console. Não há caminho por CLI, por Admin SDK nem pelo
+MCP do Firebase; a lista não é exposta por API pública.
+
+**Vivido em 01/08/2026:** o login funcionava em `localhost` desde 31/07 e falhava
+em produção. Isso confunde justamente porque parece bug de deploy — não é. É a
+única peça da cadeia de auth que mora fora do repositório e não aparece em
+nenhum arquivo de configuração. Se o login quebra só no ambiente hospedado e a
+mensagem cita domínio, comece por aqui.
+
+**Consequência estrutural, e ela não tem correção simples:** cada deploy de
+preview da Vercel recebe uma URL com hash único
+(`<projeto>-git-<branch>-<hash>.vercel.app`). Não há curinga na allowlist do
+Firebase, então **não existe como pré-autorizar previews**. Disso decorre:
+
+- validação de qualquer coisa atrás de `/admin` acontece em **produção** ou em
+  **`localhost`** — nunca em preview;
+- de quebra, isso torna acadêmica a falta de `BLOB_READ_WRITE_TOKEN` no
+  ambiente de preview: sem login não há painel, e sem painel não há upload.
+
+A única saída, se um dia incomodar, é configurar na Vercel um **alias fixo de
+branch** (um domínio estável apontando sempre para o último preview daquela
+branch) e autorizar esse alias uma vez.
 
 ---
 

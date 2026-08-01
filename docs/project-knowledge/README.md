@@ -9,7 +9,7 @@ para entender uma decisão.
 | [architecture.md](architecture.md) | Como o sistema é organizado e por quê |
 | [business-rules.md](business-rules.md) | O que o produto faz e quais regras valem |
 | [database.md](database.md) | Coleções, ids, índices, seed e sync |
-| [auth.md](auth.md) | Login, sessão, autorização e Security Rules |
+| [auth.md](auth.md) | Login, sessão, autorização, Security Rules e a configuração de console que não mora no repositório (domínios autorizados, OAuth App) |
 | [integrations.md](integrations.md) | Serviços externos e criticidade |
 | [deployment.md](deployment.md) | Ambientes, variáveis, deploy e armadilhas |
 | [conventions.md](conventions.md) | Padrões de código, testes e commits |

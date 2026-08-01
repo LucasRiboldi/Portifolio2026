@@ -80,20 +80,16 @@ ambiente local.
 Resolvido o 500, o `/login` de produção passou a renderizar mas o popup do
 GitHub recusava com `Firebase: Error (auth/unauthorized-domain)`.
 
-**Causa:** o Firebase Auth só abre o popup em origens da allowlist de
-*Authorized domains*, que por padrão traz apenas `localhost`,
-`portifolio-ac32a.firebaseapp.com` e `portifolio-ac32a.web.app`. O domínio da
-Vercel nunca esteve lá — foi exatamente por isso que o login funcionou local em
-31/07 e falhou no ar.
-
 **Correção:** Console → Authentication → Settings → Authorized domains →
-adicionar `portifolio2026-two.vercel.app`. Efeito imediato, sem redeploy.
-Não há código envolvido, e não há como fazer pelo CLI nem pelo MCP do Firebase.
+adicionar `portifolio2026-two.vercel.app`. Efeito imediato, sem redeploy, sem
+código.
 
-**Consequência que fica:** deploys de *preview* recebem URL com hash único a
-cada build, então **login não funciona em preview** e não há como
-pré-autorizar. Validação de `/admin` acontece em produção ou em `localhost`. Se
-isso incomodar, a saída é um alias fixo de branch na Vercel, autorizado uma vez.
+**Consequência que fica:** login **não funciona em preview** e não há como
+pré-autorizar — cada preview ganha URL com hash único. Validação de `/admin`
+acontece em produção ou em `localhost`.
+
+> Explicação completa (por que a lista não é acessível por API, o que decorre
+> disso e qual a saída se incomodar): **`docs/project-knowledge/auth.md` §6.1**.
 
 ---
 
