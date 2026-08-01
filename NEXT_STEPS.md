@@ -95,15 +95,45 @@ usuário: `setx VERCEL_TOKEN ""`. Gerar outro só quando for preciso operar o CL
 
 ## 4. Gatilho do Prophet Wire
 
+**O que já foi provado, e o que falta.** Em 01/08 a lógica foi exercitada
+contra um Firestore real (`tests-integration/prophet-wire-persistencia.test.ts`,
+5 casos): acervo e histórico persistem entre execuções, a dedup reencontra o
+hash **no banco** — usando duas instâncias distintas de repositório, para imitar
+o cron, onde cada execução é um processo novo — e o portão recusa sem segredo.
+
+**Falta só o que exige credencial:** a variável de ambiente e um disparo real.
+
+**1. Gerar o segredo**
+
 ```bash
-curl -X POST https://<site>/api/prophet-wire/run -H "Authorization: Bearer $CRON_SECRET"
+node -e "console.log(require('crypto').randomBytes(32).toString('base64url'))"
 ```
 
-Requer `CRON_SECRET` definido (hoje está vazio — sem ele o endpoint **recusa
-tudo**, por desenho). Definir na Vercel antes de testar.
+**2. Definir `CRON_SECRET` na Vercel** (Settings → Environment Variables →
+Production) e **redeployar** — variável só vale para deployment novo.
 
-**Pronto quando:** o acervo e o histórico persistem entre execuções e aparecem
-em `/admin/prophet-wire`.
+**3. Disparar**
+
+```bash
+curl -i -X POST https://<site>/api/prophet-wire/run -H "Authorization: Bearer SEU_SEGREDO"
+```
+
+**Pronto quando:** duas execuções seguidas aparecem em `/admin/prophet-wire` e a
+segunda não duplica o acervo.
+
+**Ao ler o relatório, não se assuste:** `counters.published` conta **só** itens
+com status `publicado`. Como `config.publishMode` é `"rascunho"`, uma execução
+perfeita reporta `published: 0` — e é esse número que o painel mostra. O sinal
+de sucesso é `errors: 0` e o acervo crescendo em `/admin`, não esse contador.
+
+Códigos: **401** = segredo errado ou variável não chegou ao deployment (a
+resposta é genérica de propósito; o motivo real vai para o log do projeto).
+**409** = execução concorrente — a trava é por processo, não coordena
+instâncias.
+
+**Expectativa a calibrar:** a IA ainda é o `FallbackAIClient`. Sem
+`ANTHROPIC_API_KEY` o pipeline roda com o conteúdo bruto, sem resumir nem
+reescrever.
 
 ---
 
@@ -178,9 +208,20 @@ middleware em todas as rotas. Registrado em `next.config.ts`.
 
 ## 12. Suíte de integração não roda no CI
 
-`npm run test:integration` sobe o emulador do Firestore e roda 16 casos sobre
-`collection.ts` e `query.ts` com o motor real. Exige Java (o emulador é um jar) e
-por isso ficou fora do CI. Só roda se alguém lembrar de rodar localmente.
+`npm run test:integration` sobe o emulador do Firestore e roda 21 casos —
+`collection.ts`/`query.ts` e a persistência do Prophet Wire — com o motor real.
+Fora do CI porque exige Java. Só roda se alguém lembrar de rodar localmente.
+
+**Nesta máquina exige uma variável antes.** O `firebase-tools` recusa Java
+abaixo de 21 (`no longer supports Java version before 21`) e o Java do PATH é o
+8. Não precisa instalar nada: o Android Studio traz uma JDK 21.
+
+```bash
+JAVA_HOME="/c/Program Files/Android/Android Studio/jbr" PATH="$JAVA_HOME/bin:$PATH" npm run test:integration
+```
+
+No PowerShell: `$env:JAVA_HOME = "C:\Program Files\Android\Android Studio\jbr"`
+e prefixe o `PATH` antes de chamar o script.
 
 ---
 

@@ -131,7 +131,10 @@ persistiu. Prova três coisas de uma vez: a escrita chega ao Firestore, o
 - **Upload de mídia.** O de imagem nunca foi executado. Áudio e vídeo eram
   impossíveis até 01/08 (ver seção 9) e o caminho novo **não foi testado no
   ar** — build e testes passam, o que não é a mesma coisa.
-- **Gatilho do Prophet Wire** — `CRON_SECRET` está vazio.
+- **Gatilho do Prophet Wire em produção** — `CRON_SECRET` está vazio. A lógica
+  já foi exercitada contra Firestore real em 01/08 (persistência, dedup pelo
+  hash no banco, histórico e o portão fechado): falta só a variável de ambiente
+  e um disparo verdadeiro.
 - **Login em preview** — impossível por construção, ver seção 3.1.
 
 ---
