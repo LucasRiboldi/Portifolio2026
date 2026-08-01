@@ -104,7 +104,7 @@ acontece em produção ou em `localhost`.
 | Vercel Blob | ✅ Store `portfolio-midia` criado e vinculado |
 | Env vars (Production) | ✅ Completas, incluindo `FIREBASE_CLIENT_EMAIL` / `FIREBASE_PRIVATE_KEY` |
 | Env vars (Preview) | ✅ 10 variáveis definidas em 31/07 (Firebase cliente + Admin SDK + `ADMIN_GITHUB_LOGIN`). Falta só `BLOB_READ_WRITE_TOKEN` |
-| CI (GitHub Actions) | ✅ `tokens:check`, lint, **testes** e build em push/PR para `main`. O passo de testes entrou em 31/07 |
+| CI (GitHub Actions) | ✅ Dois jobs em paralelo: `build` (`tokens:check`, lint, unitários, build) e `integration` (emulador do Firestore, 21 casos). O de integração entrou em 01/08 e passou no primeiro run |
 | Protection Bypass | ✅ Ligado em 31/07 para permitir testar previews por `curl` |
 | Projeto Supabase antigo | ⚠️ Continua no ar como rede de segurança. Desligar quando o Firebase estiver validado |
 
@@ -128,9 +128,9 @@ persistiu. Prova três coisas de uma vez: a escrita chega ao Firestore, o
 
 **Ainda não exercido:**
 
-- **Upload de mídia.** O de imagem nunca foi executado. Áudio e vídeo eram
-  impossíveis até 01/08 (ver seção 9) e o caminho novo **não foi testado no
-  ar** — build e testes passam, o que não é a mesma coisa.
+- **Upload de mídia.** O de imagem nunca foi executado. Áudio, vídeo e PDF
+  eram impossíveis até 01/08 (ver seção 9) e o caminho novo **não foi testado
+  no ar** — build e testes passam, o que não é a mesma coisa.
 - **Gatilho do Prophet Wire em produção** — `CRON_SECRET` está vazio. A lógica
   já foi exercitada contra Firestore real em 01/08 (persistência, dedup pelo
   hash no banco, histórico e o portão fechado): falta só a variável de ambiente
@@ -162,7 +162,7 @@ persistiu. Prova três coisas de uma vez: a escrita chega ao Firestore, o
 ```bash
 npm run dev            # servidor local (porta 3000)
 npm run build          # build de produção — NÃO rode com o dev server no ar
-npm run test:unit      # 575 testes
+npm run test:unit      # 580 testes
 npm run lint
 npm run db:seed        # popula coleções vazias a partir de src/data
 npm run db:sync        # insere o que falta em coleções já povoadas
@@ -184,9 +184,10 @@ npx firebase-tools deploy --only firestore --project portifolio-ac32a
    ainda válido nesta máquina. Higiene de credencial pendente.
 2. Projeto Supabase antigo ainda ativo (rede de segurança).
 3. `BLOB_READ_WRITE_TOKEN` ausente no ambiente **Preview** — só o upload de
-   mídia recusa lá; o resto do preview funciona.
-4. `file_url` (materiais) ainda declara só imagem: é campo de PDF/print-and-play
-   e precisaria de uma espécie `document` em `media-accept.ts`.
+   mídia recusa lá; o resto do preview funciona. Impacto baixo: sem login em
+   preview, não há painel de onde subir mídia.
+4. Actions do CI declaram Node 20 (forçado para 24 pelo runner). Aviso hoje,
+   falha quando o suporte cair.
 5. CSP com `unsafe-inline` em `script-src`.
 
 Os débitos 1 a 3 e o 5 da lista anterior foram fechados em 31/07 e 01/08
@@ -218,5 +219,6 @@ não abrir mão da validação por conteúdo** — não unifique os dois caminho
 entender o que se perde.
 
 Tetos por espécie (`lib/admin/media-accept.ts`): imagem 5 MB, áudio 25 MB,
-vídeo 200 MB. O `bodySizeLimit` foi de 6mb para 26mb para caber o áudio —
+PDF 25 MB, vídeo 200 MB. A espécie `document` entrou em 01/08 (`a338a25`) para
+o campo "Arquivo" dos materiais, que era o último `type: "media"` sem `accept`. O `bodySizeLimit` foi de 6mb para 26mb para caber o áudio —
 **mexer no teto de áudio exige mexer nele junto**.

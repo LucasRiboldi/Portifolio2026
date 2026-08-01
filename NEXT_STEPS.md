@@ -6,7 +6,7 @@
 > Ao concluir um item: remova-o daqui, atualize `PROJECT_STATE.md` e diga no
 > commit o que foi verificado de verdade.
 >
-> **Atualizado:** 2026-08-01
+> **Atualizado:** 2026-08-01 (itens 6 e 12 fechados)
 
 ---
 
@@ -23,18 +23,19 @@ upload, higiene de credencial e melhorias.
 ## 1. Verificar o upload de mídia no ar
 
 O único caminho crítico que nunca foi executado de verdade. O código de áudio e
-vídeo é **novo** (commit `dcf22af`, 01/08) — build e 575 testes passam, o que
-não prova que sobe arquivo.
+vídeo é **novo** (commit `dcf22af`, 01/08), e o de PDF também (`a338a25`) —
+build e 580 testes passam, o que não prova que sobe arquivo.
 
-Em `/admin`, três testes distintos, porque são **três caminhos diferentes**:
+Em `/admin`, quatro testes, mas só **dois caminhos diferentes** no código:
 
 | O que | Onde | Caminho no código |
 |---|---|---|
 | Imagem | Biblioteca (`/admin/media`) ou qualquer campo de capa | Server Action + magic bytes |
-| Áudio | Raio → campo "Áudio" | Server Action + magic bytes |
+| Áudio | Raio → campo "Áudio" | idem |
+| PDF | Imprensa (Recursos) → campo "Arquivo" | idem |
 | Vídeo | Videoteca → "Editar vídeo" → campo "Vídeo" | Direto para o Blob, via `api/admin/blob-upload` |
 
-**Pronto quando:** os três sobem, aparecem no preview do formulário, salvam, e a
+**Pronto quando:** os quatro sobem, aparecem no preview do formulário, salvam, e a
 mídia toca/aparece no site público.
 
 **Se o vídeo falhar**, o erro agora deve ser legível. Os suspeitos, em ordem:
@@ -149,22 +150,14 @@ pelo código**. Sem o token, só o upload de mídia recusa
 Impacto baixo, porque **login não funciona em preview de qualquer forma** (ver
 `PROJECT_STATE.md` seção 3.1) — sem `/admin`, não há de onde subir mídia.
 
-## 6. Campo `file_url` (materiais) ainda declara só imagem
-
-É campo de PDF / print-and-play, mas `type: "media"` sem `accept` cai no padrão
-imagem. Hoje não incomoda porque os três materiais estão com `null` e são
-preenchidos por URL. Para permitir upload de PDF, acrescentar uma espécie
-`document` em `lib/admin/media-accept.ts` — o mecanismo de `accept` por campo já
-existe desde o commit `dcf22af`.
-
-## 7. Login em preview é impossível
+## 6. Login em preview é impossível
 
 Cada preview da Vercel ganha URL com hash único, e o Firebase Auth exige domínio
 na allowlist de *Authorized domains* — não há como pré-autorizar. Saída, se
 incomodar: alias fixo de branch na Vercel, autorizado uma vez no console.
 Detalhes em `PROJECT_STATE.md` seção 3.1.
 
-## 8. Refatoração (Fase 5) — parcialmente feita
+## 7. Refatoração (Fase 5) — parcialmente feita
 
 Alvos concretos que restam:
 - `verifySession()` consulta o Admin SDK a cada request autenticado. Correto,
@@ -175,7 +168,7 @@ Alvos concretos que restam:
 O primeiro alvo (blocos repetidos em `lib/admin/sync-content.ts`) saiu em
 31/07 (commit `712beca`).
 
-## 9. Reescrever o conteúdo do arcano
+## 8. Reescrever o conteúdo do arcano
 
 As quatro páginas (`/anfitriao/oficina`, `/mecanicas`, `/laboratorio` e
 `/imprensa`) estão no ar com 12 documentos **escritos pelo Claude, saindo com a
@@ -193,7 +186,7 @@ Server Action chama `revalidateTag`.
 
 # 🔵 Higiene
 
-## 10. Desligar o projeto Supabase
+## 9. Desligar o projeto Supabase
 
 Continua no ar como rede de segurança. Os caminhos críticos já foram validados
 (login, CRUD, cupom); só o upload falta (item 1). Desligar depois dele.
@@ -201,27 +194,17 @@ Continua no ar como rede de segurança. Os caminhos críticos já foram validado
 **Como:** https://app.supabase.com → projeto → Settings → General → Delete
 project. **Irreversível.**
 
+## 10. Actions do CI ainda em Node 20
+
+O CI passa, mas anota: `actions/checkout@v4`, `setup-node@v4` e `setup-java@v4`
+declaram Node 20, que o runner força para o 24. Só aviso hoje; vira falha
+quando o suporte cair. Subir as três de versão maior — de uma vez, conferindo
+o run seguinte.
+
 ## 11. CSP com `unsafe-inline` em `script-src`
 
 Compromisso de um CSP por header, sem nonce por request. Um CSP estrito exigiria
 middleware em todas as rotas. Registrado em `next.config.ts`.
-
-## 12. Suíte de integração não roda no CI
-
-`npm run test:integration` sobe o emulador do Firestore e roda 21 casos —
-`collection.ts`/`query.ts` e a persistência do Prophet Wire — com o motor real.
-Fora do CI porque exige Java. Só roda se alguém lembrar de rodar localmente.
-
-**Nesta máquina exige uma variável antes.** O `firebase-tools` recusa Java
-abaixo de 21 (`no longer supports Java version before 21`) e o Java do PATH é o
-8. Não precisa instalar nada: o Android Studio traz uma JDK 21.
-
-```bash
-JAVA_HOME="/c/Program Files/Android/Android Studio/jbr" PATH="$JAVA_HOME/bin:$PATH" npm run test:integration
-```
-
-No PowerShell: `$env:JAVA_HOME = "C:\Program Files\Android\Android Studio\jbr"`
-e prefixe o `PATH` antes de chamar o script.
 
 ---
 
