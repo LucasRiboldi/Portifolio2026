@@ -25,21 +25,6 @@ import { MAX_BYTES, PREFIX } from "@/lib/admin/media-accept"
  * Server Action justamente para NÃO abrirem mão da validação por conteúdo.
  */
 export async function POST(request: Request): Promise<NextResponse> {
-  // Diferente do upload por Server Action, que também funciona por OIDC
-  // (`BLOB_STORE_ID` + `VERCEL_OIDC_TOKEN`): emitir token de CLIENTE exige o
-  // token estático. Sem ele o SDK falharia lá dentro com mensagem genérica —
-  // melhor dizer exatamente o que falta.
-  if (!process.env.BLOB_READ_WRITE_TOKEN) {
-    return NextResponse.json(
-      {
-        error:
-          "Upload de vídeo indisponível: BLOB_READ_WRITE_TOKEN ausente neste ambiente. " +
-          "Imagem, áudio e PDF continuam funcionando.",
-      },
-      { status: 503 },
-    )
-  }
-
   const body = (await request.json()) as HandleUploadBody
 
   /**
@@ -65,6 +50,24 @@ export async function POST(request: Request): Promise<NextResponse> {
     // `requireAdmin` redireciona, o que não serve para endpoint chamado por
     // fetch — aqui a resposta certa é 401.
     return NextResponse.json({ error: "Não autorizado." }, { status: 401 })
+  }
+
+  // Depois da autorização, de propósito: esta resposta diz QUAL variável falta,
+  // e isso é diagnóstico de ambiente. Respondê-la antes contaria a um chamador
+  // anônimo como o deploy está configurado.
+  //
+  // Diferente do upload por Server Action, que também funciona por OIDC
+  // (`BLOB_STORE_ID` + `VERCEL_OIDC_TOKEN`): emitir token de CLIENTE exige o
+  // token estático. Sem ele o SDK falharia com mensagem genérica.
+  if (!process.env.BLOB_READ_WRITE_TOKEN) {
+    return NextResponse.json(
+      {
+        error:
+          "Upload de vídeo indisponível: BLOB_READ_WRITE_TOKEN ausente neste ambiente. " +
+          "Imagem, áudio e PDF continuam funcionando.",
+      },
+      { status: 503 },
+    )
   }
 
   try {

@@ -39,6 +39,13 @@ jobs:
       - name: Build
         run: npm run build
 
+      # Sobe o build recém-feito e confere os PORTÕES: rota pública responde,
+      # /admin redireciona anônimo, endpoints com segredo recusam. É o que as
+      # outras duas suítes não pegam — elas provam funções, esta prova que a
+      # função certa está ligada na rota certa. Depende do build acima.
+      - name: Fumaça (portões)
+        run: npm run test:smoke
+
   # Job separado de propósito: a integração precisa de JDK e do firebase-tools,
   # que o build não usa. Junto, atrasaria o retorno do CI em todo PR; separado,
   # os dois correm em paralelo e o build continua rápido.

@@ -20,6 +20,7 @@
     "storybook": "storybook dev -p 6006",
     "build-storybook": "storybook build",
     "test:unit": "vitest run --config vitest.unit.config.ts",
+    "test:smoke": "node scripts/smoke.mjs",
     "test:integration": "firebase emulators:exec --only firestore --project portifolio-testes \"vitest run --config vitest.integration.config.ts\"",
     "assets:anfitriao": "node scripts/optimize-anfitriao-assets.mjs"
   },
