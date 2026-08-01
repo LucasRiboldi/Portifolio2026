@@ -25,12 +25,6 @@ import { MAX_BYTES, PREFIX } from "@/lib/admin/media-accept"
  * Server Action justamente para NÃO abrirem mão da validação por conteúdo.
  */
 export async function POST(request: Request): Promise<NextResponse> {
-  // `requireAdmin` redireciona, o que não serve para um endpoint chamado por
-  // fetch — aqui a resposta certa é 401.
-  if (!(await isAdmin())) {
-    return NextResponse.json({ error: "Não autorizado." }, { status: 401 })
-  }
-
   // Diferente do upload por Server Action, que também funciona por OIDC
   // (`BLOB_STORE_ID` + `VERCEL_OIDC_TOKEN`): emitir token de CLIENTE exige o
   // token estático. Sem ele o SDK falharia lá dentro com mensagem genérica —
@@ -47,6 +41,31 @@ export async function POST(request: Request): Promise<NextResponse> {
   }
 
   const body = (await request.json()) as HandleUploadBody
+
+  /**
+   * DOIS remetentes chegam neste endpoint, e cada um se autentica de um jeito.
+   * Exigir sessão dos dois — como estava — barrava o segundo com 401:
+   *
+   *   • `blob.generate-client-token` vem do NAVEGADOR pedindo permissão de
+   *     upload. Aqui a sessão de admin é a autenticação, e é obrigatória:
+   *     sem ela qualquer um emitiria token de escrita no nosso store.
+   *
+   *   • `blob.upload-completed` é WEBHOOK dos servidores da Vercel, avisando
+   *     que o arquivo subiu. Não tem cookie nenhum — autentica-se pelo
+   *     cabeçalho `x-vercel-signature`, que o próprio `handleUpload` confere
+   *     contra o `BLOB_READ_WRITE_TOKEN`. Deixar passar daqui não afrouxa
+   *     nada: quem valida é o SDK, logo abaixo.
+   *
+   * Hoje o `onUploadCompleted` é vazio, então o 401 não quebrava o upload —
+   * só produzia retentativa e ruído no log. Mas é armadilha: no dia em que
+   * alguém puser lógica ali (registrar o blob no Firestore, por exemplo), ela
+   * silenciosamente nunca rodaria.
+   */
+  if (body.type === "blob.generate-client-token" && !(await isAdmin())) {
+    // `requireAdmin` redireciona, o que não serve para endpoint chamado por
+    // fetch — aqui a resposta certa é 401.
+    return NextResponse.json({ error: "Não autorizado." }, { status: 401 })
+  }
 
   try {
     const jsonResponse = await handleUpload({
