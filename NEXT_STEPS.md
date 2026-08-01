@@ -142,13 +142,28 @@ reescrever.
 
 ## 5. `BLOB_READ_WRITE_TOKEN` ausente no ambiente Preview
 
-O fluxo novo da Vercel não o cria ao conectar o store — o diálogo de conexão só
-oferece `BLOB_STORE_ID` e `BLOB_WEBHOOK_PUBLIC_KEY`, **e nenhum dos dois é lido
-pelo código**. Sem o token, só o upload de mídia recusa
-(`admin/media/actions.ts`); o resto do preview funciona.
+**A premissa antiga estava errada** (corrigido em 01/08, commit `803420b`). O
+token *é* criado automaticamente ao vincular o store — não é preciso caçá-lo.
+O que faltava era o **ambiente marcado na conexão**.
 
-Impacto baixo, porque **login não funciona em preview de qualquer forma** (ver
-`PROJECT_STATE.md` seção 3.1) — sem `/admin`, não há de onde subir mídia.
+**Como resolver:** Storage → o store `portfolio-midia` → aba **Projects** →
+menu de contexto (⋯) ao lado do projeto → **Update Project Connection** →
+marcar **Preview** (e **Development**, se quiser `vercel env pull` local).
+
+**O achado maior, que já virou correção:** stores vinculados hoje autenticam
+por **OIDC por padrão** — `BLOB_STORE_ID` + `VERCEL_OIDC_TOKEN`, credencial
+curta e rotacionada sozinha — com o token estático só como *fallback*. Nosso
+guarda checava apenas `BLOB_READ_WRITE_TOKEN` e por isso **recusava upload em
+ambiente onde o SDK funcionaria**. Agora aceita os dois caminhos.
+
+**Uma assimetria que fica, e é real:** gerar token de *cliente* (o upload
+direto de vídeo) **não** funciona por OIDC — exige o token estático. Por isso a
+rota `api/admin/blob-upload` responde 503 explicando, em vez de falhar opaco.
+Ou seja: num ambiente só-OIDC, imagem, áudio e PDF sobem; vídeo não.
+
+**Não verificado:** se o preview de fato sobe mídia por OIDC. Só um upload real
+prova — e login não funciona em preview (item 6), então na prática isso se
+verifica em produção.
 
 ## 6. Login em preview é impossível
 
@@ -188,8 +203,26 @@ Server Action chama `revalidateTag`.
 
 ## 9. Desligar o projeto Supabase
 
-Continua no ar como rede de segurança. Os caminhos críticos já foram validados
-(login, CRUD, cupom); só o upload falta (item 1). Desligar depois dele.
+**Conferido em 01/08 — é seguro apagar.** As checagens que importavam:
+
+| Checagem | Resultado |
+|---|---|
+| Dependência no `package.json` | nenhuma |
+| `@supabase/supabase-js` instalado | não |
+| **URLs do Supabase no Firestore** | **0**, em 170 documentos varridos |
+
+A última é a que evitaria o estrago: mídia migrou do Supabase Storage para o
+Vercel Blob, e uma URL remanescente viraria imagem quebrada — irreversível
+depois do delete. Varredura feita direto no banco de produção, só leitura.
+
+As 18 menções a "supabase" que sobram no Firestore são **conteúdo editorial**
+(snippets de código, ADRs, wiki, tags) — texto sobre a migração, não ligação
+viva.
+
+**Sobra um arquivo morto:** `scripts/fix-criativo-covers.mjs` importa
+`@supabase/supabase-js`, que não está instalado — já não roda. Apagar depois
+de desligar o projeto, para o repositório não guardar script que fala com
+serviço inexistente.
 
 **Como:** https://app.supabase.com → projeto → Settings → General → Delete
 project. **Irreversível.**

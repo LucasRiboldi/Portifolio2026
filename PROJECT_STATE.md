@@ -101,12 +101,12 @@ acontece em produção ou em `localhost`.
 | Firebase Auth | ✅ Habilitado. **Login verificado em produção** (01/08/2026) — fluxo OAuth completo, não só a rota respondendo |
 | Domínios autorizados (Auth) | ✅ `portifolio2026-two.vercel.app` acrescentado em 01/08. Ver seção 3.1 — previews continuam de fora, por construção |
 | Firebase Storage | ❌ Não usado — exige plano Blaze. Mídia vai para o Vercel Blob |
-| Vercel Blob | ✅ Store `portfolio-midia` criado e vinculado |
+| Vercel Blob | ✅ Store `portfolio-midia` criado e vinculado. Autentica por **OIDC** (`BLOB_STORE_ID` + `VERCEL_OIDC_TOKEN`) por padrão; o token estático é fallback e só ele serve para upload direto de vídeo |
 | Env vars (Production) | ✅ Completas, incluindo `FIREBASE_CLIENT_EMAIL` / `FIREBASE_PRIVATE_KEY` |
 | Env vars (Preview) | ✅ 10 variáveis definidas em 31/07 (Firebase cliente + Admin SDK + `ADMIN_GITHUB_LOGIN`). Falta só `BLOB_READ_WRITE_TOKEN` |
 | CI (GitHub Actions) | ✅ Dois jobs em paralelo: `build` (`tokens:check`, lint, unitários, build) e `integration` (emulador do Firestore, 21 casos). O de integração entrou em 01/08 e passou no primeiro run |
 | Protection Bypass | ✅ Ligado em 31/07 para permitir testar previews por `curl` |
-| Projeto Supabase antigo | ⚠️ Continua no ar como rede de segurança. Desligar quando o Firebase estiver validado |
+| Projeto Supabase antigo | ⚠️ No ar como rede de segurança, mas **conferido em 01/08: seguro apagar** — 0 URLs do Supabase em 170 documentos do Firestore, nenhuma dependência instalada |
 
 ---
 
@@ -183,9 +183,10 @@ npx firebase-tools deploy --only firestore --project portifolio-ac32a
 1. **Chave de conta de serviço do Firebase não rotacionada** e token da Vercel
    ainda válido nesta máquina. Higiene de credencial pendente.
 2. Projeto Supabase antigo ainda ativo (rede de segurança).
-3. `BLOB_READ_WRITE_TOKEN` ausente no ambiente **Preview** — só o upload de
-   mídia recusa lá; o resto do preview funciona. Impacto baixo: sem login em
-   preview, não há painel de onde subir mídia.
+3. `BLOB_READ_WRITE_TOKEN` ausente no ambiente **Preview** — falta marcar o
+   ambiente na conexão do store, não caçar o token. Sem ele, só o upload de
+   **vídeo** cai (token de cliente não sai por OIDC); imagem, áudio e PDF
+   sobem. Impacto baixo: sem login em preview, não há painel de onde subir.
 4. Actions do CI declaram Node 20 (forçado para 24 pelo runner). Aviso hoje,
    falha quando o suporte cair.
 5. CSP com `unsafe-inline` em `script-src`.
