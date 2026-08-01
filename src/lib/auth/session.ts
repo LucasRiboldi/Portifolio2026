@@ -14,6 +14,7 @@ import "server-only"
  * provider. Resolvemos o login uma única vez, na criação da sessão, e gravamos
  * como custom claim; daí em diante a checagem é local.
  */
+import { cache } from "react"
 import { cookies } from "next/headers"
 
 import { getAdminAuth } from "@/lib/firebase/admin"
@@ -95,10 +96,26 @@ export async function createSession(
  *
  * As claims são lidas do *registro* do usuário, não do cookie: claims gravadas
  * depois da emissão de um token só apareceriam nele na renovação seguinte (até
- * 1h de atraso). Consultar o registro custa uma chamada ao Admin SDK por request
- * autenticado — aceitável num painel de um usuário só, e sempre correto.
+ * 1h de atraso). Consultar o registro é o que mantém a decisão sempre correta.
+ *
+ * ------------------------------------------------------------------
+ * POR QUE `cache()` DO REACT, E NÃO UM CACHE COM PRAZO
+ * ------------------------------------------------------------------
+ * Cada chamada custa DUAS idas ao Admin SDK (`verifySessionCookie` e
+ * `getUser`), e um mesmo request costuma chamar isto mais de uma vez — o
+ * layout do `/admin` chama, e a Server Action que ele dispara chama de novo,
+ * dentro do mesmo request.
+ *
+ * `cache()` memoriza **dentro de um request** e esquece no seguinte. É o que
+ * elimina a repetição sem custo nenhum de correção: revogar uma claim ou uma
+ * sessão continua valendo já no próximo request.
+ *
+ * Um cache com prazo (mesmo "curto", 30s) compraria menos e custaria caro:
+ * abriria uma janela em que uma sessão revogada segue valendo. Num portão de
+ * admin, essa janela é exatamente o que não se quer — por isso não foi feito
+ * assim, e não é para "melhorar" depois.
  */
-export async function verifySession(): Promise<AppUser | null> {
+export const verifySession = cache(async (): Promise<AppUser | null> => {
   const store = await cookies()
   const cookie = store.get(SESSION_COOKIE)?.value
   if (!cookie) return null
@@ -118,7 +135,7 @@ export async function verifySession(): Promise<AppUser | null> {
   } catch {
     return null
   }
-}
+})
 
 /** Apaga o cookie e revoga os refresh tokens do usuário. */
 export async function destroySession(): Promise<void> {
