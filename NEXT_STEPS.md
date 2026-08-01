@@ -87,8 +87,13 @@ CLI, sem nunca tocar o `.env.local` — que é como refazer isto com segurança.
 
 ## 3. Revogar o token de acesso da Vercel
 
-Usado nesta máquina (https://vercel.com/account/tokens). Limpar a variável de
-usuário: `setx VERCEL_TOKEN ""`. Gerar outro só quando for preciso operar o CLI.
+**Metade já está feita.** Conferido em 01/08: a variável de usuário
+`VERCEL_TOKEN` **não existe mais** nesta máquina — o CLI autentica por
+credencial própria, guardada por ele. Nada a limpar aqui.
+
+**Falta:** revogar o token antigo em https://vercel.com/account/tokens, se
+ainda estiver listado. Ele não está em uso, mas continua válido até ser
+revogado.
 
 ---
 
@@ -96,40 +101,34 @@ usuário: `setx VERCEL_TOKEN ""`. Gerar outro só quando for preciso operar o CL
 
 ## 4. Gatilho do Prophet Wire
 
-**O que já foi provado, e o que falta.** Em 01/08 a lógica foi exercitada
-contra um Firestore real (`tests-integration/prophet-wire-persistencia.test.ts`,
-5 casos): acervo e histórico persistem entre execuções, a dedup reencontra o
-hash **no banco** — usando duas instâncias distintas de repositório, para imitar
-o cron, onde cada execução é um processo novo — e o portão recusa sem segredo.
+**Quase fechado.** O que já está provado, em 01/08:
 
-**Falta só o que exige credencial:** a variável de ambiente e um disparo real.
+| O quê | Como |
+|---|---|
+| Persistência e dedup entre execuções | `tests-integration/prophet-wire-persistencia.test.ts`, 5 casos contra Firestore real |
+| `CRON_SECRET` definido | Preview e Production, e há deployment posterior à variável |
+| Endpoint vivo e **falha fechada** | `curl` em produção: sem header → 401; segredo errado → 401 com erro genérico |
 
-**1. Gerar o segredo**
-
-```bash
-node -e "console.log(require('crypto').randomBytes(32).toString('base64url'))"
-```
-
-**2. Definir `CRON_SECRET` na Vercel** (Settings → Environment Variables →
-Production) e **redeployar** — variável só vale para deployment novo.
-
-**3. Disparar**
+**Falta só o caminho feliz — e só você pode rodar.** O segredo está marcado
+como *sensitive* na Vercel: `vercel env pull` devolve `[SENSITIVE]`, então nem
+o CLI o lê de volta. Quem tem o valor é quem o gerou.
 
 ```bash
-curl -i -X POST https://<site>/api/prophet-wire/run -H "Authorization: Bearer SEU_SEGREDO"
+curl -i -X POST https://portifolio2026-two.vercel.app/api/prophet-wire/run -H "Authorization: Bearer SEU_SEGREDO"
 ```
 
-**Pronto quando:** duas execuções seguidas aparecem em `/admin/prophet-wire` e a
-segunda não duplica o acervo.
+Rode **duas vezes** e confira `/admin/prophet-wire`.
+
+**Pronto quando:** as duas execuções aparecem no histórico e a segunda não
+duplica o acervo.
 
 **Ao ler o relatório, não se assuste:** `counters.published` conta **só** itens
 com status `publicado`. Como `config.publishMode` é `"rascunho"`, uma execução
 perfeita reporta `published: 0` — e é esse número que o painel mostra. O sinal
-de sucesso é `errors: 0` e o acervo crescendo em `/admin`, não esse contador.
+de sucesso é `errors: 0` e o acervo crescendo. Pelo mesmo motivo, disparar é
+seguro: **nada vai ao ar**, tudo entra como rascunho.
 
-Códigos: **401** = segredo errado ou variável não chegou ao deployment (a
-resposta é genérica de propósito; o motivo real vai para o log do projeto).
-**409** = execução concorrente — a trava é por processo, não coordena
+**409** = execução concorrente; a trava é por processo, não coordena
 instâncias.
 
 **Expectativa a calibrar:** a IA ainda é o `FallbackAIClient`. Sem
@@ -146,9 +145,15 @@ reescrever.
 token *é* criado automaticamente ao vincular o store — não é preciso caçá-lo.
 O que faltava era o **ambiente marcado na conexão**.
 
-**Como resolver:** Storage → o store `portfolio-midia` → aba **Projects** →
-menu de contexto (⋯) ao lado do projeto → **Update Project Connection** →
-marcar **Preview** (e **Development**, se quiser `vercel env pull` local).
+**Como resolver — só pelo painel.** Tentado por CLI em 01/08 e não dá: o token
+é *sensitive*, então `vercel env pull` devolve `[SENSITIVE]` e não há de onde
+copiar o valor para o Preview. O caminho é reconectar o store:
+Storage → `portfolio-midia` → aba **Projects** → menu de contexto (⋯) ao lado
+do projeto → **Update Project Connection** → marcar **Preview**.
+
+**Estado conferido em 01/08** (`vercel env ls`): o Preview já tem
+`BLOB_STORE_ID` e `BLOB_WEBHOOK_PUBLIC_KEY`; falta só o `BLOB_READ_WRITE_TOKEN`,
+que existe em Development e Production.
 
 **O achado maior, que já virou correção:** stores vinculados hoje autenticam
 por **OIDC por padrão** — `BLOB_STORE_ID` + `VERCEL_OIDC_TOKEN`, credencial
@@ -161,9 +166,10 @@ direto de vídeo) **não** funciona por OIDC — exige o token estático. Por is
 rota `api/admin/blob-upload` responde 503 explicando, em vez de falhar opaco.
 Ou seja: num ambiente só-OIDC, imagem, áudio e PDF sobem; vídeo não.
 
-**Não verificado:** se o preview de fato sobe mídia por OIDC. Só um upload real
-prova — e login não funciona em preview (item 6), então na prática isso se
-verifica em produção.
+**Prioridade real: baixa.** Com `BLOB_STORE_ID` presente e a correção do OIDC,
+imagem, áudio e PDF já deveriam subir no preview — mas **login não funciona em
+preview** (item 6), então não há painel de onde subir. Resolver isto só passa a
+importar se o item 6 for resolvido antes.
 
 ## 6. Login em preview é impossível
 
