@@ -3,8 +3,8 @@
 > Resumo executivo do estado real do projeto. Atualize a cada marco.
 > Para o conhecimento estável e detalhado, veja `docs/project-knowledge/`.
 >
-> **Última atualização:** 2026-08-01 (login em produção completado; CRUD e cupom
-> validados; upload de áudio/vídeo implementado)
+> **Última atualização:** 2026-08-01, depois do primeiro teste manual do painel
+> — o upload de mídia está QUEBRADO (seção 5)
 
 ---
 
@@ -101,7 +101,7 @@ acontece em produção ou em `localhost`.
 | Firebase Auth | ✅ Habilitado. **Login verificado em produção** (01/08/2026) — fluxo OAuth completo, não só a rota respondendo |
 | Domínios autorizados (Auth) | ✅ `portifolio2026-two.vercel.app` acrescentado em 01/08. Ver seção 3.1 — previews continuam de fora, por construção |
 | Firebase Storage | ❌ Não usado — exige plano Blaze. Mídia vai para o Vercel Blob |
-| Vercel Blob | ✅ Store `portfolio-midia` criado e vinculado. Autentica por **OIDC** (`BLOB_STORE_ID` + `VERCEL_OIDC_TOKEN`) por padrão; o token estático é fallback e só ele serve para upload direto de vídeo |
+| Vercel Blob | ❌ **Store não está servindo o que foi gravado** — URL de upload responde 404 (01/08). Vinculado. Autentica por **OIDC** (`BLOB_STORE_ID` + `VERCEL_OIDC_TOKEN`) por padrão; o token estático é fallback e só ele serve para upload direto de vídeo |
 | Env vars (Production) | ✅ Completas, incluindo `FIREBASE_CLIENT_EMAIL` / `FIREBASE_PRIVATE_KEY` |
 | Env vars (Preview) | ✅ 10 variáveis definidas em 31/07 (Firebase cliente + Admin SDK + `ADMIN_GITHUB_LOGIN`). Falta só `BLOB_READ_WRITE_TOKEN` |
 | CI (GitHub Actions) | ✅ Dois jobs em paralelo: `build` (`tokens:check`, lint, 580 unitários, build, **13 de fumaça**) e `integration` (emulador do Firestore, 21 casos). Integração e fumaça entraram em 01/08 |
@@ -128,9 +128,18 @@ persistiu. Prova três coisas de uma vez: a escrita chega ao Firestore, o
 
 **Ainda não exercido:**
 
-- **Upload de mídia.** O de imagem nunca foi executado. Áudio, vídeo e PDF
-  eram impossíveis até 01/08 (ver seção 9) e o caminho novo **não foi testado
-  no ar** — build e testes passam, o que não é a mesma coisa.
+- **❌ Upload de mídia: QUEBRADO.** Testado manualmente em 01/08 e falhou de
+  três formas. (a) O arquivo **não chega ao Blob**: um mp3 gravou a URL no
+  Firestore e ela responde **404** — é por isso que o player do rádio não
+  toca. (b) O teto real é **4,5 MB da plataforma**, não os 25 MB anunciados:
+  um PDF de 4,52 MB falhou com "An unexpected response was received from the
+  server"; o `bodySizeLimit: "26mb"` não manda. (c) O vídeo trava em
+  "Enviando…" para sempre, sem erro e sem progresso.
+
+  **A lição:** os 580 testes unitários não pegaram nenhum dos três, porque
+  todos param na borda do nosso código — nenhum chega ao Blob de verdade. O
+  teste manual de dez minutos valeu mais que as três suítes. Detalhes e o
+  próximo passo em `NEXT_STEPS.md` itens 1 a 4.
 - **Gatilho do Prophet Wire em produção** — `CRON_SECRET` está vazio. A lógica
   já foi exercitada contra Firestore real em 01/08 (persistência, dedup pelo
   hash no banco, histórico e o portão fechado): falta só a variável de ambiente
