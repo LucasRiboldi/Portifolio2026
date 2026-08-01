@@ -178,16 +178,19 @@ na allowlist de *Authorized domains* — não há como pré-autorizar. Saída, s
 incomodar: alias fixo de branch na Vercel, autorizado uma vez no console.
 Detalhes em `PROJECT_STATE.md` seção 3.1.
 
-## 7. Refatoração (Fase 5) — parcialmente feita
+## 7. Refatoração (Fase 5) — resta um alvo, e ele é de oportunidade
 
-Alvos concretos que restam:
-- `verifySession()` consulta o Admin SDK a cada request autenticado. Correto,
-  mas cacheável por curta janela se o volume crescer.
-- Convenção de idioma mista na camada de dados (`buscarLinhas` vs.
-  `listContactMessages`). Padronizar ao tocar em cada módulo, não num varredão.
+**Fechados:**
+- blocos repetidos em `lib/admin/sync-content.ts` (31/07, `712beca`);
+- `verifySession()` consultava o Admin SDK a cada chamada, e um mesmo request
+  chamava mais de uma vez — layout do `/admin` e a Server Action que ele
+  dispara. Deduplicado com `cache()` do React em 01/08 (`2b72d3f`). **Não troque
+  por cache com prazo**: a razão está no comentário da função.
 
-O primeiro alvo (blocos repetidos em `lib/admin/sync-content.ts`) saiu em
-31/07 (commit `712beca`).
+**Resta:** convenção de idioma mista na camada de dados (`buscarLinhas` vs.
+`listContactMessages`). Padronizar **ao tocar em cada módulo**, não num
+varredão — renomear tudo de uma vez produz um diff enorme, sem
+comportamento novo, que atrapalha o `git blame` de todo o resto.
 
 ## 8. Reescrever o conteúdo do arcano
 
