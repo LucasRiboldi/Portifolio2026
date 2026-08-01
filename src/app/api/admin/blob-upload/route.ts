@@ -31,6 +31,21 @@ export async function POST(request: Request): Promise<NextResponse> {
     return NextResponse.json({ error: "Não autorizado." }, { status: 401 })
   }
 
+  // Diferente do upload por Server Action, que também funciona por OIDC
+  // (`BLOB_STORE_ID` + `VERCEL_OIDC_TOKEN`): emitir token de CLIENTE exige o
+  // token estático. Sem ele o SDK falharia lá dentro com mensagem genérica —
+  // melhor dizer exatamente o que falta.
+  if (!process.env.BLOB_READ_WRITE_TOKEN) {
+    return NextResponse.json(
+      {
+        error:
+          "Upload de vídeo indisponível: BLOB_READ_WRITE_TOKEN ausente neste ambiente. " +
+          "Imagem, áudio e PDF continuam funcionando.",
+      },
+      { status: 503 },
+    )
+  }
+
   const body = (await request.json()) as HandleUploadBody
 
   try {

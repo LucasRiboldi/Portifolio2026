@@ -33,10 +33,26 @@ import {
 } from "@/lib/admin/media-validate"
 import { DEFAULT_CLASSES, MAX_BYTES, PREFIX, type MediaClass } from "@/lib/admin/media-accept"
 
-/** True quando há token de escrita — injetado pela Vercel ao vincular o store. */
-const temBlob = Boolean(process.env.BLOB_READ_WRITE_TOKEN)
+/**
+ * True quando o SDK consegue falar com o store.
+ *
+ * São DOIS caminhos de autenticação, e checar só o primeiro estava barrando
+ * ambiente que funcionaria:
+ *
+ *   • `BLOB_READ_WRITE_TOKEN` — token longo, estático;
+ *   • OIDC — `BLOB_STORE_ID` + `VERCEL_OIDC_TOKEN`, que é o **padrão** dos
+ *     stores vinculados hoje (credencial curta, rotacionada sozinha).
+ *
+ * O `VERCEL_OIDC_TOKEN` é emitido em runtime, então não pode ser lido no topo
+ * do módulo — daí isto ser função, e não const. `BLOB_STORE_ID` basta como
+ * sinal de que o store está vinculado.
+ */
+function temBlob(): boolean {
+  return Boolean(process.env.BLOB_READ_WRITE_TOKEN || process.env.BLOB_STORE_ID)
+}
 
-const SEM_TOKEN = "Armazenamento de mídia não configurado (BLOB_READ_WRITE_TOKEN ausente)."
+const SEM_TOKEN =
+  "Armazenamento de mídia não configurado (nem BLOB_READ_WRITE_TOKEN nem BLOB_STORE_ID presentes)."
 
 export interface MediaItem {
   name: string
@@ -62,7 +78,7 @@ function lerClasses(bruto: FormDataEntryValue | null): MediaClass[] {
 
 export async function listMedia(): Promise<MediaResult<MediaItem[]>> {
   await requireAdmin()
-  if (!temBlob) return { ok: false, error: SEM_TOKEN }
+  if (!temBlob()) return { ok: false, error: SEM_TOKEN }
 
   try {
     const { blobs } = await list({ prefix: `${PREFIX}/`, limit: 100 })
@@ -79,7 +95,7 @@ export async function listMedia(): Promise<MediaResult<MediaItem[]>> {
 
 export async function uploadMedia(formData: FormData): Promise<MediaResult<MediaItem>> {
   await requireAdmin()
-  if (!temBlob) return { ok: false, error: SEM_TOKEN }
+  if (!temBlob()) return { ok: false, error: SEM_TOKEN }
 
   const file = formData.get("file")
   if (!(file instanceof File)) return { ok: false, error: "Nenhum arquivo recebido." }
@@ -117,7 +133,7 @@ export async function uploadMedia(formData: FormData): Promise<MediaResult<Media
 
 export async function deleteMedia(name: string): Promise<MediaResult<null>> {
   await requireAdmin()
-  if (!temBlob) return { ok: false, error: SEM_TOKEN }
+  if (!temBlob()) return { ok: false, error: SEM_TOKEN }
 
   // Só aceita o formato de nome que nós geramos — nada de caminhos.
   if (!isSafeObjectName(name)) return { ok: false, error: "Nome de arquivo inválido." }
