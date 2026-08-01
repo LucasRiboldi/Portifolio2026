@@ -5,15 +5,15 @@
  * (espelho de `config.cron`), enviando `Authorization: Bearer $CRON_SECRET`.
  * A rota monta as dependências reais e executa `runPipeline()` uma vez.
  *
- * LIMITAÇÃO CONHECIDA, declarada de propósito: o repositório em uso é o
- * in-memory, que vive só enquanto a invocação serverless existe — ou seja, hoje
- * a execução processa as fontes e produz o relatório, mas NÃO persiste entre
- * execuções (e portanto a deduplicação entre dias não tem memória). Isso passa a
- * valer de verdade com o repositório do Firestore ligado; a troca é de
- * uma linha aqui, porque tudo fala com a interface `NewsRepository`.
+ * PERSISTÊNCIA: `defaultRepository()` e `defaultRunStore()` escolhem a impl
+ * pelo ambiente — Firestore quando há credencial de Admin SDK, in-memory
+ * quando não há. Em produção, portanto, acervo e histórico PERSISTEM entre
+ * execuções e a deduplicação entre dias tem memória. Sem credencial (teste
+ * local, preview sem env) cai no in-memory, que vive só enquanto a invocação
+ * serverless existe — é o fallback honesto, não o caminho normal.
  *
- * Mesma razão para a IA: enquanto não houver `ANTHROPIC_API_KEY` e um cliente
- * real, o `FallbackAIClient` mantém o pipeline rodando com o conteúdo bruto.
+ * A IA ainda é o `FallbackAIClient`: enquanto não houver `ANTHROPIC_API_KEY` e
+ * um cliente real, o pipeline roda com o conteúdo bruto.
  */
 
 import { NextResponse } from "next/server"
