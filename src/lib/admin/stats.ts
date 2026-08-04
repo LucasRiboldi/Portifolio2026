@@ -3,7 +3,7 @@ import "server-only"
 import { contarDocs } from "@/lib/firebase/collection"
 import { isFirebaseAdminConfigured } from "@/lib/firebase/admin"
 
-const TABLES = ["projects", "posts", "skills", "tools"] as const
+const TABLES = ["projects", "skills", "tools"] as const
 
 export interface AdminStats {
   configured: boolean

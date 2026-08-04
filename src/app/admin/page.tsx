@@ -7,7 +7,6 @@ import { SyncContentButton } from "@/components/admin/sync-content-button"
 
 const CARDS = [
   { key: "projects", label: "Projetos", href: "/admin/projects", icon: FolderKanban, color: "var(--mm-primary)", light: "var(--mm-light-primary)" },
-  { key: "posts", label: "Posts", href: "/admin/posts", icon: FileText, color: "var(--mm-secondary)", light: "var(--mm-light-secondary)" },
   { key: "skills", label: "Skills", href: "/admin/skills", icon: Sparkles, color: "var(--mm-success)", light: "var(--mm-light-success)" },
   { key: "tools", label: "Ferramentas", href: "/admin/tools", icon: Wrench, color: "var(--mm-warning)", light: "var(--mm-light-warning)" },
 ]
@@ -84,7 +83,7 @@ export default async function AdminDashboard() {
             <>
               <h2 className="font-semibold">Banco vazio — importe o conteúdo atual</h2>
               <p className="mb-4 mt-1 text-sm" style={{ color: "var(--mm-text-2)" }}>
-                Copia projetos, posts, skills, ferramentas, config e realms do código
+                Copia projetos, skills, ferramentas, config e realms do código
                 para o Firestore. Só popula coleções vazias.
               </p>
               <SeedButton />
@@ -94,7 +93,7 @@ export default async function AdminDashboard() {
               <h2 className="font-semibold">Tudo sincronizado</h2>
               <p className="mb-4 mt-1 text-sm" style={{ color: "var(--mm-text-2)" }}>
                 O conteúdo do site é servido do banco. Edições publicam em segundos.
-                Se você acrescentou projetos, ferramentas ou posts no código, publique-os aqui —
+                Se você acrescentou projetos ou ferramentas no código, publique-os aqui —
                 só o que falta é inserido, nada que você editou no painel é sobrescrito.
               </p>
               <SyncContentButton />

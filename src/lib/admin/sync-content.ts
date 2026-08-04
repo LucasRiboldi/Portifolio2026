@@ -16,9 +16,8 @@ import "server-only"
  */
 import { atualizarOnde, gravarLote, idNatural, listarCampos } from "@/lib/firebase/collection"
 import { projects } from "@/data/projects"
-import { posts } from "@/data/posts"
 import { tools } from "@/data/tools"
-import { devlogs, labExperiments, snippets, wikiDocs, ideas } from "@/data/dev"
+import { devlogs, labExperiments, snippets } from "@/data/dev"
 import { artworks, comics, movies, notes, strips, tracks, videos } from "@/data/criativo-zones"
 import { materias } from "@/data/anfitriao-materias"
 import {
@@ -70,7 +69,7 @@ async function inserirFaltantes<T>(
   paraLinha: (item: T) => Record<string, unknown>,
   /**
    * Os três casos especiais que sobraram de fora do helper (`projects`,
-   * `tools`, `posts`) precisavam de apenas isto para caber aqui. Sem estes
+   * `tools`) precisavam de apenas isto para caber aqui. Sem estes
    * ganchos, o jeito de acomodá-los era repetir o ritual inteiro — que foi
    * exatamente o que aconteceu, e o que esta refatoração desfaz.
    */
@@ -174,33 +173,10 @@ export async function syncNewContent(): Promise<SyncReport> {
       }),
     ))
 
-  // ─── Posts (chave: slug) ───
-  // O `id` do documento continua sendo o slug: `idNatural` o encontra no
-  // próprio `dados`, então o comportamento não muda ao passar pelo helper.
-  await tentar("posts", () =>
-    inserirFaltantes(
-      "posts",
-      "slug",
-      posts,
-      (p) => p.slug,
-      (p) => ({
-        slug: p.slug,
-        title: p.title,
-        excerpt: p.excerpt,
-        date: p.date,
-        reading_minutes: p.readingMinutes,
-        tags: p.tags,
-        accent: p.accent,
-        body: p.body,
-        published: true,
-      }),
-      // O relatório sempre mostrou o título, não o slug.
-      { rotuloDe: (p) => p.title },
-    ))
 
   // ─── Realm dev ────────────────────────────────────────────────────────
-  // Estas cinco tabelas existiam no banco desde a migration 0003, mas não
-  // tinham caminho nenhum de publicação: nem seed, nem sync, nem arquivo em
+  // Estas tabelas existiam no banco desde a migration 0003, mas não tinham
+  // caminho nenhum de publicação: nem seed, nem sync, nem arquivo em
   // `src/data`. Na prática, o acervo técnico do laboratório só podia ser
   // escrito à mão pelo painel — e por isso estava vazio.
 
@@ -254,35 +230,6 @@ export async function syncNewContent(): Promise<SyncReport> {
     }),
   ))
 
-  await tentar("wiki", () =>
-    inserirFaltantes(
-    "wiki",
-    "slug",
-    wikiDocs,
-    (w) => w.slug,
-    (w) => ({
-      slug: w.slug,
-      title: w.title,
-      category: w.category,
-      body: w.body,
-      published: true,
-    }),
-  ))
-
-  await tentar("ideas", () =>
-    inserirFaltantes(
-    "ideas",
-    "title",
-    ideas,
-    (i) => i.title,
-    (i) => ({
-      title: i.title,
-      description: i.description,
-      status: i.status,
-      tags: i.tags,
-      published: true,
-    }),
-  ))
 
   // ─── Zonas do realm criativo ──────────────────────────────────────────
   // Mesmo buraco das tabelas do dev, por outro caminho: as sete zonas

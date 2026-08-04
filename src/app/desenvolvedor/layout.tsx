@@ -3,6 +3,10 @@ import "@/styles/dracula.css"
 // padrões). Depois de `dracula.css` de propósito: compõe com as classes de
 // lá e nunca as redefine.
 import "@/styles/dev-acervo.css"
+// Módulo de estudos do 3º semestre. Carregado pelo layout, e não pela rota,
+// porque o brilho verde dos menus das disciplinas precisa existir em toda
+// página do realm — senão o dock muda de aparência conforme onde se está.
+import "@/styles/estudos.css"
 
 import type { ReactNode } from "react"
 import type { Metadata } from "next"

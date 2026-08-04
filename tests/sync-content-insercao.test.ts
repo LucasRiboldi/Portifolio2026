@@ -8,7 +8,7 @@ import { describe, it, expect, vi, beforeEach } from "vitest"
  * então continuaria verde se a lógica de inserção fosse trocada por outra
  * errada. Este arquivo cobre o que aquele não pode: o que é gravado.
  *
- * Escrito junto da refatoração que dobrou `projects`, `tools` e `posts` dentro
+ * Escrito junto da refatoração que dobrou `projects` e `tools` dentro
  * de `inserirFaltantes` (31/07/2026). Sem ele o refactor teria como única
  * evidência "os 535 testes continuam passando" — e nenhum deles tocava nisto.
  */
@@ -21,7 +21,7 @@ const { listarCampos, gravarLote, atualizarOnde } = vi.hoisted(() => ({
 
 vi.mock("@/lib/firebase/collection", async () => {
   // `idNatural` é lógica pura e faz parte do que se quer verificar (o id do
-  // post precisa sair do slug), então usa-se o real.
+  // documento precisa sair do slug), então usa-se o real.
   const real = await vi.importActual<typeof import("@/lib/firebase/collection")>(
     "@/lib/firebase/collection",
   )
@@ -30,7 +30,7 @@ vi.mock("@/lib/firebase/collection", async () => {
 
 const { syncNewContent } = await import("@/lib/admin/sync-content")
 const { projects } = await import("@/data/projects")
-const { posts } = await import("@/data/posts")
+const { prophetTutorials } = await import("@/data/prophet-arcano")
 
 /** Captura o que foi gravado numa tabela específica. */
 function gravadosEm(tabela: string) {
@@ -87,11 +87,11 @@ describe("syncNewContent — destaque da home", () => {
 })
 
 describe("syncNewContent — identidade dos documentos", () => {
-  it("post é gravado com o slug como id", async () => {
+  it("tutorial é gravado com o slug como id", async () => {
     await syncNewContent()
 
-    const gravados = gravadosEm("posts")
-    expect(gravados.length).toBe(posts.length)
+    const gravados = gravadosEm("prophet_tutorials")
+    expect(gravados.length).toBe(prophetTutorials.length)
     for (const g of gravados) expect(g.id).toBe(g.dados.slug)
   })
 
@@ -103,13 +103,13 @@ describe("syncNewContent — identidade dos documentos", () => {
 })
 
 describe("syncNewContent — relatório", () => {
-  it("posts aparecem pelo título, não pelo slug", async () => {
+  it("tutoriais aparecem pelo título, não pelo slug", async () => {
     const r = await syncNewContent()
 
-    const titulos = posts.map((p) => p.title)
-    expect(r.inseridos.posts).toEqual(titulos)
+    const titulos = prophetTutorials.map((t) => t.title)
+    expect(r.inseridos.prophet_tutorials).toEqual(titulos)
     // O slug seria o valor "natural" a vazar aqui se o rótulo se perdesse.
-    for (const p of posts) expect(r.inseridos.posts).not.toContain(p.slug)
+    for (const t of prophetTutorials) expect(r.inseridos.prophet_tutorials).not.toContain(t.slug)
   })
 
   it("uma tabela quebrada não impede as outras", async () => {
@@ -122,6 +122,6 @@ describe("syncNewContent — relatório", () => {
 
     expect(r.falhas.projects).toContain("índice ausente")
     expect(r.inseridos.projects).toEqual([])
-    expect(r.inseridos.posts?.length ?? 0).toBeGreaterThan(0)
+    expect(r.inseridos.tools?.length ?? 0).toBeGreaterThan(0)
   })
 })

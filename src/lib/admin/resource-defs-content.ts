@@ -1,5 +1,5 @@
 /**
- * Recursos de conteúdo textual: projetos, posts, skills, ferramentas, devlogs, ideias, snippets, wiki, lab e tutoriais.
+ * Recursos de conteúdo textual: projetos, skills, ferramentas, devlogs, snippets, lab e tutoriais.
  * Parte da configuração de recursos do /admin — ver resource-types.ts para os
  * tipos/helpers e resources.ts para a montagem do mapa RESOURCES.
  */
@@ -54,53 +54,6 @@ export const CONTENT_RESOURCES: Record<string, ResourceConfig> = {
       href: optText,
       readme: z.string().default(""),
       featured: bool,
-      published: bool,
-      sort: int,
-    }),
-  },
-
-  posts: {
-    slug: "posts",
-    label: "Blog",
-    singular: "Post",
-    tag: CACHE_TAGS.posts,
-    orderBy: { column: "date", ascending: false },
-    columns: [
-      { name: "title", label: "Título" },
-      { name: "date", label: "Data" },
-      { name: "published", label: "Publicado" },
-    ],
-    fields: [
-      { name: "title", label: "Título", type: "text", required: true },
-      { name: "slug", label: "Slug", type: "text", required: true, help: "url-amigável, único" },
-      { name: "excerpt", label: "Resumo", type: "textarea" },
-      { name: "date", label: "Data", type: "text", placeholder: "2026-07-14" },
-      { name: "reading_minutes", label: "Minutos de leitura", type: "number" },
-      { name: "tags", label: "Tags", type: "tags" },
-      {
-        name: "accent",
-        label: "Cor de destaque",
-        type: "select",
-        options: [
-          { value: "magenta", label: "Magenta" },
-          { value: "cyan", label: "Cyan" },
-          { value: "lime", label: "Lime" },
-          { value: "violet", label: "Violet" },
-        ],
-      },
-      { name: "body", label: "Conteúdo (Markdown)", type: "markdown" },
-      { name: "published", label: "Publicado", type: "boolean" },
-      { name: "sort", label: "Ordem", type: "number" },
-    ],
-    schema: z.object({
-      title: z.string().min(1, "Título obrigatório"),
-      slug: z.string().min(1, "Slug obrigatório").regex(/^[a-z0-9-]+$/, "use minúsculas, números e hífens"),
-      excerpt: z.string().default(""),
-      date: z.string().default(() => new Date().toISOString().slice(0, 10)),
-      reading_minutes: int,
-      tags: tagList,
-      accent: z.enum(["magenta", "cyan", "lime", "violet"]).default("magenta"),
-      body: z.string().default(""),
       published: bool,
       sort: int,
     }),
@@ -232,46 +185,6 @@ export const CONTENT_RESOURCES: Record<string, ResourceConfig> = {
       sort: int,
     }),
   },
-
-  ideas: {
-    slug: "ideas",
-    label: "Ideias",
-    singular: "Ideia",
-    tag: CACHE_TAGS.ideas,
-    orderBy: { column: "sort", ascending: true },
-    columns: [
-      { name: "title", label: "Título" },
-      { name: "status", label: "Status" },
-    ],
-    fields: [
-      { name: "title", label: "Título", type: "text", required: true },
-      { name: "description", label: "Descrição", type: "textarea" },
-      {
-        name: "status",
-        label: "Status",
-        type: "select",
-        options: [
-          { value: "idea", label: "Ideia" },
-          { value: "mvp", label: "MVP" },
-          { value: "building", label: "Em construção" },
-          { value: "paused", label: "Pausado" },
-          { value: "done", label: "Concluído" },
-        ],
-      },
-      { name: "tags", label: "Tags", type: "tags" },
-      { name: "published", label: "Publicado", type: "boolean" },
-      { name: "sort", label: "Ordem", type: "number" },
-    ],
-    schema: z.object({
-      title: z.string().min(1, "Título obrigatório"),
-      description: z.string().default(""),
-      status: z.enum(["idea", "mvp", "building", "paused", "done"]).default("idea"),
-      tags: tagList,
-      published: bool,
-      sort: int,
-    }),
-  },
-
   snippets: {
     slug: "snippets",
     label: "Código",
@@ -297,34 +210,6 @@ export const CONTENT_RESOURCES: Record<string, ResourceConfig> = {
       description: z.string().default(""),
       code: z.string().default(""),
       tags: tagList,
-      published: bool,
-      sort: int,
-    }),
-  },
-
-  wiki: {
-    slug: "wiki",
-    label: "Wiki",
-    singular: "Página",
-    tag: CACHE_TAGS.wiki,
-    orderBy: { column: "sort", ascending: true },
-    columns: [
-      { name: "title", label: "Título" },
-      { name: "category", label: "Categoria" },
-    ],
-    fields: [
-      { name: "title", label: "Título", type: "text", required: true },
-      { name: "slug", label: "Slug", type: "text", required: true },
-      { name: "category", label: "Categoria", type: "text", placeholder: "Geral" },
-      { name: "body", label: "Conteúdo (Markdown)", type: "markdown" },
-      { name: "published", label: "Publicado", type: "boolean" },
-      { name: "sort", label: "Ordem", type: "number" },
-    ],
-    schema: z.object({
-      title: z.string().min(1, "Título obrigatório"),
-      slug: z.string().min(1).regex(/^[a-z0-9-]+$/, "minúsculas, números e hífens"),
-      category: z.string().default("Geral"),
-      body: z.string().default(""),
       published: bool,
       sort: int,
     }),

@@ -163,20 +163,6 @@
       ]
     },
     {
-      "collectionGroup": "posts",
-      "queryScope": "COLLECTION",
-      "fields": [
-        {
-          "fieldPath": "published",
-          "order": "ASCENDING"
-        },
-        {
-          "fieldPath": "date",
-          "order": "DESCENDING"
-        }
-      ]
-    },
-    {
       "collectionGroup": "devlogs",
       "queryScope": "COLLECTION",
       "fields": [
@@ -191,35 +177,7 @@
       ]
     },
     {
-      "collectionGroup": "ideas",
-      "queryScope": "COLLECTION",
-      "fields": [
-        {
-          "fieldPath": "published",
-          "order": "ASCENDING"
-        },
-        {
-          "fieldPath": "sort",
-          "order": "ASCENDING"
-        }
-      ]
-    },
-    {
       "collectionGroup": "snippets",
-      "queryScope": "COLLECTION",
-      "fields": [
-        {
-          "fieldPath": "published",
-          "order": "ASCENDING"
-        },
-        {
-          "fieldPath": "sort",
-          "order": "ASCENDING"
-        }
-      ]
-    },
-    {
-      "collectionGroup": "wiki",
       "queryScope": "COLLECTION",
       "fields": [
         {

@@ -5,7 +5,6 @@
  */
 
 export type ProjectCategory = "design" | "code" | "art" | "image"
-export type PostAccent = "magenta" | "cyan" | "lime" | "violet"
 export type SkillCategory =
   | "frontend"
   | "design"
@@ -32,21 +31,6 @@ export interface ProjectRow {
   updated_at: string
 }
 
-export interface PostRow {
-  id: string
-  slug: string
-  title: string
-  excerpt: string
-  date: string
-  reading_minutes: number
-  tags: string[]
-  accent: PostAccent
-  body: string
-  published: boolean
-  sort: number
-  created_at: string
-  updated_at: string
-}
 
 export interface SkillRow {
   id: string
@@ -116,7 +100,6 @@ export interface Database {
   public: {
     Tables: {
       projects: Table<ProjectRow>
-      posts: Table<PostRow>
       skills: Table<SkillRow>
       tools: Table<ToolRow>
       site_config: Table<SiteConfigRow>

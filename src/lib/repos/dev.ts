@@ -14,13 +14,6 @@ export interface DevlogRow {
   body: string
   tags: string[]
 }
-export interface IdeaRow {
-  id: string
-  title: string
-  description: string
-  status: string
-  tags: string[]
-}
 export interface SnippetRow {
   id: string
   title: string
@@ -28,13 +21,6 @@ export interface SnippetRow {
   description: string
   code: string
   tags: string[]
-}
-export interface WikiRow {
-  id: string
-  slug: string
-  title: string
-  category: string
-  body: string
 }
 export interface LabRow {
   id: string
@@ -62,7 +48,5 @@ function publishedReader<T>(table: string, tag: string, order: string, asc: bool
 }
 
 export const getDevlogs = publishedReader<DevlogRow>("devlogs", CACHE_TAGS.devlogs, "date", false)
-export const getIdeas = publishedReader<IdeaRow>("ideas", CACHE_TAGS.ideas, "sort", true)
 export const getSnippets = publishedReader<SnippetRow>("snippets", CACHE_TAGS.snippets, "sort", true)
-export const getWiki = publishedReader<WikiRow>("wiki", CACHE_TAGS.wiki, "sort", true)
 export const getLab = publishedReader<LabRow>("lab_experiments", CACHE_TAGS.lab, "sort", true)

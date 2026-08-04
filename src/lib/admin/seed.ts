@@ -7,7 +7,6 @@ import "server-only"
  */
 import { contarDocs, gravarLote, idNatural } from "@/lib/firebase/collection"
 import { projects } from "@/data/projects"
-import { posts } from "@/data/posts"
 import { skills } from "@/data/skills"
 import { tools } from "@/data/tools"
 import { siteConfig } from "@/constants/site"
@@ -20,7 +19,7 @@ import {
   tracks,
   videos,
 } from "@/data/criativo-zones"
-import { devlogs, labExperiments, snippets, wikiDocs, ideas } from "@/data/dev"
+import { devlogs, labExperiments, snippets } from "@/data/dev"
 import { materias } from "@/data/anfitriao-materias"
 import {
   prophetTutorials,
@@ -64,22 +63,6 @@ export async function seedDatabase(): Promise<SeedReport> {
       cover_image: p.coverImage,
       href: p.href ?? null,
       featured: p.featured ?? false,
-      published: true,
-      sort: i,
-    })),
-  )
-
-  report.posts = await seedIfEmpty(
-    "posts",
-    posts.map((p, i) => ({
-      slug: p.slug,
-      title: p.title,
-      excerpt: p.excerpt,
-      date: p.date,
-      reading_minutes: p.readingMinutes,
-      tags: p.tags,
-      accent: p.accent,
-      body: p.body,
       published: true,
       sort: i,
     })),
@@ -212,30 +195,6 @@ export async function seedDatabase(): Promise<SeedReport> {
       description: s.description,
       code: s.code,
       tags: s.tags,
-      published: true,
-      sort: i,
-    })),
-  )
-
-  report.wiki = await seedIfEmpty(
-    "wiki",
-    wikiDocs.map((w, i) => ({
-      slug: w.slug,
-      title: w.title,
-      category: w.category,
-      body: w.body,
-      published: true,
-      sort: i,
-    })),
-  )
-
-  report.ideas = await seedIfEmpty(
-    "ideas",
-    ideas.map((x, i) => ({
-      title: x.title,
-      description: x.description,
-      status: x.status,
-      tags: x.tags,
       published: true,
       sort: i,
     })),

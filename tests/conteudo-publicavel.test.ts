@@ -3,7 +3,7 @@ import path from "node:path"
 
 import { describe, it, expect } from "vitest"
 
-import { devlogs, labExperiments, snippets, wikiDocs, ideas } from "@/data/dev"
+import { devlogs, labExperiments, snippets } from "@/data/dev"
 import { artworks, comics, movies, notes, strips, tracks, videos } from "@/data/criativo-zones"
 
 /**
@@ -34,18 +34,18 @@ describe("toda tabela lida tem caminho de publicação", () => {
   /** As tabelas que o realm dev realmente lê, extraídas do repositório. */
   const tabelas = [...REPO_DEV.matchAll(/publishedReader<\w+>\("(\w+)"/g)].map((m) => m[1]!)
 
-  it("o repositório declara as cinco tabelas do realm", () => {
-    expect(tabelas.sort()).toEqual(["devlogs", "ideas", "lab_experiments", "snippets", "wiki"])
+  it("o repositório declara as tabelas do realm", () => {
+    expect(tabelas.sort()).toEqual(["devlogs", "lab_experiments", "snippets"])
   })
 
-  it.each(["devlogs", "ideas", "lab_experiments", "snippets", "wiki"])(
+  it.each(["devlogs", "lab_experiments", "snippets"])(
     "`%s` é publicável pelo sync do /admin",
     (tabela) => {
       expect(SYNC).toContain(`"${tabela}"`)
     },
   )
 
-  it.each(["devlogs", "ideas", "lab_experiments", "snippets", "wiki"])(
+  it.each(["devlogs", "lab_experiments", "snippets"])(
     "`%s` entra no seed de banco novo",
     (tabela) => {
       expect(SEED).toContain(`"${tabela}"`)
@@ -110,7 +110,7 @@ describe("uma tabela quebrada não cala as outras", () => {
   })
 
   it("o isolamento cobre as tabelas de escrita direta", () => {
-    for (const tabela of ["projects", "tools", "posts"]) {
+    for (const tabela of ["projects", "tools"]) {
       expect(SYNC).toContain(`tentar("${tabela}"`)
     }
   })
@@ -161,8 +161,6 @@ describe("o acervo não está vazio", () => {
     ["devlogs", devlogs.length],
     ["experimentos", labExperiments.length],
     ["snippets", snippets.length],
-    ["wiki", wikiDocs.length],
-    ["ideias", ideas.length],
   ])("%s tem conteúdo", (_nome, total) => {
     expect(total).toBeGreaterThan(3)
   })
@@ -177,10 +175,8 @@ describe("chaves naturais", () => {
    */
   it.each([
     ["devlogs.slug", devlogs.map((d) => d.slug)],
-    ["wiki.slug", wikiDocs.map((w) => w.slug)],
     ["lab.title", labExperiments.map((x) => x.title)],
     ["snippets.title", snippets.map((s) => s.title)],
-    ["ideas.title", ideas.map((i) => i.title)],
   ])("%s não repete", (_campo, valores) => {
     const repetidos = valores.filter((v, i) => valores.indexOf(v) !== i)
     expect(repetidos).toEqual([])
@@ -188,9 +184,7 @@ describe("chaves naturais", () => {
 
   it("os status respeitam o CHECK da migration 0003", () => {
     const statusLab = new Set(["wip", "playtest", "stable", "archived"])
-    const statusIdeia = new Set(["idea", "mvp", "building", "paused", "done"])
     expect(labExperiments.filter((x) => !statusLab.has(x.status))).toEqual([])
-    expect(ideas.filter((i) => !statusIdeia.has(i.status))).toEqual([])
   })
 
   it("as datas dos devlogs são válidas e não vêm do futuro", () => {

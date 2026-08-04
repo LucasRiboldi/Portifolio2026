@@ -133,8 +133,12 @@ describe("recursos e banco", () => {
  * leitor que nenhuma página chamava. Conteúdo era escrito, publicado e ficava
  * inalcançável — sem nada no código para acusar.
  *
- * Os sete ganharam página na mesma passagem, e a lista está vazia. Ela
- * permanece como trava nos dois sentidos: órfão novo faz o teste falhar, e
+ * Os sete ganharam página na mesma passagem, e a lista está vazia. Em
+ * 04/08/2026 as rotas de blog, wiki e ideias do realm dev saíram a pedido, e
+ * com elas o CRUD, o seed e os dados dos três — a lista continua vazia porque
+ * o conteúdo foi embora junto com a página, não porque ninguém olhou.
+ *
+ * Ela permanece como trava nos dois sentidos: órfão novo faz o teste falhar, e
  * órfão resolvido também — obrigando quem resolveu a atualizar o registro em
  * vez de deixar a lista mentir.
  */

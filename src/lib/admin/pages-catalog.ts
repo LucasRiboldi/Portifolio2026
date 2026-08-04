@@ -52,9 +52,7 @@ export const PAGE_GROUPS: PageGroup[] = [
       { key: "dev.laboratorio", label: "Laboratório", kicker: "lab.run", title: "Laboratório", highlight: "// experimentos", subtitle: "Testes de código, componentes, APIs e modelos de IA — protótipos em andamento.", ...cx("Função (fn)", "Comentário") },
       { key: "dev.ferramentas", label: "Ferramentas", kicker: "tools.list", title: "Ferramentas", highlight: "// utilitários", subtitle: "Pequenos utilitários que construí para o dia a dia.", ...cx("Função (fn)", "Comentário") },
       { key: "dev.devlogs", label: "DevLogs", kicker: "git.log", title: "DevLogs", highlight: "// diário técnico", subtitle: "Registro cronológico do desenvolvimento, decisões técnicas e problemas resolvidos.", ...cx("Função (fn)", "Comentário") },
-      { key: "dev.ideias", label: "Ideias", kicker: "backlog.next", title: "Ideias", highlight: "// backlog", subtitle: "Conceitos, MVPs e experimentos futuros esperando a vez.", ...cx("Função (fn)", "Comentário") },
       { key: "dev.codigo", label: "Código", kicker: "snippets.export", title: "Código", highlight: "// reutilizáveis", subtitle: "Snippets, componentes reutilizáveis, templates e boilerplates.", ...cx("Função (fn)", "Comentário") },
-      { key: "dev.wiki", label: "Wiki", kicker: "wiki.open", title: "Wiki", highlight: "// docs", subtitle: "Documentação técnica, anotações, cheatsheets e referências organizadas.", ...cx("Função (fn)", "Comentário") },
     ],
   },
   {

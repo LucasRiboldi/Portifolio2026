@@ -9,8 +9,6 @@
 export { devlogs, type Devlog } from "./devlogs"
 export { labExperiments, type LabExperiment } from "./lab"
 export { snippets, type Snippet } from "./snippets"
-export { wikiDocs, type WikiDoc } from "./wiki"
-export { ideas, type Idea } from "./ideas"
 
 /**
  * Acervo de referência — material de estudo, não conteúdo editorial.

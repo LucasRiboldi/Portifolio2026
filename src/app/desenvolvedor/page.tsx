@@ -12,14 +12,12 @@ import {
 } from "@/lib/repos/tech-feed"
 import {
   certificacoes,
-  designPatterns,
   javaRoadmap,
   livros,
   snippets as snippetsSeed,
 } from "@/data/dev"
 import { GsapDemo } from "@/components/dev/gsap-demo"
 import {
-  CardsPatterns,
   GradeBadges,
   GradeEstrelados,
   PainelNoticias,
@@ -49,7 +47,6 @@ const ATALHOS = [
   { href: "/desenvolvedor/codigo", t: "Código", d: "Snippets e boilerplates reutilizáveis, com destaque de sintaxe" },
   { href: "/desenvolvedor/learn", t: "Learn", d: "Trilhas de estudo por linguagem, com exercícios e progresso" },
   { href: "/desenvolvedor/java", t: "Java", d: "Trilha de estudo em oito etapas e cinco folhas de consulta" },
-  { href: "/desenvolvedor/padroes", t: "Design Patterns", d: "Cartões com problema, solução e quando evitar o padrão" },
   { href: "/desenvolvedor/estante", t: "Estante", d: "Livros de referência de TI e badges de certificação" },
 ] as const
 
@@ -250,24 +247,10 @@ export default async function DevHome() {
         </DevSection>
       )}
 
-      {/* ─── Design patterns: amostra ──────────────────────────────────── */}
-      <DevSection
-        id="padroes"
-        index={6}
-        title="Design Patterns"
-        meta={`${designPatterns.length} cartões`}
-        note="Cada cartão traz o que quase nenhum catálogo traz: quando NÃO usar."
-      >
-        <CardsPatterns patterns={designPatterns.slice(0, 3)} />
-        <DevPanelFoot>
-          <DevInternalLink href="/desenvolvedor/padroes">ver os {designPatterns.length} padrões</DevInternalLink>
-        </DevPanelFoot>
-      </DevSection>
-
       {/* ─── Certificações ─────────────────────────────────────────────── */}
       <DevSection
         id="certificacoes"
-        index={7}
+        index={6}
         title="Certificações"
         meta={`${certsObtidas.length} de ${certificacoes.length} obtidas`}
         note="Emissor, ano e link de verificação quando existe."
@@ -279,7 +262,7 @@ export default async function DevHome() {
       {lendo.length > 0 && (
         <DevSection
           id="lendo"
-          index={8}
+          index={7}
           title="Lendo agora"
           meta={`${livros.length} títulos na estante`}
           note="A lista completa — lidos, lendo e na fila — fica na estante."
@@ -307,7 +290,7 @@ export default async function DevHome() {
       {devlogs.length > 0 && (
         <DevSection
           id="devlog"
-          index={9}
+          index={8}
           title="Devlog"
           meta={`${devlogs.length} entrada${devlogs.length === 1 ? "" : "s"}`}
           note="Registro cronológico do que foi construído, na ordem em que aconteceu."
@@ -328,7 +311,7 @@ export default async function DevHome() {
 
       <DevSection
         id="stack"
-        index={10}
+        index={9}
         title="Stack em movimento"
         meta="GSAP · ScrollTrigger"
         note="Demonstração funcional do motor de animação usado no site."
@@ -336,29 +319,7 @@ export default async function DevHome() {
         <GsapDemo />
       </DevSection>
 
-      {/* ─── A porta do repositório vivo ───────────────────────────────────
-          Os blocos acima são amostras; o índice é onde o acervo se vê inteiro,
-          com as contagens calculadas de cada coleção. */}
-      <DevSection
-        id="conhecimento"
-        index={11}
-        title="Repositório vivo de conhecimento"
-        meta="índice geral"
-        note="Trilhas, folhas de consulta, padrões, livros, snippets e wiki — com quantos itens há em cada."
-      >
-        <DevPanel>
-          <DevPanelHead title="Índice do acervo" href="/desenvolvedor/conhecimento" />
-          <p>
-            As contagens são calculadas a partir das próprias coleções, não digitadas: publicar um snippet
-            ou acrescentar um padrão atualiza o índice sozinho.
-          </p>
-          <DevPanelFoot>
-            <DevInternalLink href="/desenvolvedor/conhecimento">abrir o índice</DevInternalLink>
-          </DevPanelFoot>
-        </DevPanel>
-      </DevSection>
-
-      <DevSection id="explorar" index={12} title="Explorar" meta={`${ATALHOS.length} áreas`}>
+      <DevSection id="explorar" index={10} title="Explorar" meta={`${ATALHOS.length} áreas`}>
         <div className="dv-objects">
           {ATALHOS.map((x) => (
             <DevPanel key={x.href}>
