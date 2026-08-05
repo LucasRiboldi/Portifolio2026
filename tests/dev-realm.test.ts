@@ -161,5 +161,6 @@ describe("performance", () => {
  * - anel de foco realmente visível ao percorrer o dock com Tab;
  * - ausência de transbordo horizontal em 320px e densidade em 2560px;
  * - ordem de leitura do dock grudado ao rolar;
- * - animação do GSAP respeitando reduced-motion na prática.
+ * - o motor de movimento da home respeitando reduced-motion na prática (a
+ *   demo do GSAP, que ocupava esta linha, saiu em 05/08/2026).
  */

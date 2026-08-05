@@ -1,0 +1,256 @@
+/**
+ * DEV — camada da abertura (hero + manifesto + princípios).
+ *
+ * Folha própria pelo mesmo motivo de `dev-acervo.css`: `dracula.css` já passa
+ * de 800 linhas e é o catálogo documentado pelo guia de design system, então
+ * bloco novo e coeso entra ao lado dela em vez de dentro. Nada aqui redefine
+ * `.dv-card`, `.dv-tag` ou `.dv-hero` — o que segue apenas COMPÕE com elas.
+ *
+ * O que este arquivo resolve: a abertura da home deixou de ser uma lista de
+ * chips de tecnologia e virou texto longo. Texto longo em fonte monoespaçada
+ * cansa se vier num bloco só, e o realm não tem tipografia editorial. A saída
+ * foi dar RITMO — tese, prosa, quebra, log, prosa — reaproveitando a linguagem
+ * que o realm já fala (terminal, status, painel) em vez de importar uma nova.
+ *
+ * Escopo `.dracula`, como o resto do realm: o design system renderiza os
+ * multiversos no mesmo documento, e nada daqui pode vazar para eles.
+ */
+
+/* ═══════════════════════════════════════════════════════════════════════
+   1. Hero
+
+   O selo de versão divide a primeira linha com o prompt em vez de flutuar
+   sobre o hero: posição absoluta cobriria o texto em 320px, e o `overflow:
+   hidden` do `.dv-hero` cortaria o selo em vez de deixá-lo quebrar linha.
+   ═══════════════════════════════════════════════════════════════════════ */
+.dracula .dv-hero-topo {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: var(--dev-space-3);
+  flex-wrap: wrap;
+}
+
+/* O subtítulo é conteúdo, não legenda: `.dv-hero p` o deixaria a 80% de
+   opacidade, que é o tratamento de texto secundário. */
+.dracula .dv-hero-sub {
+  max-width: var(--dev-measure);
+  margin-top: var(--dev-space-3);
+  font-size: var(--dev-text-lg);
+  line-height: 1.35;
+  opacity: 1;
+  color: var(--dev-ink-soft);
+}
+.dracula .dv-hero-sub .g { color: var(--dev-ok); }
+.dracula .dv-hero-sub .c { color: var(--dev-signal); }
+.dracula .dv-hero-sub .y { color: var(--dev-warn); }
+
+/* ═══════════════════════════════════════════════════════════════════════
+   2. Manifesto
+
+   Uma pilha com respiro grande entre blocos. O `gap` faz o trabalho que
+   margens em cada parágrafo faziam mal: aqui os blocos têm alturas muito
+   diferentes (uma linha, um painel, uma grade de três) e margem própria
+   somaria em cima do espaço do vizinho.
+   ═══════════════════════════════════════════════════════════════════════ */
+.dracula .dv-mf {
+  display: grid;
+  gap: var(--dev-space-5);
+}
+.dracula .dv-mf p {
+  max-width: var(--dev-measure);
+  font-size: var(--dev-text-base);
+  line-height: 1.75;
+  color: var(--dev-ink-soft);
+}
+
+/* A tese. Régua à esquerda em vez de corpo maior sozinho: em monoespaçada,
+   tamanho grande de mais em linha longa vira cartaz e perde a leitura. */
+.dracula .dv-mf p.dv-mf-lead {
+  padding-left: var(--dev-space-4);
+  border-left: 2px solid var(--dev-accent);
+  font-size: var(--dev-text-lg);
+  font-weight: 700;
+  line-height: 1.35;
+  color: var(--dev-ink);
+}
+
+/* A virada do texto ("Por isso resolvi concentrar tudo…"). Atravessa a
+   medida de leitura de propósito: é respiro, e respiro precisa de largura. */
+.dracula .dv-mf p.dv-mf-pull {
+  max-width: none;
+  padding: var(--dev-space-4) 0;
+  border-top: 1px dashed var(--dev-line);
+  border-bottom: 1px dashed var(--dev-line);
+  font-size: var(--dev-text-lg);
+  font-weight: 700;
+  line-height: 1.35;
+  text-align: center;
+  color: var(--dev-accent);
+}
+
+/* ── Log de estado ────────────────────────────────────────────────────
+   As quatro linhas sobre o que está pronto, quebrado ou em curso não são
+   prosa: são um relatório de situação. Ganharam a forma que o realm já usa
+   para relatório — saída de terminal, um glifo de estado por linha.
+   O glifo mora no CSS e não no JSX: é decoração de estado, e leitor de tela
+   já tem a frase inteira. */
+.dracula .dv-mf-log {
+  display: grid;
+  gap: var(--dev-space-2);
+  margin: 0;
+  padding: var(--dev-space-4) var(--dev-space-4) var(--dev-space-4) var(--dev-space-3);
+  list-style: none;
+  border: 1px solid var(--dev-line);
+  border-radius: var(--dev-radius-lg);
+  background: var(--dev-surface-0);
+  font-size: var(--dev-text-sm);
+}
+.dracula .dv-mf-log li {
+  display: grid;
+  grid-template-columns: 1.5rem 1fr;
+  align-items: baseline;
+  gap: var(--dev-space-2);
+  color: var(--dev-ink-soft);
+  line-height: 1.5;
+}
+.dracula .dv-mf-log li::before {
+  font-weight: 700;
+  text-align: center;
+}
+.dracula .dv-mf-log li[data-t="pendente"]::before { content: "⚠"; color: var(--dev-warn); }
+.dracula .dv-mf-log li[data-t="curso"]::before    { content: "◐"; color: var(--dev-signal); }
+.dracula .dv-mf-log li[data-t="quebrado"]::before { content: "✕"; color: var(--dev-danger); }
+.dracula .dv-mf-log li[data-t="eterno"]::before   { content: "∞"; color: var(--dev-accent); }
+
+/* A resposta ao log — a única linha da página que fica em verde de sucesso. */
+.dracula .dv-mf p.dv-mf-turn {
+  font-size: var(--dev-text-md);
+  font-weight: 700;
+  color: var(--dev-ok);
+}
+
+/* ── Transformações ──────────────────────────────────────────────────
+   "Cada erro vira aprendizado" e as duas irmãs são a mesma estrutura
+   repetida três vezes: entrada → saída. Em três colunas isso fica visível de
+   relance; empilhadas em parágrafo, não. */
+.dracula .dv-mf-eq {
+  display: grid;
+  gap: var(--dev-space-3);
+  grid-template-columns: repeat(auto-fit, minmax(min(100%, 15rem), 1fr));
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+.dracula .dv-mf-eq li {
+  display: grid;
+  gap: var(--dev-space-1);
+  align-content: start;
+  padding: var(--dev-space-4);
+  border: 1px solid var(--dev-line);
+  border-radius: var(--dev-radius-lg);
+  background: var(--dev-surface-1);
+  font-size: var(--dev-text-base);
+  line-height: 1.55;
+}
+.dracula .dv-mf-eq .k {
+  display: flex;
+  align-items: baseline;
+  gap: var(--dev-space-2);
+  font-weight: 700;
+  color: var(--dev-signal);
+}
+.dracula .dv-mf-eq .k::before {
+  content: "→";
+  color: var(--dev-mark);
+}
+.dracula .dv-mf-eq .v {
+  color: var(--dev-ink-soft);
+}
+
+/* ── Second Brain ────────────────────────────────────────────────────
+   A definição do site inteiro. Ganha superfície própria porque é conclusão,
+   não mais um parágrafo — e o gradiente vem do mesmo canto do `.dv-hero`,
+   fechando a abertura com o mesmo gesto que a abriu. */
+.dracula .dv-mf-brain {
+  display: grid;
+  grid-template-columns: auto 1fr;
+  gap: var(--dev-space-3);
+  padding: var(--dev-space-5);
+  border: 1px solid var(--dev-line-strong);
+  border-radius: var(--dev-radius-lg);
+  background:
+    radial-gradient(90% 160% at 0% 0%, color-mix(in srgb, var(--dev-accent) 15%, transparent), transparent 62%),
+    var(--dev-surface-1);
+}
+.dracula .dv-mf-brain .glifo {
+  font-size: 1.5rem;
+  line-height: 1.2;
+}
+.dracula .dv-mf-brain b {
+  color: var(--dev-accent);
+  font-weight: 800;
+  text-shadow: 0 0 16px color-mix(in srgb, var(--dev-accent) 45%, transparent);
+}
+
+/* ── Convite final ───────────────────────────────────────────────────
+   Última linha em forma de prompt: o hero abre com `const dev = {…}` e a
+   abertura fecha com um cursor esperando. */
+.dracula .dv-mf p.dv-mf-prompt {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: baseline;
+  gap: var(--dev-space-2);
+  max-width: none;
+  padding: var(--dev-space-3) var(--dev-space-4);
+  border: 1px dashed var(--dev-line-strong);
+  border-radius: var(--dev-radius-md);
+  background: var(--dev-surface-0);
+  color: var(--dev-ink);
+}
+.dracula .dv-mf p.dv-mf-prompt::before {
+  content: "$";
+  font-weight: 800;
+  color: var(--dev-ok);
+}
+.dracula .dv-mf p.dv-mf-prompt::after {
+  content: "▌";
+  color: var(--dev-ok);
+  animation: dv-blink 1.1s steps(2) infinite;
+}
+
+/* ═══════════════════════════════════════════════════════════════════════
+   3. Princípios
+
+   Quatro cartões curtos, sobre `.dv-card` — herdam borda, brilho de hover e
+   foco do realm; o que muda é o arranjo (glifo grande em cima, título, uma
+   frase) e o ritmo interno, que passa a vir do `gap` em vez das margens
+   soltas de `.dv-card p`.
+   ═══════════════════════════════════════════════════════════════════════ */
+.dracula .dv-traits {
+  display: grid;
+  gap: var(--dev-space-4);
+  grid-template-columns: repeat(auto-fit, minmax(min(100%, 14rem), 1fr));
+}
+.dracula .dv-trait {
+  display: grid;
+  align-content: start;
+  gap: var(--dev-space-2);
+}
+.dracula .dv-trait-glifo {
+  display: inline-block;
+  font-size: 1.7rem;
+  line-height: 1;
+  transition: transform var(--dev-dur-base) var(--dev-ease);
+}
+.dracula .dv-trait:hover .dv-trait-glifo {
+  transform: translateY(-3px) rotate(-8deg);
+}
+.dracula .dv-trait h3 {
+  font-size: var(--dev-text-md);
+  line-height: 1.25;
+}
+.dracula .dv-trait p {
+  margin-top: 0;
+  line-height: 1.55;
+}

@@ -330,7 +330,7 @@ const developer: RealmDesign = {
   motion: [
     { name: "caret", value: "blink em passos", use: "Cursor do terminal — a assinatura do realm" },
     { name: "hover de card", value: "borda muda de cor, sem transform", use: "Discreto: nada salta" },
-    { name: "GSAP demo", value: "timeline", use: "Stack em movimento na home" },
+    { name: "entrada por rolagem", value: "fade + 14px, escalonado", use: "Blocos da home chegam conforme a leitura desce" },
     { name: "ease.out", value: "cubic-bezier(0,0,0.2,1)", use: "Padrão — entra e assenta, sem passar do ponto" },
   ],
   kit: [

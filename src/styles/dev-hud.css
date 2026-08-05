@@ -175,9 +175,22 @@
   justify-content: space-between;
   gap: var(--dev-space-2);
 }
+/* `min-width: 0` porque item de flex NÃO encolhe abaixo do próprio conteúdo
+   por padrão: com um título longo e sem espaço (`LucasRiboldi/Portifolio2026`
+   nos cards de repositório estrelado), o h3 mantinha a largura inteira e
+   empurrava o selo para FORA do card — a página inteira ganhava rolagem
+   horizontal em 375px. `overflow-wrap` dá ao navegador permissão de quebrar
+   dentro da palavra, que é a única saída quando não há espaço nenhum. */
 .dv-panel-head h3 {
+  min-width: 0;
+  overflow-wrap: anywhere;
   font-size: var(--dev-text-md);
   line-height: 1.25;
+}
+/* O selo ao lado é curto e mede o que precisa; encolhê-lo só quebraria o
+   número no meio. Quem cede espaço é o título. */
+.dv-panel-head > :not(h3) {
+  flex: none;
 }
 .dv-panel-foot {
   display: flex;
@@ -258,38 +271,12 @@
   padding: var(--dev-space-3);
 }
 
-/* ─────────────────────────────────────────────────────────────────────────
-   10. BARRAS DE PROPORÇÃO.
-
-   Saíram do `style={{}}` inline do componente GSAP, onde as cores estavam
-   escritas à mão e uma delas apontava para `--d-bg-soft`, token que não existe
-   em lugar nenhum do projeto (caía silenciosamente no fallback branco).
-   ───────────────────────────────────────────────────────────────────────── */
-.dv-bars {
-  display: grid;
-  gap: var(--dev-space-3);
-  margin-top: var(--dev-space-3);
-}
-.dv-bar-label {
-  display: flex;
-  justify-content: space-between;
-  gap: var(--dev-space-2);
-  margin-bottom: var(--dev-space-1);
-  font-size: var(--dev-text-xs);
-  color: var(--dev-ink-dim);
-}
-.dv-bar {
-  height: 8px;
-  border-radius: var(--dev-radius-pill);
-  background: var(--dev-surface-2);
-  overflow: hidden;
-}
-.dv-bar-fill {
-  height: 100%;
-  border-radius: inherit;
-  background: linear-gradient(90deg, var(--dev-ok), var(--dev-signal));
-}
-.dv-ink-ok { color: var(--dev-ok); }
+/* As barras de proporção (`.dv-bars`, `.dv-bar`, `.dv-bar-label`,
+   `.dv-bar-fill`, `.dv-ink-ok`) foram removidas em 05/08/2026 junto com o
+   único componente que as usava — a demo do GSAP, que saiu da home na
+   reescrita e ficou sem página. A numeração das seções seguintes não foi
+   recuada de propósito: os números são referência citável no guia de design
+   system, e renumerar quebraria as citações. */
 
 /* ─────────────────────────────────────────────────────────────────────────
    11. TABELA TÉCNICA.
@@ -342,7 +329,65 @@
 }
 
 /* ─────────────────────────────────────────────────────────────────────────
-   12. MOVIMENTO REDUZIDO.
+   12. SELO DE VERSÃO — qual corte do repositório está no ar.
+
+   Entra na camada HUD e não na folha da home porque é metadado de build, da
+   mesma família de `.dv-meta`: informação que o leitor teria de ir procurar
+   no GitHub. O LED verde não é enfeite — marca que o número foi lido de uma
+   fonte viva; quando a origem é o `package.json` (rede indisponível, sem tag
+   ainda) ele apaga para âmbar, e o selo deixa de prometer o que não sabe.
+   ───────────────────────────────────────────────────────────────────────── */
+.dracula .dv-versao {
+  display: inline-flex;
+  align-items: center;
+  gap: var(--dev-space-2);
+  padding: 0.25rem 0.7rem 0.25rem 0.55rem;
+  border: 1px solid var(--dev-line);
+  border-radius: var(--dev-radius-pill);
+  background: color-mix(in srgb, var(--dev-surface-0) 70%, transparent);
+  font-size: var(--dev-text-2xs);
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+  white-space: nowrap;
+  transition: border-color var(--dev-dur-fast) var(--dev-ease),
+    background var(--dev-dur-fast) var(--dev-ease);
+}
+.dracula .dv-versao:hover {
+  border-color: var(--dev-accent);
+  background: var(--dev-surface-0);
+}
+.dracula .dv-versao-k {
+  color: var(--dev-ink-dim);
+}
+.dracula .dv-versao-v {
+  color: var(--dev-ok);
+  font-weight: 700;
+  letter-spacing: 0.02em;
+  text-transform: none;
+}
+.dracula .dv-versao-led {
+  width: 7px;
+  height: 7px;
+  border-radius: 50%;
+  background: var(--dev-ok);
+  box-shadow: 0 0 0 0 color-mix(in srgb, var(--dev-ok) 60%, transparent);
+  animation: dv-versao-pulso 2.4s ease-out infinite;
+}
+/* Sem release nem tag: o número é só o do pacote, e o selo diz isso em cor. */
+.dracula .dv-versao[data-origem="pacote"] .dv-versao-v {
+  color: var(--dev-warn);
+}
+.dracula .dv-versao[data-origem="pacote"] .dv-versao-led {
+  background: var(--dev-warn);
+  animation: none;
+}
+@keyframes dv-versao-pulso {
+  0% { box-shadow: 0 0 0 0 color-mix(in srgb, var(--dev-ok) 60%, transparent); }
+  70%, 100% { box-shadow: 0 0 0 6px transparent; }
+}
+
+/* ─────────────────────────────────────────────────────────────────────────
+   13. MOVIMENTO REDUZIDO.
 
    O bloco antigo era `[class*="dv-"] { animation: none !important }` — um
    seletor de atributo que varria o DOM inteiro, atingia qualquer classe futura
@@ -352,10 +397,13 @@
    ───────────────────────────────────────────────────────────────────────── */
 @media (prefers-reduced-motion: reduce) {
   .dracula .dv-caret,
+  .dracula .dv-versao-led,
+  .dracula .dv-pulso-led,
+  .dracula .dv-hero h1 span.p,
+  .dracula .dv-mf-prompt::after,
   .dracula .dv-logo .blink,
   .dracula .learn-connector[data-filled="true"]::after,
-  .dracula .learn-node[data-state="current"] .learn-node-dot,
-  .dracula .gsap-cursor {
+  .dracula .learn-node[data-state="current"] .learn-node-dot {
     animation: none;
   }
   .dracula *,

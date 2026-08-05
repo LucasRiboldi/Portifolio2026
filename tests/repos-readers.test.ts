@@ -22,9 +22,10 @@ vi.mock("@/lib/firebase/query", () => ({
 
 const { getProjects, getProjectBySlug } = await import("@/lib/repos/projects")
 const { getArtworks } = await import("@/lib/repos/criativo")
-const { getDevlogs } = await import("@/lib/repos/dev")
+const { getDevlogs, getDevlogBySlug, getSnippets } = await import("@/lib/repos/dev")
 const { projects: projectsSeed } = await import("@/data/projects")
 const { artworks: artworksSeed } = await import("@/data/criativo-zones")
+const { devlogs: devlogsSeed } = await import("@/data/dev")
 
 beforeEach(() => {
   buscarLinhas.mockReset()
@@ -104,20 +105,54 @@ describe("repos/criativo — tabela vazia cai no seed (a zona faz parte da narra
   })
 })
 
-describe("repos/dev — sem seed: ausência esvazia a seção", () => {
+describe("repos/dev — snippets e lab sem seed: ausência esvazia a seção", () => {
+  /**
+   * Contrato preservado para os dois que continuam sendo FAIXA de página: sem
+   * dado, a seção some inteira e a página em volta segue de pé. Cada um tem
+   * rota que trata o vazio com uma frase acionável ("adicione em /admin/…").
+   */
   it("sem Firestore → [] (a seção some inteira)", async () => {
     buscarLinhas.mockResolvedValue(null)
-    expect(await getDevlogs()).toEqual([])
+    expect(await getSnippets()).toEqual([])
   })
 
-  it("erro → []", async () => {
+  it("tabela vazia → [] (não inventa conteúdo)", async () => {
+    buscarLinhas.mockResolvedValue([])
+    expect(await getSnippets()).toEqual([])
+  })
+})
+
+describe("repos/dev — devlogs cai no seed desde que ganhou rota própria", () => {
+  /**
+   * A exceção, e o motivo dela: com `/desenvolvedor/devlog`, ausência de dado
+   * não some com uma faixa — deixa uma PÁGINA inteira vazia, o que quebra a
+   * promessa de que o site funciona sem backend. O acervo versionado em
+   * `src/data/dev/devlogs.ts` é o que sustenta a rota.
+   *
+   * O banco continua mandando: o seed só entra quando não há nada publicado.
+   */
+  const comoLinha = devlogsSeed.map((d) => ({ ...d, id: d.slug }))
+
+  it("sem Firestore → seed (a rota continua de pé)", async () => {
     buscarLinhas.mockResolvedValue(null)
-    expect(await getDevlogs()).toEqual([])
+    expect(await getDevlogs()).toEqual(comoLinha)
   })
 
-  it("sucesso devolve as linhas como estão", async () => {
+  it("tabela vazia → seed", async () => {
+    buscarLinhas.mockResolvedValue([])
+    expect(await getDevlogs()).toEqual(comoLinha)
+  })
+
+  it("o que está publicado ganha do arquivo — nunca se mistura", async () => {
     const rows = [{ id: "1", slug: "s", title: "t", date: "2026-01-01", summary: "", body: "", tags: [] }]
     buscarLinhas.mockResolvedValue(rows)
     expect(await getDevlogs()).toEqual(rows)
+  })
+
+  it("busca por slug atravessa o fallback", async () => {
+    buscarLinhas.mockResolvedValue(null)
+    const alvo = devlogsSeed[0]!
+    expect((await getDevlogBySlug(alvo.slug))?.title).toBe(alvo.title)
+    expect(await getDevlogBySlug("__inexistente__")).toBeUndefined()
   })
 })

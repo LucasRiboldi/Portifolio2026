@@ -3,6 +3,14 @@ import "@/styles/dracula.css"
 // padrões). Depois de `dracula.css` de propósito: compõe com as classes de
 // lá e nunca as redefine.
 import "@/styles/dev-acervo.css"
+// Abertura da home do realm (hero, manifesto, princípios). Depois de
+// `dev-acervo.css` pela mesma razão: compõe com as classes anteriores e não
+// redefine nenhuma delas.
+import "@/styles/dev-home.css"
+// Zonas da home (radar, pulso, bancada, console) e a camada de movimento.
+// Depois de `dev-home.css`: algumas regras daqui sobrepõem de propósito o que
+// `dracula.css` define para o hero.
+import "@/styles/dev-zonas.css"
 // Módulo de estudos do 3º semestre. Carregado pelo layout, e não pela rota,
 // porque o brilho verde dos menus das disciplinas precisa existir em toda
 // página do realm — senão o dock muda de aparência conforme onde se está.

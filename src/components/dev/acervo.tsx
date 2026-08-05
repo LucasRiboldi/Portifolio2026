@@ -14,72 +14,17 @@
 import type { ReactNode } from "react"
 
 import type { Certificacao, Livro, RoadmapEtapa } from "@/data/dev"
-import type { Noticia, RepoEstrelado } from "@/lib/repos/tech-feed"
+import type { RepoEstrelado } from "@/lib/repos/tech-feed"
 import { DevExternalLink, DevPanel, DevPanelFoot, DevPanelHead, TagList } from "./ui/dev-primitives"
 
 /* ────────────────────────────────────────────────────────────────────────
-   NOTÍCIAS
-   ──────────────────────────────────────────────────────────────────────── */
-
-/**
- * Data relativa curta ("3 h", "2 d").
- *
- * Notícia é sobre recência, e "há 3 horas" responde isso mais rápido do que uma
- * data absoluta que o leitor teria de comparar mentalmente com hoje. Acima de um
- * mês a distância deixa de importar e a data absoluta volta a ser mais honesta.
- */
-function quando(iso: string): string {
-  const ms = Date.now() - Date.parse(iso)
-  if (Number.isNaN(ms)) return ""
-  const h = Math.floor(ms / 3_600_000)
-  if (h < 1) return "agora há pouco"
-  if (h < 24) return `há ${h} h`
-  const d = Math.floor(h / 24)
-  if (d < 30) return `há ${d} d`
-  return new Date(iso).toLocaleDateString("pt-BR")
-}
-
-export function PainelNoticias({
-  titulo,
-  fonte,
-  noticias,
-  vazio,
-}: {
-  titulo: string
-  /** Origem, dita uma vez no cabeçalho em vez de repetida em cada item. */
-  fonte: string
-  noticias: readonly Noticia[]
-  /** Texto quando a fonte não respondeu. */
-  vazio: string
-}) {
-  return (
-    <DevPanel className="dv-feed">
-      <DevPanelHead title={titulo} badge={<span className="dv-status">{fonte}</span>} />
-      {noticias.length === 0 ? (
-        <p className="dv-empty">{vazio}</p>
-      ) : (
-        <ol className="dv-feed-list">
-          {noticias.map((n) => (
-            <li key={n.id} className="dv-feed-item">
-              <a href={n.url} target="_blank" rel="noreferrer" className="dv-feed-link">
-                {n.titulo}
-                <span className="sr-only"> (abre em nova aba)</span>
-              </a>
-              <p className="dv-feed-meta">
-                <time dateTime={n.data}>{quando(n.data)}</time>
-                {n.pontos != null && <span className="dv-feed-pontos">▲ {n.pontos}</span>}
-                {n.autor && <span className="dv-feed-autor">{n.autor}</span>}
-              </p>
-            </li>
-          ))}
-        </ol>
-      )}
-    </DevPanel>
-  )
-}
-
-/* ────────────────────────────────────────────────────────────────────────
    REPOSITÓRIOS ESTRELADOS
+
+   `PainelNoticias` morava aqui e saiu junto com os dois painéis de notícia da
+   home: o radar virou lista única de três itens, com posição e selo de
+   idioma, e mora em `home-zonas.tsx`. A função `quando()` foi com ele —
+   manter uma cópia órfã aqui só criaria duas formatações de data divergindo
+   com o tempo.
    ──────────────────────────────────────────────────────────────────────── */
 
 export function GradeEstrelados({ repos }: { repos: readonly RepoEstrelado[] }) {

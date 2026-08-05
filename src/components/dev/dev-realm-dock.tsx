@@ -13,6 +13,7 @@ import {
   Orbit,
   Coffee,
   Library,
+  ScrollText,
   Binary,
   Cpu,
   Boxes,
@@ -75,6 +76,9 @@ const ITEMS: DockItem[] = [
   // no dock é rota que só quem sabe o URL alcança.
   { href: "/desenvolvedor/java", label: "java", Icon: Coffee },
   { href: "/desenvolvedor/estante", label: "estante", Icon: Library },
+  // Ganhou rota em 05/08/2026, quando saiu da home: sem entrada aqui, seria
+  // conteúdo publicável que só quem sabe o URL alcança.
+  { href: "/desenvolvedor/devlog", label: "devlog", Icon: ScrollText },
   // As disciplinas do 3º semestre, na ordem dos dias da semana.
   ...ITENS_ESTUDO,
   { href: "/portal", label: "portal", Icon: Orbit },

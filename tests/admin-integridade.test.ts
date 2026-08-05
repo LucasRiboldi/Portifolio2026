@@ -141,6 +141,12 @@ describe("recursos e banco", () => {
  * Ela permanece como trava nos dois sentidos: órfão novo faz o teste falhar, e
  * órfão resolvido também — obrigando quem resolveu a atualizar o registro em
  * vez de deixar a lista mentir.
+ *
+ * Em 05/08/2026 a lista teve `devlogs` por algumas horas: a seção Devlog saiu
+ * da home a pedido e o conteúdo ficou sem página — o painel editava, ninguém
+ * via. Este teste acusou no mesmo dia, e a saída foi dar rota própria ao
+ * devlog (`/desenvolvedor/devlog`, com `[slug]` para o texto inteiro) em vez
+ * de aposentar o recurso. A lista voltou a ficar vazia.
  */
 const ORFAOS_CONHECIDOS: string[] = []
 

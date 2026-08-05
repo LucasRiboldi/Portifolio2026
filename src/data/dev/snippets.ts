@@ -92,7 +92,7 @@ if (faltando.length) {
     code: `@media (prefers-reduced-motion: reduce) {
   .dracula .dv-caret,
   .dracula .dv-logo .blink,
-  .dracula .gsap-cursor {
+  .dracula .dv-versao-led {
     animation: none;
   }
 

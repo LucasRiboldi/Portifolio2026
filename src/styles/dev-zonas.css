@@ -1,0 +1,560 @@
+/**
+ * DEV — zonas da home e a camada de movimento.
+ *
+ * Separada de `dev-home.css` (que ficou com hero, manifesto e princípios) por
+ * tamanho: as duas juntas passariam das 500 linhas que o projeto usa como
+ * limite. O critério do corte é o assunto — lá é a ABERTURA, aqui são as
+ * ZONAS que a home ganhou depois (radar, pulso, bancada, console) e o motor
+ * que dá movimento a todas elas.
+ *
+ * ## A regra que governa a camada de movimento
+ *
+ * O estado de REPOUSO é o estado visível. Nada nesta folha esconde conteúdo
+ * por padrão: as regras de entrada vivem todas sob `[data-motor="on"]`,
+ * atributo que só o componente `MotorDeMovimento` escreve, e só depois de
+ * montar e de checar `prefers-reduced-motion`. Sem JavaScript, com JavaScript
+ * quebrado ou com movimento reduzido, a página aparece inteira e parada.
+ *
+ * Foi uma escolha contra a alternativa comum — `opacity: 0` na folha e
+ * `opacity: 1` via classe —, que transforma qualquer falha de script numa
+ * página em branco.
+ */
+
+/* ═══════════════════════════════════════════════════════════════════════
+   1. MOVIMENTO — entrada por rolagem
+   ═══════════════════════════════════════════════════════════════════════ */
+.dracula[data-motor="on"] [data-revelar] {
+  opacity: 0;
+  transform: translateY(14px);
+  transition:
+    opacity 0.5s var(--dev-ease),
+    transform 0.5s var(--dev-ease);
+}
+.dracula[data-motor="on"] [data-revelar][data-visivel="true"] {
+  opacity: 1;
+  transform: none;
+}
+
+/* Escalonamento: irmãos entram em cascata, não em bloco. O atraso é curto de
+   propósito — acima de ~250 ms no último item a lista parece lenta em vez de
+   fluida. */
+.dracula[data-motor="on"] [data-revelar]:nth-child(2) { transition-delay: 60ms; }
+.dracula[data-motor="on"] [data-revelar]:nth-child(3) { transition-delay: 120ms; }
+.dracula[data-motor="on"] [data-revelar]:nth-child(4) { transition-delay: 180ms; }
+.dracula[data-motor="on"] [data-revelar]:nth-child(5) { transition-delay: 240ms; }
+.dracula[data-motor="on"] [data-revelar]:nth-child(n + 6) { transition-delay: 280ms; }
+
+/* ═══════════════════════════════════════════════════════════════════════
+   2. MOVIMENTO — holofote do cursor
+
+   `--mx`/`--my` chegam do motor em coordenada do PRÓPRIO cartão. O brilho
+   mora num `::before` porque `.dv-card::after` já está ocupado pelo halo de
+   hover documentado no guia, e sobrepor os dois apagaria um deles.
+
+   `border-radius: inherit` no pseudo dispensa `overflow: hidden` no cartão —
+   que cortaria justamente o halo do `::after`, desenhado para fora da caixa.
+   ═══════════════════════════════════════════════════════════════════════ */
+.dracula [data-spot] :is(.dv-card, [data-spot-item]) {
+  --mx: 50%;
+  --my: 50%;
+  position: relative;
+}
+.dracula [data-spot] :is(.dv-card, [data-spot-item])::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  z-index: 0;
+  border-radius: inherit;
+  pointer-events: none;
+  opacity: 0;
+  background: radial-gradient(
+    16rem 16rem at var(--mx) var(--my),
+    color-mix(in srgb, var(--dev-accent) 20%, transparent),
+    transparent 70%
+  );
+  transition: opacity var(--dev-dur-base) var(--dev-ease);
+}
+.dracula [data-spot] :is(.dv-card, [data-spot-item]):hover::before {
+  opacity: 1;
+}
+/* O conteúdo sobe acima do brilho; sem isto o gradiente cobriria o texto. */
+.dracula [data-spot] :is(.dv-card, [data-spot-item]) > * {
+  position: relative;
+  z-index: 1;
+}
+
+/* ═══════════════════════════════════════════════════════════════════════
+   3. RADAR — três manchetes, com posição desenhada
+
+   O número grande à esquerda não é ornamento: diz que existe uma ORDEM ali.
+   A lista antiga, de dez pontos em dois painéis, não conseguia comunicar isso
+   e o leitor tratava tudo como pilha indiferenciada.
+   ═══════════════════════════════════════════════════════════════════════ */
+.dracula .dv-radar {
+  display: grid;
+  gap: var(--dev-space-3);
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+.dracula .dv-radar-item {
+  display: grid;
+  grid-template-columns: auto 1fr;
+  gap: var(--dev-space-3);
+  align-items: start;
+  padding: var(--dev-space-4);
+  border: 1px solid var(--dev-line);
+  border-left-width: 3px;
+  border-radius: var(--dev-radius-lg);
+  background: var(--dev-surface-1);
+  transition:
+    border-color var(--dev-dur-fast) var(--dev-ease),
+    transform var(--dev-dur-fast) var(--dev-ease);
+}
+.dracula .dv-radar-item:hover {
+  border-color: var(--dev-accent);
+  transform: translateX(4px);
+}
+.dracula .dv-radar-pos {
+  font-size: 1.6rem;
+  font-weight: 800;
+  line-height: 0.9;
+  color: color-mix(in srgb, var(--dev-accent) 50%, transparent);
+}
+.dracula .dv-radar-link {
+  display: block;
+  font-size: var(--dev-text-base);
+  line-height: 1.45;
+  color: var(--dev-ink);
+}
+.dracula .dv-radar-link:hover {
+  color: var(--dev-signal);
+  text-decoration: underline;
+}
+.dracula .dv-radar-meta {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: var(--dev-space-1) var(--dev-space-3);
+  margin-top: var(--dev-space-2);
+  font-size: var(--dev-text-2xs);
+  color: var(--dev-ink-dim);
+}
+.dracula .dv-radar-fonte {
+  font-weight: 700;
+  color: var(--dev-signal);
+}
+/* O selo de idioma torna VISÍVEL a regra de que este radar prioriza
+   português — e avisa antes do clique quando um item veio de fora. */
+.dracula .dv-radar-idioma {
+  padding: 0 0.45rem;
+  border: 1px solid;
+  border-radius: var(--dev-radius-pill);
+  font-size: 0.62rem;
+  letter-spacing: 0.05em;
+}
+.dracula .dv-radar-idioma[data-idioma="pt-BR"] {
+  color: var(--dev-ok);
+  border-color: color-mix(in srgb, var(--dev-ok) 45%, transparent);
+}
+.dracula .dv-radar-idioma[data-idioma="en"] {
+  color: var(--dev-ink-dim);
+  border-color: var(--dev-line);
+}
+
+/* ═══════════════════════════════════════════════════════════════════════
+   4. PULSO DO REPOSITÓRIO
+
+   Duas leituras do mesmo dado: o gráfico responde "isto está vivo?" de
+   relance, a lista responde "vivo fazendo o quê?".
+   ═══════════════════════════════════════════════════════════════════════ */
+/* `minmax(0, 1fr)` e não o `auto` implícito: a mensagem de commit é
+   `nowrap`, e uma trilha `auto` resolve para max-content — a linha mais longa
+   esticava o painel inteiro para 662px dentro de uma tela de 375, levando o
+   gráfico e o cabeçalho junto. A mesma correção precisa descer por toda a
+   cadeia até o texto, porque cada nível reintroduz `min-width: auto`. */
+.dracula .dv-pulso {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr);
+  gap: var(--dev-space-4);
+  padding: var(--dev-space-5);
+  border: 1px solid var(--dev-line);
+  border-radius: var(--dev-radius-lg);
+  background: var(--dev-surface-1);
+}
+.dracula .dv-pulso-topo {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  justify-content: space-between;
+  gap: var(--dev-space-3);
+}
+.dracula .dv-pulso-numero {
+  display: flex;
+  align-items: baseline;
+  gap: var(--dev-space-2);
+}
+.dracula .dv-pulso-numero strong {
+  font-size: 2rem;
+  font-weight: 800;
+  line-height: 1;
+  color: var(--dev-ok);
+  font-variant-numeric: tabular-nums;
+}
+.dracula .dv-pulso-numero span {
+  font-size: var(--dev-text-sm);
+  color: var(--dev-ink-dim);
+}
+.dracula .dv-pulso-selo {
+  display: inline-flex;
+  align-items: center;
+  gap: var(--dev-space-2);
+  font-size: var(--dev-text-2xs);
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  color: var(--dev-danger);
+}
+.dracula .dv-pulso-led {
+  width: 7px;
+  height: 7px;
+  border-radius: 50%;
+  background: var(--dev-danger);
+  animation: dv-pulso-bate 1.6s ease-in-out infinite;
+}
+@keyframes dv-pulso-bate {
+  0%, 100% { opacity: 1; transform: scale(1); }
+  50% { opacity: 0.3; transform: scale(0.75); }
+}
+
+.dracula .dv-pulso-grafico {
+  display: flex;
+  align-items: flex-end;
+  gap: 4px;
+  height: 4rem;
+  padding: var(--dev-space-2);
+  border-radius: var(--dev-radius-md);
+  background: var(--dev-surface-0);
+}
+.dracula .dv-pulso-barra {
+  flex: 1;
+  min-width: 3px;
+  /* `--h` chega do servidor com a proporção do dia contra o pico da janela. */
+  height: var(--h, 0%);
+  min-height: 3px;
+  border-radius: 3px 3px 1px 1px;
+  transform-origin: bottom;
+  background: linear-gradient(180deg, var(--dev-ok), color-mix(in srgb, var(--dev-ok) 30%, transparent));
+}
+/* Dia sem commit continua ocupando lugar: comprimir o descanso faria o
+   gráfico fingir uma constância que não houve. */
+.dracula .dv-pulso-barra[data-vazio] {
+  height: 3px;
+  background: var(--dev-surface-2);
+}
+/* As barras sobem quando o gráfico entra na tela. `scaleY` e não `height`
+   porque `min-height` impediria a altura de chegar a zero. */
+.dracula[data-motor="on"] .dv-pulso-grafico[data-revelar] .dv-pulso-barra {
+  transform: scaleY(0);
+  transition: transform 0.6s var(--dev-ease);
+}
+.dracula[data-motor="on"] .dv-pulso-grafico[data-visivel="true"] .dv-pulso-barra {
+  transform: none;
+}
+.dracula[data-motor="on"] .dv-pulso-barra:nth-child(2n) { transition-delay: 40ms; }
+.dracula[data-motor="on"] .dv-pulso-barra:nth-child(3n) { transition-delay: 80ms; }
+
+.dracula .dv-commits {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr);
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+.dracula .dv-commit {
+  min-width: 0;
+  display: flex;
+  align-items: baseline;
+  justify-content: space-between;
+  gap: var(--dev-space-3);
+  padding: var(--dev-space-2) 0;
+  border-top: 1px solid color-mix(in srgb, var(--dev-line) 60%, transparent);
+}
+.dracula .dv-commit:first-child {
+  border-top: 0;
+  padding-top: 0;
+}
+.dracula .dv-commit-link {
+  display: flex;
+  align-items: baseline;
+  gap: var(--dev-space-2);
+  min-width: 0;
+  font-size: var(--dev-text-sm);
+  color: var(--dev-ink-soft);
+}
+.dracula .dv-commit-link:hover .dv-commit-msg {
+  color: var(--dev-signal);
+  text-decoration: underline;
+}
+.dracula .dv-commit-sha {
+  flex: none;
+  padding: 0 0.35rem;
+  border-radius: var(--dev-radius-sm);
+  background: var(--dev-surface-0);
+  color: var(--dev-mark);
+  font-size: var(--dev-text-2xs);
+}
+/* Mensagem de commit é uma linha: quebrar em três desalinharia a lista e
+   apagaria a leitura vertical dos sha. */
+.dracula .dv-commit-msg {
+  min-width: 0;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+.dracula .dv-commit-quando {
+  flex: none;
+  font-size: var(--dev-text-2xs);
+  color: var(--dev-ink-dim);
+}
+
+/* ═══════════════════════════════════════════════════════════════════════
+   5. BANCADA — projeto, experimento e ferramenta na mesma superfície
+
+   A faixa colorida no topo é o que substitui três seções separadas: identifica
+   o tipo sem gastar uma linha de texto, e mantém as três famílias legíveis
+   dentro de um mosaico único.
+   ═══════════════════════════════════════════════════════════════════════ */
+.dracula .dv-bancada {
+  display: grid;
+  gap: var(--dev-space-4);
+  grid-template-columns: repeat(auto-fit, minmax(min(100%, 16rem), 1fr));
+}
+/* Acima de 60rem a grade vira fixa de 3 para que a peça em destaque possa
+   ocupar duas colunas — com `auto-fit` o span brigaria com o número variável
+   de trilhas e deixaria buraco. */
+@media (min-width: 60rem) {
+  .dracula .dv-bancada {
+    grid-template-columns: repeat(3, 1fr);
+  }
+  .dracula .dv-banca-peca[data-destaque] {
+    grid-column: span 2;
+  }
+}
+.dracula .dv-banca-peca {
+  display: grid;
+  align-content: start;
+  gap: var(--dev-space-2);
+  border-top-width: 3px;
+}
+.dracula .dv-banca-peca[data-tipo="projeto"] { border-top-color: var(--dev-ok); }
+.dracula .dv-banca-peca[data-tipo="experimento"] { border-top-color: var(--dev-warn); }
+.dracula .dv-banca-peca[data-tipo="ferramenta"] { border-top-color: var(--dev-signal); }
+
+.dracula .dv-banca-topo {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: var(--dev-space-2);
+}
+.dracula .dv-banca-tipo {
+  font-size: var(--dev-text-2xs);
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  color: var(--dev-ink-dim);
+}
+.dracula .dv-banca-peca[data-tipo="projeto"] .dv-banca-tipo { color: var(--dev-ok); }
+.dracula .dv-banca-peca[data-tipo="experimento"] .dv-banca-tipo { color: var(--dev-warn); }
+.dracula .dv-banca-peca[data-tipo="ferramenta"] .dv-banca-tipo { color: var(--dev-signal); }
+
+.dracula .dv-banca-titulo {
+  font-size: var(--dev-text-md);
+  font-weight: 700;
+  line-height: 1.25;
+  color: var(--dev-signal);
+}
+.dracula .dv-banca-peca[data-destaque] .dv-banca-titulo {
+  font-size: var(--dev-text-lg);
+}
+.dracula .dv-banca-desc {
+  margin-top: 0;
+  font-size: var(--dev-text-base);
+  line-height: 1.55;
+  color: var(--dev-ink-soft);
+}
+.dracula .dv-banca-tags {
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--dev-space-1);
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+
+/* ═══════════════════════════════════════════════════════════════════════
+   6. CONSOLE
+
+   Superfície de terminal de verdade: fundo do nível 0 (o mais escuro do
+   realm), barra de entrada destacada por cima e a saída rolando dentro da
+   própria caixa — nunca arrastando a página.
+   ═══════════════════════════════════════════════════════════════════════ */
+/* `minmax(0, 1fr)` nos dois níveis pelo mesmo motivo do `.dv-pulso`: as
+   linhas de saída são `pre-wrap`, e uma trilha `auto` mede por max-content —
+   em 320px a caixa inteira era empurrada para fora e o `overflow: hidden`
+   escondia metade do console em vez de quebrar a linha. */
+.dracula .dv-console {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr);
+  border: 1px solid var(--dev-line);
+  border-radius: var(--dev-radius-lg);
+  background: var(--dev-surface-0);
+  overflow: hidden;
+}
+.dracula .dv-console-saida {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr);
+  gap: 2px;
+  align-content: start;
+  min-height: 9rem;
+  max-height: 16rem;
+  overflow-y: auto;
+  padding: var(--dev-space-4);
+  font-size: var(--dev-text-sm);
+  scrollbar-width: thin;
+}
+.dracula .dv-console-linha {
+  line-height: 1.5;
+  white-space: pre-wrap;
+  overflow-wrap: anywhere;
+  color: var(--dev-ink-soft);
+}
+.dracula .dv-console-linha[data-tipo="eco"] { color: var(--dev-ink); }
+.dracula .dv-console-linha[data-tipo="eco"]::before {
+  content: "$ ";
+  color: var(--dev-mark);
+}
+.dracula .dv-console-linha[data-tipo="erro"] { color: var(--dev-danger); }
+.dracula .dv-console-linha[data-tipo="ok"] { color: var(--dev-ok); }
+
+.dracula .dv-console-entrada {
+  display: flex;
+  align-items: center;
+  gap: var(--dev-space-2);
+  padding: var(--dev-space-2) var(--dev-space-4);
+  border-top: 1px solid var(--dev-line);
+  background: var(--dev-surface-1);
+}
+.dracula .dv-console-prompt {
+  font-weight: 800;
+  color: var(--dev-ok);
+}
+.dracula .dv-console-campo {
+  flex: 1;
+  min-width: 0;
+  border: 0;
+  outline: none;
+  background: transparent;
+  color: var(--dev-ink);
+  font-family: inherit;
+  font-size: var(--dev-text-sm);
+}
+.dracula .dv-console-campo::placeholder { color: var(--dev-ink-dim); }
+.dracula .dv-console-ok {
+  flex: none;
+  padding: 0.25rem 0.7rem;
+  border: 1px solid var(--dev-line);
+  border-radius: var(--dev-radius-pill);
+  background: transparent;
+  color: var(--dev-ink-dim);
+  font-family: inherit;
+  font-size: var(--dev-text-2xs);
+  text-transform: uppercase;
+  letter-spacing: 0.06em;
+  cursor: pointer;
+  transition:
+    color var(--dev-dur-fast) var(--dev-ease),
+    background var(--dev-dur-fast) var(--dev-ease),
+    border-color var(--dev-dur-fast) var(--dev-ease);
+}
+.dracula .dv-console-ok:hover {
+  color: var(--dev-accent-ink);
+  background: var(--dev-accent);
+  border-color: var(--dev-accent);
+}
+
+/* ═══════════════════════════════════════════════════════════════════════
+   7. ENTRADA DO DEVLOG
+
+   Texto longo, e a única página do realm que é só isso. A medida de leitura
+   passa a valer para o corpo inteiro: `.dv-prose` sozinha herdaria a largura
+   do canvas (até 1440px), e linha de 200 caracteres em monoespaçada é
+   ilegível — o olho perde o começo da linha seguinte.
+   ═══════════════════════════════════════════════════════════════════════ */
+.dracula .dv-entrada-data {
+  margin-top: var(--dev-space-3);
+  font-size: var(--dev-text-2xs);
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  color: var(--dev-ink-dim);
+}
+.dracula .dv-entrada-corpo {
+  max-width: var(--dev-measure);
+  margin-top: var(--dev-space-5);
+  font-size: var(--dev-text-base);
+  line-height: 1.75;
+}
+/* `.dv-prose h2` já é laranja; o que falta é ar em volta dos subtítulos
+   quando eles separam blocos longos em vez de rotular um parágrafo. */
+.dracula .dv-entrada-corpo h2 {
+  margin: var(--dev-space-6) 0 var(--dev-space-2);
+  padding-top: var(--dev-space-3);
+  border-top: 1px solid var(--dev-line);
+}
+.dracula .dv-entrada-corpo h2:first-child {
+  margin-top: 0;
+  padding-top: 0;
+  border-top: 0;
+}
+.dracula .dv-entrada-corpo p + p {
+  margin-top: var(--dev-space-4);
+}
+
+.dracula .dv-entrada-nav {
+  display: grid;
+  gap: var(--dev-space-3);
+  align-items: start;
+  margin-top: var(--dev-space-7);
+  padding-top: var(--dev-space-4);
+  border-top: 1px solid var(--dev-line);
+}
+/* Três colunas só quando há largura: empilhado, "anterior" e "próxima" lado a
+   lado viram duas colunas estreitas com o título quebrado em cinco linhas. */
+@media (min-width: 48rem) {
+  .dracula .dv-entrada-nav {
+    grid-template-columns: 1fr auto 1fr;
+    align-items: center;
+  }
+  .dracula .dv-entrada-nav > :last-child {
+    justify-self: end;
+    text-align: right;
+  }
+}
+
+/* ═══════════════════════════════════════════════════════════════════════
+   8. O NOME, EM MOVIMENTO
+
+   O único gesto puramente decorativo da página, e assumido como tal: o nome
+   no hero é a assinatura, e uma varredura lenta de cor faz dele algo vivo sem
+   pedir interação nenhuma. Especificidade acima da regra de `dracula.css`
+   para não depender da ordem de importação.
+   ═══════════════════════════════════════════════════════════════════════ */
+.dracula .dv-hero h1 span.p {
+  background: linear-gradient(90deg, var(--d-purple), var(--d-pink), var(--d-cyan), var(--d-purple));
+  background-size: 300% 100%;
+  -webkit-background-clip: text;
+  background-clip: text;
+  color: transparent;
+  animation: dv-nome-varre 9s linear infinite;
+}
+@keyframes dv-nome-varre {
+  to { background-position: -300% 0; }
+}

@@ -17,6 +17,8 @@
 import Link from "next/link"
 import type { ReactNode } from "react"
 
+import type { VersaoSite } from "@/lib/repos/tech-feed"
+
 /* ────────────────────────────────────────────────────────────────────────
    SEÇÃO
 
@@ -122,8 +124,12 @@ export function StatTile({
   color: string
 }) {
   return (
-    <Link href={href} className="dv-stat">
-      <div className="n" style={{ color }}>
+    /* `data-revelar` + `data-contador`: o servidor já renderiza o número
+       final — quem não tem JavaScript vê o valor certo e parado. O motor da
+       home, quando existe, zera e conta até ele assim que o bloco entra na
+       tela. O número é o dado; a contagem é enfeite em cima dele. */
+    <Link href={href} className="dv-stat" data-revelar>
+      <div className="n" style={{ color }} data-contador={value}>
         {value}
       </div>
       <div className="l">{label}</div>
@@ -157,8 +163,21 @@ export function MetaRow({ items }: { items: readonly { k: string; v: ReactNode }
    componentiza aqui é o ARRANJO do cabeçalho e do rodapé, que quatro páginas
    remontavam com utilitários Tailwind soltos e divergentes.
    ──────────────────────────────────────────────────────────────────────── */
-export function DevPanel({ children, className = "" }: { children: ReactNode; className?: string }) {
-  return <article className={`dv-card ${className}`.trim()}>{children}</article>
+export function DevPanel({
+  children,
+  className = "",
+  revelar,
+}: {
+  children: ReactNode
+  className?: string
+  /** Marca o painel para a animação de entrada do motor da home. */
+  revelar?: boolean
+}) {
+  return (
+    <article className={`dv-card ${className}`.trim()} data-revelar={revelar || undefined}>
+      {children}
+    </article>
+  )
 }
 
 export function DevPanelHead({ title, badge, href }: { title: string; badge?: ReactNode; href?: string }) {
@@ -172,4 +191,39 @@ export function DevPanelHead({ title, badge, href }: { title: string; badge?: Re
 
 export function DevPanelFoot({ children }: { children: ReactNode }) {
   return <div className="dv-panel-foot">{children}</div>
+}
+
+/* ────────────────────────────────────────────────────────────────────────
+   VERSÃO
+
+   Selo de build: diz qual corte do repositório está no ar. Mora aqui, e não
+   no JSX da home, porque é link de saída com `target="_blank"` — o mesmo
+   padrão que `DevExternalLink` centraliza, e que o teste do realm proíbe
+   remontar à mão dentro das páginas.
+
+   A legenda muda com a origem: um número vindo de release ANUNCIA uma
+   entrega, um vindo do `package.json` só descreve o pacote. Chamar os dois
+   de "versão publicada" seria mentira barata.
+   ──────────────────────────────────────────────────────────────────────── */
+const LEGENDA_VERSAO: Record<VersaoSite["origem"], string> = {
+  release: "release publicada no GitHub",
+  tag: "tag mais recente do repositório",
+  pacote: "versão declarada no package.json",
+}
+
+export function DevVersionBadge({ versao }: { versao: VersaoSite }) {
+  return (
+    <a
+      href={versao.url}
+      target="_blank"
+      rel="noreferrer"
+      className="dv-versao"
+      data-origem={versao.origem}
+    >
+      <span className="dv-versao-led" aria-hidden />
+      <span className="dv-versao-k">versão</span>
+      <span className="dv-versao-v">{versao.rotulo}</span>
+      <span className="sr-only"> — {LEGENDA_VERSAO[versao.origem]} (abre em nova aba)</span>
+    </a>
+  )
 }

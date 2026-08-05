@@ -3,8 +3,9 @@
 > Resumo executivo do estado real do projeto. Atualize a cada marco.
 > Para o conhecimento estável e detalhado, veja `docs/project-knowledge/`.
 >
-> **Última atualização:** 2026-08-01, depois do primeiro teste manual do painel
-> — o upload de mídia está QUEBRADO (seção 5)
+> **Última atualização:** 2026-08-05, reescrita da home do `/desenvolvedor`
+> (seção 2.1). Bloqueio anterior segue de pé: o upload de mídia está QUEBRADO
+> (seção 5).
 
 ---
 
@@ -32,11 +33,52 @@ configurado.
 | Regras | 63 RLS policies | `firestore.rules` + `requireAdmin()` |
 
 **Zero dependências do Supabase restantes.** As menções que sobram em
-`src/data/dev/*` e no `STACK` de `/desenvolvedor` são **conteúdo editorial**
-(devlogs narrando a construção, lista de habilidades) — preservadas de
-propósito.
+`src/data/dev/*` são **conteúdo editorial** (devlogs narrando a construção,
+lista de habilidades) — preservadas de propósito. O `STACK` que a home do
+`/desenvolvedor` exibia em chips saiu na reescrita da abertura (05/08/2026):
+o hero virou apresentação pessoal + manifesto, sem linha de tecnologias.
 
 Detalhes completos: `docs/project-knowledge/migrations/supabase-to-firebase.md`.
+
+---
+
+## 2.1 Home do `/desenvolvedor` — reescrita em 05/08/2026
+
+De índice de acervo para apresentação pessoal. O hero virou "Olá, eu sou Lucas
+Riboldi" + manifesto (§01 `readme.md`) e quatro princípios (§02).
+
+**Saíram da home a pedido:** Estudando agora (Java), Snippets, Certificações,
+Lendo agora, Devlog, Stack em movimento (demo GSAP) e Explorar. Seis dos sete
+continuam alcançáveis nas rotas próprias (`/java`, `/codigo`, `/estante`) e
+pelo dock.
+
+**Duas consequências registradas, não escondidas:**
+
+1. **`devlogs` ficou órfão por algumas horas e já foi resolvido.**
+   `tests/admin-integridade.test.ts` acusou; a saída foi dar rota própria —
+   `/desenvolvedor/devlog` (linha do tempo) e `/devlog/[slug]` (texto inteiro
+   em markdown, com navegação anterior/próxima). O leitor `getDevlogs` passou
+   a cair no seed de `src/data/dev/devlogs.ts` quando não há nada publicado:
+   faixa vazia some, PÁGINA vazia quebra a promessa de funcionar sem backend.
+   `ORFAOS_CONHECIDOS` voltou a ficar vazia.
+2. **A demo do GSAP foi removida.** `gsap-demo.tsx` saiu, e com ele as barras
+   de proporção que só ela usava (`.dv-bars` e irmãs, em `dev-hud.css`). Os
+   catálogos do guia de design system (`realm-motion.ts`, `realms.ts`) que a
+   listavam passaram a descrever o motor de movimento da home no lugar dela.
+   `@/design-system/gsap` **fica**: sete outros componentes (comic, criativo,
+   scroll suave) dependem dele.
+
+**Zonas novas:** Bancada (projetos + experimentos + ferramentas intercalados),
+Radar reformulado (3 manchetes, prioridade a fontes em português — TabNews e
+`braziliandevs` do Dev.to, com Hacker News só de reserva), Pulso do
+repositório (commits e atividade lidos da API do GitHub) e Console (terminal
+navegável). Selo de versão no hero, alimentado por release → tag →
+`package.json`.
+
+**Movimento:** `MotorDeMovimento` (`components/dev/home-motor.tsx`) é um único
+componente de cliente que enriquece o HTML do servidor — entrada por rolagem,
+contadores e holofote do cursor. O repouso é o estado VISÍVEL: sem JS ou com
+`prefers-reduced-motion`, a página aparece inteira e parada.
 
 ---
 

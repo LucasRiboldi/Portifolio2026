@@ -52,7 +52,8 @@ const DEVELOPER_MOTION: MotionEntry[] = [
   { name: "hover de card", value: "border-color 150ms · sem transform", use: "Discreto: nada salta, só a borda acende", demo: "borderOnly", where: "dv-card" },
   { name: "ease.out", value: "cubic-bezier(0, 0, 0.2, 1)", use: "Padrão — entra e assenta, sem passar do ponto", demo: "settle", where: "Todas as transições do _dev" },
   { name: "type-in", value: "steps(n) · ~40ms por caractere", use: "Texto datilografado, como saída de terminal", demo: "typeIn", where: "Home _dev, logs" },
-  { name: "GSAP timeline", value: "timeline sequencial", use: "Stack em movimento na home", demo: "settle", where: "Demo de stack" },
+  { name: "entrada por rolagem", value: "opacity + translateY 14px · 500ms · escalonado em 60ms", use: "Blocos chegam conforme a leitura avança; o repouso é o estado visível", demo: "settle", where: "Home _dev ([data-revelar])" },
+  { name: "holofote do cursor", value: "radial-gradient seguindo --mx/--my", use: "O cartão sob o ponteiro acende por dentro", demo: "borderOnly", where: "Bancada, radar e princípios ([data-spot])" },
   { name: "scanline", value: "linear · 3s · infinito", use: "Varredura do tubo — só no modo CRT", demo: "scan", where: ".crt (dev-mode.css)" },
 ]
 
