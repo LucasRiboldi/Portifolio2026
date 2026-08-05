@@ -6,9 +6,10 @@
  * item. Aqui mora o único conhecimento sobre formatos de feed.
  *
  * ESCOPO: cobre feeds RSS 2.0 (`<item>`) e Atom (`<entry>`), que são a maioria
- * das fontes do registry. Fontes `kind: "html"`/`"api"` sem feed exigem
- * extractors site-específicos e ficam para uma parte futura — o parser as
- * ignora com um aviso, sem inventar itens (nada de placeholder).
+ * das fontes do registry. Fonte sem feed cai nos extractors de `extractors.ts`,
+ * consultados **depois** do caminho estruturado — se o site publicar um feed,
+ * ele volta a valer sozinho. Sem extractor registrado, o parser ignora com um
+ * aviso, sem inventar itens (nada de placeholder).
  *
  * O parser é tolerante mas dependency-free: não é um parser XML genérico, e sim
  * um extrator de feeds. Se um formato novo aparecer, estende-se aqui.
@@ -16,6 +17,7 @@
 
 import type { RawPayload } from "./collector"
 import type { Logger } from "./logger"
+import { EXTRACTORS } from "./extractors"
 
 /** Um item de notícia extraído de um feed, ainda não mapeado para `NewsItem`. */
 export interface ParsedItem {
@@ -138,6 +140,28 @@ export function parsePayload(payload: RawPayload, logger: Logger): ParsedItem[] 
 
     const entries = blocks(body, "entry")
     if (entries.length > 0) return entries.map((b) => parseAtomEntry(source.id, b))
+
+    /**
+     * Sem feed: só então vale um extractor de HTML.
+     *
+     * A ordem importa. Se o site publicar um feed amanhã, o caminho estruturado
+     * volta a valer sozinho e o extractor deixa de rodar — sem ninguém precisar
+     * lembrar de desligá-lo.
+     */
+    const extrator = EXTRACTORS[source.id]
+    if (extrator) {
+      const extraidos = extrator(body, source.id)
+      if (extraidos.length === 0) {
+        // Zero itens de um extractor é suspeito: o site provavelmente mudou de
+        // layout. Sem este aviso, a fonte secaria em silêncio.
+        logger.warn("extractor não achou item — o layout da fonte pode ter mudado", {
+          source: source.id,
+        })
+      } else {
+        logger.debug("extraído de HTML", { source: source.id, itens: extraidos.length })
+      }
+      return extraidos
+    }
 
     logger.warn("payload sem <item>/<entry> — fonte precisa de extractor próprio", {
       source: source.id,

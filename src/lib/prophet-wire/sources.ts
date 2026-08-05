@@ -229,11 +229,9 @@ export const SOURCES: readonly Source[] = [
     url: "https://www.ukgamesexpo.co.uk/content/news/",
     kind: "html",
     defaultCategory: "Eventos",
-    // Desligada em 05/08/2026. O "404" de antes era da URL velha: as notícias
-    // mudaram para /content/news/, que responde 200. Mas não há feed —
-    // /feed/, /rss, /feed.xml e /news/rss.xml todos dão 404, e a página não
-    // anuncia nenhum. Só volta com extractor de HTML.
-    enabled: false,
+        // Sem feed: lida pelo extractor de `extractors.ts`. Ver o teste, que guarda
+    // uma fixture do HTML real — é o que acusa mudança de layout.
+    enabled: true,
   },
   {
     id: "origins",

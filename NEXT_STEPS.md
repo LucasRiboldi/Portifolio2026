@@ -176,18 +176,18 @@ curl -i -X POST https://portifolio2026-two.vercel.app/api/prophet-wire/run -H "A
 execução local, depois da auditoria de fontes do item 7. Se aparecer erro em
 produção, é fonte que caiu desde então.
 
-## 7. Recuperar cobertura: 18 das 24 fontes estão desligadas
+## 7. Recuperar cobertura: 17 das 24 fontes estão desligadas
 
-Sinal limpo (**`errors: 0`**, 6 de 6 respondendo), mas cobertura curta. Ativas:
+Sinal limpo (**`errors: 0`**, 7 de 7 respondendo), mas cobertura curta. Ativas:
 `bgg-blog`, `dice-tower`, `stonemaier`, `leder-games`, `reddit-boardgames`,
-`gen-con`.
+`gen-con` e `uk-games-expo` — esta última por **extractor de HTML**, não feed.
 
 Cada desligada tem motivo e data no comentário, em `lib/prophet-wire/sources.ts`.
 
 | Barreira | Fontes | O que destravaria |
 |---|---|---|
 | **Anti-bot por impressão TLS** | `cmon`, `icv2-games`, `fantasy-flight`, `czech-games`, `origins`, `kickstarter-tabletop`, `gamefound` | Cliente HTTP que imite navegador. Ver a nota abaixo. |
-| **Sem feed — só HTML** | `uk-games-expo`, `gmt-games`, `plaid-hat`, `ravensburger`, `spiel-essen` | Um extractor por site. Trabalho maior, valor menor. |
+| **Sem feed — só HTML** | `gmt-games`, `plaid-hat`, `ravensburger`, `spiel-essen` | Um extractor por site. O do `uk-games-expo` (em `extractors.ts`) serve de molde — leia o teste dele antes de escrever o próximo. |
 | **Limite de taxa do Reddit** | `reddit-soloboardgaming`, `reddit-boardgamedeals` | Cliente autenticado (OAuth) no lugar do RSS público. |
 | **Vazio ou quebrado na origem** | `kosmos`, `portal-games`, `asmodee`, `bgg-hotness` | Esperar. Nada a fazer do nosso lado. |
 
