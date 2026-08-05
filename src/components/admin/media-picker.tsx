@@ -2,7 +2,7 @@
 
 import { useRef, useState } from "react"
 
-import { enviarMidia } from "@/components/admin/enviar-midia"
+import { enviarMidia, type FaseEnvio } from "@/components/admin/enviar-midia"
 import {
   DEFAULT_CLASSES,
   acceptAttr,
@@ -16,6 +16,12 @@ interface MediaPickerProps {
   inputClassName: string
   /** Espécies que este campo aceita. Sem isso, só imagem — o padrão antigo. */
   accept?: MediaClass[]
+}
+
+const ROTULO: Record<FaseEnvio, string> = {
+  autorizando: "autorizando…",
+  enviando: "enviando…",
+  finalizando: "concluindo…",
 }
 
 /** Como renderizar o preview, deduzido da extensão da URL. */
@@ -41,14 +47,16 @@ export function MediaPicker({
   const [error, setError] = useState<string | null>(null)
   // null = sem progresso a mostrar (upload pequeno, que sobe de uma vez).
   const [progresso, setProgresso] = useState<number | null>(null)
+  const [fase, setFase] = useState<FaseEnvio | null>(null)
   const fileRef = useRef<HTMLInputElement>(null)
 
   async function upload(file: File) {
     setUploading(true)
     setError(null)
     setProgresso(null)
+    setFase(null)
     try {
-      const res = await enviarMidia(file, accept, setProgresso)
+      const res = await enviarMidia(file, accept, setProgresso, setFase)
       if (!res.ok) {
         setError(res.error)
         return
@@ -59,6 +67,7 @@ export function MediaPicker({
     } finally {
       setUploading(false)
       setProgresso(null)
+      setFase(null)
     }
   }
 
@@ -86,6 +95,9 @@ export function MediaPicker({
 
       {/* "Enviando…" sozinho é indistinguível de travado — foi assim que um
           vídeo ficou enviando para sempre sem ninguém saber onde parou. */}
+      {uploading && fase && (
+        <p className="text-[11px] text-[color:var(--mm-text-2)]">{ROTULO[fase]}</p>
+      )}
       {uploading && progresso !== null && (
         <div
           className="h-1 w-full overflow-hidden rounded-full bg-[color:var(--mm-border)]"

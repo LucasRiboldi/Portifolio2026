@@ -3,15 +3,24 @@
 import { useEffect, useRef, useState, useCallback } from "react"
 
 import { listMedia, deleteMedia, type MediaItem } from "@/app/admin/media/actions"
-import { enviarMidia } from "@/components/admin/enviar-midia"
+import { enviarMidia, type FaseEnvio } from "@/components/admin/enviar-midia"
 import { acceptAttr, acceptedHint, type MediaClass } from "@/lib/admin/media-accept"
 
 /**
- * A biblioteca sobe pela Server Action, que confere magic bytes — por isso
- * aceita imagem, áudio e PDF, mas não vídeo. Vídeo vai direto para o Blob e só o
- * campo "Vídeo" do formulário tem esse caminho.
+ * A biblioteca aceita imagem, áudio e PDF — não vídeo. Vídeo se cadastra pelo
+ * campo "Vídeo" do formulário de `videos`.
+ *
+ * Não confundir com POR ONDE o arquivo sobe: isso quem decide é `enviarMidia`,
+ * pelo tamanho. Arquivo pequeno vai pela Server Action e ganha conferência de
+ * magic bytes; grande vai direto ao Blob e abre mão dela.
  */
 const CLASSES: MediaClass[] = ["image", "audio", "document"]
+
+const ROTULO: Record<FaseEnvio, string> = {
+  autorizando: "autorizando…",
+  enviando: "enviando…",
+  finalizando: "concluindo…",
+}
 
 /** O preview do grid muda por espécie: <img> não renderiza um mp3 nem um PDF. */
 const ehAudio = (nome: string) => /\.(mp3|ogg|wav|m4a)$/i.test(nome)
@@ -23,6 +32,7 @@ export function MediaManager() {
   const [error, setError] = useState<string | null>(null)
   // null = sem progresso a mostrar (upload pequeno, que sobe de uma vez).
   const [progresso, setProgresso] = useState<number | null>(null)
+  const [fase, setFase] = useState<FaseEnvio | null>(null)
   const [copied, setCopied] = useState<string | null>(null)
   const fileRef = useRef<HTMLInputElement>(null)
 
@@ -46,12 +56,13 @@ export function MediaManager() {
     setUploading(true)
     setError(null)
     setProgresso(null)
+    setFase(null)
     try {
       // Mesma regra do campo de formulário: `enviarMidia` decide se vai pela
       // Server Action ou direto ao Blob. Esta página mandava tudo pela action,
       // então qualquer arquivo acima de ~4,5 MB morria aqui — e um conserto no
       // `media-picker` não a alcançava.
-      const res = await enviarMidia(file, CLASSES, setProgresso)
+      const res = await enviarMidia(file, CLASSES, setProgresso, setFase)
       if (!res.ok) {
         setError(res.error)
         return
@@ -62,6 +73,7 @@ export function MediaManager() {
     } finally {
       setUploading(false)
       setProgresso(null)
+      setFase(null)
     }
   }
 
@@ -100,7 +112,7 @@ export function MediaManager() {
           disabled={uploading}
           className="mm-btn mm-btn-primary"
         >
-          {uploading ? (progresso !== null ? `Enviando… ${progresso}%` : "Enviando…") : "Enviar arquivo"}
+          {uploading ? (progresso !== null ? `${ROTULO[fase ?? "enviando"]} ${progresso}%` : (fase ? ROTULO[fase] : "Enviando…")) : "Enviar arquivo"}
         </button>
         {uploading && progresso !== null && (
           <div
