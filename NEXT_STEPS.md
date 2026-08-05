@@ -6,14 +6,18 @@
 > Ao concluir um item: remova-o daqui, atualize `PROJECT_STATE.md` e diga no
 > commit o que foi verificado de verdade.
 >
-> **Atualizado:** 2026-08-05, depois de achar o CSP como causa raiz do upload.
+> **Atualizado:** 2026-08-05, com o upload de mídia funcionando fim a fim.
 
 ---
 
 ## Estado em uma linha
 
-Site no ar, login e CRUD funcionando, **640 testes passando**. O upload de mídia
-tinha **três** defeitos independentes, os três fechados em 04–05/08:
+Site no ar, login e CRUD funcionando, **640 testes passando**. **O upload de
+mídia funciona fim a fim** — imagem, áudio, PDF e vídeo, verificado em produção
+em 05/08 com um mp4 de 9,19 MB que sobe e toca na videoteca.
+
+Eram **três** defeitos independentes, e o diagnóstico antigo culpava um quarto
+que não existia:
 
 1. `/admin/media` apagava arquivo em uso sem avisar — o 404 era referência
    pendurada, não falha de escrita;
@@ -23,7 +27,10 @@ tinha **três** defeitos independentes, os três fechados em 04–05/08:
    era bloqueado pelo navegador — e `media-src` nem existia, o que bloquearia a
    reprodução também.
 
-Falta só você confirmar o item 1 subindo um vídeo.
+**A lição que sobra:** o sintoma ("o arquivo não chega") apontava para o
+armazenamento, e o culpado estava no `next.config.ts`. Quando um upload trava
+sem erro na tela, **o console do navegador é o primeiro lugar a olhar** — ele
+dizia exatamente qual diretiva bloqueava, desde o começo.
 
 <details>
 <summary>O que o rediagnóstico de 04/08 desmontou</summary>
@@ -51,56 +58,9 @@ Ao registrar uma URL quebrada, registre-a inteira.
 
 ---
 
-# 🔴 Confirmar
-
-## 1. O upload de vídeo — causa raiz achada e consertada, falta você confirmar
-
-**Era o nosso próprio CSP.** `connect-src` não listava o Vercel Blob, então o
-navegador recusava o PUT antes de ele sair da máquina. Corrigido em `a00d5ff`.
-
-O navegador dizia, e ninguém tinha olhado o console:
-
-```
-Connecting to 'https://…blob.vercel-storage.com/…' violates the following
-Content Security Policy directive: "connect-src 'self' …"
-The action has been blocked.
-```
-
-<details>
-<summary>Por que enganou por dias</summary>
-
-- **O handshake passava.** `/api/admin/blob-upload` é mesma origem, coberta por
-  `'self'`. O token saía, a barra aparecia — e só então nada acontecia. A fase
-  "enviando 0%" era honesta: o PUT começava e era recusado.
-- **Imagem e áudio pequenos sempre funcionaram**, porque sobem pela Server
-  Action, que também é mesma origem. Isso fazia parecer que só vídeo era
-  especial.
-- **As capas do Blob apareciam**, porque `img-src` permite `https:` inteiro.
-- **Falhava com `fetch` e com XHR**, o que descartava o transporte e empurrava
-  a suspeita para o ambiente (extensão, Brave, rede) — tudo inocente.
-
-Suspeitos eliminados por medição, todos falsos: `put()`, o store, o caminho
-OIDC, o tamanho do arquivo, o SDK, o navegador. Um upload de 9,18 MB com token
-de cliente sobe em 3,2 s por fora do browser.
-
-</details>
-
-**Segundo buraco, achado junto:** `media-src` não era declarado e caía no
-`default-src 'self'` — `<audio>` e `<video>` do Blob seriam recusados do mesmo
-jeito. Ou seja, mesmo com o upload consertado a **reprodução** continuaria
-quebrada. Declarado agora.
-
-**Verificado em produção, no navegador:** `fetch` ao Blob devolve 200 (antes
-falhava em 1 ms), e um `<audio>` do Blob carrega metadados — o mp3 que você
-subiu tem 45 s. Zero erros de CSP no console.
-
-**Falta só você:** suba o vídeo de novo. Se subir, remova este item.
-
----
-
 # 🟡 Conteúdo
 
-## 2. A zona Rádio do `/criativo` está sem música
+## 1. A zona Rádio do `/criativo` está sem música
 
 **Não é bug** — é conteúdo faltando. As faixas fantasma saíram do seed em 04/08,
 e os dois `audio_url` que restavam apontavam para arquivos apagados; foram
@@ -115,20 +75,21 @@ Para publicar, dois caminhos, e **nenhum passa por editar o seed**:
 **Os dois funcionam hoje** — o teto de 4,5 MB deixou de barrar o caminho 2 em
 04/08. Um mp3 de até 25 MB sobe pelo painel.
 
-## 3. Reparar as mídias que foram perdidas
+## 2. Repor o que falta de mídia
 
-A limpeza de 04/08 zerou campos, não recuperou arquivos. Seguem sem mídia:
+A limpeza de 04/08 zerou campos, não recuperou arquivos. Você já repôs o pôster
+e o vídeo do "Samurai Blue" e o áudio da faixa homônima. Sobra pouco:
 
-| Documento | Campo perdido |
+| Documento | Falta |
 |---|---|
-| `tracks` · "Samurai Blue" | `audio_url`, `cover_image` |
-| `tracks` · "sirius" | `audio_url` |
-| `videos` · "Samurai Blue" | `poster_image` |
+| `tracks` · "Samurai Blue" | `cover_image` |
+| `tracks` · "sirius" | `audio_url`, `cover_image` |
 
-Os arquivos originais não estão no Blob. Se você ainda tiver os locais, resubir
-pelo painel refaz tudo — e agora a exclusão acidental não se repete.
+As outras quatro fitas da videoteca (`Making of`, `Diário de um bug`, `Letragem`,
+`Retrato em 32×32`) têm pôster mas `video_url` vazio — nunca tiveram vídeo, então
+mostram só a capa. Não é regressão; é conteúdo a fazer, se você quiser.
 
-## 4. Reescrever o conteúdo do arcano
+## 3. Reescrever o conteúdo do arcano
 
 As quatro páginas (`/anfitriao/oficina`, `/mecanicas`, `/laboratorio`,
 `/imprensa`) estão no ar com 12 documentos **escritos pelo Claude, saindo com a
@@ -146,7 +107,7 @@ botão do `/admin`, não.
 **Ordem importa**: gerar a nova credencial e atualizá-la em todos os ambientes
 ANTES de invalidar a antiga — inverter derruba o backend no intervalo.
 
-## 5. Rotacionar a chave de conta de serviço do Firebase
+## 4. Rotacionar a chave de conta de serviço do Firebase
 
 Console do Google Cloud → IAM → Contas de serviço → `firebase-adminsdk-fbsvc`
 → Chaves → criar nova. Depois: substituir `serviceAccountKey.json`; atualizar
@@ -170,7 +131,7 @@ segurança.
 
 </details>
 
-## 6. Revogar o token antigo da Vercel
+## 5. Revogar o token antigo da Vercel
 
 A variável de usuário `VERCEL_TOKEN` **já não existe** nesta máquina (conferido
 em 01/08); o CLI usa credencial própria. Falta revogar o token antigo em
@@ -180,7 +141,7 @@ https://vercel.com/account/tokens, se ainda estiver listado.
 
 # 🟠 Validação restante
 
-## 7. Disparar o gatilho do Prophet Wire
+## 6. Disparar o gatilho do Prophet Wire
 
 Já provado: persistência e dedup contra Firestore real
 (`tests-integration/prophet-wire-persistencia.test.ts`), `CRON_SECRET` definido
@@ -204,22 +165,22 @@ de sucesso é `errors: 0` e o acervo crescendo.
 
 # 🟢 Melhorias
 
-## 8. `BLOB_READ_WRITE_TOKEN` ausente no Preview
+## 7. `BLOB_READ_WRITE_TOKEN` ausente no Preview
 
 Não dá por CLI — o token é *sensitive*, não há de onde copiar. O caminho é
 reconectar o store: Storage → `portfolio-midia` → aba **Projects** → ⋯ →
 **Update Project Connection** → marcar **Preview**.
 
 O Preview já tem `BLOB_STORE_ID` e `BLOB_WEBHOOK_PUBLIC_KEY`. **Prioridade
-baixa:** sem login em preview (item 9) não há painel de onde subir mídia.
+baixa:** sem login em preview (item 8) não há painel de onde subir mídia.
 
-## 9. Login em preview é impossível
+## 8. Login em preview é impossível
 
 Cada preview ganha URL com hash único e o Firebase Auth exige domínio na
 allowlist — não há curinga. Saída, se incomodar: alias fixo de branch na Vercel,
 autorizado uma vez. Detalhes em `docs/project-knowledge/auth.md` §6.1.
 
-## 10. A varredura de usos relê o banco a cada exclusão
+## 9. A varredura de usos relê o banco a cada exclusão
 
 `mapearUsosDeMidia` lê todas as coleções declaradas para responder "este arquivo
 está em uso?". São ~170 documentos e roda só no painel, então hoje não incomoda.
@@ -228,7 +189,7 @@ Se um dia incomodar, a saída não é cachear — é gravar o vínculo na hora e
 URL entra no documento, em vez de descobri-lo depois. **Não faça antes de doer:**
 o índice derivado é o que não pode dessincronizar.
 
-## 11. Convenção de idioma mista na camada de dados
+## 10. Convenção de idioma mista na camada de dados
 
 `buscarLinhas` vs. `listContactMessages`. Padronizar **ao tocar em cada módulo**,
 não num varredão — renomear tudo de uma vez produz diff enorme, sem
@@ -238,7 +199,7 @@ comportamento novo, que atrapalha o `git blame` do resto.
 
 # 🔵 Higiene
 
-## 12. Desligar o projeto Supabase
+## 11. Desligar o projeto Supabase
 
 **Conferido em 01/08, reconferido em 04/08 — seguro apagar:**
 
@@ -256,7 +217,7 @@ Supabase, que não está instalado — já não roda. Apagar depois do desligame
 **Como:** https://app.supabase.com → projeto → Settings → General → Delete
 project. **Irreversível.**
 
-## 13. CSP com `unsafe-inline` em `script-src`
+## 12. CSP com `unsafe-inline` em `script-src`
 
 Compromisso de um CSP por header, sem nonce por request. Um CSP estrito exigiria
 middleware em todas as rotas. Registrado em `next.config.ts`.

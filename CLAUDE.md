@@ -180,4 +180,5 @@ O upload de mídia tinha **três** defeitos independentes, os três fechados em
 Um upload que "trava sem erro" é sintoma clássico dele; o console do navegador
 é o único lugar que conta.
 
-**Falta confirmar:** subir um vídeo pelo painel (`NEXT_STEPS.md` item 1).
+**Verificado fim a fim em 05/08:** um mp4 de 9,19 MB sobe pelo painel e toca na
+videoteca (45 s, 720×1280), sem erro de CSP no console.
