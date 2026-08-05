@@ -163,7 +163,7 @@ Ver **`PROJECT_STATE.md`** (estado) e **`NEXT_STEPS.md`** (o que fazer).
 
 Em 2026-08-04: produção responde **200** em `/` e em `/login` — o 500 de
 `require() of ES Module` registrado aqui em 31/07 **não existe mais**. Suíte
-unitária em **615 testes**, verdes.
+unitária em **611 testes**, verdes.
 
 **Bloqueio aberto:** upload de mídia (`NEXT_STEPS.md` itens 1–4). O diagnóstico
 começa por um teste de dois arquivos descrito no item 1 — ele decide se são

@@ -13,7 +13,7 @@
 
 import type { ReactNode } from "react"
 
-import type { Certificacao, DesignPattern, Livro, RoadmapEtapa } from "@/data/dev"
+import type { Certificacao, Livro, RoadmapEtapa } from "@/data/dev"
 import type { Noticia, RepoEstrelado } from "@/lib/repos/tech-feed"
 import { DevExternalLink, DevPanel, DevPanelFoot, DevPanelHead, TagList } from "./ui/dev-primitives"
 
@@ -235,39 +235,6 @@ export function Estante({ livros, titulo }: { livros: readonly Livro[]; titulo: 
           </li>
         ))}
       </ul>
-    </div>
-  )
-}
-
-/* ────────────────────────────────────────────────────────────────────────
-   DESIGN PATTERNS
-   ──────────────────────────────────────────────────────────────────────── */
-
-export function CardsPatterns({ patterns }: { patterns: readonly DesignPattern[] }) {
-  return (
-    <div className="dv-objects">
-      {patterns.map((p) => (
-        <DevPanel key={p.nome} className="dv-pattern">
-          <DevPanelHead title={p.nome} badge={<span className="dv-status">{p.categoria}</span>} />
-          <p className="dv-prose">
-            <strong>Problema:</strong> {p.problema}
-          </p>
-          <p className="dv-prose">
-            <strong>Solução:</strong> {p.solucao}
-          </p>
-          <pre className="dv-code">
-            <code>{p.codigo}</code>
-          </pre>
-          {/* O "quando não usar" é o que separa cartão de referência de
-              propaganda de padrão — fica destacado de propósito. */}
-          <p className="dv-pattern-evitar">
-            <strong>Evitar:</strong> {p.evitar}
-          </p>
-          <DevPanelFoot>
-            <span className="dv-feed-autor">No mundo real: {p.no_mundo}</span>
-          </DevPanelFoot>
-        </DevPanel>
-      ))}
     </div>
   )
 }

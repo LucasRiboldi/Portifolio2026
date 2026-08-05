@@ -26,4 +26,3 @@ export {
   type CheatSheetItem,
 } from "./java"
 export { certificacoes, livros, type Certificacao, type CertStatus, type Livro, type LivroStatus } from "./estante"
-export { designPatterns, type DesignPattern, type PatternCategoria } from "./patterns"

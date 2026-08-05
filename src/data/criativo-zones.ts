@@ -255,56 +255,24 @@ export const movies: Movie[] = [
   },
 ]
 
-export const tracks: Track[] = [
-  {
-    id: "t1",
-    title: "Faixa de teste",
-    artist: "Lucas Riboldi",
-    audio_url: "",
-    cover_image: "/covers/faixas/t1.svg",
-    note: "Suba o arquivo pelo /admin → Rádio. Enquanto não houver áudio, o visualizador roda em modo demo.",
-  },
-  {
-    id: "t2",
-    title: "Retícula em Lo-fi",
-    artist: "Lucas Riboldi",
-    audio_url: "",
-    cover_image: "/covers/faixas/t2.svg",
-    note: "Loop de quatro compassos feito enquanto eu desenhava o halftone desta página. O chiado é vinil de verdade, gravado do toca-discos do meu pai.",
-  },
-  {
-    id: "t3",
-    title: "Terra-138",
-    artist: "Lucas Riboldi",
-    audio_url: "",
-    cover_image: "/covers/faixas/t3.svg",
-    note: "Tema da anomalia. Baixo sujo, bateria seca e um sintetizador que não afina de propósito — a ideia era soar como dimensão que deu errado.",
-  },
-  {
-    id: "t4",
-    title: "Compilando às 3 da manhã",
-    artist: "Lucas Riboldi",
-    audio_url: "",
-    cover_image: "/covers/faixas/t4.svg",
-    note: "Ambiente de duas notas para deixar rodando enquanto o build não termina. Não tem refrão porque refrão distrai.",
-  },
-  {
-    id: "t5",
-    title: "Onomatopeia (POW mix)",
-    artist: "Lucas Riboldi",
-    audio_url: "",
-    cover_image: "/covers/faixas/t5.svg",
-    note: "Percussão inteira montada com samples de impacto de HQ. Cada golpe é uma letra do alfabeto de letragem que virou a Terra-1610.",
-  },
-  {
-    id: "t6",
-    title: "Modo escuro",
-    artist: "Lucas Riboldi",
-    audio_url: "",
-    cover_image: "/covers/faixas/t6.svg",
-    note: "Feita para o realm dev: mesma progressão em duas oitavas, uma clara e outra grave, trocando conforme o tema. Nunca consegui sincronizar com o CSS, então ficou só a música.",
-  },
-]
+/**
+ * Vazio de propósito, desde 04/08.
+ *
+ * Havia seis faixas aqui, todas com `audio_url: ""` — nenhuma tinha arquivo, e
+ * `public/musica/` também estava vazia. O resultado era uma zona Rádio que
+ * listava seis títulos e não tocava nenhum, com o player exibindo um aviso de
+ * "sem áudio" que virou permanente em vez de conserto.
+ *
+ * O array continua exportado, e não removido, porque é a fonte de seed da
+ * coleção `tracks`: `seed.ts`, `sync-content.ts` e `repos/criativo.ts` o
+ * consomem, e o recurso "Rádio" do /admin depende dessa fiação. Vazio, o seed
+ * simplesmente não insere nada.
+ *
+ * Para publicar música existem dois caminhos, e nenhum passa por aqui:
+ * jogar o arquivo em `public/musica/` (ver o README de lá) ou cadastrar a
+ * faixa em /admin → Rádio, que aceita capa e comentário.
+ */
+export const tracks: Track[] = []
 
 export const videos: Video[] = [
   {

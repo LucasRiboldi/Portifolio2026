@@ -1,18 +1,12 @@
 import { describe, it, expect } from "vitest"
 
-import {
-  certificacoes,
-  designPatterns,
-  javaCheatSheets,
-  javaRoadmap,
-  livros,
-} from "@/data/dev"
+import { certificacoes, javaCheatSheets, javaRoadmap, livros } from "@/data/dev"
 
 /**
- * O acervo de referência NÃO passa pelo Supabase.
+ * O acervo de referência NÃO passa pelo banco.
  *
- * Os cinco acervos do realm dev (devlogs, lab, snippets, wiki, ideas) são lidos
- * do banco e têm `conteudo-publicavel.test.ts` guardando o caminho de
+ * Os acervos editáveis do realm dev (devlogs, lab, snippets) são lidos
+ * do Firestore e têm `conteudo-publicavel.test.ts` guardando o caminho de
  * publicação. Este aqui é o oposto por decisão: material de estudo revisado em
  * pull request, não conteúdo editorial de painel — ver o cabeçalho de
  * `src/data/dev/java.ts`.
@@ -81,25 +75,6 @@ describe("cheat sheets de Java", () => {
   })
 })
 
-describe("design patterns", () => {
-  it("não repete nome", () => {
-    const nomes = designPatterns.map((p) => p.nome)
-    expect(nomes.filter((n, i) => nomes.indexOf(n) !== i)).toEqual([])
-  })
-
-  it("todo cartão diz quando evitar", () => {
-    // É o campo que separa referência de propaganda de padrão, e o único que
-    // alguém teria preguiça de preencher.
-    const semEvitar = designPatterns.filter((p) => !p.evitar.trim())
-    expect(semEvitar.map((p) => p.nome)).toEqual([])
-  })
-
-  it("as três famílias do GoF estão representadas", () => {
-    const familias = new Set(designPatterns.map((p) => p.categoria))
-    expect([...familias].sort()).toEqual(["comportamental", "criacional", "estrutural"])
-  })
-})
-
 describe("estante", () => {
   it("não repete título de livro", () => {
     const titulos = livros.map((l) => l.titulo)
@@ -146,7 +121,6 @@ describe("o acervo não está vazio", () => {
   it.each([
     ["roadmap", javaRoadmap.length],
     ["cheat sheets", javaCheatSheets.length],
-    ["patterns", designPatterns.length],
     ["livros", livros.length],
     ["certificações", certificacoes.length],
   ])("%s tem conteúdo", (_nome, total) => {

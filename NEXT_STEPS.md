@@ -7,13 +7,14 @@
 > commit o que foi verificado de verdade.
 >
 > **Atualizado:** 2026-08-04, depois de rediagnosticar a lista contra o código
-> e contra produção.
+> e contra produção, e de limpar as duas pendências de conteúdo morto
+> (faixas fantasma e `designPatterns`).
 
 ---
 
 ## Estado em uma linha
 
-Site no ar, login e CRUD funcionando, **615 testes passando**. O upload de mídia
+Site no ar, login e CRUD funcionando, **611 testes passando**. O upload de mídia
 continua quebrado — mas o diagnóstico de 01/08 estava fragmentado demais: o que
 o doc chamava de dois bugs pode ser um só, e o conserto proposto para o item 2
 não funcionaria como estava escrito.
@@ -23,7 +24,9 @@ não funcionaria como estava escrito.
 
 - **`/login` não está mais 500.** Produção responde 200 em `/login` e na home.
   O bloqueio registrado no `CLAUDE.md` não existe mais.
-- **São 615 testes, não 580.**
+- **A contagem de testes estava velha.** O doc dizia 580; eram 615 na hora do
+  rediagnóstico, e 611 depois da limpeza do item 15 (as asserções de
+  `designPatterns` saíram junto com os dados).
 - **O item 1 não é indiagnosticável por falta de token.** A URL do Blob é
   pública — `curl` basta. O que impediu a checagem foi o doc ter elidido o nome
   do arquivo (`eec0125e-….mp3`). **Ao registrar uma URL quebrada, registre-a
@@ -121,27 +124,20 @@ Suspeitos, em ordem: o handshake de `/api/admin/blob-upload`; o webhook de
 conclusão não conseguindo voltar (Deployment Protection barra chamada
 servidor-a-servidor); ou o mesmo problema de store do item 1.
 
-## 5. Playlist do `/criativo` não toca
+## 5. A zona Rádio do `/criativo` está sem música
 
-**Causa confirmada, independente do Blob:** a zona Rádio não tem **nenhum**
-áudio tocável, por duas fontes vazias ao mesmo tempo:
+**Não é mais bug** — é conteúdo faltando. As seis faixas fantasma saíram do seed
+em 04/08, e `public/musica/` só tem o `README.md`, então a zona Rádio
+simplesmente não aparece na página em vez de listar títulos que não tocam.
 
-- as **6 faixas** do seed em `src/data/criativo-zones.ts` (linhas 263–303) têm
-  `audio_url: ""`;
-- `public/musica/` contém só o `README.md` — nenhum arquivo de áudio.
+Para publicar, dois caminhos, e **nenhum passa por editar o seed**:
 
-`music-player.tsx` já trata o caso (`{!t.audio_url && …}`), o que sugere que
-isso era conhecido e virou aviso visual em vez de conserto.
+1. jogar o mp3 em `public/musica/` e commitar — o `README.md` de lá explica a
+   convenção `Artista - Título.mp3`;
+2. cadastrar em `/admin → Rádio`, que aceita capa e comentário.
 
-**Decisão pendente, e é sua** — as três saídas custam o mesmo:
-
-1. jogar mp3 em `public/musica/` (basta commitar, o `README.md` de lá explica a
-   convenção de nome) e deixar o seed quieto;
-2. preencher os `audio_url` do seed pelo `/admin → Rádio`;
-3. apagar as faixas fantasma do seed.
-
-A 3 **destrói texto escrito à mão** — as `note` das seis faixas são conteúdo
-seu, não placeholder. Vale ler antes de escolher.
+O caminho 2 depende dos itens 1–4: sem upload funcionando, não há como subir o
+arquivo pelo painel. **O caminho 1 funciona hoje.**
 
 ---
 
@@ -272,22 +268,7 @@ três para `@v5` de uma vez, conferindo o run seguinte.
 Não confundir com o `node-version: 22` do workflow — esse é o Node **do
 projeto**, e está correto.
 
-## 15. `designPatterns` ficou órfão em `30adb8c`
-
-A remoção de `/desenvolvedor/padroes` levou a rota, mas **não** o que ela
-renderizava. Hoje:
-
-- `src/data/dev/patterns.ts` continua exportado por `data/dev/index.ts`;
-- `components/dev/acervo.tsx:246` ainda exporta `CardsPatterns`, que
-  **nenhuma página renderiza**;
-- `tests/acervo-referencia.test.ts` segue cobrindo os dados — por isso a suíte
-  passa e nada acusa.
-
-Ou seja, é conteúdo escrito e testado que ninguém vê. **Decidir:** dar uma rota
-de volta ao acervo de padrões, ou apagar dado + componente + asserções de teste
-juntos. Não apaguei por conta própria porque o conteúdo é seu.
-
-## 16. CSP com `unsafe-inline` em `script-src`
+## 15. CSP com `unsafe-inline` em `script-src`
 
 Compromisso de um CSP por header, sem nonce por request. Um CSP estrito exigiria
 middleware em todas as rotas. Registrado em `next.config.ts`.

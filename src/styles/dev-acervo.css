@@ -321,31 +321,6 @@
 }
 
 /* ═══════════════════════════════════════════════════════════════════════
-   Cartões de padrão
-   ═══════════════════════════════════════════════════════════════════════ */
-.dracula .dv-pattern .dv-code {
-  margin-top: 0.7rem;
-  font-size: 0.76rem;
-  /* O esqueleto do padrão é curto por desenho; se um dia crescer, rola dentro
-     do próprio cartão em vez de esticar a grade. */
-  max-height: 17rem;
-  overflow: auto;
-}
-.dracula .dv-pattern-evitar {
-  margin-top: 0.7rem;
-  padding: 0.5rem 0.7rem;
-  border-left: 2px solid var(--d-red);
-  background: color-mix(in srgb, var(--d-red) 8%, transparent);
-  border-radius: 0 6px 6px 0;
-  font-size: 0.82rem;
-  line-height: 1.5;
-  color: var(--d-fg);
-}
-.dracula .dv-pattern-evitar strong {
-  color: var(--d-red);
-}
-
-/* ═══════════════════════════════════════════════════════════════════════
    Cheat sheet
    ═══════════════════════════════════════════════════════════════════════ */
 .dracula .dv-cheat {
