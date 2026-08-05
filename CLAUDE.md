@@ -161,6 +161,10 @@ configuração. Quase nada precisa de código novo.
 
 Ver **`PROJECT_STATE.md`** (estado) e **`NEXT_STEPS.md`** (o que fazer).
 
-Em 2026-07-31: login **verificado localmente** (usuário criado com claim
-`admin`). **Um bloqueio aberto**: `/login` responde 500 em produção
-(`require() of ES Module` no bundle serverless) — `NEXT_STEPS.md` item 1.
+Em 2026-08-04: produção responde **200** em `/` e em `/login` — o 500 de
+`require() of ES Module` registrado aqui em 31/07 **não existe mais**. Suíte
+unitária em **615 testes**, verdes.
+
+**Bloqueio aberto:** upload de mídia (`NEXT_STEPS.md` itens 1–4). O diagnóstico
+começa por um teste de dois arquivos descrito no item 1 — ele decide se são
+dois bugs ou um.

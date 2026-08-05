@@ -14,9 +14,12 @@ Daily Prophet). Itens não implementados ainda; ordenados por área. Marque com
 - [ ] Página de **DevLog individual** (`/dev/devlogs/[slug]`) com markdown completo.
 - [ ] Mais **ferramentas internas**: regex tester, diff de texto, JWT decoder,
       hash SHA-256, conversor de unidades, gerador de gradiente.
-- [ ] **Syntax highlight** também nos blocos de código dos DevLogs/Wiki.
-- [ ] Página de **Wiki individual** (`/dev/wiki/[slug]`) com markdown.
+- [ ] **Syntax highlight** também nos blocos de código dos DevLogs.
 - [ ] Filtros/busca combinados (tag + status) onde fizer sentido.
+
+> A wiki do realm dev foi **removida** em `30adb8c`, junto com blog, ideias e
+> padrões — o espaço passou a ser o módulo de estudos. Os itens de wiki que
+> estavam aqui saíram: não são backlog, são passado.
 
 ## Daily Prophet (`/prophet`, jornal)
 - [ ] **Imprensa**: cards de download reais (upload de PDF / print&play via

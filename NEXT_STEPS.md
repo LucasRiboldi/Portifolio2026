@@ -6,16 +6,33 @@
 > Ao concluir um item: remova-o daqui, atualize `PROJECT_STATE.md` e diga no
 > commit o que foi verificado de verdade.
 >
-> **Atualizado:** 2026-08-01, depois do primeiro teste manual do painel
+> **Atualizado:** 2026-08-04, depois de rediagnosticar a lista contra o código
+> e contra produção.
 
 ---
 
 ## Estado em uma linha
 
-Site no ar, login e CRUD funcionando. **O upload de mídia está quebrado** — três
-bugs distintos, descobertos no teste manual de 01/08. Até então este arquivo
-dizia "implementado, falta verificar": estava errado, e os 580 testes não
-pegaram nenhum deles porque todos param na borda do nosso código.
+Site no ar, login e CRUD funcionando, **615 testes passando**. O upload de mídia
+continua quebrado — mas o diagnóstico de 01/08 estava fragmentado demais: o que
+o doc chamava de dois bugs pode ser um só, e o conserto proposto para o item 2
+não funcionaria como estava escrito.
+
+<details>
+<summary>O que o rediagnóstico de 04/08 corrigiu na lista anterior</summary>
+
+- **`/login` não está mais 500.** Produção responde 200 em `/login` e na home.
+  O bloqueio registrado no `CLAUDE.md` não existe mais.
+- **São 615 testes, não 580.**
+- **O item 1 não é indiagnosticável por falta de token.** A URL do Blob é
+  pública — `curl` basta. O que impediu a checagem foi o doc ter elidido o nome
+  do arquivo (`eec0125e-….mp3`). **Ao registrar uma URL quebrada, registre-a
+  inteira.**
+- **O conserto proposto para o item 2 estava incompleto** — ver item 2, achado A.
+- **`/admin/media` tem uma segunda lógica de upload**, que nenhum conserto no
+  `media-picker` alcança — ver item 2, achado B.
+
+</details>
 
 ---
 
@@ -26,38 +43,60 @@ pegaram nenhum deles porque todos param na borda do nosso código.
 **O sintoma que decide tudo:** um mp3 enviado pelo painel gravou a URL no
 Firestore, e essa URL responde **404**. O arquivo não está no store.
 
-```
-https://g0beqyv00t1gw0xe.public.blob.vercel-storage.com/public-media/eec0125e-….mp3
-→ HTTP 404
-```
+**Primeiro passo, e é barato:** subir dois arquivos pelo painel — um **pequeno
+(< 1 MB)** e um de **~6 MB**.
 
-Não é problema de player, codec ou formato: não há o que tocar. É por isso que o
-player do rádio aparece e não toca.
+| Resultado | Leitura |
+|---|---|
+| Os dois falham | **É um bug só.** O item 2 desaparece: não é tamanho, é escrita no store. |
+| Só o de 6 MB falha | São dois bugs mesmo. Siga para o item 2. |
 
-**Pergunta que discrimina, e precisa ser respondida antes de qualquer conserto:**
+Depois, em `/admin/media`: os arquivos enviados aparecem na lista?
 
-> Abra `/admin/media`. Os arquivos enviados aparecem na lista?
->
-> - **Aparecem** → estão gravados; o problema é de *entrega* (store privado,
->   `content-disposition`, domínio público errado).
-> - **Lista vazia** → nunca foram gravados; o `put()` devolve URL sem persistir,
->   e o suspeito é o caminho OIDC — `temBlob()` deixa passar com
->   `BLOB_STORE_ID`, mas a escrita pode não estar autenticada de fato.
+- **Aparecem** → estão gravados; o problema é de *entrega* (store privado,
+  `content-disposition`, domínio público errado).
+- **Lista vazia** → nunca foram gravados; o `put()` devolve URL sem persistir,
+  e o suspeito é o caminho OIDC — `temBlob()` deixa passar com `BLOB_STORE_ID`,
+  mas a escrita pode não estar autenticada de fato.
 
-Não dá para checar pelo CLI: `vercel blob list` exige o token, que é *sensitive*.
+**Guarde a URL inteira** de qualquer arquivo que falhar. Com ela, um `curl -I`
+fecha o diagnóstico sem credencial nenhuma.
 
-## 2. Teto real de upload é 4,5 MB, não 25
+## 2. Arquivos entre 4,5 MB e 25 MB morrem na Server Action
 
-**Confirmado em 01/08:** um PDF de **4,52 MB** falhou com `An unexpected response
-was received from the server`; um mp3 menor passou. O `bodySizeLimit: "26mb"` do
-`next.config.ts` **não manda** — a plataforma corta antes, em 4,5 MB.
+**Confirmado no código** (não só no teste manual): `SERVER_ACTION_LIMIT` vale
+**25 MB** em `lib/admin/media-accept.ts`, e `media-picker.tsx:98` só desvia para
+o upload direto quando `file.size > SERVER_ACTION_LIMIT`. Toda a faixa entre o
+corte real da plataforma e 25 MB entra na Server Action — é onde o PDF de
+4,52 MB morreu, com `An unexpected response was received from the server`.
 
-Ou seja, os tetos que a interface anuncia (áudio 25 MB, PDF 25 MB) são **falsos**.
-Qualquer arquivo acima de 4,5 MB falha, com mensagem que nem menciona tamanho.
+Os tetos que a interface anuncia (áudio 25 MB, PDF 25 MB) são, portanto, **falsos**.
 
-**Conserto certo:** não subir limite nenhum — mandar todo arquivo acima de ~4 MB
-pelo caminho direto ao Blob, como o vídeo já faz, em vez de pela Server Action.
-Vale para áudio, PDF e imagem.
+**Antes de consertar, confirme que o corte ainda existe.** O limite de 4,5 MB
+para corpo de request das Vercel Functions **subiu para 100 MB**. Se este deploy
+já pegou a mudança, um PDF de 4,52 MB falhando não é limite de tamanho — é o
+item 1 com outra roupa, e este item inteiro é ruído. O teste dos dois arquivos
+no item 1 responde isso.
+
+### Se o corte existir mesmo, baixar a constante NÃO basta
+
+**Achado A — o caminho direto é video-only, fixado em três lugares.** Mandar
+áudio e PDF por ele exige mexer nos três:
+
+| Onde | O que trava |
+|---|---|
+| `api/admin/blob-upload/route.ts` | `allowedContentTypes` só lista os três tipos de vídeo — áudio e PDF são **rejeitados pelo próprio token** |
+| idem | `maximumSizeInBytes: MAX_BYTES.video`, fixo |
+| `media-picker.tsx` → `uploadGrande()` | resolve a extensão por `EXT_POR_TIPO[file.type]`, que só mapeia vídeo |
+
+Efeito colateral que **já existe hoje**: áudio ou PDF acima de 25 MB cai em
+`uploadGrande` e recebe a mensagem errada — *"Formato de vídeo não aceito"*.
+
+**Achado B — `/admin/media` não tem caminho direto nenhum.**
+`components/admin/media-manager.tsx` chama `uploadMedia` sempre, sem o desvio que
+o `media-picker` tem. São duas lógicas de upload paralelas; conserto em uma não
+alcança a outra. Ou o desvio vira código compartilhado, ou o bug sobrevive
+metade consertado.
 
 **Depende do item 1:** se o store não está guardando, trocar o caminho não
 resolve nada.
@@ -84,16 +123,25 @@ servidor-a-servidor); ou o mesmo problema de store do item 1.
 
 ## 5. Playlist do `/criativo` não toca
 
-**Causa identificada, independente do Blob:** as faixas do seed em
-`src/data/criativo-zones.ts` têm `audio_url: ""`. O player as lista e não tem
-arquivo para tocar. O componente já trata o caso (`{!t.audio_url && …}`), o que
-sugere que isso era conhecido e virou aviso visual em vez de conserto.
+**Causa confirmada, independente do Blob:** a zona Rádio não tem **nenhum**
+áudio tocável, por duas fontes vazias ao mesmo tempo:
 
-`lib/repos/playlist.ts` monta faixas a partir de `public/musica/` — essas tocam.
-As duas fontes são somadas em `ZoneRadio`.
+- as **6 faixas** do seed em `src/data/criativo-zones.ts` (linhas 263–303) têm
+  `audio_url: ""`;
+- `public/musica/` contém só o `README.md` — nenhum arquivo de áudio.
 
-**Decidir:** preencher os `audio_url` do seed, remover as faixas fantasma, ou
-deixar só as da pasta.
+`music-player.tsx` já trata o caso (`{!t.audio_url && …}`), o que sugere que
+isso era conhecido e virou aviso visual em vez de conserto.
+
+**Decisão pendente, e é sua** — as três saídas custam o mesmo:
+
+1. jogar mp3 em `public/musica/` (basta commitar, o `README.md` de lá explica a
+   convenção de nome) e deixar o seed quieto;
+2. preencher os `audio_url` do seed pelo `/admin → Rádio`;
+3. apagar as faixas fantasma do seed.
+
+A 3 **destrói texto escrito à mão** — as `note` das seis faixas são conteúdo
+seu, não placeholder. Vale ler antes de escolher.
 
 ---
 
@@ -150,8 +198,8 @@ curl -i -X POST https://portifolio2026-two.vercel.app/api/prophet-wire/run -H "A
 ```
 
 Rode **duas vezes**. **Pronto quando:** as duas aparecem no histórico e a segunda
-não duplica o acervo. Agora dá para despachar o resultado: a fila do painel
-ganhou ações em 01/08 (`b63fc25`).
+não duplica o acervo. A fila do painel ganhou ações em 01/08 (`b63fc25`), então
+já dá para despachar o resultado.
 
 **Ao ler o relatório:** `counters.published` conta só status `publicado`. Com
 `publishMode: "rascunho"`, uma execução perfeita reporta `published: 0`. O sinal
@@ -199,7 +247,7 @@ botão do `/admin`, não.
 
 ## 13. Desligar o projeto Supabase
 
-**Conferido em 01/08 — seguro apagar:**
+**Conferido em 01/08, reconferido em 04/08 — seguro apagar:**
 
 | Checagem | Resultado |
 |---|---|
@@ -215,13 +263,31 @@ Supabase, que não está instalado — já não roda. Apagar depois do desligame
 **Como:** https://app.supabase.com → projeto → Settings → General → Delete
 project. **Irreversível.**
 
-## 14. Actions do CI ainda em Node 20
+## 14. Actions do CI em runtime Node 20
 
-`actions/checkout@v4`, `setup-node@v4` e `setup-java@v4` declaram Node 20, que o
-runner força para 24. Só aviso hoje; vira falha quando o suporte cair. Subir as
-três de uma vez, conferindo o run seguinte.
+`actions/checkout@v4`, `setup-node@v4` e `setup-java@v4` rodam sobre Node 20, que
+o runner força para 24. Só aviso hoje; vira falha quando o suporte cair. Subir as
+três para `@v5` de uma vez, conferindo o run seguinte.
 
-## 15. CSP com `unsafe-inline` em `script-src`
+Não confundir com o `node-version: 22` do workflow — esse é o Node **do
+projeto**, e está correto.
+
+## 15. `designPatterns` ficou órfão em `30adb8c`
+
+A remoção de `/desenvolvedor/padroes` levou a rota, mas **não** o que ela
+renderizava. Hoje:
+
+- `src/data/dev/patterns.ts` continua exportado por `data/dev/index.ts`;
+- `components/dev/acervo.tsx:246` ainda exporta `CardsPatterns`, que
+  **nenhuma página renderiza**;
+- `tests/acervo-referencia.test.ts` segue cobrindo os dados — por isso a suíte
+  passa e nada acusa.
+
+Ou seja, é conteúdo escrito e testado que ninguém vê. **Decidir:** dar uma rota
+de volta ao acervo de padrões, ou apagar dado + componente + asserções de teste
+juntos. Não apaguei por conta própria porque o conteúdo é seu.
+
+## 16. CSP com `unsafe-inline` em `script-src`
 
 Compromisso de um CSP por header, sem nonce por request. Um CSP estrito exigiria
 middleware em todas as rotas. Registrado em `next.config.ts`.
