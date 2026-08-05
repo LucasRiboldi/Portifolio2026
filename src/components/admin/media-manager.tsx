@@ -59,9 +59,19 @@ export function MediaManager() {
     }
   }
 
-  async function remove(name: string) {
+  async function remove(item: MediaItem) {
+    // O servidor recusa de qualquer forma (é ele que tem a verdade), mas
+    // avisar aqui evita o clique inútil e diz o porquê antes do confirm.
+    if (item.usos.length > 0) {
+      setError(
+        `"${item.name}" está em uso por ${item.usos.length} ` +
+          `${item.usos.length === 1 ? "documento" : "documentos"} e não pode ser apagado. ` +
+          `Troque a mídia neles primeiro.`,
+      )
+      return
+    }
     if (!confirm("Excluir este arquivo?")) return
-    const res = await deleteMedia(name)
+    const res = await deleteMedia(item.name)
     if (!res.ok) {
       setError(res.error)
       return
@@ -119,6 +129,19 @@ export function MediaManager() {
               // eslint-disable-next-line @next/next/no-img-element
               <img src={item.url} alt={item.name} className="img-frame img-wide rounded-lg" />
             )}
+            {/* Sem isto a grade é uma parede de UUIDs, e nada indica que
+                apagar um deles quebra uma página. */}
+            {item.usos.length > 0 ? (
+              <p
+                className="text-[11px] leading-snug text-[color:var(--mm-text-2)]"
+                title={item.usos.map((u) => `${u.colecao} · ${u.titulo} (${u.campo})`).join("\n")}
+              >
+                <span className="font-semibold">Em uso</span> ·{" "}
+                {item.usos.map((u) => u.titulo).join(", ")}
+              </p>
+            ) : (
+              <p className="text-[11px] text-[color:var(--mm-text-2)] opacity-60">Sem uso</p>
+            )}
             <div className="flex gap-2">
               <button
                 type="button"
@@ -129,8 +152,14 @@ export function MediaManager() {
               </button>
               <button
                 type="button"
-                onClick={() => remove(item.name)}
-                className="rounded border border-[color:var(--mm-error)] px-2 py-1 text-xs text-[color:var(--mm-error)] hover:bg-[color:var(--mm-light-error)]"
+                onClick={() => remove(item)}
+                disabled={item.usos.length > 0}
+                title={
+                  item.usos.length > 0
+                    ? "Arquivo em uso — troque a mídia nos documentos antes de apagar"
+                    : "Excluir arquivo"
+                }
+                className="rounded border border-[color:var(--mm-error)] px-2 py-1 text-xs text-[color:var(--mm-error)] hover:bg-[color:var(--mm-light-error)] disabled:cursor-not-allowed disabled:opacity-40 disabled:hover:bg-transparent"
               >
                 ✕
               </button>

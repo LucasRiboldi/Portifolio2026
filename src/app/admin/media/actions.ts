@@ -32,6 +32,7 @@ import {
   isSafeObjectName,
 } from "@/lib/admin/media-validate"
 import { DEFAULT_CLASSES, MAX_BYTES, PREFIX, type MediaClass } from "@/lib/admin/media-accept"
+import { mapearUsosDeMidia, descreverUsos, type UsoDeMidia } from "@/lib/admin/media-refs"
 
 /**
  * True quando o SDK consegue falar com o store.
@@ -57,6 +58,13 @@ const SEM_TOKEN =
 export interface MediaItem {
   name: string
   url: string
+  /**
+   * Documentos que apontam para este arquivo. Vazio = livre para apagar.
+   *
+   * Vem junto da listagem, e não sob demanda, porque a grade precisa dele para
+   * TODOS os cartões de uma vez — uma varredura serve a página inteira.
+   */
+  usos: UsoDeMidia[]
 }
 
 export type MediaResult<T> = { ok: true; data: T } | { ok: false; error: string }
@@ -82,11 +90,16 @@ export async function listMedia(): Promise<MediaResult<MediaItem[]>> {
 
   try {
     const { blobs } = await list({ prefix: `${PREFIX}/`, limit: 100 })
+    const usos = await mapearUsosDeMidia()
 
     // A listagem vem por pathname; o painel mostra "mais recente primeiro".
     const items = blobs
       .sort((a, b) => b.uploadedAt.getTime() - a.uploadedAt.getTime())
-      .map((b) => ({ name: b.pathname.slice(PREFIX.length + 1), url: b.url }))
+      .map((b) => ({
+        name: b.pathname.slice(PREFIX.length + 1),
+        url: b.url,
+        usos: usos.get(b.pathname) ?? [],
+      }))
     return { ok: true, data: items }
   } catch (err) {
     return { ok: false, error: err instanceof Error ? err.message : "Falha ao listar." }
@@ -125,7 +138,9 @@ export async function uploadMedia(formData: FormData): Promise<MediaResult<Media
       addRandomSuffix: false,
       cacheControlMaxAge: 31536000,
     })
-    return { ok: true, data: { name, url: blob.url } }
+    // `usos` vazio: o arquivo acabou de nascer, nenhum documento pode apontar
+    // para ele ainda. Quem grava a URL num campo é o passo seguinte, do usuário.
+    return { ok: true, data: { name, url: blob.url, usos: [] } }
   } catch (err) {
     return { ok: false, error: err instanceof Error ? err.message : "Falha no upload." }
   }
@@ -137,6 +152,40 @@ export async function deleteMedia(name: string): Promise<MediaResult<null>> {
 
   // Só aceita o formato de nome que nós geramos — nada de caminhos.
   if (!isSafeObjectName(name)) return { ok: false, error: "Nome de arquivo inválido." }
+
+  /**
+   * Integridade referencial, à mão — o Firestore não tem chave estrangeira
+   * para recusar isto por nós.
+   *
+   * Sem esta checagem, apagar um arquivo em uso era um clique, e o documento
+   * ficava apontando para 404 sem nada acusar. Foi o que aconteceu em 01/08:
+   * dois mp3, uma capa e um pôster viraram links quebrados, e a culpa foi
+   * atribuída ao upload por três dias.
+   *
+   * **Falha fechado de propósito:** se a varredura não completar, a resposta é
+   * recusar. Um índice pela metade diria "livre" sobre arquivo em uso, que é
+   * exatamente o defeito que isto existe para impedir.
+   */
+  let usos: UsoDeMidia[]
+  try {
+    const mapa = await mapearUsosDeMidia()
+    usos = mapa.get(`${PREFIX}/${name}`) ?? []
+  } catch (err) {
+    const motivo = err instanceof Error ? err.message : "erro desconhecido"
+    return {
+      ok: false,
+      error: `Não deu para conferir se o arquivo está em uso (${motivo}). Nada foi apagado.`,
+    }
+  }
+
+  if (usos.length > 0) {
+    return {
+      ok: false,
+      error:
+        `Arquivo em uso por ${usos.length} ${usos.length === 1 ? "documento" : "documentos"}: ` +
+        `${descreverUsos(usos)}. Troque a mídia nesses documentos antes de apagar.`,
+    }
+  }
 
   try {
     // `del` trabalha com a URL do blob, que inclui o id do store — por isso a
