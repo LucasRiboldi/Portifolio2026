@@ -48,7 +48,7 @@ describe("activeSources / findSource", () => {
   })
 
   it("findSource localiza por id e devolve undefined para inexistente", () => {
-    expect(findSource("bgg-news")?.name).toBe("BoardGameGeek News")
+    expect(findSource("bgg-blog")?.name).toBe("BoardGameGeek Blog")
     expect(findSource("nao-existe")).toBeUndefined()
   })
 })

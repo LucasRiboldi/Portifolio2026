@@ -6,7 +6,7 @@
 > Ao concluir um item: remova-o daqui, atualize `PROJECT_STATE.md` e diga no
 > commit o que foi verificado de verdade.
 >
-> **Atualizado:** 2026-08-05, depois de exercitar o Prophet Wire.
+> **Atualizado:** 2026-08-05, depois da auditoria de fontes do Prophet Wire.
 
 ---
 
@@ -28,7 +28,8 @@ que não existia:
    reprodução também.
 
 O Prophet Wire foi exercitado no mesmo dia: pipeline, dedup e histórico
-funcionam — mas **15 das 24 fontes de notícia estão fora do ar** (item 7).
+funcionam, e a auditoria de fontes levou o relatório a **`errors: 0`** — ao
+preço da cobertura, que caiu para 5 fontes ativas (item 7).
 
 **A lição que sobra:** o sintoma ("o arquivo não chega") apontava para o
 armazenamento, e o culpado estava no `next.config.ts`. Quando um upload trava
@@ -171,30 +172,36 @@ curl -i -X POST https://portifolio2026-two.vercel.app/api/prophet-wire/run -H "A
 ```
 
 **Ao ler o relatório:** `published: 0` é o esperado com `publishMode:
-"rascunho"`. E **não espere `errors: 0`** — ver o item 7.
+"rascunho"`. **`errors: 0` agora é alcançável** — foi o resultado da última
+execução local, depois da auditoria de fontes do item 7. Se aparecer erro em
+produção, é fonte que caiu desde então.
 
-## 7. 15 das 24 fontes de notícia estão quebradas
+## 7. Recuperar cobertura: 19 das 24 fontes estão desligadas
 
-Descoberto ao rodar o pipeline em 05/08. O `errors: 15` não é defeito nosso: são
-fontes externas que não respondem mais. **62% da lista apodreceu.**
+A auditoria de 05/08 deixou o sinal limpo (**`errors: 0`**, 5 de 5 fontes
+respondendo), mas ao preço da cobertura: sobraram **5 fontes ativas** —
+`bgg-blog`, `dice-tower`, `stonemaier`, `leder-games`, `reddit-boardgames`.
 
-| Status | Fontes |
-|---|---|
-| **404** — URL morreu ou mudou | `icv2-games`, `gen-con`, `kosmos`, `czech-games`, `uk-games-expo`, `portal-games` |
-| **403** — bloqueando o nosso agente | `bgg-news`, `cmon`, `kickstarter-tabletop`, `fantasy-flight`, `origins` |
-| **429** — limite de taxa | `reddit-boardgames`, `reddit-boardgamedeals` |
-| **401** | `bgg-hotness` |
-| **530** | `asmodee` |
+Cada desligada tem o motivo e a data no comentário, em `lib/prophet-wire/sources.ts`.
+Agrupadas pelo que seria preciso para voltarem:
 
-Mais **5 fontes respondem 200 mas sem `<item>`/`<entry>`** — são páginas HTML, e
-o log já diz o que falta: *"fonte precisa de extractor próprio"*. São
-`gamefound`, `gmt-games`, `plaid-hat`, `raven`, `spiel`.
+| Barreira | Fontes | O que destravaria |
+|---|---|---|
+| **URL morta (404)** | `kosmos`, `gen-con`, `uk-games-expo`, `portal-games` | Achar o feed novo. É o trabalho mais barato — comece por aqui. |
+| **Anti-bot por impressão TLS** | `cmon`, `icv2-games`, `fantasy-flight`, `czech-games`, `origins`, `kickstarter-tabletop`, `gamefound` | Nada trivial. Ver a nota abaixo. |
+| **Limite de taxa do Reddit** | `reddit-soloboardgaming`, `reddit-boardgamedeals` | Cliente autenticado (OAuth) em vez do RSS público. |
+| **Sem feed — é HTML** | `gmt-games`, `plaid-hat`, `ravensburger`, `spiel-essen` | Um extractor por site. Trabalho maior, valor menor. |
+| **Quebrado do lado deles** | `asmodee` (530), `bgg-hotness` (401) | Esperar. A XML API2 do BGG passou a exigir autenticação. |
 
-**Sobram 4 fontes realmente produtivas**, e são elas que sustentam o acervo hoje.
+**A nota que importa, sobre o anti-bot:** o `cmon` responde **200 no `curl`** com
+o nosso User-Agent e **403 no `fetch` do Node**. Ou seja, não é o UA — é o
+Cloudflare lendo a impressão TLS do cliente. **Trocar User-Agent não resolve**, e
+o palpite óbvio ("é o UA do agregador") custaria tempo à toa. Voltar essas
+fontes exigiria um cliente HTTP que imite navegador, o que é outra decisão.
 
-**Por onde começar:** os 404 são os mais baratos — é achar o feed novo. Os 403
-provavelmente cedem a um `User-Agent` decente. Os 429 do Reddit pedem espaçar as
-chamadas. Os extractors próprios são o trabalho maior; deixe por último.
+**Sobre o Reddit:** medi com as três em fila e **3 s de pausa** entre elas — só a
+primeira passa. O limite é por IP, não por concorrência, então espaçar mais não
+adianta.
 
 # 🟢 Melhorias
 

@@ -52,6 +52,20 @@ function acceptFor(kind: Source["kind"]): string {
   return "text/html, */*;q=0.8"
 }
 
+/** Pausa entre duas chamadas ao mesmo host. Curta — é cortesia, não recuo. */
+const PAUSA_MESMO_HOST_MS = 1_000
+
+const esperar = (ms: number) => new Promise((r) => setTimeout(r, ms))
+
+/** Host da URL, para agrupar. URL inválida vira balde próprio em vez de estourar. */
+function hostDe(url: string): string {
+  try {
+    return new URL(url).hostname
+  } catch {
+    return url
+  }
+}
+
 /**
  * Coleta o payload bruto de cada fonte. Nunca lança: falhas viram `RawPayload`
  * com `ok: false` e são contadas no logger. O chamador recebe SEMPRE um item
@@ -62,8 +76,8 @@ export async function collect(deps: CollectorDeps): Promise<RawPayload[]> {
   const sources = deps.sources ?? activeSources()
   const now = deps.now ?? (() => new Date())
 
-  const results = await Promise.all(
-    sources.map(async (source): Promise<RawPayload> => {
+  async function buscar(source: Source): Promise<RawPayload> {
+    {
       const fetchedAt = now().toISOString()
       try {
         const res = await http.get(source.url, {
@@ -84,8 +98,42 @@ export async function collect(deps: CollectorDeps): Promise<RawPayload[]> {
         logger.count("errors")
         return { source, fetchedAt, ok: false, body: "", status: 0, error: message }
       }
+    }
+  }
+
+  /**
+   * Serializa por host, mantendo hosts diferentes em paralelo.
+   *
+   * Antes era `Promise.all` sobre todas as fontes: três URLs do reddit.com
+   * saíam ao mesmo tempo e as três voltavam **429**. Não era bloqueio ao
+   * agregador — era o nosso próprio paralelismo pedindo demais de uma vez.
+   *
+   * Serializar tudo custaria caro (uma fonte lenta atrasaria as 8). Serializar
+   * por host resolve o caso real sem esse preço: hosts com uma fonte só, que
+   * são a maioria, seguem tão rápidos quanto antes.
+   */
+  const porHost = new Map<string, Source[]>()
+  for (const source of sources) {
+    const host = hostDe(source.url)
+    const grupo = porHost.get(host)
+    if (grupo) grupo.push(source)
+    else porHost.set(host, [source])
+  }
+
+  const porId = new Map<string, RawPayload>()
+  await Promise.all(
+    [...porHost.values()].map(async (grupo) => {
+      for (const [i, source] of grupo.entries()) {
+        // Só entre chamadas ao MESMO host, e nunca antes da primeira.
+        if (i > 0) await esperar(PAUSA_MESMO_HOST_MS)
+        porId.set(source.id, await buscar(source))
+      }
     }),
   )
+
+  // O contrato é "um item por fonte, na mesma ordem" — o agrupamento acima
+  // embaralha, então a ordem original é reposta aqui.
+  const results = sources.map((s) => porId.get(s.id)!)
 
   const okCount = results.filter((r) => r.ok).length
   logger.info("coleta concluída", { total: results.length, ok: okCount, falhas: results.length - okCount })

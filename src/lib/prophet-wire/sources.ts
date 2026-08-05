@@ -16,9 +16,9 @@ import type { Source } from "./types"
 export const SOURCES: readonly Source[] = [
   // ── Prioridade alta — portais e editoras ──────────────────────────────
   {
-    id: "bgg-news",
-    name: "BoardGameGeek News",
-    url: "https://boardgamegeek.com/rss/news",
+    id: "bgg-blog",
+    name: "BoardGameGeek Blog",
+    url: "https://boardgamegeek.com/rss/blog/1",
     kind: "rss",
     defaultCategory: "Notícias",
     enabled: true,
@@ -29,7 +29,8 @@ export const SOURCES: readonly Source[] = [
     url: "https://boardgamegeek.com/xmlapi2/hot?type=boardgame",
     kind: "api",
     defaultCategory: "Notícias",
-    enabled: true,
+    // Desligada em 05/08/2026: 401 — a XML API2 do BGG passou a exigir autenticação ("Unauthorized").
+    enabled: false,
   },
   {
     id: "dice-tower",
@@ -45,7 +46,8 @@ export const SOURCES: readonly Source[] = [
     url: "https://icv2.com/rss/articles/subject/6.xml",
     kind: "rss",
     defaultCategory: "Mercado",
-    enabled: true,
+    // Desligada em 05/08/2026: 403 — Cloudflare barra o agente; nenhuma variante do feed passa.
+    enabled: false,
   },
   {
     id: "gamefound",
@@ -53,7 +55,8 @@ export const SOURCES: readonly Source[] = [
     url: "https://gamefound.com/",
     kind: "html",
     defaultCategory: "Gamefound",
-    enabled: true,
+    // Desligada em 05/08/2026: Responde 200, mas é HTML sem <item>/<entry>: precisa de extractor próprio.
+    enabled: false,
   },
   {
     id: "kickstarter-tabletop",
@@ -61,7 +64,8 @@ export const SOURCES: readonly Source[] = [
     url: "https://www.kickstarter.com/discover/categories/games/tabletop%20games",
     kind: "html",
     defaultCategory: "Kickstarter",
-    enabled: true,
+    // Desligada em 05/08/2026: 403 — bloqueio de bot, com UA de navegador também.
+    enabled: false,
   },
 
   // ── Editoras ─────────────────────────────────────────────────────────
@@ -76,10 +80,13 @@ export const SOURCES: readonly Source[] = [
   {
     id: "cmon",
     name: "CMON",
-    url: "https://www.cmon.com/news",
-    kind: "html",
+    url: "https://www.cmon.com/feed",
+    kind: "rss",
     defaultCategory: "Editoras",
-    enabled: true,
+    // Desligada em 05/08/2026: 403 no runtime. O feed EXISTE e responde 200 no curl com o mesmo UA — o
+    // que barra é a impressão TLS do fetch do Node, lida pelo Cloudflare. Trocar
+    // User-Agent não resolve; exigiria um cliente que imite navegador.
+    enabled: false,
   },
   {
     id: "fantasy-flight",
@@ -87,7 +94,8 @@ export const SOURCES: readonly Source[] = [
     url: "https://www.fantasyflightgames.com/en/news/",
     kind: "html",
     defaultCategory: "Editoras",
-    enabled: true,
+    // Desligada em 05/08/2026: 403 — bloqueio de bot, com UA de navegador também.
+    enabled: false,
   },
   {
     id: "leder-games",
@@ -103,7 +111,8 @@ export const SOURCES: readonly Source[] = [
     url: "https://www.gmtgames.com/",
     kind: "html",
     defaultCategory: "Editoras",
-    enabled: true,
+    // Desligada em 05/08/2026: Responde 200, mas é HTML sem <item>/<entry>: precisa de extractor próprio.
+    enabled: false,
   },
   {
     id: "plaid-hat",
@@ -111,7 +120,8 @@ export const SOURCES: readonly Source[] = [
     url: "https://www.plaidhatgames.com/news/",
     kind: "html",
     defaultCategory: "Editoras",
-    enabled: true,
+    // Desligada em 05/08/2026: Responde 200, mas é HTML sem <item>/<entry>: precisa de extractor próprio.
+    enabled: false,
   },
   {
     id: "portal-games",
@@ -119,7 +129,8 @@ export const SOURCES: readonly Source[] = [
     url: "https://portalgames.pl/en/feed/",
     kind: "rss",
     defaultCategory: "Editoras",
-    enabled: true,
+    // Desligada em 05/08/2026: O feed morreu: /en/feed/ redireciona (301) para a home, que é HTML.
+    enabled: false,
   },
   {
     id: "czech-games",
@@ -127,7 +138,8 @@ export const SOURCES: readonly Source[] = [
     url: "https://czechgames.com/en/news/",
     kind: "html",
     defaultCategory: "Editoras",
-    enabled: true,
+    // Desligada em 05/08/2026: 403 — bloqueio de bot.
+    enabled: false,
   },
   {
     id: "ravensburger",
@@ -135,7 +147,8 @@ export const SOURCES: readonly Source[] = [
     url: "https://www.ravensburger.org/us/discover/news/index.html",
     kind: "html",
     defaultCategory: "Editoras",
-    enabled: true,
+    // Desligada em 05/08/2026: Responde 200, mas é HTML sem <item>/<entry>: precisa de extractor próprio.
+    enabled: false,
   },
   {
     id: "kosmos",
@@ -143,7 +156,8 @@ export const SOURCES: readonly Source[] = [
     url: "https://www.kosmos.de/en/news/",
     kind: "html",
     defaultCategory: "Editoras",
-    enabled: true,
+    // Desligada em 05/08/2026: 404 — a página de notícias saiu do ar.
+    enabled: false,
   },
   {
     id: "asmodee",
@@ -151,7 +165,8 @@ export const SOURCES: readonly Source[] = [
     url: "https://www.asmodee.com/en/news/",
     kind: "html",
     defaultCategory: "Editoras",
-    enabled: true,
+    // Desligada em 05/08/2026: 530 (Cloudflare 1016, falha de DNS na origem) — quebrado do lado deles.
+    enabled: false,
   },
 
   // ── Comunidades (Reddit) ─────────────────────────────────────────────
@@ -169,7 +184,10 @@ export const SOURCES: readonly Source[] = [
     url: "https://www.reddit.com/r/soloboardgaming/.rss",
     kind: "rss",
     defaultCategory: "Notícias",
-    enabled: true,
+    // Desligada em 05/08/2026: 429 mesmo em fila com 3s de pausa. O limite do RSS público do reddit é por
+    // IP, não por concorrência — só UMA das três chamadas passa. Mantida ativa
+    // apenas `reddit-boardgames`, a mais abrangente.
+    enabled: false,
   },
   {
     id: "reddit-boardgamedeals",
@@ -177,7 +195,8 @@ export const SOURCES: readonly Source[] = [
     url: "https://www.reddit.com/r/boardgamedeals/.rss",
     kind: "rss",
     defaultCategory: "Promoções",
-    enabled: true,
+    // Desligada em 05/08/2026: 429 pelo mesmo motivo de `reddit-soloboardgaming`.
+    enabled: false,
   },
 
   // ── Eventos ──────────────────────────────────────────────────────────
@@ -187,7 +206,8 @@ export const SOURCES: readonly Source[] = [
     url: "https://www.gencon.com/happenings/news",
     kind: "html",
     defaultCategory: "Eventos",
-    enabled: true,
+    // Desligada em 05/08/2026: 404 — a URL de notícias mudou e não achei substituta.
+    enabled: false,
   },
   {
     id: "spiel-essen",
@@ -195,7 +215,8 @@ export const SOURCES: readonly Source[] = [
     url: "https://www.spiel-essen.de/en/news/",
     kind: "html",
     defaultCategory: "Eventos",
-    enabled: true,
+    // Desligada em 05/08/2026: Responde 200, mas é HTML sem <item>/<entry>: precisa de extractor próprio.
+    enabled: false,
   },
   {
     id: "uk-games-expo",
@@ -203,7 +224,8 @@ export const SOURCES: readonly Source[] = [
     url: "https://www.ukgamesexpo.co.uk/news/",
     kind: "html",
     defaultCategory: "Eventos",
-    enabled: true,
+    // Desligada em 05/08/2026: 404 — a URL de notícias mudou e não achei substituta.
+    enabled: false,
   },
   {
     id: "origins",
@@ -211,7 +233,8 @@ export const SOURCES: readonly Source[] = [
     url: "https://www.originsgamefair.com/news",
     kind: "html",
     defaultCategory: "Eventos",
-    enabled: true,
+    // Desligada em 05/08/2026: 403 — bloqueio de bot.
+    enabled: false,
   },
 ] as const
 

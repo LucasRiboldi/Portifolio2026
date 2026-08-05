@@ -109,3 +109,85 @@ describe("collect", () => {
     expect(payload?.fetchedAt).toBe(fixed.toISOString())
   })
 })
+
+/**
+ * Serialização por host.
+ *
+ * O Collector saía com `Promise.all` sobre TODAS as fontes. Como três das
+ * ativas eram do reddit.com, as três chamadas partiam juntas e as três voltavam
+ * **429** — o pipeline reportava "fonte bloqueada" quando o culpado era o nosso
+ * próprio paralelismo. Medido em 05/08/2026, com o UA do agregador: sozinha, a
+ * mesma URL responde 200.
+ *
+ * O conserto não pode virar "serializa tudo": uma fonte lenta atrasaria as
+ * outras sete. Estes testes fixam as duas metades — mesmo host em fila, hosts
+ * diferentes em paralelo — e a ordem de retorno, que é contrato.
+ */
+describe("collect — cortesia por host", () => {
+  /** HttpClient que registra sobreposição real de chamadas por host. */
+  function httpQueRegistra(atrasoMs: number) {
+    const emVoo = new Map<string, number>()
+    const picos = new Map<string, number>()
+    const ordem: string[] = []
+
+    const http: HttpClient = {
+      async get(url) {
+        const host = new URL(url).hostname
+        const agora = (emVoo.get(host) ?? 0) + 1
+        emVoo.set(host, agora)
+        picos.set(host, Math.max(picos.get(host) ?? 0, agora))
+        ordem.push(url)
+        await new Promise((r) => setTimeout(r, atrasoMs))
+        emVoo.set(host, (emVoo.get(host) ?? 1) - 1)
+        return { status: 200, body: rss }
+      },
+    }
+    return { http, picos, ordem }
+  }
+
+  it("nunca faz duas chamadas simultâneas ao mesmo host", async () => {
+    const { http, picos } = httpQueRegistra(5)
+    const fontes = [
+      source({ id: "r1", url: "https://www.reddit.com/r/a/.rss" }),
+      source({ id: "r2", url: "https://www.reddit.com/r/b/.rss" }),
+      source({ id: "r3", url: "https://www.reddit.com/r/c/.rss" }),
+    ]
+
+    await collect({ http, logger: silent(), sources: fontes })
+
+    // Era 3 antes do conserto — e 3 chamadas juntas é o que gerava o 429.
+    expect(picos.get("www.reddit.com")).toBe(1)
+  })
+
+  it("mantém hosts diferentes em paralelo", async () => {
+    const { http, picos } = httpQueRegistra(15)
+    const fontes = [
+      source({ id: "a", url: "https://a.test/feed" }),
+      source({ id: "b", url: "https://b.test/feed" }),
+      source({ id: "c", url: "https://c.test/feed" }),
+    ]
+
+    const t0 = Date.now()
+    await collect({ http, logger: silent(), sources: fontes })
+    const decorrido = Date.now() - t0
+
+    expect([...picos.values()]).toEqual([1, 1, 1])
+    // Em fila seriam ~45ms mais duas pausas de 1s. Em paralelo, ~15ms.
+    expect(decorrido).toBeLessThan(500)
+  })
+
+  it("devolve um item por fonte, na ordem original", async () => {
+    // O agrupamento por host embaralha a execução; a ordem de retorno é
+    // contrato documentado e é reposta ao final.
+    const { http } = httpQueRegistra(1)
+    const fontes = [
+      source({ id: "r1", url: "https://www.reddit.com/r/a/.rss" }),
+      source({ id: "outro", url: "https://outro.test/feed" }),
+      source({ id: "r2", url: "https://www.reddit.com/r/b/.rss" }),
+    ]
+
+    const res = await collect({ http, logger: silent(), sources: fontes })
+
+    expect(res.map((r) => r.source.id)).toEqual(["r1", "outro", "r2"])
+  })
+})
