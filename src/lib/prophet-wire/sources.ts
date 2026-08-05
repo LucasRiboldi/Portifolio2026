@@ -129,7 +129,10 @@ export const SOURCES: readonly Source[] = [
     url: "https://portalgames.pl/en/feed/",
     kind: "rss",
     defaultCategory: "Editoras",
-    // Desligada em 05/08/2026: O feed morreu: /en/feed/ redireciona (301) para a home, que é HTML.
+    // Desligada em 05/08/2026. Não é 404: o site responde **200 para qualquer
+    // caminho**, inclusive inventado, servindo sempre a mesma página (e com
+    // lang="id-ID"). Está quebrado ou parqueado do lado deles — não há o que
+    // apontar aqui até voltarem ao ar.
     enabled: false,
   },
   {
@@ -153,10 +156,13 @@ export const SOURCES: readonly Source[] = [
   {
     id: "kosmos",
     name: "Kosmos",
-    url: "https://www.kosmos.de/en/news/",
-    kind: "html",
+    url: "https://www.kosmos.de/blogs/news.atom",
+    kind: "rss",
     defaultCategory: "Editoras",
-    // Desligada em 05/08/2026: 404 — a página de notícias saiu do ar.
+    // Desligada em 05/08/2026. O motivo antes registrado ("404") estava errado:
+    // a loja é Shopify e o feed EXISTE em /blogs/news.atom — só que **vazio**,
+    // zero <entry>. Nenhum outro handle de blog responde. Religue quando eles
+    // publicarem: a URL aqui já é a certa.
     enabled: false,
   },
   {
@@ -202,12 +208,11 @@ export const SOURCES: readonly Source[] = [
   // ── Eventos ──────────────────────────────────────────────────────────
   {
     id: "gen-con",
-    name: "Gen Con",
-    url: "https://www.gencon.com/happenings/news",
-    kind: "html",
+    name: "Gen Con Blog",
+    url: "https://gencon.blog/feed/",
+    kind: "rss",
     defaultCategory: "Eventos",
-    // Desligada em 05/08/2026: 404 — a URL de notícias mudou e não achei substituta.
-    enabled: false,
+    enabled: true,
   },
   {
     id: "spiel-essen",
@@ -221,10 +226,13 @@ export const SOURCES: readonly Source[] = [
   {
     id: "uk-games-expo",
     name: "UK Games Expo",
-    url: "https://www.ukgamesexpo.co.uk/news/",
+    url: "https://www.ukgamesexpo.co.uk/content/news/",
     kind: "html",
     defaultCategory: "Eventos",
-    // Desligada em 05/08/2026: 404 — a URL de notícias mudou e não achei substituta.
+    // Desligada em 05/08/2026. O "404" de antes era da URL velha: as notícias
+    // mudaram para /content/news/, que responde 200. Mas não há feed —
+    // /feed/, /rss, /feed.xml e /news/rss.xml todos dão 404, e a página não
+    // anuncia nenhum. Só volta com extractor de HTML.
     enabled: false,
   },
   {

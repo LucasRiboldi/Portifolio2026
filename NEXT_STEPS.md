@@ -29,7 +29,7 @@ que não existia:
 
 O Prophet Wire foi exercitado no mesmo dia: pipeline, dedup e histórico
 funcionam, e a auditoria de fontes levou o relatório a **`errors: 0`** — ao
-preço da cobertura, que caiu para 5 fontes ativas (item 7).
+preço da cobertura, que caiu para 6 fontes ativas (item 7).
 
 **A lição que sobra:** o sintoma ("o arquivo não chega") apontava para o
 armazenamento, e o culpado estava no `next.config.ts`. Quando um upload trava
@@ -176,32 +176,54 @@ curl -i -X POST https://portifolio2026-two.vercel.app/api/prophet-wire/run -H "A
 execução local, depois da auditoria de fontes do item 7. Se aparecer erro em
 produção, é fonte que caiu desde então.
 
-## 7. Recuperar cobertura: 19 das 24 fontes estão desligadas
+## 7. Recuperar cobertura: 18 das 24 fontes estão desligadas
 
-A auditoria de 05/08 deixou o sinal limpo (**`errors: 0`**, 5 de 5 fontes
-respondendo), mas ao preço da cobertura: sobraram **5 fontes ativas** —
-`bgg-blog`, `dice-tower`, `stonemaier`, `leder-games`, `reddit-boardgames`.
+Sinal limpo (**`errors: 0`**, 6 de 6 respondendo), mas cobertura curta. Ativas:
+`bgg-blog`, `dice-tower`, `stonemaier`, `leder-games`, `reddit-boardgames`,
+`gen-con`.
 
-Cada desligada tem o motivo e a data no comentário, em `lib/prophet-wire/sources.ts`.
-Agrupadas pelo que seria preciso para voltarem:
+Cada desligada tem motivo e data no comentário, em `lib/prophet-wire/sources.ts`.
 
 | Barreira | Fontes | O que destravaria |
 |---|---|---|
-| **URL morta (404)** | `kosmos`, `gen-con`, `uk-games-expo`, `portal-games` | Achar o feed novo. É o trabalho mais barato — comece por aqui. |
-| **Anti-bot por impressão TLS** | `cmon`, `icv2-games`, `fantasy-flight`, `czech-games`, `origins`, `kickstarter-tabletop`, `gamefound` | Nada trivial. Ver a nota abaixo. |
-| **Limite de taxa do Reddit** | `reddit-soloboardgaming`, `reddit-boardgamedeals` | Cliente autenticado (OAuth) em vez do RSS público. |
-| **Sem feed — é HTML** | `gmt-games`, `plaid-hat`, `ravensburger`, `spiel-essen` | Um extractor por site. Trabalho maior, valor menor. |
-| **Quebrado do lado deles** | `asmodee` (530), `bgg-hotness` (401) | Esperar. A XML API2 do BGG passou a exigir autenticação. |
+| **Anti-bot por impressão TLS** | `cmon`, `icv2-games`, `fantasy-flight`, `czech-games`, `origins`, `kickstarter-tabletop`, `gamefound` | Cliente HTTP que imite navegador. Ver a nota abaixo. |
+| **Sem feed — só HTML** | `uk-games-expo`, `gmt-games`, `plaid-hat`, `ravensburger`, `spiel-essen` | Um extractor por site. Trabalho maior, valor menor. |
+| **Limite de taxa do Reddit** | `reddit-soloboardgaming`, `reddit-boardgamedeals` | Cliente autenticado (OAuth) no lugar do RSS público. |
+| **Vazio ou quebrado na origem** | `kosmos`, `portal-games`, `asmodee`, `bgg-hotness` | Esperar. Nada a fazer do nosso lado. |
+
+<details>
+<summary>O que a caça aos 404 de 05/08 apurou — e corrigiu</summary>
+
+Dos quatro registrados como "404", **um foi recuperado e três estavam mal
+diagnosticados por mim**:
+
+- **`gen-con` — resolvido.** As notícias viraram um blog à parte:
+  `https://gencon.blog/feed/`, 10 itens, RSS de verdade. Religada, e já trouxe
+  item novo na execução seguinte.
+- **`kosmos` — não era 404.** A loja é Shopify, e o feed **existe** em
+  `/blogs/news.atom` — só que **vazio**, zero `<entry>`. A URL no registry já é
+  a certa; religue quando eles publicarem.
+- **`uk-games-expo` — não era 404.** As notícias mudaram para `/content/news/`,
+  que responde 200. Mas não há feed em variante nenhuma, e a página não anuncia
+  um. Precisa de extractor.
+- **`portal-games` — não era 404.** O site responde **200 para qualquer
+  caminho**, inclusive inventado, servindo sempre a mesma página. Está quebrado
+  ou parqueado.
+
+**Técnica que funcionou e vale repetir:** autodescoberta pela home (`<link
+rel="alternate">`) não achou nada em nenhum dos quatro. O que resolveu foi
+reconhecer a **plataforma** — o Kosmos tinha `/products/` na home, marca de
+Shopify, e Shopify sempre expõe `/blogs/<handle>.atom`. Foi assim que o feed
+apareceu, mesmo vazio.
+
+</details>
 
 **A nota que importa, sobre o anti-bot:** o `cmon` responde **200 no `curl`** com
-o nosso User-Agent e **403 no `fetch` do Node**. Ou seja, não é o UA — é o
-Cloudflare lendo a impressão TLS do cliente. **Trocar User-Agent não resolve**, e
-o palpite óbvio ("é o UA do agregador") custaria tempo à toa. Voltar essas
-fontes exigiria um cliente HTTP que imite navegador, o que é outra decisão.
+o nosso User-Agent e **403 no `fetch` do Node**. Não é o UA — é o Cloudflare
+lendo a impressão TLS do cliente. **Trocar User-Agent não resolve.**
 
-**Sobre o Reddit:** medi com as três em fila e **3 s de pausa** entre elas — só a
-primeira passa. O limite é por IP, não por concorrência, então espaçar mais não
-adianta.
+**Sobre o Reddit:** medi com as três em fila e **3 s de pausa** — só a primeira
+passa. O limite é por IP, não por concorrência.
 
 # 🟢 Melhorias
 
