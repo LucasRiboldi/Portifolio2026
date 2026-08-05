@@ -6,7 +6,7 @@
 > Ao concluir um item: remova-o daqui, atualize `PROJECT_STATE.md` e diga no
 > commit o que foi verificado de verdade.
 >
-> **Atualizado:** 2026-08-05, com o upload de mídia funcionando fim a fim.
+> **Atualizado:** 2026-08-05, depois de exercitar o Prophet Wire.
 
 ---
 
@@ -26,6 +26,9 @@ que não existia:
 3. o **CSP** não liberava o Vercel Blob em `connect-src`, então o upload direto
    era bloqueado pelo navegador — e `media-src` nem existia, o que bloquearia a
    reprodução também.
+
+O Prophet Wire foi exercitado no mesmo dia: pipeline, dedup e histórico
+funcionam — mas **15 das 24 fontes de notícia estão fora do ar** (item 7).
 
 **A lição que sobra:** o sintoma ("o arquivo não chega") apontava para o
 armazenamento, e o culpado estava no `next.config.ts`. Quando um upload trava
@@ -141,46 +144,76 @@ https://vercel.com/account/tokens, se ainda estiver listado.
 
 # 🟠 Validação restante
 
-## 6. Disparar o gatilho do Prophet Wire
+## 6. Confirmar o gatilho do Prophet Wire **em produção**
 
-Já provado: persistência e dedup contra Firestore real
-(`tests-integration/prophet-wire-persistencia.test.ts`), `CRON_SECRET` definido
-em Preview e Production, e o endpoint recusando corretamente em produção (sem
-header → 401; segredo errado → 401 genérico).
+O caminho feliz foi **provado em 05/08**, mas contra o build local com um
+`CRON_SECRET` de teste — não contra o deploy. O que ficou provado:
 
-**Falta o caminho feliz, e só você pode rodar** — o segredo é *sensitive*.
+| | Resultado |
+|---|---|
+| Sem header / segredo errado | 401, como esperado |
+| Segredo certo | 200, pipeline roda |
+| Persistência | acervo cresceu 22 → 29 → 46 rascunhos |
+| Histórico | as duas execuções registradas (4 → 6 runs) |
+| **Dedup** | **funciona** — 46 docs, 46 hashes/slugs/títulos distintos, zero repetidos |
+
+A segunda execução criou 17 documentos, e por um momento isso pareceu
+duplicação. Não era: os 17 eram inéditos, e o log mostra a dedução acontecendo
+(`entrada: 23, ineditos: 17, descartados: 6`). Contar o crescimento do acervo
+não distingue "duplicou" de "achou coisa nova" — conferir hash é o que
+distingue.
+
+**Falta só rodar contra produção**, que é onde o `CRON_SECRET` de verdade e o
+agendamento vivem:
 
 ```bash
 curl -i -X POST https://portifolio2026-two.vercel.app/api/prophet-wire/run -H "Authorization: Bearer SEU_SEGREDO"
 ```
 
-Rode **duas vezes**. **Pronto quando:** as duas aparecem no histórico e a segunda
-não duplica o acervo.
+**Ao ler o relatório:** `published: 0` é o esperado com `publishMode:
+"rascunho"`. E **não espere `errors: 0`** — ver o item 7.
 
-**Ao ler o relatório:** `counters.published` conta só status `publicado`. Com
-`publishMode: "rascunho"`, uma execução perfeita reporta `published: 0`. O sinal
-de sucesso é `errors: 0` e o acervo crescendo.
+## 7. 15 das 24 fontes de notícia estão quebradas
 
----
+Descoberto ao rodar o pipeline em 05/08. O `errors: 15` não é defeito nosso: são
+fontes externas que não respondem mais. **62% da lista apodreceu.**
+
+| Status | Fontes |
+|---|---|
+| **404** — URL morreu ou mudou | `icv2-games`, `gen-con`, `kosmos`, `czech-games`, `uk-games-expo`, `portal-games` |
+| **403** — bloqueando o nosso agente | `bgg-news`, `cmon`, `kickstarter-tabletop`, `fantasy-flight`, `origins` |
+| **429** — limite de taxa | `reddit-boardgames`, `reddit-boardgamedeals` |
+| **401** | `bgg-hotness` |
+| **530** | `asmodee` |
+
+Mais **5 fontes respondem 200 mas sem `<item>`/`<entry>`** — são páginas HTML, e
+o log já diz o que falta: *"fonte precisa de extractor próprio"*. São
+`gamefound`, `gmt-games`, `plaid-hat`, `raven`, `spiel`.
+
+**Sobram 4 fontes realmente produtivas**, e são elas que sustentam o acervo hoje.
+
+**Por onde começar:** os 404 são os mais baratos — é achar o feed novo. Os 403
+provavelmente cedem a um `User-Agent` decente. Os 429 do Reddit pedem espaçar as
+chamadas. Os extractors próprios são o trabalho maior; deixe por último.
 
 # 🟢 Melhorias
 
-## 7. `BLOB_READ_WRITE_TOKEN` ausente no Preview
+## 8. `BLOB_READ_WRITE_TOKEN` ausente no Preview
 
 Não dá por CLI — o token é *sensitive*, não há de onde copiar. O caminho é
 reconectar o store: Storage → `portfolio-midia` → aba **Projects** → ⋯ →
 **Update Project Connection** → marcar **Preview**.
 
 O Preview já tem `BLOB_STORE_ID` e `BLOB_WEBHOOK_PUBLIC_KEY`. **Prioridade
-baixa:** sem login em preview (item 8) não há painel de onde subir mídia.
+baixa:** sem login em preview (item 9) não há painel de onde subir mídia.
 
-## 8. Login em preview é impossível
+## 9. Login em preview é impossível
 
 Cada preview ganha URL com hash único e o Firebase Auth exige domínio na
 allowlist — não há curinga. Saída, se incomodar: alias fixo de branch na Vercel,
 autorizado uma vez. Detalhes em `docs/project-knowledge/auth.md` §6.1.
 
-## 9. A varredura de usos relê o banco a cada exclusão
+## 10. A varredura de usos relê o banco a cada exclusão
 
 `mapearUsosDeMidia` lê todas as coleções declaradas para responder "este arquivo
 está em uso?". São ~170 documentos e roda só no painel, então hoje não incomoda.
@@ -189,7 +222,7 @@ Se um dia incomodar, a saída não é cachear — é gravar o vínculo na hora e
 URL entra no documento, em vez de descobri-lo depois. **Não faça antes de doer:**
 o índice derivado é o que não pode dessincronizar.
 
-## 10. Convenção de idioma mista na camada de dados
+## 11. Convenção de idioma mista na camada de dados
 
 `buscarLinhas` vs. `listContactMessages`. Padronizar **ao tocar em cada módulo**,
 não num varredão — renomear tudo de uma vez produz diff enorme, sem
@@ -199,7 +232,7 @@ comportamento novo, que atrapalha o `git blame` do resto.
 
 # 🔵 Higiene
 
-## 11. Desligar o projeto Supabase
+## 12. Desligar o projeto Supabase
 
 **Conferido em 01/08, reconferido em 04/08 — seguro apagar:**
 
@@ -217,7 +250,7 @@ Supabase, que não está instalado — já não roda. Apagar depois do desligame
 **Como:** https://app.supabase.com → projeto → Settings → General → Delete
 project. **Irreversível.**
 
-## 12. CSP com `unsafe-inline` em `script-src`
+## 13. CSP com `unsafe-inline` em `script-src`
 
 Compromisso de um CSP por header, sem nonce por request. Um CSP estrito exigiria
 middleware em todas as rotas. Registrado em `next.config.ts`.
