@@ -49,12 +49,44 @@ const csp = [
   "style-src 'self' 'unsafe-inline'",
   "img-src 'self' data: blob: https:",
   "font-src 'self' data:",
+  /**
+   * `media-src` PRECISA ser declarado.
+   *
+   * Sem ele a diretiva cai no `default-src 'self'`, e aí um `<audio>` ou
+   * `<video>` apontando para o Vercel Blob é recusado pelo navegador — a faixa
+   * fica muda e a fita não roda, sem nada na tela dizendo por quê.
+   *
+   * Passou despercebido porque `img-src` permite `https:` inteiro: capa e
+   * pôster do Blob sempre apareceram, o que dava a impressão de que a mídia
+   * estava liberada.
+   *
+   * `blob:` aqui é o esquema de URI do navegador (object URLs), sem relação
+   * com o produto Vercel Blob — os dois nomes colidem por azar.
+   */
+  "media-src 'self' data: blob: https://*.public.blob.vercel-storage.com",
   [
     "connect-src 'self'",
     "https://identitytoolkit.googleapis.com",
     "https://securetoken.googleapis.com",
     "https://vitals.vercel-insights.com",
     "https://va.vercel-scripts.com",
+    /**
+     * Upload direto ao Vercel Blob — sem estes hosts o envio é BLOQUEADO PELO
+     * NAVEGADOR, e o sintoma é cruel: o handshake com a nossa rota passa (é
+     * `'self'`), o token sai, a barra aparece e trava em 0% para sempre, sem
+     * erro na tela. Só o console do navegador conta a verdade.
+     *
+     * Custou dias em 08/2026, com a culpa indo parar no `put()`, no store e no
+     * tamanho do arquivo — todos inocentes. Imagem e áudio pequenos escapavam
+     * porque sobem pela Server Action, que é mesma origem.
+     *
+     * `vercel.com` é para onde o SDK manda os bytes (`defaultVercelBlobApiUrl`
+     * = https://vercel.com/api/blob); os `*.blob.vercel-storage.com` cobrem a
+     * leitura da URL pública e as variantes do store.
+     */
+    "https://vercel.com",
+    "https://blob.vercel-storage.com",
+    "https://*.blob.vercel-storage.com",
   ].join(" "),
   ["frame-src 'self'", "https://apis.google.com", authDomain && `https://${authDomain}`]
     .filter(Boolean)
