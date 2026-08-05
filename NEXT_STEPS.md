@@ -6,16 +6,24 @@
 > Ao concluir um item: remova-o daqui, atualize `PROJECT_STATE.md` e diga no
 > commit o que foi verificado de verdade.
 >
-> **Atualizado:** 2026-08-04, depois de fechar o teto de tamanho no upload.
+> **Atualizado:** 2026-08-05, depois de achar o CSP como causa raiz do upload.
 
 ---
 
 ## Estado em uma linha
 
-Site no ar, login e CRUD funcionando, **634 testes passando**. O upload de mídia
-tinha DOIS defeitos, ambos fechados em 04/08: `/admin/media` apagava arquivo em
-uso sem avisar (o 404), e tudo entre 4,5 e 25 MB morria na Server Action (o erro
-opaco). Sobra o vídeo que trava — e agora há barra de progresso para dizer onde.
+Site no ar, login e CRUD funcionando, **640 testes passando**. O upload de mídia
+tinha **três** defeitos independentes, os três fechados em 04–05/08:
+
+1. `/admin/media` apagava arquivo em uso sem avisar — o 404 era referência
+   pendurada, não falha de escrita;
+2. tudo entre 4,5 e 25 MB morria na Server Action, porque `SERVER_ACTION_LIMIT`
+   ignorava o corte real da plataforma;
+3. o **CSP** não liberava o Vercel Blob em `connect-src`, então o upload direto
+   era bloqueado pelo navegador — e `media-src` nem existia, o que bloquearia a
+   reprodução também.
+
+Falta só você confirmar o item 1 subindo um vídeo.
 
 <details>
 <summary>O que o rediagnóstico de 04/08 desmontou</summary>
@@ -43,27 +51,50 @@ Ao registrar uma URL quebrada, registre-a inteira.
 
 ---
 
-# 🔴 Quebrado — consertar primeiro
+# 🔴 Confirmar
 
-## 1. Vídeo trava em "Enviando…" e nunca termina
+## 1. O upload de vídeo — causa raiz achada e consertada, falta você confirmar
 
-Único item de upload que sobrou. Sem erro, sem progresso, sem fim.
+**Era o nosso próprio CSP.** `connect-src` não listava o Vercel Blob, então o
+navegador recusava o PUT antes de ele sair da máquina. Corrigido em `a00d5ff`.
 
-**O que já saiu da lista de suspeitos:**
+O navegador dizia, e ninguém tinha olhado o console:
 
-- *problema de store* — a escrita foi provada boa em 04/08 (`put()` persiste,
-  URL pública devolve 200);
-- *falta de progresso* — a barra existe desde 04/08, então agora dá para ver
-  **onde** ele para.
+```
+Connecting to 'https://…blob.vercel-storage.com/…' violates the following
+Content Security Policy directive: "connect-src 'self' …"
+The action has been blocked.
+```
 
-**Sobram dois suspeitos, e a barra os separa:**
+<details>
+<summary>Por que enganou por dias</summary>
 
-| O que a barra mostra | Onde está o problema |
-|---|---|
-| Nunca sai de 0% | O handshake de `/api/admin/blob-upload` — token não sai |
-| Chega a 100% e trava | O webhook `blob.upload-completed` não consegue voltar (Deployment Protection barra chamada servidor-a-servidor) |
+- **O handshake passava.** `/api/admin/blob-upload` é mesma origem, coberta por
+  `'self'`. O token saía, a barra aparecia — e só então nada acontecia. A fase
+  "enviando 0%" era honesta: o PUT começava e era recusado.
+- **Imagem e áudio pequenos sempre funcionaram**, porque sobem pela Server
+  Action, que também é mesma origem. Isso fazia parecer que só vídeo era
+  especial.
+- **As capas do Blob apareciam**, porque `img-src` permite `https:` inteiro.
+- **Falhava com `fetch` e com XHR**, o que descartava o transporte e empurrava
+  a suspeita para o ambiente (extensão, Brave, rede) — tudo inocente.
 
-**Próximo passo:** subir um vídeo e anotar em que percentual ele para.
+Suspeitos eliminados por medição, todos falsos: `put()`, o store, o caminho
+OIDC, o tamanho do arquivo, o SDK, o navegador. Um upload de 9,18 MB com token
+de cliente sobe em 3,2 s por fora do browser.
+
+</details>
+
+**Segundo buraco, achado junto:** `media-src` não era declarado e caía no
+`default-src 'self'` — `<audio>` e `<video>` do Blob seriam recusados do mesmo
+jeito. Ou seja, mesmo com o upload consertado a **reprodução** continuaria
+quebrada. Declarado agora.
+
+**Verificado em produção, no navegador:** `fetch` ao Blob devolve 200 (antes
+falhava em 1 ms), e um `<audio>` do Blob carrega metadados — o mp3 que você
+subiu tem 45 s. Zero erros de CSP no console.
+
+**Falta só você:** suba o vídeo de novo. Se subir, remova este item.
 
 ---
 

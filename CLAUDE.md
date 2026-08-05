@@ -114,7 +114,7 @@ compara com `ADMIN_GITHUB_LOGIN` → custom claim + session cookie httpOnly.
 ```bash
 npm run dev          # local, porta 3000
 npm run build        # NÃO rode com o dev server no ar
-npm run test:unit    # 580 testes (sem rede, sem credencial)
+npm run test:unit    # 640 testes (sem rede, sem credencial)
 npm run test:smoke   # sobe o build e confere os portoes (precisa de build)
 npm run test:integration  # emulador do Firestore (precisa de JDK 21)
 npm run lint
@@ -163,14 +163,21 @@ Ver **`PROJECT_STATE.md`** (estado) e **`NEXT_STEPS.md`** (o que fazer).
 
 Em 2026-08-04: produção responde **200** em `/` e em `/login` — o 500 de
 `require() of ES Module` registrado aqui em 31/07 **não existe mais**. Suíte
-unitária em **634 testes**, verdes.
+unitária em **640 testes**, verdes.
 
-O upload de mídia tinha dois defeitos, ambos fechados em 04/08:
+O upload de mídia tinha **três** defeitos independentes, os três fechados em
+04–05/08:
 
 1. `/admin/media` apagava arquivo em uso sem avisar — o 404 era referência
-   pendurada, não falha de escrita. Guardado por `lib/admin/media-refs.ts`.
-2. A plataforma corta o corpo do request em ~4,5 MB, e `SERVER_ACTION_LIMIT`
-   valia 25 MB — tudo no meio morria com erro opaco. Agora arquivo acima de
-   4 MB sobe direto ao Blob, com barra de progresso.
+   pendurada. Guardado por `lib/admin/media-refs.ts`.
+2. A plataforma corta o corpo do request em ~4,5 MB e `SERVER_ACTION_LIMIT`
+   valia 25 MB. Arquivo acima de 4 MB agora sobe direto ao Blob.
+3. **O CSP bloqueava o upload direto.** `connect-src` não listava o Vercel Blob,
+   então o navegador recusava o PUT — sintoma: barra travada em 0%, sem erro na
+   tela. `media-src` também faltava, e teria bloqueado a reprodução.
 
-**Bloqueio aberto:** vídeo trava em "Enviando…" (`NEXT_STEPS.md` item 1).
+**Ao mexer em mídia, lembre que o CSP em `next.config.ts` é parte do caminho.**
+Um upload que "trava sem erro" é sintoma clássico dele; o console do navegador
+é o único lugar que conta.
+
+**Falta confirmar:** subir um vídeo pelo painel (`NEXT_STEPS.md` item 1).
