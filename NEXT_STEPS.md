@@ -6,34 +6,38 @@
 > Ao concluir um item: remova-o daqui, atualize `PROJECT_STATE.md` e diga no
 > commit o que foi verificado de verdade.
 >
-> **Atualizado:** 2026-08-04, depois de rediagnosticar a lista contra o código
-> e contra produção, e de limpar as duas pendências de conteúdo morto
-> (faixas fantasma e `designPatterns`).
+> **Atualizado:** 2026-08-04, depois de fechar o item do upload de mídia.
 
 ---
 
 ## Estado em uma linha
 
-Site no ar, login e CRUD funcionando, **611 testes passando**. O upload de mídia
-continua quebrado — mas o diagnóstico de 01/08 estava fragmentado demais: o que
-o doc chamava de dois bugs pode ser um só, e o conserto proposto para o item 2
-não funcionaria como estava escrito.
+Site no ar, login e CRUD funcionando, **621 testes passando**. O upload de mídia
+**não estava quebrado** — o que havia era `/admin/media` apagando arquivo em uso
+sem avisar. Consertado e reparado em 04/08. Sobra o teto de tamanho, que é outro
+sintoma e segue aberto.
 
 <details>
-<summary>O que o rediagnóstico de 04/08 corrigiu na lista anterior</summary>
+<summary>O que o rediagnóstico de 04/08 desmontou</summary>
 
-- **`/login` não está mais 500.** Produção responde 200 em `/login` e na home.
-  O bloqueio registrado no `CLAUDE.md` não existe mais.
-- **A contagem de testes estava velha.** O doc dizia 580; eram 615 na hora do
-  rediagnóstico, e 611 depois da limpeza do item 15 (as asserções de
-  `designPatterns` saíram junto com os dados).
-- **O item 1 não é indiagnosticável por falta de token.** A URL do Blob é
-  pública — `curl` basta. O que impediu a checagem foi o doc ter elidido o nome
-  do arquivo (`eec0125e-….mp3`). **Ao registrar uma URL quebrada, registre-a
-  inteira.**
-- **O conserto proposto para o item 2 estava incompleto** — ver item 2, achado A.
-- **`/admin/media` tem uma segunda lógica de upload**, que nenhum conserto no
-  `media-picker` alcança — ver item 2, achado B.
+O item 1 antigo dizia: *"o `put()` devolve URL sem persistir, e o suspeito é o
+caminho OIDC"*. Falso, e custou três dias de suspeita no lugar errado.
+
+- **`put()` persiste.** Reproduzido com `.mp3` e as opções exatas da action:
+  `head()` e `list()` enxergam, e a URL pública devolve **200**.
+- **Um `put()` que falha não produz o sintoma.** Pelo caminho OIDC ele **lança**;
+  a action cai no `catch` e devolve erro — nenhuma URL é gravada. Logo, toda URL
+  no Firestore veio de um `put()` que criou o objeto de verdade.
+- **A causa era apagar, não gravar.** `/admin/media` listava o store cru e
+  deixava excluir qualquer arquivo com um clique, sem saber o que estava em uso.
+- **Outras correções:** `/login` responde 200 (o 500 registrado no `CLAUDE.md`
+  não existia mais); eram 615 testes, não 580.
+
+**Lição de método, e é a parte que vale guardar:** o doc afirmava que o
+diagnóstico exigia o token do Blob e por isso era impossível. O token estava no
+`.env.local` o tempo todo, e a URL do Blob é pública — um `curl` bastava. O que
+de fato travou foi o doc ter **elidido o nome do arquivo** (`eec0125e-….mp3`).
+Ao registrar uma URL quebrada, registre-a inteira.
 
 </details>
 
@@ -41,45 +45,24 @@ não funcionaria como estava escrito.
 
 # 🔴 Quebrado — consertar primeiro
 
-## 1. Upload de mídia: o arquivo não chega ao Blob
+## 1. Arquivos entre 4,5 MB e 25 MB morrem na Server Action
 
-**O sintoma que decide tudo:** um mp3 enviado pelo painel gravou a URL no
-Firestore, e essa URL responde **404**. O arquivo não está no store.
-
-**Primeiro passo, e é barato:** subir dois arquivos pelo painel — um **pequeno
-(< 1 MB)** e um de **~6 MB**.
-
-| Resultado | Leitura |
-|---|---|
-| Os dois falham | **É um bug só.** O item 2 desaparece: não é tamanho, é escrita no store. |
-| Só o de 6 MB falha | São dois bugs mesmo. Siga para o item 2. |
-
-Depois, em `/admin/media`: os arquivos enviados aparecem na lista?
-
-- **Aparecem** → estão gravados; o problema é de *entrega* (store privado,
-  `content-disposition`, domínio público errado).
-- **Lista vazia** → nunca foram gravados; o `put()` devolve URL sem persistir,
-  e o suspeito é o caminho OIDC — `temBlob()` deixa passar com `BLOB_STORE_ID`,
-  mas a escrita pode não estar autenticada de fato.
-
-**Guarde a URL inteira** de qualquer arquivo que falhar. Com ela, um `curl -I`
-fecha o diagnóstico sem credencial nenhuma.
-
-## 2. Arquivos entre 4,5 MB e 25 MB morrem na Server Action
-
-**Confirmado no código** (não só no teste manual): `SERVER_ACTION_LIMIT` vale
-**25 MB** em `lib/admin/media-accept.ts`, e `media-picker.tsx:98` só desvia para
-o upload direto quando `file.size > SERVER_ACTION_LIMIT`. Toda a faixa entre o
-corte real da plataforma e 25 MB entra na Server Action — é onde o PDF de
-4,52 MB morreu, com `An unexpected response was received from the server`.
+**Confirmado no código:** `SERVER_ACTION_LIMIT` vale **25 MB** em
+`lib/admin/media-accept.ts`, e `media-picker.tsx:98` só desvia para o upload
+direto quando `file.size > SERVER_ACTION_LIMIT`. Toda a faixa entre o corte real
+da plataforma e 25 MB entra na Server Action — é onde o PDF de 4,52 MB morreu,
+com `An unexpected response was received from the server`.
 
 Os tetos que a interface anuncia (áudio 25 MB, PDF 25 MB) são, portanto, **falsos**.
 
+**Este item é independente do que foi consertado em 04/08.** Aquilo era 404 por
+referência pendurada; isto é erro no envio. Sintomas diferentes, causas
+diferentes.
+
 **Antes de consertar, confirme que o corte ainda existe.** O limite de 4,5 MB
 para corpo de request das Vercel Functions **subiu para 100 MB**. Se este deploy
-já pegou a mudança, um PDF de 4,52 MB falhando não é limite de tamanho — é o
-item 1 com outra roupa, e este item inteiro é ruído. O teste dos dois arquivos
-no item 1 responde isso.
+já pegou a mudança, o item é ruído. Teste barato: subir pelo painel um arquivo
+de **~6 MB** e outro de **~20 MB**, e ver onde começa a falhar.
 
 ### Se o corte existir mesmo, baixar a constante NÃO basta
 
@@ -101,34 +84,38 @@ o `media-picker` tem. São duas lógicas de upload paralelas; conserto em uma n�
 alcança a outra. Ou o desvio vira código compartilhado, ou o bug sobrevive
 metade consertado.
 
-**Depende do item 1:** se o store não está guardando, trocar o caminho não
-resolve nada.
-
-## 3. Upload sem indicador de progresso
+## 2. Upload sem indicador de progresso
 
 "Enviando…" é indistinguível de travado — foi exatamente o que aconteceu no
 vídeo, que ficou enviando e nunca terminou.
 
 O `upload()` do `@vercel/blob/client` aceita `onUploadProgress`; o caminho por
 Server Action não tem como reportar progresso (o corpo sobe de uma vez). Mais uma
-razão para o item 2: pelo caminho direto, todo upload ganha barra.
+razão para o item 1: pelo caminho direto, todo upload ganha barra.
 
 **Faça antes de investigar o vídeo travado.** Sem progresso não dá para saber se
 ele para no token, no envio ou na conclusão.
 
-## 4. Vídeo trava em "Enviando…" e nunca termina
+## 3. Vídeo trava em "Enviando…" e nunca termina
 
-Sem erro, sem progresso, sem fim. Diagnóstico bloqueado pelo item 3.
+Sem erro, sem progresso, sem fim. Diagnóstico bloqueado pelo item 2.
 
-Suspeitos, em ordem: o handshake de `/api/admin/blob-upload`; o webhook de
+Suspeitos, em ordem: o handshake de `/api/admin/blob-upload`; ou o webhook de
 conclusão não conseguindo voltar (Deployment Protection barra chamada
-servidor-a-servidor); ou o mesmo problema de store do item 1.
+servidor-a-servidor).
 
-## 5. A zona Rádio do `/criativo` está sem música
+**Um suspeito saiu da lista:** "problema de store" — a escrita foi provada boa em
+04/08.
 
-**Não é mais bug** — é conteúdo faltando. As seis faixas fantasma saíram do seed
-em 04/08, e `public/musica/` só tem o `README.md`, então a zona Rádio
-simplesmente não aparece na página em vez de listar títulos que não tocam.
+---
+
+# 🟡 Conteúdo
+
+## 4. A zona Rádio do `/criativo` está sem música
+
+**Não é bug** — é conteúdo faltando. As faixas fantasma saíram do seed em 04/08,
+e os dois `audio_url` que restavam apontavam para arquivos apagados; foram
+zerados na mesma data. `public/musica/` só tem o `README.md`.
 
 Para publicar, dois caminhos, e **nenhum passa por editar o seed**:
 
@@ -136,8 +123,31 @@ Para publicar, dois caminhos, e **nenhum passa por editar o seed**:
    convenção `Artista - Título.mp3`;
 2. cadastrar em `/admin → Rádio`, que aceita capa e comentário.
 
-O caminho 2 depende dos itens 1–4: sem upload funcionando, não há como subir o
-arquivo pelo painel. **O caminho 1 funciona hoje.**
+**O caminho 1 funciona hoje.** O 2 também, para arquivo abaixo de ~4 MB.
+
+## 5. Reparar as mídias que foram perdidas
+
+A limpeza de 04/08 zerou campos, não recuperou arquivos. Seguem sem mídia:
+
+| Documento | Campo perdido |
+|---|---|
+| `tracks` · "Samurai Blue" | `audio_url`, `cover_image` |
+| `tracks` · "sirius" | `audio_url` |
+| `videos` · "Samurai Blue" | `poster_image` |
+
+Os arquivos originais não estão no Blob. Se você ainda tiver os locais, resubir
+pelo painel refaz tudo — e agora a exclusão acidental não se repete.
+
+## 6. Reescrever o conteúdo do arcano
+
+As quatro páginas (`/anfitriao/oficina`, `/mecanicas`, `/laboratorio`,
+`/imprensa`) estão no ar com 12 documentos **escritos pelo Claude, saindo com a
+sua assinatura**. Nada afirma histórico pessoal e nenhum `file_url` aponta para
+arquivo inexistente — mas é rascunho.
+
+**Armadilha:** `db:sync` escreve no banco e **não revalida o cache**. Publicando
+por linha de comando, as páginas servem cache antigo até um deploy novo. Pelo
+botão do `/admin`, não.
 
 ---
 
@@ -146,7 +156,7 @@ arquivo pelo painel. **O caminho 1 funciona hoje.**
 **Ordem importa**: gerar a nova credencial e atualizá-la em todos os ambientes
 ANTES de invalidar a antiga — inverter derruba o backend no intervalo.
 
-## 6. Rotacionar a chave de conta de serviço do Firebase
+## 7. Rotacionar a chave de conta de serviço do Firebase
 
 Console do Google Cloud → IAM → Contas de serviço → `firebase-adminsdk-fbsvc`
 → Chaves → criar nova. Depois: substituir `serviceAccountKey.json`; atualizar
@@ -170,7 +180,7 @@ segurança.
 
 </details>
 
-## 7. Revogar o token antigo da Vercel
+## 8. Revogar o token antigo da Vercel
 
 A variável de usuário `VERCEL_TOKEN` **já não existe** nesta máquina (conferido
 em 01/08); o CLI usa credencial própria. Falta revogar o token antigo em
@@ -180,7 +190,7 @@ https://vercel.com/account/tokens, se ainda estiver listado.
 
 # 🟠 Validação restante
 
-## 8. Disparar o gatilho do Prophet Wire
+## 9. Disparar o gatilho do Prophet Wire
 
 Já provado: persistência e dedup contra Firestore real
 (`tests-integration/prophet-wire-persistencia.test.ts`), `CRON_SECRET` definido
@@ -194,8 +204,7 @@ curl -i -X POST https://portifolio2026-two.vercel.app/api/prophet-wire/run -H "A
 ```
 
 Rode **duas vezes**. **Pronto quando:** as duas aparecem no histórico e a segunda
-não duplica o acervo. A fila do painel ganhou ações em 01/08 (`b63fc25`), então
-já dá para despachar o resultado.
+não duplica o acervo.
 
 **Ao ler o relatório:** `counters.published` conta só status `publicado`. Com
 `publishMode: "rascunho"`, uma execução perfeita reporta `published: 0`. O sinal
@@ -203,45 +212,43 @@ de sucesso é `errors: 0` e o acervo crescendo.
 
 ---
 
-# 🟡 Melhorias
+# 🟢 Melhorias
 
-## 9. `BLOB_READ_WRITE_TOKEN` ausente no Preview
+## 10. `BLOB_READ_WRITE_TOKEN` ausente no Preview
 
 Não dá por CLI — o token é *sensitive*, não há de onde copiar. O caminho é
 reconectar o store: Storage → `portfolio-midia` → aba **Projects** → ⋯ →
 **Update Project Connection** → marcar **Preview**.
 
 O Preview já tem `BLOB_STORE_ID` e `BLOB_WEBHOOK_PUBLIC_KEY`. **Prioridade
-baixa:** sem login em preview (item 10) não há painel de onde subir mídia.
+baixa:** sem login em preview (item 11) não há painel de onde subir mídia.
 
-## 10. Login em preview é impossível
+## 11. Login em preview é impossível
 
 Cada preview ganha URL com hash único e o Firebase Auth exige domínio na
 allowlist — não há curinga. Saída, se incomodar: alias fixo de branch na Vercel,
 autorizado uma vez. Detalhes em `docs/project-knowledge/auth.md` §6.1.
 
-## 11. Convenção de idioma mista na camada de dados
+## 12. A varredura de usos relê o banco a cada exclusão
+
+`mapearUsosDeMidia` lê todas as coleções declaradas para responder "este arquivo
+está em uso?". São ~170 documentos e roda só no painel, então hoje não incomoda.
+
+Se um dia incomodar, a saída não é cachear — é gravar o vínculo na hora em que a
+URL entra no documento, em vez de descobri-lo depois. **Não faça antes de doer:**
+o índice derivado é o que não pode dessincronizar.
+
+## 13. Convenção de idioma mista na camada de dados
 
 `buscarLinhas` vs. `listContactMessages`. Padronizar **ao tocar em cada módulo**,
 não num varredão — renomear tudo de uma vez produz diff enorme, sem
 comportamento novo, que atrapalha o `git blame` do resto.
 
-## 12. Reescrever o conteúdo do arcano
-
-As quatro páginas (`/anfitriao/oficina`, `/mecanicas`, `/laboratorio`,
-`/imprensa`) estão no ar com 12 documentos **escritos pelo Claude, saindo com a
-sua assinatura**. Nada afirma histórico pessoal e nenhum `file_url` aponta para
-arquivo inexistente — mas é rascunho.
-
-**Armadilha:** `db:sync` escreve no banco e **não revalida o cache**. Publicando
-por linha de comando, as páginas servem cache antigo até um deploy novo. Pelo
-botão do `/admin`, não.
-
 ---
 
 # 🔵 Higiene
 
-## 13. Desligar o projeto Supabase
+## 14. Desligar o projeto Supabase
 
 **Conferido em 01/08, reconferido em 04/08 — seguro apagar:**
 
@@ -251,22 +258,13 @@ botão do `/admin`, não.
 | `@supabase/supabase-js` instalado | não |
 | **URLs do Supabase no Firestore** | **0**, em 170 documentos |
 
-As 18 menções que sobram são conteúdo editorial (snippets, ADRs, wiki, tags).
+As menções que sobram são conteúdo editorial (snippets, ADRs, tags).
 
 **Sobra um arquivo morto:** `scripts/fix-criativo-covers.mjs` importa o SDK do
 Supabase, que não está instalado — já não roda. Apagar depois do desligamento.
 
 **Como:** https://app.supabase.com → projeto → Settings → General → Delete
 project. **Irreversível.**
-
-## 14. Actions do CI em runtime Node 20
-
-`actions/checkout@v4`, `setup-node@v4` e `setup-java@v4` rodam sobre Node 20, que
-o runner força para 24. Só aviso hoje; vira falha quando o suporte cair. Subir as
-três para `@v5` de uma vez, conferindo o run seguinte.
-
-Não confundir com o `node-version: 22` do workflow — esse é o Node **do
-projeto**, e está correto.
 
 ## 15. CSP com `unsafe-inline` em `script-src`
 

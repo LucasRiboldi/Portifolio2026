@@ -163,8 +163,10 @@ Ver **`PROJECT_STATE.md`** (estado) e **`NEXT_STEPS.md`** (o que fazer).
 
 Em 2026-08-04: produção responde **200** em `/` e em `/login` — o 500 de
 `require() of ES Module` registrado aqui em 31/07 **não existe mais**. Suíte
-unitária em **611 testes**, verdes.
+unitária em **621 testes**, verdes.
 
-**Bloqueio aberto:** upload de mídia (`NEXT_STEPS.md` itens 1–4). O diagnóstico
-começa por um teste de dois arquivos descrito no item 1 — ele decide se são
-dois bugs ou um.
+O upload de mídia **não estava quebrado**: `/admin/media` apagava arquivo em uso
+sem avisar, e o 404 era referência pendurada. Consertado com
+`lib/admin/media-refs.ts` — ver `NEXT_STEPS.md`.
+
+**Bloqueio aberto:** teto de tamanho no upload (`NEXT_STEPS.md` itens 1–3).
