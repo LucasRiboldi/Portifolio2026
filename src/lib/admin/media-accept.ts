@@ -9,6 +9,69 @@
 /** Que espécie de mídia um campo aceita. Um campo pode aceitar mais de uma. */
 export type MediaClass = "image" | "audio" | "video" | "document"
 
+export type ImageKind = "png" | "jpg" | "gif" | "webp" | "avif"
+export type AudioKind = "mp3" | "ogg" | "wav" | "m4a"
+export type VideoKind = "mp4" | "webm" | "mov"
+export type DocumentKind = "pdf"
+export type MediaKind = ImageKind | AudioKind | VideoKind | DocumentKind
+
+/**
+ * Extensão → classe. Moradia canônica desde 04/08/2026.
+ *
+ * Vivia em `media-validate.ts`, que é `server-only`. O upload direto ao Blob
+ * precisa das mesmas tabelas nos DOIS lados — o cliente para nomear o arquivo, a
+ * rota do token para decidir o que autorizar — e duplicá-las era garantir que um
+ * dia divergissem, com o cliente mandando um formato que o token recusa.
+ */
+export const CLASS_OF: Record<MediaKind, MediaClass> = {
+  png: "image",
+  jpg: "image",
+  gif: "image",
+  webp: "image",
+  avif: "image",
+  mp3: "audio",
+  ogg: "audio",
+  wav: "audio",
+  m4a: "audio",
+  mp4: "video",
+  webm: "video",
+  mov: "video",
+  pdf: "document",
+}
+
+/** Extensão → content-type canônico. */
+export const CONTENT_TYPE: Record<MediaKind, string> = {
+  png: "image/png",
+  jpg: "image/jpeg",
+  gif: "image/gif",
+  webp: "image/webp",
+  avif: "image/avif",
+  mp3: "audio/mpeg",
+  ogg: "audio/ogg",
+  wav: "audio/wav",
+  m4a: "audio/mp4",
+  mp4: "video/mp4",
+  webm: "video/webm",
+  mov: "video/quicktime",
+  pdf: "application/pdf",
+}
+
+/**
+ * Content-type declarado pelo navegador → extensão canônica.
+ *
+ * Derivado de `CONTENT_TYPE`, e não escrito à mão, para não existir a
+ * possibilidade de as duas discordarem. `audio/mp4` mapeia para `m4a`.
+ */
+export const EXT_POR_TIPO: Record<string, MediaKind> = Object.fromEntries(
+  Object.entries(CONTENT_TYPE).map(([ext, tipo]) => [tipo, ext as MediaKind]),
+) as Record<string, MediaKind>
+
+/** Extensão a partir do nome de objeto que nós geramos (`UUID.ext`). */
+export function extDoNome(nome: string): MediaKind | null {
+  const ext = nome.split(".").pop()?.toLowerCase()
+  return ext && ext in CONTENT_TYPE ? (ext as MediaKind) : null
+}
+
 /**
  * Pasta dos objetos dentro do store. Mantém o nome que o bucket antigo tinha.
  *
@@ -32,11 +95,25 @@ export const MAX_BYTES: Record<MediaClass, number> = {
 }
 
 /**
- * Acima deste tamanho o upload não pode passar pela Server Action — é o que o
- * `bodySizeLimit` permite, com folga para o overhead do multipart. Só vídeo
- * cruza esta linha hoje.
+ * Acima deste tamanho o upload NÃO pode passar pela Server Action.
+ *
+ * Valia 25 MB, alinhado ao `bodySizeLimit: "26mb"` do `next.config.ts`. Estava
+ * errado: **o `bodySizeLimit` não manda**. Quem corta é a plataforma, antes do
+ * Next ver o request. Medido em produção em 04/08/2026, contra
+ * `/api/admin/blob-upload`, que lê o corpo antes de responder 401:
+ *
+ *   corpo de 1 MB → 401 (nosso código rodou)
+ *   corpo de 4 MB → 401 (nosso código rodou)
+ *   corpo de 6 MB → 413 FUNCTION_PAYLOAD_TOO_LARGE
+ *
+ * O efeito de 25 MB era mandar tudo entre 4,5 e 25 MB pela Server Action, para
+ * morrer com "An unexpected response was received from the server" — mensagem
+ * que não menciona tamanho. Foi como um PDF de 4,52 MB falhou em 01/08.
+ *
+ * 4 MB, e não 4,5: sobra folga para o overhead do multipart, que viaja junto do
+ * arquivo e conta para o limite.
  */
-export const SERVER_ACTION_LIMIT = 25 * 1024 * 1024
+export const SERVER_ACTION_LIMIT = 4 * 1024 * 1024
 
 const ACCEPT_BY_CLASS: Record<MediaClass, string> = {
   image: "image/png,image/jpeg,image/gif,image/webp,image/avif",

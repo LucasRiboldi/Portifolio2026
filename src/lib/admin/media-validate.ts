@@ -1,10 +1,21 @@
 import "server-only"
 
 import {
+  CLASS_OF,
+  CONTENT_TYPE,
   DEFAULT_CLASSES,
   MAX_BYTES,
   acceptedLabel,
   type MediaClass,
+  type MediaKind,
+} from "@/lib/admin/media-accept"
+
+export type {
+  ImageKind,
+  AudioKind,
+  VideoKind,
+  DocumentKind,
+  MediaKind,
 } from "@/lib/admin/media-accept"
 
 /**
@@ -21,46 +32,9 @@ import {
  * rota `api/admin/blob-upload`, que explica o que se perde e por quê.
  */
 
-export type ImageKind = "png" | "jpg" | "gif" | "webp" | "avif"
-export type AudioKind = "mp3" | "ogg" | "wav" | "m4a"
-export type VideoKind = "mp4" | "webm" | "mov"
-export type DocumentKind = "pdf"
-export type MediaKind = ImageKind | AudioKind | VideoKind | DocumentKind
-
 /** Teto de imagem. Mantido como export próprio por ser o caso mais citado. */
 export const IMAGE_MAX_BYTES = MAX_BYTES.image
 
-const CLASS_OF: Record<MediaKind, MediaClass> = {
-  png: "image",
-  jpg: "image",
-  gif: "image",
-  webp: "image",
-  avif: "image",
-  mp3: "audio",
-  ogg: "audio",
-  wav: "audio",
-  m4a: "audio",
-  mp4: "video",
-  webm: "video",
-  mov: "video",
-  pdf: "document",
-}
-
-const CONTENT_TYPE: Record<MediaKind, string> = {
-  png: "image/png",
-  jpg: "image/jpeg",
-  gif: "image/gif",
-  webp: "image/webp",
-  avif: "image/avif",
-  mp3: "audio/mpeg",
-  ogg: "audio/ogg",
-  wav: "audio/wav",
-  m4a: "audio/mp4",
-  mp4: "video/mp4",
-  webm: "video/webm",
-  mov: "video/quicktime",
-  pdf: "application/pdf",
-}
 
 /** Todas as extensões que `safeObjectName` pode gerar. */
 const EXTENSOES = Object.keys(CONTENT_TYPE) as MediaKind[]

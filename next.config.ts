@@ -119,15 +119,22 @@ const nextConfig: NextConfig = {
 
   experimental: {
     serverActions: {
-      // Imagem (5 MB) e áudio (25 MB) sobem por Server Action — os tetos estão
-      // em lib/admin/media-accept. O default de 1 MB rejeitaria arquivos
-      // legítimos antes da nossa validação rodar; a folga cobre o overhead do
-      // multipart. Quem barra de fato é o validador, não este limite.
+      // ATENÇÃO: este número NÃO é o teto real de upload, e acreditar que era
+      // custou um bug. Quem corta primeiro é a PLATAFORMA, em ~4,5 MB, antes
+      // do Next ver o request — medido em produção em 04/08/2026:
       //
-      // Vídeo NÃO passa por aqui: vai direto do navegador para o Blob via
-      // api/admin/blob-upload. Estourar este limite devolve ao cliente um
-      // "An unexpected response was received from the server" — erro opaco que
-      // não menciona tamanho. Se subir o teto de áudio, suba este junto.
+      //     corpo de 4 MB → chega ao nosso código
+      //     corpo de 6 MB → 413 FUNCTION_PAYLOAD_TOO_LARGE
+      //
+      // O teto que vale para o roteamento é `SERVER_ACTION_LIMIT`, em
+      // lib/admin/media-accept: acima dele o arquivo vai direto ao Blob por
+      // api/admin/blob-upload, sem passar pelo corpo da action. **Subir este
+      // valor não aumenta o que sobe** — só afrouxa uma segunda barreira que
+      // nunca é a primeira a fechar.
+      //
+      // Fica em 26mb porque o default de 1 MB rejeitaria arquivo legítimo
+      // antes da nossa validação rodar, e a folga cobre o overhead do
+      // multipart. Quem barra de fato é o validador.
       bodySizeLimit: "26mb",
     },
   },

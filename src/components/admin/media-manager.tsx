@@ -2,7 +2,8 @@
 
 import { useEffect, useRef, useState, useCallback } from "react"
 
-import { listMedia, uploadMedia, deleteMedia, type MediaItem } from "@/app/admin/media/actions"
+import { listMedia, deleteMedia, type MediaItem } from "@/app/admin/media/actions"
+import { enviarMidia } from "@/components/admin/enviar-midia"
 import { acceptAttr, acceptedHint, type MediaClass } from "@/lib/admin/media-accept"
 
 /**
@@ -20,6 +21,8 @@ export function MediaManager() {
   const [items, setItems] = useState<MediaItem[]>([])
   const [uploading, setUploading] = useState(false)
   const [error, setError] = useState<string | null>(null)
+  // null = sem progresso a mostrar (upload pequeno, que sobe de uma vez).
+  const [progresso, setProgresso] = useState<number | null>(null)
   const [copied, setCopied] = useState<string | null>(null)
   const fileRef = useRef<HTMLInputElement>(null)
 
@@ -42,11 +45,13 @@ export function MediaManager() {
   async function upload(file: File) {
     setUploading(true)
     setError(null)
+    setProgresso(null)
     try {
-      const fd = new FormData()
-      fd.set("file", file)
-      fd.set("classes", CLASSES.join(","))
-      const res = await uploadMedia(fd)
+      // Mesma regra do campo de formulário: `enviarMidia` decide se vai pela
+      // Server Action ou direto ao Blob. Esta página mandava tudo pela action,
+      // então qualquer arquivo acima de ~4,5 MB morria aqui — e um conserto no
+      // `media-picker` não a alcançava.
+      const res = await enviarMidia(file, CLASSES, setProgresso)
       if (!res.ok) {
         setError(res.error)
         return
@@ -56,6 +61,7 @@ export function MediaManager() {
       setError(err instanceof Error ? err.message : "Falha no upload.")
     } finally {
       setUploading(false)
+      setProgresso(null)
     }
   }
 
@@ -94,8 +100,23 @@ export function MediaManager() {
           disabled={uploading}
           className="mm-btn mm-btn-primary"
         >
-          {uploading ? "Enviando…" : "Enviar arquivo"}
+          {uploading ? (progresso !== null ? `Enviando… ${progresso}%` : "Enviando…") : "Enviar arquivo"}
         </button>
+        {uploading && progresso !== null && (
+          <div
+            className="mt-2 h-1 w-full max-w-xs overflow-hidden rounded-full bg-[color:var(--mm-border)]"
+            role="progressbar"
+            aria-valuenow={progresso}
+            aria-valuemin={0}
+            aria-valuemax={100}
+            aria-label="Progresso do envio"
+          >
+            <div
+              className="h-full bg-[color:var(--mm-text-2)] transition-[width] duration-200"
+              style={{ width: `${progresso}%` }}
+            />
+          </div>
+        )}
         <p className="mt-1 text-xs text-[color:var(--mm-text-2)]">{acceptedHint(CLASSES)}</p>
         <input
           ref={fileRef}

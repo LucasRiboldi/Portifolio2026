@@ -163,10 +163,14 @@ Ver **`PROJECT_STATE.md`** (estado) e **`NEXT_STEPS.md`** (o que fazer).
 
 Em 2026-08-04: produção responde **200** em `/` e em `/login` — o 500 de
 `require() of ES Module` registrado aqui em 31/07 **não existe mais**. Suíte
-unitária em **621 testes**, verdes.
+unitária em **634 testes**, verdes.
 
-O upload de mídia **não estava quebrado**: `/admin/media` apagava arquivo em uso
-sem avisar, e o 404 era referência pendurada. Consertado com
-`lib/admin/media-refs.ts` — ver `NEXT_STEPS.md`.
+O upload de mídia tinha dois defeitos, ambos fechados em 04/08:
 
-**Bloqueio aberto:** teto de tamanho no upload (`NEXT_STEPS.md` itens 1–3).
+1. `/admin/media` apagava arquivo em uso sem avisar — o 404 era referência
+   pendurada, não falha de escrita. Guardado por `lib/admin/media-refs.ts`.
+2. A plataforma corta o corpo do request em ~4,5 MB, e `SERVER_ACTION_LIMIT`
+   valia 25 MB — tudo no meio morria com erro opaco. Agora arquivo acima de
+   4 MB sobe direto ao Blob, com barra de progresso.
+
+**Bloqueio aberto:** vídeo trava em "Enviando…" (`NEXT_STEPS.md` item 1).

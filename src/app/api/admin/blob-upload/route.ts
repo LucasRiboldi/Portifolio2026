@@ -3,26 +3,33 @@ import { NextResponse } from "next/server"
 
 import { isAdmin } from "@/lib/auth/is-admin"
 import { isSafeObjectName } from "@/lib/admin/media-validate"
-import { MAX_BYTES, PREFIX } from "@/lib/admin/media-accept"
+import { CLASS_OF, CONTENT_TYPE, MAX_BYTES, PREFIX, extDoNome } from "@/lib/admin/media-accept"
 
 /**
- * Handshake do upload direto de vídeo para o Vercel Blob.
+ * Handshake do upload direto ao Vercel Blob — para arquivo de qualquer espécie.
  *
- * Por que existe: vídeo não cabe no corpo de uma Server Action. O
- * `bodySizeLimit` do Next é a barreira — estourá-lo devolve ao navegador um
- * "An unexpected response was received from the server", que não diz nada. Aqui
- * o arquivo vai do navegador direto para o Blob e só o token passa pelo nosso
- * servidor.
+ * Por que existe: **a plataforma corta o corpo do request em ~4,5 MB**, antes
+ * do Next ver o pedido, e estourar esse teto devolve ao navegador um "An
+ * unexpected response was received from the server", que não diz nada. O
+ * `bodySizeLimit` do `next.config.ts` não protege disso — ele só limita o que
+ * já chegou. Aqui o arquivo vai do navegador direto para o Blob e só o token
+ * passa pelo nosso servidor.
+ *
+ * Servia só a vídeo até 04/08/2026. Estava errado: o corte da plataforma vale
+ * para todo mundo, então imagem, áudio e PDF acima de 4 MB morriam na Server
+ * Action. Agora qualquer espécie acima de `SERVER_ACTION_LIMIT` vem por aqui.
  *
  * O QUE SE PERDE, e é preciso ser honesto sobre isso: sem o arquivo em mãos,
  * não há como conferir os magic bytes antes de gravar — a garantia que
- * `media-validate.ts` dá aos outros uploads. O que resta é o `contentType`
- * declarado pelo cliente, restrito pelo `allowedContentTypes` do token.
+ * `media-validate.ts` dá aos uploads pequenos. O que resta é o `contentType`
+ * declarado pelo cliente, restrito pelo `allowedContentTypes` do token, que sai
+ * apertado no tipo exato derivado da extensão.
  *
  * Por que é aceitável: só sai token para quem já passou por `isAdmin()`, ou
  * seja, o dono do site. O modelo de ameaça do upload é "arquivo hostil de
- * terceiro", e terceiro nenhum chega até aqui. Imagem e áudio seguem pela
- * Server Action justamente para NÃO abrirem mão da validação por conteúdo.
+ * terceiro", e terceiro nenhum chega até aqui. Arquivo pequeno continua indo
+ * pela Server Action justamente para NÃO abrir mão da validação por conteúdo —
+ * é a maioria dos uploads, e sai de graça.
  */
 export async function POST(request: Request): Promise<NextResponse> {
   const body = (await request.json()) as HandleUploadBody
@@ -85,9 +92,26 @@ export async function POST(request: Request): Promise<NextResponse> {
           throw new Error("Nome de arquivo inválido.")
         }
 
+        /**
+         * O que o token autoriza sai da EXTENSÃO do caminho, não de um campo à
+         * parte mandado pelo cliente.
+         *
+         * A extensão já passou por `isSafeObjectName`, que só aceita as que nós
+         * geramos — então não há entrada nova para confiar. Um segundo campo
+         * ("classe", vindo do cliente) seria mais uma coisa a validar, e poderia
+         * discordar do caminho.
+         *
+         * O token sai apertado no tipo exato: um `.mp3` autoriza `audio/mpeg` e
+         * nada mais. Antes isto era fixo nos três tipos de vídeo, o que impedia
+         * áudio e PDF grandes de usarem este caminho — o defeito que mandava
+         * arquivo de 5 MB morrer na Server Action.
+         */
+        const ext = extDoNome(nome)
+        if (!ext) throw new Error("Extensão de arquivo não reconhecida.")
+
         return {
-          allowedContentTypes: ["video/mp4", "video/webm", "video/quicktime"],
-          maximumSizeInBytes: MAX_BYTES.video,
+          allowedContentTypes: [CONTENT_TYPE[ext]],
+          maximumSizeInBytes: MAX_BYTES[CLASS_OF[ext]],
           addRandomSuffix: false,
           cacheControlMaxAge: 31536000,
         }

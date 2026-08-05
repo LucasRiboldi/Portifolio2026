@@ -1,14 +1,10 @@
 "use client"
 
 import { useRef, useState } from "react"
-import { upload as uploadParaBlob } from "@vercel/blob/client"
 
-import { uploadMedia } from "@/app/admin/media/actions"
+import { enviarMidia } from "@/components/admin/enviar-midia"
 import {
   DEFAULT_CLASSES,
-  MAX_BYTES,
-  PREFIX,
-  SERVER_ACTION_LIMIT,
   acceptAttr,
   acceptedHint,
   type MediaClass,
@@ -20,13 +16,6 @@ interface MediaPickerProps {
   inputClassName: string
   /** Espécies que este campo aceita. Sem isso, só imagem — o padrão antigo. */
   accept?: MediaClass[]
-}
-
-/** Extensão de destino a partir do tipo declarado pelo navegador. */
-const EXT_POR_TIPO: Record<string, string> = {
-  "video/mp4": "mp4",
-  "video/webm": "webm",
-  "video/quicktime": "mov",
 }
 
 /** Como renderizar o preview, deduzido da extensão da URL. */
@@ -50,60 +39,26 @@ export function MediaPicker({
   const [url, setUrl] = useState(defaultValue)
   const [uploading, setUploading] = useState(false)
   const [error, setError] = useState<string | null>(null)
+  // null = sem progresso a mostrar (upload pequeno, que sobe de uma vez).
+  const [progresso, setProgresso] = useState<number | null>(null)
   const fileRef = useRef<HTMLInputElement>(null)
-
-  /**
-   * Vídeo não cabe no corpo de uma Server Action: sobe direto para o Blob, com
-   * token emitido por `api/admin/blob-upload`. O resto continua pela action,
-   * onde os magic bytes são conferidos.
-   */
-  async function uploadGrande(file: File) {
-    const ext = EXT_POR_TIPO[file.type]
-    if (!ext) {
-      setError("Formato de vídeo não aceito. Envie MP4, WebM ou MOV.")
-      return
-    }
-    const blob = await uploadParaBlob(`${PREFIX}/${crypto.randomUUID()}.${ext}`, file, {
-      access: "public",
-      handleUploadUrl: "/api/admin/blob-upload",
-      contentType: file.type,
-    })
-    setUrl(blob.url)
-  }
-
-  async function uploadPelaAction(file: File) {
-    const fd = new FormData()
-    fd.set("file", file)
-    fd.set("classes", accept.join(","))
-    const res = await uploadMedia(fd)
-    if (!res.ok) {
-      setError(res.error)
-      return
-    }
-    setUrl(res.data.url)
-  }
 
   async function upload(file: File) {
     setUploading(true)
     setError(null)
+    setProgresso(null)
     try {
-      const tetoDoCampo = Math.max(...accept.map((c) => MAX_BYTES[c]))
-      if (file.size > tetoDoCampo) {
-        const mb = (file.size / 1024 / 1024).toFixed(1)
-        setError(`Arquivo de ${mb} MB excede ${Math.round(tetoDoCampo / 1024 / 1024)} MB.`)
+      const res = await enviarMidia(file, accept, setProgresso)
+      if (!res.ok) {
+        setError(res.error)
         return
       }
-
-      const ehVideo = file.type.startsWith("video/")
-      if (ehVideo || file.size > SERVER_ACTION_LIMIT) {
-        await uploadGrande(file)
-      } else {
-        await uploadPelaAction(file)
-      }
+      setUrl(res.url)
     } catch (err) {
       setError(err instanceof Error ? err.message : "Falha no upload.")
     } finally {
       setUploading(false)
+      setProgresso(null)
     }
   }
 
@@ -125,9 +80,27 @@ export function MediaPicker({
           disabled={uploading}
           className="shrink-0 rounded-lg border border-[color:var(--mm-border)] px-3 py-2 text-sm text-[color:var(--mm-text-2)] hover:bg-[color:var(--mm-hover)] disabled:opacity-60"
         >
-          {uploading ? "Enviando…" : "Upload"}
+          {uploading ? (progresso !== null ? `${progresso}%` : "Enviando…") : "Upload"}
         </button>
       </div>
+
+      {/* "Enviando…" sozinho é indistinguível de travado — foi assim que um
+          vídeo ficou enviando para sempre sem ninguém saber onde parou. */}
+      {uploading && progresso !== null && (
+        <div
+          className="h-1 w-full overflow-hidden rounded-full bg-[color:var(--mm-border)]"
+          role="progressbar"
+          aria-valuenow={progresso}
+          aria-valuemin={0}
+          aria-valuemax={100}
+          aria-label="Progresso do envio"
+        >
+          <div
+            className="h-full bg-[color:var(--mm-text-2)] transition-[width] duration-200"
+            style={{ width: `${progresso}%` }}
+          />
+        </div>
+      )}
       <input
         ref={fileRef}
         type="file"

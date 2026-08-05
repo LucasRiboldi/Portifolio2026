@@ -6,16 +6,16 @@
 > Ao concluir um item: remova-o daqui, atualize `PROJECT_STATE.md` e diga no
 > commit o que foi verificado de verdade.
 >
-> **Atualizado:** 2026-08-04, depois de fechar o item do upload de mídia.
+> **Atualizado:** 2026-08-04, depois de fechar o teto de tamanho no upload.
 
 ---
 
 ## Estado em uma linha
 
-Site no ar, login e CRUD funcionando, **621 testes passando**. O upload de mídia
-**não estava quebrado** — o que havia era `/admin/media` apagando arquivo em uso
-sem avisar. Consertado e reparado em 04/08. Sobra o teto de tamanho, que é outro
-sintoma e segue aberto.
+Site no ar, login e CRUD funcionando, **634 testes passando**. O upload de mídia
+tinha DOIS defeitos, ambos fechados em 04/08: `/admin/media` apagava arquivo em
+uso sem avisar (o 404), e tudo entre 4,5 e 25 MB morria na Server Action (o erro
+opaco). Sobra o vídeo que trava — e agora há barra de progresso para dizer onde.
 
 <details>
 <summary>O que o rediagnóstico de 04/08 desmontou</summary>
@@ -45,73 +45,31 @@ Ao registrar uma URL quebrada, registre-a inteira.
 
 # 🔴 Quebrado — consertar primeiro
 
-## 1. Arquivos entre 4,5 MB e 25 MB morrem na Server Action
+## 1. Vídeo trava em "Enviando…" e nunca termina
 
-**Confirmado no código:** `SERVER_ACTION_LIMIT` vale **25 MB** em
-`lib/admin/media-accept.ts`, e `media-picker.tsx:98` só desvia para o upload
-direto quando `file.size > SERVER_ACTION_LIMIT`. Toda a faixa entre o corte real
-da plataforma e 25 MB entra na Server Action — é onde o PDF de 4,52 MB morreu,
-com `An unexpected response was received from the server`.
+Único item de upload que sobrou. Sem erro, sem progresso, sem fim.
 
-Os tetos que a interface anuncia (áudio 25 MB, PDF 25 MB) são, portanto, **falsos**.
+**O que já saiu da lista de suspeitos:**
 
-**Este item é independente do que foi consertado em 04/08.** Aquilo era 404 por
-referência pendurada; isto é erro no envio. Sintomas diferentes, causas
-diferentes.
+- *problema de store* — a escrita foi provada boa em 04/08 (`put()` persiste,
+  URL pública devolve 200);
+- *falta de progresso* — a barra existe desde 04/08, então agora dá para ver
+  **onde** ele para.
 
-**Antes de consertar, confirme que o corte ainda existe.** O limite de 4,5 MB
-para corpo de request das Vercel Functions **subiu para 100 MB**. Se este deploy
-já pegou a mudança, o item é ruído. Teste barato: subir pelo painel um arquivo
-de **~6 MB** e outro de **~20 MB**, e ver onde começa a falhar.
+**Sobram dois suspeitos, e a barra os separa:**
 
-### Se o corte existir mesmo, baixar a constante NÃO basta
-
-**Achado A — o caminho direto é video-only, fixado em três lugares.** Mandar
-áudio e PDF por ele exige mexer nos três:
-
-| Onde | O que trava |
+| O que a barra mostra | Onde está o problema |
 |---|---|
-| `api/admin/blob-upload/route.ts` | `allowedContentTypes` só lista os três tipos de vídeo — áudio e PDF são **rejeitados pelo próprio token** |
-| idem | `maximumSizeInBytes: MAX_BYTES.video`, fixo |
-| `media-picker.tsx` → `uploadGrande()` | resolve a extensão por `EXT_POR_TIPO[file.type]`, que só mapeia vídeo |
+| Nunca sai de 0% | O handshake de `/api/admin/blob-upload` — token não sai |
+| Chega a 100% e trava | O webhook `blob.upload-completed` não consegue voltar (Deployment Protection barra chamada servidor-a-servidor) |
 
-Efeito colateral que **já existe hoje**: áudio ou PDF acima de 25 MB cai em
-`uploadGrande` e recebe a mensagem errada — *"Formato de vídeo não aceito"*.
-
-**Achado B — `/admin/media` não tem caminho direto nenhum.**
-`components/admin/media-manager.tsx` chama `uploadMedia` sempre, sem o desvio que
-o `media-picker` tem. São duas lógicas de upload paralelas; conserto em uma não
-alcança a outra. Ou o desvio vira código compartilhado, ou o bug sobrevive
-metade consertado.
-
-## 2. Upload sem indicador de progresso
-
-"Enviando…" é indistinguível de travado — foi exatamente o que aconteceu no
-vídeo, que ficou enviando e nunca terminou.
-
-O `upload()` do `@vercel/blob/client` aceita `onUploadProgress`; o caminho por
-Server Action não tem como reportar progresso (o corpo sobe de uma vez). Mais uma
-razão para o item 1: pelo caminho direto, todo upload ganha barra.
-
-**Faça antes de investigar o vídeo travado.** Sem progresso não dá para saber se
-ele para no token, no envio ou na conclusão.
-
-## 3. Vídeo trava em "Enviando…" e nunca termina
-
-Sem erro, sem progresso, sem fim. Diagnóstico bloqueado pelo item 2.
-
-Suspeitos, em ordem: o handshake de `/api/admin/blob-upload`; ou o webhook de
-conclusão não conseguindo voltar (Deployment Protection barra chamada
-servidor-a-servidor).
-
-**Um suspeito saiu da lista:** "problema de store" — a escrita foi provada boa em
-04/08.
+**Próximo passo:** subir um vídeo e anotar em que percentual ele para.
 
 ---
 
 # 🟡 Conteúdo
 
-## 4. A zona Rádio do `/criativo` está sem música
+## 2. A zona Rádio do `/criativo` está sem música
 
 **Não é bug** — é conteúdo faltando. As faixas fantasma saíram do seed em 04/08,
 e os dois `audio_url` que restavam apontavam para arquivos apagados; foram
@@ -123,9 +81,10 @@ Para publicar, dois caminhos, e **nenhum passa por editar o seed**:
    convenção `Artista - Título.mp3`;
 2. cadastrar em `/admin → Rádio`, que aceita capa e comentário.
 
-**O caminho 1 funciona hoje.** O 2 também, para arquivo abaixo de ~4 MB.
+**Os dois funcionam hoje** — o teto de 4,5 MB deixou de barrar o caminho 2 em
+04/08. Um mp3 de até 25 MB sobe pelo painel.
 
-## 5. Reparar as mídias que foram perdidas
+## 3. Reparar as mídias que foram perdidas
 
 A limpeza de 04/08 zerou campos, não recuperou arquivos. Seguem sem mídia:
 
@@ -138,7 +97,7 @@ A limpeza de 04/08 zerou campos, não recuperou arquivos. Seguem sem mídia:
 Os arquivos originais não estão no Blob. Se você ainda tiver os locais, resubir
 pelo painel refaz tudo — e agora a exclusão acidental não se repete.
 
-## 6. Reescrever o conteúdo do arcano
+## 4. Reescrever o conteúdo do arcano
 
 As quatro páginas (`/anfitriao/oficina`, `/mecanicas`, `/laboratorio`,
 `/imprensa`) estão no ar com 12 documentos **escritos pelo Claude, saindo com a
@@ -156,7 +115,7 @@ botão do `/admin`, não.
 **Ordem importa**: gerar a nova credencial e atualizá-la em todos os ambientes
 ANTES de invalidar a antiga — inverter derruba o backend no intervalo.
 
-## 7. Rotacionar a chave de conta de serviço do Firebase
+## 5. Rotacionar a chave de conta de serviço do Firebase
 
 Console do Google Cloud → IAM → Contas de serviço → `firebase-adminsdk-fbsvc`
 → Chaves → criar nova. Depois: substituir `serviceAccountKey.json`; atualizar
@@ -180,7 +139,7 @@ segurança.
 
 </details>
 
-## 8. Revogar o token antigo da Vercel
+## 6. Revogar o token antigo da Vercel
 
 A variável de usuário `VERCEL_TOKEN` **já não existe** nesta máquina (conferido
 em 01/08); o CLI usa credencial própria. Falta revogar o token antigo em
@@ -190,7 +149,7 @@ https://vercel.com/account/tokens, se ainda estiver listado.
 
 # 🟠 Validação restante
 
-## 9. Disparar o gatilho do Prophet Wire
+## 7. Disparar o gatilho do Prophet Wire
 
 Já provado: persistência e dedup contra Firestore real
 (`tests-integration/prophet-wire-persistencia.test.ts`), `CRON_SECRET` definido
@@ -214,22 +173,22 @@ de sucesso é `errors: 0` e o acervo crescendo.
 
 # 🟢 Melhorias
 
-## 10. `BLOB_READ_WRITE_TOKEN` ausente no Preview
+## 8. `BLOB_READ_WRITE_TOKEN` ausente no Preview
 
 Não dá por CLI — o token é *sensitive*, não há de onde copiar. O caminho é
 reconectar o store: Storage → `portfolio-midia` → aba **Projects** → ⋯ →
 **Update Project Connection** → marcar **Preview**.
 
 O Preview já tem `BLOB_STORE_ID` e `BLOB_WEBHOOK_PUBLIC_KEY`. **Prioridade
-baixa:** sem login em preview (item 11) não há painel de onde subir mídia.
+baixa:** sem login em preview (item 9) não há painel de onde subir mídia.
 
-## 11. Login em preview é impossível
+## 9. Login em preview é impossível
 
 Cada preview ganha URL com hash único e o Firebase Auth exige domínio na
 allowlist — não há curinga. Saída, se incomodar: alias fixo de branch na Vercel,
 autorizado uma vez. Detalhes em `docs/project-knowledge/auth.md` §6.1.
 
-## 12. A varredura de usos relê o banco a cada exclusão
+## 10. A varredura de usos relê o banco a cada exclusão
 
 `mapearUsosDeMidia` lê todas as coleções declaradas para responder "este arquivo
 está em uso?". São ~170 documentos e roda só no painel, então hoje não incomoda.
@@ -238,7 +197,7 @@ Se um dia incomodar, a saída não é cachear — é gravar o vínculo na hora e
 URL entra no documento, em vez de descobri-lo depois. **Não faça antes de doer:**
 o índice derivado é o que não pode dessincronizar.
 
-## 13. Convenção de idioma mista na camada de dados
+## 11. Convenção de idioma mista na camada de dados
 
 `buscarLinhas` vs. `listContactMessages`. Padronizar **ao tocar em cada módulo**,
 não num varredão — renomear tudo de uma vez produz diff enorme, sem
@@ -248,7 +207,7 @@ comportamento novo, que atrapalha o `git blame` do resto.
 
 # 🔵 Higiene
 
-## 14. Desligar o projeto Supabase
+## 12. Desligar o projeto Supabase
 
 **Conferido em 01/08, reconferido em 04/08 — seguro apagar:**
 
@@ -266,7 +225,7 @@ Supabase, que não está instalado — já não roda. Apagar depois do desligame
 **Como:** https://app.supabase.com → projeto → Settings → General → Delete
 project. **Irreversível.**
 
-## 15. CSP com `unsafe-inline` em `script-src`
+## 13. CSP com `unsafe-inline` em `script-src`
 
 Compromisso de um CSP por header, sem nonce por request. Um CSP estrito exigiria
 middleware em todas as rotas. Registrado em `next.config.ts`.
