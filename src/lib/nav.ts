@@ -18,6 +18,10 @@ export interface NavLink {
 export const SITE_LINKS: NavLink[] = [
   { label: "Portfólio", href: "/portfolio", description: "Casos completos, do problema ao que foi para o ar" },
   { label: "Cards", href: "/cards", description: "Galeria holográfica — os efeitos de foil em CSS puro" },
+  /* Fascículo #2 do Criativo (06/08/2026). Entra no menu porque a rádio, a
+     videoteca e as tirinhas saíram da capa: sem item aqui, as três zonas só
+     seriam alcançáveis por quem soubesse o URL. */
+  { label: "A sala", href: "/criativo/sala", description: "A rádio, a videoteca e as tirinhas — o que se consome sentado" },
   { label: "Dimensões", href: "/dimensoes", description: "20 universos visuais trocáveis em tempo real" },
   { label: "Design System", href: "/design-system", description: "Tokens, componentes e a documentação viva" },
 ]

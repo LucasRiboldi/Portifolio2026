@@ -1,6 +1,7 @@
 "use client"
 
 import { useRef } from "react"
+import Image from "next/image"
 import { motion, useReducedMotion, useScroll, useTransform } from "motion/react"
 import {
   Caption,
@@ -16,7 +17,7 @@ import { toChars, toWords, isSpace } from "@/animations/split"
 import { useMouseParallax } from "@/hooks/use-mouse-parallax"
 import { useMagnetic } from "@/hooks/use-magnetic"
 import { TiltCard } from "./tilt-card"
-import { FUN_STATS, HERO } from "@/constants/criativo-landing"
+import { FUN_STATS, HERO, IMAGEM_TEMPORARIA } from "@/constants/criativo-landing"
 
 /**
  * Capa da edição — o requadro de abertura do multiverso, versão cinematográfica.
@@ -110,14 +111,51 @@ export function Hero() {
         <div className="cx-noise" />
       </div>
 
+      {/*
+        A ARTE DA CAPA — ao lado do título e por trás dele.
+
+        Ocupa a metade direita do herói, que estava vazia desde que o exemplar
+        ganhou largura fixa: a coluna de texto usa ~55% da mancha e o resto era
+        só gradiente. A imagem entra atrás (`z-0`, antes da coluna de conteúdo
+        que é `z-10`) e sangra para fora pela direita, como arte de capa que o
+        corte da revista atravessa.
+
+        `aria-hidden` e sem `alt`: é ilustração de fundo, e o herói já é
+        nomeado pelo <h1>. O gradiente à esquerda dissolve a borda dura da
+        fotografia por baixo da manchete — sem ele, a letra branca cai sobre a
+        arte e perde contraste no meio da palavra.
+
+        Marcador de lugar por enquanto (`IMAGEM_TEMPORARIA`); trocar por arte
+        própria é trocar o `src`.
+      */}
+      <div aria-hidden className="cx-capa">
+        <Image
+          src={IMAGEM_TEMPORARIA}
+          alt=""
+          fill
+          priority
+          sizes="(max-width: 1024px) 100vw, 480px"
+          className="object-cover object-left-top"
+        />
+        <span className="cx-capa-veu" />
+      </div>
+
       {/* --- camadas de fundo (parallax de scroll + ponteiro) ---------- */}
       <motion.div aria-hidden className="absolute inset-0 z-0" style={layer(yBack)}>
         <SpeedLines x={74} y={34} color="rgba(18,16,14,0.13)" />
         <Halftone color="rgba(255,255,255,0.4)" step={11} />
 
-        {/* Onomatopeias soltas — profundidade pelo ponteiro (--cx-depth). */}
+        {/* Onomatopeias soltas — profundidade pelo ponteiro (--cx-depth).
+
+            O THWIP! estava em `left-[4%]`, e enquanto a secção media a largura
+            da janela isso caía na faixa vazia à esquerda da coluna de texto.
+            Com o exemplar em `--cp-mag`, a secção passou a ser a própria
+            coluna: 4% de 900px são 36px, e a palavra ia parar por cima da
+            manchete. Reancorada à direita, que é onde a arte do herói continua
+            livre em qualquer largura — a cor, a rotação, o tamanho e o
+            parallax de profundidade não mudaram. */}
         <span
-          className="cx-layer absolute left-[4%] top-[16%] hidden xl:block"
+          className="cx-layer absolute right-[8%] top-[13%] hidden xl:block"
           style={{ "--cx-depth": 26 } as React.CSSProperties}
         >
           <Onoma accent="lime" className="text-5xl">
@@ -153,13 +191,31 @@ export function Hero() {
               animate={{ opacity: 1, y: 0 }}
               transition={{ duration: 0.65, ease: EASE, delay: 0.06 }}
             >
-              <GlitchTitle as="span" treatment="glitch" className="text-[clamp(1.4rem,3.6vw,2.4rem)]">
+              {/* O teto passou a ser 3,6% da REVISTA (`--cp-mag`), não da
+                  janela — ver o comentário do <h1> logo abaixo. */}
+              <GlitchTitle as="span" treatment="glitch" className="text-[clamp(1.4rem,3.6vw,calc(var(--cp-mag)*0.036))]">
                 {HERO.author}
               </GlitchTitle>
               <span className="k-kicker text-[9px] text-[var(--k-ink)]/60">{HERO.authorTag}</span>
             </motion.div>
 
-            <h1 id="hero-title" className="mt-5 text-[clamp(2.8rem,9.5vw,7.5rem)]" aria-label={`${HERO.titleTop} ${HERO.titleMid} ${HERO.titleGlitch}`}>
+            {/*
+              O teto do clamp é 9,5% da REVISTA, não da janela.
+
+              `9.5vw` com teto de 7.5rem foi escrito quando a página ocupava a
+              largura toda: a fonte crescia junto com o espaço disponível. Com
+              o exemplar fixo em `--cp-mag`, a janela continuava a crescer e a
+              caixa não — num monitor de 1920 a manchete ia a 120px dentro de
+              836px de mancha, "REPOSITÓRIO" transbordava e colidia com a linha
+              seguinte.
+
+              `calc(var(--cp-mag)*0.095)` é exatamente o valor que `9.5vw`
+              atinge quando a janela mede o mesmo que a revista. Abaixo disso
+              nada muda — a curva fluida é a mesma, com os mesmos números, em
+              todas as larguras em que o exemplar ainda se adapta. Só deixa de
+              crescer no ponto em que a revista também deixa.
+            */}
+            <h1 id="hero-title" className="mt-5 text-[clamp(2.8rem,9.5vw,calc(var(--cp-mag)*0.095))]" aria-label={`${HERO.titleTop} ${HERO.titleMid} ${HERO.titleGlitch}`}>
               <TitleLine text={HERO.titleTop} />
               <TitleLine text={HERO.titleMid} />
 

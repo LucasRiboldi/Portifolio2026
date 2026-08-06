@@ -14,6 +14,17 @@ import type { ChapterId } from "@/design-system/comic-layout"
  * com o código.
  */
 
+/**
+ * Imagem de reserva de toda a revista.
+ *
+ * Um único ponto para o marcador de lugar: a arte comic do realm Creative,
+ * gerada para o multiverso e livre de direitos. Enquanto não houver capa
+ * própria, é ela que ocupa o requadro — no herói, nos cartões e nas lâminas da
+ * galeria. Trocar o marcador por outro é trocar esta linha, e não caçar
+ * `/realms/creative.png` por seis ficheiros.
+ */
+export const IMAGEM_TEMPORARIA = "/realms/creative.png"
+
 export const HERO = {
   kicker: "Edição #2026 · Terra-LR",
   /** Assinatura do autor na capa, na anomalia Terra-138 · Punk. */
@@ -44,6 +55,15 @@ export interface ZoneMeta {
   treatment?: Treatment
 }
 
+/**
+ * Metadados de todas as zonas — as da capa e as da Sala.
+ *
+ * A numeração é a ORDEM DE LEITURA de cada página, não um identificador
+ * global: a revista tem cinco capítulos (01–05) e a Sala, que é outro
+ * fascículo, recomeça em 01. Rádio, videoteca e tirinhas mudaram de página em
+ * 06/08/2026 e por isso mudaram de número — quem numerava 05, 06 e 08 na capa
+ * agora numera 01, 02 e 03 na Sala.
+ */
 export const ZONES: Record<Exclude<ChapterId, "multiverso">, ZoneMeta> = {
   atelie: {
     id: "atelie",
@@ -91,10 +111,11 @@ export const ZONES: Record<Exclude<ChapterId, "multiverso">, ZoneMeta> = {
     // Fundo escuro de projeção → neon (a marquise do cinema).
     treatment: "neon",
   },
+  /* ── Fascículo "A sala" (/criativo/sala) ───────────────────────────── */
   radio: {
     id: "radio",
     titleId: "z-radio",
-    index: "05",
+    index: "01",
     earth: "Terra-1969 · Onda",
     kicker: "A rádio",
     title: "Trilha sonora",
@@ -105,7 +126,7 @@ export const ZONES: Record<Exclude<ChapterId, "multiverso">, ZoneMeta> = {
   videoteca: {
     id: "videoteca",
     titleId: "z-videoteca",
-    index: "06",
+    index: "02",
     earth: "Terra-VHS · Fita",
     kicker: "A videoteca",
     title: "Fita rodando",
@@ -114,10 +135,11 @@ export const ZONES: Record<Exclude<ChapterId, "multiverso">, ZoneMeta> = {
     // Fundo verde-VHS escuro → separação RGB (o erro de rastreio da fita).
     treatment: "offset",
   },
+  /* ── De volta à capa ────────────────────────────────────────────────── */
   mural: {
     id: "mural",
     titleId: "z-mural",
-    index: "07",
+    index: "05",
     earth: "Terra-CORTIÇA · Papel",
     kicker: "O mural",
     title: "Recados & bilhetes",
@@ -129,7 +151,7 @@ export const ZONES: Record<Exclude<ChapterId, "multiverso">, ZoneMeta> = {
   tirinhas: {
     id: "tirinhas",
     titleId: "z-tirinhas",
-    index: "08",
+    index: "03",
     earth: "Terra-8311 · Piada",
     kicker: "As tirinhas",
     title: "Quadrinhos de verdade",
@@ -139,6 +161,25 @@ export const ZONES: Record<Exclude<ChapterId, "multiverso">, ZoneMeta> = {
     treatment: "3d-deep",
   },
 }
+
+/**
+ * Capa do fascículo "A sala" (`/criativo/sala`).
+ *
+ * As três zonas que moraram na capa até 06/08/2026 têm em comum o verbo: na
+ * rádio ouve-se, na videoteca vê-se, nas tirinhas lê-se. As outras cinco são
+ * de FAZER — desenhar, construir, anotar. Separá-las deu à revista um fascículo
+ * de criação e outro de fruição, e encurtou uma capa que estava com oito
+ * capítulos.
+ */
+export const SALA = {
+  kicker: "Fascículo #2 · Terra-LR",
+  titleTop: "A sala",
+  titleGlitch: "de estar",
+  subtitle:
+    "A parte do multiverso que se consome sentado: o que toca no rádio, o que roda na fita e o que se lê em duas tiras. Nada aqui se produz — aqui só se assiste.",
+  bubble: "Pega uma cadeira.",
+  backCta: { label: "Voltar para a capa", href: "/criativo" },
+} as const
 
 export interface FunStat {
   value: number

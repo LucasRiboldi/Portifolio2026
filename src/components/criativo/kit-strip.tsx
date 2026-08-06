@@ -1,29 +1,34 @@
 import Link from "next/link"
-import {
-  Bubble,
-  Burst,
-  Caption,
-  Halftone,
-  Onoma,
-  PulseRings,
-  SpeedLines,
-  Stars,
-} from "@/components/comic/atoms"
-import { PunkName } from "@/components/comic/punk-name"
-import { PANEL_IN } from "@/components/comic/motion"
-import { RevealGroup, RevealItem } from "@/components/comic/reveal"
+
+import { Caption, Halftone, SpeedLines } from "@/components/comic/atoms"
+import { KitCarousel, type LaminaKit } from "./kit-carousel"
+import { IMAGEM_TEMPORARIA } from "@/constants/criativo-landing"
 
 /**
- * Vitrine do sistema — as peças da linguagem visual mostradas em uso.
+ * A GALERIA — o que era a vitrine de primitivos.
  *
- * Fica logo depois da capa de propósito: antes de o visitante atravessar as
- * oito dimensões, esta faixa mostra que elas partilham um vocabulário. Cada
- * item é o componente de verdade, não uma imagem dele — se um primitivo
- * quebrar, quebra aqui à vista.
+ * Até 06/08/2026 esta faixa mostrava doze amostras do sistema (letras 3D,
+ * glitch, onomatopeia, balão…) numa grelha estática. Virou galeria de imagens
+ * em carrossel a pedido: o mesmo lugar na página, outro conteúdo.
  *
- * A faixa herda `k-zone--multiverso` do bloco que a envolve, então as amostras
- * aparecem na paleta da capa.
+ * As lâminas apontam todas para a arte do realm enquanto não há capas
+ * próprias — a mesma imagem temporária que os requadros usam no lugar do
+ * vazio. Trocar por arte de verdade é trocar `src` aqui; a estrutura não
+ * muda.
+ *
+ * O carrossel é cliente (arrasto, teclado, virada); esta faixa continua a ser
+ * server component e só lhe entrega os dados.
  */
+
+const LAMINAS: readonly LaminaKit[] = [
+  { id: "capa", titulo: "Capa", legenda: "Edição #2026 · a abertura da revista", src: IMAGEM_TEMPORARIA },
+  { id: "atelie", titulo: "Ateliê", legenda: "Terra-1610 · ilustração e vetor", src: IMAGEM_TEMPORARIA },
+  { id: "oficina", titulo: "Oficina", legenda: "Terra-BYTE · interfaces e código", src: IMAGEM_TEMPORARIA },
+  { id: "banca", titulo: "Banca", legenda: "Terra-616 · o que anda na cabeceira", src: IMAGEM_TEMPORARIA },
+  { id: "cine", titulo: "Cine", legenda: "Terra-42 · sessão da madrugada", src: IMAGEM_TEMPORARIA },
+  { id: "mural", titulo: "Mural", legenda: "Terra-CORTIÇA · recados e bilhetes", src: IMAGEM_TEMPORARIA },
+]
+
 export function KitStrip() {
   return (
     <section
@@ -38,9 +43,16 @@ export function KitStrip() {
       <div className="cp-bleed">
         <div className="flex flex-wrap items-end justify-between gap-4">
           <div>
-            <Caption>O kit</Caption>
-            <h2 id="kit-title" className="k-title k-3d mt-4 text-3xl sm:text-4xl">
-              Peças do sistema
+            <Caption>A galeria</Caption>
+            {/* O letreiro de ação (ref. MWzRBo) entra aqui e em mais nenhum
+                título: é o gesto mais forte da página, e repetido deixaria de
+                marcar esta faixa como a diferente. */}
+            {/* O efeito vai no <span>, não no <h2>: `.k-onoma-lettering` é
+                `inline-block` (precisa de ser, para o `transform` pegar), e no
+                próprio heading isso fazia o título subir para a linha da
+                legenda em vez de ficar abaixo dela. */}
+            <h2 id="kit-title" className="mt-4 text-4xl sm:text-5xl">
+              <span className="k-onoma-lettering">Folheie</span>
             </h2>
           </div>
 
@@ -55,29 +67,9 @@ export function KitStrip() {
           </Link>
         </div>
 
-        <RevealGroup as="ul" className="mt-10 grid grid-cols-2 gap-4 sm:grid-cols-3 lg:grid-cols-6">
-          {[
-            { label: "Letras 3D", el: <span className="k-title k-3d text-3xl">ABC</span> },
-            { label: "Glitch", el: <span className="k-title k-glitch text-3xl" data-text="ERR">ERR</span> },
-            { label: "Onomatopeia", el: <Onoma accent="yellow" className="text-3xl">POW!</Onoma> },
-            { label: "Explosão", el: <Burst accent="magenta" className="size-16 text-[10px]"><span className="k-title">NOVO</span></Burst> },
-            { label: "Balão", el: <Bubble className="text-[11px]">Oi!</Bubble> },
-            { label: "Anomalia 138", el: <PunkName className="text-lg">PUNK</PunkName> },
-            { label: "Legenda", el: <Caption>Terra-616</Caption> },
-            { label: "Retícula", el: <span className="k-halftone block size-16 rounded" style={{ "--k-dot": "var(--k-cyan)", "--k-dot-step": "6px" } as React.CSSProperties} /> },
-            { label: "Estrelas", el: <Stars value={4} className="text-[var(--k-yellow)]" /> },
-            { label: "Impacto", el: <span className="relative block size-16"><PulseRings className="inset-0" /></span> },
-            { label: "Linhas", el: <span className="k-speedlines block size-16 rounded" style={{ "--k-speed-color": "rgba(255,255,255,0.5)" } as React.CSSProperties} /> },
-            { label: "Recorte", el: <span className="k-cut-tr block size-16 border-[3px] border-[var(--k-ink)] bg-[var(--k-lime)]" /> },
-          ].map((item) => (
-            <RevealItem key={item.label} as="li" variants={PANEL_IN}>
-              <div className="k-panel flex h-full flex-col items-center justify-between gap-4 p-4 text-center">
-                <span className="flex min-h-[4.5rem] items-center justify-center">{item.el}</span>
-                <span className="k-kicker text-[9px] opacity-60">{item.label}</span>
-              </div>
-            </RevealItem>
-          ))}
-        </RevealGroup>
+        <div className="mt-10">
+          <KitCarousel laminas={LAMINAS} />
+        </div>
       </div>
     </section>
   )

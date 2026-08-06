@@ -5,24 +5,12 @@ import { ZoneAtelie } from "@/components/criativo/zone-atelie"
 import { ZoneOficina } from "@/components/criativo/zone-oficina"
 import { ZoneBanca } from "@/components/criativo/zone-banca"
 import { ZoneCine } from "@/components/criativo/zone-cine"
-import { ZoneRadio } from "@/components/criativo/zone-radio"
-import { ZoneVideoteca } from "@/components/criativo/zone-videoteca"
 import { ZoneMural } from "@/components/criativo/zone-mural"
-import { ZoneTirinhas } from "@/components/criativo/zone-tirinhas"
 import { Outro } from "@/components/criativo/outro"
 import { CriativoExperience } from "@/components/criativo/experience"
 import { ComicPage } from "@/components/layout/comic/comic-page"
 import { getProjects } from "@/lib/repos/projects"
-import {
-  getArtworks,
-  getComics,
-  getMovies,
-  getNotes,
-  getStrips,
-  getTracks,
-  getVideos,
-} from "@/lib/repos/criativo"
-import { getPlaylistFromFolder } from "@/lib/repos/playlist"
+import { getArtworks, getComics, getMovies, getNotes } from "@/lib/repos/criativo"
 
 export const metadata = {
   title: "O Multiverso",
@@ -41,25 +29,13 @@ export const metadata = {
  * Só o hero (parallax), o player de áudio e os painéis com tilt são clientes.
  */
 export default async function CriativoHome() {
-  const [projects, artworks, comics, movies, dbTracks, folderTracks, videos, notes, strips] =
-    await Promise.all([
-      getProjects(),
-      getArtworks(),
-      getComics(),
-      getMovies(),
-      getTracks(),
-      getPlaylistFromFolder(),
-      getVideos(),
-      getNotes(),
-      getStrips(),
-    ])
-
-  // A playlist tem duas fontes: os arquivos de `public/musica` (jogar o mp3 lá
-  // já publica) e as faixas cadastradas no /admin, que carregam capa e
-  // comentário. A pasta vem primeiro, e as do banco que apontam para o mesmo
-  // arquivo são descartadas para a faixa não aparecer duas vezes.
-  const folderUrls = new Set(folderTracks.map((t) => t.audio_url))
-  const tracks = [...folderTracks, ...dbTracks.filter((t) => !folderUrls.has(t.audio_url))]
+  const [projects, artworks, comics, movies, notes] = await Promise.all([
+    getProjects(),
+    getArtworks(),
+    getComics(),
+    getMovies(),
+    getNotes(),
+  ])
 
   return (
     <>
@@ -96,10 +72,7 @@ export default async function CriativoHome() {
             <ZoneOficina projects={projects} />
             <ZoneBanca comics={comics} />
             <ZoneCine movies={movies} />
-            <ZoneRadio tracks={tracks} />
-            <ZoneVideoteca videos={videos} />
             <ZoneMural notes={notes} />
-            <ZoneTirinhas strips={strips} />
             <Outro />
           </ComicPage>
         </div>

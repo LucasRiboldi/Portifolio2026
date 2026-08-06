@@ -1,0 +1,164 @@
+/**
+ * COMIC — a galeria do kit, com virada de folha.
+ *
+ * O trilho é do Embla (ele mede e arrasta); o que está aqui é só a aparência e
+ * a rotação. A separação é deliberada: trocar de biblioteca de carrossel um dia
+ * não deve custar o efeito, e mexer no efeito não deve exigir tocar no JS.
+ *
+ * Escopo `.k-gal`, dentro da linguagem `k-` do realm Creative.
+ */
+
+.k-gal {
+  --k-gal-w: 22rem; /* largura da folha */
+  display: grid;
+  gap: var(--cp-gap, 1.25rem);
+}
+
+/* `perspective` no palco e não na lâmina: com a perspetiva em cada lâmina,
+   cada folha teria o próprio ponto de fuga e a pilha deixaria de se ler como
+   um caderno. Aqui todas partilham o mesmo olho. */
+.k-gal-palco {
+  overflow: hidden;
+  perspective: 1600px;
+  perspective-origin: 50% 45%;
+  /* Respiro para a folha girada não ser cortada pelo `overflow` do Embla. */
+  padding-block: 1.25rem;
+}
+
+.k-gal-trilho {
+  display: flex;
+  align-items: stretch;
+  gap: var(--cp-gap, 1.25rem);
+  margin: 0;
+  padding: 0;
+  list-style: none;
+  transform-style: preserve-3d;
+}
+
+.k-gal-lamina {
+  position: relative;
+  flex: 0 0 var(--k-gal-w);
+  max-width: 100%;
+  transform-style: preserve-3d;
+  /* `--k-turn` chega do componente: a distância da folha ao centro, já em
+     graus. Sem JavaScript nunca é escrita, o fallback zera, e a galeria fica
+     um trilho reto — navegável, só sem virada. */
+  transform: rotateY(var(--k-turn, 0deg));
+  /* A lombada fica do lado para onde a folha se levanta. */
+  transform-origin: 50% 50%;
+  transition: transform 120ms linear, opacity 260ms ease;
+  opacity: 0.55;
+}
+
+/* A folha do centro fica de frente e opaca — é a que está a ser "lida". */
+.k-gal-lamina[data-ativa] {
+  opacity: 1;
+}
+
+.k-gal-folha {
+  display: grid;
+  grid-template-rows: auto 1fr;
+  height: 100%;
+  margin: 0;
+  border: var(--k-ink-w, 3px) solid var(--k-ink);
+  border-radius: var(--k-radius, 2px);
+  background: var(--k-zone-card, #fff);
+  overflow: hidden;
+  box-shadow:
+    7px 7px 0 0 var(--k-ink),
+    0 20px 40px -28px rgb(0 0 0 / 0.8);
+}
+
+.k-gal-img {
+  position: relative;
+  display: block;
+  aspect-ratio: 4 / 5;
+  background: var(--k-zone-b);
+}
+
+/* A dobra: sombra na lombada esquerda, como a curvatura de uma folha presa. */
+.k-gal-dobra {
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+  background: linear-gradient(
+    90deg,
+    rgb(0 0 0 / 0.42) 0%,
+    rgb(0 0 0 / 0.12) 6%,
+    transparent 18%,
+    transparent 88%,
+    rgb(0 0 0 / 0.18) 100%
+  );
+}
+
+.k-gal-legenda {
+  display: grid;
+  gap: 0.2rem;
+  padding: 0.7rem 0.9rem 0.85rem;
+  border-top: var(--k-ink-w, 3px) solid var(--k-ink);
+  font-size: 0.8rem;
+  line-height: 1.35;
+}
+.k-gal-legenda > strong {
+  font-size: 1.05rem;
+}
+.k-gal-legenda > span {
+  opacity: 0.75;
+}
+
+/* ── Controles ──────────────────────────────────────────────────────── */
+.k-gal-controles {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 1rem;
+}
+
+.k-gal-btn {
+  display: grid;
+  place-items: center;
+  width: 2.6rem;
+  height: 2.6rem;
+  border: var(--k-ink-w, 3px) solid var(--k-ink);
+  border-radius: 50%;
+  background: var(--k-zone-card, #fff);
+  color: var(--k-ink);
+  font-size: 1.4rem;
+  line-height: 1;
+  cursor: pointer;
+  box-shadow: 3px 3px 0 0 var(--k-ink);
+  transition: transform 160ms var(--k-ease, cubic-bezier(0.16, 1, 0.3, 1)), box-shadow 160ms;
+}
+.k-gal-btn:hover {
+  transform: translate(1px, 1px);
+  box-shadow: 1px 1px 0 0 var(--k-ink);
+}
+.k-gal-btn:active {
+  transform: translate(3px, 3px);
+  box-shadow: none;
+}
+
+.k-gal-conta {
+  display: inline-flex;
+  align-items: baseline;
+  gap: 0.35rem;
+  font-size: 0.85rem;
+  font-variant-numeric: tabular-nums;
+  opacity: 0.85;
+}
+
+@media (min-width: 640px) {
+  .k-gal {
+    --k-gal-w: 24rem;
+  }
+}
+
+/* Movimento reduzido: a folha para de girar e a opacidade deixa de variar. O
+   carrossel continua a funcionar — muda de lâmina, só não vira. */
+@media (prefers-reduced-motion: reduce) {
+  .k-gal-lamina {
+    transform: none;
+    opacity: 1;
+    transition: none;
+  }
+}

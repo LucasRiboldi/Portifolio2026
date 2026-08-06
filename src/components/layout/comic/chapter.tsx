@@ -97,11 +97,15 @@ export function Chapter({
             {earth && <span className="k-kicker text-[10px] opacity-60">{earth}</span>}
           </div>
 
+          {/* Teto do clamp em 8% da REVISTA (`--cp-mag`) e não da janela: com
+              o exemplar de largura fixa, `8vw` continuava a crescer com o
+              monitor e a manchete transbordava a mancha. Ver o <h1> do hero
+              para o raciocínio completo. */}
           <SplitTitle
             as="h2"
             id={titleId}
             treatment={treatment}
-            className="mt-5 text-[clamp(2.2rem,8vw,5rem)] leading-[0.9]"
+            className="mt-5 text-[clamp(2.2rem,8vw,calc(var(--cp-mag)*0.08))] leading-[0.9]"
           >
             {title}
           </SplitTitle>

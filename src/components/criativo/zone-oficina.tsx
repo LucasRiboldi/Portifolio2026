@@ -8,8 +8,21 @@ import { Chapter } from "@/components/layout/comic/chapter"
 import { Panel, PanelBody } from "@/components/layout/comic/panel"
 import { ZONES } from "@/constants/criativo-landing"
 
-/** Quantos projetos entram na landing antes de mandar para o portfólio. */
-const MAX = 4
+/**
+ * O projeto que a oficina mostra na capa.
+ *
+ * A faixa mostrava os quatro primeiros da lista. Passou a mostrar um só, a
+ * pedido: numa revista, a oficina é uma reportagem de página dupla, não um
+ * índice — e quatro peças alternando lado transformavam o capítulo na parte
+ * mais longa da edição.
+ *
+ * A escolha é por SLUG e não por posição: `projects` vem do banco e a ordem
+ * muda quando se reordena o painel; travar em `slice(0, 1)` faria a capa
+ * trocar de projeto sem ninguém pedir. Se o slug não existir (renomeado,
+ * despublicado), cai no destacado e, na falta dele, no primeiro — a capa nunca
+ * fica sem a oficina.
+ */
+const PROJETO_NA_CAPA = "bolao-copa-2026"
 
 /**
  * Capítulo 02 · Oficina — sites e componentes, em quadros alternados.
@@ -27,10 +40,21 @@ const MAX = 4
 export function ZoneOficina({ projects }: { projects: Project[] }) {
   const { id, ...meta } = ZONES.oficina
 
+  const escolhido =
+    projects.find((p) => p.slug === PROJETO_NA_CAPA) ??
+    projects.find((p) => p.featured) ??
+    projects[0]
+
+  // Sem projeto nenhum publicado, o capítulo inteiro sai — melhor do que uma
+  // reportagem de página dupla com um requadro vazio no meio.
+  if (!escolhido) return null
+
+  const emCartaz = [escolhido]
+
   return (
     <Chapter id={id} palette={id} scene="slideL" {...meta}>
       <div className="space-y-16 sm:space-y-24">
-        {projects.slice(0, MAX).map((p, i) => {
+        {emCartaz.map((p, i) => {
           const reversed = i % 2 === 1
           const href = p.slug ? `/portfolio/${p.slug}` : (p.href ?? "/portfolio")
 
@@ -121,6 +145,23 @@ export function ZoneOficina({ projects }: { projects: Project[] }) {
             </article>
           )
         })}
+      </div>
+
+      {/* Com uma peça só na capa, o resto do acervo precisa de porta — sem
+          isto, reduzir a oficina teria escondido os outros projetos do site.
+          O balão (`.k-say`, ref. GeXMgm) é um dos três pontos em que o efeito
+          novo entra nesta página. */}
+      <div className="mt-14 flex flex-wrap items-center gap-5">
+        <p className="k-say k-say--hot text-sm">Tem mais na bancada</p>
+        <Link
+          href="/portfolio"
+          className="k-sub group inline-flex items-center gap-2 text-sm text-[var(--k-lime)]"
+        >
+          Ver o portfólio inteiro
+          <span aria-hidden className="transition-transform duration-300 group-hover:translate-x-1">
+            →
+          </span>
+        </Link>
       </div>
 
       <Onoma

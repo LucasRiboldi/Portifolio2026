@@ -1,0 +1,177 @@
+/**
+ * COMIC — letreiros e caixas de fala portados de três demos.
+ *
+ * Os três efeitos foram pedidos por referência e estão aqui reescritos, não
+ * copiados: cada um usa os tokens da casa (`--k-ink`, `--k-yellow`, …) em vez
+ * das cores fixas dos originais, para mudarem de dimensão junto com a zona que
+ * os hospeda. As demos e o que foi aproveitado de cada uma:
+ *
+ *   1. `.k-onoma-lettering`  — "Transparent Action Onomatopoeia" (@sudocoda,
+ *      via codepen.io/aanjulena/pen/MWzRBo). A ideia é a inclinação combinada
+ *      com skew mais uma sombra de dois tons, que dá o relevo de letreiro
+ *      pintado à mão sem nenhuma imagem.
+ *
+ *   2. `.k-say` / `.k-say--hot` / `.k-tagname` — balões e etiqueta
+ *      (codepen.io/borntofrappe/pen/GeXMgm). A textura de retícula em SVG
+ *      inline e a camada de apoio deslocada por trás do balão.
+ *
+ *   3. `.k-knockout` — letra branca com contorno preto pesado
+ *      (codepen.io/kathykato/pen/wvgNVeJ). O original empilha vinte sombras de
+ *      1 e 2px; aqui a mesma leitura sai de `paint-order: stroke` com
+ *      `-webkit-text-stroke`, que é uma declaração em vez de vinte e não
+ *      engorda a letra por dentro.
+ *
+ * Escopo `.k-body`/`.k-zone` como o resto da linguagem do realm Creative.
+ */
+
+/* ═══════════════════════════════════════════════════════════════════════
+   1. LETREIRO DE AÇÃO  (ref. MWzRBo)
+
+   A demo original prende o efeito num `float: left` com `width: 100%` e
+   `margin-bottom: -1em`, resquício do layout dela. Aqui nada disso entra: o
+   efeito é só a letra, e quem posiciona é o bloco que o usa.
+   ═══════════════════════════════════════════════════════════════════════ */
+.k-onoma-lettering {
+  display: inline-block;
+  /* `--font-display` é a Bangers no layout raiz (`app/layout.tsx`), não
+     `--font-bangers`: o projeto nomeia as fontes pelo PAPEL, não pela família. */
+  font-family: var(--font-display), "Bangers", cursive;
+  letter-spacing: 0.02em;
+  line-height: 0.95;
+  color: var(--k-white, #fff);
+  /* Dois tons: realce quente em cima à esquerda, sombra fria embaixo à
+     direita. É o que dá o volume de letra pintada. */
+  text-shadow:
+    -1px -1px 0 var(--k-yellow, #ffd400),
+    1px 1px 0 var(--k-orange, #ff7a18),
+    2px 2px 0 var(--k-orange, #ff7a18),
+    3px 3px 0 color-mix(in srgb, var(--k-ink, #12100e) 75%, transparent);
+  transform: rotate(-10deg) skew(-10deg, 0deg);
+  transform-origin: left center;
+}
+
+/* Variante calma para títulos longos: metade da inclinação. Uma manchete de
+   oito palavras a -10deg desce demais e come a linha seguinte. */
+.k-onoma-lettering--soft {
+  transform: rotate(-4deg) skew(-6deg, 0deg);
+}
+
+/* ═══════════════════════════════════════════════════════════════════════
+   2. BALÃO E ETIQUETA  (ref. GeXMgm)
+
+   A retícula é um SVG inline em `data:` — quatro círculos que se repetem. Fica
+   como custom property para as duas cores (frente e apoio) mudarem sem
+   reescrever o gradiente inteiro.
+   ═══════════════════════════════════════════════════════════════════════ */
+.k-say {
+  --k-say-dot: %23250E17;
+  position: relative;
+  display: inline-block;
+  padding: 0.55rem 1.15rem;
+  border: 0.28rem solid var(--k-ink, #12100e);
+  background:
+    url('data:image/svg+xml;utf8,<svg width="100" height="100" transform="rotate(25)" opacity="0.28" version="1.1" viewBox="0 0 100 100" xmlns="http://www.w3.org/2000/svg"><g fill="%23250E17"><circle cx="25" cy="25" r="12.5"/><circle cx="75" cy="75" r="12.5"/><circle cx="75" cy="25" r="12.5"/><circle cx="25" cy="75" r="12.5"/></g></svg>'),
+    var(--k-white, #fff);
+  background-size: 12px, 100%;
+  color: var(--k-ink, #12100e);
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.06em;
+  line-height: 1.25;
+}
+
+/* A camada de apoio: o mesmo retângulo, deslocado, em tinta cheia. É o que dá
+   a espessura de papel recortado — e o motivo de o balão não precisar de
+   sombra difusa nenhuma. */
+.k-say::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  z-index: -1;
+  transform: translate(-0.7rem, 0.15rem);
+  background:
+    url('data:image/svg+xml;utf8,<svg width="100" height="100" transform="rotate(35)" version="1.1" viewBox="0 0 100 100" xmlns="http://www.w3.org/2000/svg"><g fill="%23250E17"><circle cx="25" cy="25" r="12.5"/><circle cx="75" cy="75" r="12.5"/><circle cx="75" cy="25" r="12.5"/><circle cx="25" cy="75" r="12.5"/></g></svg>'),
+    var(--k-ink, #12100e);
+  background-size: 12px, 100%;
+}
+
+/* Variante de destaque: fundo quente e um "!" automático, como no original. */
+.k-say--hot {
+  background:
+    url('data:image/svg+xml;utf8,<svg width="100" height="100" transform="rotate(25)" opacity="0.75" version="1.1" viewBox="0 0 100 100" xmlns="http://www.w3.org/2000/svg"><g fill="%23d68810"><circle cx="25" cy="25" r="12.5"/><circle cx="75" cy="75" r="12.5"/><circle cx="75" cy="25" r="12.5"/><circle cx="25" cy="75" r="12.5"/></g></svg>'),
+    var(--k-yellow, #ffcd28);
+  background-size: 13px, 100%;
+}
+.k-say--hot::after {
+  content: "!";
+}
+
+/* Etiqueta "olá, o meu nome é" — o terceiro elemento da demo. Duas faixas:
+   cabeçalho em tinta cheia e corpo em branco. */
+.k-tagname {
+  display: inline-grid;
+  border: 0.22rem solid var(--k-ink, #12100e);
+  background: var(--k-white, #fff);
+  color: var(--k-ink, #12100e);
+  text-align: center;
+  line-height: 1.15;
+  overflow: hidden;
+}
+.k-tagname > strong {
+  display: block;
+  padding: 0.2rem 1rem;
+  background: var(--k-ink, #12100e);
+  color: var(--k-white, #fff);
+  font-size: 0.7em;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+}
+.k-tagname > span {
+  display: block;
+  padding: 0.35rem 1rem 0.5rem;
+  font-weight: 700;
+}
+
+/* ═══════════════════════════════════════════════════════════════════════
+   3. LETRA VAZADA COM CONTORNO PESADO  (ref. wvgNVeJ)
+
+   `paint-order: stroke fill` desenha o traço ANTES do preenchimento, então o
+   contorno cresce para fora e não come a barriga da letra — que é o defeito
+   de `-webkit-text-stroke` sozinho, e a razão de a demo original ter recorrido
+   a vinte sombras empilhadas.
+   ═══════════════════════════════════════════════════════════════════════ */
+.k-knockout {
+  color: var(--k-white, #fff);
+  font-style: italic;
+  letter-spacing: -0.03em;
+  paint-order: stroke fill;
+  -webkit-text-stroke: 0.14em var(--k-ink, #12100e);
+  text-shadow: 0.09em 0.09em 0 var(--k-ink, #12100e);
+}
+
+/* Painel de citação da mesma demo: caixa branca de borda grossa, com a barra
+   de tinta à esquerda no lugar da aspa. */
+.k-quotebox {
+  position: relative;
+  border: 0.25rem solid var(--k-ink, #12100e);
+  background: var(--k-white, #fff);
+  color: var(--k-ink, #12100e);
+  padding: 1.1rem 1.25rem 1.1rem 1.6rem;
+}
+.k-quotebox::before {
+  content: "";
+  position: absolute;
+  inset: 0 auto 0 0;
+  width: 0.45rem;
+  background: var(--k-yellow, #ffd400);
+  border-right: 0.18rem solid var(--k-ink, #12100e);
+}
+
+/* ═══════════════════════════════════════════════════════════════════════
+   4. MOVIMENTO REDUZIDO
+
+   Nenhum destes efeitos anima — são todos estáticos, e é de propósito: a
+   página já tem entrada por rolagem, parallax e a virada do carrossel. Mais
+   uma camada em movimento seria ruído. Fica registado para ninguém "consertar"
+   acrescentando animação depois.
+   ═══════════════════════════════════════════════════════════════════════ */

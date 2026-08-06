@@ -13,12 +13,35 @@
  */
 
 /* ===========================================================================
+   0 · A REVISTA COMO OBJETO FÍSICO
+
+   `--cp-mag` é o formato da revista: a largura que o exemplar tem sobre a mesa,
+   e que não cresce com o monitor. Vive em `:root` e não em `.cp-page` porque o
+   cabeçalho e o rodapé — que ficam fora da revista, no layout do site — também
+   precisam de a ler para acompanharem o mesmo eixo.
+
+   900px, e não 800: é o topo da faixa pedida, e a diferença não é estética. A
+   grelha editorial tem 12 colunas a partir de 1024px de VIEWPORT, não de
+   contentor. Num exemplar de 900px isso dá colunas de ~48px, e um requadro de
+   4 colunas mede ~262px — no limite do que um cartão com capa, título, corpo e
+   etiquetas ainda comporta. A 800px o mesmo requadro cai para ~230px e a
+   diagramação de três cartões por linha deixa de caber sem reflow. 900 é o
+   valor que preserva o layout existente, que era o critério pedido.
+   =========================================================================== */
+:root {
+  --cp-mag: 900px;
+}
+
+/* ===========================================================================
    1 · Medidas do papel
    Tokens únicos para largura da mancha, margens editoriais e ritmo vertical.
    Nada de valor solto: um capítulo novo herda estas medidas por herdar a marca.
    =========================================================================== */
 .cp-page {
-  --cp-max: 1400px;
+  /* A mancha acompanha o exemplar: dentro de uma revista de 900px, um teto de
+     1400px seria letra morta. Mantê-los ligados é o que faz o alinhamento das
+     bordas continuar a valer depois desta mudança. */
+  --cp-max: var(--cp-mag);
   --cp-gutter: 1rem; /* margem editorial (mobile) */
   --cp-gap: 0.875rem; /* goteira entre requadros */
   --cp-chapter-gap: 4.5rem; /* respiro entre capítulos */
@@ -28,6 +51,27 @@
 
   position: relative;
   isolation: isolate;
+
+  /* ── O exemplar sobre a mesa ─────────────────────────────────────────
+     `max-width` + `margin-inline: auto` e mais nada: sem zoom, sem
+     `transform: scale()`, sem redução proporcional. A revista é estreita
+     porque a caixa é estreita, e todo o conteúdo dentro dela reflui como
+     reflui num telemóvel — que é o comportamento que já existia e está
+     testado.
+
+     A moldura é um filete claro de 1px mais um segundo filete escuro no
+     `box-shadow`: o claro separa o papel do fundo, o escuro dá-lhe espessura
+     sem desenhar uma segunda borda. A sombra longa e muito difusa é o que
+     levanta o exemplar da mesa. Nenhum dos três compete com o conteúdo — a
+     3840px de largura a moldura ocupa 2px do ecrã.
+
+     Sem `border-radius`: revista impressa tem corte reto. */
+  max-width: var(--cp-mag);
+  margin-inline: auto;
+  border: 1px solid rgb(255 255 255 / 0.09);
+  box-shadow:
+    0 0 0 1px rgb(0 0 0 / 0.55),
+    0 32px 90px -28px rgb(0 0 0 / 0.85);
 }
 
 @media (min-width: 640px) {
@@ -47,23 +91,56 @@
   }
 }
 
-/* Ultrawide/4K: a mancha para de crescer e as margens é que engordam — esticar
-   a linha de texto até 2560px destrói a legibilidade editorial. */
-@media (min-width: 1800px) {
-  .cp-page {
-    --cp-max: 1600px;
-    --cp-gap: 1.75rem;
-    --cp-chapter-gap: 9rem;
-    --cp-panel-pad: 1.75rem;
-  }
-}
+/* O degrau de ultrawide foi removido.
 
-/** A mancha: tudo que é conteúdo passa por aqui e fica centrado e contido. */
+   Ele engordava `--cp-gap`, `--cp-chapter-gap` e `--cp-panel-pad` a partir de
+   1800px de viewport, e fazia sentido enquanto a mancha crescia junto (chegava
+   a 1600px). Com a revista fixa em `--cp-mag`, o exemplar tem exatamente a
+   mesma largura num portátil e num 4K — mas as goteiras cresciam só no
+   segundo, e requadros de 262px perdiam 4px de largura útil cada por causa do
+   tamanho do MONITOR.
+
+   Removê-lo preserva o espaçamento interno em vez de o alterar: o que se vê a
+   1440px passa a ser o que se vê em qualquer tela maior. */
+
+/**
+ * A mancha: tudo que é conteúdo passa por aqui e fica centrado e contido.
+ *
+ * `max-width: var(--cp-max)` e não `calc(--cp-max + gutter*2)`. A soma fazia
+ * `--cp-max` significar a LINHA DE TEXTO, com a goteira por fora — enquanto o
+ * `max-w-container` do cabeçalho e do rodapé significa a CAIXA, com o padding
+ * por dentro. Duas definições diferentes para a mesma ideia, e o resultado era
+ * que as bordas não caíam no mesmo x nem quando os números batiam: com ambos
+ * em 1400px, o conteúdo do capítulo começava 32px à esquerda do logotipo.
+ *
+ * Agora só existe uma leitura: `--cp-max` é a caixa, a goteira vive dentro
+ * dela, e cabeçalho, capítulos e rodapé partilham a mesma coluna. O padding
+ * lateral do cabeçalho (`px-4 sm:px-6 lg:px-8`) já espelhava `--cp-gutter` em
+ * cada breakpoint, então o alinhamento vale em todas as larguras.
+ */
 .cp-bleed {
   width: 100%;
-  max-width: calc(var(--cp-max) + var(--cp-gutter) * 2);
+  max-width: var(--cp-max);
   margin-inline: auto;
   padding-inline: var(--cp-gutter);
+}
+
+/**
+ * O cabeçalho e o rodapé acompanham o exemplar — só na revista.
+ *
+ * Os dois vivem no layout do site, fora de `.cp-page`, e param em
+ * `--container-2xl` (1400px). Numa revista de 900px isso deixava o logótipo
+ * 250px à esquerda da capa num monitor de 1920: a barra deixava de se ler como
+ * o topo da revista e passava a flutuar sobre ela.
+ *
+ * `body:has(.cp-page)` escopa isto à landing do Criativo sem tocar em HTML nem
+ * em componente — `.cp-page` só existe ali, e o /portfolio e o /design-system
+ * partilham o mesmo cabeçalho e continuam nos 1400px. A barra em si segue full
+ * width: ela é o suporte, não a revista; o que se alinha é o conteúdo dentro
+ * dela.
+ */
+body:has(.cp-page) :is(header, footer) .max-w-container {
+  max-width: var(--cp-mag);
 }
 
 /* ===========================================================================

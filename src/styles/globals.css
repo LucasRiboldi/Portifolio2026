@@ -32,6 +32,11 @@
 @import "./criativo-fx.css";
 @import "./comic-layout.css";
 @import "./comic-book.css";
+/* Letreiros e balões portados das três demos de referência. Depois de
+   `comic-2026.css` porque consome os tokens de tinta dela. */
+@import "./comic-lettering.css";
+/* Galeria do kit — trilho do Embla, virada de folha nossa. */
+@import "./comic-gallery.css";
 
 @tailwind base;
 @tailwind components;
@@ -66,7 +71,10 @@
     --sidebar-accent-foreground: oklch(0.205 0 0);
     --sidebar-border: oklch(0.922 0 0);
     --sidebar-ring: oklch(0.708 0 0);
-    --container-2xl: 1200px;
+    /* Cópia do valor de `tokens.css`. As duas precisam andar juntas: esta
+       vive no `:root` de `@layer base` e é a que vence conforme a ordem de
+       importação. Ver o comentário longo em tokens.css. */
+    --container-2xl: 1400px;
     --gradient-start: #f97316;
     --gradient-mid: #ec4899;
     --gradient-end: #8b5cf6;

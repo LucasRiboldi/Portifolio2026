@@ -1,5 +1,6 @@
 import Image from "next/image"
 import { cn } from "@/lib/utils"
+import { IMAGEM_TEMPORARIA } from "@/constants/criativo-landing"
 import { Halftone } from "./atoms"
 
 interface MediaFrameProps {
@@ -11,24 +12,33 @@ interface MediaFrameProps {
   className?: string
   priority?: boolean
   /**
-   * Quando `true`, o vazio (sem `src`) é preenchido com a imagem do realm
-   * Creative (`/realms/creative.png`) — a arte comic gerada para o multiverso,
-   * livre de direitos autorais. Fica atrás de um leve véu com a inicial gigante,
-   * para o espaço parecer diagramação e não defeito.
+   * Imagem temporária no lugar do vazio. **Ligado por omissão.**
+   *
+   * Era opcional e as seis zonas passavam `themed` à mão — o que significa que
+   * o padrão era o pior caso (só a inicial sobre retícula) e a exceção era o
+   * bom. Invertido em 06/08/2026: campo de imagem sem `src` mostra a arte do
+   * realm, e quem quiser o requadro só com a letra pede `themed={false}`.
    */
   themed?: boolean
 }
 
 /**
- * Moldura de imagem com fallback desenhado.
+ * Moldura de imagem com marcador de lugar desenhado.
  *
- * Muito do conteúdo desta página entra sem capa (o admin ainda não subiu a
- * imagem). Em vez de um retângulo cinzento, o fallback vira um requadro de HQ:
- * quando a zona pede `themed`, a arte comic do realm com véu e inicial gigante;
- * senão, só a inicial sobre retícula. O buraco deixa de parecer defeito e passa
- * a parecer diagramação.
+ * Muito do conteúdo desta página entra sem capa (o painel ainda não subiu a
+ * imagem). Em vez de um retângulo cinzento, o vazio vira requadro de HQ: a arte
+ * comic do realm sob um véu, com a inicial gigante por cima. O buraco deixa de
+ * parecer defeito e passa a parecer diagramação.
  */
-export function MediaFrame({ src, alt = "", fallback, sizes, className, priority, themed }: MediaFrameProps) {
+export function MediaFrame({
+  src,
+  alt = "",
+  fallback,
+  sizes,
+  className,
+  priority,
+  themed = true,
+}: MediaFrameProps) {
   return (
     <span className={cn("relative block overflow-hidden bg-[var(--k-zone-b)]", className)}>
       {src ? (
@@ -43,7 +53,7 @@ export function MediaFrame({ src, alt = "", fallback, sizes, className, priority
       ) : themed ? (
         <>
           <Image
-            src="/realms/creative.png"
+            src={IMAGEM_TEMPORARIA}
             alt=""
             fill
             sizes={sizes}

@@ -24,8 +24,13 @@ export function Outro() {
       <Reveal variants={PANEL_IN} className="relative mx-auto max-w-3xl">
         <Caption>{OUTRO.kicker}</Caption>
 
-        <h2 id="outro-title" className="mt-7 text-[clamp(2.4rem,7vw,5.5rem)]">
-          <span className="k-title k-3d k-3d--deep block">{OUTRO.title}</span>
+        {/* Teto em 7% da REVISTA e não da janela: ver o <h1> do hero. */}
+        <h2 id="outro-title" className="mt-7 text-[clamp(2.4rem,7vw,calc(var(--cp-mag)*0.07))]">
+          {/* Letra vazada com contorno pesado (ref. wvgNVeJ) — o terceiro e
+              último ponto de efeito novo nesta página. Substitui o `k-3d` só
+              nesta palavra: "Continua" é a deixa de fim de fascículo, e o
+              contorno duro é o que ela usava nas revistas antigas. */}
+          <span className="k-knockout block">{OUTRO.title}</span>
           <GlitchTitle as="span" treatment="glitch" className="mt-2 block text-[0.55em]">
             {OUTRO.glitch}
           </GlitchTitle>
