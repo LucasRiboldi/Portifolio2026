@@ -206,8 +206,8 @@ export function DevPanelFoot({ children }: { children: ReactNode }) {
    de "versão publicada" seria mentira barata.
    ──────────────────────────────────────────────────────────────────────── */
 const LEGENDA_VERSAO: Record<VersaoSite["origem"], string> = {
+  tag: "tag mais alta do repositório",
   release: "release publicada no GitHub",
-  tag: "tag mais recente do repositório",
   pacote: "versão declarada no package.json",
 }
 

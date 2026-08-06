@@ -441,12 +441,32 @@ export const getPulsoRepo = unstable_cache(
 
    O número exibido no hero tem que ser o do REPOSITÓRIO, não um literal
    digitado na página — literal envelhece na primeira vez que alguém esquece
-   de mexer nele. A cadeia de origens vai da mais específica para a mais
-   garantida:
+   de mexer nele. A cadeia de origens:
 
-     1. release do GitHub  — é o que a pessoa realmente anunciou;
-     2. tag mais recente   — quando há tag mas ninguém abriu release;
+     1. tag mais alta      — é o que acompanha TODO push, por regra do projeto;
+     2. release do GitHub  — quando ainda não há tag nenhuma;
      3. `package.json`     — sempre existe, funciona sem rede e sem token.
+
+   ## Por que a tag ganha da release
+
+   A ordem era a inversa, e isso quebrou em 06/08/2026. Havia uma release da
+   v0.2.0 publicada; a v0.3.0 subiu com tag, como manda a regra de
+   versionamento, mas sem release. Como a release ganhava, o selo continuou a
+   anunciar v0.2.0 com a v0.3.0 no ar — mentindo justamente sobre a única
+   coisa que ele existe para dizer.
+
+   A causa não é de código, é de acoplamento: a release é um passo MANUAL e
+   opcional, a tag é obrigatória em todo push. Amarrar o selo ao passo
+   opcional garantia que ele ficasse para trás na primeira vez que alguém
+   tagueasse sem lançar. Agora ele segue o que a regra já assegura, e a
+   release volta a ser o que é — documentação do lançamento.
+
+   ## Por que ordenar por semver e não confiar na API
+
+   `/tags` não documenta ordem. Na prática costuma vir decrescente, mas
+   "costuma" não é contrato: bastaria o GitHub devolver `v0.10.0` depois de
+   `v0.9.0` numa ordem alfabética para o selo regredir sozinho. A ordenação
+   numérica abaixo é o que torna "mais recente" uma afirmação verificável.
 
    O passo 3 é o que mantém a promessa do projeto (o site funciona sem
    backend): rate limit da API anônima, CI sem rede ou repositório privado
@@ -466,8 +486,57 @@ function comV(bruto: string): string {
   return `v${bruto.trim().replace(/^v/i, "")}`
 }
 
+/**
+ * Compara duas tags por semver, da mais alta para a mais baixa.
+ *
+ * Compara NÚMERO a número, e não texto: `"0.10.0" < "0.9.0"` em ordem
+ * alfabética, que é o erro clássico e o que faria o selo regredir na décima
+ * versão menor. Tag que não casa com `vX.Y.Z` recebe `-1` e vai para o fim —
+ * uma tag solta (`preview`, `backup-antes-da-migracao`) não deve nunca ganhar
+ * de uma versão de verdade.
+ */
+export function partesSemver(nome: string): [number, number, number] {
+  const m = /^v?(\d+)\.(\d+)\.(\d+)/.exec(nome.trim())
+  if (!m) return [-1, -1, -1]
+  return [Number(m[1]), Number(m[2]), Number(m[3])]
+}
+
+/**
+ * Exportada só para teste — o consumidor real é o `sort` logo abaixo.
+ * `tests/versao-tags.test.ts` trava o caso do 0.10 contra o 0.9, que é onde a
+ * comparação por texto falha e o selo regrediria sozinho.
+ */
+export function maisAlta(a: string, b: string): number {
+  const [a1, a2, a3] = partesSemver(a)
+  const [b1, b2, b3] = partesSemver(b)
+  return b1 - a1 || b2 - a2 || b3 - a3
+}
+
 export const getVersaoSite = unstable_cache(
   async (): Promise<VersaoSite> => {
+    /* `per_page=100`: pedir só a primeira tag devolveria "a que a API listou
+       primeiro", que é exatamente a suposição que esta função deixou de fazer.
+       Para ordenar é preciso ver o conjunto. */
+    const tags = await buscarJson<{ name: string }[]>(
+      `https://api.github.com/repos/${GITHUB_REPO}/tags?per_page=100`,
+    )
+    const alta = Array.isArray(tags)
+      ? tags
+          .map((t) => t.name)
+          .filter((n) => partesSemver(n)[0] >= 0)
+          .sort(maisAlta)[0]
+      : undefined
+
+    if (alta) {
+      return {
+        rotulo: comV(alta),
+        origem: "tag",
+        // Serve com ou sem release: o GitHub mostra a página da tag quando não
+        // há lançamento, e a da release quando há.
+        url: `https://github.com/${GITHUB_REPO}/releases/tag/${encodeURIComponent(alta)}`,
+      }
+    }
+
     const release = await buscarJson<{ tag_name?: string; html_url?: string }>(
       `https://api.github.com/repos/${GITHUB_REPO}/releases/latest`,
     )
@@ -476,18 +545,6 @@ export const getVersaoSite = unstable_cache(
         rotulo: comV(release.tag_name),
         origem: "release",
         url: release.html_url ?? `https://github.com/${GITHUB_REPO}/releases/latest`,
-      }
-    }
-
-    const tags = await buscarJson<{ name: string }[]>(
-      `https://api.github.com/repos/${GITHUB_REPO}/tags?per_page=1`,
-    )
-    const maisRecente = tags?.[0]?.name
-    if (maisRecente) {
-      return {
-        rotulo: comV(maisRecente),
-        origem: "tag",
-        url: `https://github.com/${GITHUB_REPO}/releases/tag/${encodeURIComponent(maisRecente)}`,
       }
     }
 
