@@ -328,12 +328,12 @@
   --container-md:  768px;
   --container-lg:  1024px;
   --container-xl:  1200px;
-  /* 1400 e não 1200 desde 05/08/2026: este é o `max-w-container` do Tailwind,
-     que veste o cabeçalho, o rodapé e o `Container`. Enquanto valia 1200, a
-     barra de navegação ficava 200px mais estreita que a mancha do /criativo
-     (`--cp-max`, em comic-layout.css) e as bordas não se alinhavam acima de
-     ~1264px de viewport. Os dois passaram a declarar a mesma medida. */
-  --container-2xl: 1400px;
+  /* Aponta para `--cp-mag` (comic-layout.css), a largura do exemplar.
+     Este é o `max-w-container` do Tailwind, que veste o cabeçalho, o rodapé e
+     o `Container`. Enquanto tinha número próprio, ele e a mancha da revista
+     divergiam em silêncio — foram 1200 contra 1400, depois 1400 contra 900.
+     Uma referência em vez de uma cópia é o que impede a terceira divergência. */
+  --container-2xl: var(--cp-mag, 900px);
 }
 
 /* ============================================================

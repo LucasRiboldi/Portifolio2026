@@ -71,10 +71,10 @@
     --sidebar-accent-foreground: oklch(0.205 0 0);
     --sidebar-border: oklch(0.922 0 0);
     --sidebar-ring: oklch(0.708 0 0);
-    /* Cópia do valor de `tokens.css`. As duas precisam andar juntas: esta
-       vive no `:root` de `@layer base` e é a que vence conforme a ordem de
-       importação. Ver o comentário longo em tokens.css. */
-    --container-2xl: 1400px;
+    /* Espelha `tokens.css`. As duas precisam andar juntas: esta vive no
+       `:root` de `@layer base` e é a que vence conforme a ordem de importação.
+       Referência e não número, pelo motivo explicado lá. */
+    --container-2xl: var(--cp-mag, 900px);
     --gradient-start: #f97316;
     --gradient-mid: #ec4899;
     --gradient-end: #8b5cf6;

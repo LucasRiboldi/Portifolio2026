@@ -19,7 +19,10 @@ export default function DesignSystemLayout({ children }: { children: React.React
   return (
     <div className="relative min-h-screen">
       <DsCanvasAuto />
-      <div className="mx-auto max-w-[1200px] px-4 py-10">
+      {/* `max-w-container` e não `max-w-[1200px]`: o número solto era a
+          terceira largura do menu (900 nos fascículos, 1400 em três páginas,
+          1200 aqui) e não acompanhava nenhuma mudança das outras. */}
+      <div className="mx-auto max-w-container px-4 py-10">
         <main className="min-w-0 pb-24">{children}</main>
       </div>
     </div>

@@ -47,7 +47,14 @@ export function DimensionCards({ featuredOnly, className }: DimensionCardsProps)
                 — em vez de o deixar só como token. Cai no ciano do sistema para
                 dimensões que a camada de identidade não cobre. */}
             <span className="border-l-4 pl-3" style={{ borderColor: "var(--c-10, var(--sv-cyan))" }}>
-              <span className="sv-display block text-2xl uppercase sm:text-3xl">{d.label}</span>
+              {/* Sem o degrau `sm:text-3xl`.
+                  O nome da dimensão é desenhado na fonte da PRÓPRIA dimensão
+                  (Monoton, Nabla, UnifrakturMaguntia…), e algumas delas são
+                  muito mais largas que a métrica de uma sans. A 30px, num
+                  cartão que passou de ~430px para ~270px com o exemplar de
+                  900, "Mumbattan" pedia 232px numa caixa de 203 e ficava
+                  cortado — "Renascença" idem. A 24px os vinte nomes cabem. */}
+              <span className="sv-display block text-2xl uppercase">{d.label}</span>
               <span className="sv-heavy mt-1 block text-[11px] uppercase tracking-wide opacity-75">
                 {d.desc}
               </span>

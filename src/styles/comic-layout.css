@@ -32,6 +32,39 @@
   --cp-mag: 900px;
 }
 
+/**
+ * O EXEMPLAR — a moldura, em torno de todas as páginas do site.
+ *
+ * Envolve o `<main>` do layout `(site)`, então vale para os dois fascículos do
+ * Criativo e também para o portfólio, os cards, as dimensões e o design
+ * system. Antes vivia em `.cp-page` e o menu levava a três formatos: 900px nos
+ * fascículos, 1400 em três páginas e 1200 no design system.
+ *
+ * `max-width` + `margin-inline: auto` e mais nada — sem zoom, sem
+ * `transform: scale()`. A caixa é estreita e o conteúdo reflui pelo mesmo
+ * caminho que já usava no telemóvel.
+ *
+ * A moldura é um filete claro de 1px mais um filete escuro no `box-shadow`: o
+ * claro separa o papel do fundo, o escuro dá-lhe espessura sem desenhar uma
+ * segunda borda. A sombra longa e difusa levanta o exemplar da mesa. Nenhum
+ * dos três compete com o conteúdo — a 3840px a moldura ocupa 2px do ecrã.
+ *
+ * `min-height` para o exemplar continuar a ser um objeto em páginas curtas:
+ * sem isto, uma página de pouco conteúdo desenhava uma moldura de duas linhas
+ * de altura no meio do fundo.
+ *
+ * Sem `border-radius`: revista impressa tem corte reto.
+ */
+.k-exemplar {
+  max-width: var(--cp-mag);
+  min-height: calc(100vh - var(--k-header-h, 60px));
+  margin-inline: auto;
+  border: 1px solid rgb(255 255 255 / 0.09);
+  box-shadow:
+    0 0 0 1px rgb(0 0 0 / 0.55),
+    0 32px 90px -28px rgb(0 0 0 / 0.85);
+}
+
 /* ===========================================================================
    1 · Medidas do papel
    Tokens únicos para largura da mancha, margens editoriais e ritmo vertical.
@@ -52,26 +85,10 @@
   position: relative;
   isolation: isolate;
 
-  /* ── O exemplar sobre a mesa ─────────────────────────────────────────
-     `max-width` + `margin-inline: auto` e mais nada: sem zoom, sem
-     `transform: scale()`, sem redução proporcional. A revista é estreita
-     porque a caixa é estreita, e todo o conteúdo dentro dela reflui como
-     reflui num telemóvel — que é o comportamento que já existia e está
-     testado.
-
-     A moldura é um filete claro de 1px mais um segundo filete escuro no
-     `box-shadow`: o claro separa o papel do fundo, o escuro dá-lhe espessura
-     sem desenhar uma segunda borda. A sombra longa e muito difusa é o que
-     levanta o exemplar da mesa. Nenhum dos três compete com o conteúdo — a
-     3840px de largura a moldura ocupa 2px do ecrã.
-
-     Sem `border-radius`: revista impressa tem corte reto. */
-  max-width: var(--cp-mag);
-  margin-inline: auto;
-  border: 1px solid rgb(255 255 255 / 0.09);
-  box-shadow:
-    0 0 0 1px rgb(0 0 0 / 0.55),
-    0 32px 90px -28px rgb(0 0 0 / 0.85);
+  /* A moldura saiu daqui para `.k-exemplar`, no layout do site: ela deixou de
+     ser da revista e passou a ser do SITE, para o menu não levar a três
+     formatos diferentes. Esta classe voltou a ser só o que o nome diz — as
+     medidas do papel, a superfície impressa e o palco da câmara. */
 }
 
 @media (min-width: 640px) {
@@ -126,22 +143,17 @@
 }
 
 /**
- * O cabeçalho e o rodapé acompanham o exemplar — só na revista.
+ * O `body:has(.cp-page)` que escopava a largura do cabeçalho e do rodapé à
+ * landing do Criativo saiu daqui.
  *
- * Os dois vivem no layout do site, fora de `.cp-page`, e param em
- * `--container-2xl` (1400px). Numa revista de 900px isso deixava o logótipo
- * 250px à esquerda da capa num monitor de 1920: a barra deixava de se ler como
- * o topo da revista e passava a flutuar sobre ela.
+ * Deixou de ser preciso quando `--container-2xl` passou a apontar para
+ * `--cp-mag` (ver `tokens.css`): agora a barra, o rodapé e o `Container`
+ * partilham a medida do exemplar em TODAS as páginas, e não só onde havia uma
+ * `.cp-page` para o seletor encontrar. Uma regra condicional a menos.
  *
- * `body:has(.cp-page)` escopa isto à landing do Criativo sem tocar em HTML nem
- * em componente — `.cp-page` só existe ali, e o /portfolio e o /design-system
- * partilham o mesmo cabeçalho e continuam nos 1400px. A barra em si segue full
- * width: ela é o suporte, não a revista; o que se alinha é o conteúdo dentro
- * dela.
+ * A barra em si continua full width: ela é o suporte, não a revista; o que se
+ * alinha com o exemplar é o conteúdo dentro dela.
  */
-body:has(.cp-page) :is(header, footer) .max-w-container {
-  max-width: var(--cp-mag);
-}
 
 /* ===========================================================================
    2 · Grelha editorial de 12 colunas
