@@ -10,6 +10,52 @@
 
 ---
 
+# 📍 COMECE AQUI — estado em 2026-08-12
+
+**Branch:** `chore/qualidade-2026-08`, 11 commits, árvore limpa.
+**Verde:** `lint`, `tsc --noEmit`, **667 testes**, build de produção.
+
+## O que foi analisado
+
+Registrado para ninguém refazer. "Limpo" aqui significa medido, não presumido.
+
+| Frente | Alcance | Resultado |
+|---|---|---|
+| Contraste WCAG AA | Home dos 3 realms, medida com luminância real | 54 defeitos → **0**; 11 inconclusivos no `/criativo` |
+| Foco visível | `outline-none` e `outline: none` em todo o `src/` | 2 defeitos; 3 suspeitas descartadas com prova |
+| Referências ARIA | `aria-describedby` / `labelledby` / `controls` | 1 defeito (id inexistente) |
+| Movimento | `prefers-reduced-motion` | 147 usos em 85 arquivos — base já sólida, nada a fazer |
+| Arquivos grandes | Todo o `src/`, limite de 450 linhas | 3 acima; 1 acima de 500 (ver pendência **P4**) |
+| Código morto | `scripts/` inteiro, resíduo de Supabase | 1 arquivo apagado, 1 caminho corrigido |
+| Segurança | Diff completo da branch, 17 arquivos | **Nenhum achado** HIGH ou MEDIUM |
+| As 15 skills do prompt | Todas, por HTTP e pela API do GitHub | 13 são 404 (ver **P8**) |
+| Linha de base | lint, tsc, testes, build, bundle | 103 kB compartilhados, middleware 32,3 kB |
+
+## O que foi feito
+
+**Acessibilidade** — `SvTooltip` com `aria-describedby` apontando para id
+inexistente e sem marca de foco; `.dpx-anchor` sem `:focus-visible` nas 11
+seções do índice do jornal; `.k-gal-btn` em 1,32:1 → **12,68:1**;
+`--dev-ink-dim` do Dracula em 3,03:1 → **4,55:1**, que zerou 53 reprovações.
+
+**Ferramentas** — `sync:skills` deixou de apagar 54 das 55 skills do site a
+cada execução em máquina diferente; `licitacao-133-analyzer` saiu da vitrine
+por `NAO_PUBLICAR`; `fix-criativo-covers.mjs` (174 linhas) removido.
+
+**Documentação** — 4 documentos que afirmavam coisas falsas foram corrigidos;
+contagem de testes de 640 para 667; `CHANGELOG.md` criado com as 4 versões.
+
+**Fora do projeto** — skill `front-a11y` escrita em `~/.claude/skills/`, com o
+método validado aqui e as duas correções do medidor que este trabalho expôs.
+
+## O que falta — ver "Pendências" no fim deste arquivo
+
+`P1` polimento de interação · `P2` os 11 inconclusivos · `P3` contraste nas
+páginas internas · `P4` as 737 linhas · `P5` auditoria final · `P6` PR ·
+`P7` bump e tag · `P8` skill de animação bloqueada.
+
+---
+
 ## Diagnóstico técnico
 
 **Stack:** Next.js 15 (App Router) · React 19 · TypeScript estrito · Tailwind 3
@@ -215,17 +261,33 @@ princípio para o índice derivado.
 mesmo fato divergem — foi o defeito corrigido nos commits `782db8c` e
 `a530d55`, e não faz sentido reintroduzi-lo de propósito.
 
-## Pilar 7 — Auditoria final (`AUDIT_FINAL.md`)
+## Pilar 7 — Auditoria final
 
-- [ ] `security-review` sobre o diff da branch
-- [ ] Performance: build de produção comparado à linha de base do Pilar 1
+- [x] **Revisão de segurança sobre o diff da branch** — 17 arquivos, **nenhum
+      achado HIGH ou MEDIUM**. O único ponto que mereceu análise dedicada foi
+      o `esc()` do `sync-skills.mjs`, que gera código por interpolação: escapa
+      barra invertida **antes** da aspa, que é a ordem correta, e a descrição
+      passa por `\s+ → " "`, então não há injeção por quebra de linha.
+      Apagar o `fix-criativo-covers.mjs` **reduziu** superfície: ele consumia
+      `SUPABASE_SERVICE_ROLE_KEY`, credencial que ignora RLS
+- [x] `test:unit` verde a cada passo — 667, em todos os commits
+- [ ] `test:smoke` (exige build; não roda com o dev server no ar)
 - [ ] Responsividade em 390 / 768 / 1280 / 1920
-- [ ] Reexecução da checagem de a11y do Pilar 3
-- [ ] `test:unit` + `test:smoke` verdes
+- [ ] Build de produção comparado à linha de base do Pilar 1
+
+**`AUDIT_FINAL.md` não será criado.** Seria a terceira fonte do mesmo fato,
+ao lado deste arquivo e do `technical-debt.md` — o defeito que esta própria
+empreitada corrigiu em outros quatro documentos. O resultado da auditoria
+está acima e nas pendências abaixo.
+
+**O que esta revisão NÃO cobre, e é bom dizer:** nenhum arquivo tocado pela
+branch atravessa autenticação, autorização ou entrada de usuário.
+`requireAdmin()`, `verifySession`, `firestore.rules`, o middleware e a
+allowlist do GitHub ficaram intactos — logo, também não foram auditados.
 
 ## Pilar 8 — Entrega
 
-- [x] Branch `chore/qualidade-2026-08`, commits coerentes por frente — **6**
+- [x] Branch `chore/qualidade-2026-08`, commits coerentes por frente — **11**
 - [ ] PR único, com antes/depois e instruções de teste
 - [ ] Bump de versão + tag anotada (regra: todo push carrega as duas)
 
@@ -234,6 +296,94 @@ nesta sessão, então captura de tela falha por não haver composição de
 quadros. As provas até aqui são numéricas — razão de contraste medida, ids
 resolvidos, regras no CSS servido. Se o PR precisar de imagem, ela terá de
 sair de uma execução sua com a pane aberta.
+
+---
+
+# 🔖 Pendências — para retomar sem este contexto
+
+Cada uma diz **o que é**, **como fazer** e **como saber que ficou pronto**.
+Ordem sugerida: P6 e P7 fecham a entrega; P2 e P3 continuam a auditoria; P1 e
+P4 são os caros e opcionais.
+
+## P1 — Polimento de interação (Pilar 4, nada feito)
+
+Alvos de toque ≥ 44 px no mobile, hover consistente, estados de carregamento
+e vazio, durações de resposta a clique.
+
+**Comece pelo alvo de toque:** é o único item mensurável sem julgamento. Numa
+página aberta, `document.querySelectorAll('button,a[href]')` e o
+`getBoundingClientRect()` de cada um, com o viewport em 390 px.
+
+**A salvaguarda vale mais que a lista:** só entra mudança justificável por um
+número (px, ms, razão de contraste) ou por regra de WCAG. Sem isso, este
+pilar vira redesign por acúmulo — que foi explicitamente excluído do escopo.
+
+## P2 — Os 11 contrastes inconclusivos do `/criativo`
+
+Cabeçalhos de capítulo (`k-kicker`, `k-body`) sobre `radial-gradient`. O
+medidor compara contra a parada **mais desfavorável** do gradiente — verde
+`rgb(157,255,48)` num caso, laranja `rgb(255,107,31)` noutro — e isso gera
+falso positivo quando o texto assenta sobre a parte escura.
+
+**Precisa de olho humano, não de medição.** Nesta sessão a pane do navegador
+não compunha quadros, então captura de tela falhava. Abra `/criativo`, olhe
+onde o texto cai, e decida caso a caso.
+
+## P3 — Contraste nas páginas internas
+
+Só as **homes** dos três realms foram medidas. O projeto tem **77 arquivos
+`page.tsx`**; varrer todos não cabe.
+
+**Critério:** uma listagem e um detalhe por realm. Os tokens são
+compartilhados, então se a home e mais duas passam, o padrão do realm está
+são e o que escapa é caso isolado.
+
+**Ferramenta:** a skill `front-a11y` em `~/.claude/skills/` carrega o medidor
+pronto, já com as duas correções que este trabalho custou (conversão de
+`color(srgb …)` por canvas, e exclusão de texto com contorno).
+
+## P4 — `src/app/anfitriao/page.tsx`, 737 linhas
+
+Único arquivo acima do limite de 500 da convenção.
+
+**Não ataque de improviso.** É a home de um realm com o conteúdo editorial do
+jornal embutido no JSX: quebrar em componentes é refatoração **e**
+movimentação de conteúdo ao mesmo tempo, a combinação em que "sumiu um
+pedaço" passa batido — e há regra de preservação de conteúdo valendo.
+
+**Se for fazer:** um commit só de extração, sem tocar em uma vírgula de
+texto, e comparação do HTML renderizado antes e depois. Sem essa garantia, o
+débito é menos ruim que a correção.
+
+## P5 — Fechar a auditoria
+
+Falta `test:smoke` (exige build feito, e **nunca** com o `next dev` no ar),
+responsividade em 390/768/1280/1920, e um build de produção comparado à base:
+**103 kB** compartilhados, middleware **32,3 kB**.
+
+## P6 — Abrir o PR
+
+Branch pronta. O antes/depois em imagem depende de uma sessão com a pane do
+navegador visível; as provas atuais são numéricas e estão nos commits.
+
+## P7 — Bump de versão + tag anotada
+
+Regra do projeto: **todo push carrega as duas**, e o selo do `/desenvolvedor`
+lê a **tag**, não a release. Esta branch mexe em CSS e scripts, então é
+`v0.5.0`. Ao lançar, mova o bloco *Não lançado* do `CHANGELOG.md`.
+
+## P8 — Skill de animação, bloqueada por permissão
+
+`motion-dev-animations-skill` é um dos **dois** repositórios reais da lista
+original de 15. O clone foi recusado pelo classificador de permissões nesta
+sessão e **não foi contornado**. Se quiser, rode você:
+
+```bash
+git clone --depth 1 https://github.com/199-biotechnologies/motion-dev-animations-skill.git ~/.claude/skills/motion-dev-animations
+```
+
+Depois dele, `npm run sync:skills` acrescenta a entrada na página — agora sem
+apagar as outras 55.
 
 ---
 

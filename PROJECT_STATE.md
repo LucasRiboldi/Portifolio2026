@@ -3,10 +3,14 @@
 > Resumo executivo do estado real do projeto. Atualize a cada marco.
 > Para o conhecimento estável e detalhado, veja `docs/project-knowledge/`.
 >
-> **Última atualização:** 2026-08-12, sincronização com o `NEXT_STEPS.md`.
-> O bloqueio do upload de mídia **caiu**: verificado fim a fim em 05/08
-> (seção 5). Não há bug aberto — o que resta é higiene de credencial e
-> validação em produção do Prophet Wire.
+> **Última atualização:** 2026-08-12. O bloqueio do upload de mídia **caiu**:
+> verificado fim a fim em 05/08 (seção 5). Não há bug aberto na `main` — o que
+> resta é higiene de credencial e validação em produção do Prophet Wire.
+>
+> **Existe trabalho fora da `main`:** a branch `chore/qualidade-2026-08`, com
+> 11 commits de acessibilidade, ferramentas e documentação, ainda não mesclada.
+> O que ela fez e o que ficou pendente está no **`PLAN.md`**, seção
+> "COMECE AQUI" — inclusive as 8 pendências numeradas `P1`–`P8`.
 
 ---
 

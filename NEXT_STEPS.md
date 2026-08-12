@@ -10,6 +10,20 @@
 
 ---
 
+## ⚠️ Há trabalho fora da `main` — leia antes
+
+A branch **`chore/qualidade-2026-08`** carrega uma empreitada de qualidade com
+11 commits: quatro correções de acessibilidade medidas, o `sync:skills`
+consertado, código morto removido e o `CHANGELOG.md`. **Ainda não foi
+mesclada.**
+
+O registro completo — o que foi analisado, o que foi feito e as **8 pendências
+numeradas** (`P1` a `P8`) — está no **`PLAN.md`**, na seção "COMECE AQUI".
+Este arquivo aqui segue sendo o backlog do produto; o `PLAN.md` é o daquela
+empreitada.
+
+---
+
 ## Estado em uma linha
 
 Site no ar, login e CRUD funcionando, **667 testes passando** (medido em 12/08). **O upload de

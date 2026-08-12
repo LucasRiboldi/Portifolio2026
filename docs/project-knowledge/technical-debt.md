@@ -8,6 +8,11 @@
 > conteúdo a repor e validações pendentes moram lá, não aqui.
 >
 > **Revisado em:** 2026-08-12, conferido item a item contra o código.
+>
+> **Débitos abertos na branch `chore/qualidade-2026-08`,** ainda não mesclada:
+> `src/app/anfitriao/page.tsx` com 737 linhas (único acima do limite de 500) e
+> 11 contrastes inconclusivos no `/criativo`, que dependem de conferência
+> visual. Detalhe e critério em `PLAN.md`, pendências `P4` e `P2`.
 
 ---
 
