@@ -118,17 +118,42 @@ Não entram no relatório porque não se sustentaram:
 | `admin.css` — `.mm-input` com `outline: none` | `.mm-input:focus` define borda + anel de 3px |
 | `dracula.css`, `eightbit.css` | Todas as supressões têm substituto em `:focus` |
 
-### ⚠️ Lacuna conhecida do Pilar 3
+### Contraste — os três realms, medidos
 
-**O contraste só foi medido em `/criativo`.** Faltam `/desenvolvedor` e
-`/anfitriao` — e são os dois candidatos mais prováveis a reprovar: o Dracula
-é tema escuro com acentos saturados, e o jornal é tinta sobre papel
-envelhecido, que é onde o contraste costuma cair sem ninguém notar.
+| Realm | Antes | Depois |
+|---|---|---|
+| `/desenvolvedor` | **53 reprovações** | **0** |
+| `/anfitriao` | — | **0**, já estava limpo |
+| `/criativo` | 1 defeito confirmado (setas da galeria) | corrigido; 11 inconclusivos, abaixo |
 
-**O projeto tem 77 arquivos `page.tsx`.** Auditoria exaustiva não cabe no
-orçamento de nenhuma empreitada. O critério é amostrar por realm: a home, uma
-página de listagem e uma de detalhe. Se as três passam, o padrão do realm
-está são; o que escapa é caso isolado, não sistêmico.
+**A previsão estava errada.** Eu apostava no jornal como pior caso — tinta
+sobre papel envelhecido. Ele passou limpo de primeira. Quem reprovava era o
+Dracula, e por um motivo só: `--d-comment` (`#6272a4`) dá **3,03:1** sobre o
+`#282a36`. Basta para filete e texto grande, reprova para corpo pequeno.
+
+Todas as 53 falhas eram a mesma cor, em 12 classes, sempre como texto. O
+conserto foi no token semântico que já existia para o papel: `--dev-ink-dim`
+passou a apontar para `--d-comment-texto` (`#7b90cf`, 4,55:1). O `#6272a4`
+canônico do Dracula continua onde é filete e ícone.
+
+### Os 11 do `/criativo` ficam por confirmar à vista
+
+São cabeçalhos de capítulo (`k-kicker`, `k-body`) sobre `radial-gradient`.
+O medidor compara contra a **parada mais desfavorável** do gradiente — verde
+`rgb(157,255,48)` num caso, laranja `rgb(255,107,31)` noutro. É conservador
+de propósito, e gera falso positivo quando o texto cai fisicamente sobre a
+parte escura.
+
+**Não dá para resolver por medição nesta sessão:** a pane do navegador não
+compõe quadros, então não há captura para conferir onde o texto assenta.
+Fica registrado como pendência de olho humano, não como defeito.
+
+### Escopo, para quem continuar
+
+**O projeto tem 77 arquivos `page.tsx`.** Auditoria exaustiva não cabe. O
+critério usado foi a home de cada realm; para ir além, amostrar uma listagem
+e um detalhe por realm. Se as três passam, o padrão do realm está são — os
+tokens são compartilhados, então o que escapa é caso isolado.
 
 ## Pilar 4 — Polimento de interação, dentro da identidade
 
