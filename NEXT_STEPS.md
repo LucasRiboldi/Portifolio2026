@@ -12,7 +12,7 @@
 
 ## Estado em uma linha
 
-Site no ar, login e CRUD funcionando, **640 testes passando**. **O upload de
+Site no ar, login e CRUD funcionando, **667 testes passando** (medido em 12/08). **O upload de
 mídia funciona fim a fim** — imagem, áudio, PDF e vídeo, verificado em produção
 em 05/08 com um mp4 de 9,19 MB que sobe e toca na videoteca.
 

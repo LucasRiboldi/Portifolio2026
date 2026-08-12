@@ -34,16 +34,28 @@ Preservá-los é regra, não preferência.
 
 ---
 
-## Pilar 1 — Linha de base mensurável
+## Pilar 1 — Linha de base mensurável ✅
 
-Sem número de partida não há como afirmar melhora no fim.
+Medida em 12/08, antes de qualquer alteração.
 
-- [ ] `lint`, `tsc --noEmit` e `test:unit` — registrar o estado inicial
-- [ ] Build de produção: tempo, número de páginas, avisos
-- [ ] Peso do bundle por rota (o `build` do Next já reporta)
-- [ ] Console limpo nas rotas principais dos três realms
+- [x] `lint` — limpo
+- [x] `tsc --noEmit` — limpo
+- [x] `test:unit` — **667 testes** em 40 arquivos, 22,8 s
+- [x] Build de produção — verde
+- [x] Peso do bundle: **103 kB** compartilhados por todas as rotas; middleware
+      32,3 kB; rota mais pesada observada `/design-system/realms/[realm]` a
+      37,9 kB próprios / 208 kB de first load
+- [x] Console sem erros em `/criativo/sala`, `/design-system/components/overlays`
+      e `/anfitriao`
 
-**Pronto quando:** os números estão neste arquivo e servem de comparação.
+**Correção que a medição obrigou:** os documentos diziam "640 testes"; o número
+real é 667, e o commit `fdac461` já o registrava. Eu havia propagado o 640 para
+o `PROJECT_STATE` em 12/08. Corrigido em `CLAUDE.md`, `PROJECT_STATE.md`,
+`NEXT_STEPS.md` e `technical-debt.md`.
+
+Falta na base: o topo do relatório de build (rotas dos três realms) não foi
+capturado — o comando reteve só as últimas 60 linhas. Recuperável num próximo
+build, sem valer um build inteiro agora.
 
 ## Pilar 2 — Revisão crítica (`REVIEW_REPORT.md`)
 
@@ -56,15 +68,55 @@ Suspeita não verificada é o que custou três dias em 04/08.
 
 ## Pilar 3 — Acessibilidade (WCAG 2.1 AA)
 
+- [x] **Foco visível — dois defeitos achados e corrigidos** (ver abaixo)
+- [x] `prefers-reduced-motion` — 147 usos em 85 arquivos; a base já era sólida
 - [ ] Contraste nos três realms — o jornal 1920 e o spiderverse são os
       candidatos naturais a reprovar
-- [ ] Navegação por teclado: foco visível, ordem, armadilhas
-- [ ] `prefers-reduced-motion` respeitado em toda animação nova e existente
+- [ ] Ordem de tabulação e armadilhas de foco
 - [ ] Nomes acessíveis em controles só-ícone (o player tem vários)
 - [ ] Landmarks e hierarquia de headings
 
-**Pronto quando:** as violações estão corrigidas ou registradas com
-justificativa explícita de por que ficam.
+### Defeito 1 — `SvTooltip` descrevia por um id inexistente
+
+`sv-overlay.tsx` trazia `aria-describedby="tt"` com a string fixa, e **nenhum
+elemento do arquivo declarava `id="tt"`**. A descrição acessível apontava para
+o vazio: o balão aparecia na tela e não existia para quem usa leitor de tela.
+Duas tooltips na mesma página ainda colidiriam no mesmo id.
+
+O mesmo elemento focável levava `outline-none` sem substituto — zero marca de
+foco, falha de WCAG 2.4.7.
+
+Corrigido com `React.useId()` e anel em `focus-visible`.
+
+**Verificado no navegador:** as duas tooltips de
+`/design-system/components/overlays` agora têm ids distintos
+(`_R_32atp…`, `_R_52atp…`), ambos resolvendo para um alvo real com
+`role="tooltip"` e o texto certo. As três regras do anel existem no CSS
+compilado, inclusive a cor (`--tw-ring-color: var(--sv-cyan)`).
+
+### Defeito 2 — o índice do jornal não dizia onde você aterrissou
+
+`.dpx-anchor:focus { outline: none }` sem a contraparte. São 11 seções com
+`tabIndex={-1}` em `/anfitriao`, alvos do "Índice desta Edição": quem salta
+pelo teclado não recebia nenhuma indicação do destino.
+
+Suprimir o contorno está certo — foco por programa desenharia um anel em volta
+de meia página. Faltava o `:focus-visible`, que o navegador só aplica quando a
+última interação foi de teclado. **O projeto já tinha a solução:**
+`estudos.css:93` usa exatamente esse par, com o porquê no comentário.
+
+**Verificado no navegador:** 11 âncoras, todas com `tabindex="-1"`, e a regra
+nova servida com `outline: 2px solid var(--anf-ink); outline-offset: 6px`.
+
+### Três suspeitas descartadas por verificação
+
+Não entram no relatório porque não se sustentaram:
+
+| Suspeita | Por que não é defeito |
+|---|---|
+| `sv-input.tsx` — campo com `outline-none` | O invólucro tem `focus-within` com anel de 3px e mudança de borda |
+| `admin.css` — `.mm-input` com `outline: none` | `.mm-input:focus` define borda + anel de 3px |
+| `dracula.css`, `eightbit.css` | Todas as supressões têm substituto em `:focus` |
 
 ## Pilar 4 — Polimento de interação, dentro da identidade
 

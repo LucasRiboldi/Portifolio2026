@@ -103,7 +103,7 @@ cada um está no `PROJECT_STATE.md`.
 |---|---|---|
 | 🔴 Crítico | `/login` respondia 500 em produção | `jwks-rsa` fazia `require()` de ESM. `overrides` fixando `jose ^5.10.0` no `package.json`. `/login` responde 200 |
 | 🟠 | Nenhum fluxo de escrita exercido | Login, CRUD, cupom público e upload de mídia verificados em produção (01/08 e 05/08) |
-| 🟠 | Sem CI | `.github/workflows/ci.yml` — `build` (tokens, lint, 640 unitários, build, 13 de fumaça) e `integration` em paralelo |
+| 🟠 | Sem CI | `.github/workflows/ci.yml` — `build` (tokens, lint, 667 unitários, build, 13 de fumaça) e `integration` em paralelo |
 | 🟠 | Sem teste de integração da camada de dados | `tests-integration/`, 21 casos contra o emulador do Firestore |
 | 🟠 | Env do Preview não sincronizado | 10 variáveis definidas em 31/07. Falta só o token do Blob, que virou o item 1 |
 | 🟡 | `admin_allowlist` era coleção órfã | Removida do `lib/firebase/schema.ts` em 31/07 |
