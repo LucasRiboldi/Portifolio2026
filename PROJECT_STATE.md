@@ -3,9 +3,10 @@
 > Resumo executivo do estado real do projeto. Atualize a cada marco.
 > Para o conhecimento estável e detalhado, veja `docs/project-knowledge/`.
 >
-> **Última atualização:** 2026-08-05, reescrita da home do `/desenvolvedor`
-> (seção 2.1). Bloqueio anterior segue de pé: o upload de mídia está QUEBRADO
-> (seção 5).
+> **Última atualização:** 2026-08-12, sincronização com o `NEXT_STEPS.md`.
+> O bloqueio do upload de mídia **caiu**: verificado fim a fim em 05/08
+> (seção 5). Não há bug aberto — o que resta é higiene de credencial e
+> validação em produção do Prophet Wire.
 
 ---
 
@@ -143,10 +144,10 @@ acontece em produção ou em `localhost`.
 | Firebase Auth | ✅ Habilitado. **Login verificado em produção** (01/08/2026) — fluxo OAuth completo, não só a rota respondendo |
 | Domínios autorizados (Auth) | ✅ `portifolio2026-two.vercel.app` acrescentado em 01/08. Ver seção 3.1 — previews continuam de fora, por construção |
 | Firebase Storage | ❌ Não usado — exige plano Blaze. Mídia vai para o Vercel Blob |
-| Vercel Blob | ❌ **Store não está servindo o que foi gravado** — URL de upload responde 404 (01/08). Vinculado. Autentica por **OIDC** (`BLOB_STORE_ID` + `VERCEL_OIDC_TOKEN`) por padrão; o token estático é fallback e só ele serve para upload direto de vídeo |
+| Vercel Blob | ✅ **Grava e serve** — verificado fim a fim em 05/08 (seção 5). O 404 registrado em 01/08 era referência pendurada no Firestore, não falha de escrita. Autentica por **OIDC** (`BLOB_STORE_ID` + `VERCEL_OIDC_TOKEN`) por padrão; o token estático é fallback e só ele serve para upload direto do navegador |
 | Env vars (Production) | ✅ Completas, incluindo `FIREBASE_CLIENT_EMAIL` / `FIREBASE_PRIVATE_KEY` |
 | Env vars (Preview) | ✅ 10 variáveis definidas em 31/07 (Firebase cliente + Admin SDK + `ADMIN_GITHUB_LOGIN`). Falta só `BLOB_READ_WRITE_TOKEN` |
-| CI (GitHub Actions) | ✅ Dois jobs em paralelo: `build` (`tokens:check`, lint, 580 unitários, build, **13 de fumaça**) e `integration` (emulador do Firestore, 21 casos). Integração e fumaça entraram em 01/08 |
+| CI (GitHub Actions) | ✅ Dois jobs em paralelo: `build` (`tokens:check`, lint, **640 unitários**, build, **13 de fumaça**) e `integration` (emulador do Firestore, 21 casos). Integração e fumaça entraram em 01/08 |
 | Protection Bypass | ✅ Ligado em 31/07 para permitir testar previews por `curl` |
 | Projeto Supabase antigo | ⚠️ No ar como rede de segurança, mas **conferido em 01/08: seguro apagar** — 0 URLs do Supabase em 170 documentos do Firestore, nenhuma dependência instalada |
 
@@ -168,24 +169,37 @@ persistiu. Prova três coisas de uma vez: a escrita chega ao Firestore, o
 **✅ Cupom público do jornal** (01/08). Formulário de `/anfitriao` chega em
 `/admin/messages`.
 
+**✅ Upload de mídia, fim a fim** (05/08). Um mp4 de **9,19 MB** sobe pelo
+painel e toca na videoteca (45 s, 720×1280), sem erro de CSP no console.
+Imagem, áudio e PDF também. Eram **três** defeitos independentes, os três
+fechados em 04–05/08:
+
+1. `/admin/media` apagava arquivo em uso sem avisar — o 404 de 01/08 era
+   referência pendurada, não falha de escrita. Guardado por
+   `lib/admin/media-refs.ts`.
+2. A plataforma corta o corpo do request em ~4,5 MB e `SERVER_ACTION_LIMIT`
+   valia 25 MB. Arquivo acima de 4 MB agora sobe direto ao Blob.
+3. **O CSP bloqueava o upload direto** — `connect-src` não listava o Vercel
+   Blob, então o navegador recusava o PUT (barra travada em 0%, sem erro na
+   tela). `media-src` também faltava, e teria bloqueado a reprodução.
+
+**A lição:** os testes unitários não pegaram nenhum dos três, porque todos
+param na borda do nosso código. E o sintoma ("o arquivo não chega") apontava
+para o armazenamento, enquanto o culpado estava no `next.config.ts` — quando um
+upload trava sem erro na tela, **o console do navegador é o primeiro lugar a
+olhar**.
+
 **Ainda não exercido:**
 
-- **❌ Upload de mídia: QUEBRADO.** Testado manualmente em 01/08 e falhou de
-  três formas. (a) O arquivo **não chega ao Blob**: um mp3 gravou a URL no
-  Firestore e ela responde **404** — é por isso que o player do rádio não
-  toca. (b) O teto real é **4,5 MB da plataforma**, não os 25 MB anunciados:
-  um PDF de 4,52 MB falhou com "An unexpected response was received from the
-  server"; o `bodySizeLimit: "26mb"` não manda. (c) O vídeo trava em
-  "Enviando…" para sempre, sem erro e sem progresso.
-
-  **A lição:** os 580 testes unitários não pegaram nenhum dos três, porque
-  todos param na borda do nosso código — nenhum chega ao Blob de verdade. O
-  teste manual de dez minutos valeu mais que as três suítes. Detalhes e o
-  próximo passo em `NEXT_STEPS.md` itens 1 a 4.
-- **Gatilho do Prophet Wire em produção** — `CRON_SECRET` está vazio. A lógica
-  já foi exercitada contra Firestore real em 01/08 (persistência, dedup pelo
-  hash no banco, histórico e o portão fechado): falta só a variável de ambiente
-  e um disparo verdadeiro.
+- **Gatilho do Prophet Wire em produção.** O caminho feliz foi provado em 05/08,
+  mas contra o **build local** com um `CRON_SECRET` de teste: portão fechado
+  (401 sem segredo), pipeline rodando, persistência, histórico e **dedup
+  conferido por hash** (46 documentos, 46 hashes distintos). Falta o disparo
+  contra o deploy — comando em `NEXT_STEPS.md` item 6.
+- **Cobertura das fontes do Prophet Wire.** A auditoria de 05/08 levou o
+  relatório a `errors: 0`, ao preço da cobertura: a maior parte das 24 fontes
+  segue desligada, cada uma com motivo e data em `lib/prophet-wire/sources.ts`.
+  Ver `NEXT_STEPS.md` item 7.
 - **Login em preview** — impossível por construção, ver seção 3.1.
 
 ---
@@ -213,7 +227,7 @@ persistiu. Prova três coisas de uma vez: a escrita chega ao Firestore, o
 ```bash
 npm run dev            # servidor local (porta 3000)
 npm run build          # build de produção — NÃO rode com o dev server no ar
-npm run test:unit      # 580 testes (sem rede, sem credencial)
+npm run test:unit      # 640 testes (sem rede, sem credencial)
 npm run test:smoke     # sobe o build e confere os portoes
 npm run test:integration  # emulador do Firestore (precisa de JDK 21)
 npm run lint
@@ -237,9 +251,10 @@ npx firebase-tools deploy --only firestore --project portifolio-ac32a
    ainda válido nesta máquina. Higiene de credencial pendente.
 2. Projeto Supabase antigo ainda ativo (rede de segurança).
 3. `BLOB_READ_WRITE_TOKEN` ausente no ambiente **Preview** — falta marcar o
-   ambiente na conexão do store, não caçar o token. Sem ele, só o upload de
-   **vídeo** cai (token de cliente não sai por OIDC); imagem, áudio e PDF
-   sobem. Impacto baixo: sem login em preview, não há painel de onde subir.
+   ambiente na conexão do store, não caçar o token. Sem ele cai o upload
+   **direto** (todo arquivo acima de 4 MB, não só vídeo — o token de cliente
+   não sai por OIDC); abaixo disso passa pela Server Action e sobe. Impacto
+   baixo: sem login em preview, não há painel de onde subir.
 4. Actions do CI declaram Node 20 (forçado para 24 pelo runner). Aviso hoje,
    falha quando o suporte cair.
 5. CSP com `unsafe-inline` em `script-src`.

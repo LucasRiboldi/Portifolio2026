@@ -29,7 +29,7 @@ que não existia:
 
 O Prophet Wire foi exercitado no mesmo dia: pipeline, dedup e histórico
 funcionam, e a auditoria de fontes levou o relatório a **`errors: 0`** — ao
-preço da cobertura, que caiu para 6 fontes ativas (item 7).
+preço da cobertura, que caiu para **7 fontes ativas** de 24 (item 7).
 
 **A lição que sobra:** o sintoma ("o arquivo não chega") apontava para o
 armazenamento, e o culpado estava no `next.config.ts`. Quando um upload trava

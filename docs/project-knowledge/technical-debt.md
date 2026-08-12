@@ -2,107 +2,110 @@
 
 > Ordenado por prioridade. Ao resolver um item, remova-o daqui e registre a
 > mudança no commit — lista que só cresce vira ruído.
-
----
-
-## 🔴 Crítico
-
-### 1. `/login` responde 500 em produção
-
-**Estado:** aberto em 2026-07-31. Único bloqueio conhecido.
-
-Erro nos logs de runtime: `require() of ES Module /var/task/node_modules/…` (o
-CLI trunca o nome do módulo).
-
-Causa provável: `firebase-admin` arrasta dependências ESM-only. O trace do
-lambda (`.next/server/app/login/page.js.nft.json`) confirma `node-fetch` v3 e
-família (`fetch-blob`, `formdata-polyfill`, `data-uri-to-buffer`,
-`web-streams-polyfill`) e `jose`.
-
-Só o `/login` quebra por ser a primeira rota **dinâmica** que toca o Admin SDK
-em runtime. **Não reproduz localmente:** `next start` responde 200.
-
-Tentativas:
-1. `serverExternalPackages: ["firebase-admin"]` — alvo certo, efeito não
-   confirmado (não se verificou qual commit estava no deploy testado).
-2. Lazy-loading do SDK web — **hipótese errada**: `firebase` não aparece no
-   trace do lambda. Ficou como boa prática, não como correção.
-
-Próximo passo: obter a mensagem **completa** no dashboard da Vercel
-(Observability → Runtime Logs) e agir sobre o módulo exato. Alternativas:
-incluir os pacotes ESM em `serverExternalPackages`, ou fixar `node-fetch` em v2
-via `overrides`.
+>
+> Aqui fica o **débito estrutural** (o que o código carrega). O backlog
+> acionável, com passo a passo, é o `NEXT_STEPS.md` — credenciais a rotacionar,
+> conteúdo a repor e validações pendentes moram lá, não aqui.
+>
+> **Revisado em:** 2026-08-12, conferido item a item contra o código.
 
 ---
 
 ## 🟠 Importante
 
-### 2. Nenhum fluxo de escrita foi exercido de verdade
+### 1. `BLOB_READ_WRITE_TOKEN` ausente no ambiente Preview
 
-Login completo, CRUD pelo painel, upload no Blob e o cupom público **nunca
-foram executados**. O código está tipado, testado em unidade e compila — mas
-zero usuários existem no Firebase Auth.
+O store do Vercel Blob não está conectado ao ambiente *preview*, e o token é
+*sensitive* — não há de onde copiar por CLI. Sem ele cai o upload **direto**
+(todo arquivo acima de 4 MB, porque o token de cliente não sai por OIDC);
+abaixo disso o arquivo passa pela Server Action e sobe.
 
-### 3. Sem CI
+Impacto real é baixo enquanto o item 2 existir: sem login em preview, não há
+painel de onde subir. Como reconectar: `NEXT_STEPS.md` item 8.
 
-Não há pipeline. `tsc`, `lint`, testes e build dependem de disciplina local. Um
-workflow do GitHub Actions rodando os quatro em PR resolveria.
+### 2. Login em preview é impossível por construção
 
-### 4. Sem teste de integração da camada de dados
+Cada deploy de preview ganha URL com hash único, e o Firebase Auth exige o
+domínio na allowlist — não aceita curinga. Consequência: nenhum fluxo
+autenticado pode ser testado antes do merge.
 
-Os 535 testes mockam `lib/firebase/query`. Nada exercita `collection.ts` contra
-um Firestore real. O emulador do Firebase cobriria isso sem custo.
+Saída conhecida, se incomodar: alias fixo de branch na Vercel, autorizado uma
+vez. Detalhes em `auth.md` §6.1.
 
-### 5. Variáveis do ambiente Preview não sincronizadas
+### 3. Actions do CI declaram Node 20
 
-`sync:vercel-env` falhou para *preview*. Deploys de branch sobem sem backend.
+O runner força 24 e o build passa. Hoje é aviso; vira falha quando o suporte ao
+20 cair. Corrigir é uma linha no `ci.yml`.
 
 ---
 
 ## 🟡 Melhorias
 
-### 6. `image-resolver` hotlinka imagens da fonte
+### 4. `image-resolver` hotlinka imagens da fonte
 
 O navegador do leitor revela o IP ao domínio de origem da notícia. Reservir as
 imagens (agora há Vercel Blob) resolveria — está anotado no próprio arquivo.
 
-### 7. `admin_allowlist` é coleção órfã
+### 5. `verifySession` consulta o Admin SDK a cada request autenticado
 
-Existe no schema e não é usada: a allowlist virou `ADMIN_GITHUB_LOGIN` + custom
-claim. Remover da declaração e do banco.
+São **duas** idas ao Admin SDK por request (`verifySessionCookie` e a leitura do
+usuário), necessárias para ler claims sempre atualizadas. O `cache()` do React
+deduplica dentro do mesmo request, não entre requests. Aceitável num painel de
+um usuário; se o volume crescer, cachear por curta janela.
 
-### 8. Coleções do realm arcane permanentemente vazias
+### 6. `mapearUsosDeMidia` relê o banco a cada exclusão
 
-`prophet_tutorials`, `prophet_mechanics`, `prophet_prototypes` e
-`prophet_resources` nunca tiveram conteúdo — nem no Postgres. Ou criar seed, ou
-remover do catálogo do painel: telas que nunca mostram nada confundem.
+Lê todas as coleções declaradas para responder "este arquivo está em uso?".
+São ~170 documentos e roda só no painel, então hoje não incomoda.
 
-### 9. `verifySession` consulta o Admin SDK a cada request autenticado
+Se um dia incomodar, a saída **não é cachear** — é gravar o vínculo na hora em
+que a URL entra no documento, em vez de descobri-lo depois. Não faça antes de
+doer: o índice derivado é o que não pode dessincronizar.
 
-Necessário para ler claims sempre atualizadas. Aceitável num painel de um
-usuário; se o volume crescer, cachear por curta janela.
-
-### 10. Warning de lint pré-existente
-
-`src/hooks/use-mouse-parallax.ts:56` — dependência `ref` faltando no
-`useEffect`.
-
-### 11. CSP com `unsafe-inline` em `script-src`
+### 7. CSP com `unsafe-inline` em `script-src`
 
 Compromisso de um CSP por header, sem nonce por request. Um CSP estrito exigiria
 middleware em todas as rotas. Registrado no próprio `next.config.ts`.
+
+> **Lembrete que já custou caro:** o CSP faz parte do caminho do upload de
+> mídia. Foi ele que bloqueou o PUT direto ao Blob em 04/08, sem erro na tela —
+> só no console do navegador. Ao mexer em mídia, olhe o `next.config.ts`.
 
 ---
 
 ## 🔵 Higiene
 
-### 12. Projeto Supabase antigo ainda no ar
+### 8. Projeto Supabase antigo ainda no ar
 
-Mantido de propósito como rede de segurança. Desligar quando o Firebase estiver
-validado ponta a ponta.
+Mantido como rede de segurança durante a migração. **Conferido em 01/08 e
+reconferido em 04/08: seguro apagar** — zero dependências instaladas e 0 URLs do
+Supabase em 170 documentos do Firestore; o que sobra é conteúdo editorial
+(snippets, ADRs, tags).
 
-### 13. Convenção de idioma mista na camada de dados
+Sobra um arquivo morto: `scripts/fix-criativo-covers.mjs` importa o SDK do
+Supabase, que não está instalado — já não roda. Apagar junto.
+
+### 9. Convenção de idioma mista na camada de dados
 
 Funções novas em português (`buscarLinhas`), antigas em inglês
 (`listContactMessages`). Não vale refatorar só por isso; padronize ao tocar em
-cada módulo.
+cada módulo. Um varredão produz diff enorme, sem comportamento novo, que
+atrapalha o `git blame` do resto.
+
+---
+
+## Resolvidos (2026-07-31 a 2026-08-05)
+
+Registrados aqui só para que ninguém os reabra por engano. O relato completo de
+cada um está no `PROJECT_STATE.md`.
+
+| Era | O que era | Como fechou |
+|---|---|---|
+| 🔴 Crítico | `/login` respondia 500 em produção | `jwks-rsa` fazia `require()` de ESM. `overrides` fixando `jose ^5.10.0` no `package.json`. `/login` responde 200 |
+| 🟠 | Nenhum fluxo de escrita exercido | Login, CRUD, cupom público e upload de mídia verificados em produção (01/08 e 05/08) |
+| 🟠 | Sem CI | `.github/workflows/ci.yml` — `build` (tokens, lint, 640 unitários, build, 13 de fumaça) e `integration` em paralelo |
+| 🟠 | Sem teste de integração da camada de dados | `tests-integration/`, 21 casos contra o emulador do Firestore |
+| 🟠 | Env do Preview não sincronizado | 10 variáveis definidas em 31/07. Falta só o token do Blob, que virou o item 1 |
+| 🟡 | `admin_allowlist` era coleção órfã | Removida do `lib/firebase/schema.ts` em 31/07 |
+| 🟡 | Coleções do arcane permanentemente vazias | As quatro páginas estão no ar com 12 documentos. O conteúdo é rascunho a reescrever — virou `NEXT_STEPS.md` item 3 |
+| 🟡 | Warning de lint em `use-mouse-parallax.ts` | `ref` declarado nas dependências, com o porquê no comentário |
