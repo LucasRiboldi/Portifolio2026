@@ -152,9 +152,11 @@ pessoal fica de fora.
 
 ## Pilar 5 — Saúde do código
 
-- [ ] **Código morto:** `scripts/fix-criativo-covers.mjs`, 174 linhas que
-      importam `@supabase/supabase-js`, desinstalado. Já não roda. Custo
-      quase zero, e é o item mais seguro da lista
+- [x] **Código morto removido** (12/08): `scripts/fix-criativo-covers.mjs`,
+      174 linhas importando `@supabase/supabase-js`, desinstalado. Nenhum
+      código o chamava e não estava nos scripts do `package.json`. De quebra,
+      `setup-structure.mjs` deixou de recriar `src/lib/supabase` — resíduo da
+      migração que teria confundido quem rodasse `npm run setup`
 - [ ] `simplify` nos módulos tocados por esta branch
 - [ ] `src/app/anfitriao/page.tsx` — **737 linhas**, único acima do limite de
       500 da convenção

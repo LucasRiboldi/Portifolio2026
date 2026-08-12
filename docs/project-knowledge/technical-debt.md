@@ -82,8 +82,9 @@ reconferido em 04/08: seguro apagar** — zero dependências instaladas e 0 URLs
 Supabase em 170 documentos do Firestore; o que sobra é conteúdo editorial
 (snippets, ADRs, tags).
 
-Sobra um arquivo morto: `scripts/fix-criativo-covers.mjs` importa o SDK do
-Supabase, que não está instalado — já não roda. Apagar junto.
+O código morto que sobrava já saiu (12/08): `scripts/fix-criativo-covers.mjs`
+foi apagado, e `scripts/setup-structure.mjs` deixou de recriar
+`src/lib/supabase`. Falta só desligar o projeto lá.
 
 ### 9. Convenção de idioma mista na camada de dados
 

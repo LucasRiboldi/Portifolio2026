@@ -295,8 +295,10 @@ comportamento novo, que atrapalha o `git blame` do resto.
 
 As menções que sobram são conteúdo editorial (snippets, ADRs, tags).
 
-**Sobra um arquivo morto:** `scripts/fix-criativo-covers.mjs` importa o SDK do
-Supabase, que não está instalado — já não roda. Apagar depois do desligamento.
+**O arquivo morto já saiu:** `scripts/fix-criativo-covers.mjs` foi apagado em
+12/08. Era correção pontual de UPDATE no Supabase, de execução única e já
+executada, importando um SDK desinstalado. `scripts/setup-structure.mjs`
+deixou de recriar `src/lib/supabase` na mesma data.
 
 **Como:** https://app.supabase.com → projeto → Settings → General → Delete
 project. **Irreversível.**
