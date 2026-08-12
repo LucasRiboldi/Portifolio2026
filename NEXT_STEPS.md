@@ -64,13 +64,29 @@ Ao registrar uma URL quebrada, registre-a inteira.
 
 # 🟡 Conteúdo
 
-## 1. A zona Rádio do `/criativo` está sem música
+## 1. A zona Rádio toca, mas com uma faixa só — e uma delas é muda
 
-**Não é bug** — é conteúdo faltando. As faixas fantasma saíram do seed em 04/08,
-e os dois `audio_url` que restavam apontavam para arquivos apagados; foram
-zerados na mesma data. `public/musica/` só tem o `README.md`.
+**Conferido em 12/08, no navegador, contra o banco de produção.** A descrição
+antiga ("está sem música") deixou de valer quando você subiu o áudio do
+"Samurai Blue" — o item 2 registrou a subida e este aqui não acompanhou.
 
-Para publicar, dois caminhos, e **nenhum passa por editar o seed**:
+Estado real da coleção `tracks`:
+
+| Faixa | `audio_url` | Situação |
+|---|---|---|
+| Samurai Blue | Blob, **200**, 0,91 MB, `audio/mpeg` | **toca** — 44,8 s, `readyState` 4 na página |
+| sirius | vazio | entra na playlist rotulada "sem áudio" e não toca |
+
+`public/musica/` continua só com o `README.md`, então a playlist inteira vem do
+banco.
+
+**Não é bug** — o mecanismo está íntegro dos dois lados: a pasta é lida por
+`getPlaylistFromFolder`, o banco por `repos/criativo`, e as duas fontes são
+somadas em `ZoneRadio`. O `MusicPlayer` já trata o vazio (mensagem própria) e
+já rotula a faixa sem arquivo. Zero erro de CSP no console.
+
+**O que falta é conteúdo, e só você tem os arquivos.** Dois caminhos, nenhum
+passando por editar o seed:
 
 1. jogar o mp3 em `public/musica/` e commitar — o `README.md` de lá explica a
    convenção `Artista - Título.mp3`;
@@ -78,6 +94,12 @@ Para publicar, dois caminhos, e **nenhum passa por editar o seed**:
 
 **Os dois funcionam hoje** — o teto de 4,5 MB deixou de barrar o caminho 2 em
 04/08. Um mp3 de até 25 MB sobe pelo painel.
+
+**Decisão pendente sobre a "sirius":** ou recebe o arquivo, ou sai do ar
+(`published: false` pelo `/admin`). Deixá-la publicada e muda repõe exatamente
+o que a limpeza de 04/08 tirou do seed — um aviso de "sem áudio" permanente,
+que o comentário em `src/data/criativo-zones.ts:258` registra como erro a não
+repetir.
 
 ## 2. Repor o que falta de mídia
 
