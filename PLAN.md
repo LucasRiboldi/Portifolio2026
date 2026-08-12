@@ -200,9 +200,10 @@ princípio para o índice derivado.
 
 ## Pilar 6 — Documentação (só o que falta)
 
-- [ ] `CHANGELOG.md` — as quatro tags já existem, anotadas e com assunto
-      descritivo (`v0.2.0` 05/08 a `v0.4.0` 06/08). É transcrever, não
-      arqueologia: o material está pronto
+- [x] `CHANGELOG.md` — as quatro versões, mais a seção *Não lançado* desta
+      branch. Começa em `v0.2.0` por decisão declarada no topo do arquivo: os
+      285 commits anteriores não têm tag, e reconstruí-los daria um changelog
+      inventado com data de hoje
 - [ ] Atualizar `docs/project-knowledge/*` com o que esta branch mudou
 - [ ] `llms.txt` — **o item mais dispensável de todo o plano.** Este
       repositório já tem `CLAUDE.md`, que faz o mesmo trabalho e é lido de
