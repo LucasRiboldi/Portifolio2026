@@ -31,6 +31,20 @@ import path from "path";
 const SKILLS_DIR = path.join(os.homedir(), ".claude", "skills");
 const DATA_FILE = path.join(process.cwd(), "src", "data", "skills.ts");
 
+/**
+ * Skills que existem na máquina e NÃO entram na página pública.
+ *
+ * Nem tudo que está em `~/.claude/skills` é vitrine deste portfólio: a pasta
+ * é pessoal e mistura ferramenta de trabalho com o que faz sentido mostrar.
+ * Sem esta lista, apagar a entrada à mão não resolve — a varredura seguinte
+ * a traz de volta, e o motivo da remoção se perde.
+ */
+const NAO_PUBLICAR = new Set([
+  // Análise de licitação sob a Lei 14.133/2021. Ferramenta de trabalho, sem
+  // relação com o que este portfólio mostra. Removida da página em 12/08/2026.
+  "licitacao-133-analyzer",
+]);
+
 /** Lê name + description do frontmatter de um SKILL.md */
 function readFrontmatter(dir) {
   const file = ["SKILL.md", "SKILL.MD"]
@@ -71,6 +85,7 @@ const dirs = fs
   .readdirSync(SKILLS_DIR, { withFileTypes: true })
   .filter((d) => d.isDirectory())
   .map((d) => d.name)
+  .filter((d) => !NAO_PUBLICAR.has(d))
   .filter((d) => readFrontmatter(d));
 
 const prune = process.argv.includes("--prune");
@@ -79,13 +94,21 @@ const present = new Set(dirs);
 const added = [];
 
 /** Entradas do arquivo cuja pasta não existe nesta máquina. */
-const ausentes = [...existing.keys()].filter((n) => !present.has(n));
+const ausentes = [...existing.keys()].filter((n) => !present.has(n) && !NAO_PUBLICAR.has(n));
 const removed = prune ? ausentes : [];
+
+/** Entradas do arquivo que a lista de exclusão manda tirar. */
+const despublicadas = [...existing.keys()].filter((n) => NAO_PUBLICAR.has(n));
 
 // Parte do ARQUIVO, não da pasta: a base é o que já está publicado, e a
 // varredura só acrescenta. Sem `--prune`, nenhuma entrada existente sai.
+//
+// A única remoção que independe de `--prune` é a de `NAO_PUBLICAR`, e ela é
+// segura pelo motivo oposto ao do bug antigo: é uma decisão escrita no
+// código, não uma inferência a partir do estado da máquina.
 const merged = [];
 for (const [name, entry] of existing) {
+  if (NAO_PUBLICAR.has(name)) continue;
   if (prune && !present.has(name)) continue;
   merged.push(entry);
 }
@@ -133,6 +156,8 @@ fs.writeFileSync(DATA_FILE, out);
 console.log(`✅ Sincronizado: ${merged.length} skills`);
 if (added.length) console.log(`   + adicionadas (revisar categoria): ${added.join(", ")}`);
 if (removed.length) console.log(`   - removidas (--prune): ${removed.join(", ")}`);
+if (despublicadas.length)
+  console.log(`   - fora da página por NAO_PUBLICAR: ${despublicadas.join(", ")}`);
 
 if (ausentes.length && !prune) {
   console.log(
