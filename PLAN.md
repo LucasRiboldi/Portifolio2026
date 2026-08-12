@@ -118,33 +118,69 @@ Não entram no relatório porque não se sustentaram:
 | `admin.css` — `.mm-input` com `outline: none` | `.mm-input:focus` define borda + anel de 3px |
 | `dracula.css`, `eightbit.css` | Todas as supressões têm substituto em `:focus` |
 
+### ⚠️ Lacuna conhecida do Pilar 3
+
+**O contraste só foi medido em `/criativo`.** Faltam `/desenvolvedor` e
+`/anfitriao` — e são os dois candidatos mais prováveis a reprovar: o Dracula
+é tema escuro com acentos saturados, e o jornal é tinta sobre papel
+envelhecido, que é onde o contraste costuma cair sem ninguém notar.
+
+**O projeto tem 77 arquivos `page.tsx`.** Auditoria exaustiva não cabe no
+orçamento de nenhuma empreitada. O critério é amostrar por realm: a home, uma
+página de listagem e uma de detalhe. Se as três passam, o padrão do realm
+está são; o que escapa é caso isolado, não sistêmico.
+
 ## Pilar 4 — Polimento de interação, dentro da identidade
 
 Não é redesign. É a diferença entre "funciona" e "responde bem ao toque".
 
-- [ ] Estados de foco visíveis e coerentes nos três realms
+- [ ] Alvos de toque ≥ 44 px no mobile — **mensurável, começar por aqui**
+- [ ] Estados de foco nos três realms (o Pilar 3 cobriu dois componentes)
 - [ ] Hover consistente em botões, links e cards
-- [ ] Springs e durações revisados; nada acima de ~300 ms em resposta a clique
 - [ ] Estados de carregamento e vazio onde faltarem
-- [ ] Alvos de toque ≥ 44 px no mobile
+- [ ] Springs e durações; nada acima de ~300 ms em resposta a clique
 
 **Restrição:** cada realm mantém a sua linguagem. Consistência aqui significa
 *mesma qualidade de resposta*, não mesma aparência.
 
+**O risco deste pilar, dito em voz alta:** "polimento" é o item mais fácil de
+transformar em redesign por acúmulo. Cada ajuste parece pequeno e o conjunto
+muda a cara do site — que é exatamente o que a decisão de escopo excluiu.
+Salvaguarda: só entra mudança que possa ser justificada por um número (alvo
+de toque em px, duração em ms, contraste) ou por uma regra de WCAG. Gosto
+pessoal fica de fora.
+
 ## Pilar 5 — Saúde do código
 
-- [ ] `simplify` nos módulos tocados
-- [ ] Código morto: começar por `scripts/fix-criativo-covers.mjs`, que importa
-      um SDK desinstalado e já não roda
-- [ ] Arquivos acima de 500 linhas — localizar e dividir se houver
+- [ ] **Código morto:** `scripts/fix-criativo-covers.mjs`, 174 linhas que
+      importam `@supabase/supabase-js`, desinstalado. Já não roda. Custo
+      quase zero, e é o item mais seguro da lista
+- [ ] `simplify` nos módulos tocados por esta branch
+- [ ] `src/app/anfitriao/page.tsx` — **737 linhas**, único acima do limite de
+      500 da convenção
 - [ ] Sem regressão: `test:unit` verde a cada passo
+
+**Sobre as 737 linhas, antes de alguém partir para cima:** é a home de um
+realm, com o conteúdo editorial do jornal embutido no JSX. Quebrar em
+componentes é refatoração de arquivo grande **e** movimentação de conteúdo ao
+mesmo tempo — a combinação em que "sumiu um pedaço" passa despercebido, e há
+regra de preservação de conteúdo valendo.
+
+Se for feito: um commit só para extrair, sem tocar em texto, e comparação do
+HTML renderizado antes e depois. Se não der para garantir isso, o débito é
+menos ruim que a correção. O item 12 do `technical-debt.md` documenta o mesmo
+princípio para o índice derivado.
 
 ## Pilar 6 — Documentação (só o que falta)
 
-- [ ] `CHANGELOG.md` — Keep a Changelog, casado com as tags `v0.2.0`+
-- [ ] `llms.txt` — mapa curto do projeto para leitura por IA
-- [ ] Atualizar `docs/project-knowledge/*` com o que a auditoria mudar
-- [ ] Capturas novas no `README.md`, se o Pilar 4 alterar o visual
+- [ ] `CHANGELOG.md` — as quatro tags já existem, anotadas e com assunto
+      descritivo (`v0.2.0` 05/08 a `v0.4.0` 06/08). É transcrever, não
+      arqueologia: o material está pronto
+- [ ] Atualizar `docs/project-knowledge/*` com o que esta branch mudou
+- [ ] `llms.txt` — **o item mais dispensável de todo o plano.** Este
+      repositório já tem `CLAUDE.md`, que faz o mesmo trabalho e é lido de
+      fato. Criar um segundo mapa é a divergência do Pilar 6 com outro nome
+- [ ] Capturas novas no `README.md`, só se o Pilar 4 alterar o visual
 
 **Não criar** `ARCHITECTURE.md` nem `CONTRIBUTING.md` na raiz: duplicariam
 `docs/project-knowledge/architecture.md` e `conventions.md`. Duas fontes do
@@ -161,9 +197,29 @@ mesmo fato divergem — foi o defeito corrigido nos commits `782db8c` e
 
 ## Pilar 8 — Entrega
 
-- [ ] Branch `chore/qualidade-2026-08`, commits coerentes por frente
+- [x] Branch `chore/qualidade-2026-08`, commits coerentes por frente — **6**
 - [ ] PR único, com antes/depois e instruções de teste
 - [ ] Bump de versão + tag anotada (regra: todo push carrega as duas)
+
+**Sobre o antes/depois em imagem:** a pane do navegador não fica visível
+nesta sessão, então captura de tela falha por não haver composição de
+quadros. As provas até aqui são numéricas — razão de contraste medida, ids
+resolvidos, regras no CSS servido. Se o PR precisar de imagem, ela terá de
+sair de uma execução sua com a pane aberta.
+
+---
+
+## Fora do plano original, feito mesmo assim
+
+Dois defeitos que a própria empreitada revelou, nenhum previsto:
+
+- **`sync:skills` apagava 54 das 55 skills** de `src/data/skills.ts` a cada
+  execução em máquina diferente. Tratava `~/.claude/skills` como fonte de
+  verdade sobre conteúdo publicado. Passou a ser aditivo, com `--prune` para
+  quando a intenção for remover. (`ad6f175`)
+- **`licitacao-133-analyzer` fora da página pública**, por decisão do Lucas,
+  com a exclusão registrada em `NAO_PUBLICAR` para não voltar na varredura
+  seguinte. (`b5c703f`)
 
 ---
 
