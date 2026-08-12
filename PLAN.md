@@ -361,16 +361,30 @@ Falta `test:smoke` (exige build feito, e **nunca** com o `next dev` no ar),
 responsividade em 390/768/1280/1920, e um build de produção comparado à base:
 **103 kB** compartilhados, middleware **32,3 kB**.
 
-## P6 — Abrir o PR
+## P6 — PR aberto ✅
 
-Branch pronta. O antes/depois em imagem depende de uma sessão com a pane do
-navegador visível; as provas atuais são numéricas e estão nos commits.
+O antes/depois em imagem depende de uma sessão com a pane do navegador
+visível; as provas atuais são numéricas e estão nos commits e no corpo do PR.
 
-## P7 — Bump de versão + tag anotada
+## P7 — Bump feito, tag PENDENTE DE PROPÓSITO
 
-Regra do projeto: **todo push carrega as duas**, e o selo do `/desenvolvedor`
-lê a **tag**, não a release. Esta branch mexe em CSS e scripts, então é
-`v0.5.0`. Ao lançar, mova o bloco *Não lançado* do `CHANGELOG.md`.
+`package.json` já está em **0.5.0**. A tag `v0.5.0` **não** foi criada, e não
+é esquecimento:
+
+`getVersaoSite`, em `lib/repos/tech-feed.ts`, busca
+`/repos/{repo}/tags?per_page=100` e escolhe a **maior semver do repositório
+inteiro** — não olha em que branch a tag está. Criar `v0.5.0` numa branch não
+mesclada faria a produção, que roda a `main`, anunciar uma versão que ela não
+contém. É o defeito da `v0.3.1` de novo, pelo caminho inverso.
+
+**Depois do merge, na `main`:**
+
+```bash
+git tag -a v0.5.0 -m "v0.5.0 - acessibilidade medida, sync:skills aditivo, CHANGELOG"
+git push origin v0.5.0
+```
+
+E mova o bloco *Não lançado* do `CHANGELOG.md` para `[0.5.0]`, com a data.
 
 ## P8 — Skill de animação, bloqueada por permissão
 
