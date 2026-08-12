@@ -86,4 +86,5 @@ export const skills: Skill[] = [
   { name: 'sparc-methodology', command: '/sparc-methodology', category: 'orchestration', description: 'Metodologia SPARC (Spec, Pseudocode, Architecture, Refine, Complete).' },
   { name: 'swarm-advanced', command: '/swarm-advanced', category: 'orchestration', description: 'Padrões avançados de swarm para pesquisa, dev e testes.' },
   { name: 'swarm-orchestration', command: '/swarm-orchestration', category: 'orchestration', description: 'Orquestra swarms multi-agente para execução paralela de tarefas.' },
+  { name: 'licitacao-133-analyzer', command: '/licitacao-133-analyzer', category: 'orchestration', description: 'Analisa documentos de licitação sob a Lei 14.133/2021 — organiza a pasta do pregão (identifica edital e anexos, agrupa por empr...' },
 ]
