@@ -59,6 +59,7 @@ export const skills: Skill[] = [
   { name: 'core-web-vitals', command: '/core-web-vitals', category: 'performance', description: 'Otimiza LCP, INP e CLS para experiência e ranqueamento.' },
   { name: 'web-performance-optimization', command: '/web-performance-optimization', category: 'performance', description: 'Loading, bundle size, caching e performance de runtime.' },
   { name: 'clean-code', command: '/clean-code', category: 'quality', description: 'Padrões pragmáticos: direto, sem over-engineering nem comentário inútil.' },
+  { name: 'front-a11y', command: '/front-a11y', category: 'quality', description: 'Auditoria WCAG 2.1 AA: mede contraste de verdade, acha foco invisível e ARIA quebrada.' },
   { name: 'code-review-excellence', command: '/code-review-excellence', category: 'quality', description: 'Transforma review em troca de conhecimento, não em gatekeeping.' },
   { name: 'code-reviewer', command: '/code-reviewer', category: 'quality', description: 'Code review completo (TS/JS/Python/Go…) com checklist e scan de segurança.' },
   { name: 'code-simplifier', command: '/code-simplifier', category: 'quality', description: 'Simplifica e refina código preservando o comportamento.' },

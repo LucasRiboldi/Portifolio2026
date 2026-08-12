@@ -62,7 +62,12 @@
   margin: 0;
   border: var(--k-ink-w, 3px) solid var(--k-ink);
   border-radius: var(--k-radius, 2px);
+  /* `--k-zone-card` e `--k-zone-ink` são um PAR: toda zona define os dois
+     juntos em `comic-2026.css`. Tomar a superfície da zona e deixar a tinta
+     ser herdada quebra nas zonas escuras — na Banca, o cartão é #062a52 e a
+     tinta herdada continua quase preta. */
   background: var(--k-zone-card, #fff);
+  color: var(--k-zone-ink, var(--k-ink));
   overflow: hidden;
   box-shadow:
     7px 7px 0 0 var(--k-ink),
@@ -121,8 +126,11 @@
   height: 2.6rem;
   border: var(--k-ink-w, 3px) solid var(--k-ink);
   border-radius: 50%;
+  /* Mesmo par de tokens da `.k-gal-folha`. Com `--k-ink` fixo, as setas ‹ ›
+     ficavam em 1,32:1 sobre o cartão da Banca — glifo quase preto em
+     azul-marinho, invisível na prática. */
   background: var(--k-zone-card, #fff);
-  color: var(--k-ink);
+  color: var(--k-zone-ink, var(--k-ink));
   font-size: 1.4rem;
   line-height: 1;
   cursor: pointer;
