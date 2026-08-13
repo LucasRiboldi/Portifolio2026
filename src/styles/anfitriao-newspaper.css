@@ -552,14 +552,27 @@
   outline-offset: 2px;
 }
 
+/* O alvo de toque aqui é o LABEL, não o radio: a linha inteira é clicável.
+   Ele media 320 × 15 px, empilhado a 19 px de distância entre centros —
+   reprovava o WCAG 2.5.8 (AA) nas duas contas, tamanho e espaçamento.
+
+   `min-height` em vez de `padding`: a linha já centra o conteúdo por
+   `align-items`, então crescer a caixa não desloca nada. 26 px em vez dos
+   24 do critério porque o valor é arredondado pelo navegador, e 24 exato
+   deixava a conta na fronteira.
+
+   O radio em si continua em 0.9em, e isso está certo: ele é a marca visual,
+   não a área de acerto. */
 .dpx-choice {
   display: flex;
   align-items: center;
+  min-height: 1.625rem;
   gap: var(--anf-space-2);
   margin-bottom: var(--anf-space-1);
   font-family: var(--anf-body);
   font-size: var(--anf-text-sm);
   color: var(--anf-ink);
+  cursor: pointer;
 }
 
 .dpx-check {

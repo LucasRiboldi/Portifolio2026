@@ -50,11 +50,11 @@ método validado aqui e as duas correções do medidor que este trabalho expôs.
 
 ## O que falta — ver "Pendências" no fim deste arquivo
 
-**Abertas:** `P1` polimento de interação · `P4` as 737 linhas · `P5` fechar a
-auditoria · `P8` skill de animação bloqueada por permissão.
+**Abertas:** `P1` polimento de interação · `P4` as 737 linhas · `P8` skill de
+animação bloqueada por permissão.
 
-**Fechadas:** `P2` (falso positivo, 13/08) · `P3` (5 rotas, 3 defeitos
-corrigidos, 13/08) · `P6` PR #1 · `P7` v0.5.0.
+**Fechadas:** `P2` (falso positivo) · `P3` (5 rotas, 3 defeitos) · `P5`
+(build, fumaça, responsividade) · `P6` PR #1 · `P7` v0.5.0.
 
 ---
 
@@ -207,7 +207,10 @@ tokens são compartilhados, então o que escapa é caso isolado.
 
 Não é redesign. É a diferença entre "funciona" e "responde bem ao toque".
 
-- [ ] Alvos de toque ≥ 44 px no mobile — **mensurável, começar por aqui**
+- [ ] Alvos de toque ≥ 44 px no mobile — **conforto, não conformidade.** O
+      `P5` já fechou o WCAG 2.5.8 (AA), que pede 24 × 24 com exceção de
+      espaçamento. Os 44 px são diretriz de plataforma e nível AAA: subir a
+      essa barra é decisão de qualidade, e mexe em muita coisa
 - [ ] Estados de foco nos três realms (o Pilar 3 cobriu dois componentes)
 - [ ] Hover consistente em botões, links e cards
 - [ ] Estados de carregamento e vazio onde faltarem
@@ -423,11 +426,52 @@ pedaço" passa batido — e há regra de preservação de conteúdo valendo.
 texto, e comparação do HTML renderizado antes e depois. Sem essa garantia, o
 débito é menos ruim que a correção.
 
-## P5 — Fechar a auditoria
+## P5 — Resolvido ✅ (2026-08-13)
 
-Falta `test:smoke` (exige build feito, e **nunca** com o `next dev` no ar),
-responsividade em 390/768/1280/1920, e um build de produção comparado à base:
-**103 kB** compartilhados, middleware **32,3 kB**.
+**Build de produção:** verde, **zero avisos**, 85 rotas. Comparado à base:
+
+| Métrica | Base (12/08) | Agora |
+|---|---|---|
+| First Load JS compartilhado | 103 kB | **103 kB** |
+| Middleware | 32,3 kB | **32,3 kB** |
+
+Os hashes dos chunks compartilhados também são idênticos — as correções foram
+token de CSS e atributo, que não entram no bundle. Rota mais pesada:
+`/criativo`, 231 kB de first load.
+
+**Fumaça:** **13 de 13** contra o build de produção, na porta 3100.
+
+**Responsividade — zero transbordo horizontal** em toda a matriz medida:
+
+| Rota | 390 | 768 | 1280 | 1920 |
+|---|---|---|---|---|
+| `/criativo` | ✅ | ✅ | — | ✅ |
+| `/anfitriao` | ✅ | — | — | ✅ |
+| `/desenvolvedor` | ✅ | — | ✅ | — |
+
+### Um defeito de alvo de toque, e uma correção de critério
+
+O plano dizia "alvos ≥ 44 px". **O número está errado para AA:** 44 px é
+diretriz de plataforma (Apple HIG, Material) e nível AAA. O WCAG **2.5.8
+(AA)** pede **24 × 24**, com exceção quando o espaçamento entre centros
+alcança 24 px.
+
+Pelo critério certo, quase tudo passa: no `/criativo` a 768 px havia 12 alvos
+abaixo de 24, e **os 12 passam pela exceção** — a menor distância ao vizinho
+era 64 px.
+
+**O que reprovou de verdade:** as quatro linhas de escolha do cupom do jornal.
+E o defeito não estava onde o medidor apontou primeiro:
+
+- o medidor acusou o `<input type=radio>`, de 12 × 12 px;
+- mas o alvo clicável é o `<label>` em volta — **320 × 15 px**, empilhado a
+  19 px entre centros. Reprova nas duas contas;
+- e o radio, isolado, teria a exceção de "controle do agente de usuário"…
+  se `.dpx-check` não definisse `width: 0.9em`. O autor mexeu, então não tem.
+
+Corrigido com `min-height: 1.625rem` no label — 26 px, e não os 24 do
+critério, porque o navegador arredonda e 24 exato ficava na fronteira.
+Medido depois: 26 px, zero reprovações.
 
 ## P6 — PR aberto ✅
 

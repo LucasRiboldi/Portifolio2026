@@ -31,6 +31,9 @@ Registro das mudanças que valem para quem usa ou lê o site. Segue
   o par que a zona já declarava: **14,9:1**.
 - **Separador `·` do rodapé** — 1,74:1 e sem marcação. Ganhou `aria-hidden`,
   porque é delimitador e não conteúdo, e opacidade de 20% para 50%.
+- **Linhas de escolha do cupom do jornal** — o alvo clicável é o `<label>`, e
+  ele media 320 × 15 px empilhado a 19 px, abaixo dos 24 × 24 do WCAG 2.5.8
+  (AA) e fora da exceção de espaçamento. Agora 26 px de altura.
 
 ### Documentação
 
