@@ -3,14 +3,18 @@
 > Resumo executivo do estado real do projeto. Atualize a cada marco.
 > Para o conhecimento estável e detalhado, veja `docs/project-knowledge/`.
 >
-> **Última atualização:** 2026-08-12. O bloqueio do upload de mídia **caiu**:
-> verificado fim a fim em 05/08 (seção 5). Não há bug aberto na `main` — o que
-> resta é higiene de credencial e validação em produção do Prophet Wire.
+> **Última atualização:** 2026-08-13, no fecho da empreitada de qualidade
+> (v0.5.0 pelo PR #1, continuada até a v0.6.0). O bloqueio do upload de mídia
+> **caiu**: verificado fim a fim em 05/08 (seção 5).
 >
-> **Existe trabalho fora da `main`:** a branch `chore/qualidade-2026-08`, com
-> 11 commits de acessibilidade, ferramentas e documentação, ainda não mesclada.
-> O que ela fez e o que ficou pendente está no **`PLAN.md`**, seção
-> "COMECE AQUI" — inclusive as 8 pendências numeradas `P1`–`P8`.
+> **Um bug aberto e diagnosticado:** a entrada por rolagem do `/desenvolvedor`
+> nunca dispara, e por isso o hover dos cartões não transiciona. O alvo é
+> `home-motor.tsx`, **não o CSS** — tirar a regra de estilo esconde a página.
+> Ver `NEXT_STEPS.md`, no topo, e `PLAN.md` `P9`.
+>
+> O resto do que falta é conteúdo e higiene de credencial. O `PLAN.md` guarda
+> o que foi medido na empreitada, inclusive as suspeitas que **não** viraram
+> defeito — leia antes de reabrir investigação.
 
 ---
 

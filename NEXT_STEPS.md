@@ -6,29 +6,58 @@
 > Ao concluir um item: remova-o daqui, atualize `PROJECT_STATE.md` e diga no
 > commit o que foi verificado de verdade.
 >
-> **Atualizado:** 2026-08-05, depois da auditoria de fontes do Prophet Wire.
+> **Atualizado:** 2026-08-13, no fecho da empreitada de qualidade.
 
 ---
 
-## ⚠️ Há trabalho fora da `main` — leia antes
+## 🐞 Um defeito conhecido, aberto e diagnosticado
 
-A branch **`chore/qualidade-2026-08`** carrega uma empreitada de qualidade com
-11 commits: quatro correções de acessibilidade medidas, o `sync:skills`
-consertado, código morto removido e o `CHANGELOG.md`. **Ainda não foi
-mesclada.**
+**A entrada por rolagem do `/desenvolvedor` nunca acontece.** O
+`IntersectionObserver` de `src/components/dev/home-motor.tsx` não marca
+elemento nenhum: rolei os 5406 px da página e **zero** ganharam
+`data-visivel`. Nenhum dos 18 alvos nasce dentro da janela, então o laço de
+marcação do carregamento também não pega nenhum.
 
-O registro completo — o que foi analisado, o que foi feito e as **8 pendências
-numeradas** (`P1` a `P8`) — está no **`PLAN.md`**, na seção "COMECE AQUI".
-Este arquivo aqui segue sendo o backlog do produto; o `PLAN.md` é o daquela
-empreitada.
+**Consequência visível:** o hover dos cartões (`.dv-card`, `.dv-stat`,
+`.dv-radar-item`) não transiciona. A regra de entrada ocupa a propriedade
+`transition` de todos eles, e a borda salta em vez de acender — contra o que
+`realm-motion.ts` documenta.
+
+**A armadilha, e é séria:** o `transition` dessa regra é o que mantém a página
+visível. Tirá-lo restaura o hover **e esconde 18 elementos para sempre**,
+porque nada nunca é revelado. Tentei duas vezes; as duas foram revertidas.
+
+**Não conserte pelo CSS.** O alvo é o observador, no `home-motor.tsx`. Exige
+navegador com a tela visível — medir opacidade depois não basta, é preciso ver
+a entrada acontecer. Detalhe completo em `PLAN.md`, pendência `P9`.
+
+Sem pressa: a página funciona e o conteúdo aparece. O que se perde é a
+animação de chegada e o refinamento do hover.
+
+---
+
+## 📓 A empreitada de qualidade fechou
+
+Lançada como **v0.5.0** (PR #1) e continuada até a **v0.6.0**. O registro do
+que foi analisado, medido e decidido está no **`PLAN.md`** — inclusive as
+suspeitas que **não** viraram defeito, para ninguém refazer a investigação.
+
+Saíram de lá, e por isso não estão mais nesta lista: código morto da era
+Supabase, o `sync:skills` que apagava o site, e a contagem de testes errada
+nos documentos.
 
 ---
 
 ## Estado em uma linha
 
-Site no ar, login e CRUD funcionando, **667 testes passando** (medido em 12/08). **O upload de
+Site no ar em **v0.6.0**, login e CRUD funcionando, **667 testes** verdes,
+build de produção sem avisos. Acessibilidade auditada e conforme em WCAG 2.1
+AA nas rotas amostradas — contraste, foco, ARIA e alvo de toque. **O upload de
 mídia funciona fim a fim** — imagem, áudio, PDF e vídeo, verificado em produção
 em 05/08 com um mp4 de 9,19 MB que sobe e toca na videoteca.
+
+**O que resta é conteúdo e higiene de credencial, não código quebrado** — com
+a exceção do defeito de animação registrado logo acima.
 
 Eram **três** defeitos independentes, e o diagnóstico antigo culpava um quarto
 que não existia:

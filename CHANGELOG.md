@@ -21,6 +21,14 @@ Registro das mudanças que valem para quem usa ou lê o site. Segue
 
 ## [Não lançado]
 
+Nada ainda.
+
+## [0.6.0] — 2026-08-13
+
+Continuação da empreitada de qualidade da v0.5.0: auditoria de acessibilidade
+levada às páginas internas, o arquivo mais longo do projeto partido, e a
+auditoria final fechada.
+
 ### Corrigido
 
 - **Etiqueta de categoria do cartão de projeto** — branco a 12 px sobre o
@@ -49,6 +57,20 @@ Registro das mudanças que valem para quem usa ou lê o site. Segue
   tomava a parada mais desfavorável de gradientes empilhados como se fosse o
   fundo. O pior deles media 1,16:1 pela parada e **12,11:1** de verdade.
   Nenhuma alteração de código.
+- **`motion-dev-animations` instalada** em `~/.claude/skills/`, depois de o
+  `SKILL.md` ser lido e vetado por inteiro. Fora do repositório do site; entra
+  aqui só porque aparece na página `/desenvolvedor/skills`.
+
+### Conhecido e não corrigido
+
+- **A entrada por rolagem do `/desenvolvedor` nunca dispara.** O
+  `IntersectionObserver` não marca elemento nenhum, e por isso o hover dos
+  cartões não transiciona. Duas correções pelo CSS foram tentadas e
+  revertidas: restauram o hover e escondem 18 elementos, porque o `transition`
+  da regra de entrada é o que segura a página visível. O alvo é
+  `home-motor.tsx`. Ver `PLAN.md`, `P9`.
+
+[0.6.0]: https://github.com/LucasRiboldi/Portifolio2026/compare/v0.5.0...v0.6.0
 
 ## [0.5.0] — 2026-08-13
 
@@ -171,7 +193,7 @@ Primeira versão declarada. Antes disto o projeto viveu dois meses sem tag.
   `uk-games-expo` mudou de caminho; e o `portal-games` responde 200 para
   qualquer URL, inclusive inventada.
 
-[Não lançado]: https://github.com/LucasRiboldi/Portifolio2026/compare/v0.5.0...HEAD
+[Não lançado]: https://github.com/LucasRiboldi/Portifolio2026/compare/v0.6.0...HEAD
 [0.5.0]: https://github.com/LucasRiboldi/Portifolio2026/compare/v0.4.0...v0.5.0
 [0.4.0]: https://github.com/LucasRiboldi/Portifolio2026/compare/v0.3.1...v0.4.0
 [0.3.1]: https://github.com/LucasRiboldi/Portifolio2026/compare/v0.3.0...v0.3.1
