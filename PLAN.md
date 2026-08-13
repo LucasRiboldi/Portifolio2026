@@ -584,19 +584,60 @@ A tag só foi criada **depois** do merge, e a ordem importava: `getVersaoSite`
 escolhe a maior semver do repositório inteiro, sem olhar branch. Taguear antes
 faria a produção anunciar uma versão que ela não continha.
 
-## P9 — O hover do `_dev` não transiciona, e o conserto óbvio apaga a página
+## P9 — Diagnosticado (13/08). A causa é o observador, não o CSS.
 
-Nasceu da medição do `P1`, onde está o detalhe completo. Em uma linha: a
-regra de entrada por rolagem sobrescreve o `transition` dos cartões, e trocar
-essa regra de `transition` para `animation` deixou 18 elementos invisíveis.
+**O sintoma visível** é o hover dos cartões do `_dev`, que não transiciona.
+**A causa raiz é outra, e mais séria:** a entrada por rolagem nunca acontece.
 
-**Antes de tentar de novo, responda à pergunta que eu não consegui:** por que
-`data-visivel` nunca aparece em nenhum elemento — nem no código atual — e
-mesmo assim a página é visível? Sem essa resposta, qualquer mudança na camada
-de movimento é chute.
+### O que ficou provado
 
-**Exige a pane do navegador visível.** É preciso ver a entrada acontecer, não
-só medir opacidade depois.
+**1. O `IntersectionObserver` não marca nada.** Rolei os 5406 px da página
+inteira, em passos de 400 px: **zero** elementos com `data-visivel`. E o laço
+que marca no carregamento (`home-motor.tsx:57`) também não marca, porque
+**nenhum dos 18 nasce dentro da janela** — todos ficam abaixo da dobra.
+
+**2. O React não apaga o atributo.** Escrevi `data-visivel="true"` à mão e ele
+sobreviveu. A hipótese registrada antes — de que um re-render limparia o que o
+motor escreve — está **descartada**.
+
+**3. O `transition` da regra de entrada é o que segura a página de pé.** Este
+é o achado que explica tudo:
+
+| Regra de entrada | Página | Hover |
+|---|---|---|
+| Com `transition` (atual) | visível | **quebrado** |
+| Sem `transition` (2 tentativas) | **18 invisíveis** | correto |
+
+Com `transition`, a mudança de opacidade 1 → 0 fica pendente e nunca completa
+para conteúdo que nunca foi pintado. Sem ele, o `opacity: 0` aplica na hora —
+e como nada nunca é revelado, **fica invisível para sempre**.
+
+O `transition` estava mascarando um observador quebrado. Tirá-lo não causa o
+defeito: **expõe** o que já estava lá.
+
+### Por que não corrigi
+
+Tentei duas vezes, medindo por navegação limpa (não `reload`, que confunde com
+Fast Refresh). As duas restauraram o hover exatamente como o guia documenta —
+`border-color`, `0.15s`, atraso `0s`, zero acima de 300 ms — e as duas
+apagaram a página. Revertidas, árvore idêntica ao commit.
+
+**Consertar o CSS sem consertar o observador troca um defeito visível por um
+pior.** A ordem certa é: primeiro fazer a revelação funcionar, depois libertar
+o `transition`.
+
+### Onde começar
+
+O alvo é `src/components/dev/home-motor.tsx`, não a folha de estilo. Descobrir
+por que o observador não dispara com `{ threshold: 0.12, rootMargin: "0px 0px
+-40px 0px" }` sobre os 18 alvos. **Exige a pane do navegador visível** — é
+preciso ver a entrada acontecer, e nesta sessão ela não compunha quadros.
+
+**Uma coisa que continua inexplicada:** com a regra atual, `getComputedStyle`
+devolve opacidade **1** mesmo com o seletor casando, o motor ligado e sem
+`data-visivel`. Conferi que a folha está ativa, sem `media`, sem `@layer`, e
+que a regra está no CSS servido. Isso pede o painel de estilos do DevTools,
+que eu não tenho aqui.
 
 ## P8 — Skill de animação, bloqueada por permissão
 
