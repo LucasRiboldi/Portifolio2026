@@ -366,25 +366,15 @@ responsividade em 390/768/1280/1920, e um build de produção comparado à base:
 O antes/depois em imagem depende de uma sessão com a pane do navegador
 visível; as provas atuais são numéricas e estão nos commits e no corpo do PR.
 
-## P7 — Bump feito, tag PENDENTE DE PROPÓSITO
+## P7 — Lançado como v0.5.0 ✅
 
-`package.json` já está em **0.5.0**. A tag `v0.5.0` **não** foi criada, e não
-é esquecimento:
+Mesclado em 2026-08-13 pelo PR #1, com **merge commit** e não squash: o
+`PLAN.md` cita `ad6f175` e `b5c703f`, que são commits da branch, e reescrever
+os SHAs deixaria as referências penduradas.
 
-`getVersaoSite`, em `lib/repos/tech-feed.ts`, busca
-`/repos/{repo}/tags?per_page=100` e escolhe a **maior semver do repositório
-inteiro** — não olha em que branch a tag está. Criar `v0.5.0` numa branch não
-mesclada faria a produção, que roda a `main`, anunciar uma versão que ela não
-contém. É o defeito da `v0.3.1` de novo, pelo caminho inverso.
-
-**Depois do merge, na `main`:**
-
-```bash
-git tag -a v0.5.0 -m "v0.5.0 - acessibilidade medida, sync:skills aditivo, CHANGELOG"
-git push origin v0.5.0
-```
-
-E mova o bloco *Não lançado* do `CHANGELOG.md` para `[0.5.0]`, com a data.
+A tag só foi criada **depois** do merge, e a ordem importava: `getVersaoSite`
+escolhe a maior semver do repositório inteiro, sem olhar branch. Taguear antes
+faria a produção anunciar uma versão que ela não continha.
 
 ## P8 — Skill de animação, bloqueada por permissão
 

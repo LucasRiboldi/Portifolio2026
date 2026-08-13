@@ -19,18 +19,15 @@ Registro das mudanças que valem para quem usa ou lê o site. Segue
 
 ---
 
-## [Não lançado] — sairá como 0.5.0
+## [Não lançado]
 
-Empreitada de qualidade da branch `chore/qualidade-2026-08`. Nada aqui muda o
-que o site mostra; muda quem consegue usá-lo e o que a documentação afirma.
+Nada ainda.
 
-> **A tag `v0.5.0` só pode ser criada depois do merge na `main`.** O
-> `package.json` já foi para 0.5.0 porque viaja com o código, mas o selo do
-> `/desenvolvedor` lê **todas as tags do repositório** e escolhe a maior
-> semver, sem olhar em que branch ela está (`lib/repos/tech-feed.ts`,
-> `getVersaoSite`). Taguear antes do merge faria a produção anunciar uma
-> versão que ela não contém — o mesmo defeito que a `v0.3.1` corrigiu, pelo
-> caminho inverso.
+## [0.5.0] — 2026-08-13
+
+Empreitada de qualidade da branch `chore/qualidade-2026-08` (PR #1). Nada aqui
+muda o que o site mostra; muda quem consegue usá-lo e o que a documentação
+afirma.
 
 ### Corrigido
 
@@ -147,7 +144,8 @@ Primeira versão declarada. Antes disto o projeto viveu dois meses sem tag.
   `uk-games-expo` mudou de caminho; e o `portal-games` responde 200 para
   qualquer URL, inclusive inventada.
 
-[Não lançado]: https://github.com/LucasRiboldi/Portifolio2026/compare/v0.4.0...HEAD
+[Não lançado]: https://github.com/LucasRiboldi/Portifolio2026/compare/v0.5.0...HEAD
+[0.5.0]: https://github.com/LucasRiboldi/Portifolio2026/compare/v0.4.0...v0.5.0
 [0.4.0]: https://github.com/LucasRiboldi/Portifolio2026/compare/v0.3.1...v0.4.0
 [0.3.1]: https://github.com/LucasRiboldi/Portifolio2026/compare/v0.3.0...v0.3.1
 [0.3.0]: https://github.com/LucasRiboldi/Portifolio2026/compare/v0.2.0...v0.3.0
