@@ -50,8 +50,11 @@ método validado aqui e as duas correções do medidor que este trabalho expôs.
 
 ## O que falta — ver "Pendências" no fim deste arquivo
 
-**Abertas:** `P1` polimento de interação · `P8` skill de animação bloqueada
-por permissão.
+**Abertas:** `P8` skill de animação bloqueada por permissão · **`P9`**, novo:
+o hover dos cartões do `_dev` não transiciona, e a correção óbvia esconde a
+página (nasceu da medição do `P1`).
+
+**Medida e encerrada:** `P1` — durações sem defeito; o que sobrou virou `P9`.
 
 **Fechadas:** `P2` (falso positivo) · `P3` (5 rotas, 3 defeitos) · `P4`
 (737 → 363 linhas) · `P5` (build, fumaça, responsividade) · `P6` PR #1 ·
@@ -311,18 +314,73 @@ Cada uma diz **o que é**, **como fazer** e **como saber que ficou pronto**.
 Ordem sugerida: P6 e P7 fecham a entrega; P2 e P3 continuam a auditoria; P1 e
 P4 são os caros e opcionais.
 
-## P1 — Polimento de interação (Pilar 4, nada feito)
+## P1 — Medido em 13/08. Um defeito real achado; a correção NÃO entrou.
 
-Alvos de toque ≥ 44 px no mobile, hover consistente, estados de carregamento
-e vazio, durações de resposta a clique.
+O que era mensurável foi medido. O que era gosto ficou de fora, conforme a
+salvaguarda deste item.
 
-**Comece pelo alvo de toque:** é o único item mensurável sem julgamento. Numa
-página aberta, `document.querySelectorAll('button,a[href]')` e o
-`getBoundingClientRect()` de cada um, com o viewport em 390 px.
+### Durações de resposta a clique — sem defeito
 
-**A salvaguarda vale mais que a lista:** só entra mudança justificável por um
-número (px, ms, razão de contraste) ou por regra de WCAG. Sem isso, este
-pilar vira redesign por acúmulo — que foi explicitamente excluído do escopo.
+| Rota | Interativos visíveis | Acima de 300 ms |
+|---|---|---|
+| `/criativo` | 22 | **0** |
+| `/desenvolvedor` | 49 | 4, e nenhum é resposta a clique |
+
+Os quatro do `/desenvolvedor` são entrada por rolagem (`opacity, transform`),
+não retorno de toque. O portal tem 600 ms em `flex`, que é a animação dos
+painéis de entrada. Nenhum é o caso que o critério visava.
+
+### 🔴 Defeito confirmado: o hover dos cartões do `_dev` não transiciona
+
+`realm-motion.ts:52` documenta: *"hover de card · border-color 150ms ·
+discreto, só a borda acende"*. Medido nos três componentes:
+
+```
+.dv-stat         transition-property: opacity, transform   (0.5s)
+.dv-card         transition-property: opacity, transform   (0.5s)
+.dv-radar-item   transition-property: opacity, transform   (0.5s)
+```
+
+Nenhum transiciona `border-color`. A regra
+`.dracula[data-motor="on"] [data-revelar]` declara `transition` como atalho
+completo e, sendo mais específica, **sobrescreve** o
+`transition: border-color var(--dev-dur-fast)` de cada componente. A borda
+salta no hover. O CSS declara uma intenção que o próprio CSS cancela.
+
+Agravante: o `transition-delay` do escalonamento (até 280 ms) continua
+casando depois da entrada — se a transição fosse restaurada sem tratar isso,
+o hover passaria a esperar um quarto de segundo.
+
+### Por que a correção não entrou
+
+Troquei a entrada de `transition` para `animation` — que não disputa a
+propriedade com ninguém. O hover voltou a ser exatamente o documentado
+(`border-color`, `0.15s`, atraso `0s`) e nenhum interativo passou de 300 ms.
+
+**E a página inteira ficou invisível.** Medido pelo mesmo caminho nos dois
+estados, para não confundir com artefato de Fast Refresh:
+
+| | elementos revelados | invisíveis |
+|---|---|---|
+| Original | 0 marcados | **0** |
+| Com a correção | 0 marcados | **18** |
+
+Revertido. O defeito é real e está provado; o conserto exige entender por que
+`data-visivel` **nunca é marcado** — em nenhuma das duas versões — e a página
+mesmo assim aparece. A suspeita é o próprio arquivo avisar: o motor escreve
+atributos no DOM que o React renderizou, e um re-render os apaga.
+
+**Quem for mexer precisa da pane do navegador visível para assistir à
+entrada acontecer.** Nesta sessão ela não compunha quadros, e trocar a camada
+de movimento às cegas foi exatamente o erro que este item alertava.
+
+### Fora de escopo, por decisão e não por esquecimento
+
+- **Alvos de 44 px:** conformidade AA fechou no `P5` (24 × 24 com exceção de
+  espaçamento). Os 44 são diretriz de plataforma e nível AAA — subir a barra
+  é decisão de qualidade sua, não defeito.
+- **Consistência de hover, springs, densidade:** não há número que sustente.
+  É gosto, e a salvaguarda deste item o exclui.
 
 ## P2 — Resolvido ✅ (2026-08-13): eram falso positivo, todos
 
@@ -525,6 +583,20 @@ os SHAs deixaria as referências penduradas.
 A tag só foi criada **depois** do merge, e a ordem importava: `getVersaoSite`
 escolhe a maior semver do repositório inteiro, sem olhar branch. Taguear antes
 faria a produção anunciar uma versão que ela não continha.
+
+## P9 — O hover do `_dev` não transiciona, e o conserto óbvio apaga a página
+
+Nasceu da medição do `P1`, onde está o detalhe completo. Em uma linha: a
+regra de entrada por rolagem sobrescreve o `transition` dos cartões, e trocar
+essa regra de `transition` para `animation` deixou 18 elementos invisíveis.
+
+**Antes de tentar de novo, responda à pergunta que eu não consegui:** por que
+`data-visivel` nunca aparece em nenhum elemento — nem no código atual — e
+mesmo assim a página é visível? Sem essa resposta, qualquer mudança na camada
+de movimento é chute.
+
+**Exige a pane do navegador visível.** É preciso ver a entrada acontecer, não
+só medir opacidade depois.
 
 ## P8 — Skill de animação, bloqueada por permissão
 
