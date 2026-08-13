@@ -99,10 +99,28 @@ export function SvDrawer({
 
 /* ---------------- Tooltip (hover/focus, CSS) ---------------- */
 export function SvTooltip({ label, children }: { label: string; children: React.ReactNode }) {
+  // `useId` e não a string fixa "tt": o id precisa ser único por instância.
+  // Com o valor fixo, duas tooltips na mesma página apontavam para o mesmo
+  // elemento — e, como o alvo nunca chegou a declarar o id, o
+  // `aria-describedby` referenciava algo inexistente e o leitor de tela não
+  // anunciava nada. O balão aparecia na tela e não existia para quem ouve.
+  const tipId = React.useId()
+
   return (
     <span className="group/tt relative inline-flex">
-      <span tabIndex={0} className="outline-none" aria-describedby="tt">{children}</span>
       <span
+        tabIndex={0}
+        // O `outline-none` sozinho deixava o elemento focável sem NENHUMA
+        // marca de foco: o balão abria por `group-focus-within`, mas quem
+        // navega por teclado não via onde estava. O anel devolve a indicação
+        // exigida pelo WCAG 2.4.7 sem trazer de volta o contorno do sistema.
+        className="rounded-sm outline-none focus-visible:ring-2 focus-visible:ring-[var(--sv-cyan)] focus-visible:ring-offset-2 focus-visible:ring-offset-black"
+        aria-describedby={tipId}
+      >
+        {children}
+      </span>
+      <span
+        id={tipId}
         role="tooltip"
         className="pointer-events-none absolute bottom-full left-1/2 mb-2 -translate-x-1/2 scale-90 whitespace-nowrap rounded border-2 border-black bg-[var(--sv-yellow)] px-2 py-1 text-xs font-bold text-black opacity-0 shadow-[var(--elevation-1)] transition-all group-hover/tt:scale-100 group-hover/tt:opacity-100 group-focus-within/tt:scale-100 group-focus-within/tt:opacity-100"
       >

@@ -387,8 +387,21 @@ html {
   scroll-margin-top: var(--anf-space-8);
 }
 
+/* As seções levam `tabIndex={-1}` e recebem foco por programa, vindas do
+   "Índice desta Edição" — nunca por Tab. Sem suprimir o contorno, saltar para
+   uma seção desenharia um anel em volta de meia página.
+
+   O `:focus-visible` volta a desenhá-lo, e só ele: é a regra que o navegador
+   aplica quando a última interação foi de teclado. Sem esta segunda metade,
+   quem salta pelo índice usando o teclado não vê onde aterrissou — o mesmo
+   par usado em `estudos.css`, que resolveu isto primeiro. */
 .dpx-anchor:focus {
   outline: none;
+}
+
+.dpx-anchor:focus-visible {
+  outline: 2px solid var(--anf-ink, currentColor);
+  outline-offset: 6px;
 }
 
 @media (prefers-reduced-motion: reduce) {

@@ -18,6 +18,17 @@
   --d-current: #44475a;
   --d-fg: #f8f8f2;
   --d-comment: #6272a4;
+  /* Par de `--d-comment` para uso em TEXTO.
+
+     O #6272a4 é a cor `comment` canônica do Dracula e fica onde está: sobre
+     o #282a36 ele dá 3,03:1, que basta para borda, ícone e texto grande.
+     Como cor de texto pequeno — rótulo, metadado, carimbo de tempo — reprova
+     o WCAG AA, que pede 4,5:1.
+
+     #7b90cf é o mínimo na MESMA matiz que passa (4,55:1): o canal a canal
+     multiplicado por 1,26, não uma cor escolhida a olho. Clarear mais
+     afastaria do tema sem ganho de conformidade. */
+  --d-comment-texto: #7b90cf;
   --d-cyan: #8be9fd;
   --d-green: #50fa7b;
   --d-orange: #ffb86c;
@@ -107,7 +118,7 @@
   gap: 2px;
   padding: 0.5rem 0.6rem;
   border-radius: 11px;
-  color: var(--d-comment);
+  color: var(--d-comment-texto);
   font-size: 0.6rem;
   text-transform: uppercase;
   letter-spacing: 0.03em;
@@ -151,7 +162,7 @@
   padding: 0.35rem 0.7rem;
   border-radius: 8px;
   font-size: 0.85rem;
-  color: var(--d-comment);
+  color: var(--d-comment-texto);
   transition: color 0.15s, background 0.15s;
 }
 .dv-navlink:hover {
@@ -166,7 +177,7 @@
 
 /* ─── Cabeçalho de página ─── */
 .dv-kicker {
-  color: var(--d-comment);
+  color: var(--d-comment-texto);
   font-size: 0.8rem;
 }
 .dv-kicker .tok-fn {
@@ -185,7 +196,7 @@
   color: var(--d-purple);
 }
 .dv-sub {
-  color: var(--d-comment);
+  color: var(--d-comment-texto);
   margin-top: 0.35rem;
   max-width: 46rem;
 }
@@ -241,7 +252,7 @@
 .dv-status.mvp, .dv-status.playtest { background: color-mix(in srgb, var(--d-orange) 22%, transparent); color: var(--d-orange); }
 .dv-status.building { background: color-mix(in srgb, var(--d-cyan) 22%, transparent); color: var(--d-cyan); }
 .dv-status.done, .dv-status.stable { background: color-mix(in srgb, var(--d-green) 22%, transparent); color: var(--d-green); }
-.dv-status.paused, .dv-status.archived { background: var(--d-current); color: var(--d-comment); }
+.dv-status.paused, .dv-status.archived { background: var(--d-current); color: var(--d-comment-texto); }
 
 /* ─── Links ─── */
 .dv-link {
@@ -275,7 +286,7 @@
   margin-top: 1.25rem;
 }
 .dv-hero .term {
-  color: var(--d-comment);
+  color: var(--d-comment-texto);
   font-size: 0.8rem;
 }
 .dv-hero .term .tok-fn { color: var(--d-green); }
@@ -313,7 +324,7 @@
 }
 .dv-stat:hover { border-color: var(--dev-accent); }
 .dv-stat .n { font-size: 1.9rem; font-weight: 800; line-height: 1; }
-.dv-stat .l { color: var(--d-comment); font-size: 0.78rem; margin-top: 0.35rem; }
+.dv-stat .l { color: var(--d-comment-texto); font-size: 0.78rem; margin-top: 0.35rem; }
 
 .dv-section-title {
   display: flex;
@@ -364,7 +375,7 @@
   border-radius: 999px;
   border: 1px solid var(--d-current);
   background: transparent;
-  color: var(--d-comment);
+  color: var(--d-comment-texto);
   font-size: 0.75rem;
   cursor: pointer;
   transition: all 0.15s;
@@ -387,7 +398,7 @@
   outline: none;
 }
 .dv-search:focus { border-color: var(--d-purple); }
-.dv-count { color: var(--d-comment); font-size: 0.75rem; }
+.dv-count { color: var(--d-comment-texto); font-size: 0.75rem; }
 
 /* ─── Timeline (devlogs) ─── */
 /* `list-style: none` porque a linha do tempo agora é um <ol> de verdade (a
@@ -417,7 +428,7 @@
 }
 /* `display: block` porque a data virou <time> (inline por padrão) — antes era
    um <div> e herdava o bloco de graça. */
-.dv-tl-date { display: block; color: var(--d-comment); font-size: 0.75rem; }
+.dv-tl-date { display: block; color: var(--d-comment-texto); font-size: 0.75rem; }
 .dv-tl-item h3 { color: var(--d-cyan); font-weight: 700; margin-top: 0.15rem; }
 .dv-prose { color: var(--d-fg); opacity: 0.86; font-size: 0.9rem; margin-top: 0.5rem; }
 .dv-prose h2 { color: var(--d-orange); font-size: 1rem; font-weight: 700; margin: 0.75rem 0 0.25rem; }
@@ -432,7 +443,7 @@
   top: 0.6rem;
   right: 0.6rem;
   font-size: 0.65rem;
-  color: var(--d-comment);
+  color: var(--d-comment-texto);
   text-transform: uppercase;
 }
 .dv-copy {
@@ -440,7 +451,7 @@
   align-items: center;
   gap: 0.35rem;
   font-size: 0.72rem;
-  color: var(--d-comment);
+  color: var(--d-comment-texto);
   background: transparent;
   border: 1px solid var(--d-current);
   border-radius: 8px;
@@ -478,7 +489,7 @@
   border-radius: 9px;
   border: 1px solid var(--d-current);
   background: transparent;
-  color: var(--d-comment);
+  color: var(--d-comment-texto);
   font-size: 0.78rem;
   cursor: pointer;
 }
@@ -514,7 +525,7 @@
   border-radius: var(--d-radius);
   padding: 2rem;
   text-align: center;
-  color: var(--d-comment);
+  color: var(--d-comment-texto);
   margin-top: 1.5rem;
 }
 
@@ -537,14 +548,14 @@
   font-size: 0.62rem;
   text-transform: uppercase;
   letter-spacing: 0.04em;
-  color: var(--d-comment);
+  color: var(--d-comment-texto);
   border: 1px solid var(--d-current);
   border-radius: 999px;
   padding: 0 0.4rem;
 }
 .learn-lead { margin-top: 1rem; }
 .learn-tagline { color: var(--d-fg); opacity: 0.85; max-width: 46rem; }
-.learn-course { color: var(--d-comment); font-size: 0.82rem; margin-top: 0.35rem; }
+.learn-course { color: var(--d-comment-texto); font-size: 0.82rem; margin-top: 0.35rem; }
 
 .learn-bar {
   height: 6px;
@@ -611,11 +622,11 @@
 }
 .learn-item[data-done="true"] .learn-box::before { content: "✓"; }
 .learn-item:not(.learn-ex-item)[data-done="true"] > span:last-child {
-  color: var(--d-comment);
+  color: var(--d-comment-texto);
   text-decoration: line-through;
 }
 .learn-ex-item[data-done="true"] .learn-ex-title {
-  color: var(--d-comment);
+  color: var(--d-comment-texto);
   text-decoration: line-through;
 }
 
@@ -631,7 +642,7 @@
 @media (min-width: 640px) { .learn-errors { grid-template-columns: 1fr 1fr; } }
 .learn-error { padding: 0.9rem 1rem; }
 .learn-error-name { color: var(--d-red); background: transparent; padding: 0; font-size: 0.88rem; }
-.learn-error p { color: var(--d-comment); font-size: 0.85rem; margin-top: 0.4rem; }
+.learn-error p { color: var(--d-comment-texto); font-size: 0.85rem; margin-top: 0.4rem; }
 
 .learn-routine { margin-top: 2rem; }
 
@@ -663,7 +674,7 @@
   flex-wrap: wrap;
   gap: 0.9rem;
   font-size: 0.78rem;
-  color: var(--d-comment);
+  color: var(--d-comment-texto);
 }
 .learn-badges { display: flex; flex-wrap: wrap; gap: 0.45rem; }
 .learn-badge {
@@ -757,11 +768,11 @@
   place-items: center;
   border-radius: 50%;
   border: 2px solid var(--d-comment);
-  color: var(--d-comment);
+  color: var(--d-comment-texto);
   font-weight: 800;
 }
 .learn-node-label { font-size: 0.82rem; font-weight: 700; color: var(--d-fg); line-height: 1.15; }
-.learn-node-prog { font-size: 0.7rem; color: var(--d-comment); }
+.learn-node-prog { font-size: 0.7rem; color: var(--d-comment-texto); }
 .learn-node[data-state="done"] { border-color: var(--d-green); }
 .learn-node[data-state="done"] .learn-node-dot {
   border-color: var(--d-green);
@@ -784,7 +795,7 @@
 .learn-ex-item { align-items: flex-start; }
 .learn-ex-body { display: flex; flex-direction: column; gap: 0.15rem; flex: 1; }
 .learn-ex-title { font-weight: 700; }
-.learn-ex-prompt { font-size: 0.82rem; color: var(--d-comment); }
+.learn-ex-prompt { font-size: 0.82rem; color: var(--d-comment-texto); }
 .learn-item[data-done="true"] .learn-ex-prompt { text-decoration: none; }
 .learn-ex-diff {
   flex: none;

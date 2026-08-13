@@ -8,6 +8,11 @@
 > conteúdo a repor e validações pendentes moram lá, não aqui.
 >
 > **Revisado em:** 2026-08-12, conferido item a item contra o código.
+>
+> **Débitos abertos na branch `chore/qualidade-2026-08`,** ainda não mesclada:
+> `src/app/anfitriao/page.tsx` com 737 linhas (único acima do limite de 500) e
+> 11 contrastes inconclusivos no `/criativo`, que dependem de conferência
+> visual. Detalhe e critério em `PLAN.md`, pendências `P4` e `P2`.
 
 ---
 
@@ -82,8 +87,9 @@ reconferido em 04/08: seguro apagar** — zero dependências instaladas e 0 URLs
 Supabase em 170 documentos do Firestore; o que sobra é conteúdo editorial
 (snippets, ADRs, tags).
 
-Sobra um arquivo morto: `scripts/fix-criativo-covers.mjs` importa o SDK do
-Supabase, que não está instalado — já não roda. Apagar junto.
+O código morto que sobrava já saiu (12/08): `scripts/fix-criativo-covers.mjs`
+foi apagado, e `scripts/setup-structure.mjs` deixou de recriar
+`src/lib/supabase`. Falta só desligar o projeto lá.
 
 ### 9. Convenção de idioma mista na camada de dados
 
@@ -103,7 +109,7 @@ cada um está no `PROJECT_STATE.md`.
 |---|---|---|
 | 🔴 Crítico | `/login` respondia 500 em produção | `jwks-rsa` fazia `require()` de ESM. `overrides` fixando `jose ^5.10.0` no `package.json`. `/login` responde 200 |
 | 🟠 | Nenhum fluxo de escrita exercido | Login, CRUD, cupom público e upload de mídia verificados em produção (01/08 e 05/08) |
-| 🟠 | Sem CI | `.github/workflows/ci.yml` — `build` (tokens, lint, 640 unitários, build, 13 de fumaça) e `integration` em paralelo |
+| 🟠 | Sem CI | `.github/workflows/ci.yml` — `build` (tokens, lint, 667 unitários, build, 13 de fumaça) e `integration` em paralelo |
 | 🟠 | Sem teste de integração da camada de dados | `tests-integration/`, 21 casos contra o emulador do Firestore |
 | 🟠 | Env do Preview não sincronizado | 10 variáveis definidas em 31/07. Falta só o token do Blob, que virou o item 1 |
 | 🟡 | `admin_allowlist` era coleção órfã | Removida do `lib/firebase/schema.ts` em 31/07 |

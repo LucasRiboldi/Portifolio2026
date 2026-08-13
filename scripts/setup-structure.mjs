@@ -1,5 +1,14 @@
 import fs from "fs";
 
+// Nota de 12/08/2026: esta lista é do andaime inicial e envelheceu. Cinco
+// entradas abaixo (`src/lib/ai`, `src/lib/analytics`, `src/services`,
+// `src/content/blog`, `src/content/projects`) não existem no projeto — são
+// pastas que nunca foram usadas. Rodar isto as cria vazias.
+//
+// Só `src/lib/supabase` foi corrigida aqui, para `src/lib/firebase`, por ser
+// resíduo da migração de backend: recriar a pasta de um banco abandonado
+// confunde de verdade. As demais ficam para uma revisão do andaime, que é
+// outro assunto.
 const dirs = [
     "src/app",
     "src/components/ui",
@@ -11,7 +20,7 @@ const dirs = [
     "src/hooks",
     "src/lib/utils",
     "src/lib/github",
-    "src/lib/supabase",
+    "src/lib/firebase",
     "src/lib/analytics",
     "src/lib/ai",
     "src/services",

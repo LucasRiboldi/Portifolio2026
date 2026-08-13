@@ -3,10 +3,14 @@
 > Resumo executivo do estado real do projeto. Atualize a cada marco.
 > Para o conhecimento estável e detalhado, veja `docs/project-knowledge/`.
 >
-> **Última atualização:** 2026-08-12, sincronização com o `NEXT_STEPS.md`.
-> O bloqueio do upload de mídia **caiu**: verificado fim a fim em 05/08
-> (seção 5). Não há bug aberto — o que resta é higiene de credencial e
-> validação em produção do Prophet Wire.
+> **Última atualização:** 2026-08-12. O bloqueio do upload de mídia **caiu**:
+> verificado fim a fim em 05/08 (seção 5). Não há bug aberto na `main` — o que
+> resta é higiene de credencial e validação em produção do Prophet Wire.
+>
+> **Existe trabalho fora da `main`:** a branch `chore/qualidade-2026-08`, com
+> 11 commits de acessibilidade, ferramentas e documentação, ainda não mesclada.
+> O que ela fez e o que ficou pendente está no **`PLAN.md`**, seção
+> "COMECE AQUI" — inclusive as 8 pendências numeradas `P1`–`P8`.
 
 ---
 
@@ -147,7 +151,7 @@ acontece em produção ou em `localhost`.
 | Vercel Blob | ✅ **Grava e serve** — verificado fim a fim em 05/08 (seção 5). O 404 registrado em 01/08 era referência pendurada no Firestore, não falha de escrita. Autentica por **OIDC** (`BLOB_STORE_ID` + `VERCEL_OIDC_TOKEN`) por padrão; o token estático é fallback e só ele serve para upload direto do navegador |
 | Env vars (Production) | ✅ Completas, incluindo `FIREBASE_CLIENT_EMAIL` / `FIREBASE_PRIVATE_KEY` |
 | Env vars (Preview) | ✅ 10 variáveis definidas em 31/07 (Firebase cliente + Admin SDK + `ADMIN_GITHUB_LOGIN`). Falta só `BLOB_READ_WRITE_TOKEN` |
-| CI (GitHub Actions) | ✅ Dois jobs em paralelo: `build` (`tokens:check`, lint, **640 unitários**, build, **13 de fumaça**) e `integration` (emulador do Firestore, 21 casos). Integração e fumaça entraram em 01/08 |
+| CI (GitHub Actions) | ✅ Dois jobs em paralelo: `build` (`tokens:check`, lint, **667 unitários**, build, **13 de fumaça**) e `integration` (emulador do Firestore, 21 casos). Integração e fumaça entraram em 01/08 |
 | Protection Bypass | ✅ Ligado em 31/07 para permitir testar previews por `curl` |
 | Projeto Supabase antigo | ⚠️ No ar como rede de segurança, mas **conferido em 01/08: seguro apagar** — 0 URLs do Supabase em 170 documentos do Firestore, nenhuma dependência instalada |
 
@@ -227,7 +231,7 @@ olhar**.
 ```bash
 npm run dev            # servidor local (porta 3000)
 npm run build          # build de produção — NÃO rode com o dev server no ar
-npm run test:unit      # 640 testes (sem rede, sem credencial)
+npm run test:unit      # 667 testes (sem rede, sem credencial)
 npm run test:smoke     # sobe o build e confere os portoes
 npm run test:integration  # emulador do Firestore (precisa de JDK 21)
 npm run lint

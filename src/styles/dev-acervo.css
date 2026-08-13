@@ -55,14 +55,14 @@
   align-items: center;
   gap: 0.6rem;
   font-size: 0.72rem;
-  color: var(--d-comment);
+  color: var(--d-comment-texto);
 }
 .dracula .dv-feed-pontos {
   color: var(--d-orange);
   font-weight: 600;
 }
 .dracula .dv-feed-autor {
-  color: var(--d-comment);
+  color: var(--d-comment-texto);
   font-size: 0.72rem;
 }
 
@@ -131,7 +131,7 @@
   font-family: var(--d-mono);
   font-size: 0.8rem;
   font-weight: 700;
-  color: var(--d-comment);
+  color: var(--d-comment-texto);
   z-index: 1;
 }
 
@@ -211,7 +211,7 @@
   font-size: 0.78rem;
   font-weight: 700;
   letter-spacing: 0.02em;
-  color: var(--d-comment);
+  color: var(--d-comment-texto);
 }
 .dracula .dv-badge[data-status="obtida"] .dv-badge-sigla {
   border-color: var(--d-green);
@@ -231,7 +231,7 @@
 }
 .dracula .dv-badge-emissor {
   font-size: 0.74rem;
-  color: var(--d-comment);
+  color: var(--d-comment-texto);
 }
 .dracula .dv-badge-face:hover .dv-badge-nome {
   color: var(--d-cyan);
@@ -311,7 +311,7 @@
 .dracula .dv-livro-autor {
   margin-top: 0.2rem;
   font-size: 0.76rem;
-  color: var(--d-comment);
+  color: var(--d-comment-texto);
 }
 .dracula .dv-livro-nota {
   margin-top: 0.35rem;

@@ -30,7 +30,12 @@
   /* ── Texto ──────────────────────────────────────────────────────────── */
   --dev-ink: var(--d-fg);
   --dev-ink-soft: color-mix(in srgb, var(--d-fg) 84%, transparent);
-  --dev-ink-dim: var(--d-comment); /* metadados, rótulos, comentários */
+  /* Aponta para o par de TEXTO, não para o `--d-comment` cru: este token é
+     consumido em metadado, rótulo e nota, sempre em corpo pequeno, e o
+     #6272a4 canônico dá 3,03:1 ali — abaixo dos 4,5:1 do WCAG AA.
+     `--dev-line-strong`, logo acima, segue no canônico porque é filete, e
+     filete se mede por outro critério. */
+  --dev-ink-dim: var(--d-comment-texto); /* metadados, rótulos, comentários */
 
   /* ── Papéis semânticos ──────────────────────────────────────────────── */
   --dev-accent: var(--d-purple); /* estado ativo, seleção, navegação */

@@ -114,7 +114,7 @@ compara com `ADMIN_GITHUB_LOGIN` → custom claim + session cookie httpOnly.
 ```bash
 npm run dev          # local, porta 3000
 npm run build        # NÃO rode com o dev server no ar
-npm run test:unit    # 640 testes (sem rede, sem credencial)
+npm run test:unit    # 667 testes (sem rede, sem credencial)
 npm run test:smoke   # sobe o build e confere os portoes (precisa de build)
 npm run test:integration  # emulador do Firestore (precisa de JDK 21)
 npm run lint
@@ -163,7 +163,7 @@ Ver **`PROJECT_STATE.md`** (estado) e **`NEXT_STEPS.md`** (o que fazer).
 
 Em 2026-08-04: produção responde **200** em `/` e em `/login` — o 500 de
 `require() of ES Module` registrado aqui em 31/07 **não existe mais**. Suíte
-unitária em **640 testes**, verdes.
+unitária em **667 testes**, verdes (medido em 12/08).
 
 O upload de mídia tinha **três** defeitos independentes, os três fechados em
 04–05/08:

@@ -10,9 +10,23 @@
 
 ---
 
+## ⚠️ Há trabalho fora da `main` — leia antes
+
+A branch **`chore/qualidade-2026-08`** carrega uma empreitada de qualidade com
+11 commits: quatro correções de acessibilidade medidas, o `sync:skills`
+consertado, código morto removido e o `CHANGELOG.md`. **Ainda não foi
+mesclada.**
+
+O registro completo — o que foi analisado, o que foi feito e as **8 pendências
+numeradas** (`P1` a `P8`) — está no **`PLAN.md`**, na seção "COMECE AQUI".
+Este arquivo aqui segue sendo o backlog do produto; o `PLAN.md` é o daquela
+empreitada.
+
+---
+
 ## Estado em uma linha
 
-Site no ar, login e CRUD funcionando, **640 testes passando**. **O upload de
+Site no ar, login e CRUD funcionando, **667 testes passando** (medido em 12/08). **O upload de
 mídia funciona fim a fim** — imagem, áudio, PDF e vídeo, verificado em produção
 em 05/08 com um mp4 de 9,19 MB que sobe e toca na videoteca.
 
@@ -295,8 +309,10 @@ comportamento novo, que atrapalha o `git blame` do resto.
 
 As menções que sobram são conteúdo editorial (snippets, ADRs, tags).
 
-**Sobra um arquivo morto:** `scripts/fix-criativo-covers.mjs` importa o SDK do
-Supabase, que não está instalado — já não roda. Apagar depois do desligamento.
+**O arquivo morto já saiu:** `scripts/fix-criativo-covers.mjs` foi apagado em
+12/08. Era correção pontual de UPDATE no Supabase, de execução única e já
+executada, importando um SDK desinstalado. `scripts/setup-structure.mjs`
+deixou de recriar `src/lib/supabase` na mesma data.
 
 **Como:** https://app.supabase.com → projeto → Settings → General → Delete
 project. **Irreversível.**
