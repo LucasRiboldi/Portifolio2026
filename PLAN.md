@@ -50,11 +50,11 @@ método validado aqui e as duas correções do medidor que este trabalho expôs.
 
 ## O que falta — ver "Pendências" no fim deste arquivo
 
-**Abertas:** `P1` polimento de interação · `P3` contraste nas páginas
-internas · `P4` as 737 linhas · `P5` fechar a auditoria · `P8` skill de
-animação bloqueada por permissão.
+**Abertas:** `P1` polimento de interação · `P4` as 737 linhas · `P5` fechar a
+auditoria · `P8` skill de animação bloqueada por permissão.
 
-**Fechadas:** `P2` (falso positivo, 13/08) · `P6` PR #1 · `P7` v0.5.0.
+**Fechadas:** `P2` (falso positivo, 13/08) · `P3` (5 rotas, 3 defeitos
+corrigidos, 13/08) · `P6` PR #1 · `P7` v0.5.0.
 
 ---
 
@@ -365,18 +365,50 @@ nenhum caso marginal.
    a página tem 9041 px e 223 textos ficavam fora. Daí a segunda passada,
    medindo a cada parada da rolagem.
 
-## P3 — Contraste nas páginas internas
+## P3 — Resolvido ✅ (2026-08-13): 5 rotas amostradas, 3 defeitos
 
-Só as **homes** dos três realms foram medidas. O projeto tem **77 arquivos
-`page.tsx`**; varrer todos não cabe.
+Amostragem em vez de varredura: **77 arquivos `page.tsx`** não cabem em
+empreitada nenhuma, e os tokens são compartilhados — se a home e mais duas
+passam, o padrão do realm está são.
 
-**Critério:** uma listagem e um detalhe por realm. Os tokens são
-compartilhados, então se a home e mais duas passam, o padrão do realm está
-são e o que escapa é caso isolado.
+| Rota | Medidos | Reprovavam | Depois |
+|---|---|---|---|
+| `/desenvolvedor/projetos` (listagem) | 54 | 0 | 0 |
+| `/portfolio` (listagem) | 48 | **5** | **0** |
+| `/criativo/sala` (detalhe) | 34 | **1** | **0** |
+| `/anfitriao/materia/[slug]` (detalhe) | 60 | 0 | 0 |
+| `/desenvolvedor/devlog/[slug]` (detalhe) | 47 | 0 | 0 |
 
-**Ferramenta:** a skill `front-a11y` em `~/.claude/skills/` carrega o medidor
-pronto, já com as duas correções que este trabalho custou (conversão de
-`color(srgb …)` por canvas, e exclusão de texto com contorno).
+Zero falhas de render em todas — o contador confirma que os zeros são
+medição, não omissão.
+
+### O que foi corrigido
+
+**Etiqueta de categoria do `ProjectCard`** — branco a 12 px sobre o gradiente
+laranja→rosa da marca: **2,80:1** na ponta laranja, 3,53:1 na rosa. Trocada a
+tinta para `--k-ink` (**5,38:1** no pior ponto) em vez de escurecer o
+gradiente, que é elemento de identidade (`--gradient-text`).
+
+**"Voltar para a capa", em `/criativo/sala`** — `--k-lime` sobre a zona
+clara: **1,02:1**, invisível na prática. É o mesmo defeito das setas da
+galeria: token de acento global sobre superfície de zona, ignorando o
+`--k-zone-ink` que a zona declara. Agora **14,9:1**.
+
+Escurecer o lime até passar exigiria `#457015`, que já é oliva — não
+preservaria acento nenhum. O caráter de link fica com a seta e o hover, que
+já existiam.
+
+**Separador `·` do rodapé** — 1,74:1 a 20% de opacidade. Ganhou `aria-hidden`
+(é delimitador, não conteúdo) e subiu para 50%.
+
+### Uma lacuna do medidor que isto expôs
+
+O filtro pula elemento com `opacity: 0`, mas olha só a **própria** opacidade,
+não a dos ancestrais. A etiqueta do `ProjectCard` vive dentro de um
+`opacity-0 group-hover:opacity-100` — ela foi medida porque a opacidade dela
+é 1. Deu certo por acaso, e é o caso certo: elemento revelado no hover
+**precisa** passar quando aparece. Mas a regra inversa não vale — há texto
+oculto por ancestral que o medidor conta como visível.
 
 ## P4 — `src/app/anfitriao/page.tsx`, 737 linhas
 

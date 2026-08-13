@@ -80,9 +80,21 @@ export default async function SalaPage() {
 
                 <div className="mt-8 flex flex-wrap items-center gap-5">
                   <p className="k-say text-sm">{SALA.bubble}</p>
+                  {/* Tinta da zona, não `--k-lime`.
+
+                      O lime é acento de fundo escuro; aqui a zona pinta claro
+                      (menta/creme) e o link media 1,02:1 — invisível na
+                      prática. Mesmo defeito das setas da galeria: token de
+                      acento global sobre superfície de zona, ignorando o
+                      `--k-zone-ink` que a própria zona declara. Agora 14,9:1.
+
+                      Escurecer o lime até passar exigiria levá-lo a #457015,
+                      que já é oliva e não preserva acento nenhum. O caráter
+                      de link fica por conta da seta e do deslocamento no
+                      hover, que já existiam. */}
                   <Link
                     href={SALA.backCta.href}
-                    className="k-sub group inline-flex items-center gap-2 text-sm text-[var(--k-lime)]"
+                    className="k-sub group inline-flex items-center gap-2 text-sm text-[var(--k-zone-ink,var(--k-ink))]"
                   >
                     <span aria-hidden className="transition-transform duration-300 group-hover:-translate-x-1">
                       ←

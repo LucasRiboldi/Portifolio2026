@@ -21,6 +21,17 @@ Registro das mudanças que valem para quem usa ou lê o site. Segue
 
 ## [Não lançado]
 
+### Corrigido
+
+- **Etiqueta de categoria do cartão de projeto** — branco a 12 px sobre o
+  gradiente laranja→rosa dava **2,80:1**. A tinta passou a ser escura
+  (`--k-ink`, **5,38:1**); o gradiente da marca fica intacto.
+- **"Voltar para a capa", em `/criativo/sala`** — `--k-lime` sobre a zona
+  clara dava **1,02:1**, invisível na prática. Passou a usar `--k-zone-ink`,
+  o par que a zona já declarava: **14,9:1**.
+- **Separador `·` do rodapé** — 1,74:1 e sem marcação. Ganhou `aria-hidden`,
+  porque é delimitador e não conteúdo, e opacidade de 20% para 50%.
+
 ### Documentação
 
 - Os contrastes marcados como inconclusivos no `/criativo` foram medidos por

@@ -51,8 +51,18 @@ export function ProjectCard({ project, featured }: ProjectCardProps) {
         )}
         <div className="absolute inset-0 bg-gradient-to-t from-black/60 via-transparent to-transparent opacity-0 transition-opacity duration-300 group-hover:opacity-100" />
         <div className="absolute bottom-3 left-3 opacity-0 transition-opacity duration-300 group-hover:opacity-100">
+          {/* Tinta escura, e não branca, sobre o gradiente da marca.
+
+              Branco a 12px dava 2,80:1 na ponta laranja e 3,53:1 na rosa —
+              reprovava o WCAG AA nos dois extremos, e a etiqueta some no
+              meio do próprio fundo quente. Com `--k-ink` o pior ponto vai a
+              5,38:1.
+
+              Escurecer o gradiente resolveria igual, mas ele é elemento de
+              marca (`--gradient-text`, em `globals.css`): trocar a cor do
+              texto conserta o contraste sem tocar na identidade. */}
           <span
-            className="rounded px-2 py-0.5 text-xs font-medium text-white"
+            className="rounded px-2 py-0.5 text-xs font-semibold text-[var(--k-ink,#12100e)]"
             style={{ background: 'linear-gradient(90deg, #f97316, #ec4899)' }}
           >
             {CATEGORY_LABELS[project.category]}
