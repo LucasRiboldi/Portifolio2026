@@ -50,11 +50,12 @@ método validado aqui e as duas correções do medidor que este trabalho expôs.
 
 ## O que falta — ver "Pendências" no fim deste arquivo
 
-**Abertas:** `P1` polimento de interação · `P4` as 737 linhas · `P8` skill de
-animação bloqueada por permissão.
+**Abertas:** `P1` polimento de interação · `P8` skill de animação bloqueada
+por permissão.
 
-**Fechadas:** `P2` (falso positivo) · `P3` (5 rotas, 3 defeitos) · `P5`
-(build, fumaça, responsividade) · `P6` PR #1 · `P7` v0.5.0.
+**Fechadas:** `P2` (falso positivo) · `P3` (5 rotas, 3 defeitos) · `P4`
+(737 → 363 linhas) · `P5` (build, fumaça, responsividade) · `P6` PR #1 ·
+`P7` v0.5.0.
 
 ---
 
@@ -413,18 +414,55 @@ não a dos ancestrais. A etiqueta do `ProjectCard` vive dentro de um
 **precisa** passar quando aparece. Mas a regra inversa não vale — há texto
 oculto por ancestral que o medidor conta como visível.
 
-## P4 — `src/app/anfitriao/page.tsx`, 737 linhas
+## P4 — Resolvido ✅ (2026-08-13): 737 → 363 linhas
 
-Único arquivo acima do limite de 500 da convenção.
+Feito sob a condição que este item exigia: extração pura, **sem tocar numa
+vírgula de texto**, com o HTML servido comparado antes e depois.
 
-**Não ataque de improviso.** É a home de um realm com o conteúdo editorial do
-jornal embutido no JSX: quebrar em componentes é refatoração **e**
-movimentação de conteúdo ao mesmo tempo, a combinação em que "sumiu um
-pedaço" passa batido — e há regra de preservação de conteúdo valendo.
+| Arquivo | Linhas |
+|---|---|
+| `src/app/anfitriao/page.tsx` | **363** |
+| `src/components/anfitriao/prophet-caderno.tsx` | 318 |
+| `src/components/anfitriao/wire-column.tsx` | 89 |
 
-**Se for fazer:** um commit só de extração, sem tocar em uma vírgula de
-texto, e comparação do HTML renderizado antes e depois. Sem essa garantia, o
-débito é menos ruim que a correção.
+Nenhum arquivo do `src/` passa de 500 linhas.
+
+### A prova
+
+Antes de mexer, um snapshot do HTML servido: só o **texto visível** e o
+**esqueleto** (tag + classe, na ordem). Script e estilo ficam de fora — eles
+mudam entre builds mesmo sem alteração de código, e comparar isso seria ruído.
+
+```
+antes.texto.txt      3DDFEFD72F9BB3A3     antes.esqueleto.txt   762B076F5774A68E
+depois.texto.txt     3DDFEFD72F9BB3A3     depois.esqueleto.txt  762B076F5774A68E
+```
+
+343 linhas de texto e 568 elementos, dos dois lados. Hash idêntico.
+
+### O que foi movido, e por quê nessa ordem
+
+1. **As três auxiliares** (`Plate`, `NewsPlate`, `WireColumn`) — UI pura, zero
+   texto editorial. Risco nulo, e já tirava 87 linhas.
+2. **O caderno** — as quatro bandas ao pé da folha, que a documentação do
+   próprio arquivo já tratava como unidade. Cortado **por script**, com guarda
+   de sanidade nas bordas: se as linhas não fossem as esperadas, abortava em
+   vez de cortar no lugar errado. Copiar à mão 304 linhas é como se perde um
+   pedaço.
+
+### O que a comparação de HTML NÃO pegou
+
+Dois testes quebraram, e o HTML estava idêntico o tempo todo:
+`tests/anfitriao-zonas.test.ts` lê o **fonte** para conferir que toda zona do
+sumário tem seção com o mesmo id. Com as âncoras em outro arquivo, ele passou
+a ver meia página.
+
+A correção foi ampliar a lista de arquivos que o teste lê, não afrouxar a
+asserção — o contrato é sobre a marcação da primeira página, e em que arquivo
+ela mora é decisão de organização sobre a qual o teste não deve ter opinião.
+
+**A lição:** prova de renderização e prova de fonte pegam coisas diferentes.
+Só a primeira teria deixado passar um teste cego a metade da página.
 
 ## P5 — Resolvido ✅ (2026-08-13)
 

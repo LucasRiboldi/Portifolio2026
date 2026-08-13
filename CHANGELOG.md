@@ -35,6 +35,13 @@ Registro das mudanças que valem para quem usa ou lê o site. Segue
   ele media 320 × 15 px empilhado a 19 px, abaixo dos 24 × 24 do WCAG 2.5.8
   (AA) e fora da exceção de espaçamento. Agora 26 px de altura.
 
+### Alterado
+
+- **`anfitriao/page.tsx` partido em três** (737 → 363 linhas), único arquivo
+  acima do limite de 500 da convenção. Extração pura: o JSX foi movido
+  verbatim, e o HTML servido — texto visível e esqueleto de tags — tem hash
+  idêntico antes e depois. Nada do que a página mostra mudou.
+
 ### Documentação
 
 - Os contrastes marcados como inconclusivos no `/criativo` foram medidos por

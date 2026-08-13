@@ -9,9 +9,9 @@
 >
 > **Revisado em:** 2026-08-12, conferido item a item contra o código.
 >
-> **Débito aberto herdado da v0.5.0:** `src/app/anfitriao/page.tsx` com 737
-> linhas, único acima do limite de 500 — com a ressalva de por que mexer nele
-> é arriscado. Detalhe em `PLAN.md`, pendência `P4`.
+> **Nenhum arquivo do `src/` passa de 500 linhas.** O `anfitriao/page.tsx`,
+> que tinha 737, foi partido em três em 13/08 — extração pura, com o HTML
+> servido conferido por hash antes e depois. `PLAN.md`, `P4`.
 >
 > Os contrastes "inconclusivos" do `/criativo` foram medidos por amostragem de
 > pixel em 13/08 e **não eram defeito**: falso positivo do próprio medidor.

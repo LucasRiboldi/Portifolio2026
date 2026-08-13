@@ -23,7 +23,27 @@ import { zones, index, coupon } from "@/lib/anfitriao-prophet"
  */
 
 const RAIZ = path.join(import.meta.dirname, "..")
-const FONTE = readFileSync(path.join(RAIZ, "src/app/anfitriao/page.tsx"), "utf8")
+
+/**
+ * A folha inteira, e não só o `page.tsx`.
+ *
+ * Em 13/08/2026 a página passou de 737 linhas e foi partida em três arquivos.
+ * O HTML servido continuou idêntico — texto e esqueleto conferidos por hash
+ * antes e depois — mas estes testes leem o FONTE, e por isso passaram a ver
+ * meia página: as âncoras do caderno tinham mudado de arquivo.
+ *
+ * Concatenar é o que preserva a intenção original. O contrato testado é sobre
+ * a marcação declarada da primeira página; em que arquivo ela mora é decisão
+ * de organização, e o teste não deve ter opinião sobre isso. Se amanhã sair
+ * mais uma peça, ela entra nesta lista.
+ */
+const ARQUIVOS = [
+  "src/app/anfitriao/page.tsx",
+  "src/components/anfitriao/prophet-caderno.tsx",
+  "src/components/anfitriao/wire-column.tsx",
+]
+
+const FONTE = ARQUIVOS.map((a) => readFileSync(path.join(RAIZ, a), "utf8")).join("\n")
 
 /**
  * A página sem comentários.
