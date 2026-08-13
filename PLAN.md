@@ -21,7 +21,7 @@ Registrado para ninguém refazer. "Limpo" aqui significa medido, não presumido.
 
 | Frente | Alcance | Resultado |
 |---|---|---|
-| Contraste WCAG AA | Home dos 3 realms, medida com luminância real | 54 defeitos → **0**; 11 inconclusivos no `/criativo` |
+| Contraste WCAG AA | Home dos 3 realms, luminância real; gradiente por amostragem de pixel | 54 defeitos → **0**; os inconclusivos eram falso positivo (**P2**) |
 | Foco visível | `outline-none` e `outline: none` em todo o `src/` | 2 defeitos; 3 suspeitas descartadas com prova |
 | Referências ARIA | `aria-describedby` / `labelledby` / `controls` | 1 defeito (id inexistente) |
 | Movimento | `prefers-reduced-motion` | 147 usos em 85 arquivos — base já sólida, nada a fazer |
@@ -50,9 +50,11 @@ método validado aqui e as duas correções do medidor que este trabalho expôs.
 
 ## O que falta — ver "Pendências" no fim deste arquivo
 
-`P1` polimento de interação · `P2` os 11 inconclusivos · `P3` contraste nas
-páginas internas · `P4` as 737 linhas · `P5` auditoria final · `P6` PR ·
-`P7` bump e tag · `P8` skill de animação bloqueada.
+**Abertas:** `P1` polimento de interação · `P3` contraste nas páginas
+internas · `P4` as 737 linhas · `P5` fechar a auditoria · `P8` skill de
+animação bloqueada por permissão.
+
+**Fechadas:** `P2` (falso positivo, 13/08) · `P6` PR #1 · `P7` v0.5.0.
 
 ---
 
@@ -318,16 +320,50 @@ página aberta, `document.querySelectorAll('button,a[href]')` e o
 número (px, ms, razão de contraste) ou por regra de WCAG. Sem isso, este
 pilar vira redesign por acúmulo — que foi explicitamente excluído do escopo.
 
-## P2 — Os 11 contrastes inconclusivos do `/criativo`
+## P2 — Resolvido ✅ (2026-08-13): eram falso positivo, todos
 
-Cabeçalhos de capítulo (`k-kicker`, `k-body`) sobre `radial-gradient`. O
-medidor compara contra a parada **mais desfavorável** do gradiente — verde
-`rgb(157,255,48)` num caso, laranja `rgb(255,107,31)` noutro — e isso gera
-falso positivo quando o texto assenta sobre a parte escura.
+**Nenhum defeito. Nenhuma alteração de código.** Os inconclusivos eram ruído
+do meu instrumento, não contraste ruim.
 
-**Precisa de olho humano, não de medição.** Nesta sessão a pane do navegador
-não compunha quadros, então captura de tela falhava. Abra `/criativo`, olhe
-onde o texto cai, e decida caso a caso.
+**O que estava errado.** O medidor comparava contra a parada mais
+desfavorável do gradiente. Mas as seções do `/criativo` empilham camadas —
+um `radial-gradient` **semitransparente** sobre um `linear-gradient` de base:
+
+```
+radial-gradient(circle at 80% 10%, rgba(157,255,47,0.5), transparent 45%),
+linear-gradient(155deg, #2b0a4d, #571496 60%, …)
+```
+
+Tomar o verde `rgba(157,255,47,0.5)` como fundo ignora três coisas de uma
+vez: ele tem 50% de alfa, está centrado em `80% 10%`, e some aos 45%. O texto
+reprovado estava em **x = 0,19** — do outro lado da seção, sobre o roxo.
+
+**Como foi resolvido sem captura de tela.** A pane do navegador continua sem
+compor quadros, então em vez de olhar, medi: renderizei a pilha de fundo de
+cada seção num `foreignObject` de SVG, desenhei no canvas e li **o pixel
+exato sob cada texto**. A técnica está na skill `front-a11y`.
+
+| Texto | Pela pior parada | Real | Alvo |
+|---|---|---|---|
+| Terra-1610 · Spray | 1,16 | **12,11** | 4,5 |
+| Ilustração, vetor, pixel | 1,16 | **8,54** | 4,5 |
+| Peça 01 · code | 3,73 | **6,99** | 4,5 |
+| Terra-42 · Projeção | 2,65 | **15,73** | 4,5 |
+| Filmes que mexeram… | 2,65 | **10,16** | 4,5 |
+
+Duas varreduras independentes, uma com a página parada e outra rolando em
+passos: **0 reprovações**, pior aprovado em 6,99 — 55% acima do limite,
+nenhum caso marginal.
+
+**Duas lições que valem mais que o resultado:**
+
+1. **Lista vazia é ambígua.** "0 reprovações" e "0 medições" produzem a mesma
+   saída. Só passei a confiar depois de instrumentar: 44 textos sobre
+   gradiente, 44 medidos, 0 falhas de render.
+2. **A revelação por rolagem esconde a página do medidor.** Elemento em
+   `opacity: 0` é pulado, e com razão. Mas isso limitava a varredura à dobra:
+   a página tem 9041 px e 223 textos ficavam fora. Daí a segunda passada,
+   medindo a cada parada da rolagem.
 
 ## P3 — Contraste nas páginas internas
 

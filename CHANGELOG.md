@@ -21,7 +21,13 @@ Registro das mudanças que valem para quem usa ou lê o site. Segue
 
 ## [Não lançado]
 
-Nada ainda.
+### Documentação
+
+- Os contrastes marcados como inconclusivos no `/criativo` foram medidos por
+  amostragem de pixel e **não eram defeito** — falso positivo do medidor, que
+  tomava a parada mais desfavorável de gradientes empilhados como se fosse o
+  fundo. O pior deles media 1,16:1 pela parada e **12,11:1** de verdade.
+  Nenhuma alteração de código.
 
 ## [0.5.0] — 2026-08-13
 

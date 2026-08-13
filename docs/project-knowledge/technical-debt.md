@@ -9,10 +9,13 @@
 >
 > **Revisado em:** 2026-08-12, conferido item a item contra o código.
 >
-> **Débitos abertos na branch `chore/qualidade-2026-08`,** ainda não mesclada:
-> `src/app/anfitriao/page.tsx` com 737 linhas (único acima do limite de 500) e
-> 11 contrastes inconclusivos no `/criativo`, que dependem de conferência
-> visual. Detalhe e critério em `PLAN.md`, pendências `P4` e `P2`.
+> **Débito aberto herdado da v0.5.0:** `src/app/anfitriao/page.tsx` com 737
+> linhas, único acima do limite de 500 — com a ressalva de por que mexer nele
+> é arriscado. Detalhe em `PLAN.md`, pendência `P4`.
+>
+> Os contrastes "inconclusivos" do `/criativo` foram medidos por amostragem de
+> pixel em 13/08 e **não eram defeito**: falso positivo do próprio medidor.
+> `PLAN.md`, `P2`.
 
 ---
 
