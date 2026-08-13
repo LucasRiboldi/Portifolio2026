@@ -86,4 +86,5 @@ export const skills: Skill[] = [
   { name: 'sparc-methodology', command: '/sparc-methodology', category: 'orchestration', description: 'Metodologia SPARC (Spec, Pseudocode, Architecture, Refine, Complete).' },
   { name: 'swarm-advanced', command: '/swarm-advanced', category: 'orchestration', description: 'Padrões avançados de swarm para pesquisa, dev e testes.' },
   { name: 'swarm-orchestration', command: '/swarm-orchestration', category: 'orchestration', description: 'Orquestra swarms multi-agente para execução paralela de tarefas.' },
+  { name: 'motion-dev-animations', command: '/motion-dev-animations', category: 'design', description: 'Animações com Motion.dev: entrada, gesto, scroll e layout, com física de mola e reduced-motion.' },
 ]
