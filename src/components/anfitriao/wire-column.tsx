@@ -55,42 +55,15 @@ export function Plate({
   )
 }
 
-/** Gravura de uma notícia da faixa do Wire, com a sua legenda. */
-export function NewsPlate({ news }: { news: NewsItem }) {
-  return (
-    <figure>
-      <Plate image={news.image} sizes="(min-width: 64em) 240px, (min-width: 40em) 45vw, 90vw" />
-      {news.image.caption ? <figcaption>{news.image.caption}</figcaption> : null}
-    </figure>
-  )
-}
-
-/** Uma coluna de notícia da faixa automática. */
-export function WireColumn({ news }: { news: NewsItem }) {
-  return (
-    <article className="dpx-news">
-      <p>
-        <span className="dpx-news-kicker">{news.category}</span>
-      </p>
-      <h3 className="dpx-news-head">{news.title}</h3>
-      {news.subtitle ? <p className="dpx-news-sub">{news.subtitle}</p> : null}
-
-      <NewsPlate news={news} />
-
-      <p className="dpx-news-body">
-        <span className="dpx-news-cap">{news.dropcap}</span>
-        {news.summary}
-      </p>
-      {news.note ? <p className="dpx-news-note">{news.note}</p> : null}
-
-      <a
-        className="dpx-news-source"
-        href={news.sourceUrl}
-        target="_blank"
-        rel="noopener noreferrer"
-      >
-        {news.sourceName} ↗
-      </a>
-    </article>
-  )
-}
+/*
+ * A COLUNA do Wire saiu daqui em 14/08 para `wire-motion.tsx`, onde ela ganhou
+ * as microinterações. Não ficou cópia estática atrás: duas versões da mesma
+ * coluna divergem na primeira vez que alguém corrigir só uma delas.
+ *
+ * `Plate` ficou, e de propósito não virou "use client": as matérias inferiores
+ * da primeira página o renderizam no SERVIDOR. Como `wire-motion.tsx` também o
+ * importa, ele existe nos dois grafos — o servidor imprime as gravuras das
+ * matérias, o navegador recebe o código para as colunas animadas. É o preço de
+ * ter uma implementação só da moldura de proporção fixa que evita o CLS, e é
+ * mais barato que manter duas.
+ */

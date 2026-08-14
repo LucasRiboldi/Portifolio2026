@@ -12,6 +12,21 @@ const config: Config = {
 
   theme: {
     extend: {
+      /**
+       * Animações das peças da Magic UI enxertadas no herói do /criativo.
+       *
+       * Os quadros (`@keyframes`) vivem em `globals.css`, não aqui, porque é
+       * lá que a preferência de movimento reduzido os desliga — e uma regra
+       * `@media` não cabe no objeto de configuração. Aqui só se declara o
+       * utilitário que o componente do registry referencia por nome
+       * (`animate-shiny-text`, `animate-aurora`); sem esta entrada a classe
+       * simplesmente não é gerada, e a peça fica parada sem acusar nada.
+       */
+      animation: {
+        "shiny-text": "shiny-text 8s infinite",
+        aurora: "aurora 12s ease-in-out infinite"
+      },
+
       screens: {
         mobile: "375px",
         "mobile-lg": "425px",

@@ -16,6 +16,9 @@ import { EASE } from "@/components/comic/motion"
 import { toChars, toWords, isSpace } from "@/animations/split"
 import { useMouseParallax } from "@/hooks/use-mouse-parallax"
 import { useMagnetic } from "@/hooks/use-magnetic"
+import { InteractiveGridPattern } from "@/components/ui/interactive-grid-pattern"
+import { AnimatedShinyText } from "@/components/ui/animated-shiny-text"
+import { AuroraText } from "@/components/ui/aurora-text"
 import { TiltCard } from "./tilt-card"
 import { FUN_STATS, HERO, IMAGEM_TEMPORARIA } from "@/constants/criativo-landing"
 
@@ -95,8 +98,29 @@ export function Hero() {
       aria-labelledby="hero-title"
       className="cx-parallax k-zone k-zone--multiverso k-grain relative isolate flex min-h-[calc(100vh-var(--k-header-h))] items-center overflow-hidden pb-28 pt-12"
     >
-      {/* --- fundo vivo: mesh + grão (atrás de tudo) -------------------- */}
+      {/* --- fundo vivo: mesh + grelha reativa + grão (atrás de tudo) ---- */}
       <div aria-hidden className="pointer-events-none absolute inset-0 z-0 overflow-hidden">
+        {/*
+          A GRELHA REATIVA (Magic UI, adaptada em `ui/interactive-grid-pattern`).
+
+          Era o que faltava ao fundo deste herói: mesh, grão, halftone e speed
+          lines são todos ESTÁTICOS ou ligados à rolagem — nenhum respondia ao
+          cursor. A grelha acende a célula sob o ponteiro e a deixa esfriar
+          devagar, o que dá ao fundo a mesma reatividade que os cartões já têm.
+
+          `pointer-events-auto` reverte, só para ela, o `pointer-events-none`
+          do contêiner: sem isso a peça não recebe `mouseenter` e o efeito
+          inteiro é decoração morta. O contêiner continua transparente ao
+          clique — é a grelha que volta a existir para o ponteiro, e ela não
+          tem nada clicável.
+
+          16×10 e não os 24×24 do padrão: são 160 retângulos em vez de 576, e
+          cada passagem do mouse re-renderiza a lista toda. A malha mais grossa
+          também casa melhor com a escala de impressão do realm.
+
+          `xl:block` e escondida abaixo disso: no celular não há cursor para
+          acender célula nenhuma, e 160 nós de SVG sem função é peso puro.
+        */}
         <div
           className="cx-mesh"
           style={
@@ -108,6 +132,16 @@ export function Hero() {
             } as React.CSSProperties
           }
         />
+        {/* Depois do mesh e antes do grão, de propósito: o mesh é um gradiente
+            que cobre a área inteira e engoliria a grelha se ela viesse antes;
+            o grão é uma textura translúcida, que passa por cima sem apagar. */}
+        <InteractiveGridPattern
+          className="pointer-events-auto hidden xl:block"
+          squares={[16, 10]}
+          width={64}
+          height={64}
+        />
+
         <div className="cx-noise" />
       </div>
 
@@ -181,7 +215,25 @@ export function Hero() {
               animate={{ opacity: 1, y: 0 }}
               transition={{ duration: 0.6, ease: EASE }}
             >
-              <Caption>{HERO.kicker}</Caption>
+              {/*
+                O TEXT REVEAL entra AQUI, e não na manchete — e a escolha é a
+                decisão de LCP documentada no topo deste arquivo.
+
+                Os componentes de reveal do registry (`text-reveal`,
+                `blur-fade`) começam em `opacity: 0` e esperam a hidratação.
+                Aplicá-los ao `<h1>`, que é o elemento de LCP, atrasaria a
+                pintura do maior texto da tela — exatamente o que o reveal por
+                caractere daqui foi escrito para evitar.
+
+                `AnimatedShinyText` não tem esse problema: ele varre o
+                `background-position` de um gradiente recortado no texto. A
+                letra está pintada no primeiro quadro; o que se move é o
+                brilho. O chapéu é o lugar certo para ele — é curto, é
+                secundário e não disputa LCP com ninguém.
+              */}
+              <Caption>
+                <AnimatedShinyText>{HERO.kicker}</AnimatedShinyText>
+              </Caption>
             </motion.div>
 
             {/* --- assinatura do autor (anomalia Terra-138) -------------- */}
@@ -196,7 +248,18 @@ export function Hero() {
               <GlitchTitle as="span" treatment="glitch" className="text-[clamp(1.4rem,3.6vw,calc(var(--cp-mag)*0.036))]">
                 {HERO.author}
               </GlitchTitle>
-              <span className="k-kicker text-[9px] text-[var(--k-ink)]/60">{HERO.authorTag}</span>
+              {/*
+                O GRADIENTE (aurora) na etiqueta da anomalia, não na
+                assinatura ao lado: aquela já é tratada pelo `GlitchTitle`, e
+                dois efeitos de cor no mesmo par de palavras se anulariam —
+                o glitch trabalha por deslocamento de canal, o aurora por
+                varredura de matiz, e sobrepostos viram ruído.
+
+                Aqui ele tem função: a etiqueta é a linha mais miúda do bloco
+                e a que mais some. Cor em movimento devolve a ela o peso que a
+                hierarquia tipográfica lhe tirou, sem aumentar o corpo.
+              */}
+              <AuroraText className="k-kicker text-[9px]">{HERO.authorTag}</AuroraText>
             </motion.div>
 
             {/*

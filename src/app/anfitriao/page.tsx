@@ -14,7 +14,9 @@ import {
 } from "@/lib/anfitriao-prophet"
 import { ZoneLink } from "@/components/anfitriao/zone-link"
 import { NewspaperJsonLd } from "@/components/anfitriao/newspaper-jsonld"
-import { Plate, WireColumn } from "@/components/anfitriao/wire-column"
+import { Plate } from "@/components/anfitriao/wire-column"
+import { WireGrid } from "@/components/anfitriao/wire-motion"
+import { ProphetScroll } from "@/components/anfitriao/prophet-scroll"
 import { ProphetCaderno } from "@/components/anfitriao/prophet-caderno"
 import { getFrontNews } from "@/data/prophet-wire"
 
@@ -69,6 +71,11 @@ export default async function DailyProphetFront() {
       {/* Dados estruturados da folha. Fica no topo por convenção de leitura —
           o buscador não se importa com a posição, quem lê o HTML se importa. */}
       <NewspaperJsonLd url="https://portifolio2026-two.vercel.app/anfitriao" />
+
+      {/* Motor de rolagem (GSAP/ScrollTrigger). Não imprime nada: enriquece o
+          HTML que o servidor já mandou. Ver `prophet-scroll.tsx` para a divisão
+          de território com o Motion das colunas. */}
+      <ProphetScroll />
 
       {/* ─── EXCLUSIVO — a faixa de manchete do original ─── */}
       <section
@@ -279,11 +286,11 @@ export default async function DailyProphetFront() {
           </h2>
           <hr className="hr-double-bottom" />
 
-          <div className="dpx-wire-grid">
-            {rest.map((n) => (
-              <WireColumn key={n.slug} news={n} />
-            ))}
-          </div>
+          {/* A grelha saiu daqui para `wire-motion.tsx`, que é onde as colunas
+              ganham entrada por rolagem, elevação no ponteiro e a tarja de
+              procedência. O `<div className="dpx-wire-grid">` continua sendo o
+              elemento externo — mudou quem o imprime, não a diagramação. */}
+          <WireGrid news={rest} />
         </section>
       )}
 

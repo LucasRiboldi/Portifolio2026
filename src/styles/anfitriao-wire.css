@@ -17,7 +17,6 @@
  * regra da casa: se uma classe quebrar, quebra no guia também.
  */
 
-
 /* ─────────────────────────────────────────────────────────────
    Linha de data — sob o cabeçalho, entre filetes finos.
    ───────────────────────────────────────────────────────────── */
@@ -553,6 +552,26 @@
   font-style: italic;
   color: var(--anf-ink-2);
   margin: 0 0 0.35em;
+}
+
+/* A TARJA DE PROCEDÊNCIA — monta no ponteiro ou no foco, desmonta na saída.
+   Quem a anima é o `AnimatePresence` de `wire-motion.tsx`; aqui só existe a
+   aparência.
+
+   `overflow: hidden` é requisito, não enfeite: a saída interpola a altura até
+   zero, e sem o corte o texto continuaria desenhado por fora da caixa que
+   encolhe. A composição tipográfica imita a linha de telégrafo do impresso —
+   versalete espaçado, filete acima. */
+.dpx-news-wireline {
+  overflow: hidden;
+  margin: 0 0 0.35em;
+  border-top: 1px solid var(--anf-rule, var(--anf-ink));
+  padding-top: 0.3em;
+  font-family: var(--anf-head);
+  font-size: var(--anf-text-xs);
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  color: var(--anf-ink-2);
 }
 
 .dpx-news-source {

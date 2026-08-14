@@ -149,3 +149,57 @@
 .gradient-border {
   border-image: linear-gradient(90deg, #f97316, #ec4899, #8b5cf6) 1;
 }
+
+/* ─────────────────────────────────────────────────────────────
+   Quadros das peças da Magic UI (`animated-shiny-text`, `aurora-text`).
+
+   O instalador do registry escreveu estes quadros dentro de um `@theme
+   inline`, que é do TAILWIND 4. Este projeto está no 3: ali a at-rule não é
+   reconhecida, o bloco inteiro é descartado, e as duas peças ficavam paradas
+   sem erro nenhum na tela — o pior tipo de defeito.
+
+   Aqui os quadros são CSS puro, e os utilitários `animate-shiny-text` e
+   `animate-aurora` que os componentes pedem estão declarados no
+   `tailwind.config.ts` — o mesmo efeito, dito no dialeto que este projeto fala.
+
+   UMA DIFERENÇA DELIBERADA: o `aurora` original também gira e escala o texto
+   (`rotate(-5deg) scale(0.9)` … `rotate(5deg) scale(1.1)`). Aqui ficou só a
+   varredura do gradiente. A peça foi enxertada sobre uma manchete que já
+   ocupa a largura da mancha: escalar 10% para cima e para baixo em laço
+   infinito mexeria na caixa de uma linha de título e brigaria com o glitch
+   que aquela coluna já tem. Cor em movimento é o que se queria; o texto
+   dançando, não.
+
+   O movimento reduzido corta os dois: são ornamentos em laço infinito, e
+   laço infinito é justamente o que a preferência existe para desligar.
+   ───────────────────────────────────────────────────────────── */
+@keyframes shiny-text {
+  0%,
+  90%,
+  100% {
+    background-position: calc(-100% - var(--shiny-width)) 0;
+  }
+  30%,
+  60% {
+    background-position: calc(100% + var(--shiny-width)) 0;
+  }
+}
+
+@keyframes aurora {
+  0% {
+    background-position: 0% 50%;
+  }
+  50% {
+    background-position: 100% 50%;
+  }
+  100% {
+    background-position: 0% 50%;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .animate-shiny-text,
+  .animate-aurora {
+    animation: none;
+  }
+}
