@@ -6,33 +6,15 @@
 > Ao concluir um item: remova-o daqui, atualize `PROJECT_STATE.md` e diga no
 > commit o que foi verificado de verdade.
 >
-> **Atualizado:** 2026-08-13, no fecho da empreitada de qualidade.
+> **Atualizado:** 2026-08-14, no fecho do `P9`.
 
 ---
 
-## 🐞 Um defeito conhecido, aberto e diagnosticado
+## ✅ Nenhum defeito de código aberto
 
-**A entrada por rolagem do `/desenvolvedor` nunca acontece.** O
-`IntersectionObserver` de `src/components/dev/home-motor.tsx` não marca
-elemento nenhum: rolei os 5406 px da página e **zero** ganharam
-`data-visivel`. Nenhum dos 18 alvos nasce dentro da janela, então o laço de
-marcação do carregamento também não pega nenhum.
-
-**Consequência visível:** o hover dos cartões (`.dv-card`, `.dv-stat`,
-`.dv-radar-item`) não transiciona. A regra de entrada ocupa a propriedade
-`transition` de todos eles, e a borda salta em vez de acender — contra o que
-`realm-motion.ts` documenta.
-
-**A armadilha, e é séria:** o `transition` dessa regra é o que mantém a página
-visível. Tirá-lo restaura o hover **e esconde 18 elementos para sempre**,
-porque nada nunca é revelado. Tentei duas vezes; as duas foram revertidas.
-
-**Não conserte pelo CSS.** O alvo é o observador, no `home-motor.tsx`. Exige
-navegador com a tela visível — medir opacidade depois não basta, é preciso ver
-a entrada acontecer. Detalhe completo em `PLAN.md`, pendência `P9`.
-
-Sem pressa: a página funciona e o conteúdo aparece. O que se perde é a
-animação de chegada e o refinamento do hover.
+O `P9` — a entrada por rolagem do `/desenvolvedor` — fechou em 14/08. Ele
+estava diagnosticado ao contrário: o observador **funciona**, e o culpado
+**era** o CSS. Registro completo em `PLAN.md`.
 
 ---
 
@@ -56,8 +38,7 @@ AA nas rotas amostradas — contraste, foco, ARIA e alvo de toque. **O upload de
 mídia funciona fim a fim** — imagem, áudio, PDF e vídeo, verificado em produção
 em 05/08 com um mp4 de 9,19 MB que sobe e toca na videoteca.
 
-**O que resta é conteúdo e higiene de credencial, não código quebrado** — com
-a exceção do defeito de animação registrado logo acima.
+**O que resta é conteúdo e higiene de credencial, não código quebrado.**
 
 Eram **três** defeitos independentes, e o diagnóstico antigo culpava um quarto
 que não existia:

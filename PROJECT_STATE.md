@@ -3,16 +3,15 @@
 > Resumo executivo do estado real do projeto. Atualize a cada marco.
 > Para o conhecimento estável e detalhado, veja `docs/project-knowledge/`.
 >
-> **Última atualização:** 2026-08-13, no fecho da empreitada de qualidade
-> (v0.5.0 pelo PR #1, continuada até a v0.6.0). O bloqueio do upload de mídia
-> **caiu**: verificado fim a fim em 05/08 (seção 5).
+> **Última atualização:** 2026-08-14, no fecho do `P9`. O bloqueio do upload de
+> mídia **caiu**: verificado fim a fim em 05/08 (seção 5).
 >
-> **Um bug aberto e diagnosticado:** a entrada por rolagem do `/desenvolvedor`
-> nunca dispara, e por isso o hover dos cartões não transiciona. O alvo é
-> `home-motor.tsx`, **não o CSS** — tirar a regra de estilo esconde a página.
-> Ver `NEXT_STEPS.md`, no topo, e `PLAN.md` `P9`.
+> **Nenhum bug de código aberto.** O `P9` fechou em 14/08 e o diagnóstico
+> anterior estava errado nos dois pontos: o `IntersectionObserver` de
+> `home-motor.tsx` **funciona** (0 → 18 alvos revelados ao rolar, medido em
+> navegador que compõe quadros), e o culpado **era** o CSS. Ver `PLAN.md` `P9`.
 >
-> O resto do que falta é conteúdo e higiene de credencial. O `PLAN.md` guarda
+> O que falta é conteúdo e higiene de credencial. O `PLAN.md` guarda
 > o que foi medido na empreitada, inclusive as suspeitas que **não** viraram
 > defeito — leia antes de reabrir investigação.
 

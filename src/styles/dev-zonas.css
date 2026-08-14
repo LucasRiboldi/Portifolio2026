@@ -23,26 +23,45 @@
 /* ═══════════════════════════════════════════════════════════════════════
    1. MOVIMENTO — entrada por rolagem
    ═══════════════════════════════════════════════════════════════════════ */
-.dracula[data-motor="on"] [data-revelar] {
+/* A entrada é ANIMAÇÃO, não transição — e a diferença não é de estilo.
+   `transition` é propriedade herdável pela cascata: declarada aqui, ela
+   SUBSTITUÍA a do próprio elemento (`.dv-card` pede `border-color 0.15s,
+   transform 0.15s`) e continuava substituindo depois de a entrada terminar.
+   Resultado medido: cartão já revelado com `transition-property: opacity,
+   transform / 0.5s` — borda saltando no hover, elevação em 0,5 s.
+
+   Com `@keyframes` a entrada não encosta no `transition` em momento nenhum.
+   O estado escondido mora sob `:not([data-visivel])`, e é o que impede o modo
+   de falha das tentativas anteriores: se o motor nunca revelasse, bastaria o
+   atributo faltar para o elemento voltar a nascer visível — nada aqui prende
+   conteúdo em `opacity: 0` permanente. */
+.dracula[data-motor="on"] [data-revelar]:not([data-visivel="true"]) {
   opacity: 0;
   transform: translateY(14px);
-  transition:
-    opacity 0.5s var(--dev-ease),
-    transform 0.5s var(--dev-ease);
 }
 .dracula[data-motor="on"] [data-revelar][data-visivel="true"] {
-  opacity: 1;
-  transform: none;
+  animation: dv-entrada 0.5s var(--dev-ease) backwards;
+}
+/* Sem `to`: o destino é o estado natural do elemento. Sem `forwards`: ao
+   terminar, a animação SOLTA `opacity` e `transform`, e o hover recupera o
+   controle do `transform`. Com `forwards` o valor final ficaria travado e o
+   cartão perderia a elevação. */
+@keyframes dv-entrada {
+  from {
+    opacity: 0;
+    transform: translateY(14px);
+  }
 }
 
 /* Escalonamento: irmãos entram em cascata, não em bloco. O atraso é curto de
    propósito — acima de ~250 ms no último item a lista parece lenta em vez de
-   fluida. */
-.dracula[data-motor="on"] [data-revelar]:nth-child(2) { transition-delay: 60ms; }
-.dracula[data-motor="on"] [data-revelar]:nth-child(3) { transition-delay: 120ms; }
-.dracula[data-motor="on"] [data-revelar]:nth-child(4) { transition-delay: 180ms; }
-.dracula[data-motor="on"] [data-revelar]:nth-child(5) { transition-delay: 240ms; }
-.dracula[data-motor="on"] [data-revelar]:nth-child(n + 6) { transition-delay: 280ms; }
+   fluida. `backwards` segura o quadro inicial durante a espera; sem ele o
+   elemento piscaria visível antes de começar. */
+.dracula[data-motor="on"] [data-revelar]:nth-child(2) { animation-delay: 60ms; }
+.dracula[data-motor="on"] [data-revelar]:nth-child(3) { animation-delay: 120ms; }
+.dracula[data-motor="on"] [data-revelar]:nth-child(4) { animation-delay: 180ms; }
+.dracula[data-motor="on"] [data-revelar]:nth-child(5) { animation-delay: 240ms; }
+.dracula[data-motor="on"] [data-revelar]:nth-child(n + 6) { animation-delay: 280ms; }
 
 /* ═══════════════════════════════════════════════════════════════════════
    2. MOVIMENTO — holofote do cursor

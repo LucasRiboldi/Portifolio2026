@@ -50,12 +50,11 @@ método validado aqui e as duas correções do medidor que este trabalho expôs.
 
 ## O que falta — ver "Pendências" no fim deste arquivo
 
-**Aberta:** só a **`P9`** — a entrada por rolagem do `_dev` nunca dispara, e
-por isso o hover dos cartões não transiciona. Diagnosticada, com o alvo
-identificado (`home-motor.tsx`) e o caminho anotado.
+**Aberta:** nenhuma.
 
 **Fechadas:** `P1` (medida — durações sem defeito) · `P2` · `P3` · `P4` ·
-`P5` · `P6` · `P7` · `P8`.
+`P5` · `P6` · `P7` · `P8` · `P9` (14/08 — era o CSS, e o diagnóstico anterior
+tinha sido colhido em página oculta).
 
 **Fechadas:** `P2` (falso positivo) · `P3` (5 rotas, 3 defeitos) · `P4`
 (737 → 363 linhas) · `P5` (build, fumaça, responsividade) · `P6` PR #1 ·
@@ -585,60 +584,75 @@ A tag só foi criada **depois** do merge, e a ordem importava: `getVersaoSite`
 escolhe a maior semver do repositório inteiro, sem olhar branch. Taguear antes
 faria a produção anunciar uma versão que ela não continha.
 
-## P9 — Diagnosticado (13/08). A causa é o observador, não o CSS.
+## P9 — Resolvido ✅ (2026-08-14). Era o CSS; o observador estava são.
 
-**O sintoma visível** é o hover dos cartões do `_dev`, que não transiciona.
-**A causa raiz é outra, e mais séria:** a entrada por rolagem nunca acontece.
+**O diagnóstico de 13/08 estava errado nos dois pontos**, e a lição de método
+vale mais que o conserto.
 
-### O que ficou provado
+### O que a medição válida mostrou
 
-**1. O `IntersectionObserver` não marca nada.** Rolei os 5406 px da página
-inteira, em passos de 400 px: **zero** elementos com `data-visivel`. E o laço
-que marca no carregamento (`home-motor.tsx:57`) também não marca, porque
-**nenhum dos 18 nasce dentro da janela** — todos ficam abaixo da dobra.
+Navegador com `document.visibilityState === "visible"`, rolagem em passos de
+400 px pelos 5406 px da página:
 
-**2. O React não apaga o atributo.** Escrevi `data-visivel="true"` à mão e ele
-sobreviveu. A hipótese registrada antes — de que um re-render limparia o que o
-motor escreve — está **descartada**.
+| Rolagem | 400 | 800 | 1200 | 1600 | 2000 | 2400 | 2800 | 3200 | 3600+ |
+|---|---|---|---|---|---|---|---|---|---|
+| `data-visivel` | 0 | 0 | 4 | 8 | 10 | 13 | 14 | 17 | **18/18** |
 
-**3. O `transition` da regra de entrada é o que segura a página de pé.** Este
-é o achado que explica tudo:
+O `IntersectionObserver` de `home-motor.tsx` **funciona**, com o `threshold` e
+o `rootMargin` que já estavam lá. Nenhuma linha do componente foi tocada.
 
-| Regra de entrada | Página | Hover |
-|---|---|---|
-| Com `transition` (atual) | visível | **quebrado** |
-| Sem `transition` (2 tentativas) | **18 invisíveis** | correto |
+### Por que a medição de 13/08 mentiu
 
-Com `transition`, a mudança de opacidade 1 → 0 fica pendente e nunca completa
-para conteúdo que nunca foi pintado. Sem ele, o `opacity: 0` aplica na hora —
-e como nada nunca é revelado, **fica invisível para sempre**.
+A pane do navegador estava **oculta**, e página oculta não compõe quadros. Sem
+composição não roda `requestAnimationFrame`, não progride transição e **o
+`IntersectionObserver` não entrega callback**. Os três "achados" da véspera
+eram o mesmo artefato:
 
-O `transition` estava mascarando um observador quebrado. Tirá-lo não causa o
-defeito: **expõe** o que já estava lá.
+| Sintoma de 13/08 | Explicação real |
+|---|---|
+| zero `data-visivel` depois de rolar tudo | o observador não é notificado com a página oculta |
+| opacidade computada **1** com o seletor casando | a transição 1 → 0 nunca começou — era o "inexplicado" |
+| "o `transition` é o que segura a página de pé" | falso: o que segurava era a página nunca ser pintada |
 
-### Por que não corrigi
+**A regra:** `visibilityState` é o primeiro valor a ler antes de acreditar em
+qualquer medida de animação. Vale como asserção no começo do script.
 
-Tentei duas vezes, medindo por navegação limpa (não `reload`, que confunde com
-Fast Refresh). As duas restauraram o hover exatamente como o guia documenta —
-`border-color`, `0.15s`, atraso `0s`, zero acima de 300 ms — e as duas
-apagaram a página. Revertidas, árvore idêntica ao commit.
+**O contorno que resolveu:** `playwright`, que já é dependência do projeto,
+abre um Chromium que compõe de verdade — e independe da pane. Foi assim que a
+tabela acima saiu.
 
-**Consertar o CSS sem consertar o observador troca um defeito visível por um
-pior.** A ordem certa é: primeiro fazer a revelação funcionar, depois libertar
-o `transition`.
+### O conserto, e por que ele não tem o modo de falha das tentativas revertidas
 
-### Onde começar
+O defeito real era um só: `.dracula[data-motor="on"] [data-revelar]` declarava
+`transition`, que **substitui** a do próprio elemento pela cascata — e
+continuava substituindo depois de a entrada terminar. Medido num cartão já
+revelado: `transition-property: opacity, transform / 0.5s`, no lugar do
+`border-color 0.15s, transform 0.15s` que o `.dv-card` pede.
 
-O alvo é `src/components/dev/home-motor.tsx`, não a folha de estilo. Descobrir
-por que o observador não dispara com `{ threshold: 0.12, rootMargin: "0px 0px
--40px 0px" }` sobre os 18 alvos. **Exige a pane do navegador visível** — é
-preciso ver a entrada acontecer, e nesta sessão ela não compunha quadros.
+A entrada virou `@keyframes dv-entrada`, e o estado escondido passou a morar
+sob `:not([data-visivel="true"])`. Duas consequências:
 
-**Uma coisa que continua inexplicada:** com a regra atual, `getComputedStyle`
-devolve opacidade **1** mesmo com o seletor casando, o motor ligado e sem
-`data-visivel`. Conferi que a folha está ativa, sem `media`, sem `@layer`, e
-que a regra está no CSS servido. Isso pede o painel de estilos do DevTools,
-que eu não tenho aqui.
+- animação não encosta em `transition`, então o hover volta inteiro;
+- o repouso deixa de ser `opacity: 0`. Se a revelação falhasse, o pior caso é
+  a página aparecer **sem animação** — nunca invisível. É exatamente o que as
+  duas tentativas de 13/08 não tinham.
+
+Sem `forwards` de propósito: animação preenchida para a frente travaria
+`transform` no valor final e o cartão perderia a elevação no hover.
+
+### Prova
+
+| Medida | Resultado |
+|---|---|
+| Revelação após o conserto | 0 → 17/17 ao rolar (a contagem varia com o nº de notícias do radar) |
+| `.dv-card` revelado | `transition: border-color, transform / 0.15s` |
+| `.dv-stat` · `.dv-radar-item` | `border-color / 0.15s` · `border-color, transform / 0.15s` |
+| Hover, borda medida **no meio** da transição | `rgb(68,71,90)` → `rgb(158,127,208)` → `rgb(189,147,249)` |
+| `prefers-reduced-motion: reduce` | motor ausente, **0** de 17 invisíveis |
+| Suíte · lint | 667 testes verdes · sem aviso |
+
+A borda medida no meio é o ponto: declaração de `transition` correta não prova
+que a cor anda. Um valor intermediário, sim.
 
 ## P8 — Resolvido ✅ (2026-08-13): instalada, depois de lida
 
