@@ -167,8 +167,8 @@ O conteúdo do site **vem do Firestore**, editável em `/admin` — sem redeploy
 ## 🛠 Stack
 
 `Next.js 15` · `React 19` · `TypeScript 5` · `Tailwind 3` · `Motion 12` · `GSAP 3` · `Lottie` ·
-`Firebase` (Firestore + Auth) · `Vercel Blob` (mídia) · `Radix / Base UI` · `React Hook Form + Zod 4` ·
-`react-markdown` · `Storybook 10` · `Vitest 4`
+`Firebase` (Firestore + Auth) · `Vercel Blob` (mídia) · `Base UI` · `Zod 4` (validação, formulários
+via `FormData` nativa) · `react-markdown` · `Storybook 10` · `Vitest 4`
 
 Hospedado na **Vercel** — deploy automático no push da `main`.
 

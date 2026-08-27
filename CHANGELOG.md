@@ -23,6 +23,28 @@ Registro das mudanças que valem para quem usa ou lê o site. Segue
 
 Nada ainda.
 
+## [0.7.1] — 2026-08-27
+
+Varredura de auditoria pós-v0.7.0: dependências mortas, vulnerabilidades e
+documentação desatualizada — sem mudança de comportamento.
+
+### Corrigido
+
+- **Segurança:** `postcss` (leitura de `.map` arbitrário) e `sharp` (CVEs de
+  `libvips`, severidade alta) atualizados via `npm audit fix`, sem breaking
+  change. Fica pendente `uuid` (moderado), preso na cadeia do
+  `firebase-admin` — corrigir exigiria rebaixar o `firebase-admin`, registrado
+  em `docs/project-knowledge/technical-debt.md`.
+- README citava `Radix / Base UI` e `React Hook Form` na Stack; a migração
+  para `@base-ui/react` puro e `FormData` nativa já tinha tornado isso
+  desatualizado.
+
+### Removido
+
+- 4 dependências instaladas e nunca importadas: `@hookform/resolvers`, `ai`,
+  `radix-ui`, `react-hook-form` — resíduo da migração para `@base-ui/react` +
+  `FormData` nativa em formulários. `npm uninstall` tirou 79 pacotes da árvore.
+
 ## [0.6.0] — 2026-08-13
 
 Continuação da empreitada de qualidade da v0.5.0: auditoria de acessibilidade

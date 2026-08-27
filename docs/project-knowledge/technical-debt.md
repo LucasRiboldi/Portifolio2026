@@ -7,7 +7,8 @@
 > acionável, com passo a passo, é o `NEXT_STEPS.md` — credenciais a rotacionar,
 > conteúdo a repor e validações pendentes moram lá, não aqui.
 >
-> **Revisado em:** 2026-08-12, conferido item a item contra o código.
+> **Revisado em:** 2026-08-27, nova varredura (build/lint/testes + dependências
+> + diff pós-v0.6.0) — sem duplicação nem código morto novo. Ver "Resolvidos".
 >
 > **Nenhum arquivo do `src/` passa de 500 linhas.** O `anfitriao/page.tsx`,
 > que tinha 737, foi partido em três em 13/08 — extração pura, com o HTML
@@ -70,7 +71,18 @@ Se um dia incomodar, a saída **não é cachear** — é gravar o vínculo na ho
 que a URL entra no documento, em vez de descobri-lo depois. Não faça antes de
 doer: o índice derivado é o que não pode dessincronizar.
 
-### 7. CSP com `unsafe-inline` em `script-src`
+### 7. `uuid` vulnerável, preso na cadeia do `firebase-admin`
+
+`npm audit` acusa `uuid < 11.1.1` (moderado, bounds check ausente em v3/v5/v6) via
+`gaxios`/`teeny-request`/`@google-cloud/storage`, dependências transitivas do
+`firebase-admin`. A correção automática (`npm audit fix --force`) rebaixaria o
+`firebase-admin` para `10.3.0` — regressão de versão maior, não aplicada.
+Risco baixo na prática: a função vulnerável não recebe entrada do usuário no
+nosso uso (é gerada internamente pelo cliente do Google Cloud Storage, que nem
+usamos — Storage é mídia vai para o Vercel Blob). Revisar quando o
+`firebase-admin` publicar uma versão que resolva a cadeia sem downgrade.
+
+### 8. CSP com `unsafe-inline` em `script-src`
 
 Compromisso de um CSP por header, sem nonce por request. Um CSP estrito exigiria
 middleware em todas as rotas. Registrado no próprio `next.config.ts`.
@@ -83,7 +95,7 @@ middleware em todas as rotas. Registrado no próprio `next.config.ts`.
 
 ## 🔵 Higiene
 
-### 8. Projeto Supabase antigo ainda no ar
+### 9. Projeto Supabase antigo ainda no ar
 
 Mantido como rede de segurança durante a migração. **Conferido em 01/08 e
 reconferido em 04/08: seguro apagar** — zero dependências instaladas e 0 URLs do
@@ -94,7 +106,7 @@ O código morto que sobrava já saiu (12/08): `scripts/fix-criativo-covers.mjs`
 foi apagado, e `scripts/setup-structure.mjs` deixou de recriar
 `src/lib/supabase`. Falta só desligar o projeto lá.
 
-### 9. Convenção de idioma mista na camada de dados
+### 10. Convenção de idioma mista na camada de dados
 
 Funções novas em português (`buscarLinhas`), antigas em inglês
 (`listContactMessages`). Não vale refatorar só por isso; padronize ao tocar em
@@ -118,3 +130,11 @@ cada um está no `PROJECT_STATE.md`.
 | 🟡 | `admin_allowlist` era coleção órfã | Removida do `lib/firebase/schema.ts` em 31/07 |
 | 🟡 | Coleções do arcane permanentemente vazias | As quatro páginas estão no ar com 12 documentos. O conteúdo é rascunho a reescrever — virou `NEXT_STEPS.md` item 3 |
 | 🟡 | Warning de lint em `use-mouse-parallax.ts` | `ref` declarado nas dependências, com o porquê no comentário |
+
+## Resolvidos (2026-08-27)
+
+| Era | O que era | Como fechou |
+|---|---|---|
+| 🟡 | 4 dependências instaladas e nunca importadas: `@hookform/resolvers`, `ai`, `radix-ui`, `react-hook-form` (resíduo da migração para `@base-ui/react` + `FormData` nativa) | `npm uninstall` — 79 pacotes a menos na árvore (inclui as transitivas do `radix-ui`) |
+| 🟠 | `postcss` (leitura de `.map` arbitrário) e `sharp` (CVEs do `libvips`, severidade alta) vulneráveis | `npm audit fix`, sem breaking change. `test:unit` (667) e `build` verdes depois |
+| 🟢 | README citava `Radix / Base UI` e `React Hook Form` na Stack — desatualizado desde a migração para Base UI puro | Linha da Stack corrigida em `README.md` |
