@@ -4,7 +4,7 @@ import { dirname, join } from "node:path"
 
 import { describe, expect, it } from "vitest"
 
-import { extrairUkge, dataUkge, EXTRACTORS } from "@/lib/prophet-wire/extractors"
+import { extrairUkge, dataUkge, extrairPlaidHat, dataPlaidHat, EXTRACTORS } from "@/lib/prophet-wire/extractors"
 import { parsePayload } from "@/lib/prophet-wire/parser"
 import { RunLogger } from "@/lib/prophet-wire/logger"
 import type { RawPayload } from "@/lib/prophet-wire/collector"
@@ -28,6 +28,7 @@ import type { Source } from "@/lib/prophet-wire/types"
 
 const here = dirname(fileURLToPath(import.meta.url))
 const html = readFileSync(join(here, "fixtures", "ukge-news.html"), "utf-8")
+const plaidHatHtml = readFileSync(join(here, "fixtures", "plaidhat-news.html"), "utf-8")
 
 const source: Source = {
   id: "uk-games-expo",
@@ -145,9 +146,57 @@ describe("parsePayload usa o extractor só quando não há feed", () => {
   })
 })
 
+describe("dataPlaidHat", () => {
+  it("lê a data embutida no caminho da URL", () => {
+    // A listagem não traz data em texto — só o próprio link tem.
+    expect(dataPlaidHat("/news/2026/08/18/the-monolith-is-now-live-on-kickstarter/")).toBe(
+      "2026-08-18T00:00:00.000Z",
+    )
+  })
+
+  it("devolve null sem o padrão /news/AAAA/MM/DD/", () => {
+    expect(dataPlaidHat("/news/sobre-nos/")).toBeNull()
+    expect(dataPlaidHat("")).toBeNull()
+  })
+
+  it("rejeita data impossível em vez de deixar o Date corrigir", () => {
+    expect(dataPlaidHat("/news/2026/02/31/x/")).toBeNull()
+  })
+})
+
+describe("extrairPlaidHat", () => {
+  const itens = extrairPlaidHat(plaidHatHtml, "plaid-hat")
+
+  it("acha os quatro cartões da fixture", () => {
+    expect(itens).toHaveLength(4)
+  })
+
+  it("extrai título, link absoluto, data e imagem", () => {
+    expect(itens[0]).toMatchObject({
+      sourceId: "plaid-hat",
+      title: "The Monolith is Now Live on Kickstarter",
+      link: "https://www.plaidhatgames.com/news/2026/08/18/the-monolith-is-now-live-on-kickstarter/",
+      publishedAt: "2026-08-18T00:00:00.000Z",
+    })
+    expect(itens[0]!.imageUrl).toMatch(/^https:\/\/media\.plaidhatgames\.com\//)
+  })
+
+  it("não pareia campos de cartões diferentes mesmo com contagem de categorias variável", () => {
+    // O quarto cartão tem 4 categorias contra 1 dos outros — se o corte por
+    // cartão falhasse, o título dele vazaria pro cartão seguinte (ou vice-versa).
+    expect(itens[3]!.title).toBe("New Titles from Plaid Hat Games!")
+    expect(itens[3]!.link).toBe("https://www.plaidhatgames.com/news/2026/07/23/new-titles-from-plaid-hat-games/")
+  })
+
+  it("devolve lista vazia — não lança — em HTML irreconhecível", () => {
+    expect(extrairPlaidHat("<html><body>nada</body></html>", "plaid-hat")).toEqual([])
+  })
+})
+
 describe("registry", () => {
   it("o id registrado é o mesmo do registry de fontes", () => {
     // Um id torto aqui faria o extractor nunca rodar, em silêncio.
     expect(Object.keys(EXTRACTORS)).toContain("uk-games-expo")
+    expect(Object.keys(EXTRACTORS)).toContain("plaid-hat")
   })
 })

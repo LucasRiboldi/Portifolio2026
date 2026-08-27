@@ -114,7 +114,7 @@ compara com `ADMIN_GITHUB_LOGIN` → custom claim + session cookie httpOnly.
 ```bash
 npm run dev          # local, porta 3000
 npm run build        # NÃO rode com o dev server no ar
-npm run test:unit    # 667 testes (sem rede, sem credencial)
+npm run test:unit    # 675 testes (sem rede, sem credencial)
 npm run test:smoke   # sobe o build e confere os portoes (precisa de build)
 npm run test:integration  # emulador do Firestore (precisa de JDK 21)
 npm run lint

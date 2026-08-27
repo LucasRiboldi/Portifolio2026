@@ -150,19 +150,25 @@ em produção. Isso confunde justamente porque parece bug de deploy — não é.
 nenhum arquivo de configuração. Se o login quebra só no ambiente hospedado e a
 mensagem cita domínio, comece por aqui.
 
-**Consequência estrutural, e ela não tem correção simples:** cada deploy de
-preview da Vercel recebe uma URL com hash único
-(`<projeto>-git-<branch>-<hash>.vercel.app`). Não há curinga na allowlist do
-Firebase, então **não existe como pré-autorizar previews**. Disso decorre:
+**Consequência estrutural:** cada deploy de preview da Vercel recebe uma URL
+com hash único (`<projeto>-git-<branch>-<hash>.vercel.app`). Não há curinga na
+allowlist do Firebase, então não dá para pré-autorizar cada preview
+individualmente.
 
-- validação de qualquer coisa atrás de `/admin` acontece em **produção** ou em
-  **`localhost`** — nunca em preview;
-- de quebra, isso torna acadêmica a falta de `BLOB_READ_WRITE_TOKEN` no
-  ambiente de preview: sem login não há painel, e sem painel não há upload.
+**Resolvido em 27/08/2026** com a saída que este documento já apontava: branch
+fixa `preview` + alias estável na Vercel
+(`portifolio2026-preview-lucasriboldis-projects.vercel.app`, reatribuído a cada
+novo deploy manual com `vercel alias set`) + esse alias autorizado uma única
+vez em Authentication → Settings → Authorized domains. Login e upload de
+mídia validados fim a fim contra esse domínio no mesmo dia — ver
+`PROJECT_STATE.md` §5.
 
-A única saída, se um dia incomodar, é configurar na Vercel um **alias fixo de
-branch** (um domínio estável apontando sempre para o último preview daquela
-branch) e autorizar esse alias uma vez.
+**O que persiste:** o webhook Git→Vercel não dispara deploy automático para a
+branch `preview` (investigar no dashboard); por ora o deploy dessa branch é
+manual (`vercel deploy` + `vercel alias set`, comando completo no
+`NEXT_STEPS.md` item 8 do histórico). Continua sem caminho por CLI, Admin SDK
+ou MCP do Firebase para autorizar domínios — a autorização em si é sempre
+manual, uma vez por domínio.
 
 ---
 

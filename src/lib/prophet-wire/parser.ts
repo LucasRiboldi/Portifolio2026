@@ -83,6 +83,20 @@ function toIso(value: string | null): string | null {
   return Number.isNaN(t) ? null : new Date(t).toISOString()
 }
 
+/**
+ * Resolve `link` contra a URL da fonte quando o feed traz caminho relativo
+ * (ex.: GMT Games devolve `/news.aspx?showarticle=593`). Sem isto a URL vai
+ * quebrada para o Firestore — proveniência perdida.
+ */
+function absolutizar(link: string, baseUrl: string): string {
+  if (!link) return link
+  try {
+    return new URL(link, baseUrl).toString()
+  } catch {
+    return link
+  }
+}
+
 /** Primeira imagem: enclosure, media:content/thumbnail, ou `<img src>` no corpo. */
 function findImage(block: string): string | null {
   return (
@@ -103,22 +117,22 @@ function atomLink(block: string): string {
 
 // ── Parsing por formato ────────────────────────────────────────────────
 
-function parseRssItem(sourceId: string, block: string): ParsedItem {
+function parseRssItem(sourceId: string, block: string, baseUrl: string): ParsedItem {
   return {
     sourceId,
     title: stripHtml(tag(block, "title") ?? ""),
-    link: tag(block, "link") ?? "",
+    link: absolutizar(tag(block, "link") ?? "", baseUrl),
     publishedAt: toIso(tag(block, "pubDate") ?? tag(block, "dc:date")),
     summary: stripHtml(tag(block, "description") ?? tag(block, "content:encoded") ?? ""),
     imageUrl: findImage(block),
   }
 }
 
-function parseAtomEntry(sourceId: string, block: string): ParsedItem {
+function parseAtomEntry(sourceId: string, block: string, baseUrl: string): ParsedItem {
   return {
     sourceId,
     title: stripHtml(tag(block, "title") ?? ""),
-    link: atomLink(block),
+    link: absolutizar(atomLink(block), baseUrl),
     publishedAt: toIso(tag(block, "updated") ?? tag(block, "published")),
     summary: stripHtml(tag(block, "summary") ?? tag(block, "content") ?? ""),
     imageUrl: findImage(block),
@@ -136,10 +150,10 @@ export function parsePayload(payload: RawPayload, logger: Logger): ParsedItem[] 
 
   try {
     const items = blocks(body, "item")
-    if (items.length > 0) return items.map((b) => parseRssItem(source.id, b))
+    if (items.length > 0) return items.map((b) => parseRssItem(source.id, b, source.url))
 
     const entries = blocks(body, "entry")
-    if (entries.length > 0) return entries.map((b) => parseAtomEntry(source.id, b))
+    if (entries.length > 0) return entries.map((b) => parseAtomEntry(source.id, b, source.url))
 
     /**
      * Sem feed: só então vale um extractor de HTML.

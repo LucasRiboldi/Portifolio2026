@@ -7,8 +7,9 @@
 > commit o que foi verificado de verdade.
 >
 > **Atualizado:** 2026-08-27 — `BLOB_READ_WRITE_TOKEN` do Preview resolvido,
-> uuid moderado corrigido, item de login em preview com decisão tomada
-> (branch `preview`). Ver `technical-debt.md`.
+> uuid moderado corrigido, item 8 (login + upload de mídia em preview) fechado,
+> item 7 avançou de 7 para 9 fontes ativas (`gmt-games`, `plaid-hat`). Ver
+> `technical-debt.md`.
 
 ---
 
@@ -224,20 +225,55 @@ curl -i -X POST https://portifolio2026-two.vercel.app/api/prophet-wire/run -H "A
 execução local, depois da auditoria de fontes do item 7. Se aparecer erro em
 produção, é fonte que caiu desde então.
 
-## 7. Recuperar cobertura: 17 das 24 fontes estão desligadas
+## 7. Recuperar cobertura: 15 das 24 fontes estão desligadas
 
-Sinal limpo (**`errors: 0`**, 7 de 7 respondendo), mas cobertura curta. Ativas:
-`bgg-blog`, `dice-tower`, `stonemaier`, `leder-games`, `reddit-boardgames`,
-`gen-con` e `uk-games-expo` — esta última por **extractor de HTML**, não feed.
+Sinal limpo (**`errors: 0`**), cobertura subindo. Ativas: `bgg-blog`,
+`dice-tower`, `stonemaier`, `leder-games`, `reddit-boardgames`, `gen-con`,
+`uk-games-expo` (extractor de HTML) e, desde 27/08, **`gmt-games`** e
+**`plaid-hat`** — 9 de 24.
 
 Cada desligada tem motivo e data no comentário, em `lib/prophet-wire/sources.ts`.
 
 | Barreira | Fontes | O que destravaria |
 |---|---|---|
 | **Anti-bot por impressão TLS** | `cmon`, `icv2-games`, `fantasy-flight`, `czech-games`, `origins`, `kickstarter-tabletop`, `gamefound` | Cliente HTTP que imite navegador. Ver a nota abaixo. |
-| **Sem feed — só HTML** | `gmt-games`, `plaid-hat`, `ravensburger`, `spiel-essen` | Um extractor por site. O do `uk-games-expo` (em `extractors.ts`) serve de molde — leia o teste dele antes de escrever o próximo. |
+| **Sem feed — precisa de extractor** | *(nenhuma pendente agora — ver caixa abaixo)* | — |
 | **Limite de taxa do Reddit** | `reddit-soloboardgaming`, `reddit-boardgamedeals` | Cliente autenticado (OAuth) no lugar do RSS público. |
-| **Vazio ou quebrado na origem** | `kosmos`, `portal-games`, `asmodee`, `bgg-hotness` | Esperar. Nada a fazer do nosso lado. |
+| **Vazio ou quebrado na origem** | `kosmos`, `portal-games`, `asmodee`, `bgg-hotness`, `ravensburger`, `spiel-essen` | Esperar. Nada a fazer do nosso lado. |
+
+<details>
+<summary>O que a recuperação de 27/08 apurou — duas religadas, duas descartadas por bom motivo</summary>
+
+Das quatro fontes do grupo "sem feed", **duas tinham feed escondido e nenhuma
+precisou de extractor de verdade** (uma precisou, mas já existia molde):
+
+- **`gmt-games` — resolvido sem extractor.** A home (que não tem `<item>`) tem
+  um link discreto "News RSS" pra `NewsRSS.aspx` — RSS 2.0 completo, com
+  `<pubDate>` e tudo. O registry antigo só tinha checado a home; a fonte virou
+  `kind: "rss"` apontando pro feed de verdade. Achado colateral: o `<link>`
+  desse feed vem **relativo** (`/news.aspx?showarticle=593`), e o parser nunca
+  resolvia isso contra a URL da fonte — bug de verdade, não só deste feed.
+  Corrigido em `parser.ts` (`absolutizar`), com teste cobrindo o caso.
+- **`plaid-hat` — extractor novo**, seguindo o molde do `uk-games-expo`: corta
+  por `<article id="post-...">`, sem regex sobre a página inteira. A data não
+  aparece em texto na listagem — só no próprio link (`/news/AAAA/MM/DD/slug/`)
+  — então `dataPlaidHat` lê dali.
+- **`ravensburger` — não é "sem extractor", é site reestruturado.** O domínio
+  `.org` inteiro dá 301 pra uma home de loja genérica (`ravensburger.com`,
+  `lang="de"`), sem seção de jogos ou notícias em lugar nenhum. Movido pro
+  grupo "quebrado na origem" — não há o que raspar até acharem um caminho novo.
+- **`spiel-essen` — extraível, mas sem data em lugar nenhum.** A listagem tem
+  título, resumo e link limpos, mas **zero data** — nem na listagem, nem na
+  página do artigo individual. `withinWindow` descarta todo item sem
+  `publishedAt`; um extractor aqui sempre devolveria lista vazia, o "seca em
+  silêncio" que o resto do módulo existe pra evitar. Movido pro mesmo grupo do
+  `ravensburger`.
+
+**Verificado contra payload real, não só fixture:** rodei o parser de verdade
+(`tsx`) contra o RSS do GMT e o HTML do Plaid Hat baixados ao vivo — títulos,
+links absolutos e datas batem, incluindo nos itens fora da fixture de teste.
+
+</details>
 
 <details>
 <summary>O que a caça aos 404 de 05/08 apurou — e corrigiu</summary>
@@ -275,7 +311,7 @@ passa. O limite é por IP, não por concorrência.
 
 # 🟢 Melhorias
 
-## 8. Login em preview é impossível — falta só autorizar no Firebase
+## 8. Login e upload de mídia em preview — RESOLVIDO em 27/08
 
 Cada preview ganha URL com hash único e o Firebase Auth exige domínio na
 allowlist — não há curinga. **Decidido em 27/08:** branch fixa `preview`.
@@ -292,14 +328,18 @@ npx vercel alias set <url-do-deploy-acima> portifolio2026-preview-lucasriboldis-
 ```
 
 O domínio `portifolio2026-preview-lucasriboldis-projects.vercel.app` já está
-no ar (responde 302 em `/portal`, verificado em 27/08). Falta só: autorizá-lo
-em Firebase Console → Authentication → Settings → Authorized domains — sem
-CLI/API disponível para essa parte. Detalhes em
+no ar (responde 302 em `/portal`, verificado em 27/08) e **já foi autorizado**
+em Firebase Console → Authentication → Settings → Authorized domains (27/08,
+manual — sem CLI/API disponível para essa parte). Detalhes em
 `docs/project-knowledge/auth.md` §6.1.
 
 `BLOB_READ_WRITE_TOKEN` já foi adicionado ao ambiente Preview em 27/08
-(`vercel env add`), então assim que o login destravar, o upload de mídia no
-painel de preview já funciona.
+(`vercel env add`). **Login validado fim a fim em 27/08:** popup do GitHub
+completou, sessão criada, `/admin` carregou com dados reais do Firestore (7
+projetos, 54 skills, 7 ferramentas). **Upload de mídia validado no mesmo dia:**
+PNG de teste enviado em `/admin/media`, apareceu na galeria (que já lista os
+arquivos reais — preview lê o mesmo Firestore/Blob de produção) e foi
+removido em seguida. Item fechado.
 
 ## 9. A varredura de usos relê o banco a cada exclusão
 

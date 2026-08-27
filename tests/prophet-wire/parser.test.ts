@@ -40,6 +40,17 @@ describe("parsePayload — RSS", () => {
     expect(items[0]?.publishedAt).toBe("2026-07-23T10:00:00.000Z")
     expect(items[0]?.summary).toContain("expansão com novos trabalhadores")
   })
+
+  it("resolve link relativo contra a URL da fonte", () => {
+    // GMT Games devolve <link>/news.aspx?showarticle=593</link> — relativo.
+    // Sem resolver, a URL vai quebrada para o Firestore.
+    const feed = `<rss><channel><item>
+      <title>Relativo</title><link>/news.aspx?showarticle=593</link>
+      <pubDate>Thu, 20 Aug 2026 14:14:32 GMT</pubDate>
+    </item></channel></rss>`
+    const items = parsePayload(payload(feed, { source: source({ url: "https://www.gmtgames.com/" }) }), silent())
+    expect(items[0]?.link).toBe("https://www.gmtgames.com/news.aspx?showarticle=593")
+  })
 })
 
 describe("parsePayload — Atom", () => {

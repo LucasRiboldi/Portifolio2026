@@ -7,8 +7,8 @@
 > acionável, com passo a passo, é o `NEXT_STEPS.md` — credenciais a rotacionar,
 > conteúdo a repor e validações pendentes moram lá, não aqui.
 >
-> **Revisado em:** 2026-08-27, nova varredura (build/lint/testes + dependências
-> + diff pós-v0.6.0) — sem duplicação nem código morto novo. Ver "Resolvidos".
+> **Revisado em:** 2026-08-27 (segunda varredura do dia) — login em preview
+> fechado e dois débitos do Prophet Wire resolvidos. Ver "Resolvidos".
 >
 > **Nenhum arquivo do `src/` passa de 500 linhas.** O `anfitriao/page.tsx`,
 > que tinha 737, foi partido em três em 13/08 — extração pura, com o HTML
@@ -20,43 +20,21 @@
 
 ---
 
-## 🟠 Importante
-
-### 1. Login em preview é impossível por construção — falta só autorizar no Firebase
-
-Cada deploy de preview ganha URL com hash único, e o Firebase Auth exige o
-domínio na allowlist — não aceita curinga. Consequência: nenhum fluxo
-autenticado pode ser testado antes do merge.
-
-**Decidido em 27/08:** branch fixa `preview`. O push para `origin/preview`
-**não disparou deploy automático** — o webhook Git→Vercel não reage a essa
-branch (a investigar no dashboard; outras branches já dispararam preview
-deploy no passado). Contornado com alias manual:
-`vercel alias set <deploy> portifolio2026-preview-lucasriboldis-projects.vercel.app`.
-Esse domínio é estável enquanto o alias for reatribuído a cada novo deploy
-manual (`vercel deploy` na branch `preview` + `vercel alias set`).
-
-Falta só: autorizar `portifolio2026-preview-lucasriboldis-projects.vercel.app`
-em Firebase Console → Authentication → Settings → Authorized domains. Sem
-CLI/API disponível neste ambiente para essa parte.
-
----
-
 ## 🟡 Melhorias
 
-### 2. `image-resolver` hotlinka imagens da fonte
+### 1. `image-resolver` hotlinka imagens da fonte
 
 O navegador do leitor revela o IP ao domínio de origem da notícia. Reservir as
 imagens (agora há Vercel Blob) resolveria — está anotado no próprio arquivo.
 
-### 3. `verifySession` consulta o Admin SDK a cada request autenticado
+### 2. `verifySession` consulta o Admin SDK a cada request autenticado
 
 São **duas** idas ao Admin SDK por request (`verifySessionCookie` e a leitura do
 usuário), necessárias para ler claims sempre atualizadas. O `cache()` do React
 deduplica dentro do mesmo request, não entre requests. Aceitável num painel de
 um usuário; se o volume crescer, cachear por curta janela.
 
-### 4. `mapearUsosDeMidia` relê o banco a cada exclusão
+### 3. `mapearUsosDeMidia` relê o banco a cada exclusão
 
 Lê todas as coleções declaradas para responder "este arquivo está em uso?".
 São ~170 documentos e roda só no painel, então hoje não incomoda.
@@ -65,7 +43,7 @@ Se um dia incomodar, a saída **não é cachear** — é gravar o vínculo na ho
 que a URL entra no documento, em vez de descobri-lo depois. Não faça antes de
 doer: o índice derivado é o que não pode dessincronizar.
 
-### 5. CSP com `unsafe-inline` em `script-src`
+### 4. CSP com `unsafe-inline` em `script-src`
 
 Compromisso de um CSP por header, sem nonce por request. Um CSP estrito exigiria
 middleware em todas as rotas. Registrado no próprio `next.config.ts`.
@@ -78,7 +56,7 @@ middleware em todas as rotas. Registrado no próprio `next.config.ts`.
 
 ## 🔵 Higiene
 
-### 6. Projeto Supabase antigo ainda no ar
+### 5. Projeto Supabase antigo ainda no ar
 
 Mantido como rede de segurança durante a migração. **Conferido em 01/08 e
 reconferido em 04/08: seguro apagar** — zero dependências instaladas e 0 URLs do
@@ -89,7 +67,7 @@ O código morto que sobrava já saiu (12/08): `scripts/fix-criativo-covers.mjs`
 foi apagado, e `scripts/setup-structure.mjs` deixou de recriar
 `src/lib/supabase`. Falta só desligar o projeto lá.
 
-### 7. Convenção de idioma mista na camada de dados
+### 6. Convenção de idioma mista na camada de dados
 
 Funções novas em português (`buscarLinhas`), antigas em inglês
 (`listContactMessages`). Não vale refatorar só por isso; padronize ao tocar em
@@ -124,3 +102,5 @@ cada um está no `PROJECT_STATE.md`.
 | 🟡 | `uuid < 11.1.1` (moderado) via `teeny-request` → `@google-cloud/storage` → `firebase-admin` | `overrides` no `package.json` (mesmo padrão do `jose`/`jwks-rsa`) força `uuid ^11.1.1` sem tocar a versão do `firebase-admin`. `npm audit` → 0 vulnerabilidades. `test:unit` e `build` verdes depois |
 | 🟢 | "Actions do CI declaram Node 20" — item desatualizado; `ci.yml` já declara `node-version: 22` desde o commit `452cac4`, este documento não tinha sido atualizado | Item removido, sem mudança de código necessária |
 | 🟠 | `BLOB_READ_WRITE_TOKEN` ausente no ambiente Preview do Vercel | `vercel env add` — token copiado do `.env.local`, adicionado ao ambiente Preview. `vercel env ls` confirma presença |
+| 🟠 | Login em preview impossível por construção (cada preview tem URL com hash único, sem curinga na allowlist do Firebase) | Branch fixa `preview` + alias estável na Vercel, autorizado uma vez no Firebase Console. Login e upload de mídia validados fim a fim contra esse domínio. Detalhes em `PROJECT_STATE.md` §3.1 e §5, `docs/project-knowledge/auth.md` §6.1 |
+| 🟡 | `gmt-games` e `plaid-hat` desligadas no Prophet Wire por "sem `<item>`/`<entry>`" | `gmt-games` tinha RSS de verdade atrás de um link não notado na home; `plaid-hat` ganhou extractor próprio. De quebra, corrigido bug real no parser: `<link>` relativo em feed nunca era resolvido contra a URL da fonte. `ravensburger` e `spiel-essen` reclassificadas para "quebrado na origem" (site reestruturado / sem data em lugar nenhum) — não é falta de extractor. `NEXT_STEPS.md` item 7 |

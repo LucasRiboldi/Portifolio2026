@@ -113,10 +113,62 @@ export const extrairUkge: Extractor = (html, sourceId) => {
   })
 }
 
+const BASE_PLAID_HAT = "https://www.plaidhatgames.com"
+
+/**
+ * `"/news/2026/08/18/slug/"` → ISO. A data não aparece na listagem — só no
+ * próprio caminho — então vem dali, não de texto solto.
+ */
+export function dataPlaidHat(href: string): string | null {
+  const m = /\/news\/(\d{4})\/(\d{2})\/(\d{2})\//.exec(href)
+  if (!m) return null
+
+  const ano = Number(m[1])
+  const mes = Number(m[2])
+  const dia = Number(m[3])
+  if (mes < 1 || mes > 12 || dia < 1 || dia > 31) return null
+
+  const d = new Date(Date.UTC(ano, mes - 1, dia))
+  if (d.getUTCDate() !== dia || d.getUTCMonth() !== mes - 1) return null
+  return d.toISOString()
+}
+
+/**
+ * Plaid Hat Games — listagem de `/news/`.
+ *
+ * Cada notícia é um `<article id="post-...">`; cortar por ele (e não por um
+ * regex sobre a página toda) é o que impede o título de um cartão parear com
+ * a imagem do seguinte quando um vier sem categoria.
+ */
+export const extrairPlaidHat: Extractor = (html, sourceId) => {
+  const cartoes = html.split(/<article id="post-[^"]*" class="news-list-item">/).slice(1)
+
+  return cartoes.flatMap((cartao): ParsedItem[] => {
+    const titulo = /<h3><a class="news-list-title-link" href="([^"]+)">([\s\S]*?)<\/a><\/h3>/i.exec(cartao)
+    // Sem título ou sem link não há notícia.
+    if (!titulo) return []
+
+    const imagem = /<img[^>]*\ssrc="([^"]+)"/i.exec(cartao)
+    const href = titulo[1]!
+
+    return [
+      {
+        sourceId,
+        title: texto(titulo[2]!),
+        link: absoluta(href, BASE_PLAID_HAT),
+        publishedAt: dataPlaidHat(href),
+        summary: "",
+        imageUrl: imagem ? absoluta(imagem[1]!, BASE_PLAID_HAT) : null,
+      },
+    ]
+  })
+}
+
 /**
  * Extractor por id de fonte. `parsePayload` consulta este mapa antes de
  * desistir de um payload sem `<item>`/`<entry>`.
  */
 export const EXTRACTORS: Readonly<Record<string, Extractor>> = {
   "uk-games-expo": extrairUkge,
+  "plaid-hat": extrairPlaidHat,
 }

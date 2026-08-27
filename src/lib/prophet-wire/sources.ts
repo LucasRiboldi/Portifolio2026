@@ -108,11 +108,13 @@ export const SOURCES: readonly Source[] = [
   {
     id: "gmt-games",
     name: "GMT Games",
-    url: "https://www.gmtgames.com/",
-    kind: "html",
+    url: "https://www.gmtgames.com/NewsRSS.aspx",
+    kind: "rss",
     defaultCategory: "Editoras",
-    // Desligada em 05/08/2026: Responde 200, mas é HTML sem <item>/<entry>: precisa de extractor próprio.
-    enabled: false,
+    // Religada em 27/08/2026: a home (sem feed) tinha um link "News RSS" pra
+    // NewsRSS.aspx — RSS 2.0 de verdade, <item> completo. Não precisava de
+    // extractor, só olhar a página inteira, não só a listagem.
+    enabled: true,
   },
   {
     id: "plaid-hat",
@@ -120,8 +122,9 @@ export const SOURCES: readonly Source[] = [
     url: "https://www.plaidhatgames.com/news/",
     kind: "html",
     defaultCategory: "Editoras",
-    // Desligada em 05/08/2026: Responde 200, mas é HTML sem <item>/<entry>: precisa de extractor próprio.
-    enabled: false,
+    // Religada em 27/08/2026: extractor próprio em extractors.ts (data vem do
+    // caminho `/news/YYYY/MM/DD/`, a listagem não traz data em texto).
+    enabled: true,
   },
   {
     id: "portal-games",
@@ -150,7 +153,11 @@ export const SOURCES: readonly Source[] = [
     url: "https://www.ravensburger.org/us/discover/news/index.html",
     kind: "html",
     defaultCategory: "Editoras",
-    // Desligada em 05/08/2026: Responde 200, mas é HTML sem <item>/<entry>: precisa de extractor próprio.
+    // Recheck em 27/08/2026: não era "sem <item>/<entry>" — o `.org` inteiro
+    // dá 301 pra `ravensburger.org/` e daí pra `ravensburger.com/start/…`,
+    // a home genérica da loja (lang="de"), sem seção de jogos/notícias
+    // nenhuma. Site reestruturado do lado deles; não há o que raspar até
+    // acharem um caminho novo. Sem extractor possível hoje.
     enabled: false,
   },
   {
@@ -220,7 +227,12 @@ export const SOURCES: readonly Source[] = [
     url: "https://www.spiel-essen.de/en/news/",
     kind: "html",
     defaultCategory: "Eventos",
-    // Desligada em 05/08/2026: Responde 200, mas é HTML sem <item>/<entry>: precisa de extractor próprio.
+    // Recheck em 27/08/2026: a listagem tem cartões extraíveis (título, resumo,
+    // link) mas ZERO data em texto — nem na listagem, nem na página do artigo
+    // individual. `withinWindow` descarta todo item sem `publishedAt`, então um
+    // extractor aqui produziria sempre lista vazia: exatamente o "seca em
+    // silêncio" que o resto do módulo evita. Sem extractor até a origem expor
+    // data em algum lugar.
     enabled: false,
   },
   {

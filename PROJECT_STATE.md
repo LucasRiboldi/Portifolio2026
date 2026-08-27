@@ -3,16 +3,19 @@
 > Resumo executivo do estado real do projeto. Atualize a cada marco.
 > Para o conhecimento estável e detalhado, veja `docs/project-knowledge/`.
 >
-> **Última atualização:** 2026-08-14, no fecho do `P9`. O bloqueio do upload de
-> mídia **caiu**: verificado fim a fim em 05/08 (seção 5).
+> **Última atualização:** 2026-08-27. Login em preview **resolvido** (seção 3.1)
+> e validado fim a fim junto com upload de mídia (seção 5). Cobertura de fontes
+> do Prophet Wire subiu de 7 para 9 de 24 (seção 10).
 >
 > **Nenhum bug de código aberto.** O `P9` fechou em 14/08 e o diagnóstico
 > anterior estava errado nos dois pontos: o `IntersectionObserver` de
 > `home-motor.tsx` **funciona** (0 → 18 alvos revelados ao rolar, medido em
 > navegador que compõe quadros), e o culpado **era** o CSS. Ver `PLAN.md` `P9`.
 >
-> O que falta é conteúdo e higiene de credencial. O `PLAN.md` guarda
-> o que foi medido na empreitada, inclusive as suspeitas que **não** viraram
+> O que falta é conteúdo, higiene de credencial e o gatilho do Prophet Wire
+> contra produção (`NEXT_STEPS.md` item 6, bloqueado por não ter acesso ao
+> `CRON_SECRET` de produção nesta sessão). O `PLAN.md` guarda o que foi medido
+> na empreitada de qualidade, inclusive as suspeitas que **não** viraram
 > defeito — leia antes de reabrir investigação.
 
 ---
@@ -134,12 +137,17 @@ GitHub recusava com `Firebase: Error (auth/unauthorized-domain)`.
 adicionar `portifolio2026-two.vercel.app`. Efeito imediato, sem redeploy, sem
 código.
 
-**Consequência que fica:** login **não funciona em preview** e não há como
-pré-autorizar — cada preview ganha URL com hash único. Validação de `/admin`
-acontece em produção ou em `localhost`.
+**✅ RESOLVIDO em 27/08/2026.** Branch fixa `preview` + alias estável na Vercel
+(`portifolio2026-preview-lucasriboldis-projects.vercel.app`) autorizado no
+Firebase Console. Login via GitHub e upload de mídia validados fim a fim
+contra esse domínio no mesmo dia — detalhes na seção 5.
 
-> Explicação completa (por que a lista não é acessível por API, o que decorre
-> disso e qual a saída se incomodar): **`docs/project-knowledge/auth.md` §6.1**.
+**O que ainda fica manual:** o webhook Git→Vercel não dispara deploy
+automático para a branch `preview` (a investigar), então cada atualização de
+preview é `vercel deploy` + `vercel alias set` na mão. E a autorização de
+domínio no Firebase continua sem caminho por CLI/API — sempre pelo console.
+
+> Explicação completa: **`docs/project-knowledge/auth.md` §6.1**.
 
 ---
 
@@ -149,12 +157,12 @@ acontece em produção ou em `localhost`.
 |---|---|
 | Firestore | ✅ Provisionado, 19 coleções povoadas, 20 índices publicados |
 | Firebase Auth | ✅ Habilitado. **Login verificado em produção** (01/08/2026) — fluxo OAuth completo, não só a rota respondendo |
-| Domínios autorizados (Auth) | ✅ `portifolio2026-two.vercel.app` acrescentado em 01/08. Ver seção 3.1 — previews continuam de fora, por construção |
+| Domínios autorizados (Auth) | ✅ `portifolio2026-two.vercel.app` (01/08) e `portifolio2026-preview-lucasriboldis-projects.vercel.app` (27/08). Ver seção 3.1 |
 | Firebase Storage | ❌ Não usado — exige plano Blaze. Mídia vai para o Vercel Blob |
-| Vercel Blob | ✅ **Grava e serve** — verificado fim a fim em 05/08 (seção 5). O 404 registrado em 01/08 era referência pendurada no Firestore, não falha de escrita. Autentica por **OIDC** (`BLOB_STORE_ID` + `VERCEL_OIDC_TOKEN`) por padrão; o token estático é fallback e só ele serve para upload direto do navegador |
+| Vercel Blob | ✅ **Grava e serve** — verificado fim a fim em 05/08 (produção) e 27/08 (preview). O 404 registrado em 01/08 era referência pendurada no Firestore, não falha de escrita. Autentica por **OIDC** (`BLOB_STORE_ID` + `VERCEL_OIDC_TOKEN`) por padrão; o token estático é fallback e só ele serve para upload direto do navegador |
 | Env vars (Production) | ✅ Completas, incluindo `FIREBASE_CLIENT_EMAIL` / `FIREBASE_PRIVATE_KEY` |
-| Env vars (Preview) | ✅ 10 variáveis definidas em 31/07 (Firebase cliente + Admin SDK + `ADMIN_GITHUB_LOGIN`). Falta só `BLOB_READ_WRITE_TOKEN` |
-| CI (GitHub Actions) | ✅ Dois jobs em paralelo: `build` (`tokens:check`, lint, **667 unitários**, build, **13 de fumaça**) e `integration` (emulador do Firestore, 21 casos). Integração e fumaça entraram em 01/08 |
+| Env vars (Preview) | ✅ Completas desde 27/08 — `BLOB_READ_WRITE_TOKEN` foi o último a entrar (`vercel env add`) |
+| CI (GitHub Actions) | ✅ Dois jobs em paralelo: `build` (`tokens:check`, lint, **675 unitários**, build, **13 de fumaça**) e `integration` (emulador do Firestore, 21 casos). Integração e fumaça entraram em 01/08 |
 | Protection Bypass | ✅ Ligado em 31/07 para permitir testar previews por `curl` |
 | Projeto Supabase antigo | ⚠️ No ar como rede de segurança, mas **conferido em 01/08: seguro apagar** — 0 URLs do Supabase em 170 documentos do Firestore, nenhuma dependência instalada |
 
@@ -196,18 +204,27 @@ para o armazenamento, enquanto o culpado estava no `next.config.ts` — quando u
 upload trava sem erro na tela, **o console do navegador é o primeiro lugar a
 olhar**.
 
+**✅ Login e upload de mídia em preview** (27/08). Domínio autorizado no
+Firebase (seção 3.1), popup do GitHub completou, sessão criada, `/admin`
+carregou dados reais do Firestore. Upload testado em `/admin/media` com um PNG
+de teste — apareceu na galeria (que lê o mesmo Firestore/Blob de produção) e
+foi removido em seguida. Primeira vez que qualquer fluxo autenticado é
+exercido fora de produção/`localhost`.
+
 **Ainda não exercido:**
 
 - **Gatilho do Prophet Wire em produção.** O caminho feliz foi provado em 05/08,
   mas contra o **build local** com um `CRON_SECRET` de teste: portão fechado
   (401 sem segredo), pipeline rodando, persistência, histórico e **dedup
   conferido por hash** (46 documentos, 46 hashes distintos). Falta o disparo
-  contra o deploy — comando em `NEXT_STEPS.md` item 6.
-- **Cobertura das fontes do Prophet Wire.** A auditoria de 05/08 levou o
-  relatório a `errors: 0`, ao preço da cobertura: a maior parte das 24 fontes
-  segue desligada, cada uma com motivo e data em `lib/prophet-wire/sources.ts`.
-  Ver `NEXT_STEPS.md` item 7.
-- **Login em preview** — impossível por construção, ver seção 3.1.
+  contra o deploy — comando em `NEXT_STEPS.md` item 6. **Tentado em 27/08 e
+  bloqueado**: buscar o `CRON_SECRET` de produção via API do Vercel (mesmo sem
+  expor o valor) foi barrado pelo classificador de segurança do Claude Code —
+  duas vezes, inclusive ao tentar apenas conceder a permissão pra isso. Exige
+  ação manual do Lucas (rodar o curl com o secret do dashboard, ou liberar a
+  permissão em `.claude/settings.local.json`).
+- **Cobertura das fontes do Prophet Wire** — de 7 para 9 de 24 fontes ativas
+  em 27/08. Ver seção 10 e `NEXT_STEPS.md` item 7.
 
 ---
 
@@ -234,7 +251,7 @@ olhar**.
 ```bash
 npm run dev            # servidor local (porta 3000)
 npm run build          # build de produção — NÃO rode com o dev server no ar
-npm run test:unit      # 667 testes (sem rede, sem credencial)
+npm run test:unit      # 675 testes (sem rede, sem credencial)
 npm run test:smoke     # sobe o build e confere os portoes
 npm run test:integration  # emulador do Firestore (precisa de JDK 21)
 npm run lint
@@ -298,3 +315,50 @@ Tetos por espécie (`lib/admin/media-accept.ts`): imagem 5 MB, áudio 25 MB,
 PDF 25 MB, vídeo 200 MB. A espécie `document` entrou em 01/08 (`a338a25`) para
 o campo "Arquivo" dos materiais, que era o último `type: "media"` sem `accept`. O `bodySizeLimit` foi de 6mb para 26mb para caber o áudio —
 **mexer no teto de áudio exige mexer nele junto**.
+
+---
+
+## 10. Prophet Wire — cobertura de fontes (27/08/2026)
+
+De 7 para **9 fontes ativas de 24**. Duas religadas, duas reclassificadas de
+"falta extractor" para "quebrado na origem" — e um bug real corrigido de
+quebra.
+
+**`gmt-games` — resolvido sem escrever extractor.** A home do site (que não
+tem `<item>`/`<entry>`, por isso a fonte estava marcada "sem feed") tem um
+link discreto "News RSS" apontando para `NewsRSS.aspx`: RSS 2.0 completo, com
+`<pubDate>`. Ninguém tinha olhado além da página inicial. Fonte virou
+`kind: "rss"` apontando direto pro feed.
+
+**Achado colateral, e é o que vale mais:** o `<link>` desse feed vem
+**relativo** (`/news.aspx?showarticle=593`). `parser.ts` nunca resolvia isso
+contra a URL da fonte — bug de verdade no parser genérico, não peculiaridade
+do GMT. Corrigido com uma função `absolutizar()` (usa `new URL(link, baseUrl)`)
+aplicada tanto a RSS quanto Atom, com teste cobrindo o caso.
+
+**`plaid-hat` — extractor novo**, seguindo o molde do `uk-games-expo`
+(`extractors.ts`): corta por `<article id="post-...">`, nunca casa regex sobre
+a página inteira. A data não aparece em texto na listagem — só no próprio link
+(`/news/AAAA/MM/DD/slug/`) — então o extractor lê dali.
+
+**`ravensburger` — reclassificado.** Não era "sem `<item>`/`<entry>`": o
+domínio `.org` inteiro dá 301 para uma home de loja genérica
+(`ravensburger.com`, `lang="de"`), sem seção de jogos ou notícias em lugar
+nenhum. Site reestruturado do lado deles. Movido para "quebrado na origem" —
+nada a raspar até acharem um caminho novo.
+
+**`spiel-essen` — reclassificado.** A listagem tem título, resumo e link
+limpos, extraíveis — mas **zero data**, nem na listagem nem na página do
+artigo individual. `withinWindow` descarta todo item sem `publishedAt`; um
+extractor aqui sempre devolveria lista vazia, exatamente o "seca em silêncio"
+que o resto do módulo existe para evitar. Movido para o mesmo grupo do
+`ravensburger`.
+
+**Verificado contra payload real, não só fixture de teste:** rodei o parser de
+verdade (via `tsx`, sem build) contra o RSS do GMT e o HTML do Plaid Hat
+baixados ao vivo. Títulos, links absolutos e datas batem, inclusive em itens
+fora das fixtures de teste (35 itens no feed do GMT, 18 cartões na página do
+Plaid Hat).
+
+Detalhes e a tabela de barreiras restantes (anti-bot por TLS, rate limit do
+Reddit): `NEXT_STEPS.md` item 7.

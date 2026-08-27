@@ -23,6 +23,36 @@ Registro das mudanças que valem para quem usa ou lê o site. Segue
 
 Nada ainda.
 
+## [0.7.3] — 2026-08-27
+
+Login em preview destravado e cobertura do Prophet Wire ampliada — sem mudança
+de comportamento em produção.
+
+### Adicionado
+
+- Domínio de preview (`portifolio2026-preview-lucasriboldis-projects.vercel.app`)
+  autorizado em Firebase Authentication → Authorized domains. Login via GitHub
+  e upload de mídia validados fim a fim em `/admin` fora de produção/`localhost`
+  pela primeira vez.
+- Duas fontes do Prophet Wire religadas: `gmt-games` (feed RSS que já existia,
+  só não tinha sido notado além da home) e `plaid-hat` (extractor de HTML novo,
+  no molde do `uk-games-expo`).
+
+### Corrigido
+
+- **Parser de feeds:** `<link>` relativo em RSS/Atom (ex.: `/news.aspx?id=1`)
+  nunca era resolvido contra a URL da fonte — a URL ia quebrada para o
+  Firestore. Afetava qualquer feed que devolvesse link relativo, não só o do
+  GMT Games, que foi onde apareceu.
+
+### Removido
+
+- `ravensburger` e `spiel-essen` reclassificadas de "falta extractor" para
+  "quebrado na origem": a primeira porque o site inteiro foi reestruturado
+  (redireciona pra uma home de loja genérica, sem seção de jogos); a segunda
+  porque a listagem não expõe data de publicação em lugar nenhum, e um
+  extractor sem data sempre devolveria lista vazia.
+
 ## [0.7.2] — 2026-08-27
 
 ### Corrigido
