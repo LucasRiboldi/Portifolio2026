@@ -55,6 +55,56 @@ documentação desatualizada — sem mudança de comportamento.
   `radix-ui`, `react-hook-form` — resíduo da migração para `@base-ui/react` +
   `FormData` nativa em formulários. `npm uninstall` tirou 79 pacotes da árvore.
 
+## [0.7.0] — 2026-08-14
+
+> Reconstruído em 27/08 a partir do commit `6d3a807` — a tag existia sem
+> entrada aqui.
+
+### Adicionado
+
+- **Microinterações e rolagem suave no Anfitrião e no Criativo.**
+  `smooth-scroll-provider.tsx` liga Lenis ao GSAP ScrollTrigger; as colunas
+  do Prophet Wire ganharam hover e revelação em cascata
+  (`wire-motion.tsx`, em Motion, não GSAP — os dois motores não podem
+  compartilhar seletor no mesmo elemento, sob risco de tremor).
+- **`tilt-card.tsx`** — inclinação 3D no cursor, no Criativo.
+- **`scrub-parallax.tsx`** — parallax vinculado à posição de rolagem (GSAP
+  ScrollTrigger).
+- **Dois componentes "Magic UI" enxertados**, adaptados de Tailwind 4 para
+  Tailwind 3 + tokens `--k-*` do realm: `aurora-text.tsx` (gradiente
+  animado em texto) e `animated-shiny-text.tsx` (shimmer sobre glifos).
+- **`realm-motion.ts`** — catálogo de padrões de movimento por realm, no
+  lugar do que a demo do GSAP (removida na v0.6.0) descrevia antes.
+
+Nenhum arquivo novo passa de 500 linhas; nenhuma duplicação com
+`use-magnetic.ts`/`use-mouse-parallax.ts`. Revisão de segurança sobre o
+diff: nenhum dos arquivos toca `next.config.ts`, `middleware.ts`,
+`firestore.rules` ou `lib/auth/*` — são componentes visuais client-side que
+recebem dado já resolvido no servidor, sem leitura de Firestore no browser.
+
+## [0.6.1] — 2026-08-14
+
+> Reconstruído em 27/08 a partir do commit `36a80f5` — a tag existia sem
+> entrada aqui.
+
+### Corrigido
+
+- **P9 — hover dos cartões do `_dev` não voltava inteiro, e a entrada por
+  rolagem media a transição errada.** A regra de entrada declarava
+  `transition`, que substituía a do próprio `.dv-card` mesmo depois de a
+  animação terminar — cartão já revelado media `opacity, transform / 0.5s`
+  no lugar do `border-color 0.15s, transform 0.15s` que o hover pedia:
+  borda saltando, elevação lenta.
+- Corrigido trocando a entrada para `@keyframes`, com o estado escondido
+  sob `:not([data-visivel])` — a animação deixou de sobrescrever o
+  `transition` do elemento. Repouso deixou de ser `opacity: 0`: se a
+  revelação falhar, o pior caso é a página sem animação, nunca invisível.
+- **O diagnóstico anterior do P9 estava invertido.** O `IntersectionObserver`
+  de `home-motor.tsx` sempre funcionou (0 → 17/17 alvos ao rolar) — quem
+  mentiu foi a medição feita com a página oculta (`visibilityState: hidden`
+  congela `rAF`, transições e `IntersectionObserver`). Remedido com
+  Playwright, que sobe um Chromium visível.
+
 ## [0.6.0] — 2026-08-13
 
 Continuação da empreitada de qualidade da v0.5.0: auditoria de acessibilidade

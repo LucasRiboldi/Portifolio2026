@@ -41,28 +41,23 @@ autenticado pode ser testado antes do merge.
 Saída conhecida, se incomodar: alias fixo de branch na Vercel, autorizado uma
 vez. Detalhes em `auth.md` §6.1.
 
-### 3. Actions do CI declaram Node 20
-
-O runner força 24 e o build passa. Hoje é aviso; vira falha quando o suporte ao
-20 cair. Corrigir é uma linha no `ci.yml`.
-
 ---
 
 ## 🟡 Melhorias
 
-### 4. `image-resolver` hotlinka imagens da fonte
+### 3. `image-resolver` hotlinka imagens da fonte
 
 O navegador do leitor revela o IP ao domínio de origem da notícia. Reservir as
 imagens (agora há Vercel Blob) resolveria — está anotado no próprio arquivo.
 
-### 5. `verifySession` consulta o Admin SDK a cada request autenticado
+### 4. `verifySession` consulta o Admin SDK a cada request autenticado
 
 São **duas** idas ao Admin SDK por request (`verifySessionCookie` e a leitura do
 usuário), necessárias para ler claims sempre atualizadas. O `cache()` do React
 deduplica dentro do mesmo request, não entre requests. Aceitável num painel de
 um usuário; se o volume crescer, cachear por curta janela.
 
-### 6. `mapearUsosDeMidia` relê o banco a cada exclusão
+### 5. `mapearUsosDeMidia` relê o banco a cada exclusão
 
 Lê todas as coleções declaradas para responder "este arquivo está em uso?".
 São ~170 documentos e roda só no painel, então hoje não incomoda.
@@ -71,7 +66,7 @@ Se um dia incomodar, a saída **não é cachear** — é gravar o vínculo na ho
 que a URL entra no documento, em vez de descobri-lo depois. Não faça antes de
 doer: o índice derivado é o que não pode dessincronizar.
 
-### 7. CSP com `unsafe-inline` em `script-src`
+### 6. CSP com `unsafe-inline` em `script-src`
 
 Compromisso de um CSP por header, sem nonce por request. Um CSP estrito exigiria
 middleware em todas as rotas. Registrado no próprio `next.config.ts`.
@@ -84,7 +79,7 @@ middleware em todas as rotas. Registrado no próprio `next.config.ts`.
 
 ## 🔵 Higiene
 
-### 8. Projeto Supabase antigo ainda no ar
+### 7. Projeto Supabase antigo ainda no ar
 
 Mantido como rede de segurança durante a migração. **Conferido em 01/08 e
 reconferido em 04/08: seguro apagar** — zero dependências instaladas e 0 URLs do
@@ -95,7 +90,7 @@ O código morto que sobrava já saiu (12/08): `scripts/fix-criativo-covers.mjs`
 foi apagado, e `scripts/setup-structure.mjs` deixou de recriar
 `src/lib/supabase`. Falta só desligar o projeto lá.
 
-### 9. Convenção de idioma mista na camada de dados
+### 8. Convenção de idioma mista na camada de dados
 
 Funções novas em português (`buscarLinhas`), antigas em inglês
 (`listContactMessages`). Não vale refatorar só por isso; padronize ao tocar em
@@ -128,3 +123,4 @@ cada um está no `PROJECT_STATE.md`.
 | 🟠 | `postcss` (leitura de `.map` arbitrário) e `sharp` (CVEs do `libvips`, severidade alta) vulneráveis | `npm audit fix`, sem breaking change. `test:unit` (667) e `build` verdes depois |
 | 🟢 | README citava `Radix / Base UI` e `React Hook Form` na Stack — desatualizado desde a migração para Base UI puro | Linha da Stack corrigida em `README.md` |
 | 🟡 | `uuid < 11.1.1` (moderado) via `teeny-request` → `@google-cloud/storage` → `firebase-admin` | `overrides` no `package.json` (mesmo padrão do `jose`/`jwks-rsa`) força `uuid ^11.1.1` sem tocar a versão do `firebase-admin`. `npm audit` → 0 vulnerabilidades. `test:unit` e `build` verdes depois |
+| 🟢 | "Actions do CI declaram Node 20" — item desatualizado; `ci.yml` já declara `node-version: 22` desde o commit `452cac4`, este documento não tinha sido atualizado | Item removido, sem mudança de código necessária |
