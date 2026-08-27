@@ -22,42 +22,34 @@
 
 ## 🟠 Importante
 
-### 1. `BLOB_READ_WRITE_TOKEN` ausente no ambiente Preview
-
-O store do Vercel Blob não está conectado ao ambiente *preview*, e o token é
-*sensitive* — não há de onde copiar por CLI. Sem ele cai o upload **direto**
-(todo arquivo acima de 4 MB, porque o token de cliente não sai por OIDC);
-abaixo disso o arquivo passa pela Server Action e sobe.
-
-Impacto real é baixo enquanto o item 2 existir: sem login em preview, não há
-painel de onde subir. Como reconectar: `NEXT_STEPS.md` item 8.
-
-### 2. Login em preview é impossível por construção
+### 1. Login em preview é impossível por construção — decisão tomada, falta o passo manual
 
 Cada deploy de preview ganha URL com hash único, e o Firebase Auth exige o
 domínio na allowlist — não aceita curinga. Consequência: nenhum fluxo
 autenticado pode ser testado antes do merge.
 
-Saída conhecida, se incomodar: alias fixo de branch na Vercel, autorizado uma
-vez. Detalhes em `auth.md` §6.1.
+**Decidido em 27/08:** branch fixa `preview`, autorizada uma vez no Firebase.
+Falta só o passo manual (push + confirmar URL + Firebase Console) — não há
+CLI/API para gerenciar domínios autorizados do Firebase Auth neste ambiente.
+Detalhes em `auth.md` §6.1 e `NEXT_STEPS.md` item 8.
 
 ---
 
 ## 🟡 Melhorias
 
-### 3. `image-resolver` hotlinka imagens da fonte
+### 2. `image-resolver` hotlinka imagens da fonte
 
 O navegador do leitor revela o IP ao domínio de origem da notícia. Reservir as
 imagens (agora há Vercel Blob) resolveria — está anotado no próprio arquivo.
 
-### 4. `verifySession` consulta o Admin SDK a cada request autenticado
+### 3. `verifySession` consulta o Admin SDK a cada request autenticado
 
 São **duas** idas ao Admin SDK por request (`verifySessionCookie` e a leitura do
 usuário), necessárias para ler claims sempre atualizadas. O `cache()` do React
 deduplica dentro do mesmo request, não entre requests. Aceitável num painel de
 um usuário; se o volume crescer, cachear por curta janela.
 
-### 5. `mapearUsosDeMidia` relê o banco a cada exclusão
+### 4. `mapearUsosDeMidia` relê o banco a cada exclusão
 
 Lê todas as coleções declaradas para responder "este arquivo está em uso?".
 São ~170 documentos e roda só no painel, então hoje não incomoda.
@@ -66,7 +58,7 @@ Se um dia incomodar, a saída **não é cachear** — é gravar o vínculo na ho
 que a URL entra no documento, em vez de descobri-lo depois. Não faça antes de
 doer: o índice derivado é o que não pode dessincronizar.
 
-### 6. CSP com `unsafe-inline` em `script-src`
+### 5. CSP com `unsafe-inline` em `script-src`
 
 Compromisso de um CSP por header, sem nonce por request. Um CSP estrito exigiria
 middleware em todas as rotas. Registrado no próprio `next.config.ts`.
@@ -79,7 +71,7 @@ middleware em todas as rotas. Registrado no próprio `next.config.ts`.
 
 ## 🔵 Higiene
 
-### 7. Projeto Supabase antigo ainda no ar
+### 6. Projeto Supabase antigo ainda no ar
 
 Mantido como rede de segurança durante a migração. **Conferido em 01/08 e
 reconferido em 04/08: seguro apagar** — zero dependências instaladas e 0 URLs do
@@ -90,7 +82,7 @@ O código morto que sobrava já saiu (12/08): `scripts/fix-criativo-covers.mjs`
 foi apagado, e `scripts/setup-structure.mjs` deixou de recriar
 `src/lib/supabase`. Falta só desligar o projeto lá.
 
-### 8. Convenção de idioma mista na camada de dados
+### 7. Convenção de idioma mista na camada de dados
 
 Funções novas em português (`buscarLinhas`), antigas em inglês
 (`listContactMessages`). Não vale refatorar só por isso; padronize ao tocar em
@@ -124,3 +116,4 @@ cada um está no `PROJECT_STATE.md`.
 | 🟢 | README citava `Radix / Base UI` e `React Hook Form` na Stack — desatualizado desde a migração para Base UI puro | Linha da Stack corrigida em `README.md` |
 | 🟡 | `uuid < 11.1.1` (moderado) via `teeny-request` → `@google-cloud/storage` → `firebase-admin` | `overrides` no `package.json` (mesmo padrão do `jose`/`jwks-rsa`) força `uuid ^11.1.1` sem tocar a versão do `firebase-admin`. `npm audit` → 0 vulnerabilidades. `test:unit` e `build` verdes depois |
 | 🟢 | "Actions do CI declaram Node 20" — item desatualizado; `ci.yml` já declara `node-version: 22` desde o commit `452cac4`, este documento não tinha sido atualizado | Item removido, sem mudança de código necessária |
+| 🟠 | `BLOB_READ_WRITE_TOKEN` ausente no ambiente Preview do Vercel | `vercel env add` — token copiado do `.env.local`, adicionado ao ambiente Preview. `vercel env ls` confirma presença |

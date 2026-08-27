@@ -6,7 +6,9 @@
 > Ao concluir um item: remova-o daqui, atualize `PROJECT_STATE.md` e diga no
 > commit o que foi verificado de verdade.
 >
-> **Atualizado:** 2026-08-14, no fecho do `P9`.
+> **Atualizado:** 2026-08-27 — `BLOB_READ_WRITE_TOKEN` do Preview resolvido,
+> uuid moderado corrigido, item de login em preview com decisão tomada
+> (branch `preview`). Ver `technical-debt.md`.
 
 ---
 
@@ -273,22 +275,22 @@ passa. O limite é por IP, não por concorrência.
 
 # 🟢 Melhorias
 
-## 8. `BLOB_READ_WRITE_TOKEN` ausente no Preview
-
-Não dá por CLI — o token é *sensitive*, não há de onde copiar. O caminho é
-reconectar o store: Storage → `portfolio-midia` → aba **Projects** → ⋯ →
-**Update Project Connection** → marcar **Preview**.
-
-O Preview já tem `BLOB_STORE_ID` e `BLOB_WEBHOOK_PUBLIC_KEY`. **Prioridade
-baixa:** sem login em preview (item 9) não há painel de onde subir mídia.
-
-## 9. Login em preview é impossível
+## 8. Login em preview é impossível — decisão tomada, falta o passo manual
 
 Cada preview ganha URL com hash único e o Firebase Auth exige domínio na
-allowlist — não há curinga. Saída, se incomodar: alias fixo de branch na Vercel,
-autorizado uma vez. Detalhes em `docs/project-knowledge/auth.md` §6.1.
+allowlist — não há curinga. **Decidido em 27/08:** a branch fixa é `preview`.
+Vercel gera automaticamente uma URL estável para ela
+(`portifolio2026-git-preview-lucasriboldis-projects.vercel.app`, a confirmar
+no primeiro push). Falta só: dar `git push origin preview` uma vez, conferir a
+URL exata no dashboard, e autorizá-la em Firebase Console → Authentication →
+Settings → Authorized domains. Sem tooling de CLI/API para isso — é ação de
+console. Detalhes em `docs/project-knowledge/auth.md` §6.1.
 
-## 10. A varredura de usos relê o banco a cada exclusão
+Prioridade sobe: `BLOB_READ_WRITE_TOKEN` já foi adicionado ao ambiente
+Preview em 27/08 (`vercel env add`), então assim que o login destravar, o
+upload de mídia no painel de preview já funciona.
+
+## 9. A varredura de usos relê o banco a cada exclusão
 
 `mapearUsosDeMidia` lê todas as coleções declaradas para responder "este arquivo
 está em uso?". São ~170 documentos e roda só no painel, então hoje não incomoda.
@@ -297,7 +299,7 @@ Se um dia incomodar, a saída não é cachear — é gravar o vínculo na hora e
 URL entra no documento, em vez de descobri-lo depois. **Não faça antes de doer:**
 o índice derivado é o que não pode dessincronizar.
 
-## 11. Convenção de idioma mista na camada de dados
+## 10. Convenção de idioma mista na camada de dados
 
 `buscarLinhas` vs. `listContactMessages`. Padronizar **ao tocar em cada módulo**,
 não num varredão — renomear tudo de uma vez produz diff enorme, sem
@@ -307,7 +309,7 @@ comportamento novo, que atrapalha o `git blame` do resto.
 
 # 🔵 Higiene
 
-## 12. Desligar o projeto Supabase
+## 11. Desligar o projeto Supabase
 
 **Conferido em 01/08, reconferido em 04/08 — seguro apagar:**
 
@@ -327,7 +329,7 @@ deixou de recriar `src/lib/supabase` na mesma data.
 **Como:** https://app.supabase.com → projeto → Settings → General → Delete
 project. **Irreversível.**
 
-## 13. CSP com `unsafe-inline` em `script-src`
+## 12. CSP com `unsafe-inline` em `script-src`
 
 Compromisso de um CSP por header, sem nonce por request. Um CSP estrito exigiria
 middleware em todas as rotas. Registrado em `next.config.ts`.
