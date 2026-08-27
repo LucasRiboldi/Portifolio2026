@@ -22,16 +22,23 @@
 
 ## 🟠 Importante
 
-### 1. Login em preview é impossível por construção — decisão tomada, falta o passo manual
+### 1. Login em preview é impossível por construção — falta só autorizar no Firebase
 
 Cada deploy de preview ganha URL com hash único, e o Firebase Auth exige o
 domínio na allowlist — não aceita curinga. Consequência: nenhum fluxo
 autenticado pode ser testado antes do merge.
 
-**Decidido em 27/08:** branch fixa `preview`, autorizada uma vez no Firebase.
-Falta só o passo manual (push + confirmar URL + Firebase Console) — não há
-CLI/API para gerenciar domínios autorizados do Firebase Auth neste ambiente.
-Detalhes em `auth.md` §6.1 e `NEXT_STEPS.md` item 8.
+**Decidido em 27/08:** branch fixa `preview`. O push para `origin/preview`
+**não disparou deploy automático** — o webhook Git→Vercel não reage a essa
+branch (a investigar no dashboard; outras branches já dispararam preview
+deploy no passado). Contornado com alias manual:
+`vercel alias set <deploy> portifolio2026-preview-lucasriboldis-projects.vercel.app`.
+Esse domínio é estável enquanto o alias for reatribuído a cada novo deploy
+manual (`vercel deploy` na branch `preview` + `vercel alias set`).
+
+Falta só: autorizar `portifolio2026-preview-lucasriboldis-projects.vercel.app`
+em Firebase Console → Authentication → Settings → Authorized domains. Sem
+CLI/API disponível neste ambiente para essa parte.
 
 ---
 

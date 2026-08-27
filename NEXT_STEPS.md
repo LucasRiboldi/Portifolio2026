@@ -275,20 +275,31 @@ passa. O limite é por IP, não por concorrência.
 
 # 🟢 Melhorias
 
-## 8. Login em preview é impossível — decisão tomada, falta o passo manual
+## 8. Login em preview é impossível — falta só autorizar no Firebase
 
 Cada preview ganha URL com hash único e o Firebase Auth exige domínio na
-allowlist — não há curinga. **Decidido em 27/08:** a branch fixa é `preview`.
-Vercel gera automaticamente uma URL estável para ela
-(`portifolio2026-git-preview-lucasriboldis-projects.vercel.app`, a confirmar
-no primeiro push). Falta só: dar `git push origin preview` uma vez, conferir a
-URL exata no dashboard, e autorizá-la em Firebase Console → Authentication →
-Settings → Authorized domains. Sem tooling de CLI/API para isso — é ação de
-console. Detalhes em `docs/project-knowledge/auth.md` §6.1.
+allowlist — não há curinga. **Decidido em 27/08:** branch fixa `preview`.
 
-Prioridade sobe: `BLOB_READ_WRITE_TOKEN` já foi adicionado ao ambiente
-Preview em 27/08 (`vercel env add`), então assim que o login destravar, o
-upload de mídia no painel de preview já funciona.
+**O push para `origin/preview` não disparou deploy automático** — o
+webhook Git→Vercel não reagiu a essa branch (outras branches já dispararam
+preview deploy antes; vale investigar no dashboard da Vercel por quê).
+Contornado com deploy manual + alias fixo:
+
+```bash
+git checkout preview && git pull
+npx vercel deploy                              # cria um deploy Preview novo
+npx vercel alias set <url-do-deploy-acima> portifolio2026-preview-lucasriboldis-projects.vercel.app
+```
+
+O domínio `portifolio2026-preview-lucasriboldis-projects.vercel.app` já está
+no ar (responde 302 em `/portal`, verificado em 27/08). Falta só: autorizá-lo
+em Firebase Console → Authentication → Settings → Authorized domains — sem
+CLI/API disponível para essa parte. Detalhes em
+`docs/project-knowledge/auth.md` §6.1.
+
+`BLOB_READ_WRITE_TOKEN` já foi adicionado ao ambiente Preview em 27/08
+(`vercel env add`), então assim que o login destravar, o upload de mídia no
+painel de preview já funciona.
 
 ## 9. A varredura de usos relê o banco a cada exclusão
 
