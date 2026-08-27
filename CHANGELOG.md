@@ -23,6 +23,17 @@ Registro das mudanças que valem para quem usa ou lê o site. Segue
 
 Nada ainda.
 
+## [0.7.2] — 2026-08-27
+
+### Corrigido
+
+- **Segurança:** `uuid < 11.1.1` (moderado — bounds check ausente em v3/v5/v6),
+  transitivo via `teeny-request` → `@google-cloud/storage` → `firebase-admin`.
+  `npm audit fix --force` rebaixaria o `firebase-admin` para `10.3.0`; em vez
+  disso, `overrides` no `package.json` força `uuid ^11.1.1` sem tocar a versão
+  do `firebase-admin` — mesmo padrão já usado para `jose`/`jwks-rsa`.
+  `npm audit` → **0 vulnerabilidades**. `test:unit` (667) e `build` verdes.
+
 ## [0.7.1] — 2026-08-27
 
 Varredura de auditoria pós-v0.7.0: dependências mortas, vulnerabilidades e
@@ -32,9 +43,8 @@ documentação desatualizada — sem mudança de comportamento.
 
 - **Segurança:** `postcss` (leitura de `.map` arbitrário) e `sharp` (CVEs de
   `libvips`, severidade alta) atualizados via `npm audit fix`, sem breaking
-  change. Fica pendente `uuid` (moderado), preso na cadeia do
-  `firebase-admin` — corrigir exigiria rebaixar o `firebase-admin`, registrado
-  em `docs/project-knowledge/technical-debt.md`.
+  change. `uuid` moderado ficou pendente nesta versão — resolvido em
+  `[0.7.2]`.
 - README citava `Radix / Base UI` e `React Hook Form` na Stack; a migração
   para `@base-ui/react` puro e `FormData` nativa já tinha tornado isso
   desatualizado.

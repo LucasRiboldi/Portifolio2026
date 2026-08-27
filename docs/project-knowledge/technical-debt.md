@@ -71,18 +71,7 @@ Se um dia incomodar, a saída **não é cachear** — é gravar o vínculo na ho
 que a URL entra no documento, em vez de descobri-lo depois. Não faça antes de
 doer: o índice derivado é o que não pode dessincronizar.
 
-### 7. `uuid` vulnerável, preso na cadeia do `firebase-admin`
-
-`npm audit` acusa `uuid < 11.1.1` (moderado, bounds check ausente em v3/v5/v6) via
-`gaxios`/`teeny-request`/`@google-cloud/storage`, dependências transitivas do
-`firebase-admin`. A correção automática (`npm audit fix --force`) rebaixaria o
-`firebase-admin` para `10.3.0` — regressão de versão maior, não aplicada.
-Risco baixo na prática: a função vulnerável não recebe entrada do usuário no
-nosso uso (é gerada internamente pelo cliente do Google Cloud Storage, que nem
-usamos — Storage é mídia vai para o Vercel Blob). Revisar quando o
-`firebase-admin` publicar uma versão que resolva a cadeia sem downgrade.
-
-### 8. CSP com `unsafe-inline` em `script-src`
+### 7. CSP com `unsafe-inline` em `script-src`
 
 Compromisso de um CSP por header, sem nonce por request. Um CSP estrito exigiria
 middleware em todas as rotas. Registrado no próprio `next.config.ts`.
@@ -95,7 +84,7 @@ middleware em todas as rotas. Registrado no próprio `next.config.ts`.
 
 ## 🔵 Higiene
 
-### 9. Projeto Supabase antigo ainda no ar
+### 8. Projeto Supabase antigo ainda no ar
 
 Mantido como rede de segurança durante a migração. **Conferido em 01/08 e
 reconferido em 04/08: seguro apagar** — zero dependências instaladas e 0 URLs do
@@ -106,7 +95,7 @@ O código morto que sobrava já saiu (12/08): `scripts/fix-criativo-covers.mjs`
 foi apagado, e `scripts/setup-structure.mjs` deixou de recriar
 `src/lib/supabase`. Falta só desligar o projeto lá.
 
-### 10. Convenção de idioma mista na camada de dados
+### 9. Convenção de idioma mista na camada de dados
 
 Funções novas em português (`buscarLinhas`), antigas em inglês
 (`listContactMessages`). Não vale refatorar só por isso; padronize ao tocar em
@@ -138,3 +127,4 @@ cada um está no `PROJECT_STATE.md`.
 | 🟡 | 4 dependências instaladas e nunca importadas: `@hookform/resolvers`, `ai`, `radix-ui`, `react-hook-form` (resíduo da migração para `@base-ui/react` + `FormData` nativa) | `npm uninstall` — 79 pacotes a menos na árvore (inclui as transitivas do `radix-ui`) |
 | 🟠 | `postcss` (leitura de `.map` arbitrário) e `sharp` (CVEs do `libvips`, severidade alta) vulneráveis | `npm audit fix`, sem breaking change. `test:unit` (667) e `build` verdes depois |
 | 🟢 | README citava `Radix / Base UI` e `React Hook Form` na Stack — desatualizado desde a migração para Base UI puro | Linha da Stack corrigida em `README.md` |
+| 🟡 | `uuid < 11.1.1` (moderado) via `teeny-request` → `@google-cloud/storage` → `firebase-admin` | `overrides` no `package.json` (mesmo padrão do `jose`/`jwks-rsa`) força `uuid ^11.1.1` sem tocar a versão do `firebase-admin`. `npm audit` → 0 vulnerabilidades. `test:unit` e `build` verdes depois |
