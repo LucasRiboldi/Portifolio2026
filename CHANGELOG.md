@@ -23,6 +23,55 @@ Registro das mudanças que valem para quem usa ou lê o site. Segue
 
 Nada ainda.
 
+## [0.7.5] — 2026-08-28
+
+Correções das melhorias Medium/Low levantadas pela auditoria de 0.7.4 —
+decisão do Lucas foi implementar, não só registrar. Nenhuma mudança de
+comportamento visível pretendida, exceto o contraste do rodapé (visual) e o
+JSON-LD novo (invisível na página, visível para crawlers).
+
+### Adicionado
+
+- **Structured data (schema.org)** — Person + WebSite via JSON-LD no layout
+  raiz, com dados do `site-config`. Canonical por rota ficou de fora de
+  propósito: exigiria metadata em ~80 páginas, e um canonical "global"
+  apontando tudo para a home seria pior que nenhum. Ver `NEXT_STEPS.md`
+  item 18.
+- **`Cross-Origin-Opener-Policy: same-origin-allow-popups`** em
+  `next.config.ts`. Não usei `same-origin` (o valor mais estrito) porque
+  quebra o `signInWithPopup` do login GitHub — o Firebase Auth precisa que o
+  popup consiga avisar a janela principal quando termina.
+
+### Corrigido
+
+- **Contraste do rodapé de `/desenvolvedor`** — `.dv-meta dt`/`.k` aplicava
+  `opacity: 0.75` em cima de `--dev-ink-dim` (`#7b90cf`, já ajustado numa
+  correção de contraste anterior para ~4,56:1). A opacidade extra derrubava
+  o resultado renderizado para `#6677a9` sobre `#282a36` — 3,23:1, abaixo do
+  4,5:1 que WCAG AA pede. Removida a opacidade; o `text-transform: uppercase`
+  já bastava para diferenciar rótulo de valor.
+- **Duplicação de `publishedReader`/`reader`** entre `lib/repos/dev.ts`,
+  `criativo.ts`, `prophet.ts` e `projects.ts` — quatro reimplementações do
+  mesmo "leitor cacheado com fallback ao seed", cada uma com uma variação
+  pequena e não documentada. Unificadas em `lib/repos/utils.ts`, preservando
+  a única diferença de comportamento real que havia entre elas: `projects.ts`
+  só cai no seed quando a consulta falha (`null`), não quando há
+  legitimamente zero projetos publicados — os outros três caem no seed nos
+  dois casos. Essa diferença agora é explícita (`treatEmptyAsPublished`), não
+  um acidente de implementação.
+
+### Avaliado, não executado
+
+- **Dividir os 14 arquivos acima de 500 linhas** (pior caso:
+  `design-system/realms.ts`, 1052 linhas, importado por 20 arquivos). O dado
+  é declarativo, a divisão seria mecânica, mas o raio de explosão é real e
+  esta sessão não tinha ferramenta de browser disponível para conferir
+  visualmente as páginas de design system depois de dividir. Ver
+  `NEXT_STEPS.md` item 17.
+- **As 54 falhas de teste do working tree não commitado** seguem de fora —
+  não são desta versão, ver `PROJECT_STATE.md` seção 11 e `NEXT_STEPS.md`
+  item 13.
+
 ## [0.7.4] — 2026-08-28
 
 Auditoria técnica completa (QA, segurança, performance, acessibilidade,

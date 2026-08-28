@@ -6,7 +6,14 @@
 > Ao concluir um item: remova-o daqui, atualize `PROJECT_STATE.md` e diga no
 > commit o que foi verificado de verdade.
 >
-> **Atualizado:** 2026-08-28 — auditoria técnica completa (QA, segurança,
+> **Atualizado:** 2026-08-28 (tarde) — itens 14, 15, 16 e a metade
+> "structured data" do 18 resolvidos no mesmo dia da auditoria, a pedido do
+> Lucas. Seguem abertos: item 13 (origem do WIP não commitado), item 17
+> (dividir arquivos grandes — avaliado, raio de explosão grande demais para
+> fazer sem ferramenta de browser disponível), canonical por rota do item 18,
+> e item 19 (meta de Storybook, deixada em aberto por decisão do Lucas).
+>
+> **2026-08-28 (manhã)** — auditoria técnica completa (QA, segurança,
 > performance, a11y, arquitetura) gerou os itens 13–19, seção "🔴 Auditoria
 > técnica". Veredito: aprovado com ressalvas, zero Critical. Detalhe em
 > `PROJECT_STATE.md` seção 11.
@@ -112,37 +119,30 @@ pergunte a quem deixou esse WIP aberto, se você lembrar). **Como saber que
 ficou pronto:** os 675 testes voltam a passar, ou você sabe exatamente quais
 54 falham no HEAD e por quê — e decide se commita o WIP ou descarta.
 
-## 14. Unificar o leitor cacheado duplicado (`publishedReader`/`reader`)
+## 14. Unificar o leitor cacheado duplicado — ✅ RESOLVIDO em 28/08
 
-`lib/repos/dev.ts:37`, `criativo.ts:33`, `prophet.ts:48` e `projects.ts:31`
-reimplementam a mesma leitura cacheada com fallback ao seed, cada um com uma
-pequena variação. Contradiz o que este backlog e o `README.md` afirmam sobre
-os leitores compartilharem `publishedReader`.
+`lib/repos/dev.ts`, `criativo.ts`, `prophet.ts` e `projects.ts`
+reimplementavam a mesma leitura cacheada com fallback ao seed, cada um com
+uma pequena variação. Unificados em `lib/repos/utils.ts`
+(`publishedReader<T, R>`), com a diferença real de comportamento que havia
+entre eles (`projects.ts` só cai no seed em `null`, não em lista vazia) agora
+explícita via `treatEmptyAsPublished`, não mais um acidente de implementação.
+`npm run test:unit` seguiu em 621/675 (as mesmas 54 falhas do item 13, zero
+novas) depois da migração.
 
-**Como fazer:** extrair para `lib/repos/utils.ts`, com seed opcional (o caso
-do `criativo.ts`), e migrar os 4 pontos de uso. **Como saber que ficou
-pronto:** os 4 arquivos importam a mesma função e `npm run test:unit`
-continua verde.
+## 15. Corrigir contraste do rodapé de `/desenvolvedor` — ✅ RESOLVIDO em 28/08
 
-## 15. Corrigir contraste do rodapé de `/desenvolvedor`
+Causa raiz: `.dv-meta dt`/`.k` aplicava `opacity: 0.75` em cima de
+`--dev-ink-dim` (`#7b90cf`, já em ~4,56:1 por uma correção de contraste
+anterior) — a opacidade extra derrubava o resultado renderizado para
+`#6677a9`, 3,23:1. Removida a opacidade em `dev-hud.css`; `text-transform:
+uppercase` já diferencia rótulo de valor sem precisar dimmer.
 
-Labels do rodapé (`footer.dv-section > dl.dv-meta`) em `#6677a9` sobre
-`#282a36` dão 3.23:1 — WCAG AA pede 4.5:1. Achado por Lighthouse+axe real,
-não só leitura de token.
+## 16. Adicionar `Cross-Origin-Opener-Policy` — ✅ RESOLVIDO em 28/08
 
-**Como fazer:** trocar o token de cor do label ou aumentar peso/tamanho da
-fonte. **Como saber que ficou pronto:** o audit `color-contrast` do
-Lighthouse não aparece mais nessa página.
-
-## 16. Adicionar `Cross-Origin-Opener-Policy`
-
-Os outros 6 headers de segurança (CSP, HSTS, X-Content-Type-Options,
-Referrer-Policy, Permissions-Policy, X-Frame-Options) já existem em
-`next.config.ts` e foram confirmados por `curl` real; falta só o COOP.
-
-**Como fazer:** adicionar `Cross-Origin-Opener-Policy: same-origin` ao array
-de headers. **Como saber que ficou pronto:** `curl -I` contra produção
-mostra o header.
+Adicionado `same-origin-allow-popups` (não o `same-origin` mais estrito) em
+`next.config.ts` — `same-origin` quebraria o `signInWithPopup` do login
+GitHub, que depende da janela principal conseguir ler o retorno do popup.
 
 ## 17. Dividir os arquivos acima de 500 linhas
 
@@ -150,19 +150,31 @@ mostra o header.
 `src/design-system/realms.ts` (1052 linhas), depois `architecture.ts` (615),
 `registry.ts` (612); na camada de dados, `src/lib/repos/tech-feed.ts` (566).
 
-**Como fazer:** extrair por seção/responsabilidade, sem trocar
-comportamento — comece pelo pior caso. **Como saber que ficou pronto:**
-`find src -name "*.ts*" | xargs wc -l | sort -rn | head` não mostra nada
-acima de 500.
+**Avaliado em 28/08/2026, não executado de propósito:** `realms.ts` é
+importado por **20 arquivos**, `registry.ts` por 5 — é dado declarativo
+(specs de design por realm), não lógica complexa, então dividir é mecânico,
+mas o raio de explosão é real e esta sessão não tinha ferramenta de browser
+disponível para conferir visualmente as ~20 páginas depois. Fazer sem isso é
+trocar um achado Medium por um risco de regressão visual silenciosa.
 
-## 18. Canonical + structured data
+**Como fazer, quando for a vez:** extrair por realm (`realms/creative.ts`,
+`realms/dev.ts`, `realms/arcane.ts`, reexportados por `realms.ts`), com
+Playwright/Chrome DevTools disponível para comparar screenshot antes/depois
+de `/design-system/realms/[realm]` nos 3 realms. **Como saber que ficou
+pronto:** `find src -name "*.ts*" | xargs wc -l | sort -rn | head` não mostra
+nada acima de 500, e as 3 páginas de realm renderizam idênticas.
 
-Nenhuma página verificada tem `<link rel="canonical">` nem
-`application/ld+json`.
+## 18. Structured data — ✅ RESOLVIDO em 28/08 · canonical por rota — ainda em aberto
 
-**Como fazer:** adicionar no `generateMetadata`/layout raiz (schema
-Person/WebSite para a home, Article para devlogs). **Como saber que ficou
-pronto:** `curl` no HTML mostra as duas tags nas rotas principais.
+JSON-LD (Person + WebSite) adicionado no layout raiz (`src/app/layout.tsx`),
+com dados do `site-config`. `curl` confirma a tag `application/ld+json` no
+HTML.
+
+**Canonical ficou de fora de propósito:** exigiria `alternates.canonical` em
+cada uma das ~80 rotas, e um canonical "global" no layout raiz apontando
+tudo para a home seria pior que nenhum (diria ao Google que o site inteiro é
+duplicata da home). Fazer rota a rota quando fizer sentido — não é urgente
+com o site inteiro sob um domínio só e sem conteúdo espelhado.
 
 ## 19. Ampliar cobertura de Storybook
 

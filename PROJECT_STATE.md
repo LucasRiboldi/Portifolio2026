@@ -280,8 +280,10 @@ npx firebase-tools deploy --only firestore --project portifolio-ac32a
 
 > Backlog acionável, com passo a passo: **`NEXT_STEPS.md`**.
 
-1. **Chave de conta de serviço do Firebase não rotacionada** e token da Vercel
-   ainda válido nesta máquina. Higiene de credencial pendente.
+1. **Chave de conta de serviço do Firebase e token da Vercel — decisão do
+   Lucas em 28/08/2026: manter, não rotacionar agora.** Deixa de ser débito
+   pendente; é uma escolha registrada. Reabrir só se houver suspeita de
+   exposição nova.
 2. Projeto Supabase antigo ainda ativo (rede de segurança).
 3. `BLOB_READ_WRITE_TOKEN` ausente no ambiente **Preview** — falta marcar o
    ambiente na conexão do store, não caçar o token. Sem ele cai o upload
@@ -447,3 +449,14 @@ PID/porta (`netstat -ano`), nunca por nome de imagem.
 
 Backlog acionável gerado por esta auditoria: `NEXT_STEPS.md`, seção
 "🔴 Auditoria técnica", itens 13–19.
+
+**Mesmo dia, à tarde — decisão do Lucas: corrigir o que dava, não só
+registrar.** Itens 14, 15, 16 e a metade "structured data" do 18 resolvidos
+(v0.7.5) — build, lint e os mesmos 621/675 testes de antes (zero regressão
+nova). Item 13 (origem do WIP) segue sem investigar; item 17 (dividir
+arquivos grandes) foi avaliado e adiado de propósito (raio de explosão de 20
+arquivos, sem ferramenta de browser disponível para conferir visualmente);
+canonical por rota do item 18 ficou de fora (faria mais mal que bem se feito
+errado, "global", em vez de por rota); item 19 (meta de Storybook) segue em
+aberto por decisão do Lucas. Rotação das credenciais do item 1 dos débitos
+técnicos: decidido manter, não rotacionar.

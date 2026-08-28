@@ -1,6 +1,6 @@
-import type { NextConfig } from "next";
+import type { NextConfig } from 'next';
 
-const isDev = process.env.NODE_ENV === "development";
+const isDev = process.env.NODE_ENV === 'development';
 
 /**
  * `next dev` compila com devtool baseado em eval (HMR + source maps). Sem
@@ -17,15 +17,15 @@ const scriptSrc = [
   // O Firebase Auth carrega o gapi para montar o iframe do popup de OAuth.
   // Sem esta origem o popup abre e morre com `auth/internal-error` — que não
   // diz nada sobre CSP, e por isso custa caro de diagnosticar.
-  "https://apis.google.com",
+  'https://apis.google.com',
   isDev && "'unsafe-eval'",
-  isDev && "https://va.vercel-scripts.com",
+  isDev && 'https://va.vercel-scripts.com',
 ]
   .filter(Boolean)
-  .join(" ");
+  .join(' ');
 
 /** Domínio que o Firebase usa para hospedar o handler do OAuth. */
-const authDomain = process.env.NEXT_PUBLIC_FIREBASE_AUTH_DOMAIN || "";
+const authDomain = process.env.NEXT_PUBLIC_FIREBASE_AUTH_DOMAIN || '';
 
 /**
  * Content-Security-Policy — permissiva o suficiente para o Next App Router
@@ -66,10 +66,10 @@ const csp = [
   "media-src 'self' data: blob: https://*.public.blob.vercel-storage.com",
   [
     "connect-src 'self'",
-    "https://identitytoolkit.googleapis.com",
-    "https://securetoken.googleapis.com",
-    "https://vitals.vercel-insights.com",
-    "https://va.vercel-scripts.com",
+    'https://identitytoolkit.googleapis.com',
+    'https://securetoken.googleapis.com',
+    'https://vitals.vercel-insights.com',
+    'https://va.vercel-scripts.com',
     /**
      * Upload direto ao Vercel Blob — sem estes hosts o envio é BLOQUEADO PELO
      * NAVEGADOR, e o sintoma é cruel: o handshake com a nossa rota passa (é
@@ -84,27 +84,42 @@ const csp = [
      * = https://vercel.com/api/blob); os `*.blob.vercel-storage.com` cobrem a
      * leitura da URL pública e as variantes do store.
      */
-    "https://vercel.com",
-    "https://blob.vercel-storage.com",
-    "https://*.blob.vercel-storage.com",
-  ].join(" "),
-  ["frame-src 'self'", "https://apis.google.com", authDomain && `https://${authDomain}`]
+    'https://vercel.com',
+    'https://blob.vercel-storage.com',
+    'https://*.blob.vercel-storage.com',
+  ].join(' '),
+  [
+    "frame-src 'self'",
+    'https://apis.google.com',
+    authDomain && `https://${authDomain}`,
+  ]
     .filter(Boolean)
-    .join(" "),
+    .join(' '),
   "frame-ancestors 'none'",
   "base-uri 'self'",
   "form-action 'self'",
   "object-src 'none'",
-  "upgrade-insecure-requests",
-].join("; ");
+  'upgrade-insecure-requests',
+].join('; ');
 
 const securityHeaders = [
-  { key: "Content-Security-Policy", value: csp },
-  { key: "X-Content-Type-Options", value: "nosniff" },
-  { key: "Referrer-Policy", value: "strict-origin-when-cross-origin" },
-  { key: "Permissions-Policy", value: "camera=(), microphone=(), geolocation=(), interest-cohort=()" },
-  { key: "X-Frame-Options", value: "DENY" },
-  { key: "Strict-Transport-Security", value: "max-age=63072000; includeSubDomains; preload" },
+  { key: 'Content-Security-Policy', value: csp },
+  { key: 'X-Content-Type-Options', value: 'nosniff' },
+  { key: 'Referrer-Policy', value: 'strict-origin-when-cross-origin' },
+  {
+    key: 'Permissions-Policy',
+    value: 'camera=(), microphone=(), geolocation=(), interest-cohort=()',
+  },
+  { key: 'X-Frame-Options', value: 'DENY' },
+  {
+    key: 'Strict-Transport-Security',
+    value: 'max-age=63072000; includeSubDomains; preload',
+  },
+  // `same-origin` (o valor mais restrito) quebra o signInWithPopup do GitHub:
+  // o COOP estrito isola a janela do popup e o Firebase Auth não consegue
+  // detectar o fechamento nem receber o resultado de volta. `-allow-popups`
+  // mantém o isolamento para o resto do site e libera só essa janela.
+  { key: 'Cross-Origin-Opener-Policy', value: 'same-origin-allow-popups' },
 ];
 
 const nextConfig: NextConfig = {
@@ -142,7 +157,7 @@ const nextConfig: NextConfig = {
    * jwks-rsa na v5 — a última com build CommonJS. Se algum dia o jwks-rsa
    * corrigir o próprio require, esse override pode sair.
    */
-  serverExternalPackages: ["firebase-admin"],
+  serverExternalPackages: ['firebase-admin'],
 
   // Fixa a raiz do workspace neste projeto. Sem isto o Next detecta o
   // package-lock.json órfão em C:\Users\lucas e infere a raiz errada,
@@ -167,7 +182,7 @@ const nextConfig: NextConfig = {
       // Fica em 26mb porque o default de 1 MB rejeitaria arquivo legítimo
       // antes da nossa validação rodar, e a folga cobre o overhead do
       // multipart. Quem barra de fato é o validador.
-      bodySizeLimit: "26mb",
+      bodySizeLimit: '26mb',
     },
   },
 
@@ -175,7 +190,7 @@ const nextConfig: NextConfig = {
     // AVIF primeiro, WebP como rede de segurança. O default do Next é só
     // WebP; as cartas já são AVIF na origem, e sem isto o otimizador as
     // reencodava para WebP — maior que o arquivo que entrou.
-    formats: ["image/avif", "image/webp"],
+    formats: ['image/avif', 'image/webp'],
 
     // As galerias de cartas pedem `quality={60}` (são dezenas de imagens
     // hi-res; a 75 o peso da página duplicava sem diferença visível no foil).
@@ -194,21 +209,21 @@ const nextConfig: NextConfig = {
     // `contentDispositionType` impede que um SVG servido pelo otimizador seja
     // renderizado como documento na própria origem.
     dangerouslyAllowSVG: true,
-    contentDispositionType: "attachment",
+    contentDispositionType: 'attachment',
     contentSecurityPolicy: "default-src 'self'; script-src 'none'; sandbox;",
 
     remotePatterns: [
       {
-        protocol: "https",
-        hostname: "**"
-      }
-    ]
+        protocol: 'https',
+        hostname: '**',
+      },
+    ],
   },
 
   async headers() {
     return [
       {
-        source: "/:path*",
+        source: '/:path*',
         headers: securityHeaders,
       },
     ];
@@ -216,10 +231,18 @@ const nextConfig: NextConfig = {
 
   async redirects() {
     return [
-      { source: "/dev", destination: "/desenvolvedor", permanent: true },
-      { source: "/dev/:path*", destination: "/desenvolvedor/:path*", permanent: true },
-      { source: "/prophet", destination: "/anfitriao", permanent: true },
-      { source: "/prophet/:path*", destination: "/anfitriao/:path*", permanent: true },
+      { source: '/dev', destination: '/desenvolvedor', permanent: true },
+      {
+        source: '/dev/:path*',
+        destination: '/desenvolvedor/:path*',
+        permanent: true,
+      },
+      { source: '/prophet', destination: '/anfitriao', permanent: true },
+      {
+        source: '/prophet/:path*',
+        destination: '/anfitriao/:path*',
+        permanent: true,
+      },
     ];
   },
 };

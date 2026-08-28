@@ -21,7 +21,8 @@
    de `.dracula`, e `:focus-visible` garante que o anel não apareça em clique
    de mouse.
    ───────────────────────────────────────────────────────────────────────── */
-.dracula :is(a, button, input, textarea, select, summary, [tabindex]):focus-visible {
+.dracula
+  :is(a, button, input, textarea, select, summary, [tabindex]):focus-visible {
   outline: var(--dev-ring-width) solid var(--dev-ring-color);
   outline-offset: var(--dev-ring-offset);
   border-radius: var(--dev-radius-sm);
@@ -135,7 +136,9 @@
 .dv-meta dt,
 .dv-meta .k {
   text-transform: uppercase;
-  opacity: 0.75;
+  /* Sem opacidade aqui: ela multiplicava sobre --dev-ink-dim (já ajustado
+     para 4,5:1 em outra correção de contraste) e derrubava o rótulo do
+     rodapé para 3,23:1 contra --dev-bg. O uppercase já diferencia do valor. */
 }
 .dv-meta dd,
 .dv-meta .v {
@@ -235,11 +238,11 @@
   color: var(--dev-mark);
 }
 .dv-out::before {
-  content: "❯";
+  content: '❯';
   color: var(--dev-ink-dim);
 }
-.dv-out[data-external="true"]::after {
-  content: "↗";
+.dv-out[data-external='true']::after {
+  content: '↗';
   font-size: 0.85em;
   opacity: 0.7;
 }
@@ -349,7 +352,8 @@
   letter-spacing: 0.06em;
   text-transform: uppercase;
   white-space: nowrap;
-  transition: border-color var(--dev-dur-fast) var(--dev-ease),
+  transition:
+    border-color var(--dev-dur-fast) var(--dev-ease),
     background var(--dev-dur-fast) var(--dev-ease);
 }
 .dracula .dv-versao:hover {
@@ -374,16 +378,21 @@
   animation: dv-versao-pulso 2.4s ease-out infinite;
 }
 /* Sem release nem tag: o número é só o do pacote, e o selo diz isso em cor. */
-.dracula .dv-versao[data-origem="pacote"] .dv-versao-v {
+.dracula .dv-versao[data-origem='pacote'] .dv-versao-v {
   color: var(--dev-warn);
 }
-.dracula .dv-versao[data-origem="pacote"] .dv-versao-led {
+.dracula .dv-versao[data-origem='pacote'] .dv-versao-led {
   background: var(--dev-warn);
   animation: none;
 }
 @keyframes dv-versao-pulso {
-  0% { box-shadow: 0 0 0 0 color-mix(in srgb, var(--dev-ok) 60%, transparent); }
-  70%, 100% { box-shadow: 0 0 0 6px transparent; }
+  0% {
+    box-shadow: 0 0 0 0 color-mix(in srgb, var(--dev-ok) 60%, transparent);
+  }
+  70%,
+  100% {
+    box-shadow: 0 0 0 6px transparent;
+  }
 }
 
 /* ─────────────────────────────────────────────────────────────────────────
@@ -402,8 +411,8 @@
   .dracula .dv-hero h1 span.p,
   .dracula .dv-mf-prompt::after,
   .dracula .dv-logo .blink,
-  .dracula .learn-connector[data-filled="true"]::after,
-  .dracula .learn-node[data-state="current"] .learn-node-dot {
+  .dracula .learn-connector[data-filled='true']::after,
+  .dracula .learn-node[data-state='current'] .learn-node-dot {
     animation: none;
   }
   .dracula *,

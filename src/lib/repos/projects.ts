@@ -1,13 +1,14 @@
-import "server-only"
+import 'server-only';
 
-import { unstable_cache } from "next/cache"
+import type { ProjectRow } from '@/lib/firebase/types';
+import { projects as seed, type Project } from '@/data/projects';
+import { CACHE_TAGS } from './tags';
+import { publishedReader } from './utils';
 
-import { buscarLinhas } from "@/lib/firebase/query"
-import type { ProjectRow } from "@/lib/firebase/types"
-import { projects as seed, type Project } from "@/data/projects"
-import { CACHE_TAGS } from "./tags"
-
-type ProjectRowExt = ProjectRow & { slug?: string | null; readme?: string | null }
+type ProjectRowExt = ProjectRow & {
+  slug?: string | null;
+  readme?: string | null;
+};
 
 function rowToProject(r: ProjectRowExt): Project {
   return {
@@ -16,31 +17,33 @@ function rowToProject(r: ProjectRowExt): Project {
     description: r.description,
     category: r.category,
     tags: r.tags ?? [],
-    coverImage: r.cover_image ?? "",
+    coverImage: r.cover_image ?? '',
     href: r.href ?? undefined,
     featured: r.featured,
     slug: r.slug ?? undefined,
     readme: r.readme ?? undefined,
-  }
+  };
 }
 
 /** Projetos publicados para o site público (cacheado, com fallback ao seed). */
-export const getProjects = unstable_cache(
-  async (): Promise<Project[]> => {
-    const data = await buscarLinhas<ProjectRowExt>("projects", {
-      where: [{ campo: "published", valor: true }],
-      orderBy: [{ campo: "sort" }, { campo: "created_at" }],
-    })
-
-    if (!data) return seed
-    return data.map(rowToProject)
-  },
-  ["projects"],
-  { tags: [CACHE_TAGS.projects] },
-)
+export const getProjects = publishedReader<ProjectRowExt, Project>(
+  'projects',
+  CACHE_TAGS.projects,
+  {
+    order: 'sort',
+    secondaryOrder: 'created_at',
+    seed,
+    // 0 projetos publicados de verdade é um resultado válido — só null/erro
+    // caem no seed, ao contrário dos demais leitores desta camada.
+    treatEmptyAsPublished: true,
+    map: rowToProject,
+  }
+);
 
 /** Um projeto pelo slug (usa a lista cacheada). */
-export async function getProjectBySlug(slug: string): Promise<Project | undefined> {
-  const all = await getProjects()
-  return all.find((p) => p.slug === slug)
+export async function getProjectBySlug(
+  slug: string
+): Promise<Project | undefined> {
+  const all = await getProjects();
+  return all.find((p) => p.slug === slug);
 }

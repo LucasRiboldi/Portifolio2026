@@ -1,66 +1,37 @@
-import "server-only"
+import 'server-only';
 
-import { unstable_cache } from "next/cache"
-
-import { buscarLinhas } from "@/lib/firebase/query"
-import { devlogs as devlogsSeed } from "@/data/dev"
-import { CACHE_TAGS } from "./tags"
+import { devlogs as devlogsSeed } from '@/data/dev';
+import { CACHE_TAGS } from './tags';
+import { publishedReader } from './utils';
 
 export interface DevlogRow {
-  id: string
-  slug: string
-  title: string
-  date: string
-  summary: string
-  body: string
-  tags: string[]
+  id: string;
+  slug: string;
+  title: string;
+  date: string;
+  summary: string;
+  body: string;
+  tags: string[];
 }
 export interface SnippetRow {
-  id: string
-  title: string
-  language: string
-  description: string
-  code: string
-  tags: string[]
+  id: string;
+  title: string;
+  language: string;
+  description: string;
+  code: string;
+  tags: string[];
 }
 export interface LabRow {
-  id: string
-  title: string
-  description: string
-  status: string
-  stack: string[]
-  demo_url: string | null
-  repo_url: string | null
+  id: string;
+  title: string;
+  description: string;
+  status: string;
+  stack: string[];
+  demo_url: string | null;
+  repo_url: string | null;
 }
 
-/** Cria um leitor público cacheado (published=true) para uma tabela. */
-function publishedReader<T>(table: string, tag: string, order: string, asc: boolean) {
-  return unstable_cache(
-    async (): Promise<T[]> => {
-      const data = await buscarLinhas<T>(table, {
-        where: [{ campo: "published", valor: true }],
-        orderBy: [{ campo: order, asc }],
-      })
-      return data ?? []
-    },
-    [table],
-    { tags: [tag] },
-  )
-}
-
-/**
- * Envolve um leitor com a cópia versionada de `src/data`.
- *
- * O banco continua mandando: o seed só entra quando não há NADA publicado, e
- * nunca se mistura com o que veio do Firestore — meia lista do banco somada a
- * meia lista do arquivo daria uma terceira coisa que ninguém escreveu.
- */
-function leitorComSeed<T>(ler: () => Promise<T[]>, seed: () => T[]) {
-  return async (): Promise<T[]> => {
-    const publicados = await ler()
-    return publicados.length > 0 ? publicados : seed()
-  }
-}
+const devlogsSeedComId = devlogsSeed.map((d) => ({ ...d, id: d.slug }));
 
 /**
  * Devlogs — o único leitor deste arquivo com rede embaixo.
@@ -79,16 +50,27 @@ function leitorComSeed<T>(ler: () => Promise<T[]>, seed: () => T[]) {
  * não caberia — o devlog versionado EXISTE, e escondê-lo seria mentir sobre o
  * acervo.
  */
-export const getDevlogs = leitorComSeed(
-  publishedReader<DevlogRow>("devlogs", CACHE_TAGS.devlogs, "date", false),
-  () => devlogsSeed.map((d) => ({ ...d, id: d.slug })),
-)
+export const getDevlogs = publishedReader<DevlogRow>(
+  'devlogs',
+  CACHE_TAGS.devlogs,
+  { order: 'date', asc: false, seed: devlogsSeedComId }
+);
 
 /** Um devlog pelo slug (reaproveita a lista, que já é cacheada). */
-export async function getDevlogBySlug(slug: string): Promise<DevlogRow | undefined> {
-  const todos = await getDevlogs()
-  return todos.find((d) => d.slug === slug)
+export async function getDevlogBySlug(
+  slug: string
+): Promise<DevlogRow | undefined> {
+  const todos = await getDevlogs();
+  return todos.find((d) => d.slug === slug);
 }
 
-export const getSnippets = publishedReader<SnippetRow>("snippets", CACHE_TAGS.snippets, "sort", true)
-export const getLab = publishedReader<LabRow>("lab_experiments", CACHE_TAGS.lab, "sort", true)
+export const getSnippets = publishedReader<SnippetRow>(
+  'snippets',
+  CACHE_TAGS.snippets,
+  { order: 'sort', asc: true }
+);
+export const getLab = publishedReader<LabRow>(
+  'lab_experiments',
+  CACHE_TAGS.lab,
+  { order: 'sort', asc: true }
+);

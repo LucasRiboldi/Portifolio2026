@@ -1,9 +1,7 @@
-import "server-only"
+import 'server-only';
 
-import { unstable_cache } from "next/cache"
-
-import { buscarLinhas } from "@/lib/firebase/query"
-import { CACHE_TAGS } from "./tags"
+import { CACHE_TAGS } from './tags';
+import { publishedReader } from './utils';
 import {
   artworks as artworksSeed,
   comics as comicsSeed,
@@ -19,7 +17,7 @@ import {
   type Strip,
   type Track,
   type Video,
-} from "@/data/criativo-zones"
+} from '@/data/criativo-zones';
 
 /**
  * Leitores das zonas da landing /criativo.
@@ -30,49 +28,48 @@ import {
  * leitores do realm Dev devolvem `[]` nesse caso porque lá a secção some
  * inteira, aqui a zona faz parte da narrativa da página.
  */
-function publishedReader<T>(
-  table: string,
-  tag: string,
-  order: string,
-  ascending: boolean,
-  seed: T[],
-) {
-  return unstable_cache(
-    async (): Promise<T[]> => {
-      const data = await buscarLinhas<T>(table, {
-        where: [{ campo: "published", valor: true }],
-        orderBy: [{ campo: order, asc: ascending }, { campo: "created_at" }],
-      })
-
-      if (!data || data.length === 0) return seed
-      return data
-    },
-    [table],
-    { tags: [tag] },
-  )
-}
-
-export const getArtworks = publishedReader<Artwork>(
-  "artworks", CACHE_TAGS.artworks, "sort", true, artworksSeed,
-)
-export const getComics = publishedReader<Comic>(
-  "comics", CACHE_TAGS.comics, "sort", true, comicsSeed,
-)
-export const getMovies = publishedReader<Movie>(
-  "movies", CACHE_TAGS.movies, "sort", true, moviesSeed,
-)
-export const getTracks = publishedReader<Track>(
-  "tracks", CACHE_TAGS.tracks, "sort", true, tracksSeed,
-)
-export const getVideos = publishedReader<Video>(
-  "videos", CACHE_TAGS.videos, "sort", true, videosSeed,
-)
-export const getNotes = publishedReader<Note>(
+export const getArtworks = publishedReader<Artwork>('artworks', CACHE_TAGS.artworks, {
+  order: 'sort',
+  asc: true,
+  secondaryOrder: 'created_at',
+  seed: artworksSeed,
+});
+export const getComics = publishedReader<Comic>('comics', CACHE_TAGS.comics, {
+  order: 'sort',
+  asc: true,
+  secondaryOrder: 'created_at',
+  seed: comicsSeed,
+});
+export const getMovies = publishedReader<Movie>('movies', CACHE_TAGS.movies, {
+  order: 'sort',
+  asc: true,
+  secondaryOrder: 'created_at',
+  seed: moviesSeed,
+});
+export const getTracks = publishedReader<Track>('tracks', CACHE_TAGS.tracks, {
+  order: 'sort',
+  asc: true,
+  secondaryOrder: 'created_at',
+  seed: tracksSeed,
+});
+export const getVideos = publishedReader<Video>('videos', CACHE_TAGS.videos, {
+  order: 'sort',
+  asc: true,
+  secondaryOrder: 'created_at',
+  seed: videosSeed,
+});
+export const getNotes = publishedReader<Note>('notes', CACHE_TAGS.notes, {
   // Fixados primeiro: o mural começa pelo que deve ser lido antes.
-  "notes", CACHE_TAGS.notes, "pinned", false, notesSeed,
-)
-export const getStrips = publishedReader<Strip>(
-  "strips", CACHE_TAGS.strips, "sort", true, stripsSeed,
-)
+  order: 'pinned',
+  asc: false,
+  secondaryOrder: 'created_at',
+  seed: notesSeed,
+});
+export const getStrips = publishedReader<Strip>('strips', CACHE_TAGS.strips, {
+  order: 'sort',
+  asc: true,
+  secondaryOrder: 'created_at',
+  seed: stripsSeed,
+});
 
-export type { Artwork, Comic, Movie, Note, Strip, Track, Video }
+export type { Artwork, Comic, Movie, Note, Strip, Track, Video };
