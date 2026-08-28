@@ -15,13 +15,42 @@ Registro das mudanças que valem para quem usa ou lê o site. Segue
 >
 > **Ao lançar:** todo push carrega bump do `package.json` **e** tag anotada — o
 > selo do `/desenvolvedor` lê a tag, não a release. Mova o que está em
-> *Não lançado* para a versão nova, com a data do dia.
+> _Não lançado_ para a versão nova, com a data do dia.
 
 ---
 
 ## [Não lançado]
 
 Nada ainda.
+
+## [0.7.4] — 2026-08-28
+
+Auditoria técnica completa (QA, segurança, performance, acessibilidade,
+arquitetura, produção) — sem mudança de comportamento no site. Apenas
+documentação; nenhum código de produção foi alterado por esta versão.
+
+### Adicionado
+
+- Registro da auditoria em `PROJECT_STATE.md` (seção 11) e backlog acionável
+  correspondente em `NEXT_STEPS.md` (itens 13–19, seção "🔴 Auditoria
+  técnica"). Veredito: **aprovado com ressalvas** — zero problemas Critical.
+
+### Corrigido
+
+- Nada nesta versão. Os achados da auditoria (duplicação de
+  `publishedReader`, arquivos acima de 500 linhas, contraste do rodapé de
+  `/desenvolvedor`, `Cross-Origin-Opener-Policy` ausente, canonical/structured
+  data ausentes, cobertura de Storybook em ~2,7%) ficam registrados como
+  backlog, não corrigidos automaticamente.
+
+### Observado, não resolvido
+
+- **54 de 675 testes unitários falham num working tree não commitado**
+  encontrado no início da auditoria (707 arquivos modificados, com diff
+  substancial em `resource-defs-content.ts`, `resource-defs-materias.ts` e
+  `extractors.ts`). A origem desse WIP não foi identificada — duas sessões
+  Claude diferentes confirmaram que não é trabalho delas. Não confirmado se
+  o HEAD commitado também falha. Ver `NEXT_STEPS.md` item 13.
 
 ## [0.7.3] — 2026-08-27
 
@@ -193,7 +222,7 @@ afirma.
 ### Corrigido
 
 - **Texto apagado do realm dev reprovava contraste.** `--d-comment`
-  (`#6272a4`), a cor *comment* canônica do Dracula, dá 3,03:1 sobre o fundo
+  (`#6272a4`), a cor _comment_ canônica do Dracula, dá 3,03:1 sobre o fundo
   `#282a36` — abaixo dos 4,5:1 que o WCAG AA pede para corpo pequeno. Eram 53
   elementos na home, em 12 classes, todos entre 9,6 px e 13,1 px. O token
   semântico `--dev-ink-dim` passou a apontar para `--d-comment-texto`
@@ -279,7 +308,7 @@ afirma.
 - **A revista do `/criativo`**: formato de exemplar em 900 px com moldura,
   galeria em carrossel com virada de folha, e arte de capa no herói.
 - Rádio, videoteca e tirinhas saíram da capa para `/criativo/sala` — as cinco
-  que ficaram são de *fazer*, estas três de *consumir*.
+  que ficaram são de _fazer_, estas três de _consumir_.
 
 ### Corrigido
 

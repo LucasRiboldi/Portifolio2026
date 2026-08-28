@@ -3,20 +3,29 @@
 > Resumo executivo do estado real do projeto. Atualize a cada marco.
 > Para o conhecimento estável e detalhado, veja `docs/project-knowledge/`.
 >
-> **Última atualização:** 2026-08-27. Login em preview **resolvido** (seção 3.1)
-> e validado fim a fim junto com upload de mídia (seção 5). Cobertura de fontes
-> do Prophet Wire subiu de 7 para 9 de 24 (seção 10).
+> **Última atualização:** 2026-08-28. Auditoria técnica completa (QA,
+> segurança, performance, a11y, arquitetura, produção) registrada na seção 11
+> — veredito **aprovado com ressalvas**, zero Critical. Backlog gerado por ela
+> em `NEXT_STEPS.md` (itens 13–19).
 >
-> **Nenhum bug de código aberto.** O `P9` fechou em 14/08 e o diagnóstico
-> anterior estava errado nos dois pontos: o `IntersectionObserver` de
-> `home-motor.tsx` **funciona** (0 → 18 alvos revelados ao rolar, medido em
-> navegador que compõe quadros), e o culpado **era** o CSS. Ver `PLAN.md` `P9`.
+> **Há um bug de código em aberto, achado pela auditoria — mas não em
+> produção confirmada.** 54 de 675 testes unitários falham no **working tree
+> não commitado** (18 tipos de conteúdo "órfãos" em `admin-integridade.test.ts`
+> e falhas em `prophet-wire/extractors.test.ts`). A causa está em mudanças
+> ainda não commitadas em `resource-defs-content.ts`, `resource-defs-materias.ts`
+> e `extractors.ts` cuja origem **ninguém identificou** — não é WIP desta
+> sessão nem de outra sessão Claude ativa checada em 28/08. Ver seção 11 antes
+> de investigar do zero.
 >
-> O que falta é conteúdo, higiene de credencial e o gatilho do Prophet Wire
-> contra produção (`NEXT_STEPS.md` item 6, bloqueado por não ter acesso ao
-> `CRON_SECRET` de produção nesta sessão). O `PLAN.md` guarda o que foi medido
-> na empreitada de qualidade, inclusive as suspeitas que **não** viraram
-> defeito — leia antes de reabrir investigação.
+> O `P9` (scroll do `/desenvolvedor`) segue fechado desde 14/08 — diagnóstico
+> antigo errado nos dois pontos: o `IntersectionObserver` de `home-motor.tsx`
+> **funciona**, o culpado **era** o CSS. Ver `PLAN.md` `P9`.
+>
+> O que mais falta é conteúdo, higiene de credencial e o gatilho do Prophet
+> Wire contra produção (`NEXT_STEPS.md` item 6, bloqueado por não ter acesso
+> ao `CRON_SECRET` de produção nesta sessão). O `PLAN.md` guarda o que foi
+> medido na empreitada de qualidade anterior, inclusive as suspeitas que
+> **não** viraram defeito — leia antes de reabrir investigação.
 
 ---
 
@@ -36,12 +45,12 @@ configurado.
 
 **Concluída no código.** 10 commits, de `7f97a9e` a `12fcc5f`.
 
-| Área | Antes | Agora |
-|---|---|---|
-| Banco | Postgres/Supabase | Firestore (29 coleções) |
-| Auth | Supabase Auth (redirect) | Firebase Auth GitHub (popup + session cookie) |
-| Mídia | Supabase Storage | Vercel Blob |
-| Regras | 63 RLS policies | `firestore.rules` + `requireAdmin()` |
+| Área   | Antes                    | Agora                                         |
+| ------ | ------------------------ | --------------------------------------------- |
+| Banco  | Postgres/Supabase        | Firestore (29 coleções)                       |
+| Auth   | Supabase Auth (redirect) | Firebase Auth GitHub (popup + session cookie) |
+| Mídia  | Supabase Storage         | Vercel Blob                                   |
+| Regras | 63 RLS policies          | `firestore.rules` + `requireAdmin()`          |
 
 **Zero dependências do Supabase restantes.** As menções que sobram em
 `src/data/dev/*` são **conteúdo editorial** (devlogs narrando a construção,
@@ -153,18 +162,18 @@ domínio no Firebase continua sem caminho por CLI/API — sempre pelo console.
 
 ## 4. Estado da infraestrutura
 
-| Item | Estado |
-|---|---|
-| Firestore | ✅ Provisionado, 19 coleções povoadas, 20 índices publicados |
-| Firebase Auth | ✅ Habilitado. **Login verificado em produção** (01/08/2026) — fluxo OAuth completo, não só a rota respondendo |
-| Domínios autorizados (Auth) | ✅ `portifolio2026-two.vercel.app` (01/08) e `portifolio2026-preview-lucasriboldis-projects.vercel.app` (27/08). Ver seção 3.1 |
-| Firebase Storage | ❌ Não usado — exige plano Blaze. Mídia vai para o Vercel Blob |
-| Vercel Blob | ✅ **Grava e serve** — verificado fim a fim em 05/08 (produção) e 27/08 (preview). O 404 registrado em 01/08 era referência pendurada no Firestore, não falha de escrita. Autentica por **OIDC** (`BLOB_STORE_ID` + `VERCEL_OIDC_TOKEN`) por padrão; o token estático é fallback e só ele serve para upload direto do navegador |
-| Env vars (Production) | ✅ Completas, incluindo `FIREBASE_CLIENT_EMAIL` / `FIREBASE_PRIVATE_KEY` |
-| Env vars (Preview) | ✅ Completas desde 27/08 — `BLOB_READ_WRITE_TOKEN` foi o último a entrar (`vercel env add`) |
-| CI (GitHub Actions) | ✅ Dois jobs em paralelo: `build` (`tokens:check`, lint, **675 unitários**, build, **13 de fumaça**) e `integration` (emulador do Firestore, 21 casos). Integração e fumaça entraram em 01/08 |
-| Protection Bypass | ✅ Ligado em 31/07 para permitir testar previews por `curl` |
-| Projeto Supabase antigo | ⚠️ No ar como rede de segurança, mas **conferido em 01/08: seguro apagar** — 0 URLs do Supabase em 170 documentos do Firestore, nenhuma dependência instalada |
+| Item                        | Estado                                                                                                                                                                                                                                                                                                                          |
+| --------------------------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| Firestore                   | ✅ Provisionado, 19 coleções povoadas, 20 índices publicados                                                                                                                                                                                                                                                                    |
+| Firebase Auth               | ✅ Habilitado. **Login verificado em produção** (01/08/2026) — fluxo OAuth completo, não só a rota respondendo                                                                                                                                                                                                                  |
+| Domínios autorizados (Auth) | ✅ `portifolio2026-two.vercel.app` (01/08) e `portifolio2026-preview-lucasriboldis-projects.vercel.app` (27/08). Ver seção 3.1                                                                                                                                                                                                  |
+| Firebase Storage            | ❌ Não usado — exige plano Blaze. Mídia vai para o Vercel Blob                                                                                                                                                                                                                                                                  |
+| Vercel Blob                 | ✅ **Grava e serve** — verificado fim a fim em 05/08 (produção) e 27/08 (preview). O 404 registrado em 01/08 era referência pendurada no Firestore, não falha de escrita. Autentica por **OIDC** (`BLOB_STORE_ID` + `VERCEL_OIDC_TOKEN`) por padrão; o token estático é fallback e só ele serve para upload direto do navegador |
+| Env vars (Production)       | ✅ Completas, incluindo `FIREBASE_CLIENT_EMAIL` / `FIREBASE_PRIVATE_KEY`                                                                                                                                                                                                                                                        |
+| Env vars (Preview)          | ✅ Completas desde 27/08 — `BLOB_READ_WRITE_TOKEN` foi o último a entrar (`vercel env add`)                                                                                                                                                                                                                                     |
+| CI (GitHub Actions)         | ✅ Dois jobs em paralelo: `build` (`tokens:check`, lint, **675 unitários**, build, **13 de fumaça**) e `integration` (emulador do Firestore, 21 casos). Integração e fumaça entraram em 01/08                                                                                                                                   |
+| Protection Bypass           | ✅ Ligado em 31/07 para permitir testar previews por `curl`                                                                                                                                                                                                                                                                     |
+| Projeto Supabase antigo     | ⚠️ No ar como rede de segurança, mas **conferido em 01/08: seguro apagar** — 0 URLs do Supabase em 170 documentos do Firestore, nenhuma dependência instalada                                                                                                                                                                   |
 
 ---
 
@@ -362,3 +371,79 @@ Plaid Hat).
 
 Detalhes e a tabela de barreiras restantes (anti-bot por TLS, rate limit do
 Reddit): `NEXT_STEPS.md` item 7.
+
+---
+
+## 11. Auditoria técnica completa — 28/08/2026
+
+Pedido: QA + segurança + performance + acessibilidade + arquitetura +
+produção, com testes **executados de verdade** (Playwright/Chrome DevTools,
+Lighthouse+axe, Vitest, build de produção) — não só leitura de código.
+**Veredito: APROVADO COM RESSALVAS.** Zero Critical, 1 High (confinado ao
+working tree, item 1 abaixo), 6 Medium, 3 Low. Relatório completo (matriz de
+51 verificações, cobertura por área) foi entregue ao Lucas no chat da sessão;
+aqui fica só o que muda o estado do projeto.
+
+**Executado com evidência real (não só análise estática):**
+
+- Build de produção: sucesso, 92 páginas. Lint: 0 erros, 2 warnings.
+- Segurança: `middleware` + `requireAdmin()` cobrem 100% das Server Actions
+  verificadas; cookie de sessão httpOnly/secure/sameSite correto;
+  `firestore.rules` sem regra permissiva; os 6 headers de segurança
+  confirmados por `curl` real contra o servidor rodando (não só lidos do
+  `next.config.ts`); o CSP bloqueou ao vivo uma tentativa de injetar script
+  externo; um XSS refletido tentado no "console" fake de `/desenvolvedor`
+  saiu escapado pelo React, sem execução. `npm audit`: 3 High, todos na
+  cadeia `@storybook/nextjs-vite → image-size` (devDependency, sem exposição
+  em runtime).
+- Acessibilidade: Lighthouse+axe real em `/desenvolvedor` — 96/100. Teclado
+  testado manualmente (foco visível, skip-link funcional).
+- Responsividade: 375px e 768px sem overflow horizontal.
+- SEO: `robots.txt` e `sitemap.xml` válidos; meta tags presentes.
+
+**Achados que mudam algo:**
+
+1. **[High] 54 de 675 testes unitários falham no working tree não
+   commitado**, concentrados em `admin-integridade.test.ts` (18 tipos de
+   conteúdo "órfãos"), `conteudo-publicavel.test.ts` e
+   `prophet-wire/extractors.test.ts`. Rastreado até mudanças **não
+   commitadas** em `resource-defs-content.ts`, `resource-defs-materias.ts` e
+   `extractors.ts`. **Duas sessões Claude diferentes confirmaram que não é
+   trabalho delas** — a origem do WIP não foi identificada. Não testei se o
+   HEAD commitado (`782a4c7`) também falha, para não mexer no working tree
+   sem confirmação.
+2. **[Medium] Duplicação real do padrão "leitor cacheado com fallback ao
+   seed"** entre `lib/repos/dev.ts:37`, `criativo.ts:33`, `prophet.ts:48` e
+   `projects.ts:31` (inline, sem nem nomear a função). Contradiz a frase
+   deste documento e do `README.md` ("os leitores compartilham
+   `publishedReader`") — na prática, não compartilham.
+3. **[Medium] 14 arquivos violam o limite de 500 linhas** deste próprio
+   documento/`CLAUDE.md`. Pior caso: `src/design-system/realms.ts`, 1052
+   linhas. Dentro da própria camada de dados: `src/lib/repos/tech-feed.ts`,
+   566 linhas.
+4. **[Medium] Contraste WCAG AA falho no rodapé de `/desenvolvedor`** —
+   labels `PROJETOS`/`EXPERIMENTOS`/`SNIPPETS`/`FERRAMENTAS`/`VERSÃO` em
+   `#6677a9` sobre `#282a36`, 3.23:1 (WCAG AA exige 4.5:1).
+5. **[Medium] Sem `<link rel="canonical">` nem structured data (JSON-LD)**
+   em nenhuma página verificada.
+6. **[Medium] Cobertura de Storybook: 6 `.stories.tsx` para 226
+   componentes** (~2,7%).
+7. **[Low]** Sem CSRF explícito e sem rate limiting em `POST /auth/session`
+   (mitigado pela allowlist do GitHub); `Cross-Origin-Opener-Policy` ausente;
+   `sv-misc.tsx:51` usa `<img>` em vez de `next/image`.
+
+**Não executado, e por quê:** LCP/INP exatos e profiling de Three.js/GSAP
+(ferramenta de trace do Chrome DevTools caiu no meio da sessão — ver
+incidente abaixo); leitor de tela real; Firefox/Safari; `test:integration`
+(emulador do Firestore, requer JDK 21 não verificado nesta máquina);
+carga/stress/backup/recuperação — sem ambiente de staging nem autorização
+para testes pesados/destrutivos.
+
+**Incidente operacional durante a auditoria:** `taskkill /F /IM node.exe /T`
+foi usado para parar o dev server e matou **todos** os processos Node da
+máquina, derrubando as ferramentas de browser automation no meio do trabalho.
+Sem perda de código, mas registrado para não repetir: parar processo por
+PID/porta (`netstat -ano`), nunca por nome de imagem.
+
+Backlog acionável gerado por esta auditoria: `NEXT_STEPS.md`, seção
+"🔴 Auditoria técnica", itens 13–19.

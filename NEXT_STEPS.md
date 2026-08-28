@@ -6,9 +6,14 @@
 > Ao concluir um item: remova-o daqui, atualize `PROJECT_STATE.md` e diga no
 > commit o que foi verificado de verdade.
 >
-> **Atualizado:** 2026-08-27 — `BLOB_READ_WRITE_TOKEN` do Preview resolvido,
-> uuid moderado corrigido, item 8 (login + upload de mídia em preview) fechado,
-> item 7 avançou de 7 para 9 fontes ativas (`gmt-games`, `plaid-hat`). Ver
+> **Atualizado:** 2026-08-28 — auditoria técnica completa (QA, segurança,
+> performance, a11y, arquitetura) gerou os itens 13–19, seção "🔴 Auditoria
+> técnica". Veredito: aprovado com ressalvas, zero Critical. Detalhe em
+> `PROJECT_STATE.md` seção 11.
+>
+> **2026-08-27** — `BLOB_READ_WRITE_TOKEN` do Preview resolvido, uuid moderado
+> corrigido, item 8 (login + upload de mídia em preview) fechado, item 7
+> avançou de 7 para 9 fontes ativas (`gmt-games`, `plaid-hat`). Ver
 > `technical-debt.md`.
 
 ---
@@ -66,8 +71,8 @@ dizia exatamente qual diretiva bloqueava, desde o começo.
 <details>
 <summary>O que o rediagnóstico de 04/08 desmontou</summary>
 
-O item 1 antigo dizia: *"o `put()` devolve URL sem persistir, e o suspeito é o
-caminho OIDC"*. Falso, e custou três dias de suspeita no lugar errado.
+O item 1 antigo dizia: _"o `put()` devolve URL sem persistir, e o suspeito é o
+caminho OIDC"_. Falso, e custou três dias de suspeita no lugar errado.
 
 - **`put()` persiste.** Reproduzido com `.mp3` e as opções exatas da action:
   `head()` e `list()` enxergam, e a URL pública devolve **200**.
@@ -89,6 +94,88 @@ Ao registrar uma URL quebrada, registre-a inteira.
 
 ---
 
+# 🔴 Auditoria técnica (28/08/2026)
+
+> Gerado pela auditoria completa registrada em `PROJECT_STATE.md` seção 11.
+> Nenhum item aqui é Critical; o item 13 é o único High.
+
+## 13. Confirmar se as 54 falhas de teste também estão no HEAD commitado
+
+O working tree tinha 707 arquivos modificados não commitados quando a
+auditoria rodou, com diff substancial (não só formatação) em
+`resource-defs-content.ts`, `resource-defs-materias.ts` e `extractors.ts`.
+Duas sessões Claude diferentes confirmaram que não é trabalho delas — a
+origem não foi identificada.
+
+**Como fazer:** `git stash && npm run test:unit && git stash pop` (ou
+pergunte a quem deixou esse WIP aberto, se você lembrar). **Como saber que
+ficou pronto:** os 675 testes voltam a passar, ou você sabe exatamente quais
+54 falham no HEAD e por quê — e decide se commita o WIP ou descarta.
+
+## 14. Unificar o leitor cacheado duplicado (`publishedReader`/`reader`)
+
+`lib/repos/dev.ts:37`, `criativo.ts:33`, `prophet.ts:48` e `projects.ts:31`
+reimplementam a mesma leitura cacheada com fallback ao seed, cada um com uma
+pequena variação. Contradiz o que este backlog e o `README.md` afirmam sobre
+os leitores compartilharem `publishedReader`.
+
+**Como fazer:** extrair para `lib/repos/utils.ts`, com seed opcional (o caso
+do `criativo.ts`), e migrar os 4 pontos de uso. **Como saber que ficou
+pronto:** os 4 arquivos importam a mesma função e `npm run test:unit`
+continua verde.
+
+## 15. Corrigir contraste do rodapé de `/desenvolvedor`
+
+Labels do rodapé (`footer.dv-section > dl.dv-meta`) em `#6677a9` sobre
+`#282a36` dão 3.23:1 — WCAG AA pede 4.5:1. Achado por Lighthouse+axe real,
+não só leitura de token.
+
+**Como fazer:** trocar o token de cor do label ou aumentar peso/tamanho da
+fonte. **Como saber que ficou pronto:** o audit `color-contrast` do
+Lighthouse não aparece mais nessa página.
+
+## 16. Adicionar `Cross-Origin-Opener-Policy`
+
+Os outros 6 headers de segurança (CSP, HSTS, X-Content-Type-Options,
+Referrer-Policy, Permissions-Policy, X-Frame-Options) já existem em
+`next.config.ts` e foram confirmados por `curl` real; falta só o COOP.
+
+**Como fazer:** adicionar `Cross-Origin-Opener-Policy: same-origin` ao array
+de headers. **Como saber que ficou pronto:** `curl -I` contra produção
+mostra o header.
+
+## 17. Dividir os arquivos acima de 500 linhas
+
+14 arquivos violam o limite do `CLAUDE.md`. Pior caso:
+`src/design-system/realms.ts` (1052 linhas), depois `architecture.ts` (615),
+`registry.ts` (612); na camada de dados, `src/lib/repos/tech-feed.ts` (566).
+
+**Como fazer:** extrair por seção/responsabilidade, sem trocar
+comportamento — comece pelo pior caso. **Como saber que ficou pronto:**
+`find src -name "*.ts*" | xargs wc -l | sort -rn | head` não mostra nada
+acima de 500.
+
+## 18. Canonical + structured data
+
+Nenhuma página verificada tem `<link rel="canonical">` nem
+`application/ld+json`.
+
+**Como fazer:** adicionar no `generateMetadata`/layout raiz (schema
+Person/WebSite para a home, Article para devlogs). **Como saber que ficou
+pronto:** `curl` no HTML mostra as duas tags nas rotas principais.
+
+## 19. Ampliar cobertura de Storybook
+
+6 de 226 componentes têm `.stories.tsx` (~2,7%). `@storybook/addon-a11y` já
+está configurado, mas sem stories não há o que ele audite.
+
+**Como fazer:** priorizar `components/ui/*` (reusados em várias páginas)
+antes de `design-system/*` (mais específicos). **Como saber que ficou
+pronto:** sem meta fixa — combine um número realista com o Lucas antes de
+começar.
+
+---
+
 # 🟡 Conteúdo
 
 ## 1. A zona Rádio toca, mas com uma faixa só — e uma delas é muda
@@ -99,10 +186,10 @@ antiga ("está sem música") deixou de valer quando você subiu o áudio do
 
 Estado real da coleção `tracks`:
 
-| Faixa | `audio_url` | Situação |
-|---|---|---|
-| Samurai Blue | Blob, **200**, 0,91 MB, `audio/mpeg` | **toca** — 44,8 s, `readyState` 4 na página |
-| sirius | vazio | entra na playlist rotulada "sem áudio" e não toca |
+| Faixa        | `audio_url`                          | Situação                                          |
+| ------------ | ------------------------------------ | ------------------------------------------------- |
+| Samurai Blue | Blob, **200**, 0,91 MB, `audio/mpeg` | **toca** — 44,8 s, `readyState` 4 na página       |
+| sirius       | vazio                                | entra na playlist rotulada "sem áudio" e não toca |
 
 `public/musica/` continua só com o `README.md`, então a playlist inteira vem do
 banco.
@@ -133,10 +220,10 @@ repetir.
 A limpeza de 04/08 zerou campos, não recuperou arquivos. Você já repôs o pôster
 e o vídeo do "Samurai Blue" e o áudio da faixa homônima. Sobra pouco:
 
-| Documento | Falta |
-|---|---|
-| `tracks` · "Samurai Blue" | `cover_image` |
-| `tracks` · "sirius" | `audio_url`, `cover_image` |
+| Documento                 | Falta                      |
+| ------------------------- | -------------------------- |
+| `tracks` · "Samurai Blue" | `cover_image`              |
+| `tracks` · "sirius"       | `audio_url`, `cover_image` |
 
 As outras quatro fitas da videoteca (`Making of`, `Diário de um bug`, `Letragem`,
 `Retrato em 32×32`) têm pôster mas `video_url` vazio — nunca tiveram vídeo, então
@@ -170,7 +257,7 @@ Preview**; redeploy; conferir `/login` → 200; só então apagar a antiga.
 <details>
 <summary>Armadilhas do processo</summary>
 
-**Não dá para copiar de produção:** as variáveis são *sensitive*;
+**Não dá para copiar de produção:** as variáveis são _sensitive_;
 `vercel env pull` devolve `[SENSITIVE]`. Os valores vêm de fora.
 
 **`vercel link` e `vercel env pull` sobrescrevem o `.env.local`** sem avisar.
@@ -199,13 +286,13 @@ https://vercel.com/account/tokens, se ainda estiver listado.
 O caminho feliz foi **provado em 05/08**, mas contra o build local com um
 `CRON_SECRET` de teste — não contra o deploy. O que ficou provado:
 
-| | Resultado |
-|---|---|
-| Sem header / segredo errado | 401, como esperado |
-| Segredo certo | 200, pipeline roda |
-| Persistência | acervo cresceu 22 → 29 → 46 rascunhos |
-| Histórico | as duas execuções registradas (4 → 6 runs) |
-| **Dedup** | **funciona** — 46 docs, 46 hashes/slugs/títulos distintos, zero repetidos |
+|                             | Resultado                                                                 |
+| --------------------------- | ------------------------------------------------------------------------- |
+| Sem header / segredo errado | 401, como esperado                                                        |
+| Segredo certo               | 200, pipeline roda                                                        |
+| Persistência                | acervo cresceu 22 → 29 → 46 rascunhos                                     |
+| Histórico                   | as duas execuções registradas (4 → 6 runs)                                |
+| **Dedup**                   | **funciona** — 46 docs, 46 hashes/slugs/títulos distintos, zero repetidos |
 
 A segunda execução criou 17 documentos, e por um momento isso pareceu
 duplicação. Não era: os 17 eram inéditos, e o log mostra a dedução acontecendo
@@ -234,12 +321,12 @@ Sinal limpo (**`errors: 0`**), cobertura subindo. Ativas: `bgg-blog`,
 
 Cada desligada tem motivo e data no comentário, em `lib/prophet-wire/sources.ts`.
 
-| Barreira | Fontes | O que destravaria |
-|---|---|---|
-| **Anti-bot por impressão TLS** | `cmon`, `icv2-games`, `fantasy-flight`, `czech-games`, `origins`, `kickstarter-tabletop`, `gamefound` | Cliente HTTP que imite navegador. Ver a nota abaixo. |
-| **Sem feed — precisa de extractor** | *(nenhuma pendente agora — ver caixa abaixo)* | — |
-| **Limite de taxa do Reddit** | `reddit-soloboardgaming`, `reddit-boardgamedeals` | Cliente autenticado (OAuth) no lugar do RSS público. |
-| **Vazio ou quebrado na origem** | `kosmos`, `portal-games`, `asmodee`, `bgg-hotness`, `ravensburger`, `spiel-essen` | Esperar. Nada a fazer do nosso lado. |
+| Barreira                            | Fontes                                                                                                | O que destravaria                                    |
+| ----------------------------------- | ----------------------------------------------------------------------------------------------------- | ---------------------------------------------------- |
+| **Anti-bot por impressão TLS**      | `cmon`, `icv2-games`, `fantasy-flight`, `czech-games`, `origins`, `kickstarter-tabletop`, `gamefound` | Cliente HTTP que imite navegador. Ver a nota abaixo. |
+| **Sem feed — precisa de extractor** | _(nenhuma pendente agora — ver caixa abaixo)_                                                         | —                                                    |
+| **Limite de taxa do Reddit**        | `reddit-soloboardgaming`, `reddit-boardgamedeals`                                                     | Cliente autenticado (OAuth) no lugar do RSS público. |
+| **Vazio ou quebrado na origem**     | `kosmos`, `portal-games`, `asmodee`, `bgg-hotness`, `ravensburger`, `spiel-essen`                     | Esperar. Nada a fazer do nosso lado.                 |
 
 <details>
 <summary>O que a recuperação de 27/08 apurou — duas religadas, duas descartadas por bom motivo</summary>
@@ -364,10 +451,10 @@ comportamento novo, que atrapalha o `git blame` do resto.
 
 **Conferido em 01/08, reconferido em 04/08 — seguro apagar:**
 
-| Checagem | Resultado |
-|---|---|
-| Dependência no `package.json` | nenhuma |
-| `@supabase/supabase-js` instalado | não |
+| Checagem                          | Resultado                |
+| --------------------------------- | ------------------------ |
+| Dependência no `package.json`     | nenhuma                  |
+| `@supabase/supabase-js` instalado | não                      |
 | **URLs do Supabase no Firestore** | **0**, em 170 documentos |
 
 As menções que sobram são conteúdo editorial (snippets, ADRs, tags).
